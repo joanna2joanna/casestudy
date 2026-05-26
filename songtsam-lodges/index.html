@@ -792,7 +792,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
     <div class="map-container" id="mapContainer">
       <div id="parkmap" style="height:100%;width:100%;"></div>
     </div>
-    <p style="font-size:0.75rem;color:#8B7355;margin-top:0.8rem;text-align:center;">坐标基于已知地理参考点估算，中国大陆区域使用 GCJ-02 坐标系。🟤 山居 &nbsp; 🔴 林卡 &nbsp; 🟢 帐篷营地</p>
+    <p style="font-size:0.75rem;color:#8B7355;margin-top:0.8rem;text-align:center;">坐标基于已知地理参考点估算，使用 WGS-84 坐标系。ESRI ArcGIS 瓦片。🟤 山居 &nbsp; 🔴 林卡 &nbsp; 🟢 帐篷营地</p>
   </div>
   </div>
 </section>
@@ -1116,6 +1116,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   <p>松赞酒店系列 · 案例研究报告</p>
   <p style="margin-top:0.5rem;">数据来源：松赞官网、Wikipedia、36氪、界面新闻、创业邦、飞客茶馆 | 本报告仅供研究参考</p>
   <p style="margin-top:0.5rem;">© 2026 案例研究项目 · 数据截至 2025 年 5 月</p>
+  <p style="margin-top:1rem;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:#C8A45C;text-decoration:none;font-size:0.85rem;">← 返回案例研究首页</a></p>
 </footer>
 
 <!-- Leaflet JS -->
@@ -1185,29 +1186,15 @@ const typeColors = {
 const typeLabels = { lodge:'🏔️ 山居', linka:'🏛️ 林卡', camp:'⛺ 营地' };
 
 // ── Map layers ──
-function makeGaodeStreet() {
-  return L.tileLayer('https://webrd{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=8&x={x}&y={y}&z={z}', {
-    subdomains: ['01','02','03','04'],
-    attribution: '© 高德地图',
-    maxZoom: 18
-  });
-}
-function makeGaodeSat() {
-  return L.tileLayer('https://webst{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
-    subdomains: ['01','02','03','04'],
-    attribution: '© 高德地图',
-    maxZoom: 18
-  });
-}
-function makeEsriStreet() {
+function makeStreetLayer() {
   return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-    attribution: '© ESRI',
+    attribution: '© ESRI | 坐标系统: WGS-84',
     maxZoom: 18
   });
 }
-function makeEsriSat() {
+function makeSatLayer() {
   return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: '© ESRI',
+    attribution: '© ESRI | 坐标系统: WGS-84',
     maxZoom: 18
   });
 }
@@ -1217,7 +1204,7 @@ let map, streetLayer, satLayer, currentMode = 'street';
 
 function addMarkers(m) {
   hotels.forEach(h => {
-    let gcj = wgs84ToGcj02(h.lng, h.lat);
+    let pos = [h.lat, h.lng];
     let color = typeColors[h.type];
     let icon = L.divIcon({
       className: 'custom-div-icon',
@@ -1227,7 +1214,7 @@ function addMarkers(m) {
       iconSize: [100, 42],
       iconAnchor: [50, 21]
     });
-    L.marker(gcj, { icon }).addTo(m);
+    L.marker(pos, { icon }).addTo(m);
   });
 }
 
@@ -1235,21 +1222,21 @@ function addMarkers(m) {
 function addRoutes(m) {
   // Shangri-La Circuit: Shangri-La → Tacheng → Meili → Benzilan → Shangri-La
   const scCircuit = [
-    [99.700,27.868],[99.410,27.340],[98.879,28.444],[99.330,28.270],[99.700,27.868]
-  ].map(p => wgs84ToGcj02(p[0],p[1]));
+    [27.868,99.700],[27.340,99.410],[28.444,98.879],[28.270,99.330],[27.868,99.700]
+  ];
   L.polyline(scCircuit, {color:'#5C3A2E',weight:3,dashArray:'8 6',opacity:0.7}).addTo(m);
 
   // Yunnan-Tibet Route: Lijiang → Shangri-La → Meili → Rumei → Laigu → Bome → Namcha Barwa → Lhasa
   const ytRoute = [
-    [100.233,26.870],[99.700,27.868],[98.879,28.444],[98.590,29.680],
-    [96.690,29.480],[95.770,29.860],[94.880,29.630],[91.117,29.658]
-  ].map(p => wgs84ToGcj02(p[0],p[1]));
+    [26.870,100.233],[27.868,99.700],[28.444,98.879],[29.680,98.590],
+    [29.480,96.690],[29.860,95.770],[29.630,94.880],[29.658,91.117]
+  ];
   L.polyline(ytRoute, {color:'#8B3A4A',weight:4,opacity:0.6}).addTo(m);
 
   // Nujiang extension
   const njRoute = [
-    [99.700,27.868],[98.890,27.430],[98.620,28.020]
-  ].map(p => wgs84ToGcj02(p[0],p[1]));
+    [27.868,99.700],[27.430,98.890],[28.020,98.620]
+  ];
   L.polyline(njRoute, {color:'#4A6741',weight:3,dashArray:'5 5',opacity:0.5}).addTo(m);
 }
 
@@ -1265,13 +1252,13 @@ function initMap(mode) {
   });
 
   if (mode === 'satellite') {
-    satLayer = makeGaodeSat();
+    satLayer = makeSatLayer();
     satLayer.addTo(map);
   } else if (mode === 'route') {
-    streetLayer = makeGaodeStreet();
+    streetLayer = makeStreetLayer();
     streetLayer.addTo(map);
   } else {
-    streetLayer = makeGaodeStreet();
+    streetLayer = makeStreetLayer();
     streetLayer.addTo(map);
   }
 

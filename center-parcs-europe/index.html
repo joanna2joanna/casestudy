@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Center Parcs Europe · 多村品牌案例研究</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+<style>
+html { font-size: 17px; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #F5F0E8;
+  color: #2D2418;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; }
+h2 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 1.5rem; }
+h3 { font-size: 1.35rem; font-weight: 600; }
+.mono { font-family: 'DM Mono', monospace; }
+
+/* Hero */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(165deg, #0D2818 0%, #1B5E3A 25%, #2D7A4F 40%, #0F3D22 70%, #051808 100%);
+  color: #FFF;
+  text-align: center;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 70%, rgba(0,180,160,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 30%, rgba(212,149,58,0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 60%);
+}
+.hero-inner { position: relative; z-index: 1; padding: 3rem 2rem; max-width: 900px; }
+.hero-badge {
+  display: inline-block;
+  border: 1px solid rgba(0,200,160,0.5);
+  color: #00C8A0;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  padding: 0.35rem 1.2rem;
+  border-radius: 100px;
+  margin-bottom: 2rem;
+  font-family: 'DM Mono', monospace;
+}
+.hero h1 {
+  font-size: clamp(3rem, 6vw, 4.8rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  letter-spacing: 0.02em;
+}
+.hero-sub {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.75);
+  max-width: 650px;
+  margin: 0 auto 3rem;
+  line-height: 1.6;
+}
+.hero-kpis {
+  display: flex;
+  gap: 2.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.hero-kpi-num {
+  font-size: 2.4rem;
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+  color: #00C8A0;
+}
+.hero-kpi-label { font-size: 0.78rem; color: rgba(255,255,255,0.55); margin-top: 0.25rem; letter-spacing: 0.06em; }
+
+/* Section */
+.section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+
+/* Cards */
+.card-grid { display: grid; gap: 1.5rem; }
+.card-grid-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.card-grid-3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.card-grid-4 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+.card {
+  background: #FFF;
+  border-radius: 16px;
+  padding: 1.8rem;
+  border: 1px solid #E0D8C8;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+.card-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+.card h4 { font-size: 0.85rem; color: #1B5E3A; letter-spacing: 0.06em; margin-bottom: 0.4rem; }
+.card .val { font-size: 1.15rem; font-weight: 600; color: #2D2418; }
+
+.section-header { text-align: center; margin-bottom: 3.5rem; }
+.section-header h2 { color: #0D2818; }
+.section-header p { color: #6B5E40; max-width: 650px; margin: 0 auto; font-size: 1rem; }
+
+/* Park card */
+.park-card {
+  background: #FFF;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #E0D8C8;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.park-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
+.park-card-header {
+  padding: 1.4rem 1.8rem;
+  color: #FFF;
+  position: relative;
+  overflow: hidden;
+}
+.park-card-header.nl { background: linear-gradient(135deg, #E8782A, #C0561A); } /* Netherlands orange */
+.park-card-header.be { background: linear-gradient(135deg, #2D2D2D, #1A1A1A); } /* Belgium black/gold */
+.park-card-header.de { background: linear-gradient(135deg, #1A1A1A, #CC0000); } /* Germany */
+.park-card-header.fr { background: linear-gradient(135deg, #002395, #001A6E); } /* France blue */
+.park-card-header.dk { background: linear-gradient(135deg, #C60C30, #8B0018); } /* Denmark red */
+.park-card-header .flag { font-size: 1.5rem; margin-right: 0.5rem; }
+.park-card-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  padding: 0.15rem 0.6rem;
+  border-radius: 100px;
+  margin-bottom: 0.5rem;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.12);
+}
+.park-card-header h3 { font-size: 1.2rem; }
+.park-card-body { padding: 1.4rem 1.8rem; flex: 1; }
+.park-card-body .theme-tag { display: inline-block; background: #E8F5E9; color: #1B5E3A; padding: 0.2rem 0.7rem; border-radius: 6px; font-size: 0.78rem; font-weight: 600; margin-bottom: 0.6rem; }
+.park-card-body .desc { font-size: 0.85rem; color: #6B5E40; line-height: 1.6; }
+
+/* Two column comparison */
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0; }
+.compare-col { padding: 2rem; border-radius: 16px; }
+.compare-col.nl-cp { background: linear-gradient(135deg, #FFF3E6, #FFE8CC); border: 1px solid #E8C890; }
+.compare-col.new-gen { background: linear-gradient(135deg, #E8F5E9, #D0EDD4); border: 1px solid #A0D4A8; }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 2.5rem; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.6rem; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #00C8A0, #1B5E3A 60%, #00C8A0);
+}
+.timeline-item { position: relative; margin-bottom: 2rem; }
+.timeline-item::before {
+  content: '';
+  position: absolute; left: -2rem; top: 0.4rem;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: #00C8A0; border: 2px solid #FFF;
+  box-shadow: 0 0 0 2px #00C8A0;
+}
+.timeline-year { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: #1B5E3A; font-weight: 600; }
+.timeline-title { font-weight: 600; margin: 0.2rem 0; }
+.timeline-desc { font-size: 0.88rem; color: #6B5E40; }
+
+/* Tables */
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.data-table th { background: #0D2818; color: #FFF; padding: 0.8rem 1rem; text-align: left; font-weight: 500; font-size: 0.8rem; letter-spacing: 0.05em; }
+.data-table td { padding: 0.7rem 1rem; border-bottom: 1px solid #E0D8C8; }
+.data-table tr:nth-child(even) { background: #F7F4EC; }
+.data-table tr:hover { background: #EDE8DC; }
+.data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
+
+/* Resource cards */
+.resource-card {
+  background: #FFF; border-radius: 14px; padding: 1.5rem;
+  border: 1px solid #E0D8C8; display: flex; gap: 1.2rem; align-items: flex-start;
+  transition: transform 0.2s;
+}
+.resource-card:hover { transform: translateY(-2px); }
+.resource-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: linear-gradient(135deg, #1B5E3A, #0D2818);
+  color: #FFF; display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; flex-shrink: 0;
+}
+.resource-card h4 { font-size: 0.95rem; margin-bottom: 0.25rem; }
+.resource-card p { font-size: 0.82rem; color: #8B7B60; }
+.resource-card a { color: #1B5E3A; text-decoration: none; font-weight: 500; }
+
+/* KPI row */
+.kpi-row { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; margin: 2rem 0; }
+.kpi-card {
+  background: #FFF; border-radius: 16px; padding: 1.8rem 2rem;
+  text-align: center; border: 1px solid #E0D8C8; min-width: 160px; flex: 1;
+}
+.kpi-card .num { font-size: 2.4rem; font-weight: 700; color: #1B5E3A; font-family: 'Playfair Display', serif; }
+.kpi-card .label { font-size: 0.78rem; color: #8B7B60; margin-top: 0.3rem; }
+
+/* Philosophy cards */
+.phil-card {
+  background: #FFF; border-left: 4px solid #00C8A0;
+  border-radius: 0 12px 12px 0; padding: 1.5rem 1.8rem; margin-bottom: 1.2rem;
+}
+.phil-card h4 { color: #0D2818; margin-bottom: 0.4rem; }
+
+/* Map */
+.map-section { background: #FFF; border-radius: 20px; padding: 2rem; border: 1px solid #E0D8C8; }
+
+/* Accordion country section */
+.country-section { margin-bottom: 3rem; }
+.country-heading { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; padding-bottom: 0.8rem; border-bottom: 2px solid #E0D8C8; }
+.country-heading .flag { font-size: 2rem; }
+.country-heading h3 { color: #0D2818; }
+
+@media (max-width: 768px) {
+  html { font-size: 15px; }
+  .section { padding: 3rem 1.2rem; }
+  .compare-grid { grid-template-columns: 1fr; }
+  .hero-kpis { gap: 1.5rem; }
+  .hero-kpi-num { font-size: 1.8rem; }
+  .card-grid-2, .card-grid-3, .card-grid-4 { grid-template-columns: 1fr; }
+}
+
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+.footer {
+  background: linear-gradient(180deg, #0D2818, #051808);
+  color: rgba(255,255,255,0.7); text-align: center;
+  padding: 3rem 2rem; font-size: 0.85rem; line-height: 1.8;
+}
+.footer a { color: #00C8A0; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- ═══════ 1. HERO ═══════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">数据截至 2025 年 10 月</div>
+    <h1>Center Parcs Europe</h1>
+    <p class="hero-sub">从荷兰一座森林营地出发，57年演进出 26 个度假村遍布 5 国——<br>每个村都是同一套品牌 DNA 与当地自然文化的独特对话</p>
+    <div class="hero-kpis">
+      <div><div class="hero-kpi-num">28</div><div class="hero-kpi-label">运营中度假村（含 Sunparks）</div></div>
+      <div><div class="hero-kpi-num">57 年</div><div class="hero-kpi-label">品牌历程 (1968-)</div></div>
+      <div><div class="hero-kpi-num">5 国</div><div class="hero-kpi-label">荷兰·比利时·德国·法国·丹麦</div></div>
+      <div><div class="hero-kpi-num">€19.5亿</div><div class="hero-kpi-label">集团年营收 (FY2025)</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 2. 项目概览 ═══════ -->
+<section class="section">
+  <div class="section-header reveal">
+    <h2>项目概览</h2>
+    <p>Center Parcs 是 Pierre & Vacances 集团旗下欧洲最大的自然度假村品牌，首创"森林中的度假小屋 + 热带水上乐园"模式</p>
+  </div>
+  <div class="card-grid card-grid-3 reveal">
+    <div class="card"><div class="card-icon">👨‍💼</div><h4>创始人</h4><div class="val">Piet Derksen</div><p style="font-size:0.82rem;color:#6B5E40;margin-top:0.3rem;">荷兰企业家，1953年创办 Sporthuis Centrum 运动用品店</p></div>
+    <div class="card"><div class="card-icon">📅</div><h4>首村开业</h4><div class="val">1968 年</div><p style="font-size:0.82rem;color:#6B5E40;margin-top:0.3rem;">De Lommerbergen，荷兰 Reuver（已关闭）</p></div>
+    <div class="card"><div class="card-icon">🏢</div><h4>母公司</h4><div class="val">Pierre & Vacances</div><p style="font-size:0.82rem;color:#6B5E40;margin-top:0.3rem;">2003 年起归属 PVCP 集团，总部荷兰 Capelle a/d IJssel</p></div>
+    <div class="card"><div class="card-icon">🏠</div><h4>住宿总量</h4><div class="val">~16,000 栋度假屋</div><p style="font-size:0.82rem;color:#6B5E40;margin-top:0.3rem;">从 Comfort 到 VIP 三级，每栋可容纳 4-12 人</p></div>
+    <div class="card"><div class="card-icon">💶</div><h4>均价 (ADR)</h4><div class="val">€188 / 晚</div><p style="font-size:0.82rem;color:#6B5E40;margin-top:0.3rem;">2025 Q3 数据，同比 +7.9%</p></div>
+    <div class="card"><div class="card-icon">📊</div><h4>入住率</h4><div class="val">67%–84%</div><p style="font-size:0.82rem;color:#6B5E40;margin-top:0.3rem;">季节性波动，夏季高峰 83.7%（2025 Q4）</p></div>
+  </div>
+</section>
+
+<!-- ═══════ 3. 品牌哲学 ═══════ -->
+<section class="section" style="background:#F2F5EE;max-width:100%;padding:5rem 2rem;">
+  <div style="max-width:1100px;margin:0 auto;">
+  <div class="section-header reveal">
+    <h2>品牌哲学：回归自然</h2>
+    <p>"Follow Your Nature"——品牌核心理念的四个支柱，构成了每个村庄的共同 DNA</p>
+  </div>
+  <div class="reveal">
+    <div class="phil-card">
+      <h4>🌲 森林中的家——选址与布局哲学</h4>
+      <p style="font-size:0.9rem;color:#6B5E40;">每家 Center Parcs 建于森林/湖边，度假屋分散隐匿于树木之间。无车区设计——私家车在抵达日卸行李后停入外围停车场，内部以步行、自行车和电动接驳车为主。</p>
+    </div>
+    <div class="phil-card">
+      <h4>🏊 Aqua Mundo——品牌的"心脏"</h4>
+      <p style="font-size:0.9rem;color:#6B5E40;">自 1980 年 De Eemhof 首创室内亚热带游泳穹顶以来，每个村都有一个 Aqua Mundo——恒温 29°C、棕榈树环绕、水滑梯+造浪池+儿童水上乐园。这是 Center Parcs 最具辨识度的品牌符号。</p>
+    </div>
+    <div class="phil-card">
+      <h4>🏛️ Market Dome——中央社交枢纽</h4>
+      <p style="font-size:0.9rem;color:#6B5E40;">每个村都有一个带顶棚的中央广场，汇集餐厅、超市、商店、娱乐设施。全天候运营，不受天气影响——是家庭度假的"城市广场"。</p>
+    </div>
+    <div class="phil-card">
+      <h4>🌍 在地化适应性——同一品牌，不同面孔</h4>
+      <p style="font-size:0.9rem;color:#6B5E40;">虽然共享上述 DNA，但每个村的建筑风格、景观主题、活动内容、餐饮风味都深度融入当地自然与文化语境——这也是本报告的核心关注点。</p>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ═══════ 4. 发展时间线 ═══════ -->
+<section class="section">
+  <div class="section-header reveal">
+    <h2>发展时间线</h2>
+    <p>57 年，从荷兰森林营地到北欧海岸——一个品牌的持续演进</p>
+  </div>
+  <div class="reveal">
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">1968</div>
+        <div class="timeline-title">🌲 起源：De Lommerbergen</div>
+        <div class="timeline-desc">荷兰企业家 Piet Derksen 为运动用品店的员工和客户在 Reuver 附近买了一小片林地放置帐篷。帐篷很快升级为度假屋，<strong>第一家 Center Parcs 正式诞生</strong>。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1980</div>
+        <div class="timeline-title">🏊 革命：第一座 Aqua Mundo</div>
+        <div class="timeline-desc"><strong>De Eemhof</strong>（荷兰 Zeewolde）开业，首创室内亚热带游泳穹顶概念——从此 Aqua Mundo 成为 Center Parcs 的绝对核心与品牌标识。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1981 – 1995</div>
+        <div class="timeline-title">🌍 跨国扩张期</div>
+        <div class="timeline-desc">进入<strong>比利时</strong>（Erperheide 1981, De Vossemeren 1987）、<strong>法国</strong>（Les Bois-Francs 1988）、<strong>德国</strong>（Bispinger Heide 1995），品牌从荷兰走向欧洲。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2003</div>
+        <div class="timeline-title">🤝 归属 PVCP 集团</div>
+        <div class="timeline-desc">Pierre & Vacances 与 DBCP 合资收购 Center Parcs Europe。同年整合 Gran Dorado 度假村，<strong>门店数从 8 跳涨至 20+</strong>。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2007 – 2018</div>
+        <div class="timeline-title">🏗️ 新一代旗舰村</div>
+        <div class="timeline-desc"><strong>Le Lac d'Ailette</strong> (2007, 法国)、<strong>Les Trois Forêts</strong> (2010)、<strong>Park Bostalsee</strong> (2013)、<strong>Le Bois aux Daims</strong> (2015)、<strong>Villages Nature Paris</strong> (2017, 与 Euro Disney 合资)、<strong>Park Allgäu</strong> (2018)——新一代村庄规模更大、设计更精致。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2021 – 2022</div>
+        <div class="timeline-title">♻️ 可持续奢华转型</div>
+        <div class="timeline-desc"><strong>Terhills Resort</strong> (2021, 比利时) 在废弃煤矿上建造，250 栋全独立设计度假屋 + 浮动太阳能电站。 <strong>Les Landes de Gascogne</strong> (2022, 法国) 首次引入树屋+教育农场概念。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2025</div>
+        <div class="timeline-title">🇩🇰 北欧首秀：Nordborg Resort</div>
+        <div class="timeline-desc">丹麦 Als 岛，440 栋北欧设计度假屋，<strong>欧洲首个获 DGNB 金级认证的度假村</strong>。丹麦最长栈桥（140m）伸入波罗的海。Center Parcs 首次进入斯堪的纳维亚。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2026+</div>
+        <div class="timeline-title">🔜 未来展望</div>
+        <div class="timeline-desc"><strong>Pütnitz</strong>（德国北海沿岸，2026）、<strong>Forêt de Poligny</strong> 和 <strong>Forêt du Rousset</strong>（法国）、<strong>Hanshui Hometown</strong>（中国湖北十堰，合资项目）——加速扩展至新市场。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 5. 各村特色与在地化详解 ═══════ -->
+<section class="section" style="background:#F2F5EE;max-width:100%;padding:5rem 2rem;">
+  <div style="max-width:1100px;margin:0 auto;">
+  <div class="section-header reveal">
+    <h2>各村特色与在地化详解</h2>
+    <p>26 个村庄、5 个国家，每个村都是品牌基因与在地语境的独特对话——这是多品牌-多项目运营的经典范例</p>
+  </div>
+
+  <!-- Netherlands -->
+  <div class="country-section reveal">
+    <div class="country-heading"><span class="flag">🇳🇱</span><h3>荷兰 · 9 个度假村——品牌的"故乡"</h3></div>
+    <div class="card-grid card-grid-3">
+      <div class="park-card">
+        <div class="park-card-header nl"><div class="park-card-badge">1971 · Limburg</div><h3>Het Meerdal</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🌿 自然探索 · 经典家庭</div><p class="desc">最老的现存村庄之一。以茂密森林和大量自然探索活动著称——森林徒步、动物追踪、树冠探险。主打<span style="color:#1B5E3A;font-weight:600;">纯自然家庭度假</span>，是品牌"back to nature"基因的最纯粹体现。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header nl"><div class="park-card-badge">1972 · Drenthe</div><h3>De Huttenheugte</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🎪 冒险农场 · 活力运动</div><p class="desc">以"冒险农场"概念闻名——<span style="color:#1B5E3A;font-weight:600;">Discovery Bay</span> 大型沙滩湖区提供水上充气乐园和划船活动。强调运动与冒险，是品牌最活跃的村庄之一。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header nl"><div class="park-card-badge">1980 · Flevoland</div><h3>De Eemhof</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🏊 品牌革命 · Aqua Mundo 诞生地</div><p class="desc"><span style="color:#1B5E3A;font-weight:600;">历史上最重要的村庄</span>——1980年在这里诞生了世界第一座室内亚热带游泳穹顶（Aqua Mundo），含 FlowRider 冲浪模拟器。位于 Veluwemeer 湖畔，兼具水上运动。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header nl"><div class="park-card-badge">1983 · North Brabant</div><h3>De Kempervennen</h3></div>
+        <div class="park-card-body"><div class="theme-tag">⛷️ 四季全能 · 室内滑雪</div><p class="desc"><span style="color:#1B5E3A;font-weight:600;">唯一拥有室内滑雪场的 Center Parcs</span>——Montana Snowcenter 提供全年滑雪/单板体验。结合水上运动和大量室内活动，是品牌最具"全能运动"形象的村庄。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header nl"><div class="park-card-badge">1986 · Limburg</div><h3>Het Heijderbos</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🧗 丛林探险 · 热带穹顶</div><p class="desc">Aqua Mundo 规模宏大，拥有大型<strong>丛林主题游乐区</strong>和树冠步道。被称为"荷兰森林最深处"的 Center Parcs，在德国游客中尤其受欢迎。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header nl"><div class="park-card-badge">1990 · South Holland</div><h3>Port Zélande</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🌊 海上度假 · 三角洲风情</div><p class="desc">坐落在<span style="color:#1B5E3A;font-weight:600;">Grevelingenmeer 湖边</span>，是品牌最"海洋风"的村庄之一。大量水上运动（帆船、风筝冲浪、潜水），建筑融入 Zeeland 三角洲地区的海岸美学。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header nl"><div class="park-card-badge">1989 · North Holland</div><h3>Park Zandvoort</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🏖️ 沙丘度假 · 北海之滨</div><p class="desc"><span style="color:#1B5E3A;font-weight:600;">唯一建在沙丘生态系统中的 Center Parcs</span>。度假屋嵌入海岸沙丘景观，步行可达北海海滩。整个村庄的景观设计与沙丘植被完全融合——是品牌最"海滨度假村"化的存在。</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Belgium -->
+  <div class="country-section reveal">
+    <div class="country-heading"><span class="flag">🇧🇪</span><h3>比利时 · 5 个度假村——试验新一代概念</h3></div>
+    <div class="card-grid card-grid-3">
+      <div class="park-card">
+        <div class="park-card-header be"><div class="park-card-badge">1981 · Limburg</div><h3>Erperheide</h3></div>
+        <div class="park-card-body"><div class="theme-tag">👶 最亲子 · 幼童天堂</div><p class="desc">被公认为<strong>最适合低龄儿童的 Center Parcs</strong>。专为 0-6 岁设计的大型室内游乐区、温和的 Aqua Mundo 儿童专区、大量亲子工作坊。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header be"><div class="park-card-badge">1987 · Limburg</div><h3>De Vossemeren</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🏔️ 湖山之间 · 双湖体验</div><p class="desc">以<strong>两个大型天然湖泊</strong>为特色——"Discovery Bay"和"Action Bay"分别供休闲和运动使用。比利时佛兰德地区森林覆盖率最高的选址之一。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header be"><div class="park-card-badge">2021 · Limburg</div><h3>Terhills Resort</h3></div>
+        <div class="park-card-body"><div class="theme-tag">♻️ 可持续奢华 · 后工业再生 · 旗舰</div><p class="desc"><span style="color:#1B5E3A;font-weight:600;">品牌新世代的宣言之作</span>——建在废弃煤矿的 63 公顷土地上，250 栋全独立设计度假屋（各不相同的朝向与造型），浮动太阳能电站供能 50%+，琥珀色蝙蝠友好照明。紧邻 Hoge Kempen 国家公园。代表了从"家庭度假"到<span style="color:#1B5E3A;font-weight:600;">"设计驱动型生态度假"</span>的战略转型。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header be"><div class="park-card-badge">1989 · West Flanders</div><h3>Park De Haan</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🏖️ 海岸沙丘 · 北海度假</div><p class="desc">与 Zandvoort 类似的<strong>沙丘度假概念</strong>，但位于比利时北海海岸。度假屋隐匿于海岸松林与沙丘之间，步行 10 分钟到海滩。拥有独特的"海岸+森林"双生态系统体验。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header be"><div class="park-card-badge">1992 · Luxembourg</div><h3>Les Ardennes</h3></div>
+        <div class="park-card-body"><div class="theme-tag">⛰️ 阿登高地 · 山谷秘境</div><p class="desc">位于瓦隆大区阿登山脉——Center Parcs 中<strong>最"山区"的村庄</strong>。地形起伏、树林茂密，冬季可结合周边滑雪。度假屋沿山谷溪流错落分布，是品牌最具山地度假氛围的一站。</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Germany -->
+  <div class="country-section reveal">
+    <div class="country-heading"><span class="flag">🇩🇪</span><h3>德国 · 6 个度假村——从北海到阿尔卑斯山麓</h3></div>
+    <div class="card-grid card-grid-3">
+      <div class="park-card">
+        <div class="park-card-header de"><div class="park-card-badge">1995 · Lower Saxony</div><h3>Bispinger Heide</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🌾 吕讷堡石楠 · 德式经典</div><p class="desc">坐落在著名的<strong>吕讷堡石楠草原</strong>（Lüneburger Heide）边缘，建筑风格融入北德乡村美学。最大的德国 Center Parcs，拥有超过 800 栋度假屋。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header de"><div class="park-card-badge">2013 · Saarland</div><h3>Park Bostalsee</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🏖️ 地中海夏日 · 湖区开放模式</div><p class="desc">12,000m² 的 <strong>Market Dome</strong> 内栽种棕榈树，营造全年"地中海夏日"氛围。<span style="color:#1B5E3A;font-weight:600;">唯一对非住客开放的 Center Parcs</span>——日间访客可购买 Aqua Mundo 门票。紧邻 120 公顷的 Bostalsee 水库，提供帆船、帆板等运动。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header de"><div class="park-card-badge">2018 · Baden-Württemberg</div><h3>Park Allgäu</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🏔️ 阿尔卑斯山麓 · 巴伐利亚庄园</div><p class="desc"><span style="color:#1B5E3A;font-weight:600;">德国最新、最具在地特色的村庄</span>——选址 Allgäu 阿尔卑斯山麓，建筑风格融入巴伐利亚传统农庄美学（木构阳台、坡屋顶、花卉装饰）。邻近 Alpsee 湖，冬季可滑雪，夏季徒步+水上运动。实现了"南德乡村度假"的在地化表达。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header de"><div class="park-card-badge">1979 · Rhineland-Palatinate</div><h3>Park Eifel</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🌋 火山地貌 · 艾菲尔秘境</div><p class="desc">位于<strong>艾菲尔火山地区</strong>——德国最具戏剧性的自然景观之一。火山湖（Maar）、玄武岩地貌和茂密森林构成独特的度假背景。是品牌最"地质奇观"化的选址。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header de"><div class="park-card-badge">1992 · Lower Saxony</div><h3>Park Nordseeküste</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🌊 北海海岸 · 瓦登海门户</div><p class="desc">位于德国北海沿岸，靠近<strong>瓦登海国家公园</strong>（UNESCO 世界遗产）。度假屋沿堤坝后方的盐沼草原展开，是品牌最"北海风情"的村庄——潮汐、盐碱滩涂、候鸟迁徙构成独特体验。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header de"><div class="park-card-badge">1994 · North Rhine-Westphalia</div><h3>Park Hochsauerland</h3></div>
+        <div class="park-card-body"><div class="theme-tag">⛷️ 冬季运动 · Sauerland 高地</div><p class="desc">位于<strong>Sauerland 冬季运动区</strong>——德国最受欢迎的滑雪目的地之一。度假屋建筑采用当地山地质感——石材基座+木构上层。冬季滑雪+Aqua Mundo 暖水，形成"冰火两重天"的独特体验。</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- France -->
+  <div class="country-section reveal">
+    <div class="country-heading"><span class="flag">🇫🇷</span><h3>法国 · 7 个度假村——最进取的在地化创新</h3></div>
+    <div class="card-grid card-grid-3">
+      <div class="park-card">
+        <div class="park-card-header fr"><div class="park-card-badge">1988 · Normandy</div><h3>Les Bois-Francs</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🏰 诺曼底森林 · 法式经典</div><p class="desc">法国第一家 Center Parcs。选址诺曼底茂密的<span style="color:#1B5E3A;font-weight:600;">国有森林</span>，建筑采用诺曼底半木构（colombage）风格的现代演绎。距巴黎仅 1.5 小时，是法国市场的经典入门。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header fr"><div class="park-card-badge">1993 · Sologne</div><h3>Les Hauts de Bruyères</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🏞️ 索洛涅湖区 · 翻新标杆</div><p class="desc">位于法国中部<strong>Sologne 千湖之区</strong>。2024 年完成全范围翻新——€6,500万投资，720 栋度假屋和中央设施全面升级。代表品牌对"存量资产再激活"的能力。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header fr"><div class="park-card-badge">2007 · Picardy</div><h3>Le Lac d'Ailette</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🌊 湖畔度假 · 水上运动天堂</div><p class="desc">建在 Ailette 湖半岛上，<span style="color:#1B5E3A;font-weight:600;">湖景是所有法国村中最好的</span>。大量度假屋直接临水，水上运动（帆船、皮划艇、桨板）是核心体验。建筑采用现代湖畔度假村风格。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header fr"><div class="park-card-badge">2010 · Lorraine</div><h3>Les Trois Forêts</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🌳 三林交汇 · 欧洲最大之一</div><p class="desc">地处<strong>三片国家森林交汇处</strong>，占地 435 公顷——是面积最大的 Center Parcs 之一。Aqua Mundo 规模为法国之最，度假屋设计强调与原始森林的视觉通透性。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header fr"><div class="park-card-badge">2015 · Vienne</div><h3>Le Bois aux Daims</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🦌 鹿之林 · Futuroscope 联动</div><p class="desc">紧邻<span style="color:#1B5E3A;font-weight:600;">Futuroscope 未来影视主题公园</span>——是品牌唯一与大型主题公园形成协同的选址。"鹿之林"的名字来自当地常见的野生鹿群，度假屋设计融入 Poitou 地区石材元素。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header fr"><div class="park-card-badge">2017 · Île-de-France</div><h3>Villages Nature Paris</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🌱 生态城市度假 · Euro Disney 合资</div><p class="desc"><span style="color:#1B5E3A;font-weight:600;">品牌史上最特别的项目</span>——与 Euro Disney 合资，主打"可持续城市度假"。地热供暖、零碳目标、有机农场、湖畔空中花园（Aqualagon）。位于巴黎迪士尼乐园旁，吸引国际客群。</p></div>
+      </div>
+      <div class="park-card">
+        <div class="park-card-header fr"><div class="park-card-badge">2022 · Nouvelle-Aquitaine</div><h3>Les Landes de Gascogne</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🌲 教育农场 · 树屋度假 · 在地化巅峰</div><p class="desc"><span style="color:#1B5E3A;font-weight:600;">法国最新村，在地化的极致</span>——17 栋树屋（Nests）、传统农舍改建、教育农场（濒危品种保育）、4 个永续菜园、烟草烘干棚风格 Aqua Mundo、巴斯克集市风格 Market Dome。全身心投入 Landes 地区的松林、农业和美食文化。首年吸引 187,300 名访客。</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Denmark -->
+  <div class="country-section reveal">
+    <div class="country-heading"><span class="flag">🇩🇰</span><h3>丹麦 · 1 个度假村——北欧第一站</h3></div>
+    <div class="card-grid card-grid-2">
+      <div class="park-card">
+        <div class="park-card-header dk"><div class="park-card-badge">2025 · Als Island</div><h3>Nordborg Resort</h3></div>
+        <div class="park-card-body"><div class="theme-tag">🇩🇰 北欧首秀 · DGNB 金级 · 丹麦最长栈桥</div><p class="desc">2025 年 6 月 20 日开业，<strong>440 栋北欧设计度假屋</strong>散布于 190 公顷海岸森林。<span style="color:#1B5E3A;font-weight:600;">欧洲首个 DGNB 金级认证度假村</span>——从材料选择到能源循环全面可持续。140 米栈桥伸入波罗的海，Aqua Mundo 7,200m²，融合 friluftsliv（北欧户外生活哲学）。SPAR 超市携手 Lagkagehuset 烘焙。预计年接待 450,000 过夜+25,000 日间游客。</p></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ═══════ 6. 品牌 DNA vs 在地化对比 ═══════ -->
+<section class="section">
+  <div class="section-header reveal">
+    <h2>统一 DNA vs 在地化演绎</h2>
+    <p>Center Parcs 最值得研究的课题：如何让 28 个村庄既有"一家人"的辨识度，又有各自独特的在地灵魂</p>
+  </div>
+  <div class="compare-grid reveal">
+    <div class="compare-col nl-cp">
+      <h3>🔷 品牌统一 DNA（所有村共有）</h3>
+      <ul style="list-style:none;">
+        <li style="padding:0.5rem 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:0.9rem;">✅ Aqua Mundo 室内亚热带水上乐园</li>
+        <li style="padding:0.5rem 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:0.9rem;">✅ Market Dome 中央穹顶广场</li>
+        <li style="padding:0.5rem 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:0.9rem;">✅ 无车区 + 森林/湖边选址</li>
+        <li style="padding:0.5rem 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:0.9rem;">✅ Comfort / Premium / VIP 三级度假屋</li>
+        <li style="padding:0.5rem 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:0.9rem;">✅ 儿童俱乐部 + 家庭活动编排</li>
+        <li style="padding:0.5rem 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:0.9rem;">✅ Deep Nature Spa</li>
+        <li style="padding:0.5rem 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:0.9rem;">✅ 自行车为主要内部交通工具</li>
+      </ul>
+    </div>
+    <div class="compare-col new-gen">
+      <h3>🔶 在地化维度（各村差异点）</h3>
+      <ul style="list-style:none;">
+        <li style="padding:0.5rem 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:0.9rem;">🎨 <strong>建筑风格：</strong>从诺曼底半木构→巴伐利亚农庄→北欧极简→沙丘有机</li>
+        <li style="padding:0.5rem 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:0.9rem;">🌿 <strong>景观设计：</strong>荷兰森林 / 法国松林 / 德国内陆湖 / 丹麦海岸 / 阿登山谷</li>
+        <li style="padding:0.5rem 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:0.9rem;">🍽️ <strong>在地食材与餐饮：</strong>Les Landes 本地榛子 SPA / Allgäu 巴伐利亚啤酒 / Nordborg Lagkagehuset 丹麦烘焙</li>
+        <li style="padding:0.5rem 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:0.9rem;">🎯 <strong>独特活动：</strong>教育农场 / 室内滑雪 / 海上帆船 / 树屋住宿 / 火山湖探索</li>
+        <li style="padding:0.5rem 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:0.9rem;">🏛️ <strong>Market Dome 主题：</strong>Basque 集市 / 地中海棕榈园 / 北欧 hygge 空间</li>
+        <li style="padding:0.5rem 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:0.9rem;">♻️ <strong>可持续策略：</strong>浮动太阳能 / 地热 / DGNB 金级 / 生物多样性廊道</li>
+        <li style="padding:0.5rem 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:0.9rem;">🏘️ <strong>周边联动：</strong>Futuroscope 主题公园 / 国家公园 / 滑雪区 / Disneyland Paris</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 7. 运营指标 ═══════ -->
+<section class="section" style="background:#F2F5EE;max-width:100%;padding:5rem 2rem;">
+  <div style="max-width:1100px;margin:0 auto;">
+  <div class="section-header reveal">
+    <h2>运营指标</h2>
+    <p>财务数据来自 PVCP 集团 FY2024/2025 年报（截至 2025 年 9 月）</p>
+  </div>
+  <div class="kpi-row reveal">
+    <div class="kpi-card"><div class="num">€19.46亿</div><div class="label">集团经济总营收 (FY2025)</div></div>
+    <div class="kpi-card"><div class="num">€1.25亿</div><div class="label">Center Parcs EBITDA</div></div>
+    <div class="kpi-card"><div class="num">€188</div><div class="label">平均房价 ADR / 晚</div></div>
+    <div class="kpi-card"><div class="num">78%</div><div class="label">Q3 入住率 (2025)</div></div>
+    <div class="kpi-card"><div class="num">83.7%</div><div class="label">Q4 旺季入住率 (2025)</div></div>
+  </div>
+  <div class="reveal" style="overflow-x:auto;margin-top:2rem;">
+    <table class="data-table">
+      <thead><tr><th>区域</th><th>村数</th><th>最早开业</th><th>最新开业</th><th>Q3收入增长 (YoY)</th><th>代表特色</th></tr></thead>
+      <tbody>
+        <tr><td>🇳🇱 荷兰</td><td class="num">9</td><td>1971</td><td>2011</td><td class="num">+11.5%</td><td>品牌起源·最纯正 DNA</td></tr>
+        <tr><td>🇧🇪 比利时</td><td class="num">5</td><td>1981</td><td>2021</td><td class="num">+5.2%</td><td>新一代概念试验场</td></tr>
+        <tr><td>🇩🇪 德国</td><td class="num">6</td><td>1979</td><td>2018</td><td class="num">+5.5%</td><td>从北海到阿尔卑斯</td></tr>
+        <tr><td>🇫🇷 法国</td><td class="num">7</td><td>1988</td><td>2022</td><td class="num">+21.8%</td><td>最进取的在地化创新</td></tr>
+        <tr><td>🇩🇰 丹麦</td><td class="num">1</td><td>2025</td><td>2025</td><td>—</td><td>北欧首秀·DGNB金级</td></tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</section>
+
+<!-- ═══════ 8. 投资与扩建时序 ═══════ -->
+<section class="section">
+  <div class="section-header reveal">
+    <h2>投资与扩建时序</h2>
+    <p>从单店到多国品牌矩阵——关键投资节点一览</p>
+  </div>
+  <div class="card-grid card-grid-3 reveal">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2.2rem;font-weight:700;color:#1B5E3A;font-family:'Playfair Display',serif;">€6,500万</div>
+      <div style="font-size:0.85rem;color:#6B5E40;">Hauts de Bruyères 翻新 (2024)</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2.2rem;font-weight:700;color:#1B5E3A;font-family:'Playfair Display',serif;">€1.3亿</div>
+      <div style="font-size:0.85rem;color:#6B5E40;">Park Bostalsee 新建 (2013)</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2.2rem;font-weight:700;color:#1B5E3A;font-family:'Playfair Display',serif;">€5,000万+</div>
+      <div style="font-size:0.85rem;color:#6B5E40;">Nordborg Resort 新建 (2025, 估算)</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2.2rem;font-weight:700;color:#1B5E3A;font-family:'Playfair Display',serif;">€1亿+</div>
+      <div style="font-size:0.85rem;color:#6B5E40;">年资本支出 Capex (FY2025)</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2.2rem;font-weight:700;color:#1B5E3A;font-family:'Playfair Display',serif;">3 个</div>
+      <div style="font-size:0.85rem;color:#6B5E40;">在建/规划新项目</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2.2rem;font-weight:700;color:#1B5E3A;font-family:'Playfair Display',serif;">+3.8%</div>
+      <div style="font-size:0.85rem;color:#6B5E40;">年旅游收入增长率</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 9. 发展模式启示 ═══════ -->
+<section class="section" style="background:#F2F5EE;max-width:100%;padding:5rem 2rem;">
+  <div style="max-width:1100px;margin:0 auto;">
+  <div class="section-header reveal">
+    <h2>多项目品牌运营启示</h2>
+    <p>Center Parcs 是一个教科书级别的"品牌标准化 + 在地差异化"案例，以下是可以复用的方法论</p>
+  </div>
+  <div class="card-grid card-grid-2 reveal">
+    <div class="card">
+      <div class="card-icon">🧬</div>
+      <h4>1. 硬性统一 / 软性差异 二分法</h4>
+      <p style="font-size:0.85rem;color:#6B5E40;">Aqua Mundo + Market Dome + 无车区 = 硬标准，绝不妥协。建筑风格、在地活动、餐饮内容 = 软变量，充分在地化。这种二分保证了品牌辨识度，又避免了"千村一面"。</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗺️</div>
+      <h4>2. 生态系统选址的先决性</h4>
+      <p style="font-size:0.85rem;color:#6B5E40;">每个村必须依附于一个独特的自然生态系统——森林、湖泊、沙丘、海岸、火山地貌、阿尔卑斯山麓。生态系统决定了村庄的"底色"，建筑和活动只是在底色上作画。</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔬</div>
+      <h4>3. 用新市场做概念验证</h4>
+      <p style="font-size:0.85rem;color:#6B5E40;">比利时 Terhills（可持续奢华）、法国 Landes（教育农场+树屋）、丹麦 Nordborg（北欧设计）都是在新市场或新选址中试验新概念，成功后反哺存量村庄的翻新策略。</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📐</div>
+      <h4>4. 度假屋设计的三级弹性</h4>
+      <p style="font-size:0.85rem;color:#6B5E40;">Comfort / Premium / VIP 三级体系允许不同市场根据消费力灵活配比——Terhills 100% VIP 级 vs 荷兰村庄多级混搭。品牌定位可在"大众家庭"到"设计奢华"之间滑动。</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔄</div>
+      <h4>5. 周边联动的乘数效应</h4>
+      <p style="font-size:0.85rem;color:#6B5E40;">Le Bois aux Daims + Futuroscope、Villages Nature Paris + Disneyland、Nordborg + Universe 科学公园——与邻近大型吸引物的战略联动，将村庄从"目的地"升级为"住宿基地"。</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">♻️</div>
+      <h4>6. 可持续 = 新奢华</h4>
+      <p style="font-size:0.85rem;color:#6B5E40;">Terhills 的浮动太阳能、Nordborg 的 DGNB 金级、Villages Nature 的地热——可持续不再是成本项，而是品牌升级的叙事主轴和溢价依据。</p>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ═══════ 10. 延伸资料库 ═══════ -->
+<section class="section">
+  <div class="section-header reveal">
+    <h2>延伸资料库</h2>
+    <p>5 个精选高质量外部资源</p>
+  </div>
+  <div class="card-grid card-grid-2 reveal">
+    <a href="https://www.centerparcs.eu" target="_blank" style="text-decoration:none;color:inherit;">
+      <div class="resource-card">
+        <div class="resource-icon">🏛️</div>
+        <div><h4>Center Parcs Europe 官网</h4><p>各村详细信息、360° 虚拟导览、最新价格与活动</p><span style="color:#1B5E3A;font-weight:500;font-size:0.82rem;">centerparcs.eu →</span></div>
+      </div>
+    </a>
+    <a href="https://news.groupepvcp.com" target="_blank" style="text-decoration:none;color:inherit;">
+      <div class="resource-card">
+        <div class="resource-icon">📊</div>
+        <div><h4>PVCP 集团新闻中心</h4><p>财报、新项目发布、可持续报告——一手官方数据源</p><span style="color:#1B5E3A;font-weight:500;font-size:0.82rem;">news.groupepvcp.com →</span></div>
+      </div>
+    </a>
+    <a href="https://www.eap-magazin.de" target="_blank" style="text-decoration:none;color:inherit;">
+      <div class="resource-card">
+        <div class="resource-icon">🎢</div>
+        <div><h4>EuroAmusement Professional</h4><p>休闲产业专业媒体，深度报道各村开业与扩建（如 Nordborg、Terhills）</p><span style="color:#1B5E3A;font-weight:500;font-size:0.82rem;">eap-magazin.de →</span></div>
+      </div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=Center+Parcs+Europe+review" target="_blank" style="text-decoration:none;color:inherit;">
+      <div class="resource-card">
+        <div class="resource-icon">🎥</div>
+        <div><h4>YouTube · Center Parcs 体验视频</h4><p>海量家庭 Vlog、各村 walkthrough、Aqua Mundo 实拍</p><span style="color:#1B5E3A;font-weight:500;font-size:0.82rem;">youtube.com →</span></div>
+      </div>
+    </a>
+    <a href="https://commons.wikimedia.org/w/index.php?search=Center+Parcs+Europe" target="_blank" style="text-decoration:none;color:inherit;">
+      <div class="resource-card">
+        <div class="resource-icon">🖼️</div>
+        <div><h4>Wikimedia Commons</h4><p>自由版权图片库，各村建筑与 Aqua Mundo 高清图片</p><span style="color:#1B5E3A;font-weight:500;font-size:0.82rem;">commons.wikimedia.org →</span></div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>Center Parcs Europe · 多村品牌案例研究报告</p>
+  <p style="margin-top:0.5rem;">数据来源：PVCP 集团年报、Center Parcs 官网、EuroAmusement Professional、Wikipedia | 本报告仅供研究参考</p>
+  <p style="margin-top:0.5rem;">© 2026 案例研究项目 · 数据截至 2025 年 10 月</p>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+});
+</script>
+</body>
+</html>

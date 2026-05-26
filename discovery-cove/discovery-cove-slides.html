@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discovery Cove 案例研究</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&display=swap" rel="stylesheet">
+
+<style>
+/* ===========================================
+   CSS CUSTOM PROPERTIES — Paper & Ink Theme
+   =========================================== */
+:root {
+  --bg-cream: #faf9f7;
+  --bg-warm: #f5f2eb;
+  --text-primary: #1a1a1a;
+  --text-secondary: #555;
+  --text-muted: #888;
+  --accent: #c41e3a;
+  --accent-dim: rgba(196,30,58,0.08);
+  --rule-color: #d9d4cc;
+  --rule-light: #ece7de;
+
+  --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
+  --font-body: 'Source Serif 4', 'Georgia', serif;
+
+  --title-size: 68px;
+  --heading-size: 48px;
+  --body-size: 22px;
+  --small-size: 16px;
+  --caption-size: 13px;
+
+  --slide-padding: 90px 110px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration: 0.6s;
+}
+
+/* ===========================================
+   VIEWPORT BASE (viewport-base.css)
+   =========================================== */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  width:100%; height:100%;
+  margin:0; overflow:hidden;
+  background:#1a1a1a;
+}
+
+.deck-viewport {
+  position:fixed; inset:0;
+  overflow:hidden;
+  background:#1a1a1a;
+}
+
+.deck-stage {
+  position:absolute; left:0; top:0;
+  width:1920px; height:1080px;
+  overflow:hidden;
+  transform-origin:0 0;
+}
+
+.slide {
+  position:absolute; inset:0;
+  width:1920px; height:1080px;
+  overflow:hidden;
+  visibility:hidden; opacity:0; pointer-events:none;
+}
+
+.slide.active, .slide.visible {
+  visibility:visible; opacity:1; pointer-events:auto; z-index:1;
+}
+
+img, video, canvas, svg { max-width:100%; max-height:100%; }
+
+@media print {
+  html,body { width:1920px; height:auto; overflow:visible; background:#fff; }
+  .deck-viewport { position:static; overflow:visible; background:#fff; }
+  .deck-stage { position:static; width:auto; height:auto; transform:none!important; background:none; }
+  .slide { position:relative; display:block!important; visibility:visible!important; opacity:1!important; pointer-events:auto!important; width:1920px; height:1080px; break-after:page; }
+  .slide:last-child { break-after:auto; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  *, *::before, *::after { animation-duration:0.01ms!important; transition-duration:0.2s!important; }
+}
+
+/* ===========================================
+   SLIDE BACKGROUND
+   =========================================== */
+.slide-bg {
+  position:absolute; inset:0;
+  background:
+    linear-gradient(180deg, rgba(196,30,58,0.025) 0%, transparent 30%),
+    linear-gradient(180deg, transparent 70%, rgba(196,30,58,0.015) 100%),
+    var(--bg-cream);
+}
+
+/* Subtle paper grain overlay */
+.slide-bg::after {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  background-size:256px 256px;
+}
+
+/* ===========================================
+   COMMON LAYOUT
+   =========================================== */
+.slide-content {
+  position:relative; z-index:2;
+  width:100%; height:100%;
+  display:flex; flex-direction:column;
+  padding:var(--slide-padding);
+}
+
+/* Ornament — § symbol between two rules */
+.ornament {
+  display:flex; align-items:center; gap:18px;
+  margin-bottom:18px;
+}
+.ornament-rule {
+  flex:0 0 48px; height:1px;
+  background:var(--accent);
+}
+.ornament-glyph {
+  font-family:var(--font-display);
+  font-size:20px; color:var(--accent);
+  font-style:italic;
+}
+
+/* Section kicker */
+.slide-kicker {
+  font-family:var(--font-body);
+  font-size:var(--caption-size);
+  font-weight:400; letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  margin-bottom:12px;
+}
+
+/* Slide title */
+.slide-title {
+  font-family:var(--font-display);
+  font-weight:700; font-size:var(--title-size);
+  color:var(--text-primary);
+  line-height:1.1; letter-spacing:-0.01em;
+  margin-bottom:14px;
+}
+.slide-title em { font-style:italic; color:var(--accent); }
+
+/* Separator rule */
+.sep-rule {
+  width:120px; height:1px;
+  background:var(--accent);
+  margin:18px 0 28px;
+}
+
+/* Slide description */
+.slide-desc {
+  font-family:var(--font-body);
+  font-size:var(--small-size);
+  color:var(--text-secondary);
+  line-height:1.6;
+  margin-bottom:24px;
+  max-width:1100px;
+}
+
+/* Bottom chrome */
+.slide-chrome {
+  position:absolute; bottom:40px; left:110px; right:110px;
+  display:flex; justify-content:space-between; align-items:baseline;
+}
+.chrome-page {
+  font-family:var(--font-body);
+  font-size:var(--caption-size);
+  color:#aaa;
+  letter-spacing:0.06em;
+}
+.chrome-divider {
+  height:1px; flex:1;
+  background:var(--rule-color);
+  margin:0 24px;
+  align-self:center;
+}
+.chrome-label {
+  font-family:var(--font-body);
+  font-size:var(--caption-size);
+  color:#aaa;
+  font-style:italic;
+}
+
+/* ===========================================
+   ANIMATIONS
+   =========================================== */
+.reveal {
+  opacity:0;
+  transform:translateY(22px);
+  transition: opacity var(--duration) var(--ease-out-expo),
+              transform var(--duration) var(--ease-out-expo);
+}
+.slide.visible .reveal { opacity:1; transform:translateY(0); }
+.slide.visible .reveal:nth-child(1) { transition-delay:0.05s; }
+.slide.visible .reveal:nth-child(2) { transition-delay:0.1s; }
+.slide.visible .reveal:nth-child(3) { transition-delay:0.15s; }
+.slide.visible .reveal:nth-child(4) { transition-delay:0.2s; }
+.slide.visible .reveal:nth-child(5) { transition-delay:0.25s; }
+.slide.visible .reveal:nth-child(6) { transition-delay:0.3s; }
+.slide.visible .reveal:nth-child(7) { transition-delay:0.35s; }
+.slide.visible .reveal:nth-child(8) { transition-delay:0.4s; }
+.slide.visible .reveal:nth-child(9) { transition-delay:0.45s; }
+.slide.visible .reveal:nth-child(10) { transition-delay:0.5s; }
+
+/* ===========================================
+   SLIDE 1: TITLE
+   =========================================== */
+.title-slide .slide-content {
+  justify-content:center; align-items:center;
+  text-align:center;
+  padding-top:120px; padding-bottom:100px;
+}
+.title-slide .ornament { margin-bottom:28px; }
+.title-slide .slide-kicker { margin-bottom:24px; }
+.title-slide .slide-title {
+  font-size:112px; font-weight:700;
+  line-height:1.06; margin-bottom:20px;
+}
+.title-stats {
+  display:flex; justify-content:center; gap:72px;
+  margin-top:56px;
+}
+.title-stat { text-align:center; }
+.title-stat-num {
+  font-family:var(--font-display);
+  font-size:44px; font-weight:600;
+  color:var(--text-primary); line-height:1;
+}
+.title-stat-label {
+  font-family:var(--font-body);
+  font-size:var(--caption-size);
+  color:var(--text-muted);
+  letter-spacing:0.08em; text-transform:uppercase;
+  margin-top:8px;
+}
+.title-slide .bottom-rule {
+  width:260px; height:1px;
+  background:var(--rule-color);
+  margin-top:60px;
+}
+
+/* ===========================================
+   SLIDE 2: OVERVIEW GRID
+   =========================================== */
+.overview-grid {
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:20px;
+  margin-top:10px;
+}
+.ov-card {
+  background:#fff;
+  border-radius:2px;
+  padding:28px 26px;
+  border:1px solid var(--rule-light);
+}
+.ov-card-label {
+  font-family:var(--font-body);
+  font-size:12px; font-weight:600;
+  letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:8px;
+}
+.ov-card-value {
+  font-family:var(--font-display);
+  font-size:32px; font-weight:700;
+  color:var(--text-primary);
+  line-height:1.15;
+}
+.ov-card-sub {
+  font-family:var(--font-body);
+  font-size:14px; color:var(--text-muted);
+  margin-top:4px; line-height:1.4;
+}
+
+/* ===========================================
+   SLIDE 3: TECHNICAL TABLE
+   =========================================== */
+.tech-table {
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+}
+.tech-table thead th {
+  background:var(--text-primary);
+  color:#fff;
+  font-family:var(--font-body);
+  font-size:12px; font-weight:600;
+  letter-spacing:0.08em; text-transform:uppercase;
+  padding:14px 24px; text-align:left;
+}
+.tech-table thead th:first-child { border-radius:2px 0 0 0; }
+.tech-table thead th:last-child { border-radius:0 2px 0 0; }
+.tech-table tbody td {
+  padding:12px 24px;
+  font-family:var(--font-body);
+  font-size:15px; color:var(--text-primary);
+  border-bottom:1px solid var(--rule-light);
+  line-height:1.45;
+}
+.tech-table tbody tr:hover td { background:rgba(196,30,58,0.025); }
+.tech-table .cat-cell {
+  font-family:var(--font-body);
+  font-size:12px; font-weight:600;
+  color:var(--accent);
+  letter-spacing:0.06em; text-transform:uppercase;
+  background:var(--bg-warm);
+}
+
+/* ===========================================
+   SLIDE 4: SPATIAL LAYOUT — THREE ZONES
+   =========================================== */
+.zones-row {
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:20px;
+  margin-top:10px;
+}
+.zone-card {
+  background:#fff;
+  border-radius:2px;
+  border-top:3px solid;
+  padding:28px 24px;
+  border-bottom:1px solid var(--rule-light);
+  border-left:1px solid var(--rule-light);
+  border-right:1px solid var(--rule-light);
+}
+.zone-card.front { border-color:#D4A853; }
+.zone-card.middle { border-color:#1A7A7A; }
+.zone-card.back { border-color:#1A6A85; }
+.zone-card h3 {
+  font-family:var(--font-display);
+  font-size:26px; font-weight:600;
+  color:var(--text-primary);
+  margin-bottom:4px;
+}
+.zone-card .zone-en {
+  font-size:12px; color:var(--text-muted);
+  margin-bottom:16px; font-style:italic;
+}
+.zone-card ul {
+  list-style:none;
+}
+.zone-card li {
+  font-family:var(--font-body);
+  font-size:14px; color:var(--text-secondary);
+  padding:5px 0; line-height:1.45;
+}
+.zone-card li::before { content:'— '; color:var(--accent); }
+.zone-tag {
+  display:inline-block;
+  font-size:10px; font-weight:600;
+  padding:2px 7px; border-radius:10px;
+  margin-left:4px; letter-spacing:0.04em;
+}
+.zone-tag.temp { background:#FDE8E0; color:#C05030; }
+.zone-tag.size { background:#E0F0F0; color:#1A6B6B; }
+.zone-tag.new { background:#FEF0D0; color:#8B6914; }
+
+/* Water bodies summary strip */
+.water-strip {
+  display:flex; gap:16px;
+  margin-top:20px;
+}
+.water-item {
+  flex:1; background:#fff;
+  border:1px solid var(--rule-light);
+  padding:18px 16px; text-align:center;
+  border-radius:2px;
+}
+.water-item .w-name {
+  font-family:var(--font-display);
+  font-size:17px; font-weight:600;
+  color:var(--text-primary);
+}
+.water-item .w-spec {
+  font-family:var(--font-body);
+  font-size:12px; color:var(--text-muted);
+  margin-top:4px;
+}
+
+/* ===========================================
+   SLIDE 5: INVESTMENT TIMELINE
+   =========================================== */
+.timeline {
+  position:relative;
+  padding-left:56px;
+  margin-top:10px;
+}
+.timeline::before {
+  content:''; position:absolute; left:19px; top:6px; bottom:6px;
+  width:2px; background:var(--rule-color);
+}
+.tl-item {
+  position:relative;
+  margin-bottom:30px;
+}
+.tl-item:last-child { margin-bottom:0; }
+.tl-dot {
+  position:absolute; left:-44px; top:6px;
+  width:14px; height:14px;
+  border-radius:50%;
+  background:var(--accent);
+  border:2px solid var(--bg-cream);
+  box-shadow:0 0 0 3px var(--bg-cream);
+}
+.tl-item.future .tl-dot { background:#D4A853; }
+.tl-year {
+  font-family:var(--font-body);
+  font-size:13px; font-weight:600;
+  color:var(--accent); letter-spacing:0.06em;
+}
+.tl-item.future .tl-year { color:#8B6914; }
+.tl-title {
+  font-family:var(--font-display);
+  font-size:24px; font-weight:600;
+  color:var(--text-primary);
+  margin:2px 0 6px;
+}
+.tl-desc {
+  font-family:var(--font-body);
+  font-size:var(--small-size); color:var(--text-secondary);
+  line-height:1.55; max-width:1500px;
+}
+.tl-meta {
+  display:flex; flex-wrap:wrap; gap:16px;
+  margin-top:8px;
+}
+.tl-meta-item {
+  font-family:var(--font-body);
+  font-size:13px; color:var(--text-muted);
+}
+
+/* ===========================================
+   SLIDE 6: KPI
+   =========================================== */
+.kpi-grid {
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:18px;
+  margin-top:10px;
+}
+.kpi-card {
+  background:#fff;
+  border:1px solid var(--rule-light);
+  padding:28px 24px;
+  text-align:center;
+  border-radius:2px;
+}
+.kpi-label {
+  font-family:var(--font-body);
+  font-size:12px; font-weight:600;
+  letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--text-muted);
+  margin-bottom:12px;
+}
+.kpi-value {
+  font-family:var(--font-display);
+  font-size:44px; font-weight:700;
+  color:var(--text-primary);
+  line-height:1.1;
+}
+.kpi-sub {
+  font-family:var(--font-body);
+  font-size:13px; color:var(--text-muted);
+  margin-top:6px;
+}
+.parent-strip {
+  background:var(--text-primary);
+  color:#fff;
+  margin-top:24px;
+  padding:30px 36px;
+  display:flex; justify-content:space-around;
+  align-items:center;
+  border-radius:2px;
+}
+.parent-item { text-align:center; }
+.parent-num {
+  font-family:var(--font-display);
+  font-size:34px; font-weight:600;
+}
+.parent-label {
+  font-family:var(--font-body);
+  font-size:12px; color:rgba(255,255,255,0.55);
+  letter-spacing:0.06em; text-transform:uppercase;
+  margin-top:4px;
+}
+.parent-kicker {
+  font-family:var(--font-body);
+  font-size:12px; color:rgba(255,255,255,0.45);
+  letter-spacing:0.06em; margin-bottom:10px;
+  text-align:center;
+}
+
+/* ===========================================
+   SLIDE 7: WATER TECH TABLE
+   =========================================== */
+.water-table {
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  margin-top:10px;
+}
+.water-table thead th {
+  background:var(--text-primary);
+  color:#fff;
+  font-family:var(--font-body);
+  font-size:12px; font-weight:600;
+  letter-spacing:0.08em; text-transform:uppercase;
+  padding:14px 24px; text-align:left;
+}
+.water-table tbody td {
+  padding:14px 24px;
+  font-family:var(--font-body);
+  font-size:15px; color:var(--text-primary);
+  border-bottom:1px solid var(--rule-light);
+  line-height:1.4;
+}
+.water-table tbody tr:hover td { background:rgba(196,30,58,0.025); }
+.water-table .water-name {
+  font-family:var(--font-display);
+  font-size:19px; font-weight:600;
+  color:var(--text-primary);
+}
+
+/* ===========================================
+   SLIDE 8: ANIMALS + AMENITIES
+   =========================================== */
+.animal-grid {
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:14px;
+  margin-top:10px;
+}
+.animal-card {
+  background:#fff; border:1px solid var(--rule-light);
+  padding:20px 18px; display:flex; align-items:flex-start;
+  gap:14px; border-radius:2px;
+}
+.animal-emoji { font-size:28px; flex-shrink:0; line-height:1.2; }
+.animal-name {
+  font-family:var(--font-display);
+  font-size:17px; font-weight:600;
+  color:var(--text-primary);
+}
+.animal-detail {
+  font-family:var(--font-body);
+  font-size:13px; color:var(--text-muted);
+  margin-top:2px; line-height:1.4;
+}
+.amenities-strip {
+  display:flex; flex-wrap:wrap; gap:12px;
+  margin-top:20px;
+}
+.amenity-pill {
+  background:#fff;
+  border:1px solid var(--rule-light);
+  padding:12px 18px; border-radius:2px;
+  font-family:var(--font-body);
+  font-size:14px; color:var(--text-primary);
+  display:flex; align-items:center; gap:8px;
+}
+
+/* ===========================================
+   SLIDE 9: CLOSING
+   =========================================== */
+.closing-slide .slide-content {
+  justify-content:center; align-items:center;
+  text-align:center;
+}
+.closing-slide .ornament { margin-bottom:28px; }
+.closing-quote {
+  font-family:var(--font-display);
+  font-size:42px; font-weight:400;
+  font-style:italic;
+  color:var(--text-primary);
+  line-height:1.35;
+  max-width:1200px;
+  opacity:0.85;
+}
+.closing-slide .slide-kicker {
+  margin-top:40px;
+}
+.closing-slide .bottom-rule {
+  width:200px; height:1px;
+  background:var(--rule-color);
+  margin-top:48px;
+}
+
+/* ===========================================
+   INLINE EDITING
+   =========================================== */
+.edit-hotzone {
+  position:fixed; top:0; left:0;
+  width:80px; height:80px;
+  z-index:10000;
+  cursor:pointer;
+}
+.edit-toggle {
+  position:fixed; top:16px; left:16px;
+  width:40px; height:40px;
+  border-radius:50%;
+  background:rgba(26,26,26,0.8);
+  color:#faf9f7;
+  border:none; cursor:pointer;
+  font-size:18px; line-height:40px; text-align:center;
+  opacity:0; pointer-events:none;
+  transition:opacity 0.3s ease;
+  z-index:10001;
+}
+.edit-toggle.show { opacity:1; pointer-events:auto; }
+
+[contenteditable="true"]:focus {
+  outline:2px dashed var(--accent);
+  outline-offset:4px;
+}
+</style>
+</head>
+<body>
+
+<!-- Edit controls -->
+<div class="edit-hotzone"></div>
+<button class="edit-toggle" id="editToggle" title="编辑模式 (E)">&#9998;</button>
+
+<div class="deck-viewport">
+<main class="deck-stage" id="deckStage">
+
+<!-- ===========================================
+     SLIDE 1 — TITLE
+     =========================================== -->
+<section class="slide title-slide active" id="s1">
+  <div class="slide-bg"></div>
+  <div class="slide-content">
+    <div class="ornament reveal">
+      <span class="ornament-rule"></span>
+      <span class="ornament-glyph">&sect;</span>
+      <span class="ornament-rule"></span>
+    </div>
+    <div class="slide-kicker reveal">内部研究 &middot; 奥兰多文旅项目深度分析</div>
+    <h1 class="slide-title reveal">Discovery Cove<span style="font-style:italic; color:var(--accent);"> 案例研究</span></h1>
+    <div class="reveal" style="font-family:var(--font-body);font-size:20px;color:var(--text-secondary);margin-top:8px;">全包式一日度假村 &middot; 投资 &middot; 建设 &middot; 空间 &middot; 运营</div>
+    <div class="title-stats reveal">
+      <div class="title-stat"><div class="title-stat-num">14.2 公顷</div><div class="title-stat-label">占地面积</div></div>
+      <div class="title-stat"><div class="title-stat-num">~1,300 人</div><div class="title-stat-label">日最大容量</div></div>
+      <div class="title-stat"><div class="title-stat-num">800 万+</div><div class="title-stat-label">累计游客 2000–2025</div></div>
+      <div class="title-stat"><div class="title-stat-num">&yen;4.35–6.53 亿</div><div class="title-stat-label">估算年营收</div></div>
+    </div>
+    <div class="bottom-rule reveal"></div>
+    <div class="reveal" style="font-family:var(--font-body);font-size:13px;color:#aaa;margin-top:20px;letter-spacing:0.06em;">数据截至 2026 年 5 月 &middot; 内部资料</div>
+  </div>
+  <div class="slide-chrome">
+    <span class="chrome-page">01</span>
+    <span class="chrome-divider"></span>
+    <span class="chrome-label">Discovery Cove &middot; 案例研究</span>
+  </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 2 — PROJECT OVERVIEW
+     =========================================== -->
+<section class="slide" id="s2">
+  <div class="slide-bg"></div>
+  <div class="slide-content">
+    <div class="slide-kicker reveal">01 &mdash;&mdash; 项目概览</div>
+    <h2 class="slide-title reveal">全包式一日度假村</h2>
+    <div class="sep-rule reveal"></div>
+    <p class="slide-desc reveal">Discovery Cove（探索湾）是 United Parks &amp; Resorts 旗下高端精品公园，毗邻 SeaWorld Orlando，以严格限流和全包模式打造私密热带绿洲体验，开创了主题公园行业的"反主题公园"范式。</p>
+    <div class="overview-grid reveal">
+      <div class="ov-card"><div class="ov-card-label">开业时间</div><div class="ov-card-value">2000.7.1</div><div class="ov-card-sub">运营已超过 25 年</div></div>
+      <div class="ov-card"><div class="ov-card-label">开发商</div><div class="ov-card-value" style="font-size:26px;">Busch Entertainment</div><div class="ov-card-sub">安海斯-布希集团旗下（现 United Parks）</div></div>
+      <div class="ov-card"><div class="ov-card-label">地理位置</div><div class="ov-card-value" style="font-size:26px;">Orlando, FL</div><div class="ov-card-sub">6000 Discovery Cove Way &middot; 毗邻 SeaWorld</div></div>
+      <div class="ov-card"><div class="ov-card-label">总占地面积</div><div class="ov-card-value">14.2 公顷</div><div class="ov-card-sub">核心区约 14.2 公顷 &middot; 含景观带 24.3 公顷</div></div>
+      <div class="ov-card"><div class="ov-card-label">日容量限制</div><div class="ov-card-value">~1,000–1,300</div><div class="ov-card-sub">严格预约制 &middot; 确保不拥挤</div></div>
+      <div class="ov-card"><div class="ov-card-label">门票价格 (2025)</div><div class="ov-card-value" style="font-size:24px;">&yen;1,718–2,654</div><div class="ov-card-sub">含海豚游泳 &middot; 全包式一日体验 ($237–$366)</div></div>
+    </div>
+  </div>
+  <div class="slide-chrome">
+    <span class="chrome-page">02</span>
+    <span class="chrome-divider"></span>
+    <span class="chrome-label">Discovery Cove &middot; 项目概览</span>
+  </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 3 — TECHNICAL SUMMARY
+     =========================================== -->
+<section class="slide" id="s3">
+  <div class="slide-bg"></div>
+  <div class="slide-content">
+    <div class="slide-kicker reveal">02 &mdash;&mdash; 技术总表</div>
+    <h2 class="slide-title reveal">完整技术参数</h2>
+    <div class="sep-rule reveal"></div>
+    <p class="slide-desc reveal">涵盖投资、空间、水体、运营、动物五大维度的综合技术指标汇总。</p>
+    <table class="tech-table reveal" style="margin-top:4px;">
+      <thead><tr><th>维度</th><th>指标</th><th>数据</th></tr></thead>
+      <tbody>
+        <tr><td class="cat-cell" rowspan="4">基础信息</td><td>项目名称</td><td>Discovery Cove（探索湾）</td></tr>
+        <tr><td>开业时间</td><td>2000年7月1日</td></tr>
+        <tr><td>位置</td><td>6000 Discovery Cove Way, Orlando, FL 32821</td></tr>
+        <tr><td>运营商</td><td>United Parks &amp; Resorts（NYSE: PRKS）</td></tr>
+
+        <tr><td class="cat-cell" rowspan="3">空间规模</td><td>核心园区</td><td>约 14.2 公顷</td></tr>
+        <tr><td>含景观带总面积</td><td>~24.3 公顷</td></tr>
+        <tr><td>功能分区</td><td>三大区（前区&middot;中区&middot;后区）&middot; 5 个主要水体 &middot; 3,000 吨进口白沙</td></tr>
+
+        <tr><td class="cat-cell" rowspan="4">投资数据</td><td>Grand Reef 扩建 (2011)</td><td>材料成本 &gt;&yen;1.23亿（$1,700万）</td></tr>
+        <tr><td>Project Canopy 酒店 (2024–2026)</td><td>估算 &gt;&yen;7.25亿（$1亿）&middot; 250间 &middot; 约 26,816 m&sup2;</td></tr>
+        <tr><td>酒店设计师</td><td>Cooper Carry (建筑) &middot; EDSA (景观) &middot; AtkinsR&eacute;alis (土木)</td></tr>
+        <tr><td>投资回报预期</td><td>CEO 预计股权回报率 &gt;20%</td></tr>
+
+        <tr><td class="cat-cell" rowspan="3">水体技术</td><td>主要水体</td><td>Dolphin Lagoon &middot; Grand Reef &middot; Serenity Bay &middot; Wind-Away River &middot; Freshwater Oasis</td></tr>
+        <tr><td>总水量</td><td>超过 15,000 m&sup3;（盐水和淡水双系统）</td></tr>
+        <tr><td>温度控制</td><td>盐水 22–24&deg;C &middot; 淡水 29–31&deg;C</td></tr>
+
+        <tr><td class="cat-cell" rowspan="3">运营指标</td><td>日容量 / 年游客量 / 累计游客</td><td>~1,300 人 / ~30–35 万 / 800 万+（2000–2025）</td></tr>
+        <tr><td>门票区间 (2025)</td><td>&yen;1,718–2,654（含海豚）&middot; &yen;1,225–1,805（基础）</td></tr>
+        <tr><td>估算年营收</td><td>&yen;4.35–6.53亿（$6,000–9,000万）</td></tr>
+
+        <tr><td class="cat-cell" rowspan="2">动物生态</td><td>海洋物种</td><td>125+ 种 &middot; ~10,000 只（Grand Reef）&middot; 大西洋宽吻海豚 &middot; 鲨鱼 &middot; 鹰鳐</td></tr>
+        <tr><td>陆生/鸟类</td><td>250+ 只自由飞行鸟类 &middot; 亚洲小爪水獭 &middot; 白顶狨猴 &middot; 火烈鸟</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="slide-chrome">
+    <span class="chrome-page">03</span>
+    <span class="chrome-divider"></span>
+    <span class="chrome-label">Discovery Cove &middot; 技术总表</span>
+  </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 4 — SPATIAL LAYOUT
+     =========================================== -->
+<section class="slide" id="s4">
+  <div class="slide-bg"></div>
+  <div class="slide-content">
+    <div class="slide-kicker reveal">03 &mdash;&mdash; 空间布局</div>
+    <h2 class="slide-title reveal">三区递进 &middot; 从绿洲到深海</h2>
+    <div class="sep-rule reveal"></div>
+    <p class="slide-desc reveal">园区自北向南分三大区域，空间叙事从入口接待&rarr;海豚互动&rarr;深海探索逐级展开。Wind-Away River 作为环形水系串联全局。</p>
+    <div class="zones-row reveal">
+      <div class="zone-card front">
+        <h3>前区 &middot; 迎宾与探索层</h3>
+        <div class="zone-en">Front Zone — Welcome, Dining &amp; Exploration</div>
+        <ul>
+          <li>Laguna Grill 主餐厅 + Blue Bamboo Bar + Hibiscus Hideaway <span class="zone-tag new">2024翻新</span></li>
+          <li>Explorer's Aviary 探险者鸟舍 — 250+ 只自由飞行热带鸟类</li>
+          <li>Freshwater Oasis 淡水绿洲 — 水獭 + 狨猴 <span class="zone-tag new">2012新增</span></li>
+          <li>Wind-Away River 漂流河 — 加热淡水，穿越鸟舍</li>
+          <li>Serenity Bay 宁静湾 — 大型淡水泳池 <span class="zone-tag temp">29–31&deg;C</span></li>
+          <li>Flamingo Point 火烈鸟点 <span class="zone-tag new">2024新增</span></li>
+        </ul>
+      </div>
+      <div class="zone-card middle">
+        <h3>中区 &middot; 核心互动层</h3>
+        <div class="zone-en">Middle Zone — Dolphin Interaction Hub</div>
+        <ul>
+          <li>Dolphin Lagoon 海豚泻湖 — 大西洋宽吻海豚 <span class="zone-tag size">约 9,085 m&sup3;</span> <span class="zone-tag temp">22–24&deg;C</span></li>
+          <li>潜水装备 &amp; 潜水衣领取处</li>
+          <li>中央储物柜区（距各区间最近）</li>
+          <li>小型餐饮补给站</li>
+        </ul>
+      </div>
+      <div class="zone-card back">
+        <h3>后区 &middot; 深海探索层</h3>
+        <div class="zone-en">Back Zone — Deep Reef &amp; Snorkeling</div>
+        <ul>
+          <li>The Grand Reef 大堡礁 — 浮潜礁湖 <span class="zone-tag size">约 3,785+ m&sup3;</span> <span class="zone-tag size">1.0 公顷</span></li>
+          <li>125+ 物种、约 10,000 只海洋生物</li>
+          <li>SeaVenture 海底漫步 — 约 3.7m 深头盔水下行走 <span class="zone-tag new">10岁+</span></li>
+          <li>鲨鱼观赏桥（玻璃隔离）+ 鹰鳐喂食体验</li>
+        </ul>
+      </div>
+    </div>
+    <div class="water-strip reveal">
+      <div class="water-item"><div class="w-name">Dolphin Lagoon</div><div class="w-spec">约 9,085 m&sup3; &middot; 盐水 &middot; 22–24&deg;C</div></div>
+      <div class="water-item"><div class="w-name">The Grand Reef</div><div class="w-spec">约 3,785+ m&sup3; &middot; 盐水 &middot; 22–24&deg;C</div></div>
+      <div class="water-item"><div class="w-name">Serenity Bay</div><div class="w-spec">约 3,123 m&sup3; &middot; 淡水 &middot; 29–31&deg;C</div></div>
+      <div class="water-item"><div class="w-name">Wind-Away River</div><div class="w-spec">淡水循环 &middot; 加热恒温</div></div>
+      <div class="water-item"><div class="w-name">Freshwater Oasis</div><div class="w-spec">淡水涉水 &middot; 加热恒温</div></div>
+    </div>
+  </div>
+  <div class="slide-chrome">
+    <span class="chrome-page">04</span>
+    <span class="chrome-divider"></span>
+    <span class="chrome-label">Discovery Cove &middot; 空间布局</span>
+  </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 5 — INVESTMENT TIMELINE
+     =========================================== -->
+<section class="slide" id="s5">
+  <div class="slide-bg"></div>
+  <div class="slide-content">
+    <div class="slide-kicker reveal">04 &mdash;&mdash; 投资与建设</div>
+    <h2 class="slide-title reveal">分阶段投资 &middot; 持续迭代</h2>
+    <div class="sep-rule reveal"></div>
+    <p class="slide-desc reveal">从 2000 年开业到 2026 年酒店落成，采用"核心开业 + 持续升级"的长周期投资策略。</p>
+    <div class="timeline reveal">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">1999 — 2000</div>
+        <div class="tl-title">初始建设 &middot; 开业启幕</div>
+        <div class="tl-desc">Anheuser-Busch 旗下 Busch Entertainment 投资建设，定位"高端一日度假村"。门票开价 &yen;1,298/天（$179/天），当时其他奥兰多公园约 &yen;319/天（$44/天），颠覆行业定价体系。确切初始投资额未公开披露。</div>
+        <div class="tl-meta"><span class="tl-meta-item">开发商：Busch Entertainment</span><span class="tl-meta-item">面积：约 12.1 公顷</span><span class="tl-meta-item">日容量：~1,000 人</span></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2011</div>
+        <div class="tl-title">大堡礁扩建 &middot; The Grand Reef</div>
+        <div class="tl-desc">替代原有珊瑚礁，新建超 3,785 m&sup3; 盐水礁湖（1.0 公顷），容纳 125+ 物种、约 10,000 只海洋生物。新增 SeaVenture 海底漫步体验。建筑许可材料成本已超 &yen;1.23 亿（$1,700 万）。</div>
+        <div class="tl-meta"><span class="tl-meta-item">材料成本：&gt;&yen;1.23亿（&gt;$17M）</span><span class="tl-meta-item">水量：约 3,785+ m&sup3;</span><span class="tl-meta-item">物种：125+</span></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2012</div>
+        <div class="tl-title">淡水绿洲新增 &middot; Freshwater Oasis</div>
+        <div class="tl-desc">新增雨林天蓬下的涉水步道，引入亚洲小爪水獭和白顶狨猴，丰富非海洋动物互动体验。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2021 — 2024</div>
+        <div class="tl-title">设施翻新 &middot; 餐饮升级</div>
+        <div class="tl-desc">Laguna Grill 餐厅从自助食堂模式升级为档口式供餐。新增 Flamingo Point 火烈鸟观察区（2024）。</div>
+        <div class="tl-meta"><span class="tl-meta-item">餐饮模式升级</span><span class="tl-meta-item">Flamingo Point 2024</span></div>
+      </div>
+      <div class="tl-item future">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2024 — 2026 (进行中)</div>
+        <div class="tl-title">Project Canopy &middot; 园内酒店</div>
+        <div class="tl-desc">SeaWorld 第二座园内酒店，250 间客房、6 层、约 26,816 m&sup2;。配备树顶餐厅(约 669 m&sup2;)、水疗中心(约 1,022 m&sup2;)、会议空间(约 650 m&sup2;)、泳池、酒吧、健身中心。估算投资超 &yen;7.25 亿（$1 亿），CEO 预计股权回报率超 20%。</div>
+        <div class="tl-meta"><span class="tl-meta-item">&gt;&yen;7.25亿（&gt;$100M）</span><span class="tl-meta-item">250间</span><span class="tl-meta-item">Cooper Carry (建筑)</span><span class="tl-meta-item">EDSA (景观)</span><span class="tl-meta-item">AtkinsR&eacute;alis (土木)</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-chrome">
+    <span class="chrome-page">05</span>
+    <span class="chrome-divider"></span>
+    <span class="chrome-label">Discovery Cove &middot; 投资建设时序</span>
+  </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 6 — OPERATIONS KPI
+     =========================================== -->
+<section class="slide" id="s6">
+  <div class="slide-bg"></div>
+  <div class="slide-content">
+    <div class="slide-kicker reveal">05 &mdash;&mdash; 运营指标</div>
+    <h2 class="slide-title reveal">高端限量 &middot; 高客单价模式</h2>
+    <div class="sep-rule reveal"></div>
+    <p class="slide-desc reveal">以严格限流换溢价能力，全包模式提升人均消费，门票收入为基础、附加体验和餐饮零售为补充。</p>
+    <div class="kpi-grid reveal">
+      <div class="kpi-card"><div class="kpi-label">年游客量（估算）</div><div class="kpi-value">30–35 万</div><div class="kpi-sub">日均约 850–950 人</div></div>
+      <div class="kpi-card"><div class="kpi-label">累计游客 (2000–2025)</div><div class="kpi-value">800 万+</div><div class="kpi-sub">25 年运营 &middot; 1,000 万次浮潜</div></div>
+      <div class="kpi-card"><div class="kpi-label">门票区间 (2025·含海豚)</div><div class="kpi-value" style="font-size:34px;">&yen;1,718–2,654</div><div class="kpi-sub">全包餐饮 &middot; 装备 &middot; SeaWorld 通票 ($237–366)</div></div>
+      <div class="kpi-card"><div class="kpi-label">估算年营收</div><div class="kpi-value">&yen;4.35–6.53 亿</div><div class="kpi-sub">基于客流量 &times; 人均消费估算 ($60–90M)</div></div>
+    </div>
+    <div class="parent-strip reveal">
+      <div class="parent-kicker" style="position:absolute;top:-30px;left:36px;text-align:left;">母公司 United Parks &amp; Resorts &middot; 2023 全年数据（NYSE: PRKS）</div>
+      <div class="parent-item"><div class="parent-num">&yen;125.2 亿</div><div class="parent-label">总营收（$1.727B）</div></div>
+      <div class="parent-item"><div class="parent-num">&yen;16.98 亿</div><div class="parent-label">净利润（$234.2M）</div></div>
+      <div class="parent-item"><div class="parent-num">&yen;51.73 亿</div><div class="parent-label">调整后 EBITDA（$713.5M）</div></div>
+      <div class="parent-item"><div class="parent-num">21.6M</div><div class="parent-label">总游客量</div></div>
+      <div class="parent-item"><div class="parent-num">&yen;579</div><div class="parent-label">人均消费（$79.91·创纪录）</div></div>
+    </div>
+  </div>
+  <div class="slide-chrome">
+    <span class="chrome-page">06</span>
+    <span class="chrome-divider"></span>
+    <span class="chrome-label">Discovery Cove &middot; 运营指标</span>
+  </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 7 — WATER TECHNOLOGY
+     =========================================== -->
+<section class="slide" id="s7">
+  <div class="slide-bg"></div>
+  <div class="slide-content">
+    <div class="slide-kicker reveal">06 &mdash;&mdash; 核心水体技术</div>
+    <h2 class="slide-title reveal">超过 15,000 m&sup3; 人工水体</h2>
+    <div class="sep-rule reveal"></div>
+    <p class="slide-desc reveal">园区内五大核心水体统一管理，盐水/淡水分系统运行，温度精确控制以满足动物福利和游客舒适度双重标准。</p>
+    <table class="water-table reveal" style="margin-top:4px;">
+      <thead><tr><th>水体名称</th><th>水量</th><th>水温</th><th>类型</th><th>主要功能</th></tr></thead>
+      <tbody>
+        <tr><td class="water-name">Dolphin Lagoon</td><td>约 9,085 m&sup3;</td><td>22–24&deg;C</td><td>盐水</td><td>大西洋宽吻海豚互动体验</td></tr>
+        <tr><td class="water-name">The Grand Reef</td><td>约 3,785+ m&sup3;</td><td>22–24&deg;C</td><td>盐水</td><td>浮潜 &middot; 海底漫步 &middot; 海洋生物展示</td></tr>
+        <tr><td class="water-name">Serenity Bay</td><td>约 3,123 m&sup3;</td><td>29–31&deg;C</td><td>淡水</td><td>游泳 &middot; 休闲 &middot; 沙滩躺椅</td></tr>
+        <tr><td class="water-name">Wind-Away River</td><td>循环系统</td><td>加热恒温</td><td>淡水</td><td>漂流河 &middot; 穿越鸟舍 &middot; 洞穴 &middot; 瀑布</td></tr>
+        <tr><td class="water-name">Freshwater Oasis</td><td>涉水池</td><td>加热恒温</td><td>淡水</td><td>涉水观赏水獭 &middot; 狨猴栖息地</td></tr>
+      </tbody>
+    </table>
+
+    <div class="slide-kicker reveal" style="margin-top:40px;">07 &mdash;&mdash; 动物生态体系</div>
+    <h2 class="slide-title reveal" style="font-size:40px;">海洋 &middot; 鸟类 &middot; 淡水多维覆盖</h2>
+    <div class="sep-rule reveal" style="margin-bottom:16px;"></div>
+    <div class="animal-grid reveal">
+      <div class="animal-card"><div class="animal-emoji">&#128044;</div><div><div class="animal-name">大西洋宽吻海豚</div><div class="animal-detail">Dolphin Lagoon &middot; 30 分钟互动体验 &middot; 限龄 6 岁+</div></div></div>
+      <div class="animal-card"><div class="animal-emoji">&#128032;</div><div><div class="animal-name">热带鱼 &amp; 海洋生物</div><div class="animal-detail">Grand Reef &middot; 125+ 物种 &middot; ~10,000 只</div></div></div>
+      <div class="animal-card"><div class="animal-emoji">&#129436;</div><div><div class="animal-name">热带鸟类</div><div class="animal-detail">Explorer's Aviary &middot; 250+ 只 &middot; 自由飞行</div></div></div>
+      <div class="animal-card"><div class="animal-emoji">&#129446;</div><div><div class="animal-name">亚洲小爪水獭</div><div class="animal-detail">Freshwater Oasis &middot; 涉水观赏窗口</div></div></div>
+      <div class="animal-card"><div class="animal-emoji">&#128053;</div><div><div class="animal-name">白顶狨猴</div><div class="animal-detail">Primate Island &middot; Freshwater Oasis 内</div></div></div>
+      <div class="animal-card"><div class="animal-emoji">&#129434;</div><div><div class="animal-name">火烈鸟</div><div class="animal-detail">Flamingo Point &middot; 2024 年新增展示区</div></div></div>
+      <div class="animal-card"><div class="animal-emoji">&#129416;</div><div><div class="animal-name">鲨鱼</div><div class="animal-detail">Grand Reef &middot; 玻璃隔离 &middot; 绳索桥观赏</div></div></div>
+      <div class="animal-card"><div class="animal-emoji">&#129465;</div><div><div class="animal-name">鹰鳐</div><div class="animal-detail">Grand Reef &middot; 鳐鱼喂食体验 &middot; 浮潜可见</div></div></div>
+    </div>
+  </div>
+  <div class="slide-chrome">
+    <span class="chrome-page">07</span>
+    <span class="chrome-divider"></span>
+    <span class="chrome-label">Discovery Cove &middot; 水体技术与动物生态</span>
+  </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 8 — AMENITIES + DESIGN
+     =========================================== -->
+<section class="slide" id="s8">
+  <div class="slide-bg"></div>
+  <div class="slide-content">
+    <div class="slide-kicker reveal">08 &mdash;&mdash; 配套设施与设计体系</div>
+    <h2 class="slide-title reveal">全包服务 &middot; 零隐形消费</h2>
+    <div class="sep-rule reveal"></div>
+    <p class="slide-desc reveal">从入园到离开，所有基础服务均包含在门票内。即将新增的 Project Canopy 酒店将实现"住宿+体验"闭环。</p>
+    <div class="amenities-strip reveal">
+      <div class="amenity-pill">&#127860; Laguna Grill 主餐厅</div>
+      <div class="amenity-pill">&#127865; Blue Bamboo + Hibiscus 酒吧 &times;2</div>
+      <div class="amenity-pill">&#129380; 小吃饮料站 &times;3 · 无限取用</div>
+      <div class="amenity-pill">&#128704; 更衣 · 淋浴 · 热水</div>
+      <div class="amenity-pill">&#128274; 储物柜（免费·两处）</div>
+      <div class="amenity-pill">&#129343; 浮潜装备 + 潜水衣 + 救生衣</div>
+      <div class="amenity-pill">&#127966; 3,000 吨进口白沙沙滩</div>
+      <div class="amenity-pill">&#127965; 沙滩躺椅 · 遮阳伞</div>
+      <div class="amenity-pill">&#128248; 摄影服务（付费加购）</div>
+      <div class="amenity-pill">&#127873; 礼品店 · 泳装 · 防晒</div>
+      <div class="amenity-pill">&#127976; Project Canopy 酒店 · 2026 · 250 间 · 水疗</div>
+    </div>
+
+    <div class="slide-kicker reveal" style="margin-top:36px;">设计方与主要供应商</div>
+    <div class="overview-grid reveal" style="grid-template-columns:repeat(3,1fr);">
+      <div class="ov-card" style="text-align:center;"><div class="ov-card-label">建筑设计</div><div class="ov-card-value" style="font-size:22px;">Cooper Carry</div><div class="ov-card-sub">Project Canopy 酒店主创设计 (Atlanta)</div></div>
+      <div class="ov-card" style="text-align:center;"><div class="ov-card-label">景观设计</div><div class="ov-card-value" style="font-size:22px;">EDSA</div><div class="ov-card-sub">热带景观与水体环境营造 (Fort Lauderdale)</div></div>
+      <div class="ov-card" style="text-align:center;"><div class="ov-card-label">土木工程</div><div class="ov-card-value" style="font-size:22px;">AtkinsR&eacute;alis</div><div class="ov-card-sub">基础设施与结构工程设计</div></div>
+    </div>
+  </div>
+  <div class="slide-chrome">
+    <span class="chrome-page">08</span>
+    <span class="chrome-divider"></span>
+    <span class="chrome-label">Discovery Cove &middot; 配套设施与设计</span>
+  </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 9 — CLOSING
+     =========================================== -->
+<section class="slide closing-slide" id="s9">
+  <div class="slide-bg"></div>
+  <div class="slide-content">
+    <div class="ornament reveal">
+      <span class="ornament-rule"></span>
+      <span class="ornament-glyph">&sect;</span>
+      <span class="ornament-rule"></span>
+    </div>
+    <div class="slide-kicker reveal">总结</div>
+    <h2 class="slide-title reveal" style="font-size:64px;">"反主题公园"范式</h2>
+    <div class="reveal" style="width:120px;height:1px;background:var(--accent);margin:24px auto;"></div>
+    <p class="closing-quote reveal">严格限流换来溢价能力，全包模式提升客单价，<br>持续迭代延长生命周期——Discovery Cove 用 25 年证明，<br><em style="color:var(--accent)">少即是多</em> 在主题公园行业同样成立。</p>
+    <div class="slide-kicker reveal" style="margin-top:48px;">数据来源</div>
+    <div class="reveal" style="font-family:var(--font-body);font-size:15px;color:var(--text-secondary);max-width:900px;line-height:1.7;">United Parks &amp; Resorts 公开文件 &middot; 行业报道 &middot; 官方资料 &middot; 编制时间：2026年5月</div>
+    <div class="bottom-rule reveal"></div>
+    <div class="reveal" style="font-family:var(--font-body);font-size:13px;color:#bbb;margin-top:20px;letter-spacing:0.06em;">本工具仅供案例研究参考，不构成投资建议</div>
+  </div>
+  <div class="slide-chrome">
+    <span class="chrome-page">09</span>
+    <span class="chrome-divider"></span>
+    <span class="chrome-label">Discovery Cove &middot; 案例研究</span>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+/* ===========================================
+   SLIDE PRESENTATION CONTROLLER
+   =========================================== */
+class SlidePresentation {
+  constructor() {
+    this.slides = document.querySelectorAll('.slide');
+    this.currentSlide = 0;
+    this.totalSlides = this.slides.length;
+    this.stage = document.getElementById('deckStage');
+    this.setupStageScale();
+    this.setupKeyboardNav();
+    this.setupTouchNav();
+    this.setupWheelNav();
+    this.showSlide(0);
+  }
+
+  setupStageScale() {
+    const scale = () => {
+      const factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      const x = (window.innerWidth - 1920 * factor) / 2;
+      const y = (window.innerHeight - 1080 * factor) / 2;
+      this.stage.style.transform = 'translate(' + x + 'px, ' + y + 'px) scale(' + factor + ')';
+    };
+    scale();
+    window.addEventListener('resize', scale);
+  }
+
+  setupKeyboardNav() {
+    document.addEventListener('keydown', (e) => {
+      if (e.target.getAttribute('contenteditable') === 'true') return;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        this.next();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+        e.preventDefault();
+        this.prev();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        this.showSlide(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        this.showSlide(this.totalSlides - 1);
+      }
+    });
+  }
+
+  setupTouchNav() {
+    let startX = 0, startY = 0;
+    this.stage.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }, { passive: true });
+    this.stage.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - startX;
+      const dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+        dx < 0 ? this.next() : this.prev();
+      } else if (Math.abs(dy) > 50) {
+        dy > 0 ? this.prev() : this.next();
+      }
+    });
+  }
+
+  setupWheelNav() {
+    let wheelTimeout = null;
+    this.stage.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      if (wheelTimeout) return;
+      wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 800);
+      e.deltaY > 0 ? this.next() : this.prev();
+    }, { passive: false });
+  }
+
+  showSlide(index) {
+    this.currentSlide = Math.max(0, Math.min(index, this.totalSlides - 1));
+    this.slides.forEach((slide, i) => {
+      if (i === this.currentSlide) {
+        slide.classList.add('active', 'visible');
+      } else {
+        slide.classList.remove('active', 'visible');
+      }
+    });
+  }
+
+  next() {
+    if (this.currentSlide < this.totalSlides - 1) this.showSlide(this.currentSlide + 1);
+  }
+
+  prev() {
+    if (this.currentSlide > 0) this.showSlide(this.currentSlide - 1);
+  }
+}
+
+new SlidePresentation();
+
+/* ===========================================
+   INLINE EDITING
+   =========================================== */
+(function() {
+  const hotzone = document.querySelector('.edit-hotzone');
+  const editToggle = document.getElementById('editToggle');
+  let hideTimeout = null;
+  let isEditing = false;
+
+  function toggleEdit() {
+    isEditing = !isEditing;
+    if (isEditing) {
+      editToggle.classList.add('show');
+      editToggle.textContent = '✔';
+      document.querySelectorAll('.slide.visible [contenteditable]').forEach(el => {
+        el.setAttribute('contenteditable', 'true');
+      });
+      document.querySelectorAll('.slide.visible h1, .slide.visible h2, .slide.visible h3, .slide.visible p, .slide.visible li, .slide.visible td, .slide.visible .slide-desc, .slide.visible .slide-kicker').forEach(el => {
+        if (!el.hasAttribute('contenteditable')) el.setAttribute('contenteditable', 'true');
+      });
+    } else {
+      editToggle.textContent = '✎';
+      document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+        el.removeAttribute('contenteditable');
+      });
+      const saved = {};
+      document.querySelectorAll('[data-edit-id]').forEach(el => {
+        saved[el.getAttribute('data-edit-id')] = el.innerHTML;
+      });
+      try { localStorage.setItem('dc-slides', JSON.stringify(saved)); } catch(e) {}
+    }
+  }
+
+  function restore() {
+    try {
+      const saved = JSON.parse(localStorage.getItem('dc-slides'));
+      if (saved) {
+        Object.keys(saved).forEach(id => {
+          const el = document.querySelector('[data-edit-id="' + id + '"]');
+          if (el) el.innerHTML = saved[id];
+        });
+      }
+    } catch(e) {}
+  }
+
+  restore();
+
+  hotzone.addEventListener('mouseenter', () => {
+    clearTimeout(hideTimeout);
+    editToggle.classList.add('show');
+  });
+  hotzone.addEventListener('mouseleave', () => {
+    hideTimeout = setTimeout(() => {
+      if (!isEditing) editToggle.classList.remove('show');
+    }, 400);
+  });
+  editToggle.addEventListener('mouseenter', () => { clearTimeout(hideTimeout); });
+  editToggle.addEventListener('mouseleave', () => {
+    hideTimeout = setTimeout(() => {
+      if (!isEditing) editToggle.classList.remove('show');
+    }, 400);
+  });
+  editToggle.addEventListener('click', toggleEdit);
+  hotzone.addEventListener('click', toggleEdit);
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.key === 'e' || e.key === 'E') && !e.target.getAttribute('contenteditable')) {
+      toggleEdit();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 's' && isEditing) {
+      e.preventDefault();
+      const saved = {};
+      document.querySelectorAll('[data-edit-id]').forEach(el => {
+        saved[el.getAttribute('data-edit-id')] = el.innerHTML;
+      });
+      localStorage.setItem('dc-slides', JSON.stringify(saved));
+      const indicator = document.createElement('div');
+      indicator.textContent = '✓ 已保存';
+      indicator.style.cssText = 'position:fixed;top:16px;right:16px;background:rgba(26,26,26,0.9);color:#faf9f7;padding:10px 20px;border-radius:2px;font-family:var(--font-body);font-size:14px;z-index:99999;';
+      document.body.appendChild(indicator);
+      setTimeout(() => indicator.remove(), 1800);
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

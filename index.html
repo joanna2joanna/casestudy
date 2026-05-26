@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文旅项目案例研究 · 索引</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+<style>
+html { font-size: 17px; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #F5F0E8;
+  color: #2D2018;
+  line-height: 1.65;
+  min-height: 100vh;
+}
+
+.header {
+  background: linear-gradient(165deg, #1A1520 0%, #2D2035 50%, #1A1520 100%);
+  color: #FFF;
+  text-align: center;
+  padding: 4rem 2rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 30% 60%, rgba(200,160,100,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 30%, rgba(140,100,180,0.06) 0%, transparent 60%);
+}
+.header-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+.header h1 { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 800; letter-spacing: 0.02em; margin-bottom: 0.5rem; }
+.header .sub { color: rgba(255,255,255,0.6); font-size: 1rem; }
+.header .count { font-family: 'DM Mono', monospace; color: #C8A45C; font-size: 0.85rem; margin-top: 1rem; }
+
+.grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.case-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: #FFF;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #E8E0D5;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.case-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+
+.card-accent {
+  height: 6px;
+  background: #8B3A4A;
+}
+.card-accent.theme-park { background: linear-gradient(90deg, #E8433C, #F5A623); }
+.card-accent.water-park { background: linear-gradient(90deg, #007DC5, #00B4D8); }
+.card-accent.hotel { background: linear-gradient(90deg, #5C3A2E, #C8A45C); }
+.card-accent.resort { background: linear-gradient(90deg, #1B5E3A, #00C8A0); }
+
+.card-body { padding: 1.5rem 1.8rem; }
+.card-body .tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.7rem;
+  border-radius: 100px;
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 0.6rem;
+  background: #F5F0E8;
+  color: #8B7355;
+}
+.card-body h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 0.3rem; }
+.card-body .location { font-size: 0.82rem; color: #8B7355; margin-bottom: 0.8rem; }
+.card-body .desc { font-size: 0.88rem; color: #6B5E50; line-height: 1.5; }
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.8rem;
+  color: #8B7B60;
+  border-top: 1px solid #E8E0D5;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  html { font-size: 15px; }
+  .header h1 { font-size: 2rem; }
+  .grid { grid-template-columns: 1fr; padding: 1.5rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>文旅项目案例研究</h1>
+    <p class="sub">主题公园 · 精品酒店 · 度假村 · 自然景区 —— 从投资、设计到运营的深度分析</p>
+    <div class="count">共 9 个案例 · 持续更新中</div>
+  </div>
+</div>
+
+<div class="grid">
+
+  <a href="songtsam-lodges/" class="case-card">
+    <div class="card-accent hotel"></div>
+    <div class="card-body">
+      <div class="tag">精品酒店系列</div>
+      <h2>松赞酒店系列</h2>
+      <div class="location">云南 · 西藏（2001-）</div>
+      <div class="desc">"中国的安缦"——从香格里拉到拉萨，18家精品山居与林卡沿滇藏线铺展，以"酒店+旅行"模式重新定义藏地深度体验。重点解析各家酒店理念、山居vs林卡产品哲学、松赞环线经典路线。</div>
+    </div>
+  </a>
+
+  <a href="center-parcs-europe/" class="case-card">
+    <div class="card-accent resort"></div>
+    <div class="card-body">
+      <div class="tag">多国度假村品牌</div>
+      <h2>Center Parcs Europe</h2>
+      <div class="location">荷兰·比利时·德国·法国·丹麦（1968-）</div>
+      <div class="desc">欧洲最大的自然度假村品牌，28个村庄遍布5国。以Aqua Mundo室内水上乐园和Market Dome为统一DNA，各村在建筑、景观、活动、餐饮上深度在地化。重点解析标准化与差异化的平衡策略。</div>
+    </div>
+  </a>
+
+  <a href="universal-studios-beijing/" class="case-card">
+    <div class="card-accent theme-park"></div>
+    <div class="card-body">
+      <div class="tag">主题公园</div>
+      <h2>北京环球度假区</h2>
+      <div class="location">北京通州（2021-）</div>
+      <div class="desc">环球影城全球第五座度假区，7大主题区 + 环球城市大道。重点分析空间布局、投资规模、技术指标与中国市场在地化策略。</div>
+    </div>
+  </a>
+
+  <a href="shanghai-disneyland/" class="case-card">
+    <div class="card-accent theme-park"></div>
+    <div class="card-body">
+      <h2>上海迪士尼乐园</h2>
+      <div class="location">上海浦东（2016-）</div>
+      <div class="desc">中国内地首座迪士尼度假区，7大主题园区。重点分析"原汁原味迪士尼，别具一格中国风"的在地化实践。</div>
+    </div>
+  </a>
+
+  <a href="tokyo-disneysea/" class="case-card">
+    <div class="card-accent theme-park"></div>
+    <div class="card-body">
+      <div class="tag">主题公园</div>
+      <h2>东京迪士尼海洋</h2>
+      <div class="location">日本千叶（2001-）</div>
+      <div class="desc">全球唯一以海洋为主题的迪士尼乐园，7大主题海港。重点分析Fantasy Springs第八海港扩建与独特的设计美学。</div>
+    </div>
+  </a>
+
+  <a href="epic-universe/" class="case-card">
+    <div class="card-accent theme-park"></div>
+    <div class="card-body">
+      <div class="tag">主题公园</div>
+      <h2>Epic Universe</h2>
+      <div class="location">美国奥兰多（2025-）</div>
+      <div class="desc">环球影城最新史诗级乐园，5大沉浸式世界。重点分析Super Nintendo World、Dark Universe等新园区的技术突破。</div>
+    </div>
+  </a>
+
+  <a href="europa-park/" class="case-card">
+    <div class="card-accent theme-park"></div>
+    <div class="card-body">
+      <div class="tag">主题公园</div>
+      <h2>欧洲公园 Europa-Park</h2>
+      <div class="location">德国鲁斯特（1975-）</div>
+      <div class="desc">德国最大主题公园，18个欧洲国家主题区。重点分析家族运营模式、Rulantica水上乐园扩建与Mack Rides制造业协同。</div>
+    </div>
+  </a>
+
+  <a href="discovery-cove/" class="case-card">
+    <div class="card-accent water-park"></div>
+    <div class="card-body">
+      <div class="tag">海洋度假 · 水乐园</div>
+      <h2>Discovery Cove</h2>
+      <div class="location">美国奥兰多（2000-）</div>
+      <div class="desc">SeaWorld旗下全包式热带度假村，每日限流1,300人。重点分析"限量预约制+全包定价"的高端度假模式。</div>
+    </div>
+  </a>
+
+  <a href="zhuhai-chimelong-ocean-kingdom/" class="case-card">
+    <div class="card-accent theme-park"></div>
+    <div class="card-body">
+      <div class="tag">主题公园 · 海洋</div>
+      <h2>珠海长隆海洋王国</h2>
+      <div class="location">广东珠海（2014-）</div>
+      <div class="desc">全球最大的海洋主题公园，鲸鲨馆创造5项吉尼斯纪录。重点分析中国本土主题公园的超级单体模式。</div>
+    </div>
+  </a>
+
+</div>
+
+<div class="footer">
+  <p>案例研究项目 · <a href="https://github.com" style="color:#8B3A4A;">GitHub Pages</a> 托管</p>
+</div>
+
+</body>
+</html>

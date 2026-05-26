@@ -1,0 +1,2121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>上海迪士尼乐园 — 文旅项目深度案例研究</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --royal-blue: #1A3A5C;
+  --royal-blue-light: #264D73;
+  --gold: #F5C44E;
+  --gold-light: #F9D97A;
+  --gold-dark: #D4A017;
+  --pink: #E8A0BF;
+  --pink-light: #F2C6D9;
+  --white: #FFFEF9;
+  --white-dark: #F5F0E8;
+  --text: #2C2C2C;
+  --text-light: #5A5A5A;
+  --border-subtle: rgba(26,58,92,0.08);
+  --shadow-sm: 0 2px 8px rgba(26,58,92,0.06);
+  --shadow-md: 0 4px 20px rgba(26,58,92,0.10);
+  --shadow-lg: 0 8px 40px rgba(26,58,92,0.14);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; font-size: 17px; }
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--text);
+  background: var(--white);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  color: var(--royal-blue);
+  line-height: 1.25;
+}
+
+h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
+h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
+h3 { font-size: clamp(1.15rem, 2.2vw, 1.5rem); }
+
+.mono { font-family: 'DM Mono', 'SF Mono', monospace; }
+
+/* Layout */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+section {
+  padding: 80px 0;
+  position: relative;
+}
+
+section:nth-child(even) {
+  background: var(--white-dark);
+}
+
+/* Reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(135deg, #0D1F33 0%, var(--royal-blue) 30%, #1A3A5C 60%, #264D73 100%);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+  padding: 120px 0 80px;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 35%, rgba(245,196,78,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(232,160,191,0.08) 0%, transparent 40%),
+    radial-gradient(ellipse at 20% 70%, rgba(245,196,78,0.06) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 200px;
+  background: linear-gradient(to bottom, rgba(13,31,51,0.6) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  padding: 0 24px;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 8px 22px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-bottom: 36px;
+  color: var(--gold-light);
+}
+
+.hero h1 {
+  color: var(--white);
+  font-size: clamp(2.8rem, 7vw, 5rem);
+  margin-bottom: 20px;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+
+.hero .subtitle {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--gold-light);
+  font-weight: 400;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.hero .location {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.7);
+  font-weight: 400;
+  margin-bottom: 48px;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+
+.hero-stat {
+  text-align: center;
+}
+
+.hero-stat .value {
+  font-family: 'DM Mono', monospace;
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--gold);
+  display: block;
+}
+
+.hero-stat .label {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-top: 4px;
+}
+
+/* ===== SECTION HEADERS ===== */
+.section-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.section-header h2 {
+  margin-bottom: 8px;
+}
+
+.section-header .section-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--gold-dark);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.section-divider {
+  width: 60px;
+  height: 3px;
+  background: var(--gold);
+  margin: 16px auto 0;
+  border-radius: 2px;
+}
+
+/* ===== OVERVIEW ===== */
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.overview-card {
+  background: var(--white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+}
+
+.overview-card h3 {
+  color: var(--royal-blue);
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.overview-card h3 .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.92rem;
+}
+
+.info-row:last-child { border-bottom: none; }
+
+.info-row .key {
+  color: var(--text-light);
+  font-weight: 500;
+  flex-shrink: 0;
+  margin-right: 16px;
+}
+
+.info-row .val {
+  text-align: right;
+  font-weight: 600;
+  color: var(--royal-blue);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.85rem;
+}
+
+/* ===== DESIGN & CONSTRUCTION ===== */
+.design-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.design-card {
+  background: var(--white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.design-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.design-card h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--royal-blue-light);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--gold);
+  display: inline-block;
+}
+
+.design-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.design-card li {
+  padding: 6px 0;
+  font-size: 0.88rem;
+  color: var(--text-light);
+  position: relative;
+  padding-left: 18px;
+}
+
+.design-card li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+/* ===== TECHNICAL SUMMARY TABLE ===== */
+.tech-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+}
+
+.tech-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+  font-size: 0.88rem;
+}
+
+.tech-table thead th {
+  background: var(--royal-blue);
+  color: var(--white);
+  padding: 16px 20px;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.tech-table thead th:first-child { border-radius: var(--radius) 0 0 0; }
+.tech-table thead th:last-child { border-radius: 0 var(--radius) 0 0; }
+
+.tech-table tbody td {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: top;
+}
+
+.tech-table tbody tr:nth-child(even) {
+  background: rgba(245,196,78,0.04);
+}
+
+.tech-table tbody tr:hover {
+  background: rgba(245,196,78,0.08);
+}
+
+.tech-table .metric {
+  font-family: 'DM Mono', monospace;
+  font-weight: 600;
+  color: var(--royal-blue);
+  white-space: nowrap;
+}
+
+.tech-table .note {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  font-style: italic;
+}
+
+/* ===== SPATIAL LAYOUT / MAPS ===== */
+.map-section {
+  background: var(--royal-blue);
+  color: var(--white);
+  padding: 80px 0;
+}
+
+.map-section h2 {
+  color: var(--white);
+}
+
+.map-section .section-num {
+  color: var(--gold-light);
+}
+
+.map-section .section-divider {
+  background: var(--gold);
+}
+
+.map-container {
+  background: var(--white);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 32px;
+}
+
+.map-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--royal-blue);
+  background: var(--white);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.map-label::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+#parkmap, #satmap {
+  width: 100%;
+  height: 480px;
+  z-index: 1;
+}
+
+.zone-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 24px;
+  padding: 20px;
+  background: rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+  backdrop-filter: blur(4px);
+}
+
+.zone-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.9);
+}
+
+.zone-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(255,255,255,0.6);
+}
+
+/* ===== SVG DIAGRAM ===== */
+.svg-diagram-wrap {
+  text-align: center;
+  margin-top: 48px;
+}
+
+.svg-diagram-wrap h3 {
+  color: var(--white);
+  margin-bottom: 24px;
+  font-size: 1.3rem;
+}
+
+.svg-container {
+  display: inline-block;
+  background: rgba(255,255,255,0.05);
+  border-radius: var(--radius);
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.svg-container svg {
+  width: 100%;
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+}
+
+/* ===== INVESTMENT TIMELINE ===== */
+.timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 32px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--gold), var(--pink));
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 80px;
+  margin-bottom: 40px;
+}
+
+.timeline-item:last-child { margin-bottom: 0; }
+
+.timeline-dot {
+  position: absolute;
+  left: 23px;
+  top: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 3px solid var(--white);
+  box-shadow: 0 0 0 3px var(--gold-dark);
+  z-index: 1;
+}
+
+.timeline-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gold-dark);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.timeline-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--royal-blue);
+  margin-bottom: 4px;
+}
+
+.timeline-desc {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+
+/* ===== OPERATIONS KPIs ===== */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.kpi-card {
+  background: var(--white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.kpi-value {
+  font-family: 'DM Mono', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--royal-blue);
+  margin-bottom: 6px;
+}
+
+.kpi-value.gold { color: var(--gold-dark); }
+
+.kpi-label {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.kpi-note {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+.revenue-bar-wrap {
+  margin-top: 48px;
+}
+
+.revenue-bar-wrap h3 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.revenue-bars {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  justify-content: center;
+  height: 200px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.revenue-bar {
+  flex: 1;
+  border-radius: 6px 6px 0 0;
+  position: relative;
+  min-width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+  transition: transform 0.3s ease;
+}
+
+.revenue-bar:hover { transform: scaleY(1.04); }
+
+.revenue-bar .bar-pct {
+  font-family: 'DM Mono', monospace;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--white);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+.revenue-bar .bar-label {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  font-weight: 600;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.bar-tickets { background: var(--royal-blue); height: 100%; }
+.bar-dining { background: var(--gold); height: 51%; }
+.bar-merch { background: var(--pink); height: 38%; }
+
+/* ===== CORE TECH INDICATORS ===== */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.tech-indicator {
+  background: var(--white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.tech-indicator h4 {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--gold-dark);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.tech-indicator .ti-value {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--royal-blue);
+}
+
+.tech-indicator .ti-desc {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  margin-top: 8px;
+}
+
+/* ===== AMENITIES ===== */
+.amenity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.amenity-card {
+  background: var(--white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--gold);
+}
+
+.amenity-card h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--royal-blue);
+  margin-bottom: 10px;
+}
+
+.amenity-card p {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+/* ===== NEWS & EXPANSION ===== */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.news-card {
+  background: var(--white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.news-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--pink), var(--royal-blue));
+}
+
+.news-card .news-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 8px;
+}
+
+.news-card h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--royal-blue);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.news-card p {
+  font-size: 0.84rem;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+/* ===== REFERENCE LIBRARY ===== */
+.ref-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.ref-card {
+  background: var(--white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 22px 20px;
+  text-decoration: none;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.ref-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--gold);
+}
+
+.ref-card .ref-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--royal-blue);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.ref-card .ref-info {
+  flex: 1;
+}
+
+.ref-card .ref-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--royal-blue);
+}
+
+.ref-card .ref-domain {
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  background: #0D1F33;
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  padding: 40px 24px;
+  font-size: 0.8rem;
+}
+
+.footer strong {
+  color: var(--gold-light);
+}
+
+/* ===== HIGHLIGHT BOX ===== */
+.highlight-box {
+  background: linear-gradient(135deg, var(--royal-blue), var(--royal-blue-light));
+  color: var(--white);
+  border-radius: var(--radius);
+  padding: 32px;
+  margin: 32px 0;
+  box-shadow: var(--shadow-md);
+}
+
+.highlight-box h3 {
+  color: var(--gold-light);
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+}
+
+.highlight-box p {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  line-height: 1.7;
+}
+
+.highlight-box .tag {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--royal-blue);
+  padding: 3px 12px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-right: 6px;
+  margin-bottom: 6px;
+}
+
+/* ===== LAND LIST ===== */
+.land-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.land-card {
+  background: var(--white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.land-card .land-color-bar {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 4px;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.land-card h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--royal-blue);
+  margin-bottom: 4px;
+  margin-top: 4px;
+}
+
+.land-card .land-en {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  margin-bottom: 8px;
+  font-style: italic;
+}
+
+.land-card .land-highlights {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  section { padding: 56px 0; }
+
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-stats {
+    gap: 28px;
+  }
+
+  .hero-stat .value {
+    font-size: 1.5rem;
+  }
+
+  .timeline::before { left: 20px; }
+
+  .timeline-item {
+    padding-left: 56px;
+  }
+
+  .timeline-dot {
+    left: 11px;
+  }
+
+  .revenue-bars {
+    height: 150px;
+  }
+
+  .map-container {
+    border-radius: var(--radius-sm);
+  }
+
+  #parkmap, #satmap {
+    height: 320px;
+  }
+
+  .kpi-value {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 0 16px; }
+
+  .hero {
+    min-height: auto;
+    padding: 100px 0 60px;
+  }
+
+  .hero-stats {
+    gap: 18px;
+  }
+
+  .tech-table {
+    font-size: 0.78rem;
+  }
+
+  .tech-table thead th, .tech-table tbody td {
+    padding: 10px 12px;
+  }
+}
+
+/* Custom leaflet style overrides */
+.leaflet-control-layers-toggle {
+  background-size: 22px;
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== MODULE 1: HERO ==================== -->
+<section class="hero" id="hero">
+  <div class="hero-content reveal">
+    <div class="hero-badge">数据截至 2026 年 5 月</div>
+    <h1>上海迪士尼乐园</h1>
+    <p class="subtitle">SHANGHAI DISNEYLAND RESORT</p>
+    <p class="location">上海市浦东新区川沙新镇黄赵路310号</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="value">¥340亿</span>
+        <span class="label">总投资</span>
+      </div>
+      <div class="hero-stat">
+        <span class="value">1,470万</span>
+        <span class="label">年游客量 (2024)</span>
+      </div>
+      <div class="hero-stat">
+        <span class="value">1.13亿+</span>
+        <span class="label">累计游客</span>
+      </div>
+      <div class="hero-stat">
+        <span class="value">390 公顷</span>
+        <span class="label">度假区总面积</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MODULE 2: OVERVIEW ==================== -->
+<section id="overview">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">Module 02</div>
+      <h2>项目概览 Project Overview</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="overview-grid">
+      <div class="overview-card reveal">
+        <h3><span class="icon">&#9733;</span> 基本信息</h3>
+        <div class="info-row"><span class="key">开业日期</span><span class="val">2016年6月16日</span></div>
+        <div class="info-row"><span class="key">投资方</span><span class="val">上海申迪集团（57%）+ 华特迪士尼（43%）</span></div>
+        <div class="info-row"><span class="key">运营商</span><span class="val">上海国际主题乐园有限公司</span></div>
+        <div class="info-row"><span class="key">管理方</span><span class="val">Disney Experiences（70%迪士尼/30%申迪）</span></div>
+        <div class="info-row"><span class="key">总占地面积</span><span class="val">390 公顷（3.9 km²）</span></div>
+        <div class="info-row"><span class="key">乐园核心区</span><span class="val">116 公顷（1.16 km²）</span></div>
+        <div class="info-row"><span class="key">日最高承载量</span><span class="val">约 80,000 人</span></div>
+        <div class="info-row"><span class="key">门票价格</span><span class="val">¥435（平日） – ¥659（高峰日）</span></div>
+      </div>
+
+      <div class="overview-card reveal">
+        <h3><span class="icon">&#9733;</span> 运营亮点</h3>
+        <div class="info-row"><span class="key">年游客量 (2024)</span><span class="val">1,470万人次（全球第5）</span></div>
+        <div class="info-row"><span class="key">中国排名</span><span class="val">主题公园第1名</span></div>
+        <div class="info-row"><span class="key">累计游客</span><span class="val">1.13亿+ (截至2025.11)</span></div>
+        <div class="info-row"><span class="key">累计营收</span><span class="val">¥1,140亿+</span></div>
+        <div class="info-row"><span class="key">二次消费占比</span><span class="val">55%（超全球平均水平）</span></div>
+        <div class="info-row"><span class="key">主题园区</span><span class="val">8大主题园区 + 1座标志性城堡</span></div>
+        <div class="info-row"><span class="key">酒店</span><span class="val">2家运营中 + 2家在建</span></div>
+        <div class="info-row"><span class="key">荣誉</span><span class="val">中国建设工程鲁班奖</span></div>
+      </div>
+    </div>
+
+    <div class="highlight-box reveal">
+      <h3>项目定位</h3>
+      <p>上海迪士尼乐园是中国大陆第一座、全球第六座迪士尼度假区，也是迪士尼迄今在海外最大的投资项目之一。项目由<strong>上海申迪集团</strong>与<strong>华特迪士尼公司</strong>合资开发，总投资约¥340亿（约$55亿），一期于2016年6月16日正式开园。度假区融合迪士尼经典IP与中国文化元素，以"原汁原味迪士尼，别具一格中国风"为设计理念，打造成为亚太地区最具影响力的主题娱乐目的地之一。</p>
+      <div style="margin-top:12px;">
+        <span class="tag">上海独家</span>
+        <span class="tag">中国大陆首座</span>
+        <span class="tag">全球第6座Disney Resort</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MODULE 3: DESIGN & CONSTRUCTION ==================== -->
+<section id="design">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">Module 03</div>
+      <h2>设计与施工 Design &amp; Construction</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="design-grid">
+      <div class="design-card reveal">
+        <h4>核心设计团队</h4>
+        <ul>
+          <li><strong>总体规划：</strong>Walt Disney Imagineering (WDI)</li>
+          <li><strong>建筑设计：</strong>上海建筑设计研究院 + WDI</li>
+          <li><strong>景观设计：</strong>WDI + 上海市园林设计院</li>
+          <li><strong>总承包商：</strong>上海建工集团、中国建筑第八工程局</li>
+          <li><strong>主题包装咨询：</strong>PCL（加拿大）</li>
+        </ul>
+      </div>
+
+      <div class="design-card reveal">
+        <h4>核心游乐设备制造商</h4>
+        <ul>
+          <li><strong>Vekoma (荷兰)：</strong>七个小矮人矿山车、创极速光轮</li>
+          <li><strong>Dynamic Attractions (加拿大)：</strong>翱翔·飞越地平线（飞行影院）</li>
+          <li><strong>Mack Rides (德国)：</strong>加勒比海盗—沉落宝藏之战（磁力偏转系统）</li>
+          <li><strong>Zamperla (意大利)：</strong>抱抱龙冲天赛车</li>
+          <li><strong>Sansei Technologies (日本)：</strong>疯狂动物城：热力追踪（无轨黑暗骑乘系统）</li>
+        </ul>
+      </div>
+
+      <div class="design-card reveal">
+        <h4>设计特色</h4>
+        <ul>
+          <li>米奇大街替代传统Main Street，全球首创入口设计</li>
+          <li>奇幻童话城堡高60米，全球迪士尼城堡之最</li>
+          <li>宝藏湾（Treasure Cove）—— 上海迪士尼独家主题园区</li>
+          <li>疯狂动物城（Zootopia）—— 全球首座该主题园区</li>
+          <li>十二生肖中国元素融入奇想花园设计</li>
+          <li>城堡内设船餐厅（Royal Banquet Hall），全球首创</li>
+        </ul>
+      </div>
+
+      <div class="design-card reveal">
+        <h4>施工里程碑</h4>
+        <ul>
+          <li>2009年获国务院批准立项</li>
+          <li>2011年4月8日正式破土动工</li>
+          <li>2014年追加$8亿投资（扩容30%）</li>
+          <li>2016年6月16日盛大开园</li>
+          <li>高峰期施工人员逾25,000人</li>
+          <li>荣获<strong>中国建设工程鲁班奖</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MODULE 4: TECHNICAL SUMMARY TABLE ==================== -->
+<section id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">Module 04</div>
+      <h2>技术指标总表 Technical Summary</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="tech-table-wrapper reveal">
+      <table class="tech-table">
+        <thead>
+          <tr>
+            <th>指标类别</th>
+            <th>指标名称</th>
+            <th>数值</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>规模</td>
+            <td>度假区总面积</td>
+            <td class="metric">390 公顷</td>
+            <td class="note">约3.9 km²</td>
+          </tr>
+          <tr>
+            <td>规模</td>
+            <td>乐园核心区面积</td>
+            <td class="metric">116 公顷</td>
+            <td class="note">约1.16 km²</td>
+          </tr>
+          <tr>
+            <td>规模</td>
+            <td>主题园区数</td>
+            <td class="metric">8 个</td>
+            <td class="note">含Zootopia（2023年新开）</td>
+          </tr>
+          <tr>
+            <td>投资</td>
+            <td>一期总投资</td>
+            <td class="metric">¥340亿（约$55亿）</td>
+            <td class="note">含2014年追加$8亿</td>
+          </tr>
+          <tr>
+            <td>投资</td>
+            <td>蜘蛛侠过山车投资</td>
+            <td class="metric">¥24.59亿</td>
+            <td class="note">2025年5月动工</td>
+          </tr>
+          <tr>
+            <td>容量</td>
+            <td>日最高承载量</td>
+            <td class="metric">~80,000 人</td>
+            <td class="note">旺季峰值</td>
+          </tr>
+          <tr>
+            <td>客流量</td>
+            <td>年游客量（2024）</td>
+            <td class="metric">1,470 万人次</td>
+            <td class="note">全球主题公园第5名</td>
+          </tr>
+          <tr>
+            <td>客流量</td>
+            <td>累计游客量</td>
+            <td class="metric">1.13 亿+</td>
+            <td class="note">截至2025年11月</td>
+          </tr>
+          <tr>
+            <td>营收</td>
+            <td>累计营收</td>
+            <td class="metric">¥1,140亿+</td>
+            <td class="note">2016–2025</td>
+          </tr>
+          <tr>
+            <td>营收</td>
+            <td>门票收入占比</td>
+            <td class="metric">53%</td>
+            <td class="note">餐饮27% + 商品20%</td>
+          </tr>
+          <tr>
+            <td>营收</td>
+            <td>二次消费占比</td>
+            <td class="metric">55%</td>
+            <td class="note">高于全球迪士尼平均水平</td>
+          </tr>
+          <tr>
+            <td>票价</td>
+            <td>平日票价</td>
+            <td class="metric">¥435</td>
+            <td class="note">约$65</td>
+          </tr>
+          <tr>
+            <td>票价</td>
+            <td>高峰日票价</td>
+            <td class="metric">¥659</td>
+            <td class="note">约$98</td>
+          </tr>
+          <tr>
+            <td>建筑</td>
+            <td>城堡高度</td>
+            <td class="metric">60 米</td>
+            <td class="note">全球迪士尼城堡最高</td>
+          </tr>
+          <tr>
+            <td>酒店</td>
+            <td>运营中酒店</td>
+            <td class="metric">2 家 / 1,220 间</td>
+            <td class="note">另2家在建</td>
+          </tr>
+          <tr>
+            <td>停车</td>
+            <td>停车位</td>
+            <td class="metric">10,000+ 个</td>
+            <td class="note">多个停车场</td>
+          </tr>
+          <tr>
+            <td>交通</td>
+            <td>地铁接入</td>
+            <td class="metric">11号线迪士尼站</td>
+            <td class="note">直达园区入口</td>
+          </tr>
+          <tr>
+            <td>奖项</td>
+            <td>建设工程荣誉</td>
+            <td class="metric">鲁班奖</td>
+            <td class="note">中国建筑行业最高荣誉</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MODULE 5: SPATIAL LAYOUT ==================== -->
+<section class="map-section" id="spatial">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num" style="color: var(--gold-light);">Module 05</div>
+      <h2 style="color: var(--white);">空间布局与地图 Spatial Layout</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- Street Map -->
+    <div class="map-container">
+      <div class="map-label">街道地图 Street Map</div>
+      <div id="parkmap"></div>
+    </div>
+
+    <div class="zone-legend reveal">
+      <div class="zone-legend-item"><span class="zone-legend-dot" style="background:#E84C3D;"></span> 米奇大街 Mickey Ave</div>
+      <div class="zone-legend-item"><span class="zone-legend-dot" style="background:#F5C44E;"></span> 奇想花园 Gardens</div>
+      <div class="zone-legend-item"><span class="zone-legend-dot" style="background:#00A0E8;"></span> 明日世界 Tomorrowland</div>
+      <div class="zone-legend-item"><span class="zone-legend-dot" style="background:#E8A0BF;"></span> 梦幻世界 Fantasyland</div>
+      <div class="zone-legend-item"><span class="zone-legend-dot" style="background:#8B4513;"></span> 宝藏湾 Treasure Cove</div>
+      <div class="zone-legend-item"><span class="zone-legend-dot" style="background:#2E7D32;"></span> 探险岛 Adventure Isle</div>
+      <div class="zone-legend-item"><span class="zone-legend-dot" style="background:#7CB342;"></span> 疯狂动物城 Zootopia</div>
+      <div class="zone-legend-item"><span class="zone-legend-dot" style="background:#FF9800;"></span> 玩具总动员 Toy Story</div>
+    </div>
+
+    <!-- Satellite Map -->
+    <div class="map-container" style="margin-top: 24px;">
+      <div class="map-label">卫星影像 Satellite View</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Reference Diagram -->
+    <div class="svg-diagram-wrap reveal">
+      <h3>乐园空间结构示意图</h3>
+      <div class="svg-container">
+        <svg viewBox="0 0 1000 850" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="waterGrad" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#4A90D9" stop-opacity="0.7"/>
+              <stop offset="100%" stop-color="#2C5F8A" stop-opacity="0.9"/>
+            </radialGradient>
+            <radialGradient id="castleGlow" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#F5C44E" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#F5C44E" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Background -->
+          <rect width="800" height="700" fill="#1A3A5C" rx="12"/>
+
+          <!-- Title -->
+          <text x="400" y="30" text-anchor="middle" fill="#F5C44E" font-family="Playfair Display,Georgia,serif" font-size="18" font-weight="700">上海迪士尼乐园 — 空间结构示意图</text>
+
+          <!-- Compass Rose -->
+          <g transform="translate(720, 60)">
+            <polygon points="0,-18 5,-2 0,-6 -5,-2" fill="#F5C44E"/>
+            <polygon points="0,18 5,2 0,6 -5,2" fill="#8A9BB0"/>
+            <polygon points="-18,0 -2,5 -6,0 -2,-5" fill="#8A9BB0"/>
+            <polygon points="18,0 2,5 6,0 2,-5" fill="#8A9BB0"/>
+            <text x="0" y="-22" text-anchor="middle" fill="#F5C44E" font-size="10" font-family="DM Sans,sans-serif">N</text>
+          </g>
+
+          <!-- Wishing Star Lake -->
+          <ellipse cx="400" cy="600" rx="180" ry="70" fill="url(#waterGrad)" stroke="#4A90D9" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <text x="400" y="605" text-anchor="middle" fill="#A0C4E8" font-size="11" font-family="DM Sans,sans-serif">星愿湖 Wishing Star Lake</text>
+
+          <!-- Main Entrance -->
+          <rect x="350" y="540" width="100" height="30" rx="4" fill="#E84C3D" opacity="0.85"/>
+          <text x="400" y="559" text-anchor="middle" fill="#FFF" font-size="9" font-family="DM Sans,sans-serif">主入口 Entrance</text>
+
+          <!-- Mickey Avenue (bottom center) -->
+          <rect x="340" y="480" width="120" height="50" rx="6" fill="#E84C3D" opacity="0.8"/>
+          <text x="400" y="500" text-anchor="middle" fill="#FFF" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">米奇大街</text>
+          <text x="400" y="516" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="8" font-family="DM Sans,sans-serif">Mickey Avenue</text>
+
+          <!-- Gardens of Imagination (center-bottom, just above Mickey Ave) -->
+          <rect x="350" y="430" width="100" height="42" rx="6" fill="#F5C44E" opacity="0.75"/>
+          <text x="400" y="449" text-anchor="middle" fill="#1A3A5C" font-size="9" font-family="DM Sans,sans-serif" font-weight="600">奇想花园</text>
+          <text x="400" y="462" text-anchor="middle" fill="rgba(26,58,92,0.7)" font-size="7" font-family="DM Sans,sans-serif">Gardens of Imagination</text>
+
+          <!-- Castle (center, glowing) -->
+          <circle cx="400" cy="370" r="35" fill="url(#castleGlow)" opacity="0.6"/>
+          <polygon points="400,310 385,365 370,365 388,380 382,410 400,390 418,410 412,380 430,365 415,365" fill="#E8A0BF" stroke="#F5C44E" stroke-width="1.5"/>
+          <text x="400" y="426" text-anchor="middle" fill="#F5C44E" font-size="9" font-family="DM Sans,sans-serif" font-weight="700">奇幻童话城堡</text>
+          <text x="400" y="438" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="7" font-family="DM Sans,sans-serif">Enchanted Storybook Castle · 60m</text>
+
+          <!-- Tomorrowland (top-left) -->
+          <rect x="220" y="140" width="130" height="70" rx="6" fill="#00A0E8" opacity="0.7"/>
+          <text x="285" y="165" text-anchor="middle" fill="#FFF" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">明日世界</text>
+          <text x="285" y="182" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="8" font-family="DM Sans,sans-serif">Tomorrowland</text>
+          <text x="285" y="197" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="7" font-family="DM Sans,sans-serif">TRON · Jet Packs · Buzz</text>
+
+          <!-- Fantasyland (top-center) -->
+          <rect x="320" y="100" width="150" height="60" rx="6" fill="#E8A0BF" opacity="0.75"/>
+          <text x="395" y="125" text-anchor="middle" fill="#FFF" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">梦幻世界</text>
+          <text x="395" y="141" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="8" font-family="DM Sans,sans-serif">Fantasyland</text>
+
+          <!-- Treasure Cove (top-right) -->
+          <rect x="510" y="150" width="130" height="65" rx="6" fill="#8B4513" opacity="0.75"/>
+          <text x="575" y="175" text-anchor="middle" fill="#FFF" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">宝藏湾</text>
+          <text x="575" y="191" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="8" font-family="DM Sans,sans-serif">Treasure Cove</text>
+          <text x="575" y="205" text-anchor="middle" fill="#F5C44E" font-size="7" font-family="DM Sans,sans-serif">&#9733; 上海独家</text>
+
+          <!-- Adventure Isle (right-center) -->
+          <rect x="530" y="260" width="110" height="60" rx="6" fill="#2E7D32" opacity="0.7"/>
+          <text x="585" y="285" text-anchor="middle" fill="#FFF" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">探险岛</text>
+          <text x="585" y="301" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="8" font-family="DM Sans,sans-serif">Adventure Isle</text>
+
+          <!-- Zootopia (right, upper) -->
+          <rect x="550" y="350" width="110" height="55" rx="6" fill="#7CB342" opacity="0.75"/>
+          <text x="605" y="373" text-anchor="middle" fill="#FFF" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">疯狂动物城</text>
+          <text x="605" y="389" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="7" font-family="DM Sans,sans-serif">Zootopia (2023)</text>
+
+          <!-- Toy Story Land (left, middle) -->
+          <rect x="190" y="280" width="120" height="55" rx="6" fill="#FF9800" opacity="0.7"/>
+          <text x="250" y="305" text-anchor="middle" fill="#FFF" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">玩具总动员</text>
+          <text x="250" y="321" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="7" font-family="DM Sans,sans-serif">Toy Story Land (2018)</text>
+
+          <!-- Connecting paths (subtle lines) -->
+          <g stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none" stroke-dasharray="3,3">
+            <line x1="400" y1="350" x2="285" y2="190"/>
+            <line x1="400" y1="350" x2="395" y2="145"/>
+            <line x1="400" y1="350" x2="575" y2="190"/>
+            <line x1="400" y1="350" x2="585" y2="300"/>
+            <line x1="400" y1="350" x2="605" y2="380"/>
+            <line x1="400" y1="350" x2="250" y2="320"/>
+            <line x1="400" y1="400" x2="400" y2="445"/>
+            <line x1="400" y1="470" x2="400" y2="510"/>
+          </g>
+
+          <!-- Labels for Wishing Star Lake area -->
+          <text x="400" y="650" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="8" font-family="DM Sans,sans-serif">迪士尼小镇 · 星愿公园 · 地铁11号线迪士尼站</text>
+
+          <!-- Legend box -->
+          <rect x="30" y="640" width="200" height="50" rx="4" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="0.5"/>
+          <text x="130" y="660" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="8" font-family="DM Sans,sans-serif">8 大主题园区 + 主入口 + 星愿湖</text>
+          <text x="130" y="678" text-anchor="middle" fill="rgba(255,255,255,0.35)" font-size="7" font-family="DM Sans,sans-serif">北向朝上 · 城堡为中心 · 辐射式布局</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MODULE 6: INVESTMENT TIMELINE ==================== -->
+<section id="timeline">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">Module 06</div>
+      <h2>投资与开发时间线 Investment Timeline</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2009</div>
+        <div class="timeline-title">项目获中国政府批准</div>
+        <div class="timeline-desc">经国务院审批，上海迪士尼项目正式立项，成为中国大陆首个迪士尼度假区。</div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2011 年 4月 8日</div>
+        <div class="timeline-title">正式破土动工</div>
+        <div class="timeline-desc">在上海浦东新区川沙新镇举行奠基仪式，一期工程全面启动。</div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2014</div>
+        <div class="timeline-title">追加 $8亿 投资</div>
+        <div class="timeline-desc">迪士尼宣布追加8亿美元投资，用于增加园区容量约30%，新增游乐设施和表演项目。</div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2016 年 6月 16日</div>
+        <div class="timeline-title">盛大开园</div>
+        <div class="timeline-desc">上海迪士尼乐园正式向公众开放，当日接待首批游客，标志着迪士尼在中国大陆的里程碑。</div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2018 年 4月 26日</div>
+        <div class="timeline-title">玩具总动员园区开园</div>
+        <div class="timeline-desc">上海迪士尼第七个主题园区——皮克斯玩具总动员（Toy Story Land）正式开放，为第一个扩建项目。</div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2023 年 12月 20日</div>
+        <div class="timeline-title">疯狂动物城园区开园</div>
+        <div class="timeline-desc">全球首座疯狂动物城主题园区（Zootopia）开幕，"热力追踪"无轨黑暗骑乘引发热潮。</div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2025 年 5月</div>
+        <div class="timeline-title">蜘蛛侠过山车动工</div>
+        <div class="timeline-desc">投资¥24.59亿，首个漫威大型游乐设施动工，轨道开始安装。</div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2025 年 11月</div>
+        <div class="timeline-title">1亿人次里程碑 + 第四酒店公布</div>
+        <div class="timeline-desc">累计游客突破1.13亿，同时宣布兴建第四家度假区酒店，紧邻主入口。</div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2026 年 3月–6月</div>
+        <div class="timeline-title">十周年庆典 "加你更奇妙"</div>
+        <div class="timeline-desc">开园十周年庆祝活动，第三家酒店完工收尾，第四家酒店场地平整，新入口检票设备上线。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MODULE 7: OPERATIONS KPIs ==================== -->
+<section id="operations">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">Module 07</div>
+      <h2>运营关键指标 Operations KPIs</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card reveal">
+        <div class="kpi-value gold">1,470万</div>
+        <div class="kpi-label">年游客量（2024年）</div>
+        <div class="kpi-note">全球主题公园第5名</div>
+      </div>
+      <div class="kpi-card reveal">
+        <div class="kpi-value">1.13亿+</div>
+        <div class="kpi-label">累计游客量</div>
+        <div class="kpi-note">截至2025年11月</div>
+      </div>
+      <div class="kpi-card reveal">
+        <div class="kpi-value gold">¥1,140亿+</div>
+        <div class="kpi-label">累计营收</div>
+        <div class="kpi-note">2016–2025年</div>
+      </div>
+      <div class="kpi-card reveal">
+        <div class="kpi-value">55%</div>
+        <div class="kpi-label">二次消费占比</div>
+        <div class="kpi-note">高于全球迪士尼平均</div>
+      </div>
+      <div class="kpi-card reveal">
+        <div class="kpi-value">~80,000</div>
+        <div class="kpi-label">日最大承载量（人）</div>
+        <div class="kpi-note">旺季峰值容量</div>
+      </div>
+      <div class="kpi-card reveal">
+        <div class="kpi-value">~1,300万</div>
+        <div class="kpi-label">2023年游客量</div>
+        <div class="kpi-note">疫后强劲复苏</div>
+      </div>
+    </div>
+
+    <!-- Revenue Structure Bar Chart -->
+    <div class="revenue-bar-wrap reveal">
+      <h3>营收结构 Revenue Structure</h3>
+      <div class="revenue-bars">
+        <div class="revenue-bar bar-tickets">
+          <span class="bar-pct">53%</span>
+        </div>
+        <div class="revenue-bar bar-dining">
+          <span class="bar-pct">27%</span>
+        </div>
+        <div class="revenue-bar bar-merch">
+          <span class="bar-pct">20%</span>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:12px;margin-top:12px;">
+        <span class="bar-label">门票 Tickets</span>
+        <span class="bar-label" style="margin-left:20px;">餐饮 Dining</span>
+        <span class="bar-label" style="margin-left:20px;">商品 Merchandise</span>
+      </div>
+      <p style="text-align:center;margin-top:24px;font-size:0.82rem;color:var(--text-light);">二次消费（餐饮+商品）合计占比 <strong>47%</strong>，远超行业平均水平。门票收入占比逐年下降，体现出强劲的园内消费拉动能力。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MODULE 8: CORE TECH INDICATORS ==================== -->
+<section id="core-tech">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">Module 08</div>
+      <h2>核心技术指标 Core Tech Indicators</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="tech-grid">
+      <div class="tech-indicator reveal">
+        <h4>CASTLE HEIGHT 城堡高度</h4>
+        <div class="ti-value">60 米</div>
+        <div class="ti-desc">奇幻童话城堡（Enchanted Storybook Castle）为全球迪士尼最高城堡，融合13位公主的故事元素，设有船餐厅和皇家宴会厅。</div>
+      </div>
+
+      <div class="tech-indicator reveal">
+        <h4>MAGNETIC PROPULSION 磁力偏转系统</h4>
+        <div class="ti-value">Mack Rides</div>
+        <div class="ti-desc">加勒比海盗—沉落宝藏之战采用Mack Rides磁力偏转系统，实现船体360度旋转、侧移和加速，全球首创的沉浸式水道黑暗骑乘。</div>
+      </div>
+
+      <div class="tech-indicator reveal">
+        <h4>TRACKLESS DARK RIDE 无轨黑暗骑乘</h4>
+        <div class="ti-value">Sansei Technologies</div>
+        <div class="ti-desc">疯狂动物城：热力追踪采用无轨自动引导车辆（AGV）技术，车辆可自由行驶于复杂场景中，具备精准定位和多车联动能力。</div>
+      </div>
+
+      <div class="tech-indicator reveal">
+        <h4>FLYING THEATER 飞行影院</h4>
+        <div class="ti-value">Dynamic Attractions</div>
+        <div class="ti-desc">翱翔·飞越地平线采用悬挂式飞行影院系统，球幕直径约24米，模拟飞行掠过全球地标，单场容量约90人。</div>
+      </div>
+
+      <div class="tech-indicator reveal">
+        <h4>TRON COASTER 创极速光轮</h4>
+        <div class="ti-value">Vekoma / 95 km/h</div>
+        <div class="ti-desc">全球首个TRON主题摩托式过山车，骑乘者跨坐于"光轮摩托"上，最高时速约95 km/h，弹射起步加速度约为1.5 G。</div>
+      </div>
+
+      <div class="tech-indicator reveal">
+        <h4>ANIMATRONICS 电子动画</h4>
+        <div class="ti-value">500+ 角色</div>
+        <div class="ti-desc">全园拥有超过500个先进电子动画角色（Audio-Animatronics），涵盖加勒比海盗、小熊维尼、疯狂动物城等IP，部分采用AI驱动的交互功能。</div>
+      </div>
+
+      <div class="tech-indicator reveal">
+        <h4>CAPACITY 系统容量</h4>
+        <div class="ti-value">~80,000 人/日</div>
+        <div class="ti-desc">旺季设计容量约8万人次，通过动态票务系统（分档票价）和预约等候卡系统管理客流，高峰时段等待时间平均控制在45–90分钟。</div>
+      </div>
+
+      <div class="tech-indicator reveal">
+        <h4>PROJECTION MAPPING 投影映射</h4>
+        <div class="ti-value">4K / 城堡投影</div>
+        <div class="ti-desc">奇幻童话城堡夜间灯光秀采用高精度建筑投影映射（Projection Mapping），覆盖城堡正面超过10,000 m²投影面积，配合焰火与音乐。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MODULE 9: AMENITIES ==================== -->
+<section id="amenities">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">Module 09</div>
+      <h2>配套设施 Amenities</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="amenity-grid">
+      <div class="amenity-card reveal">
+        <h4>上海迪士尼乐园酒店</h4>
+        <p>420间客房，新艺术运动风格（Art Nouveau），面朝星愿湖，设有米奇儿童俱乐部和室内恒温泳池。提供"神奇王国"景观房型，可直接观赏城堡夜景。</p>
+      </div>
+
+      <div class="amenity-card reveal">
+        <h4>玩具总动员酒店</h4>
+        <p>800间客房，以皮克斯《玩具总动员》为设计主题，色彩明快活泼。设有"阳光食汇"餐厅和户外水上游乐区，适合亲子家庭入住。</p>
+      </div>
+
+      <div class="amenity-card reveal">
+        <h4>第三家酒店（在建）</h4>
+        <p>9层建筑，融合新艺术运动与上海本土装饰风格，坐落于星愿湖畔。目前正在进行内部精装修，预计2026年内完工投用。</p>
+      </div>
+
+      <div class="amenity-card reveal">
+        <h4>第四家酒店（规划中）</h4>
+        <p>2025年11月正式公布，选址紧邻乐园主入口，可实现步行入园。目前处于场地平整阶段，为度假区持续扩容的重要配套。</p>
+      </div>
+
+      <div class="amenity-card reveal">
+        <h4>迪士尼小镇 Disneytown</h4>
+        <p>毗邻乐园的大型购物、餐饮与娱乐综合体。设有华特迪士尼大剧院（上演《美女与野兽》中文版百老汇音乐剧）、世界商店及多家主题餐厅。</p>
+      </div>
+
+      <div class="amenity-card reveal">
+        <h4>星愿公园 Wishing Star Park</h4>
+        <p>占地50公顷的免费公共公园，环绕星愿湖而建。设有环湖步道（约2.5 km）、生态湿地、儿童游乐场和玻璃花房，是城市生态休闲目的地。</p>
+      </div>
+
+      <div class="amenity-card reveal">
+        <h4>交通与停车</h4>
+        <p>上海地铁11号线迪士尼站直达主入口（步行约5分钟）。多个地面及立体停车场提供超过10,000个停车位，含充电桩和残疾人专用车位。</p>
+      </div>
+
+      <div class="amenity-card reveal">
+        <h4>其他设施</h4>
+        <p>婴儿车轮椅租赁、寄存柜、医疗中心、ATM、外币兑换、免费Wi-Fi覆盖全园、官方APP（含实时等候时间与预约功能）、迪士尼尊享卡（Premier Access）等。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MODULE 10: LATEST NEWS & EXPANSION ==================== -->
+<section id="news">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">Module 10</div>
+      <h2>最新动态与扩建 Latest News &amp; Expansion</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="news-grid">
+      <div class="news-card reveal">
+        <div class="news-tag">新建</div>
+        <h4>蜘蛛侠过山车 Spider-Man Coaster</h4>
+        <p>投资¥24.59亿，上海迪士尼首个漫威大型游乐设施。2025年5月动工，轨道正在安装中。预期将成为明日世界或漫威主题扩展区域的核心吸引力。</p>
+      </div>
+
+      <div class="news-card reveal">
+        <div class="news-tag">扩建</div>
+        <h4>飞越地平线扩容 Soaring Expansion</h4>
+        <p>翱翔·飞越地平线作为常年排队王项目（平均等候120+分钟），正在进行容量扩建工程，增加放映厅与排队区，以缩短等候时间。</p>
+      </div>
+
+      <div class="news-card reveal">
+        <div class="news-tag">技术</div>
+        <h4>星球大战 BDX 交互机器人</h4>
+        <p>迪士尼正在将自主研发的BDX（Bipedal Dynamic eXperience）双足动态交互机器人引入上海园区，初期以星战角色互动形式呈现。</p>
+      </div>
+
+      <div class="news-card reveal">
+        <div class="news-tag">酒店</div>
+        <h4>第三酒店内装 / 第四酒店平整</h4>
+        <p>第三家酒店室内精装修施工中，第四家酒店（主入口旁）场地平整与基础工程同步推进。两家酒店投用后度假区客房总数将突破2,000间。</p>
+      </div>
+
+      <div class="news-card reveal">
+        <div class="news-tag">庆典</div>
+        <h4>十周年 "加你更奇妙"</h4>
+        <p>2026年3月至6月，乐园迎来开园十周年大型庆典活动，主题为"加你更奇妙"。包含限定巡游、特别烟花、十周年纪念商品及酒店套餐。</p>
+      </div>
+
+      <div class="news-card reveal">
+        <div class="news-tag">IP 联动</div>
+        <h4>疯狂动物城故事线扩展</h4>
+        <p>配合《疯狂动物城2》电影上映，Zootopia园区将扩展新的互动故事线和季节性主题活动，持续丰富游客体验层次。</p>
+      </div>
+
+      <div class="news-card reveal">
+        <div class="news-tag">运营</div>
+        <h4>新入口检票设备上线</h4>
+        <p>2026年上半年分批引入新型入口闸机与生物识别验证设备，提升入园效率，减少排队等待时间。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MODULE 11: REFERENCE LIBRARY ==================== -->
+<section id="references">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">Module 11</div>
+      <h2>参考资源 Reference Library</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="ref-grid">
+      <a href="https://commons.wikimedia.org/wiki/Category:Shanghai_Disneyland" target="_blank" rel="noopener" class="ref-card reveal">
+        <div class="ref-icon">WC</div>
+        <div class="ref-info">
+          <div class="ref-title">Wikimedia Commons</div>
+          <div class="ref-domain">高清图片资源库</div>
+        </div>
+      </a>
+
+      <a href="https://search.bilibili.com/all?keyword=上海迪士尼乐园+完整游览" target="_blank" rel="noopener" class="ref-card reveal">
+        <div class="ref-icon">B站</div>
+        <div class="ref-info">
+          <div class="ref-title">Bilibili 哔哩哔哩</div>
+          <div class="ref-domain">完整游览视频攻略</div>
+        </div>
+      </a>
+
+      <a href="https://www.shanghaidisneyresort.com/" target="_blank" rel="noopener" class="ref-card reveal">
+        <div class="ref-icon">SD</div>
+        <div class="ref-info">
+          <div class="ref-title">上海迪士尼度假区官网</div>
+          <div class="ref-domain">票务、酒店、最新公告</div>
+        </div>
+      </a>
+
+      <a href="https://hk.trip.com/travel-guide/attraction/shanghai/shanghai-disneyland-80428/" target="_blank" rel="noopener" class="ref-card reveal">
+        <div class="ref-icon">TC</div>
+        <div class="ref-info">
+          <div class="ref-title">Trip.com 携程旅行</div>
+          <div class="ref-domain">游客游记与实用攻略</div>
+        </div>
+      </a>
+
+      <a href="https://baike.baidu.com/item/上海迪士尼乐园" target="_blank" rel="noopener" class="ref-card reveal">
+        <div class="ref-icon">BK</div>
+        <div class="ref-info">
+          <div class="ref-title">百度百科</div>
+          <div class="ref-domain">综合百科资料</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 8 THEMED LANDS DETAIL ==================== -->
+<section id="lands">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">Bonus</div>
+      <h2>8大主题园区一览 Themed Lands</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="land-grid">
+      <div class="land-card reveal">
+        <div class="land-color-bar" style="background:#E84C3D;"></div>
+        <h4>1. 米奇大街</h4>
+        <div class="land-en">Mickey Avenue</div>
+        <div class="land-highlights">全球首创——以米奇大街替代传统Main Street U.S.A.，设有主题商店（M大街购物廊、甜心糖果）和餐厅（米奇好伙伴美味集市），为进入乐园的第一印象区。</div>
+      </div>
+
+      <div class="land-card reveal">
+        <div class="land-color-bar" style="background:#F5C44E;"></div>
+        <h4>2. 奇想花园</h4>
+        <div class="land-en">Gardens of Imagination</div>
+        <div class="land-highlights">中国生肖十二朋友园、小飞象（Dumbo）、漫威英雄总部（Marvel Universe）。全球首个以中国十二生肖为设计灵感的迪士尼花园。</div>
+      </div>
+
+      <div class="land-card reveal">
+        <div class="land-color-bar" style="background:#00A0E8;"></div>
+        <h4>3. 明日世界</h4>
+        <div class="land-en">Tomorrowland</div>
+        <div class="land-highlights">创极速光轮（TRON Lightcycle Power Run，标志性摩托过山车）、喷气背包飞行器（Jet Packs）、巴斯光年星际营救（Buzz Lightyear Planet Rescue）。</div>
+      </div>
+
+      <div class="land-card reveal">
+        <div class="land-color-bar" style="background:#E8A0BF;"></div>
+        <h4>4. 梦幻世界</h4>
+        <div class="land-en">Fantasyland</div>
+        <div class="land-highlights">奇幻童话城堡（60米，全球最高迪士尼城堡）、七个小矮人矿山车、小飞侠天空奇遇、小熊维尼历险记、冰雪奇缘：欢唱盛会。</div>
+      </div>
+
+      <div class="land-card reveal">
+        <div class="land-color-bar" style="background:#8B4513;"></div>
+        <h4>5. 宝藏湾</h4>
+        <div class="land-en">Treasure Cove &#9733; 上海独家</div>
+        <div class="land-highlights">全球迪士尼唯一以海盗为主题的园区。核心项目：加勒比海盗—沉落宝藏之战（磁力偏转水道黑暗骑乘）、船奇戏水滩、探秘海妖复仇号。</div>
+      </div>
+
+      <div class="land-card reveal">
+        <div class="land-color-bar" style="background:#2E7D32;"></div>
+        <h4>6. 探险岛</h4>
+        <div class="land-en">Adventure Isle</div>
+        <div class="land-highlights">翱翔·飞越地平线（飞行影院）、雷鸣山漂流（Roaring Rapids）、古迹探索营（Camp Discovery）、欢笑聚友会的丛林迪士尼朋友们。</div>
+      </div>
+
+      <div class="land-card reveal">
+        <div class="land-color-bar" style="background:#7CB342;"></div>
+        <h4>7. 疯狂动物城</h4>
+        <div class="land-en">Zootopia &#9733; 全球首座</div>
+        <div class="land-highlights">2023年12月20日开幕，全球首座Zootopia主题园区。核心项目：疯狂动物城：热力追踪（Sansei无轨黑暗骑乘系统）。沉浸式城市景观，全年排队热门。</div>
+      </div>
+
+      <div class="land-card reveal">
+        <div class="land-color-bar" style="background:#FF9800;"></div>
+        <h4>8. 皮克斯玩具总动员</h4>
+        <div class="land-en">Toy Story Land</div>
+        <div class="land-highlights">2018年4月26日开幕。抱抱龙冲天赛车（RC Racer）、弹簧狗团团转（Slinky Dog Spin）、胡迪牛仔嘉年华（Woody's Roundup），色彩缤纷的放大版玩具世界。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="container">
+    <p>上海迪士尼乐园文旅项目深度案例研究 &middot; <strong>数据截至 2026 年 5 月</strong></p>
+    <p style="margin-top:8px;font-size:0.75rem;">Shanghai Disneyland Resort Case Study Report &middot; Data as of May 2026 &middot; All units in metric (公制) &middot; Currency: RMB (¥)</p>
+    <p style="margin-top:8px;font-size:0.7rem;opacity:0.5;">本项目为独立研究分析，非迪士尼官方出版物。图片来源：各参考资源链接。地图瓦片：高德地图 &copy; AutoNavi. 坐标转换：WGS-84 to GCJ-02.</p>
+  </div>
+</footer>
+
+<!-- ==================== SCRIPTS ==================== -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ==================== GCJ-02 Coordinate Conversion ====================
+function wgs84ToGcj02(lng, lat) {
+  var PI = Math.PI, a = 6378245.0, ee = 0.00669342162296594323;
+  function transformLat(x, y) {
+    var ret = -100.0 + 2.0*x + 3.0*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
+    ret += (20.0*Math.sin(6.0*x*PI) + 20.0*Math.sin(2.0*x*PI)) * 2.0 / 3.0;
+    ret += (20.0*Math.sin(y*PI) + 40.0*Math.sin(y/3.0*PI)) * 2.0 / 3.0;
+    ret += (160.0*Math.sin(y/12.0*PI) + 320.0*Math.sin(y*PI/30.0)) * 2.0 / 3.0;
+    return ret;
+  }
+  function transformLng(x, y) {
+    var ret = 300.0 + x + 2.0*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x));
+    ret += (20.0*Math.sin(6.0*x*PI) + 20.0*Math.sin(2.0*x*PI)) * 2.0 / 3.0;
+    ret += (20.0*Math.sin(x*PI) + 40.0*Math.sin(x/3.0*PI)) * 2.0 / 3.0;
+    ret += (150.0*Math.sin(x/12.0*PI) + 300.0*Math.sin(x/30.0*PI)) * 2.0 / 3.0;
+    return ret;
+  }
+  var dLat = transformLat(lng - 105.0, lat - 35.0);
+  var dLng = transformLng(lng - 105.0, lat - 35.0);
+  var radLat = lat / 180.0 * PI;
+  var magic = Math.sin(radLat);
+  magic = 1 - ee * magic * magic;
+  var sqrtMagic = Math.sqrt(magic);
+  dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * PI);
+  dLng = (dLng * 180.0) / (a / sqrtMagic * Math.cos(radLat) * PI);
+  return [lng + dLng, lat + dLat];
+}
+
+// ==================== Gaode Tile Layer Factory ====================
+function createGaodeStreetLayer() {
+  return L.tileLayer(
+    'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}',
+    {
+      subdomains: ['1','2','3','4'],
+      attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> AutoNavi',
+      maxZoom: 19
+    }
+  );
+}
+
+function createGaodeSatLayer() {
+  return L.tileLayer(
+    'https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+    {
+      subdomains: ['1','2','3','4'],
+      attribution: '&copy; <a href="https://www.amap.com/">高德卫星</a> AutoNavi',
+      maxZoom: 19
+    }
+  );
+}
+
+// ==================== Zone Markers ====================
+var zonesWgs84 = [
+  { name: '米奇大街 Mickey Ave', lat: 31.1425, lng: 121.6570, color: '#E84C3D' },
+  { name: '奇想花园 Gardens', lat: 31.1438, lng: 121.6572, color: '#F5C44E' },
+  { name: '明日世界 Tomorrowland', lat: 31.1442, lng: 121.6535, color: '#00A0E8' },
+  { name: '梦幻世界 Fantasyland', lat: 31.1469, lng: 121.6545, color: '#E8A0BF' },
+  { name: '宝藏湾 Treasure Cove', lat: 31.1474, lng: 121.6585, color: '#8B4513' },
+  { name: '探险岛 Adventure Isle', lat: 31.1443, lng: 121.6605, color: '#2E7D32' },
+  { name: '疯狂动物城 Zootopia', lat: 31.1455, lng: 121.6608, color: '#7CB342' },
+  { name: '玩具总动员 Toy Story', lat: 31.1428, lng: 121.6550, color: '#FF9800' }
+];
+
+function createZoneMarkers() {
+  var markers = [];
+  for (var i = 0; i < zonesWgs84.length; i++) {
+    var z = zonesWgs84[i];
+    var gcj = wgs84ToGcj02(z.lng, z.lat);
+    var icon = L.divIcon({
+      className: 'zone-marker-icon',
+      html: '<div style="'
+        + 'width:16px;height:16px;border-radius:50%;'
+        + 'background:' + z.color + ';'
+        + 'border:2.5px solid #FFF;'
+        + 'box-shadow: 0 2px 8px rgba(0,0,0,0.35);'
+        + '"></div>',
+      iconSize: [16, 16],
+      iconAnchor: [8, 8]
+    });
+    var marker = L.marker([gcj[1], gcj[0]], { icon: icon });
+    marker.bindTooltip(z.name, {
+      permanent: true,
+      direction: 'top',
+      offset: [0, -10],
+      className: 'zone-tooltip'
+    });
+    markers.push(marker);
+  }
+  return markers;
+}
+
+// ==================== Init Map: parkmap (Street) ====================
+(function() {
+  var centerWgs = [31.1445, 121.6570];
+  var centerGcj = wgs84ToGcj02(centerWgs[1], centerWgs[0]);
+
+  var parkmap = L.map('parkmap', {
+    center: [centerGcj[1], centerGcj[0]],
+    zoom: 16,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var streetLayer = createGaodeStreetLayer();
+  streetLayer.addTo(parkmap);
+
+  var markers = createZoneMarkers();
+  var markerGroup = L.layerGroup(markers);
+  markerGroup.addTo(parkmap);
+
+  // Add castle marker
+  var castleIcon = L.divIcon({
+    className: 'castle-marker-icon',
+    html: '<div style="'
+      + 'width:22px;height:22px;border-radius:3px;'
+      + 'background:#E8A0BF;'
+      + 'border:3px solid #F5C44E;'
+      + 'box-shadow: 0 0 12px rgba(245,196,78,0.6), 0 2px 8px rgba(0,0,0,0.4);'
+      + 'transform:rotate(45deg);'
+      + '"></div>',
+    iconSize: [22, 22],
+    iconAnchor: [11, 11]
+  });
+  var castleGcj = wgs84ToGcj02(121.6572, 31.1445);
+  L.marker([castleGcj[1], castleGcj[0]], { icon: castleIcon })
+    .bindTooltip('奇幻童话城堡 Castle', {
+      permanent: true,
+      direction: 'top',
+      offset: [0, -14],
+      className: 'castle-tooltip'
+    })
+    .addTo(parkmap);
+
+  setTimeout(function() { parkmap.invalidateSize(); }, 1000);
+})();
+
+// ==================== Init Map: satmap (Satellite) ====================
+(function() {
+  var centerWgs = [31.1445, 121.6570];
+  var centerGcj = wgs84ToGcj02(centerWgs[1], centerWgs[0]);
+
+  var satmap = L.map('satmap', {
+    center: [centerGcj[1], centerGcj[0]],
+    zoom: 16,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var satLayer = createGaodeSatLayer();
+  satLayer.addTo(satmap);
+
+  var streetOverlay = createGaodeStreetLayer();
+
+  var markers = createZoneMarkers();
+  var markerGroup = L.layerGroup(markers);
+  markerGroup.addTo(satmap);
+
+  var castleIcon = L.divIcon({
+    className: 'castle-marker-icon',
+    html: '<div style="'
+      + 'width:22px;height:22px;border-radius:3px;'
+      + 'background:#E8A0BF;'
+      + 'border:3px solid #F5C44E;'
+      + 'box-shadow: 0 0 12px rgba(245,196,78,0.6), 0 2px 8px rgba(0,0,0,0.4);'
+      + 'transform:rotate(45deg);'
+      + '"></div>',
+    iconSize: [22, 22],
+    iconAnchor: [11, 11]
+  });
+  var castleGcj = wgs84ToGcj02(121.6572, 31.1445);
+  L.marker([castleGcj[1], castleGcj[0]], { icon: castleIcon })
+    .bindTooltip('奇幻童话城堡 Castle', {
+      permanent: true,
+      direction: 'top',
+      offset: [0, -14],
+      className: 'castle-tooltip'
+    })
+    .addTo(satmap);
+
+  // Layer control for satellite map
+  var baseMaps = {
+    '卫星影像 Satellite': satLayer
+  };
+  var overlayMaps = {
+    '街道图层 Street': streetOverlay
+  };
+  L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(satmap);
+  streetOverlay.addTo(satmap);
+
+  setTimeout(function() { satmap.invalidateSize(); }, 1000);
+})();
+
+// ==================== Tooltip Styles ====================
+(function addTooltipStyles() {
+  var style = document.createElement('style');
+  style.textContent =
+    '.zone-tooltip {' +
+    '  background: rgba(26,58,92,0.92);' +
+    '  border: 1px solid rgba(255,255,255,0.3);' +
+    '  border-radius: 6px;' +
+    '  color: #FFFEF9;' +
+    '  font-family: "DM Sans", sans-serif;' +
+    '  font-size: 10px;' +
+    '  font-weight: 600;' +
+    '  padding: 3px 8px;' +
+    '  white-space: nowrap;' +
+    '  box-shadow: 0 2px 8px rgba(0,0,0,0.3);' +
+    '}' +
+    '.castle-tooltip {' +
+    '  background: rgba(232,160,191,0.95);' +
+    '  border: 1px solid #F5C44E;' +
+    '  border-radius: 6px;' +
+    '  color: #1A3A5C;' +
+    '  font-family: "DM Sans", sans-serif;' +
+    '  font-size: 10px;' +
+    '  font-weight: 700;' +
+    '  padding: 3px 8px;' +
+    '  white-space: nowrap;' +
+    '  box-shadow: 0 2px 8px rgba(0,0,0,0.3);' +
+    '}' +
+    '.leaflet-tooltip-top:before { border-top-color: rgba(26,58,92,0.92); }' +
+    '.castle-tooltip.leaflet-tooltip-top:before { border-top-color: rgba(232,160,191,0.95); }';
+  document.head.appendChild(style);
+})();
+
+// ==================== IntersectionObserver for Reveal ====================
+(function() {
+  if (!('IntersectionObserver' in window)) {
+    var reveals = document.querySelectorAll('.reveal');
+    for (var i = 0; i < reveals.length; i++) {
+      reveals[i].classList.add('visible');
+    }
+    return;
+  }
+
+  var observer = new IntersectionObserver(
+    function(entries) {
+      for (var i = 0; i < entries.length; i++) {
+        var entry = entries[i];
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      }
+    },
+    {
+      root: null,
+      rootMargin: '0px 0px -40px 0px',
+      threshold: 0.1
+    }
+  );
+
+  var revealEls = document.querySelectorAll('.reveal');
+  for (var j = 0; j < revealEls.length; j++) {
+    observer.observe(revealEls[j]);
+  }
+})();
+</script>
+
+</body>
+</html>

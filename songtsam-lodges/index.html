@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>松赞酒店系列 · 案例研究报告</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+html { font-size: 17px; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #F5F0E8;
+  color: #2D2018;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+/* Typography */
+h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; }
+h2 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 1.5rem; }
+h3 { font-size: 1.35rem; font-weight: 600; }
+.mono { font-family: 'DM Mono', monospace; }
+
+/* Hero */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(165deg, #3D1525 0%, #5C2D3E 25%, #8B3A4A 50%, #4A1A2E 75%, #1A0A10 100%);
+  color: #FFF;
+  text-align: center;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(200,164,92,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(200,164,92,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(255,220,180,0.04) 0%, transparent 60%);
+}
+.hero-inner { position: relative; z-index: 1; padding: 3rem 2rem; max-width: 900px; }
+.hero-badge {
+  display: inline-block;
+  border: 1px solid rgba(200,164,92,0.5);
+  color: #C8A45C;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  padding: 0.35rem 1.2rem;
+  border-radius: 100px;
+  margin-bottom: 2rem;
+  font-family: 'DM Mono', monospace;
+}
+.hero h1 {
+  font-size: clamp(3rem, 6vw, 4.8rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  letter-spacing: 0.02em;
+}
+.hero-sub {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.75);
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  line-height: 1.6;
+}
+.hero-kpis {
+  display: flex;
+  gap: 2.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.hero-kpi-num {
+  font-size: 2.4rem;
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+  color: #C8A45C;
+}
+.hero-kpi-label { font-size: 0.78rem; color: rgba(255,255,255,0.55); margin-top: 0.25rem; letter-spacing: 0.06em; }
+
+/* Section */
+.section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+
+/* Cards */
+.card-grid { display: grid; gap: 1.5rem; }
+.card-grid-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.card-grid-3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.card-grid-4 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+.card {
+  background: #FFF;
+  border-radius: 16px;
+  padding: 1.8rem;
+  border: 1px solid #E8E0D5;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+.card-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+.card h4 { font-size: 0.85rem; color: #8B3A4A; letter-spacing: 0.06em; margin-bottom: 0.4rem; }
+.card .val { font-size: 1.15rem; font-weight: 600; color: #2D2018; }
+
+/* Section header */
+.section-header { text-align: center; margin-bottom: 3.5rem; }
+.section-header h2 { color: #3D1525; }
+.section-header p { color: #8B7355; max-width: 650px; margin: 0 auto; font-size: 1rem; }
+
+/* Route Cards - featured */
+.route-card {
+  background: linear-gradient(135deg, #FFFBF5, #FFF);
+  border: 1px solid #E0D3C0;
+  border-radius: 20px;
+  padding: 2.2rem;
+  margin-bottom: 1.8rem;
+  position: relative;
+  overflow: hidden;
+}
+.route-card::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(139,58,74,0.04) 0%, transparent 70%);
+}
+.route-card h3 { color: #5C2D3E; font-size: 1.5rem; margin-bottom: 0.5rem; }
+.route-meta { display: flex; gap: 2rem; flex-wrap: wrap; margin: 1rem 0; }
+.route-meta-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.88rem; color: #8B7355; }
+.route-meta-item strong { color: #3D1525; }
+.route-days { display: inline-block; background: #8B3A4A; color: #FFF; padding: 0.2rem 0.9rem; border-radius: 100px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; }
+.route-stops { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1rem 0; }
+.route-stop { background: #F5F0E8; color: #5C2D3E; padding: 0.3rem 0.8rem; border-radius: 6px; font-size: 0.82rem; font-weight: 500; }
+
+/* Hotel profile card - featured large */
+.hotel-card {
+  background: #FFF;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #E8E0D5;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.hotel-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
+.hotel-card-header {
+  padding: 1.5rem 1.8rem;
+  color: #FFF;
+  position: relative;
+  overflow: hidden;
+}
+.hotel-card-header.lodge { background: linear-gradient(135deg, #5C3A2E, #3D2018); }
+.hotel-card-header.linka { background: linear-gradient(135deg, #6B2D3E, #3D1525); }
+.hotel-card-header.camp { background: linear-gradient(135deg, #4A6741, #2D4028); }
+.hotel-card-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.7rem;
+  border-radius: 100px;
+  margin-bottom: 0.6rem;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+.hotel-card-header h3 { font-size: 1.3rem; margin-bottom: 0.25rem; }
+.hotel-card-header .altitude { font-size: 0.78rem; opacity: 0.75; font-family: 'DM Mono', monospace; }
+.hotel-card-body { padding: 1.5rem 1.8rem; flex: 1; }
+.hotel-card-body .tagline { font-size: 0.95rem; color: #8B3A4A; font-weight: 600; margin-bottom: 0.6rem; }
+.hotel-card-body .desc { font-size: 0.88rem; color: #6B5E50; line-height: 1.6; }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 2.5rem; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.6rem;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #C8A45C, #8B3A4A 50%, #C8A45C);
+}
+.timeline-item { position: relative; margin-bottom: 2rem; }
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -2rem; top: 0.4rem;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: #C8A45C;
+  border: 2px solid #FFF;
+  box-shadow: 0 0 0 2px #C8A45C;
+}
+.timeline-year { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: #8B3A4A; font-weight: 600; }
+.timeline-title { font-weight: 600; margin: 0.2rem 0; }
+.timeline-desc { font-size: 0.88rem; color: #6B5E50; }
+
+/* Tables */
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.data-table th { background: #3D1525; color: #FFF; padding: 0.8rem 1rem; text-align: left; font-weight: 500; font-size: 0.8rem; letter-spacing: 0.05em; }
+.data-table td { padding: 0.7rem 1rem; border-bottom: 1px solid #E8E0D5; }
+.data-table tr:nth-child(even) { background: #FAF7F2; }
+.data-table tr:hover { background: #F5EDE0; }
+.data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
+
+/* Two column comparison */
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0; }
+.compare-col { padding: 2rem; border-radius: 16px; }
+.compare-col.lodge { background: linear-gradient(135deg, #F5EDE0, #EDE0D0); border: 1px solid #D8C8B0; }
+.compare-col.linka { background: linear-gradient(135deg, #FAF0F2, #F5E0E5); border: 1px solid #E0C8D0; }
+.compare-col h3 { margin-bottom: 1rem; text-align: center; }
+.compare-col ul { list-style: none; }
+.compare-col li { padding: 0.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 0.9rem; }
+.compare-col li::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 0.6rem; vertical-align: middle; }
+.compare-col.lodge li::before { background: #5C3A2E; }
+.compare-col.linka li::before { background: #8B3A4A; }
+
+/* Map container */
+.map-section { background: #FFF; border-radius: 20px; padding: 2rem; border: 1px solid #E8E0D5; }
+.map-container { height: 520px; border-radius: 12px; overflow: hidden; border: 1px solid #E8E0D5; }
+.map-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+.map-tab {
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #D8C8B0;
+  background: #FFF;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+}
+.map-tab.active { background: #3D1525; color: #FFF; border-color: #3D1525; }
+
+/* Philosophy cards */
+.philosophy-card {
+  background: #FFF;
+  border-left: 4px solid #C8A45C;
+  border-radius: 0 12px 12px 0;
+  padding: 1.5rem 1.8rem;
+  margin-bottom: 1.2rem;
+}
+.philosophy-card h4 { color: #3D1525; margin-bottom: 0.4rem; }
+
+/* Resource links */
+.resource-card {
+  background: #FFF;
+  border-radius: 14px;
+  padding: 1.5rem;
+  border: 1px solid #E8E0D5;
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+  transition: transform 0.2s;
+}
+.resource-card:hover { transform: translateY(-2px); }
+.resource-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #8B3A4A, #5C2D3E);
+  color: #FFF;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.resource-card h4 { font-size: 0.95rem; margin-bottom: 0.25rem; }
+.resource-card p { font-size: 0.82rem; color: #8B7355; }
+.resource-card a { color: #8B3A4A; text-decoration: none; font-weight: 500; }
+
+/* SVG Map */
+.svg-map-wrap { max-width: 100%; overflow-x: auto; margin: 2rem 0; }
+.svg-map-wrap svg { min-width: 800px; width: 100%; height: auto; }
+
+/* KPI cards in hero style */
+.kpi-row { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; margin: 2rem 0; }
+.kpi-card {
+  background: #FFF;
+  border-radius: 16px;
+  padding: 1.8rem 2rem;
+  text-align: center;
+  border: 1px solid #E8E0D5;
+  min-width: 160px;
+  flex: 1;
+}
+.kpi-card .num { font-size: 2.4rem; font-weight: 700; color: #8B3A4A; font-family: 'Playfair Display', serif; }
+.kpi-card .label { font-size: 0.78rem; color: #8B7355; margin-top: 0.3rem; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  html { font-size: 15px; }
+  .section { padding: 3rem 1.2rem; }
+  .compare-grid { grid-template-columns: 1fr; }
+  .hero-kpis { gap: 1.5rem; }
+  .hero-kpi-num { font-size: 1.8rem; }
+  .card-grid-2, .card-grid-3, .card-grid-4 { grid-template-columns: 1fr; }
+}
+
+/* Scroll reveal */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Footer */
+.footer {
+  background: linear-gradient(180deg, #3D1525, #1A0A10);
+  color: rgba(255,255,255,0.7);
+  text-align: center;
+  padding: 3rem 2rem;
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+.footer a { color: #C8A45C; text-decoration: none; }
+
+/* Photo gallery grid */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+.gallery-card {
+  background: linear-gradient(135deg, #F5F0E8, #EDE0D0);
+  border-radius: 14px;
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px solid #E8E0D5;
+  transition: transform 0.2s;
+}
+.gallery-card:hover { transform: translateY(-3px); }
+.gallery-card .emoji { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.gallery-card h4 { font-size: 0.9rem; color: #3D1525; margin-bottom: 0.3rem; }
+.gallery-card .src { font-size: 0.75rem; color: #8B7355; }
+.gallery-card a { color: #8B3A4A; text-decoration: none; font-weight: 500; font-size: 0.8rem; }
+
+/* Leaflet overrides */
+.leaflet-container { font-family: 'DM Sans', sans-serif; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ 1. HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">数据截至 2025 年 5 月</div>
+    <h1>松赞酒店系列</h1>
+    <p class="hero-sub">从香格里拉的一栋老宅出发，沿茶马古道在滇藏大地铺展 18 家精品山居与林卡，<br>用「酒店+旅行」模式重新定义藏地深度体验</p>
+    <div class="hero-kpis">
+      <div><div class="hero-kpi-num">18+</div><div class="hero-kpi-label">精品酒店及营地</div></div>
+      <div><div class="hero-kpi-num">25 年</div><div class="hero-kpi-label">品牌历程 (2001-)</div></div>
+      <div><div class="hero-kpi-num">¥1.56万</div><div class="hero-kpi-label">人均环线消费</div></div>
+      <div><div class="hero-kpi-num">~98%</div><div class="hero-kpi-label">本地员工占比</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 2. 项目概览 ═══════════════ -->
+<section class="section">
+  <div class="section-header reveal">
+    <h2>项目概览</h2>
+    <p>松赞（Songtsam）是中国本土最具影响力的精品酒店品牌之一，被誉为"中国的安缦"</p>
+  </div>
+  <div class="card-grid card-grid-3 reveal">
+    <div class="card"><div class="card-icon">🏠</div><h4>创始人</h4><div class="val">白玛多吉</div><p style="font-size:0.82rem;color:#8B7355;margin-top:0.3rem;">前央视纪录片导演，1964年生于云南香格里拉克纳村</p></div>
+    <div class="card"><div class="card-icon">📅</div><h4>首店开业</h4><div class="val">2001 年</div><p style="font-size:0.82rem;color:#8B7355;margin-top:0.3rem;">松赞绿谷山居，由创始人祖宅改建</p></div>
+    <div class="card"><div class="card-icon">🏛️</div><h4>品牌体系</h4><div class="val">山居 + 林卡 + 帐篷</div><p style="font-size:0.82rem;color:#8B7355;margin-top:0.3rem;">两大产品系列 + 营地体验</p></div>
+    <div class="card"><div class="card-icon">📍</div><h4>布局区域</h4><div class="val">云南 · 西藏</div><p style="font-size:0.82rem;color:#8B7355;margin-top:0.3rem;">从香格里拉到拉萨，沿滇藏线铺展</p></div>
+    <div class="card"><div class="card-icon">🛏️</div><h4>客房规模</h4><div class="val">约 420 间</div><p style="font-size:0.82rem;color:#8B7355;margin-top:0.3rem;">山居 ≤25间/处，林卡 40-80间/处</p></div>
+    <div class="card"><div class="card-icon">💴</div><h4>价格区间</h4><div class="val">¥1,400 – ¥4,700 /晚</div><p style="font-size:0.82rem;color:#8B7355;margin-top:0.3rem;">均价长期保持 ¥4,000+/晚</p></div>
+  </div>
+</section>
+
+<!-- ═══════════════ 3. 品牌理念：山居 vs 林卡 ═══════════════ -->
+<section class="section" style="background:#FAF7F2;max-width:100%;padding:5rem 2rem;">
+  <div style="max-width:1100px;margin:0 auto;">
+  <div class="section-header reveal">
+    <h2>两大产品系列：山居 vs 林卡</h2>
+    <p>理解松赞的关键——「山居」隐于山中村落，「林卡」居于开阔园林，两种体验哲学的互补共生</p>
+  </div>
+  <div class="compare-grid reveal">
+    <div class="compare-col lodge">
+      <h3>🏔️ 松赞山居 · Lodge</h3>
+      <ul>
+        <li><strong>藏语含义：</strong>居于山中，隐遁于自然</li>
+        <li><strong>规模：</strong>小型精品，每处通常 ≤25 间客房</li>
+        <li><strong>选址特点：</strong>遗世独立的山中村庄，远离尘嚣</li>
+        <li><strong>设计风格：</strong>质朴温暖，去繁复符号，建筑谦逊融入大地</li>
+        <li><strong>体验侧重：</strong>深度融入村庄生活，与自然零距离对话</li>
+        <li><strong>配套：</strong>基础功能为主，以文化和自然为重心</li>
+        <li><strong>代表：</strong>绿谷、梅里、塔城、茨中、来古、南迦巴瓦、如美、丙中洛、石月亮</li>
+        <li><strong>一句话：</strong>"住在风景里的藏家"</li>
+      </ul>
+    </div>
+    <div class="compare-col linka">
+      <h3>🏛️ 松赞林卡 · Linka</h3>
+      <ul>
+        <li><strong>藏语含义：</strong>林卡 = 园林/乐园，藏式度假庄园</li>
+        <li><strong>规模：</strong>较大规模，一般 40-80 间客房</li>
+        <li><strong>选址特点：</strong>开阔地带，与景区核心对望</li>
+        <li><strong>设计风格：</strong>奢华雅致，文化符号丰富，仪式感强</li>
+        <li><strong>体验侧重：</strong>在舒适度假中感受藏式文化仪式</li>
+        <li><strong>配套：</strong>会议室、健身房、游泳池、SPA 等齐全</li>
+        <li><strong>代表：</strong>香格里拉、丽江、拉萨、波密、昆明</li>
+        <li><strong>一句话：</strong>"奢享藏式园林的度假村"</li>
+      </ul>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 4. 核心理念 ═══════════════ -->
+<section class="section">
+  <div class="section-header reveal">
+    <h2>六大品牌哲学</h2>
+    <p>白玛多吉用纪录片导演的眼光和藏族人对故土的深情，构建了一套独一无二的酒店哲学</p>
+  </div>
+  <div class="reveal">
+    <div class="philosophy-card">
+      <h4>📷 "适合架摄像机的地方"——纪录片导演的选址逻辑</h4>
+      <p style="font-size:0.9rem;color:#6B5E50;">不看人流量、交通便利度，只看风景和文化底蕴。每个窗口都是一幅"活的画框"，框住雪山、稻田、峡谷或寺庙。</p>
+    </div>
+    <div class="philosophy-card">
+      <h4>🏛️ "酒店即博物馆"——活态的藏文化展示空间</h4>
+      <p style="font-size:0.9rem;color:#6B5E50;">每座酒店收藏大量藏式艺术品和传统手工艺品——手工铜器、藏毯、经幡、老木门板。不是静态展示，而是在使用中传承。</p>
+    </div>
+    <div class="philosophy-card">
+      <h4>🤝 "村里的第N户人家"——社区共生模式</h4>
+      <p style="font-size:0.9rem;color:#6B5E50;">98%员工来自当地村庄，直接采购村民农副产品（酥油、蜂蜜、葡萄酒），将酒店深度嵌入当地经济与文化生态。</p>
+    </div>
+    <div class="philosophy-card">
+      <h4>🧭 "酒店+旅行"——环线闭环模式</h4>
+      <p style="font-size:0.9rem;color:#6B5E50;">真正的创新——将分散的精品酒店串联成线，自持车队与餐饮，形成"风景+精品山居+在地文化+原住民员工+游客体验"五位一体。</p>
+    </div>
+    <div class="philosophy-card">
+      <h4>🪵 "谦逊融入土地"——建筑即对话</h4>
+      <p style="font-size:0.9rem;color:#6B5E50;">不超过三层，黄色夯土墙面、页岩坡屋顶。不砍伐山林、不破坏自然地貌，来古山居甚至将建筑镶嵌于山体以减少视觉冲击。</p>
+    </div>
+    <div class="philosophy-card">
+      <h4>🙏 "真诚的微笑不需要培训"——原住民管家服务</h4>
+      <p style="font-size:0.9rem;color:#6B5E50;">员工不只是服务员，更是旅行伙伴和向导。带客人探访藏族家庭、印制经幡、品尝酥油茶——"不像在服务客人，而更像是在照顾家人"。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 5. 松赞环线 ═══════════════ -->
+<section class="section" style="background:#FAF7F2;max-width:100%;padding:5rem 2rem;">
+  <div style="max-width:1100px;margin:0 auto;">
+  <div class="section-header reveal">
+    <h2>松赞环线 · 经典路线</h2>
+    <p>松赞将18家酒店按地理脉络串联成多条一价全包环线，每条路线都是一次深度的藏地人文之旅</p>
+  </div>
+
+  <div class="reveal">
+    <div class="route-card">
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+        <h3 style="margin:0;">🏔️ 滇藏线大穿越</h3>
+        <span class="route-days">10晚11天</span>
+        <span style="font-size:0.88rem;color:#8B3A4A;font-weight:600;">¥49,999 / 2人</span>
+      </div>
+      <p style="color:#6B5E50;margin-bottom:1rem;">松赞旗舰路线。穿行横断山脉至喜马拉雅，串联7家松赞酒店，体验从云南藏区到西藏圣城的壮阔景观与文化变迁。</p>
+      <div class="route-meta">
+        <div class="route-meta-item">📍 <strong>方向：</strong>香格里拉 → 拉萨</div>
+        <div class="route-meta-item">🚗 <strong>交通：</strong>越野/商务车 + 专属司机</div>
+        <div class="route-meta-item">👥 <strong>规模：</strong>8-12人精品小团</div>
+      </div>
+      <div class="route-stops">
+        <span class="route-stop">香格里拉</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">梅里</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">如美</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">来古</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">波密</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">南迦巴瓦</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">拉萨</span>
+      </div>
+      <p style="font-size:0.82rem;color:#8B7355;margin-top:0.8rem;"><strong>亮点：</strong>松赞林寺 · 梅里日照金山 · 芒康千年盐田 · 怒江72拐 · 来古冰川 · 南迦巴瓦峰 · 布达拉宫</p>
+    </div>
+
+    <div class="route-card">
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+        <h3 style="margin:0;">🌿 香格里拉环线 · 探索三江并流</h3>
+        <span class="route-days">7晚8天</span>
+      </div>
+      <p style="color:#6B5E50;margin-bottom:1rem;">聚焦云南迪庆核心区域，深度探索金沙江、澜沧江、怒江三江并流世界自然遗产地。</p>
+      <div class="route-meta">
+        <div class="route-meta-item">📍 <strong>方向：</strong>香格里拉 → 塔城 → 梅里 → 香格里拉</div>
+        <div class="route-meta-item">👥 <strong>规模：</strong>8-12人精品小团</div>
+      </div>
+      <div class="route-stops">
+        <span class="route-stop">香格里拉</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">塔城</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">梅里</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">香格里拉</span>
+      </div>
+      <p style="font-size:0.82rem;color:#8B7355;margin-top:0.8rem;"><strong>亮点：</strong>松赞林寺 · 达摩祖师洞转经 · 滇金丝猴追踪 · 飞来寺煨桑祈福 · 纳帕海观鸟 · 唐卡绘制体验</p>
+    </div>
+
+    <div class="route-card">
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+        <h3 style="margin:0;">🐎 茶马古道之旅</h3>
+        <span class="route-days">5晚6天</span>
+      </div>
+      <p style="color:#6B5E50;margin-bottom:1rem;">最短但最精华的入门环线，适合首次体验松赞的旅行者。</p>
+      <div class="route-meta">
+        <div class="route-meta-item">📍 <strong>方向：</strong>香格里拉 → 奔子栏 → 梅里 → 香格里拉</div>
+      </div>
+      <div class="route-stops">
+        <span class="route-stop">香格里拉</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">奔子栏</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">梅里</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">香格里拉</span>
+      </div>
+      <p style="font-size:0.82rem;color:#8B7355;margin-top:0.8rem;"><strong>亮点：</strong>尼丁原始森林徒步 · 东竹林寺 · 金沙江大拐弯 · 日照金山 · 印制经幡 · 尼西黑陶制作 · 尼西土锅鸡</p>
+    </div>
+
+    <div class="route-card">
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+        <h3 style="margin:0;">🌸 滇藏桃花秘境</h3>
+        <span class="route-days">11晚12天</span>
+      </div>
+      <p style="color:#6B5E50;margin-bottom:1rem;">春季限定路线。每年3月，波密桃花沟绵延数十公里的野桃花与雪山交相辉映。</p>
+      <div class="route-meta">
+        <div class="route-meta-item">📍 <strong>最佳季节：</strong>每年 3 月中下旬</div>
+      </div>
+      <p style="font-size:0.82rem;color:#8B7355;margin-top:0.8rem;"><strong>亮点：</strong>波密桃花沟 · 南迦巴瓦桃花倒影 · 雅鲁藏布大峡谷 · 来古冰川 · 藏纸制作 · 骑马探朵松措</p>
+    </div>
+
+    <div class="route-card">
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+        <h3 style="margin:0;">🏯 寻找珍贵风物</h3>
+        <span class="route-days">6晚7天</span>
+      </div>
+      <p style="color:#6B5E50;margin-bottom:1rem;">从丽江出发，沿金沙江河谷北上，体验纳西文化与藏文化交汇处的风物之美。</p>
+      <div class="route-meta">
+        <div class="route-meta-item">📍 <strong>方向：</strong>丽江 → 塔城 → 奔子栏 → 香格里拉</div>
+      </div>
+      <div class="route-stops">
+        <span class="route-stop">丽江</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">塔城</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">奔子栏</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">香格里拉</span>
+      </div>
+      <p style="font-size:0.82rem;color:#8B7355;margin-top:0.8rem;"><strong>亮点：</strong>长江第一湾 · 忠义市场 · 滇金丝猴 · 尼丁森林徒步 · 尼西黑陶 · 纳帕海 · 藏民家访</p>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top:2rem;">
+    <div class="card" style="background:#FFFBF5;border:1px solid #E0D3C0;">
+      <h4 style="color:#8B3A4A;margin-bottom:0.8rem;">💡 一价全包包含内容</h4>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.5rem;font-size:0.85rem;color:#5C3D3E;">
+        <div>✅ 全程松赞酒店住宿（2人一房）</div>
+        <div>✅ 每日早、午、晚餐 + 下午茶</div>
+        <div>✅ 全程越野/商务车 + 专属司机</div>
+        <div>✅ 1位松赞旅行管家全程服务</div>
+        <div>✅ 所有活动体验及门票</div>
+        <div>✅ 车内小吃、饮用水、迷你吧</div>
+        <div>✅ 旅游意外保险</div>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 6. 各家酒店详解 ═══════════════ -->
+<section class="section">
+  <div class="section-header reveal">
+    <h2>18家酒店理念与特色详解</h2>
+    <p>每一家松赞都是独一无二的——不同的海拔、不同的景观、不同的文化主题，但共享同一套品牌基因</p>
+  </div>
+
+  <h3 style="margin:2rem 0 1.2rem;color:#3D1525;">🏔️ 山居系列 —— 隐于山中，回归本质</h3>
+  <div class="card-grid card-grid-3 reveal">
+    <div class="hotel-card">
+      <div class="hotel-card-header lodge">
+        <div class="hotel-card-badge">山居 · 2001</div>
+        <h3>松赞绿谷山居</h3>
+        <div class="altitude">海拔 ~3,300m · 云南香格里拉</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">松赞之源 · 藏地博物馆</div>
+        <p class="desc">一切开始的地方。由白玛多吉克纳村祖宅改建，紧邻噶丹·松赞林寺。收藏大量藏式艺术品和传统手工艺品，被称为"藏地民俗文化艺术博物馆"。22间客房，每一间都面向松赞林寺的金顶。</p>
+      </div>
+    </div>
+
+    <div class="hotel-card">
+      <div class="hotel-card-header lodge">
+        <div class="hotel-card-badge">山居 · 2011</div>
+        <h3>松赞塔城山居</h3>
+        <div class="altitude">海拔 ~2,000m · 云南维西</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">田园诗画 · 高原江南</div>
+        <p class="desc">建在层层稻田之上，四周青松环绕，毗邻滇金丝猴国家公园。海拔仅2,000米，气候温润，被称为"松赞环线上的江南"。在这里可以体验鱼米之乡般的藏地田园生活——梯田、农家、手磨豆腐。</p>
+      </div>
+    </div>
+
+    <div class="hotel-card">
+      <div class="hotel-card-header lodge">
+        <div class="hotel-card-badge">山居 · 2011</div>
+        <h3>松赞奔子栏山居</h3>
+        <div class="altitude">海拔 ~2,000m · 云南德钦</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">干热河谷 · 观星胜地</div>
+        <p class="desc">金沙江边干热河谷中的隐逸村庄。光污染极少，是滇藏地区最佳观星地之一。周围有尼丁原始森林可供徒步，东竹林寺近在咫尺。气候干燥温暖，是香格里拉环线中气候最宜人的一站。</p>
+      </div>
+    </div>
+
+    <div class="hotel-card">
+      <div class="hotel-card-header lodge">
+        <div class="hotel-card-badge">山居 · 2011</div>
+        <h3>松赞梅里山居</h3>
+        <div class="altitude">海拔 ~3,600m · 云南德钦</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">日照金山 · 神山朝圣</div>
+        <p class="desc">坐落在仅五户人家的小村落中，原址为17世纪藏传佛教寺院遗迹。清晨推窗即可直面卡瓦格博峰的日照金山——这是每一个旅人终生难忘的瞬间。被视为松赞最具精神性的山居。</p>
+      </div>
+    </div>
+
+    <div class="hotel-card">
+      <div class="hotel-card-header lodge">
+        <div class="hotel-card-badge">山居 · 2013</div>
+        <h3>松赞茨中山居</h3>
+        <div class="altitude">海拔 ~2,200m · 云南德钦</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">信仰交响 · 红酒之乡</div>
+        <p class="desc">澜沧江峡谷深处的异域之境。百年前法国传教士在此留下哥特式天主教堂与葡萄种植传统，天主教与藏传佛教在此和谐共存。2023年改造后主打酒庄概念，酒店承包葡萄园，可体验独特的藏地葡萄酒文化。</p>
+      </div>
+    </div>
+
+    <div class="hotel-card">
+      <div class="hotel-card-header lodge">
+        <div class="hotel-card-badge">山居 · 2019</div>
+        <h3>松赞来古山居</h3>
+        <div class="altitude">海拔 ~4,200m · 西藏然乌</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">冰川秘境 · 极致海拔</div>
+        <p class="desc">松赞海拔最高的山居，镶嵌在来古冰川对面的山崖中。为减少对高原生态的视觉冲击，建筑嵌入山体。房间模块由德国公司生产，绕道青海-格尔木-拉萨运输（因滇藏线路段狭窄无法通行），堪称工程奇迹。</p>
+      </div>
+    </div>
+
+    <div class="hotel-card">
+      <div class="hotel-card-header lodge">
+        <div class="hotel-card-badge">山居 · 2019</div>
+        <h3>松赞如美山居</h3>
+        <div class="altitude">海拔 ~2,600m · 西藏芒康</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">滇藏要冲 · 河谷壮歌</div>
+        <p class="desc">位于芒康如美镇，地处滇藏线与318川藏线的交汇要冲。直面澜沧江干热河谷的壮阔景色，是从云南进入西藏后的第一站，也是滇藏环线中承上启下的关键节点。</p>
+      </div>
+    </div>
+
+    <div class="hotel-card">
+      <div class="hotel-card-header lodge">
+        <div class="hotel-card-badge">山居 · 2021</div>
+        <h3>松赞南迦巴瓦山居</h3>
+        <div class="altitude">海拔 ~3,100m · 西藏林芝</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">雪山倒影 · 摄影天堂</div>
+        <p class="desc">直面"中国最美雪山"南迦巴瓦峰。门前水塘可拍摄经典雪山倒影，每扇窗都是一幅雪山画卷。位于雅鲁藏布大峡谷入口，是藏东环线的标志性酒店，也是桃花季最抢手的住处。</p>
+      </div>
+    </div>
+
+    <div class="hotel-card">
+      <div class="hotel-card-header lodge">
+        <div class="hotel-card-badge">山居 · 2023</div>
+        <h3>松赞丙中洛山居</h3>
+        <div class="altitude">海拔 ~1,750m · 云南贡山</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">人神共居 · 多元信仰</div>
+        <p class="desc">毗邻普化寺，面朝稻田与碧罗雪山。怒江峡谷深处的"人神共居之地"——藏传佛教、天主教、基督教、原始宗教在此多民族多信仰和谐共存。新一代山居设计去繁复符号，回归空间舒适与视野通透的本质。</p>
+      </div>
+    </div>
+
+    <div class="hotel-card">
+      <div class="hotel-card-header lodge">
+        <div class="hotel-card-badge">山居 · 2024</div>
+        <h3>松赞石月亮山居</h3>
+        <div class="altitude">海拔 ~1,750m · 云南福贡</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">云海之上 · 峡谷之巅</div>
+        <p class="desc">碧罗雪山山腰处，与怒江对岸高黎贡山上天然形成的"石月亮"巨岩奇观遥相对望。设有松赞首个无边泳池，俯瞰怒江大峡谷全貌。云海日出的壮美景观使其成为松赞最新的标志性山居。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin:2.5rem 0 1.2rem;color:#3D1525;">🏛️ 林卡系列 —— 藏式园林中的奢华休憩</h3>
+  <div class="card-grid card-grid-3 reveal">
+    <div class="hotel-card">
+      <div class="hotel-card-header linka">
+        <div class="hotel-card-badge">林卡 · 2009</div>
+        <h3>松赞香格里拉林卡</h3>
+        <div class="altitude">海拔 ~3,300m · 云南香格里拉</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">松赞林寺对望 · 藏式碉房群落</div>
+        <p class="desc">与噶丹·松赞林寺遥相对望，依山势错落布局。康巴藏式碉房建筑群，内含松赞博物馆、藏式地毯店、佛像店等文化空间。配套完善（会议室、Spa、健身房），是松赞林卡系列中最具代表性的旗舰。</p>
+      </div>
+    </div>
+
+    <div class="hotel-card">
+      <div class="hotel-card-header linka">
+        <div class="hotel-card-badge">林卡 · 2017</div>
+        <h3>松赞丽江林卡</h3>
+        <div class="altitude">海拔 ~2,400m · 云南丽江</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">纳西官邸 · 汉藏纳融合</div>
+        <p class="desc">纳西院落与中原官邸建筑风格的融合之作。东临丽江古城、北观玉龙雪山，融合藏、纳西、汉族三种建筑文化。是滇藏线从丽江出发的首选起点，也是探索茶马古道文化的门户。</p>
+      </div>
+    </div>
+
+    <div class="hotel-card">
+      <div class="hotel-card-header linka">
+        <div class="hotel-card-badge">林卡 · 2019</div>
+        <h3>松赞拉萨林卡</h3>
+        <div class="altitude">海拔 ~3,650m · 西藏拉萨</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">圣城栖居 · 传统藏院</div>
+        <p class="desc">位于拉萨市区，以传统藏式民居风格建造。不追求市中心的喧闹，更适合非首次造访拉萨、希望深度感受圣城日常的旅人。建筑风格纯正，铜器、壁画、藏毯等工艺在这里达到松赞体系的巅峰。</p>
+      </div>
+    </div>
+
+    <div class="hotel-card">
+      <div class="hotel-card-header linka">
+        <div class="hotel-card-badge">林卡 · 2019</div>
+        <h3>松赞波密林卡</h3>
+        <div class="altitude">海拔 ~2,700m · 西藏波密</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">雪山湖景 · 国道驿站</div>
+        <p class="desc">推窗即见连绵雪山与高原湖泊。临近318国道，是川藏线上最令人惊艳的休憩站。波密地区森林茂密、氧气充足，是高原旅行中的"氧吧"站。春季桃花季尤为一房难求。</p>
+      </div>
+    </div>
+
+    <div class="hotel-card">
+      <div class="hotel-card-header linka">
+        <div class="hotel-card-badge">林卡 · 2026</div>
+        <h3>松赞昆明林卡</h3>
+        <div class="altitude">海拔 ~1,890m · 云南昆明</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">城市会客厅 · 全新突破</div>
+        <p class="desc">2026年最新开业，松赞首次走出藏区进入省会城市。建筑面积2.2万㎡，由建筑大师王澍设计。集酒店、艺术馆、粤菜餐厅于一体，定位为"喜马拉雅文化的城市会客厅"，是滇藏旅行的一站式起点或终点。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin:2.5rem 0 1.2rem;color:#3D1525;">⛺ 帐篷营地 —— 与荒野的零距离对话</h3>
+  <div class="card-grid card-grid-2 reveal">
+    <div class="hotel-card">
+      <div class="hotel-card-header camp">
+        <div class="hotel-card-badge">帐篷营地 · 2020</div>
+        <h3>松赞雨崩帐篷营地</h3>
+        <div class="altitude">海拔 ~3,100m · 云南德钦</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">神山脚下 · 户外朝圣</div>
+        <p class="desc">位于梅里雪山脚下的雨崩村，是徒步爱好者的终极目的地。帐篷营地提供在卡瓦格博神山脚下过夜的独特体验，将户外探险与松赞品质服务结合——篝火晚餐、星空露营、清晨日照金山。</p>
+      </div>
+    </div>
+    <div class="hotel-card">
+      <div class="hotel-card-header camp">
+        <div class="hotel-card-badge">帐篷营地 · 2022</div>
+        <h3>松赞百巴帐篷营地</h3>
+        <div class="altitude">海拔 ~3,200m · 西藏林芝</div>
+      </div>
+      <div class="hotel-card-body">
+        <div class="tagline">森林秘境 · 轻奢露营</div>
+        <p class="desc">隐匿于林芝百巴原始森林之中，提供轻奢帐篷露营体验。与南迦巴瓦山居形成互补——一个是固定住所的极致景观，一个是森林深处与自然的零距离对话。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 7. 交互地图 ═══════════════ -->
+<section class="section" style="background:#FAF7F2;max-width:100%;padding:5rem 2rem;">
+  <div style="max-width:1100px;margin:0 auto;">
+  <div class="section-header reveal">
+    <h2>滇藏布局 · 酒店分布图</h2>
+    <p>18家酒店沿滇藏线从昆明到拉萨一字排开，形成一条约 1,500 公里的精品酒店走廊</p>
+  </div>
+  <div class="map-section">
+    <div class="map-tabs">
+      <button class="map-tab active" onclick="switchMap('street')">🗺️ 街道图</button>
+      <button class="map-tab" onclick="switchMap('satellite')">🛰️ 卫星图</button>
+      <button class="map-tab" onclick="switchMap('route')">🧭 环线示意</button>
+    </div>
+    <div class="map-container" id="mapContainer">
+      <div id="parkmap" style="height:100%;width:100%;"></div>
+    </div>
+    <p style="font-size:0.75rem;color:#8B7355;margin-top:0.8rem;text-align:center;">坐标基于已知地理参考点估算，中国大陆区域使用 GCJ-02 坐标系。🟤 山居 &nbsp; 🔴 林卡 &nbsp; 🟢 帐篷营地</p>
+  </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 8. 设计与建设 ═══════════════ -->
+<section class="section">
+  <div class="section-header reveal">
+    <h2>设计与建设</h2>
+  </div>
+  <div class="card-grid card-grid-2 reveal">
+    <div class="card">
+      <h4 style="color:#8B3A4A;">🏛️ 核心设计团队</h4>
+      <div style="font-size:0.88rem;color:#6B5E50;line-height:1.8;margin-top:0.8rem;">
+        <p><strong>创始人 / 总规划师：</strong>白玛多吉——以纪录片导演的审美和藏族人的文化直觉，亲自参与每一家酒店的选址与概念设计</p>
+        <p style="margin-top:0.6rem;"><strong>来古山居建筑师：</strong>戚山山 / STUDIO QI——将40个模块化房间"镶嵌"于海拔4,200米的山崖</p>
+        <p style="margin-top:0.6rem;"><strong>昆明林卡建筑师：</strong>王澍 / 业余建筑工作室——2012年普利兹克奖得主，首次为松赞设计</p>
+        <p style="margin-top:0.6rem;"><strong>室内设计：</strong>顾忆 / 无设建筑——多代山居的室内设计，从繁复符号到去繁归真</p>
+      </div>
+    </div>
+    <div class="card">
+      <h4 style="color:#8B3A4A;">🔨 建设特色</h4>
+      <div style="font-size:0.88rem;color:#6B5E50;line-height:1.8;margin-top:0.8rem;">
+        <p><strong>建筑材料：</strong>就地取材——黄色夯土墙面、页岩坡屋顶、本地石材与木材</p>
+        <p style="margin-top:0.6rem;"><strong>高度控制：</strong>所有建筑不超过三层，谦逊融入周边村落肌理</p>
+        <p style="margin-top:0.6rem;"><strong>模块化运输（来古）：</strong>房间模块由德国公司生产，因滇藏线狭窄无法通行，绕道青海→格尔木→拉萨，运输距离相当于绕行大半个中国</p>
+        <p style="margin-top:0.6rem;"><strong>高原施工：</strong>面对极端气候、冻土、运输困难、环保约束等多重挑战</p>
+      </div>
+    </div>
+  </div>
+  <div class="reveal" style="margin-top:1.5rem;">
+    <table class="data-table">
+      <thead><tr><th>供应商类别</th><th>合作方</th><th>参与内容</th></tr></thead>
+      <tbody>
+        <tr><td>建筑设计</td><td>STUDIO QI（戚山山）、业余建筑工作室（王澍）、无设建筑（顾忆）</td><td>各酒店建筑方案设计</td></tr>
+        <tr><td>模块化生产</td><td>德国模块化建筑公司</td><td>来古山居40+房间模块</td></tr>
+        <tr><td>室内装饰</td><td>松赞自有工匠团队</td><td>手工铜器、铜洗手盆、藏毯、老木门板、经幡</td></tr>
+        <tr><td>景观施工</td><td>本地施工队 + 松赞工程团队</td><td>依山就势、不破坏自然地貌</td></tr>
+        <tr><td>社区参与</td><td>各所在地村民</td><td>建设用工 + 运营雇佣 + 农产品供应</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════ 9. 技术指标总表 ═══════════════ -->
+<section class="section" style="background:#FAF7F2;max-width:100%;padding:5rem 2rem;">
+  <div style="max-width:1100px;margin:0 auto;">
+  <div class="section-header reveal">
+    <h2>技术指标总表</h2>
+    <p>17家主要酒店 + 2个帐篷营地的全维度数据速查</p>
+  </div>
+  <div class="reveal" style="overflow-x:auto;">
+    <table class="data-table" style="min-width:900px;">
+      <thead><tr><th>酒店</th><th>类型</th><th>开业</th><th>海拔(m)</th><th>位置</th><th>客房(约)</th><th>主题标签</th></tr></thead>
+      <tbody>
+        <tr><td>松赞绿谷山居</td><td>山居</td><td>2001</td><td class="num">3,300</td><td>云南香格里拉</td><td class="num">22</td><td>藏地博物馆·品牌起源</td></tr>
+        <tr><td>松赞香格里拉林卡</td><td>林卡</td><td>2009</td><td class="num">3,300</td><td>云南香格里拉</td><td class="num">75</td><td>松赞林寺对望·旗舰</td></tr>
+        <tr><td>松赞塔城山居</td><td>山居</td><td>2011</td><td class="num">2,000</td><td>云南维西</td><td class="num">20</td><td>高原江南·田园诗意</td></tr>
+        <tr><td>松赞奔子栏山居</td><td>山居</td><td>2011</td><td class="num">2,000</td><td>云南德钦</td><td class="num">18</td><td>观星胜地·干热河谷</td></tr>
+        <tr><td>松赞梅里山居</td><td>山居</td><td>2011</td><td class="num">3,600</td><td>云南德钦</td><td class="num">17</td><td>日照金山·精神圣地</td></tr>
+        <tr><td>松赞茨中山居</td><td>山居</td><td>2013</td><td class="num">2,200</td><td>云南德钦</td><td class="num">15</td><td>红酒之乡·信仰交响</td></tr>
+        <tr><td>松赞丽江林卡</td><td>林卡</td><td>2017</td><td class="num">2,400</td><td>云南丽江</td><td class="num">42</td><td>纳西官邸·三族合璧</td></tr>
+        <tr><td>松赞拉萨林卡</td><td>林卡</td><td>2019</td><td class="num">3,650</td><td>西藏拉萨</td><td class="num">50</td><td>圣城栖居·传统藏院</td></tr>
+        <tr><td>松赞波密林卡</td><td>林卡</td><td>2019</td><td class="num">2,700</td><td>西藏波密</td><td class="num">45</td><td>雪山湖景·川藏驿站</td></tr>
+        <tr><td>松赞来古山居</td><td>山居</td><td>2019</td><td class="num">4,200</td><td>西藏然乌</td><td class="num">20</td><td>冰川秘境·最高海拔</td></tr>
+        <tr><td>松赞如美山居</td><td>山居</td><td>2019</td><td class="num">2,600</td><td>西藏芒康</td><td class="num">20</td><td>滇藏要冲·河谷壮歌</td></tr>
+        <tr><td>松赞雨崩帐篷营地</td><td>营地</td><td>2020</td><td class="num">3,100</td><td>云南德钦</td><td class="num">~10</td><td>神山脚下·户外朝圣</td></tr>
+        <tr><td>松赞南迦巴瓦山居</td><td>山居</td><td>2021</td><td class="num">3,100</td><td>西藏林芝</td><td class="num">20</td><td>雪山倒影·摄影天堂</td></tr>
+        <tr><td>松赞百巴帐篷营地</td><td>营地</td><td>2022</td><td class="num">3,200</td><td>西藏林芝</td><td class="num">~10</td><td>森林秘境·轻奢露营</td></tr>
+        <tr><td>松赞丙中洛山居</td><td>山居</td><td>2023</td><td class="num">1,750</td><td>云南贡山</td><td class="num">22</td><td>人神共居·多元信仰</td></tr>
+        <tr><td>松赞石月亮山居</td><td>山居</td><td>2024</td><td class="num">1,750</td><td>云南福贡</td><td class="num">24</td><td>云海之上·无边泳池</td></tr>
+        <tr><td>松赞昆明林卡</td><td>林卡</td><td>2026</td><td class="num">1,890</td><td>云南昆明</td><td class="num">~60</td><td>城市会客厅·王澍设计</td></tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 10. 投资与建设时序 ═══════════════ -->
+<section class="section">
+  <div class="section-header reveal">
+    <h2>投资与建设时序</h2>
+    <p>从一个人背债130万改建老宅，到估值15亿的藏地精品酒店集团——25年慢生长的扩张逻辑</p>
+  </div>
+  <div class="reveal">
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">2000 – 2001</div>
+        <div class="timeline-title">🏠 起源：央视导演回乡改建祖宅</div>
+        <div class="timeline-desc">白玛多吉离开工作13年的央视，回到香格里拉克纳村，背负130万债务将自家祖宅改造为第一家酒店——<strong>松赞绿谷山居</strong>。员工仅9人（家人和邻居），2年后开始亲自全职管理。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2005 – 2009</div>
+        <div class="timeline-title">🏛️ 第二家：林卡系列的诞生与挫折</div>
+        <div class="timeline-desc">建成<strong>松赞香格里拉林卡</strong>，尝试与雅高集团合作运营但以失败告终。这次教训让白玛多吉坚定了"自己做"的决心，也催生了后来的全自营模式。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2009 – 2013</div>
+        <div class="timeline-title">🔗 香格里拉环线成型</div>
+        <div class="timeline-desc">陆续建成<strong>奔子栏、梅里、塔城、茨中</strong>四家山居，形成最早的"香格里拉环线"。2011年推出"一价全包"式环线旅行产品，标志着"酒店+旅行"模式的正式确立。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2015 – 2021</div>
+        <div class="timeline-title">🛤️ 滇藏线大拓展</div>
+        <div class="timeline-desc">沿滇藏线（茶马古道）进入西藏腹地。先后开业<strong>丽江林卡(2017)、拉萨林卡(2019)、波密林卡(2019)、来古山居(2019)、如美山居(2019)、南迦巴瓦山居(2021)</strong>，正式打通滇藏大环线。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2022</div>
+        <div class="timeline-title">💰 A轮融资：首次接受机构投资</div>
+        <div class="timeline-desc"><strong>招银国际投资3亿元</strong>，占股约21%，估值约13.6亿元——这是松赞22年来首次接受机构投资。此前仅有20多名个人天使（多为住过酒店的客人）。制定了"每年新开3-5家"的加速计划。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2023 – 2024</div>
+        <div class="timeline-title">🌿 怒江新篇章</div>
+        <div class="timeline-desc"><strong>丙中洛山居(2023)、石月亮山居(2024)</strong>相继开业，将松赞版图拓展至怒江大峡谷，标志着大滇西旅游环线的进一步充实。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2025</div>
+        <div class="timeline-title">🤝 B轮融资：俞敏洪加入</div>
+        <div class="timeline-desc"><strong>新东方（东方卓永）投资约1.7-2亿元</strong>，持股12.4%，估值超15亿元。俞敏洪亲自加入董事会，松赞的文化传播基因与新东方的教育文旅资源形成战略协同。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2026</div>
+        <div class="timeline-title">🏙️ 昆明林卡：走出藏区的第一步</div>
+        <div class="timeline-desc">松赞首次进入省会城市，建筑大师王澍设计，定位城市文化会客厅。标志着品牌从"藏地秘境"向"城市入口"的战略延伸。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-grid card-grid-3 reveal" style="margin-top:2rem;">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2.2rem;font-weight:700;color:#8B3A4A;font-family:'Playfair Display',serif;">¥3亿</div>
+      <div style="font-size:0.85rem;color:#8B7355;">2022年A轮融资（招银国际）</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2.2rem;font-weight:700;color:#8B3A4A;font-family:'Playfair Display',serif;">~¥2亿</div>
+      <div style="font-size:0.85rem;color:#8B7355;">2025年B轮融资（新东方）</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2.2rem;font-weight:700;color:#8B3A4A;font-family:'Playfair Display',serif;">>¥15亿</div>
+      <div style="font-size:0.85rem;color:#8B7355;">2025年估值</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 11. 运营指标 ═══════════════ -->
+<section class="section" style="background:#FAF7F2;max-width:100%;padding:5rem 2rem;">
+  <div style="max-width:1100px;margin:0 auto;">
+  <div class="section-header reveal">
+    <h2>运营指标</h2>
+  </div>
+  <div class="kpi-row reveal">
+    <div class="kpi-card"><div class="num">¥2.4亿</div><div class="label">2021年营收（历史峰值）</div></div>
+    <div class="kpi-card"><div class="num">~420间</div><div class="label">总客房数（17家酒店）</div></div>
+    <div class="kpi-card"><div class="num">¥4,000+</div><div class="label">客房均价 / 晚</div></div>
+    <div class="kpi-card"><div class="num">1,600+</div><div class="label">员工总数</div></div>
+    <div class="kpi-card"><div class="num">~98%</div><div class="label">本地员工占比</div></div>
+  </div>
+  <div class="card-grid card-grid-2 reveal" style="margin-top:1.5rem;">
+    <div class="card">
+      <h4 style="color:#8B3A4A;">👥 股权结构（2025）</h4>
+      <div style="font-size:0.88rem;color:#6B5E50;line-height:2;">
+        <div>白玛多吉（创始人）：<strong>21.3%</strong></div>
+        <div>招银国际：<strong>17.9%</strong></div>
+        <div>新东方 / 东方卓永：<strong>12.4%</strong></div>
+        <div>其他个人及机构股东：<strong>~48.4%</strong></div>
+      </div>
+    </div>
+    <div class="card">
+      <h4 style="color:#8B3A4A;">🏆 行业荣誉</h4>
+      <div style="font-size:0.88rem;color:#6B5E50;line-height:1.8;">
+        <div>TripAdvisor "中国最好的25家小酒店" —— <strong>连续9年</strong></div>
+        <div>美国CNN "中国风景最好的9家酒店"</div>
+        <div>英国《Tatler》"101家全世界最好的酒店"</div>
+        <div>被誉为 <strong>"中国的安缦"</strong></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 12. 配套设施体系 ═══════════════ -->
+<section class="section">
+  <div class="section-header reveal">
+    <h2>配套设施与服务体系</h2>
+  </div>
+  <div class="card-grid card-grid-4 reveal">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2rem;">🍽️</div>
+      <h4 style="margin-top:0.5rem;">餐饮体系</h4>
+      <p style="font-size:0.82rem;color:#6B5E50;">每家提供藏地时令美食：松茸汽锅鸡、尼西土锅鸡、糌粑酥油茶、青稞曲奇、在自持餐厅烹饪课堂体验</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2rem;">🚗</div>
+      <h4 style="margin-top:0.5rem;">车队与交通</h4>
+      <p style="font-size:0.82rem;color:#6B5E50;">自持越野/商务车队，专属司机+旅行管家，覆盖全环线。一价全包含全程用车</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2rem;">🧘</div>
+      <h4 style="margin-top:0.5rem;">身心疗愈</h4>
+      <p style="font-size:0.82rem;color:#6B5E50;">晨间冥想、颂钵疗愈、花艺课程。林卡系列配有 Spa、泳池、健身房</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2rem;">🎨</div>
+      <h4 style="margin-top:0.5rem;">文化手作</h4>
+      <p style="font-size:0.82rem;color:#6B5E50;">唐卡绘画、经幡印刷、风马旗拓印、藏式合香手串、黑陶制作（尼西）</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2rem;">🥾</div>
+      <h4 style="margin-top:0.5rem;">户外探索</h4>
+      <p style="font-size:0.82rem;color:#6B5E50;">管家带领徒步/骑行、茶山徒步、峡谷探险、村庄骑行、尼丁原始森林徒步</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2rem;">🏛️</div>
+      <h4 style="margin-top:0.5rem;">文化空间</h4>
+      <p style="font-size:0.82rem;color:#6B5E50;">松赞博物馆、藏式地毯店、佛像店、手工艺品展销（香格里拉林卡）</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2rem;">🎪</div>
+      <h4 style="margin-top:0.5rem;">社区走访</h4>
+      <p style="font-size:0.82rem;color:#6B5E50;">探访藏族家庭、印制经幡、品尝酥油茶、藏民家访——"走进松赞是文化的栖居，走出松赞就是藏族的生活"</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2rem;">🍷</div>
+      <h4 style="margin-top:0.5rem;">在地物产</h4>
+      <p style="font-size:0.82rem;color:#6B5E50;">茨中葡萄酒、塔城手工豆腐、本地酥油与蜂蜜——酒店直采村中农副产品</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 13. 最新动态与扩建 ═══════════════ -->
+<section class="section" style="background:#FAF7F2;max-width:100%;padding:5rem 2rem;">
+  <div style="max-width:1100px;margin:0 auto;">
+  <div class="section-header reveal">
+    <h2>最新动态与扩建展望</h2>
+  </div>
+  <div class="card-grid card-grid-2 reveal">
+    <div class="card">
+      <h4 style="color:#8B3A4A;">🔜 近期规划（2025-2027）</h4>
+      <ul style="font-size:0.88rem;color:#6B5E50;line-height:2;list-style:none;margin-top:0.5rem;">
+        <li>• 云南怒江区域持续深化布局</li>
+        <li>• 普洱地区新项目探索</li>
+        <li>• 林芝地区加密（桃花季需求旺盛）</li>
+        <li>• 每年新开3-5家店的节奏持续推进</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4 style="color:#8B3A4A;">🗺️ 远期愿景</h4>
+      <ul style="font-size:0.88rem;color:#6B5E50;line-height:2;list-style:none;margin-top:0.5rem;">
+        <li>• <strong>川藏线拓展：</strong>阿里、山南地区</li>
+        <li>• <strong>新疆选址：</strong>首次走出藏区至西北</li>
+        <li>• 整个茶马古道布局约 <strong>40座酒店群</strong></li>
+        <li>• 从"藏地精品"到"中国山居美学代表"</li>
+      </ul>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 14. 延伸资料库 ═══════════════ -->
+<section class="section">
+  <div class="section-header reveal">
+    <h2>延伸资料库</h2>
+    <p>5 个精选高质量外部资源</p>
+  </div>
+  <div class="card-grid card-grid-2 reveal">
+    <a href="https://www.songtsam.com" target="_blank" style="text-decoration:none;color:inherit;">
+      <div class="resource-card">
+        <div class="resource-icon">🏛️</div>
+        <div>
+          <h4>松赞官网</h4>
+          <p>官方酒店介绍、环线产品、最新动态与预订入口</p>
+          <span style="color:#8B3A4A;font-weight:500;font-size:0.82rem;">songtsam.com →</span>
+        </div>
+      </div>
+    </a>
+    <a href="https://commons.wikimedia.org/w/index.php?search=Songtsam" target="_blank" style="text-decoration:none;color:inherit;">
+      <div class="resource-card">
+        <div class="resource-icon">🖼️</div>
+        <div>
+          <h4>Wikimedia Commons</h4>
+          <p>自由版权图片库，搜索 Songtsam / 松赞获取高清酒店与周边景观图片</p>
+          <span style="color:#8B3A4A;font-weight:500;font-size:0.82rem;">commons.wikimedia.org →</span>
+        </div>
+      </div>
+    </a>
+    <a href="https://www.bilibili.com/search?keyword=%E6%9D%BE%E8%B5%9E%E9%85%92%E5%BA%97" target="_blank" style="text-decoration:none;color:inherit;">
+      <div class="resource-card">
+        <div class="resource-icon">🎬</div>
+        <div>
+          <h4>B站搜索「松赞酒店」</h4>
+          <p>大量高清Vlog、航拍、深度体验视频，多位旅行博主实地拍摄</p>
+          <span style="color:#8B3A4A;font-weight:500;font-size:0.82rem;">bilibili.com →</span>
+        </div>
+      </div>
+    </a>
+    <a href="https://www.flyert.com/forum.php?mod=forumdisplay&fid=212" target="_blank" style="text-decoration:none;color:inherit;">
+      <div class="resource-card">
+        <div class="resource-icon">📝</div>
+        <div>
+          <h4>飞客茶馆 · 酒店Report</h4>
+          <p>高端常旅客社区的松赞深度入住报告，含大量实拍照片与细节评价</p>
+          <span style="color:#8B3A4A;font-weight:500;font-size:0.82rem;">flyert.com →</span>
+        </div>
+      </div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=Songtsam+Lodge+Tibet+Yunnan" target="_blank" style="text-decoration:none;color:inherit;">
+      <div class="resource-card">
+        <div class="resource-icon">🎥</div>
+        <div>
+          <h4>YouTube · Songtsam Lodges</h4>
+          <p>国际媒体报道、酒店官方视频，尤其推荐 CNBC、CNN Travel 的相关纪录片</p>
+          <span style="color:#8B3A4A;font-weight:500;font-size:0.82rem;">youtube.com →</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>松赞酒店系列 · 案例研究报告</p>
+  <p style="margin-top:0.5rem;">数据来源：松赞官网、Wikipedia、36氪、界面新闻、创业邦、飞客茶馆 | 本报告仅供研究参考</p>
+  <p style="margin-top:0.5rem;">© 2026 案例研究项目 · 数据截至 2025 年 5 月</p>
+</footer>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ── WGS-84 to GCJ-02 conversion (for China projects) ──
+const PI = Math.PI;
+const A = 6378245.0;
+const EE = 0.00669342162296594323;
+function transformLat(x, y) {
+  let ret = -100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y + 0.2 * Math.sqrt(Math.abs(x));
+  ret += (20.0 * Math.sin(6.0 * x * PI) + 20.0 * Math.sin(2.0 * x * PI)) * 2.0 / 3.0;
+  ret += (20.0 * Math.sin(y * PI) + 40.0 * Math.sin(y / 3.0 * PI)) * 2.0 / 3.0;
+  ret += (160.0 * Math.sin(y / 12.0 * PI) + 320.0 * Math.sin(y * PI / 30.0)) * 2.0 / 3.0;
+  return ret;
+}
+function transformLng(x, y) {
+  let ret = 300.0 + x + 2.0 * y + 0.1 * x * x + 0.1 * x * y + 0.1 * Math.sqrt(Math.abs(x));
+  ret += (20.0 * Math.sin(6.0 * x * PI) + 20.0 * Math.sin(2.0 * x * PI)) * 2.0 / 3.0;
+  ret += (20.0 * Math.sin(x * PI) + 40.0 * Math.sin(x / 3.0 * PI)) * 2.0 / 3.0;
+  ret += (150.0 * Math.sin(x / 12.0 * PI) + 300.0 * Math.sin(x / 30.0 * PI)) * 2.0 / 3.0;
+  return ret;
+}
+function wgs84ToGcj02(lng, lat) {
+  if (lng < 72.004 || lng > 137.8347 || lat < 0.8293 || lat > 55.8271) return [lng, lat];
+  let dLat = transformLat(lng - 105.0, lat - 35.0);
+  let dLng = transformLng(lng - 105.0, lat - 35.0);
+  let radLat = lat / 180.0 * PI;
+  let magic = Math.sin(radLat);
+  magic = 1 - EE * magic * magic;
+  let sqrtMagic = Math.sqrt(magic);
+  dLat = (dLat * 180.0) / ((A * (1 - EE)) / (magic * sqrtMagic) * PI);
+  dLng = (dLng * 180.0) / (A / sqrtMagic * Math.cos(radLat) * PI);
+  return [lng + dLng, lat + dLat];
+}
+
+// ── Hotel data (WGS-84, will convert to GCJ-02 for Gaode tiles) ──
+const hotels = [
+  // 山居系列
+  { name:'绿谷山居', type:'lodge', lat:27.866, lng:99.705, region:'云南香格里拉', alt:'3,300m', year:2001 },
+  { name:'塔城山居', type:'lodge', lat:27.340, lng:99.410, region:'云南维西', alt:'2,000m', year:2011 },
+  { name:'奔子栏山居', type:'lodge', lat:28.270, lng:99.330, region:'云南德钦', alt:'2,000m', year:2011 },
+  { name:'梅里山居', type:'lodge', lat:28.444, lng:98.879, region:'云南德钦', alt:'3,600m', year:2011 },
+  { name:'茨中山居', type:'lodge', lat:28.010, lng:98.910, region:'云南德钦', alt:'2,200m', year:2013 },
+  { name:'来古山居', type:'lodge', lat:29.480, lng:96.690, region:'西藏然乌', alt:'4,200m', year:2019 },
+  { name:'如美山居', type:'lodge', lat:29.680, lng:98.590, region:'西藏芒康', alt:'2,600m', year:2019 },
+  { name:'南迦巴瓦山居', type:'lodge', lat:29.630, lng:94.880, region:'西藏林芝', alt:'3,100m', year:2021 },
+  { name:'丙中洛山居', type:'lodge', lat:28.020, lng:98.620, region:'云南贡山', alt:'1,750m', year:2023 },
+  { name:'石月亮山居', type:'lodge', lat:27.430, lng:98.890, region:'云南福贡', alt:'1,750m', year:2024 },
+  // 林卡系列
+  { name:'香格里拉林卡', type:'linka', lat:27.868, lng:99.700, region:'云南香格里拉', alt:'3,300m', year:2009 },
+  { name:'丽江林卡', type:'linka', lat:26.870, lng:100.233, region:'云南丽江', alt:'2,400m', year:2017 },
+  { name:'拉萨林卡', type:'linka', lat:29.658, lng:91.117, region:'西藏拉萨', alt:'3,650m', year:2019 },
+  { name:'波密林卡', type:'linka', lat:29.860, lng:95.770, region:'西藏波密', alt:'2,700m', year:2019 },
+  { name:'昆明林卡', type:'linka', lat:25.040, lng:102.703, region:'云南昆明', alt:'1,890m', year:2026 },
+  // 帐篷营地
+  { name:'雨崩帐篷营地', type:'camp', lat:28.390, lng:98.810, region:'云南德钦', alt:'3,100m', year:2020 },
+  { name:'百巴帐篷营地', type:'camp', lat:29.800, lng:94.900, region:'西藏林芝', alt:'3,200m', year:2022 },
+];
+
+const typeColors = {
+  lodge: { bg:'#5C3A2E', border:'#FFF' },
+  linka: { bg:'#8B3A4A', border:'#FFF' },
+  camp: { bg:'#4A6741', border:'#FFF' }
+};
+
+const typeLabels = { lodge:'🏔️ 山居', linka:'🏛️ 林卡', camp:'⛺ 营地' };
+
+// ── Map layers ──
+function makeGaodeStreet() {
+  return L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '© 高德地图',
+    maxZoom: 18
+  });
+}
+function makeGaodeSat() {
+  return L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '© 高德地图',
+    maxZoom: 18
+  });
+}
+function makeEsriStreet() {
+  return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '© ESRI',
+    maxZoom: 18
+  });
+}
+function makeEsriSat() {
+  return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '© ESRI',
+    maxZoom: 18
+  });
+}
+
+// Create map instances
+let map, streetLayer, satLayer, currentMode = 'street';
+
+function addMarkers(m) {
+  hotels.forEach(h => {
+    let gcj = wgs84ToGcj02(h.lng, h.lat);
+    let color = typeColors[h.type];
+    let icon = L.divIcon({
+      className: 'custom-div-icon',
+      html: `<div style="background:${color.bg};color:#FFF;border:2px solid ${color.border};border-radius:8px;padding:3px 8px;font-size:12px;font-weight:600;white-space:nowrap;font-family:'DM Sans',sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.3);text-align:center;">
+        ${h.name}<br><span style="font-size:10px;opacity:0.8;">${h.alt}</span>
+      </div>`,
+      iconSize: [100, 42],
+      iconAnchor: [50, 21]
+    });
+    L.marker(gcj, { icon }).addTo(m);
+  });
+}
+
+// ── Route lines (GCJ-02) ──
+function addRoutes(m) {
+  // Shangri-La Circuit: Shangri-La → Tacheng → Meili → Benzilan → Shangri-La
+  const scCircuit = [
+    [99.700,27.868],[99.410,27.340],[98.879,28.444],[99.330,28.270],[99.700,27.868]
+  ].map(p => wgs84ToGcj02(p[0],p[1]));
+  L.polyline(scCircuit, {color:'#5C3A2E',weight:3,dashArray:'8 6',opacity:0.7}).addTo(m);
+
+  // Yunnan-Tibet Route: Lijiang → Shangri-La → Meili → Rumei → Laigu → Bome → Namcha Barwa → Lhasa
+  const ytRoute = [
+    [100.233,26.870],[99.700,27.868],[98.879,28.444],[98.590,29.680],
+    [96.690,29.480],[95.770,29.860],[94.880,29.630],[91.117,29.658]
+  ].map(p => wgs84ToGcj02(p[0],p[1]));
+  L.polyline(ytRoute, {color:'#8B3A4A',weight:4,opacity:0.6}).addTo(m);
+
+  // Nujiang extension
+  const njRoute = [
+    [99.700,27.868],[98.890,27.430],[98.620,28.020]
+  ].map(p => wgs84ToGcj02(p[0],p[1]));
+  L.polyline(njRoute, {color:'#4A6741',weight:3,dashArray:'5 5',opacity:0.5}).addTo(m);
+}
+
+function initMap(mode) {
+  if (map) { map.remove(); }
+  currentMode = mode;
+
+  map = L.map('parkmap', {
+    center: [29.5, 96.5],
+    zoom: 7,
+    scrollWheelZoom: false,
+    attributionControl: true
+  });
+
+  if (mode === 'satellite') {
+    satLayer = makeGaodeSat();
+    satLayer.addTo(map);
+  } else if (mode === 'route') {
+    streetLayer = makeGaodeStreet();
+    streetLayer.addTo(map);
+  } else {
+    streetLayer = makeGaodeStreet();
+    streetLayer.addTo(map);
+  }
+
+  addMarkers(map);
+
+  if (mode === 'route') {
+    addRoutes(map);
+  }
+
+  // Legend
+  const legend = L.control({position:'bottomright'});
+  legend.onAdd = function() {
+    const div = L.DomUtil.create('div','info-legend');
+    div.style.cssText = 'background:#FFF;padding:10px 14px;border-radius:10px;font-size:13px;line-height:1.8;box-shadow:0 2px 12px rgba(0,0,0,0.1);border:1px solid #E8E0D5;';
+    div.innerHTML = `
+      <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#5C3A2E;margin-right:8px;"></span>山居 Lodge</div>
+      <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#8B3A4A;margin-right:8px;"></span>林卡 Linka</div>
+      <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#4A6741;margin-right:8px;"></span>帐篷营地 Camp</div>
+      ${mode==='route'?`<div style="margin-top:6px;border-top:1px solid #E8E0D5;padding-top:6px;"><span style="display:inline-block;width:20px;height:3px;background:#8B3A4A;margin-right:6px;vertical-align:middle;"></span>滇藏线</div>
+      <div><span style="display:inline-block;width:20px;height:3px;border-top:3px dashed #5C3A2E;margin-right:6px;vertical-align:middle;"></span>香格里拉环线</div>
+      <div><span style="display:inline-block;width:20px;height:3px;border-top:3px dashed #4A6741;margin-right:6px;vertical-align:middle;"></span>怒江延伸</div>`:''}
+    `;
+    return div;
+  };
+  legend.addTo(map);
+
+  // Add summary label
+  const info = L.control({position:'topleft'});
+  info.onAdd = function() {
+    const div = L.DomUtil.create('div');
+    div.style.cssText = 'background:rgba(255,255,255,0.92);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;color:#3D1525;box-shadow:0 2px 8px rgba(0,0,0,0.08);border:1px solid #E8E0D5;';
+    div.innerHTML = mode==='route' ? '滇藏环线 · 松赞18家酒店分布' : '松赞酒店 · 滇藏布局';
+    return div;
+  };
+  info.addTo(map);
+
+  setTimeout(() => map.invalidateSize(), 800);
+}
+
+function switchMap(mode) {
+  document.querySelectorAll('.map-tab').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.map-tab').forEach(btn => {
+    if (btn.textContent.includes(mode === 'street' ? '街道' : mode === 'satellite' ? '卫星' : '环线')) {
+      btn.classList.add('active');
+    }
+  });
+  initMap(mode);
+}
+
+// ── Scroll reveal ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  initMap('street');
+});
+</script>
+</body>
+</html>

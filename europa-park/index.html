@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>欧洲乐园 Europa-Park — 深度案例研究</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 17px; scroll-behavior: smooth; }
+body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; background: #faf7f2; color: #2c2416; line-height: 1.6; }
+
+/* Hero */
+.hero { min-height: 95vh; background: linear-gradient(135deg, #1a0e04 0%, #3d1f0a 30%, #6b3a1f 60%, #2c1810 100%); color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 70%, rgba(180,130,60,0.15) 0%, transparent 60%), radial-gradient(ellipse at 70% 30%, rgba(200,160,80,0.1) 0%, transparent 50%); }
+.hero-badge { display: inline-block; border: 1px solid rgba(255,255,255,0.25); border-radius: 2rem; padding: 0.3rem 1.2rem; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1.5rem; backdrop-filter: blur(10px); background: rgba(255,255,255,0.06); }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 7vw, 5.2rem); font-weight: 800; line-height: 1.1; margin-bottom: 1rem; letter-spacing: -0.02em; }
+.hero h2 { font-size: clamp(1rem, 2.5vw, 1.35rem); font-weight: 400; opacity: 0.8; max-width: 600px; margin-bottom: 2.5rem; }
+.hero-stats { display: flex; gap: clamp(1.5rem, 4vw, 3.5rem); flex-wrap: wrap; justify-content: center; }
+.hero-stat { text-align: center; }
+.hero-stat-num { font-family: 'DM Mono', monospace; font-size: 2.2rem; font-weight: 500; letter-spacing: -0.03em; }
+.hero-stat-label { font-size: 0.78rem; opacity: 0.6; margin-top: 0.2rem; }
+
+/* Sections */
+section { max-width: 1100px; margin: 0 auto; padding: 3.5rem 2rem; }
+.section-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; margin-bottom: 0.4rem; letter-spacing: -0.01em; }
+.section-sub { font-size: 0.9rem; color: #8b7355; margin-bottom: 2rem; }
+
+/* Cards */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.3rem; }
+.card { background: #fff; border-radius: 0.8rem; padding: 1.5rem; border: 1px solid #e8ddd0; transition: transform 0.2s, box-shadow 0.2s; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.07); }
+.card-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
+.card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
+.card p { font-size: 0.85rem; color: #6b5e4f; }
+.card .big-number { font-family: 'DM Mono', monospace; font-size: 1.6rem; font-weight: 500; color: #6b3a1f; }
+
+/* Table */
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.data-table th { text-align: left; padding: 0.6rem 0.8rem; background: #f5efe6; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: #6b3a1f; border-bottom: 2px solid #d4c4ab; }
+.data-table td { padding: 0.55rem 0.8rem; border-bottom: 1px solid #e8ddd0; vertical-align: top; }
+.data-table tr:hover td { background: #fdfaf6; }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 2rem; }
+.timeline::before { content: ''; position: absolute; left: 0.45rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #6b3a1f, #c4a97d); }
+.timeline-item { margin-bottom: 1.5rem; position: relative; }
+.timeline-item::before { content: ''; position: absolute; left: -1.65rem; top: 0.4rem; width: 0.65rem; height: 0.65rem; border-radius: 50%; background: #6b3a1f; border: 2px solid #faf7f2; }
+.timeline-year { font-family: 'DM Mono', monospace; font-size: 0.85rem; font-weight: 500; color: #6b3a1f; }
+.timeline-text { font-size: 0.85rem; color: #555; }
+
+/* Map containers */
+.map-wrapper { border-radius: 0.8rem; overflow: hidden; border: 1px solid #e8ddd0; margin-bottom: 1.5rem; }
+.map-tabs { display: flex; gap: 0; background: #f5efe6; border-bottom: 1px solid #e8ddd0; }
+.map-tab { padding: 0.6rem 1.2rem; font-size: 0.82rem; font-weight: 500; cursor: pointer; border: none; background: none; color: #8b7355; transition: all 0.2s; font-family: inherit; }
+.map-tab.active { color: #6b3a1f; background: #fff; border-bottom: 2px solid #6b3a1f; margin-bottom: -1px; }
+.map-container { height: 480px; width: 100%; }
+.map-container.sat { height: 480px; width: 100%; }
+.map-note { font-size: 0.78rem; color: #8b7355; margin-top: 0.5rem; }
+
+/* Area cards */
+.area-card { background: #fff; border-radius: 0.8rem; padding: 1.2rem 1.4rem; border-left: 4px solid #6b3a1f; margin-bottom: 0.8rem; border: 2px solid #e8ddd0; border-left-width: 5px; display: flex; gap: 1rem; align-items: flex-start; }
+.area-card .area-emoji { font-size: 1.8rem; flex-shrink: 0; }
+.area-card h4 { font-size: 0.95rem; margin-bottom: 0.15rem; }
+.area-card p { font-size: 0.78rem; color: #6b5e4f; }
+
+/* SVG diagram */
+.svg-diagram-wrap { text-align: center; margin: 2rem 0; }
+.svg-diagram-wrap svg { max-width: 100%; height: auto; border-radius: 0.8rem; border: 1px solid #e8ddd0; }
+
+/* KPI row */
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
+.kpi-card { background: #fff; border-radius: 0.8rem; padding: 1.3rem; text-align: center; border: 1px solid #e8ddd0; }
+.kpi-num { font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 500; color: #6b3a1f; }
+.kpi-label { font-size: 0.78rem; color: #8b7355; margin-top: 0.2rem; }
+
+/* Reference links */
+.ref-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem; }
+.ref-card { background: #fff; border-radius: 0.8rem; padding: 1.2rem; border: 1px solid #e8ddd0; text-decoration: none; color: inherit; transition: transform 0.2s, box-shadow 0.2s; display: block; }
+.ref-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
+.ref-card .ref-icon { font-size: 1.4rem; }
+.ref-card h4 { font-size: 0.9rem; margin: 0.4rem 0 0.2rem; }
+.ref-card p { font-size: 0.75rem; color: #8b7355; }
+
+/* Supplier table */
+.supplier-table { font-size: 0.82rem; }
+.supplier-table td:first-child { font-weight: 500; white-space: nowrap; }
+
+/* Footer */
+footer { background: #1a0e04; color: rgba(255,255,255,0.6); text-align: center; padding: 2rem; font-size: 0.78rem; margin-top: 3rem; }
+footer a { color: rgba(255,255,255,0.8); }
+
+/* Reveal animation */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Tag */
+.tag { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 0.3rem; font-size: 0.72rem; font-weight: 500; background: #f0e8d8; color: #6b3a1f; margin-right: 0.3rem; margin-bottom: 0.3rem; }
+
+/* DivIcon custom labels */
+.leaflet-div-icon { background: transparent !important; border: none !important; }
+.park-marker { white-space: nowrap; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.72rem; padding: 2px 8px; border-radius: 3px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.4); letter-spacing: 0.02em; }
+
+/* Responsive */
+@media (max-width: 640px) {
+  section { padding: 2rem 1rem; }
+  .hero-stats { gap: 1rem; }
+  .hero-stat-num { font-size: 1.5rem; }
+  .card-grid { grid-template-columns: 1fr; }
+  .map-container { height: 320px; }
+  .data-table { font-size: 0.72rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- 1. HERO -->
+<header class="hero">
+  <div class="hero-badge">数据截至 2025 年 5 月</div>
+  <h1>Europa-Park<br>欧洲乐园</h1>
+  <h2>德国最大主题乐园，家族经营五十年的欧洲文化之旅</h2>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">95<span style="font-size:0.6em;opacity:0.6"> ha</span></div><div class="hero-stat-label">占地面积</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">620<span style="font-size:0.6em;opacity:0.6"> 万</span></div><div class="hero-stat-label">年均游客（2024）</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">18</div><div class="hero-stat-label">主题分区</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">50<span style="font-size:0.6em;opacity:0.6"> 年</span></div><div class="hero-stat-label">运营历史</div></div>
+  </div>
+</header>
+
+<!-- 2. 项目概览 -->
+<section>
+  <h2 class="section-title">项目概览</h2>
+  <p class="section-sub">德国巴登-符腾堡州鲁斯特市，家族全资持有运营</p>
+  <div class="card-grid">
+    <div class="card"><div class="card-icon">&#x1F4C5;</div><h3>开业时间</h3><p>1975 年 7 月 12 日，由 Franz Mack 与 Roland Mack 父子创办</p></div>
+    <div class="card"><div class="card-icon">&#x1F3ED;</div><h3>开发商 / 运营商</h3><p>Mack 家族，Europa-Park GmbH & Co Mack KG。三代经营，全球唯一同时拥有主题乐园和游乐设备制造厂（Mack Rides）的家族</p></div>
+    <div class="card"><div class="card-icon">&#x1F4CD;</div><h3>地理位置</h3><p>德国巴登-符腾堡州鲁斯特市（Rust），距弗赖堡约 30 km，距法瑞边境约 10 km</p></div>
+    <div class="card"><div class="card-icon">&#x1F3DE;</div><h3>占地面积</h3><p><span class="big-number">95 ha</span><br>乐园核心区（另有 Rulantica 水上乐园 4 ha、6 家主题酒店及停车场共约 133 ha 度假区）</p></div>
+    <div class="card"><div class="card-icon">&#x1F465;</div><h3>日容量 / 年游客</h3><p>日容量约 50,000&ndash;60,000 人<br>年均 620 万人次（2024），全欧第二</p></div>
+    <div class="card"><div class="card-icon">&#x1F3AB;</div><h3>门票价格</h3><p>成人单日 €52&ndash;76（动态定价，约 ¥410&ndash;600），2 日 €98&ndash;138<br>停车 €10/日</p></div>
+  </div>
+</section>
+
+<!-- 3. 设计与建设 -->
+<section>
+  <h2 class="section-title">设计与建设</h2>
+  <p class="section-sub">从游乐设备制造商到主题乐园帝国的垂直整合</p>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">&#x270F;&#xFE0F;</div>
+      <h3>设计方</h3>
+      <p>
+        <b>概念设计</b>：Franz &amp; Roland Mack（1972 年考察美国后提出）<br>
+        <b>主题区设计</b>：Ulrich Damrau（1982 年确立「欧洲各国」主题概念）<br>
+        <b>建筑设计</b>：pbr Planungsbüro Rohling AG（Rulantica、多家酒店）<br>
+        <b>景观设计</b>：Europa-Park 自有景观团队，以 15 世纪 Balthasar 城堡为视觉锚点，保留原生森林与天然河道
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-icon">&#x1F3D7;&#xFE0F;</div>
+      <h3>施工方</h3>
+      <p>
+        <b>总承包商</b>：园区扩建由 Mack 集团内部统筹，部分分包至区域专业公司<br>
+        <b>Rulantica 木结构</b>：Holzbau Amann GmbH（胶合木/CLT 施工），binderholz GmbH（材料供应）<br>
+        <b>Silver Lake City（2025-26）</b>：Mack 集团内部施工 + 区域合作伙伴<br>
+        <b>基础设施</b>：园区道路、停车楼、酒店等由德国本土工程企业承建
+      </p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:2rem;margin-bottom:1rem;font-size:1.1rem;">关键供应商</h3>
+  <table class="data-table supplier-table">
+    <thead>
+      <tr><th>类别</th><th>公司</th><th>国别</th><th>供应内容</th></tr>
+    </thead>
+    <tbody>
+      <tr><td rowspan="4">骑乘设备</td><td>Mack Rides</td><td>德国</td><td>园内 80%+ 骑乘设备制造商，含 blue fire Megacoaster（弹射过山车）、Euro-Mir（旋转）、Poseidon（水上过山车）、Eurosat（室内过山车）、Arthur（倒挂动力过山车）、Alpenexpress（动力过山车）、Pirates in Batavia（暗骑）、Atlantica SuperSplash（水上）等</td></tr>
+      <tr><td>Bolliger &amp; Mabillard (B&amp;M)</td><td>瑞士</td><td>Silver Star 超级过山车（73 m，130 km/h，欧洲最高过山车之一）</td></tr>
+      <tr><td>Great Coasters International (GCI)</td><td>美国</td><td>Wodan Timbur Coaster 木质过山车</td></tr>
+      <tr><td>ETF Ride Systems</td><td>荷兰</td><td>部分轨道运输系统</td></tr>
+      <tr><td rowspan="2">主题包装</td><td>Mack Solutions</td><td>德国</td><td>Mack 集团旗下主题包装与布景部门，负责园区建筑立面、暗骑场景、沉浸式环境</td></tr>
+      <tr><td>P&P Projects</td><td>荷兰</td><td>部分主题包装与场景设计咨询</td></tr>
+      <tr><td>演艺特效</td><td>MACK One</td><td>德国</td><td>VR 过山车、Voletarium 飞行剧院（欧洲最大）、沉浸式多媒体特效</td></tr>
+      <tr><td>智能化</td><td>Mack Solutions / 外部机电</td><td>德国</td><td>园区闸机、动态定价系统、排队管理、食品订单自动化（FoodLoop 世界首个过山车送餐系统）</td></tr>
+      <tr><td>景观绿化</td><td>Europa-Park 自有团队</td><td>德国</td><td>保留原生黑森林植被，各主题区种植对应国别典型植物（意大利柏树、法国薰衣草、北欧针叶林等）</td></tr>
+      <tr><td>木结构（Rulantica）</td><td>binderholz / Holzbau Amann</td><td>德国</td><td>1,100 m³ 胶合木 + 300 m³ CLT，贝壳形穹顶跨度约 12,000 m²</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 4. 技术指标总表 -->
+<section>
+  <h2 class="section-title">技术指标总表</h2>
+  <p class="section-sub">全维度数据速查</p>
+  <div style="overflow-x:auto;">
+  <table class="data-table">
+    <thead>
+      <tr><th>指标类别</th><th>参数</th><th>数值</th><th>备注</th></tr>
+    </thead>
+    <tbody>
+      <tr><td rowspan="3">规模指标</td><td>乐园占地面积</td><td>95 ha</td><td>核心区（含后勤），较 1975 年 16 ha 扩展近 6 倍</td></tr>
+      <tr><td>度假区总面积</td><td>约 133 ha</td><td>含 6 家酒店、Rulantica、停车场及后勤区</td></tr>
+      <tr><td>主题分区数</td><td>18（2026 年增至 19）</td><td>2025 新增卢森堡，2026 新增摩纳哥</td></tr>
+      <tr><td rowspan="3">设施指标</td><td>游乐设施总数</td><td>100+</td><td>含演出、展览及互动体验</td></tr>
+      <tr><td>过山车数量</td><td>13</td><td>含 Silver Star (B&amp;M)、blue fire、Wodan、Voltron Nevera、Euro-Mir 等</td></tr>
+      <tr><td>水上设施</td><td>17+（含 Rulantica 25 项）</td><td>Poseidon、Atlantica SuperSplash、Fjord Rafting 等</td></tr>
+      <tr><td rowspan="3">容量指标</td><td>日最大容量</td><td>约 50,000&ndash;60,000 人</td><td>夏季峰值</td></tr>
+      <tr><td>年游客量（2024）</td><td>620 万人次</td><td>欧洲第二（仅次 Disneyland Paris 1,020 万）</td></tr>
+      <tr><td>度假区年过夜数</td><td>约 380 万间夜</td><td>含酒店 140 万 + 外部 240 万</td></tr>
+      <tr><td rowspan="3">投资指标</td><td>初始投资（1975）</td><td>约 €1,300 万</td><td>以 DM 计价换算</td></tr>
+      <tr><td>累计投资（至 2005）</td><td>€4.2 亿</td><td>30 年累计</td></tr>
+      <tr><td>累计总投资（至 2024）</td><td>超过 €7 亿（约 ¥55 亿）</td><td>含 Rulantica €1.8 亿</td></tr>
+      <tr><td rowspan="3">运营指标</td><td>门票收入（估算）</td><td>约 €3.5&ndash;4 亿/年</td><td>基于 620 万游客 × 均票价 €58&ndash;65</td></tr>
+      <tr><td>度假区总营收（2023/24）</td><td>超过 €10 亿</td><td>含酒店、餐饮、零售、Rulantica（圣加仑大学 HSG 研究）</td></tr>
+      <tr><td>区域经济影响</td><td>€8.96 亿（巴符州）+ €1.56 亿（阿尔萨斯）</td><td>含游客消费、采购及雇员支出乘数效应</td></tr>
+      <tr><td rowspan="2">人力指标</td><td>员工数（旺季）</td><td>约 3,500+ 人</td><td>德国本地为主，含法国跨境通勤者</td></tr>
+      <tr><td>开业时员工数（1975）</td><td>50 人</td><td>初期规模</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- 5. 空间布局与功能分区 -->
+<section>
+  <h2 class="section-title">空间布局与功能分区</h2>
+  <p class="section-sub">入口在北侧，主题区自北向南分层展开，Balthasar 城堡位于东北角</p>
+
+  <!-- Interactive Leaflet Map -->
+  <div class="map-wrapper reveal">
+    <div class="map-tabs">
+      <button class="map-tab active" onclick="switchMap('street')">街道图</button>
+      <button class="map-tab" onclick="switchMap('sat')">卫星图</button>
+    </div>
+    <div id="parkmap" class="map-container"></div>
+  </div>
+  <p class="map-note">基于 WGS-84 坐标 | 瓦片源：ESRI ArcGIS | 坐标来源：OpenStreetMap Overpass API（2025-05 提取）| 各主题区坐标取自 OSM 节点，经卫星图交叉验证</p>
+
+  <!-- SVG Reference Diagram -->
+  <div class="svg-diagram-wrap reveal">
+    <svg viewBox="0 0 1000 850" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">
+      <defs>
+        <filter id="shadow"><feDropShadow dx="0.5" dy="0.5" stdDeviation="1" flood-opacity="0.1"/></filter>
+      </defs>
+
+      <!-- Clean light background -->
+      <rect width="1000" height="850" fill="#faf7f2"/>
+
+      <!-- Park boundary -->
+      <rect x="30" y="25" width="940" height="810" rx="15" fill="#f5f0e5" stroke="#d4c4ab" stroke-width="2" stroke-dasharray="10,5"/>
+
+      <!-- Water features -->
+      <ellipse cx="420" cy="430" rx="65" ry="45" fill="#c8dde8" stroke="#9ab8c8" stroke-width="1.5"/>
+      <text x="420" y="434" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#6a8a9a">湖面</text>
+      <!-- River stream -->
+      <path d="M420,475 Q400,550 350,600 Q320,630 280,660" stroke="#9ab8c8" stroke-width="2.5" fill="none"/>
+      
+      <!-- Railway loop (approximate) -->
+      <ellipse cx="500" cy="440" rx="350" ry="320" fill="none" stroke="#c4b89c" stroke-width="1.2" stroke-dasharray="6,4" opacity="0.5"/>
+
+      <!-- Compass -->
+      <g transform="translate(940,70)">
+        <polygon points="0,-24 6,9 0,2 -6,9" fill="#6b3a1f"/>
+        <polygon points="0,-24 0,2" fill="#8b5b3f"/>
+        <text x="0" y="-29" text-anchor="middle" font-family="DM Mono,monospace" font-size="12" font-weight="700" fill="#6b3a1f">N</text>
+      </g>
+
+      <!-- Title -->
+      <text x="500" y="20" text-anchor="middle" font-family="DM Mono,monospace" font-size="11" fill="#8b7355">北 NORTH · 入口方向</text>
+
+      <!-- 摩纳哥 -->
+      <g filter="url(#shadow)">
+        <polygon points="120,60 200,55 240,80 235,140 190,165 130,160 100,130 95,90" fill="#c4284a" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="170" y="116" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" font-weight="700" fill="#fff">摩纳哥</text>
+      </g>
+      <!-- 法国 -->
+      <g filter="url(#shadow)">
+        <polygon points="210,80 340,70 370,100 380,150 350,190 280,200 220,190 195,150 200,100" fill="#3a6ab5" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="285" y="146" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="14" font-weight="700" fill="#fff">法国</text>
+      </g>
+      <!-- 卢森堡 -->
+      <g filter="url(#shadow)">
+        <polygon points="440,75 500,70 510,95 495,120 445,125 430,105" fill="#6ab0d0" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="470" y="101" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" font-weight="700" fill="#1a4a5a">卢森堡</text>
+      </g>
+      <!-- 意大利 -->
+      <g filter="url(#shadow)">
+        <polygon points="380,80 480,75 510,105 520,155 490,190 430,195 385,170 370,130" fill="#e8a03a" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="445" y="146" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="14" font-weight="700" fill="#4a3000">意大利</text>
+      </g>
+      <!-- 德国 -->
+      <g filter="url(#shadow)">
+        <polygon points="510,55 650,50 700,80 720,140 710,200 660,230 560,225 500,195 490,130 500,80" fill="#e8c84a" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="605" y="146" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="16" font-weight="700" fill="#4a3a00">德国</text>
+      </g>
+      <!-- Balthasar -->
+      <g filter="url(#shadow)">
+        <polygon points="720,60 800,55 830,90 825,160 790,190 725,195 700,160 705,100" fill="#8b6b4a" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="765" y="132" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" font-weight="700" fill="#fff">Balthasar</text>
+        <text x="765" y="146" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" font-weight="700" fill="#fff">城堡</text>
+      </g>
+      <!-- 希腊 -->
+      <g filter="url(#shadow)">
+        <polygon points="100,190 230,180 270,210 290,260 275,320 220,345 140,340 95,310 80,260 85,220" fill="#3070b0" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="185" y="266" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="14" font-weight="700" fill="#fff">希腊</text>
+      </g>
+      <!-- 克罗地亚 -->
+      <g filter="url(#shadow)">
+        <polygon points="270,230 340,220 360,250 350,290 310,310 270,305 255,275" fill="#e07040" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="310" y="269" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="10" font-weight="700" fill="#fff">克罗地亚</text>
+      </g>
+      <!-- 瑞士 -->
+      <g filter="url(#shadow)">
+        <polygon points="350,210 470,200 510,230 520,280 490,320 420,325 360,310 330,275 335,240" fill="#c42020" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="420" y="269" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="14" font-weight="700" fill="#fff">瑞士</text>
+      </g>
+      <!-- 列支敦 -->
+      <g filter="url(#shadow)">
+        <polygon points="515,240 560,235 575,265 565,295 530,300 505,290 500,265" fill="#c4284a" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="540" y="267" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="#fff">列支敦</text>
+        <text x="540" y="280" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="#fff">士登</text>
+      </g>
+      <!-- 英国 -->
+      <g filter="url(#shadow)">
+        <polygon points="560,220 660,210 700,240 710,300 680,340 620,345 570,330 540,290 545,250" fill="#c41e3a" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="625" y="281" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="14" font-weight="700" fill="#fff">英国</text>
+      </g>
+      <!-- 爱尔兰 -->
+      <g filter="url(#shadow)">
+        <polygon points="660,230 750,220 780,255 785,310 740,335 670,335 630,310 625,270" fill="#2a7a3a" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="705" y="286" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="700" fill="#fff">爱尔兰</text>
+      </g>
+      <!-- 俄罗斯 -->
+      <g filter="url(#shadow)">
+        <polygon points="320,330 430,320 470,350 475,410 430,440 360,445 310,420 300,375" fill="#4a8b3a" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="385" y="389" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="700" fill="#fff">俄罗斯</text>
+      </g>
+      <!-- 荷兰 -->
+      <g filter="url(#shadow)">
+        <polygon points="440,330 540,320 580,350 585,410 540,440 470,445 430,420 425,370" fill="#e87a20" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="505" y="389" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="14" font-weight="700" fill="#fff">荷兰</text>
+      </g>
+      <!-- 童话森林 -->
+      <g filter="url(#shadow)">
+        <polygon points="590,340 700,330 740,360 745,420 690,450 610,450 570,425 565,375" fill="#7a4a8a" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="655" y="396" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="12" font-weight="700" fill="#fff">童话森林</text>
+      </g>
+      <!-- 海盗湾区 -->
+      <g filter="url(#shadow)">
+        <polygon points="280,380 370,370 400,400 395,450 350,470 285,470 260,440 265,410" fill="#b0a030" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="330" y="429" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#4a4000">海盗湾区</text>
+      </g>
+      <!-- 斯堪的纳维亚 -->
+      <g filter="url(#shadow)">
+        <polygon points="100,430 240,420 290,450 310,510 280,560 200,575 120,565 80,530 70,480" fill="#1a5a9a" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="185" y="506" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="700" fill="#fff">斯堪的纳维亚</text>
+      </g>
+      <!-- 冰岛 -->
+      <g filter="url(#shadow)">
+        <polygon points="100,580 260,560 300,590 315,650 275,700 180,710 100,700 70,660 60,620" fill="#5a8aaa" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="185" y="646" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="14" font-weight="700" fill="#fff">冰岛</text>
+      </g>
+      <!-- 奥地利 -->
+      <g filter="url(#shadow)">
+        <polygon points="510,490 630,480 680,510 710,560 690,620 620,640 540,635 480,605 470,550" fill="#e85a4a" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="590" y="569" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="14" font-weight="700" fill="#fff">奥地利</text>
+      </g>
+      <!-- 葡萄牙 -->
+      <g filter="url(#shadow)">
+        <polygon points="260,620 370,610 400,640 410,690 370,730 290,740 240,720 225,680 230,640" fill="#3a8b4a" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="315" y="681" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="13" font-weight="700" fill="#fff">葡萄牙</text>
+      </g>
+      <!-- 西班牙 -->
+      <g filter="url(#shadow)">
+        <polygon points="400,630 520,620 560,650 570,710 530,750 440,755 380,735 365,690" fill="#d4452a" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="470" y="696" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="14" font-weight="700" fill="#fff">西班牙</text>
+      </g>
+      <!-- 探险世界 -->
+      <g filter="url(#shadow)">
+        <polygon points="680,620 780,610 810,650 815,700 770,730 690,735 650,710 640,660" fill="#b0a030" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="730" y="676" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#4a4000">探险世界</text>
+      </g>
+      <!-- 酒店区 -->
+      <g filter="url(#shadow)">
+        <polygon points="240,740 600,720 650,750 650,800 580,820 280,820 220,800" fill="#d4c4ab" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <text x="435" y="781" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="14" font-weight="700" fill="#4a3a2a">酒店区</text>
+      </g>
+
+      <!-- Main entrance marker -->
+      <polygon points="542,174 558,174 550,186" fill="#2c2416" opacity="0.8"/>
+      <text x="550" y="166" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" font-weight="700" fill="#2c2416">入口</text>
+
+      <!-- Key attractions -->
+      <circle cx="450" cy="261" r="2.5" fill="#2c2416" opacity="0.7"/>
+      <circle cx="337" cy="583" r="2.5" fill="#2c2416" opacity="0.7"/>
+      <circle cx="375" cy="650" r="2.5" fill="#2c2416" opacity="0.7"/>
+      <circle cx="425" cy="382" r="2.5" fill="#2c2416" opacity="0.7"/>
+      <circle cx="425" cy="437" r="2.5" fill="#2c2416" opacity="0.7"/>
+      <circle cx="387" cy="316" r="2.5" fill="#2c2416" opacity="0.7"/>
+      <circle cx="613" cy="182" r="2.5" fill="#2c2416" opacity="0.7"/>
+      <circle cx="487" cy="279" r="2.5" fill="#2c2416" opacity="0.7"/>
+      <circle cx="694" cy="504" r="2.5" fill="#2c2416" opacity="0.7"/>
+      <circle cx="431" cy="516" r="2.5" fill="#2c2416" opacity="0.7"/>
+      <circle cx="600" cy="613" r="2.5" fill="#2c2416" opacity="0.7"/>
+
+      <!-- Legend -->
+      <rect x="30" y="820" width="12" height="12" rx="2" fill="#2c2416" opacity="0.5"/>
+      <text x="48" y="831" font-family="DM Sans,sans-serif" font-size="9" fill="#8b7355">标志性景点</text>
+
+      <text x="940" y="835" font-family="DM Sans,sans-serif" font-size="9" fill="#b0a090" text-anchor="end">示意图 · OSM 坐标参照 · 分区边界为近似值</text>
+    </svg>
+    <p style="font-size:0.78rem;color:#8b7355;margin-top:0.5rem;">示意图，基于 OSM 主题区坐标与公园布局绘制。各色块表示功能区大致范围与相邻关系，非精确产权边界。深色小圆点为标志性骑乘设施。</p>
+  </div>
+
+  <h3 style="margin-top:2rem;margin-bottom:1rem;">分区详解</h3>
+  <div class="area-card"><div class="area-emoji">&#x1F1E9;&#x1F1EA;</div><div><h4>德国 Deutschland</h4><p>主入口区域，German Alley 购物街，传统巴伐利亚建筑风格。园区交通枢纽，Europa-Park 快线始发站。</p></div></div>
+  <div class="area-card"><div class="area-emoji">&#x1F1EE;&#x1F1F9;</div><div><h4>意大利 Italia（1982）</h4><p>首个国家主题区。Piccolo Mondo 儿童暗骑，经典意大利广场与喷泉。1982 年 Ulrich Damrau 在此确立「欧洲各国」概念。</p></div></div>
+  <div class="area-card"><div class="area-emoji">&#x1F1EB;&#x1F1F7;</div><div><h4>法国 France（1990）</h4><p>Eurosat CanCan 室内过山车（球幕穹顶）、Silver Star (B&amp;M)超级过山车。2026年新辟摩纳哥主题区环绕 Silver Star。</p></div></div>
+  <div class="area-card"><div class="area-emoji">&#x1F1E8;&#x1F1ED;</div><div><h4>瑞士 Schweiz</h4><p>Schweizer Bobbahn 雪橇过山车（Mack 制造），穿行于模拟阿尔卑斯山景之中。</p></div></div>
+  <div class="area-card"><div class="area-emoji">&#x1F1E6;&#x1F1F9;</div><div><h4>奥地利 Österreich</h4><p>Alpenexpress "Enzian" 动力过山车，穿越钻石矿洞与魔法森林小径。</p></div></div>
+  <div class="area-card"><div class="area-emoji">&#x1F1EC;&#x1F1F7;</div><div><h4>希腊 Griechenland</h4><p>Poseidon 水上过山车（Mack 制造，欧洲首个水上弹射过山车），白蓝相间的地中海村落建筑。</p></div></div>
+  <div class="area-card"><div class="area-emoji">&#x1F1EE;&#x1F1F8;</div><div><h4>冰岛 Island</h4><p>blue fire Megacoaster（Mack 弹射过山车，0-100 km/h 仅 2.5 秒）、Wodan Timbur Coaster（GCI 木质过山车）、Whale Adventures 水上互动。</p></div></div>
+  <div class="area-card"><div class="area-emoji">&#x1F1F8;&#x1F1EA;</div><div><h4>斯堪的纳维亚 Skandinavien</h4><p>Fjord Rafting 漂流、Snorri Tours 暗骑。2018 年火灾后重建的北欧村落，还原维京风格木建筑群。</p></div></div>
+</section>
+
+<!-- 园区实景图集 -->
+<section>
+  <h3 style="margin-bottom:1rem;">园区实景图集</h3>
+  <div class="card-grid">
+    <a href="https://commons.wikimedia.org/wiki/Category:Europa-Park" target="_blank" rel="noopener" class="ref-card">
+      <div class="ref-icon">&#x1F3DE;&#xFE0F;</div><h4>全园俯瞰 &amp; 鸟瞰</h4><p>Wikimedia Commons — 高清自由版权图片合集</p>
+    </a>
+    <a href="https://www.youtube.com/@EuropaPark" target="_blank" rel="noopener" class="ref-card">
+      <div class="ref-icon">&#x1F3AC;</div><h4>Silver Star &amp; blue fire POV</h4><p>YouTube 官方频道 — 过山车第一视角及幕后花絮</p>
+    </a>
+    <a href="https://www.schwarzwaldportal.com/en/Themed-areas-in-Europa-Park.html" target="_blank" rel="noopener" class="ref-card">
+      <div class="ref-icon">&#x1F4F7;</div><h4>18 大主题区实拍合集</h4><p>Schwarzwald Portal — 各主题区高清实拍及游客指南</p>
+    </a>
+    <a href="https://www.eap-magazin.de/Article/Europa-Park-Opens-18th-Themed-Area-and-Further-Novelties.html" target="_blank" rel="noopener" class="ref-card">
+      <div class="ref-icon">&#x1F4F0;</div><h4>卢森堡新园区 &amp; 摩纳哥</h4><p>EAP 杂志 — 最新区开幕报道及高清组图</p>
+    </a>
+    <a href="https://www.europapark.de/en/theme-park/attractions/voltron-nevera" target="_blank" rel="noopener" class="ref-card">
+      <div class="ref-icon">&#x26A1;</div><h4>Voltron Nevera</h4><p>Europa-Park 官网 — 最新多弹射过山车 Voltron 详情与照片</p>
+    </a>
+    <a href="https://www.dw.com/en/europa-park-germanys-largest-theme-park-turns-50/g-71012345" target="_blank" rel="noopener" class="ref-card">
+      <div class="ref-icon">&#x1F4F8;</div><h4>50 周年特别图集</h4><p>Deutsche Welle — 德国之声 50 周年专题影像报道</p>
+    </a>
+  </div>
+</section>
+
+<!-- 6. 投资与建设时序 -->
+<section>
+  <h2 class="section-title">投资与建设时序</h2>
+  <p class="section-sub">从 16 公顷的「设备陈列室」到欧洲第二</p>
+  <div class="timeline">
+    <div class="timeline-item"><div class="timeline-year">1972</div><div class="timeline-text">Franz Mack 与儿子 Roland 赴美国考察，构想「作为 Mack Rides 设备陈列室的主题乐园」</div></div>
+    <div class="timeline-item"><div class="timeline-year">1973-1974</div><div class="timeline-text">选址：原定 Breisach（洪泛风险否决）→ Neuenburg（公路冲突）→ 最终定址 Rust，购入 Balthasar 城堡（建于 1442 年）周边土地</div></div>
+    <div class="timeline-item"><div class="timeline-year">1975 年 7 月</div><div class="timeline-text"><b>开幕：16 ha，15 项设施，50 名员工</b>，首年 25 万游客，门票 DM 14.50（约 €3）</div></div>
+    <div class="timeline-item"><div class="timeline-year">1978</div><div class="timeline-text">首次突破 100 万年游客</div></div>
+    <div class="timeline-item"><div class="timeline-year">1982</div><div class="timeline-text"><b>意大利区开放</b>——首个国家主题区。Ulrich Damrau 确立「欧洲各国」主题概念</div></div>
+    <div class="timeline-item"><div class="timeline-year">1984-1996</div><div class="timeline-text">荷兰(1984)、英国(1988)、法国(1990)、斯堪的纳维亚(1992)、西班牙(1994)、德国(1996) 陆续开放</div></div>
+    <div class="timeline-item"><div class="timeline-year">1991</div><div class="timeline-text">年游客突破 200 万</div></div>
+    <div class="timeline-item"><div class="timeline-year">1995</div><div class="timeline-text"><b>Hotel El Andaluz 开业</b>——德国首家主题乐园酒店</div></div>
+    <div class="timeline-item"><div class="timeline-year">1999</div><div class="timeline-text">Hotel Castillo Alcazar 开业</div></div>
+    <div class="timeline-item"><div class="timeline-year">2001/02</div><div class="timeline-text">首次冬季运营季，18 万游客</div></div>
+    <div class="timeline-item"><div class="timeline-year">2002</div><div class="timeline-text"><b>Silver Star 开放</b>——B&amp;M 超级过山车，73 m，130 km/h（至今仍是欧洲最高之一）</div></div>
+    <div class="timeline-item"><div class="timeline-year">2004</div><div class="timeline-text">Hotel Colosseo——当时德国最大酒店综合体（4,128 张床位）；Atlantica SuperSplash 水上设施</div></div>
+    <div class="timeline-item"><div class="timeline-year">2009</div><div class="timeline-text"><b>blue fire Megacoaster 开放</b>——Mack 首代弹射过山车，2.5 秒加速至 100 km/h</div></div>
+    <div class="timeline-item"><div class="timeline-year">2011</div><div class="timeline-text">年游客突破 450 万</div></div>
+    <div class="timeline-item"><div class="timeline-year">2012</div><div class="timeline-text">Hotel Bell Rock；Wodan Timbur Coaster（GCI 木质过山车）</div></div>
+    <div class="timeline-item"><div class="timeline-year">2017</div><div class="timeline-text"><b>Voletarium 飞行剧院</b>——欧洲最大悬吊飞行模拟器；Pirates in Batavia 重建</div></div>
+    <div class="timeline-item"><div class="timeline-year">2018</div><div class="timeline-text">斯堪的纳维亚区大火——损失惨重；随后全面重建，复原度更高</div></div>
+    <div class="timeline-item"><div class="timeline-year">2019</div><div class="timeline-text"><b>Rulantica 水上乐园开幕 + Hotel Krønasår</b>——单笔最大投资 €1.8 亿（约 ¥14 亿），室内面积 32,600 m²</div></div>
+    <div class="timeline-item"><div class="timeline-year">2022</div><div class="timeline-text">年游客首次突破 600 万</div></div>
+    <div class="timeline-item"><div class="timeline-year">2024</div><div class="timeline-text"><b>Voltron Nevera 开放</b>——多弹射过山车（Mack 最新技术），620 万游客（TEA 2024 Index）</div></div>
+    <div class="timeline-item"><div class="timeline-year">2025（50 周年）</div><div class="timeline-text"><b>卢森堡区 + GRAND PRIX EDventure</b> 互动暗骑开放 · Silver Lake City 西部小镇一期 · 年游客超 700 万（新纪录）</div></div>
+    <div class="timeline-item"><div class="timeline-year">2026</div><div class="timeline-text"><b>摩纳哥区</b>（第 18 主题区）围绕 Silver Star 开放，Albert II 亲王出席 · Silver Lake City 二期：Riverside Western Lodge、Silver Lake 啤酒厂</div></div>
+    <div class="timeline-item"><div class="timeline-year">2028（规划）</div><div class="timeline-text"><b>Euro-Mir 重建</b>——与 ESA 欧洲空间局合作，全新太空主题区，现有俄罗斯区将大幅缩减</div></div>
+  </div>
+</section>
+
+<!-- 7. 运营指标 -->
+<section>
+  <h2 class="section-title">运营指标</h2>
+  <p class="section-sub">欧洲第二、全球最受欢迎的季节性主题乐园</p>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-num">620<span style="font-size:0.5em;"> 万</span></div><div class="kpi-label">2024 年游客量</div></div>
+    <div class="kpi-card"><div class="kpi-num">+3.3%</div><div class="kpi-label">同比增速（2024 vs 2023）</div></div>
+    <div class="kpi-card"><div class="kpi-num">€52&ndash;76</div><div class="kpi-label">成人单日票价（动态定价）</div></div>
+    <div class="kpi-card"><div class="kpi-num">8<span style="font-size:0.5em;"> 小时</span></div><div class="kpi-label">平均游客停留时间</div></div>
+    <div class="kpi-card"><div class="kpi-num">77.6%</div><div class="kpi-label">回头客比例</div></div>
+    <div class="kpi-card"><div class="kpi-num">49.7%</div><div class="kpi-label">德国本國游客占比</div></div>
+  </div>
+
+  <h3 style="margin-top:2rem;margin-bottom:1rem;">客源结构（2023 季节）</h3>
+  <table class="data-table">
+    <thead><tr><th>来源国</th><th>占比</th><th>来源国</th><th>占比</th></tr></thead>
+    <tbody>
+      <tr><td>德国</td><td>49.7%</td><td>瑞士</td><td>22.7%</td></tr>
+      <tr><td>法国</td><td>18.8%</td><td>其他（荷/比/奥/英等）</td><td>8.8%</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:2rem;margin-bottom:1rem;">欧洲主要主题乐园对比（2024）</h3>
+  <table class="data-table">
+    <thead><tr><th>排名</th><th>乐园</th><th>国别</th><th>2024 游客量</th><th>同比变化</th><th>面积 (ha)</th><th>开业年份</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Disneyland Park Paris</td><td>法国</td><td>1,020 万</td><td>+2.0%</td><td>约 55</td><td>1992</td></tr>
+      <tr style="background:#fef9f2;"><td>2</td><td><b>Europa-Park Rust</b></td><td><b>德国</b></td><td><b>620 万</b></td><td><b>+3.3%</b></td><td><b>95</b></td><td><b>1975</b></td></tr>
+      <tr><td>3</td><td>Efteling</td><td>荷兰</td><td>560 万</td><td>+2.5%</td><td>约 72</td><td>1952</td></tr>
+      <tr><td>4</td><td>Walt Disney Studios Park Paris</td><td>法国</td><td>520 万</td><td>+3.5%</td><td>约 27</td><td>2002</td></tr>
+      <tr><td>5</td><td>Tivoli Gardens</td><td>丹麦</td><td>430 万</td><td>持平</td><td>约 8</td><td>1843</td></tr>
+      <tr><td>6</td><td>PortAventura Park</td><td>西班牙</td><td>410 万</td><td>+2.0%</td><td>约 105</td><td>1995</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.72rem;color:#8b7355;margin-top:0.5rem;">数据来源：TEA/AECOM 2024 Theme Index</p>
+</section>
+
+<!-- 8. 核心技术与规模指标 -->
+<section>
+  <h2 class="section-title">核心技术与规模指标</h2>
+  <p class="section-sub">设施、景观、建筑、商业配套分类参数</p>
+  <table class="data-table">
+    <thead><tr><th>类别</th><th>参数</th><th>数值</th><th>详情</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="4">设施指标</td><td>过山车</td><td>13 座</td><td>Silver Star（B&amp;M，73 m，130 km/h）· blue fire（Mack 弹射，100 km/h）· Wodan（GCI 木质）· Voltron Nevera（Mack 多弹射）· Euro-Mir（Mack 旋转）· Eurosat CanCan（Mack 室内）· Schweizer Bobbahn（Mack 雪橇）· Poseidon（Mack 水上）· Matterhorn Blitz（Mack）· Arthur（Mack 倒挂）· Alpenexpress（Mack 动力）· Ba-a-a Express（儿童）· Pegasus（Mack 家庭）</td></tr>
+      <tr><td>水上游乐</td><td>17+ 项</td><td>Poseidon、Atlantica SuperSplash、Fjord Rafting、Whale Adventures 等 + Rulantica 25 项独立计数</td></tr>
+      <tr><td>暗骑/剧院/互动</td><td>20+ 项</td><td>Pirates in Batavia、Voletarium（欧洲最大飞行剧院）、GRAND PRIX EDventure（2025 互动暗骑）、Magic Cinema 4D、Abenteuer Atlantis 等</td></tr>
+      <tr><td>演出</td><td>约 6 小时/日</td><td>冰上秀、魔术、特技、季节性节庆演出（万圣节/冬季）</td></tr>
+      <tr><td rowspan="2">景观指标</td><td>水体</td><td>中央湖 + 天然河道</td><td>入口位于北侧，Balthasar 城堡坐落东北角；中央湖及奥地利湖区散布园中</td></tr>
+      <tr><td>植被</td><td>成熟黑森林原生林 + 各国主题植被</td><td>意大利柏树、法国薰衣草、北欧针叶林、南欧橄榄树等</td></tr>
+      <tr><td rowspan="3">建筑指标</td><td>酒店</td><td>6 家主题酒店</td><td>El Andaluz（西式）· Castillo Alcazar（城堡）· Colosseo（罗马，最大）· Bell Rock（新英格兰）· Krønasår（北欧）· Guesthouses · 总计 5,800+ 床位</td></tr>
+      <tr><td>Rulantica 穹顶</td><td>贝壳形胶合木壳体</td><td>32,600 m² 室内净面积，20 m 高，跨度约 12,000 m²，1,100 m³ GLT + 300 m³ CLT</td></tr>
+      <tr><td>Silver Lake City</td><td>西部主题度假村</td><td>36 间木屋 + 68 个房车位 + 120 间河滨旅馆（2026.6 完工），容纳 2,000+ 过夜客</td></tr>
+      <tr><td rowspan="3">商业配套</td><td>餐饮</td><td>40+ 家</td><td>FoodLoop（世界首个过山车送餐）、Ammolite – House of Light（高档）、Café de Paris（摩纳哥区）、各国风味</td></tr>
+      <tr><td>零售</td><td>60+ 家商店</td><td>德国街购物长廊 + 各主题区主题商店</td></tr>
+      <tr><td>停车</td><td>多层停车楼 + 地面</td><td>Silver Lake City 新增 580 车位，总停车位逾万</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 9. 配套设施体系 -->
+<section>
+  <h2 class="section-title">配套设施体系</h2>
+  <div class="card-grid">
+    <div class="card"><div class="card-icon">&#x1F3E8;</div><h3>住宿</h3><p>6 家主题酒店（5,800+ 床位）<br>Silver Lake City：36 木屋 + 120 间河滨旅馆 + 68 房车位 + 帐篷/Tipi/篷车<br>2023/24 酒店过夜 140 万间夜</p></div>
+    <div class="card"><div class="card-icon">&#x1F374;</div><h3>餐饮</h3><p>40+ 餐厅，各国正宗美食<br>FoodLoop：世界首个过山车送餐系统<br>Ammolite – House of Light：高档餐厅 &amp; 品酒室<br>2025 新增 Sallys Café、Cold Rush 冰淇淋、Grandpa Will's 热狗</p></div>
+    <div class="card"><div class="card-icon">&#x1F6D7;</div><h3>交通与停车</h3><p>A5 高速公路直达（Rust 出口）<br>Europa-Park 快线历史铁路环园运行<br>多层停车楼 + Silver Lake City 580 车位<br>法国/瑞士 30 分钟车程，弗赖堡 30 km</p></div>
+    <div class="card"><div class="card-icon">&#x1F3AC;</div><h3>娱乐</h3><p>Voletarium 飞行剧院（欧洲最大）<br>Magic Cinema 4D<br>Globe Theater 魔术秀<br>季节性节庆：万圣节、冬季魔法、50 周年特演<br>VR 过山车（Mack One）</p></div>
+    <div class="card"><div class="card-icon">&#x1F4B6;</div><h3>商业</h3><p>60+ 商店，德国街主购物区<br>50 周年限定商品<br>Grand Prix 赛车主题周边（卢森堡区）<br>VDV/Venice Simplon 高端系列</p></div>
+    <div class="card"><div class="card-icon">&#x1F3D7;&#xFE0F;</div><h3>Rulantica 水上乐园</h3><p>2019 开业 · 室内 32,600 m² · 25 项水上游乐（含 17 条滑道）· 13 个主题区 · 2025 新增 Svømmepøl 大型户外泳池<br>Hotel Krønasår 直通</p></div>
+  </div>
+</section>
+
+<!-- 10. 最新动态与扩建展望 -->
+<section>
+  <h2 class="section-title">最新动态与扩建展望</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">&#x1F3A2;</div>
+      <h3>50 周年庆典（2025）</h3>
+      <p>2025 年 7 月 12 日满 50 周年。全新卢森堡主题区开放，GRAND PRIX EDventure 互动暗骑亮相（Ed &amp; Edda 角色 IP），7 百万+ 游客创历史新高。</p>
+      <div><span class="tag">2025</span><span class="tag">50周年</span><span class="tag">卢森堡</span></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">&#x1F3DC;</div>
+      <h3>Silver Lake City 西部小镇</h3>
+      <p><b>一期（已开放）</b>：36 栋原木木屋、68 房车位、Diner Station 自助餐、Wild Horse Bar 酒吧、12 洞 Gold Rush Golf。<br><b>二期（2026.6）</b>：Riverside Western Lodge（120 间）、Silver Lake 啤酒厂、YULLBE GO VR、Little Heroes 儿童康复中心（RTL 基金会 × DJ BoBo）。容纳 2,000+ 过夜游客。</p>
+      <div><span class="tag">2025-2026</span><span class="tag">西部主题</span><span class="tag">酒店扩建</span></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">&#x1F1F2;&#x1F1E8;</div>
+      <h3>摩纳哥区（2026 春）</h3>
+      <p>第 18 个欧洲主题区，围绕 Silver Star 打造。地中海式前庭（致敬 Jardin Exotique）、数码水族馆、F1 赛车模拟器、Albert II 亲王私人藏车展、Café de Paris。摩纳哥亲王出席开园仪式。</p>
+      <div><span class="tag">2026</span><span class="tag">摩纳哥</span><span class="tag">Silver Star</span></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">&#x1F680;</div>
+      <h3>Euro-Mir × ESA 太空区（2028）</h3>
+      <p>与欧洲空间局 (ESA) 合作，完全重建 Euro-Mir 旋转过山车（原 1997 年俄罗斯太空站主题）。更高家庭友好度，全新欧洲太空探索主题。「Euro-Mir」名称将停用。现有俄罗斯区大幅缩减。</p>
+      <div><span class="tag">2028 规划</span><span class="tag">ESA</span><span class="tag">太空主题</span></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">&#x1F3AC;</div>
+      <h3>新娱乐与餐饮（2025-2026）</h3>
+      <p>SNORRI 4D 新电影「Catch Me If You Candy」· Wonderlab 魔术秀（Globe Theater）· Sallys Café（冰岛区，Sally Özcan 联名）· Cold Rush 西部冰淇淋 · Grandpa Will's 热狗 · Ammolite 焕新（WineChamber + 新入口）</p>
+      <div><span class="tag">2025-2026</span><span class="tag">餐饮</span><span class="tag">娱乐</span></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">&#x1F4C8;</div>
+      <h3>运营展望</h3>
+      <p>50 周年纪录年后，2026 年摩纳哥 + Silver Lake City 全面运营有望推动游客量至 650 万+。Euro-Mir/ESA 太空区（2028）将拉开下一轮大型投资序幕。度假区过夜容量突破 8,000 床位后，多日游比例将持续提升。</p>
+      <div><span class="tag">展望</span><span class="tag">增长</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11. 延伸资料库 -->
+<section>
+  <h2 class="section-title">延伸资料库</h2>
+  <p class="section-sub">5 个精选高质量外部站点</p>
+  <div class="ref-grid">
+    <a href="https://commons.wikimedia.org/wiki/Category:Europa-Park" target="_blank" rel="noopener" class="ref-card">
+      <div class="ref-icon">&#x1F5BC;&#xFE0F;</div><h4>Wikimedia Commons</h4><p>自由版权高清图片库 — 园区全景、设施特写、历史照片、酒店与 Rulantica</p>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=europa+park+2025+4k+pov" target="_blank" rel="noopener" class="ref-card">
+      <div class="ref-icon">&#x25B6;&#xFE0F;</div><h4>YouTube — POV &amp; 4K 游园</h4><p>Silver Star、blue fire、Wodan、Voltron 过山车第一视角，50 周年 4K 游园纪录片</p>
+    </a>
+    <a href="https://corporate.europapark.com/en/presse/" target="_blank" rel="noopener" class="ref-card">
+      <div class="ref-icon">&#x1F4F0;</div><h4>Europa-Park 官方新闻中心</h4><p>企业新闻、财务公告、建设进度、开幕式通稿 — 信息的一手来源</p>
+    </a>
+    <a href="https://www.schwarzwaldportal.com/en/europa-park-rust/" target="_blank" rel="noopener" class="ref-card">
+      <div class="ref-icon">&#x1F30D;</div><h4>Schwarzwald Portal — 深度游客指南</h4><p>18 主题区详解、酒店测评、季节攻略、实拍图片与实用建议</p>
+    </a>
+    <a href="https://www.eap-magazin.de/en/Tags/Europa-Park/" target="_blank" rel="noopener" class="ref-card">
+      <div class="ref-icon">&#x1F4F0;</div><h4>EuroAmusement Professional (EAP)</h4><p>行业权威杂志 — Europa-Park 扩张、技术、运营深度报道与高清组图</p>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>Europa-Park 案例研究 · 2025 年 5 月 · 数据来源：TEA/AECOM 2024 Theme Index、Europa-Park 官方新闻中心、Wikipedia、HSG 圣加仑大学经济影响研究、EAP 杂志</p>
+  <p style="margin-top:0.5rem;">所有数据均使用中国大陆公制单位。金额以欧元 (€) 为主，括号备注人民币 (¥) 约值。德国项目使用 WGS-84 坐标，无需 GCJ-02 转换。</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// --- IntersectionObserver for scroll reveal ---
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// --- Leaflet tile factories (separate instances per map) ---
+function makeStreetLayer() {
+  return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    maxZoom: 20
+  });
+}
+function makeSatLayer() {
+  return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    maxZoom: 20
+  });
+}
+
+// --- Map initialization ---
+const parkCenter = [48.2650, 7.7205];
+const parkZoom = 16;
+
+// Street map (default visible)
+const streetMap = L.map('parkmap', {
+  center: parkCenter,
+  zoom: parkZoom,
+  scrollWheelZoom: false,
+  zoomControl: true
+});
+const streetTile = makeStreetLayer().addTo(streetMap);
+
+// Satellite map (hidden, in a sibling container created on demand)
+let satMap = null;
+let satTile = null;
+let currentView = 'street';
+
+// Define themed area markers (WGS-84 coordinates, approximate based on OSM + satellite)
+const areas = [
+  { name: '德国', lat: 48.2684, lng: 7.7237, color: '#e8c84a', textColor: '#4a3a00' },
+  { name: '意大利', lat: 48.2677, lng: 7.7222, color: '#e8a03a', textColor: '#5a3a00' },
+  { name: '法国', lat: 48.2672, lng: 7.7214, color: '#3a6ab5', textColor: '#fff' },
+  { name: '西班牙', lat: 48.2611, lng: 7.7218, color: '#d4452a', textColor: '#fff' },
+  { name: '瑞士', lat: 48.2667, lng: 7.7206, color: '#c42020', textColor: '#fff' },
+  { name: '奥地利', lat: 48.2619, lng: 7.7226, color: '#e85a4a', textColor: '#fff' },
+  { name: '英国', lat: 48.2652, lng: 7.7213, color: '#c41e3a', textColor: '#fff' },
+  { name: '希腊', lat: 48.2667, lng: 7.7195, color: '#3070b0', textColor: '#fff' },
+  { name: '俄罗斯', lat: 48.2647, lng: 7.7200, color: '#4a8b3a', textColor: '#fff' },
+  { name: '斯堪的纳维亚', lat: 48.2626, lng: 7.7197, color: '#1a5a9a', textColor: '#fff' },
+  { name: '荷兰', lat: 48.2639, lng: 7.7206, color: '#e87a20', textColor: '#fff' },
+  { name: '冰岛', lat: 48.2621, lng: 7.7185, color: '#5a8aaa', textColor: '#fff' },
+  { name: '葡萄牙', lat: 48.2619, lng: 7.7210, color: '#3a8b4a', textColor: '#fff' },
+  { name: '爱尔兰', lat: 48.2664, lng: 7.7235, color: '#2a7a3a', textColor: '#fff' },
+  { name: '克罗地亚', lat: 48.2658, lng: 7.7194, color: '#e07040', textColor: '#fff' },
+  { name: '列支敦士登', lat: 48.2660, lng: 7.7217, color: '#c4284a', textColor: '#fff' },
+  { name: '童话森林', lat: 48.2635, lng: 7.7233, color: '#7a4a8a', textColor: '#fff' },
+  { name: 'Balthasar 城堡', lat: 48.2685, lng: 7.7250, color: '#8b6b4a', textColor: '#fff', isCastle: true },
+  { name: '主入口', lat: 48.2688, lng: 7.7218, color: '#6b3a1f', textColor: '#fff', isEntrance: true }
+];
+
+function addMarkers(map) {
+  areas.forEach(a => {
+    const size = a.isCastle ? 12 : a.isEntrance ? 14 : 11;
+    const icon = L.divIcon({
+      className: '',
+      html: `<div class="park-marker" style="background:${a.color};color:${a.textColor};font-size:${size}px;padding:2px 7px;border-radius:3px;border:1.5px solid rgba(255,255,255,0.7);box-shadow:0 1px 3px rgba(0,0,0,0.3);">${a.name}</div>`,
+      iconSize: [0, 0],
+      iconAnchor: [0, 0]
+    });
+    L.marker([a.lat, a.lng], { icon }).addTo(map);
+  });
+
+  // Central lake polygon (approximate — "See in Österreich" area)
+  L.circle([48.2640, 7.7210], {
+    radius: 110,
+    color: '#5a9ab5',
+    fillColor: '#7eb8da',
+    fillOpacity: 0.3,
+    weight: 1.5
+  }).addTo(map).bindPopup('中央湖<br>Central Lake');
+
+  // Park boundary (OSM-verified extent)
+  L.polygon([
+    [48.2590, 7.7150], [48.2590, 7.7265],
+    [48.2705, 7.7265], [48.2705, 7.7150]
+  ], {
+    color: '#6b3a1f',
+    weight: 1.5,
+    fill: false,
+    dashArray: '6,4',
+    opacity: 0.5
+  }).addTo(map).bindPopup('Europa-Park 乐园边界（近似）<br>核心区约 95 ha');
+}
+
+addMarkers(streetMap);
+
+// Map switch function
+function switchMap(type) {
+  document.querySelectorAll('.map-tab').forEach(t => t.classList.remove('active'));
+  if (type === 'street') {
+    document.querySelector('.map-tab:first-child').classList.add('active');
+    document.getElementById('parkmap').style.display = '';
+    if (satMap) { satMap.remove(); satMap = null; satTile = null; }
+    currentView = 'street';
+    setTimeout(() => streetMap.invalidateSize(), 200);
+  } else {
+    document.querySelector('.map-tab:last-child').classList.add('active');
+    document.getElementById('parkmap').style.display = 'none';
+    if (!satMap) {
+      const satDiv = document.createElement('div');
+      satDiv.id = 'satmap';
+      satDiv.className = 'map-container';
+      document.getElementById('parkmap').parentNode.appendChild(satDiv);
+      satMap = L.map('satmap', {
+        center: parkCenter,
+        zoom: parkZoom,
+        scrollWheelZoom: false,
+        zoomControl: true
+      });
+      satTile = makeSatLayer().addTo(satMap);
+      addMarkers(satMap);
+    } else {
+      document.getElementById('satmap').style.display = '';
+    }
+    currentView = 'sat';
+    setTimeout(() => { if (satMap) satMap.invalidateSize(); }, 200);
+  }
+}
+
+// Initial size fix
+setTimeout(() => streetMap.invalidateSize(), 800);
+</script>
+</body>
+</html>

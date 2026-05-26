@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>珠海长隆海洋王国 — 案例研究</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+html { font-size: 17px; scroll-behavior: smooth; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'DM Sans', sans-serif; background: #faf7f2; color: #2c2c2c; line-height: 1.6; }
+
+/* Hero — deep ocean teal */
+.hero { background: linear-gradient(135deg, #0a1628 0%, #0b3045 30%, #0d5b7a 60%, #0b7a8e 100%); min-height: 85vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at 30% 60%, rgba(0,200,200,0.12) 0%, transparent 50%), radial-gradient(ellipse at 65% 40%, rgba(255,140,60,0.10) 0%, transparent 50%); }
+.hero-content { position: relative; z-index: 1; max-width: 900px; padding: 2rem; }
+.hero-badge { display: inline-block; background: rgba(0,210,200,0.18); border: 1px solid rgba(0,210,200,0.35); color: #00d2c8; padding: 0.35rem 1.2rem; border-radius: 2rem; font-size: 0.78rem; letter-spacing: 0.08em; margin-bottom: 1.8rem; }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: 4.2rem; font-weight: 800; line-height: 1.15; margin-bottom: 1rem; letter-spacing: 0.02em; }
+.hero h1 span { color: #00d2c8; }
+.hero .subtitle { font-size: 1.2rem; opacity: 0.85; margin-bottom: 2.5rem; font-weight: 400; }
+.hero-stats { display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap; }
+.hero-stat { text-align: center; }
+.hero-stat .num { font-family: 'DM Mono', monospace; font-size: 2.4rem; font-weight: 500; color: #00d2c8; }
+.hero-stat .label { font-size: 0.78rem; opacity: 0.7; margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* Sections */
+.section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
+.section-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; margin-bottom: 2rem; color: #0b3045; position: relative; }
+.section-title::after { content: ''; display: block; width: 50px; height: 3px; background: #00b4a0; margin-top: 0.5rem; }
+
+/* Cards */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.card { background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid #eee; }
+.card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #0b3045; margin-bottom: 0.5rem; }
+.card p { font-size: 0.9rem; color: #666; }
+.card .value { font-family: 'DM Mono', monospace; font-size: 1.3rem; color: #0b7a8e; font-weight: 500; }
+
+/* Tables */
+.data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.data-table th { background: #0b3045; color: #fff; padding: 0.9rem 1.2rem; text-align: left; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.data-table td { padding: 0.8rem 1.2rem; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: #f4faf9; }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 2rem; }
+.timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #00b4a0, #0b5b7a); }
+.timeline-item { position: relative; padding: 0 0 2rem 1.8rem; }
+.timeline-item::before { content: ''; position: absolute; left: -2.35rem; top: 0.4rem; width: 12px; height: 12px; border-radius: 50%; background: #00b4a0; border: 3px solid #fff; box-shadow: 0 0 0 2px #00b4a0; }
+.timeline-year { font-family: 'DM Mono', monospace; font-size: 0.9rem; color: #0b7a8e; font-weight: 600; }
+.timeline-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: #0b3045; margin: 0.2rem 0 0.3rem; }
+.timeline-desc { font-size: 0.88rem; color: #666; }
+
+/* Map */
+.map-container { height: 420px; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); position: relative; z-index: 1; }
+.map-tabs { display: flex; gap: 1rem; margin-bottom: 1rem; }
+.map-tab { padding: 0.6rem 1.4rem; border-radius: 8px; background: #fff; border: 1px solid #ddd; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; transition: all 0.2s; }
+.map-tab.active { background: #0b3045; color: #fff; border-color: #0b3045; }
+
+/* SVG */
+.svg-diagram { width: 100%; max-width: 100%; margin: 2rem auto; display: block; }
+
+/* KPI */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; }
+.kpi-card { background: linear-gradient(135deg, #fff, #f4faf9); border-radius: 12px; padding: 1.5rem; text-align: center; border: 1px solid #e0f0ee; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.kpi-card .kpi-num { font-family: 'DM Mono', monospace; font-size: 1.8rem; color: #0b3045; font-weight: 500; }
+.kpi-card .kpi-label { font-size: 0.78rem; color: #888; margin-top: 0.3rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.kpi-card .kpi-sub { font-size: 0.78rem; color: #0b7a8e; margin-top: 0.2rem; }
+
+/* Gallery */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+.gallery-card { background: #fff; border-radius: 12px; padding: 1.2rem; text-align: center; border: 1px solid #eee; transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: block; }
+.gallery-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+.gallery-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+.gallery-name { font-weight: 600; font-size: 0.9rem; color: #0b3045; }
+.gallery-src { font-size: 0.75rem; color: #999; margin-top: 0.3rem; }
+
+/* Links */
+.resource-list { display: grid; gap: 0.8rem; }
+.resource-card { background: #fff; border-radius: 10px; padding: 1.2rem; border: 1px solid #eee; display: flex; align-items: center; gap: 1rem; text-decoration: none; color: inherit; transition: box-shadow 0.2s; }
+.resource-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+.resource-icon { font-size: 1.5rem; flex-shrink: 0; }
+.resource-info h4 { font-size: 0.95rem; color: #0b3045; }
+.resource-info p { font-size: 0.78rem; color: #999; }
+
+/* Footer */
+.footer { background: #0a1628; color: #8899aa; text-align: center; padding: 2.5rem; font-size: 0.8rem; }
+.footer a { color: #00d2c8; text-decoration: none; }
+
+/* Animations */
+.reveal { opacity: 0; transform: translateY(25px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 768px) {
+  .hero h1 { font-size: 2.4rem; }
+  .hero-stats { gap: 1.5rem; }
+  .section { padding: 2.5rem 1.2rem; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- 1. Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">数据截至 2026 年 5 月</div>
+    <h1>珠海长隆<span>海洋王国</span></h1>
+    <p class="subtitle">Chimelong Ocean Kingdom — 全球最大的海洋主题公园，拥有世界最大水族箱</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">132</div><div class="label">公顷占地面积</div></div>
+      <div class="hero-stat"><div class="num">8</div><div class="label">主题分区</div></div>
+      <div class="hero-stat"><div class="num">1,252 万</div><div class="label">2023 年游客量</div></div>
+      <div class="hero-stat"><div class="num">¥200 亿+</div><div class="label">累计投资</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. 项目概览 -->
+<section class="section">
+  <h2 class="section-title reveal">项目概览</h2>
+  <div class="card-grid reveal">
+    <div class="card"><h3>开业时间</h3><div class="value">2014 年 3 月 29 日</div><p>珠海横琴新区首个大型主题公园</p></div>
+    <div class="card"><h3>开发商 / 运营商</h3><div class="value">广东长隆集团</div><p>创始人苏志刚，中国文旅龙头企业</p></div>
+    <div class="card"><h3>地理位置</h3><div class="value">22.100°N, 113.531°E</div><p>广东省珠海市横琴粤澳深度合作区富祥湾长隆大道 1 号</p></div>
+    <div class="card"><h3>占地面积</h3><div class="value">132 公顷</div><p>含海洋王国核心区约 60 公顷 + 酒店配套区</p></div>
+    <div class="card"><h3>日容量</h3><div class="value">约 80,000 人</div><p>旺季可达 10 万人次</p></div>
+    <div class="card"><h3>票价</h3><div class="value">¥350 - ¥450</div><p>成人一日票，节假日上浮</p></div>
+  </div>
+</section>
+
+<!-- 3. 设计与建设 -->
+<section class="section">
+  <h2 class="section-title reveal">设计与建设</h2>
+  <div class="card-grid reveal" style="grid-template-columns: 1fr 1fr;">
+    <div class="card">
+      <h3>设计方</h3>
+      <p style="margin-top:0.8rem;"><strong>Forrec Ltd（加拿大）</strong> — 总体规划与概念设计</p>
+      <p><strong>PGAV Destinations（美国）</strong> — 方案深化</p>
+      <p><strong>广州园林建筑规划设计院</strong> — 景观设计</p>
+      <p><strong>广东省建筑设计研究院</strong> — 建筑设计与结构</p>
+    </div>
+    <div class="card">
+      <h3>施工方</h3>
+      <p style="margin-top:0.8rem;"><strong>中建三局第一建设工程有限责任公司</strong> — 施工总承包</p>
+      <p><strong>上海建工集团</strong> — 机电安装与维生系统</p>
+      <p><strong>森特股份</strong> — 金属屋面系统</p>
+      <p><strong>普邦股份</strong> — 景观绿化施工</p>
+    </div>
+  </div>
+  <table class="data-table reveal" style="margin-top:1.5rem;">
+    <thead><tr><th>类别</th><th>供应商</th><th>供应内容</th></tr></thead>
+    <tbody>
+      <tr><td>骑乘设备</td><td>Mack Rides（德国）</td><td>鹦鹉过山车、冰山过山车</td></tr>
+      <tr><td>骑乘设备</td><td>Zamperla（意大利）</td><td>雨林升降塔、多台家庭骑乘</td></tr>
+      <tr><td>骑乘设备</td><td>Intamin（瑞士）</td><td>超级激流（水上游乐设施）</td></tr>
+      <tr><td>主题包装</td><td>广东淡水河谷艺术</td><td>主题包装与场景营造</td></tr>
+      <tr><td>演艺特效</td><td>ECA2（法国）</td><td>横琴海大型水幕投影与烟花系统</td></tr>
+      <tr><td>智能化</td><td>华为 / 海康威视</td><td>票务闸机、安防监控、客流分析</td></tr>
+      <tr><td>景观绿化</td><td>普邦股份</td><td>园区绿植、水体造景、生态修复</td></tr>
+      <tr><td>维生系统</td><td>上海建工 + 澳大利亚 AMC</td><td>海水调配、过滤循环、温度控制（22,000 m³ 鲸鲨缸）</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 4. 技术指标总表 -->
+<section class="section">
+  <h2 class="section-title reveal">技术指标总表</h2>
+  <table class="data-table reveal">
+    <thead><tr><th>指标</th><th>数据</th><th>备注</th></tr></thead>
+    <tbody>
+      <tr><td>总占地面积</td><td>132 公顷</td><td>含酒店与配套区</td></tr>
+      <tr><td>核心园区面积</td><td>约 60 公顷</td><td>含横琴海中心湖约 5.5 公顷</td></tr>
+      <tr><td>主题分区</td><td>8 个</td><td>海洋大街、海豚湾、雨林飞翔、海洋奇观、极地探险、英雄岛、海象山、横琴海</td></tr>
+      <tr><td>骑乘设施数</td><td>约 20 项</td><td>含过山车 3 台</td></tr>
+      <tr><td>动物展馆</td><td>20+ 个</td><td>鲸鲨、企鹅、北极熊、白鲸、海豚、海牛、鳐鱼等</td></tr>
+      <tr><td>鲸鲨馆水体</td><td>约 22,000 m³</td><td>世界最大水族缸，获 5 项吉尼斯纪录</td></tr>
+      <tr><td>演出/娱乐</td><td>10+ 场日常演出</td><td>含夜间大型烟花秀《海洋保卫战》</td></tr>
+      <tr><td>餐厅数量</td><td>约 20 家</td><td>海底餐厅等主题餐饮</td></tr>
+      <tr><td>商店数量</td><td>约 25 家</td><td>主题商品、海洋纪念品</td></tr>
+      <tr><td>配套酒店客房</td><td>5,738 间</td><td>横琴湾 (1,888) + 企鹅 (2,000) + 马戏 (700) + 飞船 (1,250) + 海洋科学</td></tr>
+      <tr><td>设计容量</td><td>80,000 人/日</td><td>旺季高峰近 10 万</td></tr>
+      <tr><td>累计投资</td><td>超 ¥200 亿</td><td>含酒店与二期扩建</td></tr>
+      <tr><td>2023 年游客</td><td>1,252 万</td><td>全球主题公园第 6 位 (TEA/AECOM)</td></tr>
+      <tr><td>员工数</td><td>约 8,000 人</td><td>含动物保育、演艺、运营</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 5. 空间布局与交互地图 -->
+<section class="section">
+  <h2 class="section-title reveal">空间布局与功能分区</h2>
+
+  <div class="map-tabs reveal">
+    <button class="map-tab active" onclick="switchMap('street')">街道图</button>
+    <button class="map-tab" onclick="switchMap('sat')">卫星图</button>
+  </div>
+  <div class="map-container reveal" id="parkmap"></div>
+  <p style="text-align:center;margin-top:0.5rem;font-size:0.78rem;color:#999;">坐标来源：OpenStreetMap 实测 (WGS-84) · ESRI 瓦片</p>
+
+  <!-- SVG 示意图 -->
+    <svg viewBox="0 0 1000 850" class="svg-diagram reveal" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="shadow"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#00000022"/></filter>
+      <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0b3045"/></marker>
+    </defs>
+    <rect x="50" y="50" width="900" height="750" rx="12" fill="#f5f1e8" stroke="#ddd" stroke-width="1.5"/>
+    <!-- 横琴海中心湖 -->
+    <ellipse cx="377" cy="435" rx="130" ry="100" fill="#b0d8e8" opacity="0.55" stroke="#7bb8cc" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <!-- 海洋大街 — 东侧入口 -->
+    <polygon points="525,288 705,288 729,447 541,447" fill="#0077b6" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+    <text x="625" y="375" text-anchor="middle" fill="#fff" font-size="12" font-family="DM Sans" font-weight="600">海洋大街（入口）</text>
+    <!-- 海象山 — 东侧 -->
+    <polygon points="647,403 786,403 827,553 664,579" fill="#c4956a" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+    <text x="730" y="495" text-anchor="middle" fill="#fff" font-size="12" font-family="DM Sans" font-weight="600">海象山</text>
+    <!-- 海豚湾 — 北侧 -->
+    <polygon points="353,138 541,112 566,315 377,341" fill="#00a8cc" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+    <text x="460" y="230" text-anchor="middle" fill="#fff" font-size="12" font-family="DM Sans" font-weight="600">海豚湾</text>
+    <!-- 雨林飞翔 — 东北角 -->
+    <polygon points="623,182 909,182 909,341 664,341" fill="#2d8a4e" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+    <text x="770" y="265" text-anchor="middle" fill="#fff" font-size="12" font-family="DM Sans" font-weight="600">雨林飞翔</text>
+    <!-- 海洋奇观 — 西侧 -->
+    <polygon points="91,341 271,341 255,579 91,579" fill="#1a5f8a" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+    <text x="175" y="465" text-anchor="middle" fill="#fff" font-size="12" font-family="DM Sans" font-weight="600">海洋奇观</text>
+    <!-- 极地探险 — 南侧 -->
+    <polygon points="271,579 459,579 435,729 255,729" fill="#a8c8e0" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+    <text x="355" y="660" text-anchor="middle" fill="#2c4a6e" font-size="12" font-family="DM Sans" font-weight="600">极地探险</text>
+    <!-- 英雄岛 — 中南 -->
+    <polygon points="296,465 459,447 459,606 296,624" fill="#f4a460" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+    <text x="378" y="540" text-anchor="middle" fill="#8b5a2b" font-size="12" font-family="DM Sans" font-weight="600">英雄岛</text>
+    <!-- 鲸鲨馆标记 -->
+    <rect x="148" y="476" width="16" height="16" rx="3" fill="#ff6b35" stroke="#fff" stroke-width="1.5"/>
+    <text x="170" y="489" fill="#ff6b35" font-size="11" font-family="DM Sans" font-weight="700">鲸鲨馆</text>
+    <!-- 鹦鹉过山车标记 -->
+    <circle cx="750" cy="275" r="6" fill="#ff4444" stroke="#fff" stroke-width="1.5"/>
+    <!-- 入口箭头（东侧） -->
+    <line x1="785" y1="375" x2="745" y2="375" stroke="#0b3045" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+    <text x="790" y="365" fill="#0b3045" font-size="12" font-family="DM Sans" font-weight="600">主入口 →</text>
+    <!-- 指北针 -->
+    <g transform="translate(910,80)"><polygon points="0,18 6,0 12,18 6,13" fill="#0b3045"/><text x="6" y="30" text-anchor="middle" fill="#0b3045" font-size="12" font-family="DM Sans" font-weight="700">N</text></g>
+    <!-- 比例尺 -->
+    <line x1="100" y1="810" x2="300" y2="810" stroke="#0b3045" stroke-width="2"/><line x1="100" y1="805" x2="100" y2="815" stroke="#0b3045" stroke-width="2"/><line x1="300" y1="805" x2="300" y2="815" stroke="#0b3045" stroke-width="2"/>
+    <text x="200" y="825" text-anchor="middle" fill="#0b3045" font-size="12" font-family="DM Sans">约 200m</text>
+    <text x="500" y="845" text-anchor="middle" fill="#999" font-size="12" font-family="DM Sans">示意图 · 基于 OSM 坐标与卫星影像 · 北向上</text>
+  </svg>
+
+  <!-- 园区实景图集 -->
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:#0b3045;margin-top:2.5rem;margin-bottom:1.2rem;" class="reveal">园区实景图集</h3>
+  <div class="gallery-grid reveal">
+    <a href="https://commons.wikimedia.org/wiki/Category:Chimelong_Ocean_Kingdom" target="_blank" class="gallery-card">
+      <div class="gallery-emoji">🐋</div><div class="gallery-name">鲸鲨馆</div><div class="gallery-src">Wikimedia Commons</div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=珠海长隆海洋王国+烟花+海洋保卫战" target="_blank" class="gallery-card">
+      <div class="gallery-emoji">🎆</div><div class="gallery-name">海洋保卫战 烟花秀</div><div class="gallery-src">B站 / YouTube</div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=Chimelong+Ocean+Kingdom+whale+shark+aquarium" target="_blank" class="gallery-card">
+      <div class="gallery-emoji">🦈</div><div class="gallery-name">鲸鲨缸实拍</div><div class="gallery-src">YouTube 4K</div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=Chimelong+Ocean+Kingdom+polar+bear+penguin" target="_blank" class="gallery-card">
+      <div class="gallery-emoji">🐧</div><div class="gallery-name">极地探险区</div><div class="gallery-src">YouTube 实拍</div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=珠海长隆海洋王国+鹦鹉过山车" target="_blank" class="gallery-card">
+      <div class="gallery-emoji">🎢</div><div class="gallery-name">鹦鹉过山车 POV</div><div class="gallery-src">B站 第一视角</div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=Chimelong+Ocean+Kingdom+full+tour+walk" target="_blank" class="gallery-card">
+      <div class="gallery-emoji">🚶</div><div class="gallery-name">全景步行游览</div><div class="gallery-src">YouTube 全程实拍</div>
+    </a>
+  </div>
+
+  <div class="card-grid reveal" style="margin-top:2rem;">
+    <div class="card"><h3>海洋大街</h3><p>入口迎宾大道，巨型 LED 天幕穹顶。两侧购物与餐饮，营造沉浸式海底世界到达体验。</p></div>
+    <div class="card"><h3>海豚湾</h3><p>海豚保育中心 + 海豚剧场，可近距离观赏瓶鼻海豚。海豚岛为室外展池，5 米深自然海水。</p></div>
+    <div class="card"><h3>雨林飞翔</h3><p>亚马逊热带雨林主题。鹦鹉过山车（Mack Rides，高 50m，长 1,278m，极速 108km/h）为标志性骑乘。雨林升降塔为家庭版跳楼机。</p></div>
+    <div class="card"><h3>海洋奇观</h3><p>鲸鲨馆 — 世界最大水族缸（22,000 m³），获 5 项吉尼斯世界纪录。饲养鲸鲨、蝠鲼等大型海洋生物。海底互动船可穿越缸底隧道。</p></div>
+    <div class="card"><h3>极地探险</h3><p>北极熊馆 + 企鹅馆 + 白鲸剧场。冰山过山车穿行于极地景观中。企鹅馆饲养帝企鹅、阿德利企鹅等多个物种。</p></div>
+    <div class="card"><h3>英雄岛</h3><p>卡卡虎 IP 主题区，面向亲子家庭。多台家庭骑乘与互动游乐设施，色彩鲜明活泼。</p></div>
+    <div class="card"><h3>海象山</h3><p>海狮剧场 + 超级激流（Intamin 水上设施，高 23m 激流俯冲）。海象、海狮户外展区。</p></div>
+    <div class="card"><h3>横琴海</h3><p>中心人工湖约 5.5 公顷，日间花车巡游 + 夜间大型水上秀《海洋保卫战》（烟花、水幕、无人机、喷火特效）。</p></div>
+  </div>
+</section>
+
+<!-- 6. 投资与建设时序 -->
+<section class="section">
+  <h2 class="section-title reveal">投资与建设时序</h2>
+  <div class="timeline reveal">
+    <div class="timeline-item">
+      <div class="timeline-year">2010 年 11 月</div>
+      <div class="timeline-title">项目奠基</div>
+      <div class="timeline-desc">长隆集团在横琴新区正式启动海洋王国项目。横琴岛填海造地工程同期推进。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2014 年 1 月</div>
+      <div class="timeline-title">试营业启动</div>
+      <div class="timeline-desc">海洋王国进入试运营阶段，同期横琴湾酒店（1,888 间）开业。初始投资约 ¥200 亿。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2014 年 3 月 29 日</div>
+      <div class="timeline-title">正式开园</div>
+      <div class="timeline-desc">获 5 项吉尼斯世界纪录认证，包括世界最大水族缸、最大水族馆、最大水族馆观景窗等。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2015 年</div>
+      <div class="timeline-title">企鹅酒店开业</div>
+      <div class="timeline-desc">2,000 间客房的企鹅酒店投入使用，紧邻海洋王国主入口。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2019 年</div>
+      <div class="timeline-title">游客高峰年</div>
+      <div class="timeline-desc">年游客量约 1,900 万，为开业以来最高。同年 11 月珠机城际铁路长隆站通车。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2023 年</div>
+      <div class="timeline-title">宇宙飞船新馆开业</div>
+      <div class="timeline-desc">长隆宇宙飞船（原"海洋科学馆"）在南侧开业，新增 1,250 间客房的飞船酒店。全球 TOP 6 主题公园（1,252 万游客）。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2025 - 2026 年</div>
+      <div class="timeline-title">持续升级</div>
+      <div class="timeline-desc">英雄岛二期扩建规划中，夜间秀持续迭代。二期拟新增更多室内场馆与主题骑乘。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. 运营指标 -->
+<section class="section">
+  <h2 class="section-title reveal">运营指标</h2>
+  <div class="kpi-grid reveal">
+    <div class="kpi-card"><div class="kpi-num">1,252 万</div><div class="kpi-label">2023 年游客量</div><div class="kpi-sub">全球 TOP 6（TEA/AECOM）</div></div>
+    <div class="kpi-card"><div class="kpi-num">¥350 - ¥450</div><div class="kpi-label">一日票价</div><div class="kpi-sub">成人，节假日浮动</div></div>
+    <div class="kpi-card"><div class="kpi-num">~¥60 亿</div><div class="kpi-label">年营收（估算）</div><div class="kpi-sub">含酒店与商业</div></div>
+    <div class="kpi-card"><div class="kpi-num">5</div><div class="kpi-label">吉尼斯世界纪录</div><div class="kpi-sub">水族缸相关</div></div>
+    <div class="kpi-card"><div class="kpi-num">5</div><div class="kpi-label">TEA 大奖</div><div class="kpi-sub">主题娱乐协会</div></div>
+    <div class="kpi-card"><div class="kpi-num">-</div><div class="kpi-label">非上市</div><div class="kpi-sub">长隆集团未上市，财报不公开</div></div>
+  </div>
+  <table class="data-table reveal" style="margin-top:2rem;">
+    <thead><tr><th>对比项目</th><th>珠海长隆海洋王国</th><th>上海迪士尼</th><th>北京环球影城</th></tr></thead>
+    <tbody>
+      <tr><td>开业</td><td>2014</td><td>2016</td><td>2021</td></tr>
+      <tr><td>面积（核心园区）</td><td>132 公顷（核心约 60）</td><td>390 公顷（核心约 91）</td><td>400 公顷（核心约 130）</td></tr>
+      <tr><td>2023 游客</td><td>1,252 万</td><td>约 1,300 万+</td><td>约 800 万+</td></tr>
+      <tr><td>投资规模</td><td>¥200 亿+（累计）</td><td>¥340 亿（一期）</td><td>¥500 亿+（一期）</td></tr>
+      <tr><td>运营方</td><td>长隆集团（中国民企）</td><td>迪士尼 + 上海申迪</td><td>环球 + 首旅</td></tr>
+      <tr><td>票价比</td><td>¥350 - ¥450</td><td>¥475 - ¥799</td><td>¥418 - ¥638</td></tr>
+      <tr><td>特色</td><td>海洋动物 + 游乐设施</td><td>IP 沉浸式</td><td>影视特效骑乘</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 8. 核心技术与规模指标 -->
+<section class="section">
+  <h2 class="section-title reveal">核心技术与规模指标</h2>
+  <table class="data-table reveal">
+    <thead><tr><th>类别</th><th>指标</th><th>数据</th></tr></thead>
+    <tbody>
+      <tr><td>设施</td><td>骑乘设施总数</td><td>约 20 项（含 3 台过山车）</td></tr>
+      <tr><td>设施</td><td>鹦鹉过山车</td><td>Mack Rides 制，高 50m，长 1,278m，极速 108 km/h</td></tr>
+      <tr><td>设施</td><td>冰山过山车</td><td>Mack Rides 制，穿行极地展区，水上 + 轨道复合</td></tr>
+      <tr><td>设施</td><td>超级激流</td><td>Intamin 制，高 23m，俯冲角度约 45°</td></tr>
+      <tr><td>设施</td><td>动物展馆</td><td>20+ 个展馆，饲养物种超 300 种、总数约 20,000 只</td></tr>
+      <tr><td>景观</td><td>鲸鲨馆水族缸</td><td>宽 39.6m × 高 8.3m 亚克力观景窗，缸体 22,000 m³</td></tr>
+      <tr><td>景观</td><td>横琴海中心湖</td><td>约 5.5 公顷人工湖，用于水上演出与烟花秀</td></tr>
+      <tr><td>景观</td><td>LED 天幕</td><td>海洋大街入口穹顶，弧形 LED 屏幕面积超 2,000 m²</td></tr>
+      <tr><td>建筑</td><td>企鹅酒店</td><td>2,000 间客房，全球最大企鹅主题酒店</td></tr>
+      <tr><td>建筑</td><td>鲸鲨馆建筑面积</td><td>约 48,000 m²（相当于 6 个标准足球场）</td></tr>
+      <tr><td>商业</td><td>商店 + 餐厅</td><td>约 45 家（25 商店 + 20 餐饮）</td></tr>
+      <tr><td>交通</td><td>城际铁路</td><td>珠机城际长隆站，直达珠海站（约 20 分钟）</td></tr>
+      <tr><td>交通</td><td>停车容量</td><td>约 8,000 个车位</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 9. 配套设施体系 -->
+<section class="section">
+  <h2 class="section-title reveal">配套设施体系</h2>
+  <div class="card-grid reveal">
+    <div class="card"><h3>横琴湾酒店</h3><p>1,888 间客房，五星级，海豚池直达。会议中心 3,000 m²，宴会厅可容纳 1,500 人。</p></div>
+    <div class="card"><h3>企鹅酒店</h3><p>2,000 间客房，紧邻海洋王国入口。企鹅馆内嵌酒店大堂，可边用餐边观企鹅。</p></div>
+    <div class="card"><h3>马戏酒店</h3><p>700 间客房，连接长隆国际马戏城。杂技主题设计，适合观看马戏表演的住客。</p></div>
+    <div class="card"><h3>飞船酒店</h3><p>1,250 间客房，2023 年开业。连接长隆宇宙飞船新馆，太空海洋主题。</p></div>
+    <div class="card"><h3>餐饮</h3><p>20 家餐厅：海底餐厅（与鲸鲨同席）、雨林餐厅、城堡餐厅、马戏餐厅等。人均 ¥60-200。</p></div>
+    <div class="card"><h3>交通</h3><p>珠机城际铁路长隆站步行 10 分钟。广珠城轨珠海站换乘。深圳蛇口码头直达横琴码头。港珠澳大桥 40 分钟车程。</p></div>
+    <div class="card"><h3>停车</h3><p>度假区停车楼约 8,000 车位。小型车 ¥20/次（住客免费）。</p></div>
+    <div class="card"><h3>商业配套</h3><p>长隆大道商业街、酒店商业廊。纪念品商店覆盖各主题区，鲸鲨馆出口设最大门店。</p></div>
+  </div>
+</section>
+
+<!-- 10. 最新动态与扩建展望 -->
+<section class="section">
+  <h2 class="section-title reveal">最新动态与扩建展望</h2>
+  <div class="card-grid reveal">
+    <div class="card"><h3>宇宙飞船新馆</h3><p>2023 年南侧开业，总投资约 ¥50 亿。全球最大室内主题公园之一。飞船酒店 1,250 间同步运营。海洋 + 太空双主题联动。</p></div>
+    <div class="card"><h3>横琴国际休闲旅游岛</h3><p>2019 年国务院批复横琴为国际休闲旅游岛。长隆作为核心引擎持续扩建，二期规划含更多室内场馆、主题区与度假酒店。</p></div>
+    <div class="card"><h3>深中通道利好</h3><p>深中通道通车后，深圳至珠海车程缩短至约 1 小时，带来深圳及粤东地区增量客源。</p></div>
+    <div class="card"><h3>夜间经济升级</h3><p>《海洋保卫战》持续升级，融入无人机编队（300+ 架）、水幕投影、激光矩阵、烟花燃放，为珠三角最大夜间水上演出。</p></div>
+  </div>
+</section>
+
+<!-- 11. 延伸资料库 -->
+<section class="section">
+  <h2 class="section-title reveal">延伸资料库</h2>
+  <div class="resource-list reveal">
+    <a href="https://commons.wikimedia.org/wiki/Category:Chimelong_Ocean_Kingdom" target="_blank" class="resource-card">
+      <span class="resource-icon">📷</span>
+      <div class="resource-info"><h4>Wikimedia Commons — 珠海长隆海洋王国</h4><p>自由版权实景图片集</p></div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=Chimelong+Ocean+Kingdom+4K" target="_blank" class="resource-card">
+      <span class="resource-icon">🎬</span>
+      <div class="resource-info"><h4>YouTube — Chimelong Ocean Kingdom 4K</h4><p>4K 步行游览、骑乘 POV、鲸鲨缸实拍</p></div>
+    </a>
+    <a href="https://zh.chimelong.com/oceankingdom/" target="_blank" class="resource-card">
+      <span class="resource-icon">🐋</span>
+      <div class="resource-info"><h4>长隆海洋王国官方网站</h4><p>票务、园区地图、实时运营信息、演出时间表</p></div>
+    </a>
+    <a href="https://www.themeparx.com/chimelong-ocean-kingdom/" target="_blank" class="resource-card">
+      <span class="resource-icon">🔧</span>
+      <div class="resource-info"><h4>ThemeParx — 供应商与建设数据库</h4><p>骑乘制造商、承包商、设计与施工详情</p></div>
+    </a>
+    <a href="https://www.zhihu.com/search?type=content&q=珠海长隆海洋王国+攻略" target="_blank" class="resource-card">
+      <span class="resource-icon">📝</span>
+      <div class="resource-info"><h4>知乎 — 珠海长隆深度攻略合集</h4><p>游客实拍、攻略心得、避坑指南</p></div>
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>珠海长隆海洋王国案例研究 · 数据截至 2026 年 5 月 · 坐标 OSM 验证 (WGS-84 / ESRI 瓦片)</p>
+  <p style="margin-top:0.4rem;">资金来源：公开报道、TEA/AECOM 年度报告、长隆集团官方、Wikipedia、OpenStreetMap</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// === ESRI 瓦片 (WGS-84) ===
+function makeStreetLayer() {
+  return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; ESRI',
+    maxZoom: 18
+  });
+}
+function makeSatLayer() {
+  return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; ESRI',
+    maxZoom: 18
+  });
+}
+
+const parkCenter = [22.100, 113.531];
+
+const map = L.map('parkmap', {
+  center: parkCenter,
+  zoom: 16,
+  scrollWheelZoom: false,
+  zoomControl: true,
+  layers: [makeStreetLayer()]
+});
+
+const satLayer = makeSatLayer();
+
+window.switchMap = function(type) {
+  document.querySelectorAll('.map-tab').forEach(b => b.classList.remove('active'));
+  map.eachLayer(l => { if (l instanceof L.TileLayer) map.removeLayer(l); });
+  if (type === 'street') {
+    map.addLayer(makeStreetLayer());
+    document.querySelector('.map-tab:first-child').classList.add('active');
+  } else {
+    map.addLayer(satLayer);
+    document.querySelector('.map-tab:last-child').classList.add('active');
+  }
+};
+
+// OSM-verified area coordinates (WGS-84) → GCJ-02 for Leaflet
+const areas = [
+  { name: '海洋大街', lat: 22.1012, lng: 113.5329, color: '#0077b6', textColor: '#fff', desc: '入口大道 · LED 天幕（东侧）' },
+  { name: '海象山', lat: 22.0995, lng: 113.5340, color: '#c4956a', textColor: '#fff', desc: '海狮剧场 · 海象岛 · 超级激流（东侧）' },
+  { name: '海豚湾', lat: 22.1022, lng: 113.5310, color: '#00a8cc', textColor: '#fff', desc: '海豚剧场 · 海豚保育中心（北侧）' },
+  { name: '雨林飞翔', lat: 22.1015, lng: 113.5345, color: '#2d8a4e', textColor: '#fff', desc: '鹦鹉过山车 · 雨林升降塔（东北）' },
+  { name: '海洋奇观', lat: 22.0996, lng: 113.5277, color: '#1a5f8a', textColor: '#fff', desc: '鲸鲨馆 · 世界最大水族缸（西侧）' },
+  { name: '极地探险', lat: 22.0980, lng: 113.5300, color: '#a8c8e0', textColor: '#2c4a6e', desc: '北极熊馆 · 企鹅馆 · 白鲸剧场（南侧）' },
+  { name: '英雄岛', lat: 22.0990, lng: 113.5310, color: '#f4a460', textColor: '#6b3a1e', desc: '亲子互动区（中南）' },
+  { name: '横琴海', lat: 22.1001, lng: 113.5305, color: '#4ab8d0', textColor: '#fff', desc: '中心湖 · 烟花秀《海洋保卫战》' },
+];
+
+areas.forEach(a => {
+  const icon = L.divIcon({
+    className: 'custom-icon',
+    html: `<div style="background:${a.color};color:${a.textColor};padding:4px 10px;border-radius:4px;font-size:12px;font-weight:600;white-space:nowrap;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.3);font-family:'DM Sans',sans-serif;">${a.name}</div>`,
+    iconAnchor: [40, 14]
+  });
+  L.marker([a.lat, a.lng], { icon }).addTo(map).bindPopup(`<b>${a.name}</b><br><small>${a.desc}</small>`);
+});
+
+// Park boundary (WGS-84) → GCJ-02
+const boundary = [
+  [22.0965, 113.5270], [22.0965, 113.5370],
+  [22.1045, 113.5370], [22.1045, 113.5270]
+];
+L.polygon(boundary, {
+  color: '#00b4a0', weight: 2, fill: false, dashArray: '6,4'
+}).addTo(map);
+
+setTimeout(() => map.invalidateSize(), 1000);
+
+// === Intersection Observer ===
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

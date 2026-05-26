@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>东京迪士尼海洋 — 案例研究</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+html { font-size: 17px; scroll-behavior: smooth; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'DM Sans', sans-serif; background: #faf7f2; color: #2c2c2c; line-height: 1.6; }
+
+/* Hero */
+.hero { background: linear-gradient(135deg, #0a1628 0%, #0d2847 30%, #134b6b 60%, #1a6d8a 100%); min-height: 85vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at 30% 50%, rgba(212,175,55,0.15) 0%, transparent 60%), radial-gradient(ellipse at 70% 30%, rgba(100,180,220,0.12) 0%, transparent 50%); }
+.hero-content { position: relative; z-index: 1; max-width: 900px; padding: 2rem; }
+.hero-badge { display: inline-block; background: rgba(212,175,55,0.2); border: 1px solid rgba(212,175,55,0.4); color: #d4af37; padding: 0.35rem 1.2rem; border-radius: 2rem; font-size: 0.78rem; letter-spacing: 0.08em; margin-bottom: 1.8rem; }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: 4.2rem; font-weight: 800; line-height: 1.15; margin-bottom: 1rem; letter-spacing: 0.02em; }
+.hero h1 span { color: #d4af37; }
+.hero .subtitle { font-size: 1.2rem; opacity: 0.85; margin-bottom: 2.5rem; font-weight: 400; }
+.hero-stats { display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap; }
+.hero-stat { text-align: center; }
+.hero-stat .num { font-family: 'DM Mono', monospace; font-size: 2.4rem; font-weight: 500; color: #d4af37; }
+.hero-stat .label { font-size: 0.78rem; opacity: 0.7; margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* Sections */
+.section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
+.section-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; margin-bottom: 2rem; color: #0d2847; position: relative; }
+.section-title::after { content: ''; display: block; width: 50px; height: 3px; background: #d4af37; margin-top: 0.5rem; }
+
+/* Cards */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.card { background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid #eee; }
+.card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #0d2847; margin-bottom: 0.5rem; }
+.card p { font-size: 0.9rem; color: #666; }
+.card .value { font-family: 'DM Mono', monospace; font-size: 1.3rem; color: #1a6d8a; font-weight: 500; }
+
+/* Tables */
+.data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.data-table th { background: #0d2847; color: #fff; padding: 0.9rem 1.2rem; text-align: left; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.data-table td { padding: 0.8rem 1.2rem; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: #f8f6f0; }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 2rem; }
+.timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #d4af37, #1a6d8a); }
+.timeline-item { position: relative; padding: 0 0 2rem 1.8rem; }
+.timeline-item::before { content: ''; position: absolute; left: -2.35rem; top: 0.4rem; width: 12px; height: 12px; border-radius: 50%; background: #d4af37; border: 3px solid #fff; box-shadow: 0 0 0 2px #d4af37; }
+.timeline-year { font-family: 'DM Mono', monospace; font-size: 0.9rem; color: #1a6d8a; font-weight: 600; }
+.timeline-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: #0d2847; margin: 0.2rem 0 0.3rem; }
+.timeline-desc { font-size: 0.88rem; color: #666; }
+
+/* Map */
+.map-container { height: 420px; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); position: relative; z-index: 1; }
+.map-controls { display: flex; gap: 0.5rem; margin-bottom: 0.8rem; }
+.map-btn { padding: 0.45rem 1rem; border: 1px solid #ccc; border-radius: 6px; background: #fff; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; transition: all 0.2s; }
+.map-btn.active { background: #0d2847; color: #fff; border-color: #0d2847; }
+.map-tabs { display: flex; gap: 1rem; margin-bottom: 1rem; }
+.map-tab { padding: 0.6rem 1.4rem; border-radius: 8px; background: #fff; border: 1px solid #ddd; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; transition: all 0.2s; }
+.map-tab.active { background: #0d2847; color: #fff; border-color: #0d2847; }
+
+/* SVG */
+.svg-diagram { width: 100%; max-width: 100%; margin: 2rem auto; display: block; }
+
+/* KPI */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; }
+.kpi-card { background: linear-gradient(135deg, #fff, #f8f6f0); border-radius: 12px; padding: 1.5rem; text-align: center; border: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.kpi-card .kpi-num { font-family: 'DM Mono', monospace; font-size: 1.8rem; color: #0d2847; font-weight: 500; }
+.kpi-card .kpi-label { font-size: 0.78rem; color: #888; margin-top: 0.3rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.kpi-card .kpi-sub { font-size: 0.78rem; color: #1a6d8a; margin-top: 0.2rem; }
+
+/* Gallery */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+.gallery-card { background: #fff; border-radius: 12px; padding: 1.2rem; text-align: center; border: 1px solid #eee; transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: block; }
+.gallery-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+.gallery-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+.gallery-name { font-weight: 600; font-size: 0.9rem; color: #0d2847; }
+.gallery-src { font-size: 0.75rem; color: #999; margin-top: 0.3rem; }
+
+/* Links */
+.resource-list { display: grid; gap: 0.8rem; }
+.resource-card { background: #fff; border-radius: 10px; padding: 1.2rem; border: 1px solid #eee; display: flex; align-items: center; gap: 1rem; text-decoration: none; color: inherit; transition: box-shadow 0.2s; }
+.resource-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+.resource-icon { font-size: 1.5rem; flex-shrink: 0; }
+.resource-info h4 { font-size: 0.95rem; color: #0d2847; }
+.resource-info p { font-size: 0.78rem; color: #999; }
+
+/* Footer */
+.footer { background: #0a1628; color: #8899aa; text-align: center; padding: 2.5rem; font-size: 0.8rem; }
+.footer a { color: #d4af37; text-decoration: none; }
+
+/* Animations */
+.reveal { opacity: 0; transform: translateY(25px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero h1 { font-size: 2.4rem; }
+  .hero-stats { gap: 1.5rem; }
+  .section { padding: 2.5rem 1.2rem; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- 1. Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">数据截至 2026 年 5 月</div>
+    <h1>东京<span>迪士尼海洋</span></h1>
+    <p class="subtitle">Tokyo DisneySea — 世界唯一以海洋为主题、由八大"海港"组成的迪士尼主题公园</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">71</div><div class="label">公顷占地面积</div></div>
+      <div class="hero-stat"><div class="num">8</div><div class="label">主题海港</div></div>
+      <div class="hero-stat"><div class="num">1,240 万</div><div class="label">年均游客（2023）</div></div>
+      <div class="hero-stat"><div class="num">¥3,350 亿</div><div class="label">初始投资</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. 项目概览 -->
+<section class="section">
+  <h2 class="section-title reveal">项目概览</h2>
+  <div class="card-grid reveal">
+    <div class="card"><h3>开业时间</h3><div class="value">2001 年 9 月 4 日</div><p>东京迪士尼度假区第二座主题公园</p></div>
+    <div class="card"><h3>开发商 / 运营商</h3><div class="value">Oriental Land Company</div><p>日本本土企业，迪士尼授权运营（非迪士尼自有）</p></div>
+    <div class="card"><h3>地理位置</h3><div class="value">35.627°N, 139.888°E</div><p>日本千叶县浦安市舞滨，东京湾沿岸</p></div>
+    <div class="card"><h3>占地面积</h3><div class="value">71 公顷</div><p>约 176 英亩，含 Fantasy Springs 扩建后</p></div>
+    <div class="card"><h3>日容量</h3><div class="value">约 55,000 人</div><p>东京迪士尼度假区整体日容量约 15 万人</p></div>
+    <div class="card"><h3>票价</h3><div class="value">¥7,900 - ¥10,900</div><p>一日护照浮动票价制（约 ¥400 - ¥550）</p></div>
+  </div>
+</section>
+
+<!-- 3. 设计与建设 -->
+<section class="section">
+  <h2 class="section-title reveal">设计与建设</h2>
+  <div class="card-grid reveal" style="grid-template-columns: 1fr 1fr;">
+    <div class="card">
+      <h3>设计方</h3>
+      <p style="margin-top:0.8rem;"><strong>Walt Disney Imagineering</strong> — 概念设计与总体创意</p>
+      <p><strong>Oriental Land Company</strong> — 业主方项目管理</p>
+      <p><strong>株式会社日建设计 (Nikken Sekkei)</strong> — 建筑设计与结构工程</p>
+      <p><strong>Landscape Design Inc.</strong> — 景观设计</p>
+    </div>
+    <div class="card">
+      <h3>施工方</h3>
+      <p style="margin-top:0.8rem;"><strong>大林组 (Obayashi Corporation)</strong> — 总承包商</p>
+      <p><strong>清水建设 (Shimizu Corporation)</strong> — 主要分包</p>
+      <p><strong>鹿岛建设 (Kajima Corporation)</strong> — 主要分包</p>
+      <p><strong>竹中工务店 (Takenaka Corporation)</strong> — Hotel MiraCosta</p>
+    </div>
+  </div>
+  <table class="data-table reveal" style="margin-top:1.5rem;">
+    <thead><tr><th>类别</th><th>供应商</th><th>供应内容</th></tr></thead>
+    <tbody>
+      <tr><td>骑乘设备</td><td>Walt Disney Imagineering (自研)</td><td>Journey to the Center of the Earth, 20,000 Leagues, Sindbad 等核心骑乘</td></tr>
+      <tr><td>骑乘设备</td><td>Vekoma</td><td>Raging Spirits 过山车轨道</td></tr>
+      <tr><td>骑乘设备</td><td>Sansei Technologies (S&S)</td><td>Tower of Terror 落塔系统</td></tr>
+      <tr><td>主题包装</td><td>Walt Disney Imagineering</td><td>全园区主题包装、火山造型、建筑立面</td></tr>
+      <tr><td>演艺特效</td><td>Disney Live Entertainment</td><td>夜间秀 "Believe! Sea of Dreams"、港口演出</td></tr>
+      <tr><td>智能化</td><td>NEC / 日立</td><td>园区票务系统、排队管理、安防监控</td></tr>
+      <tr><td>景观绿化</td><td>Landscape Design Inc.</td><td>全园区植栽设计与水景系统</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 4. 技术指标总表 -->
+<section class="section">
+  <h2 class="section-title reveal">技术指标总表</h2>
+  <table class="data-table reveal">
+    <thead><tr><th>指标</th><th>数据</th><th>备注</th></tr></thead>
+    <tbody>
+      <tr><td>总占地面积</td><td>71 公顷</td><td>含 Fantasy Springs 14 公顷扩建</td></tr>
+      <tr><td>水域面积</td><td>约 9 公顷</td><td>中央港湾 + 各海港水道</td></tr>
+      <tr><td>主题分区</td><td>8 个海港</td><td>地中海港湾、美国海滨、神秘岛、发现港、美人鱼礁湖、阿拉伯海岸、失落河三角洲、梦幻泉</td></tr>
+      <tr><td>骑乘设施数</td><td>约 25 项</td><td>含 Fantasy Springs 新增 4 项</td></tr>
+      <tr><td>演出/娱乐</td><td>15+ 场日常演出</td><td>含夜间大型水上秀</td></tr>
+      <tr><td>餐厅数量</td><td>约 45 家</td><td>涵盖快餐、主题餐厅、高档餐饮</td></tr>
+      <tr><td>商店数量</td><td>约 50 家</td><td>各海港专属商品</td></tr>
+      <tr><td>酒店客房</td><td>Hotel MiraCosta 502 间 + Fantasy Springs Hotel 475 间</td><td>共 977 间园区直营酒店</td></tr>
+      <tr><td>初始投资</td><td>¥3,350 亿 (约 $25 亿)</td><td>2001 年开业</td></tr>
+      <tr><td>Fantasy Springs 投资</td><td>¥3,200 亿 (约 $25 亿)</td><td>2024 年开业</td></tr>
+      <tr><td>累计投资</td><td>超 ¥6,550 亿 (约 $50 亿)</td><td>不含持续更新维护</td></tr>
+      <tr><td>年均游客</td><td>1,200 - 1,500 万</td><td>全球 TOP 5 主题公园（游客量）</td></tr>
+      <tr><td>员工数</td><td>约 10,000 人（兼职 + 全职）</td><td>含演职人员</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 5. 空间布局与交互地图 -->
+<section class="section">
+  <h2 class="section-title reveal">空间布局与功能分区</h2>
+
+  <div class="map-tabs reveal">
+    <button class="map-tab active" onclick="switchMap('street')">街道图</button>
+    <button class="map-tab" onclick="switchMap('sat')">卫星图</button>
+  </div>
+  <div class="map-container reveal" id="parkmap"></div>
+
+  <p style="text-align:center;margin-top:0.5rem;font-size:0.78rem;color:#999;">点击标记查看分区详情 · 坐标来源：OpenStreetMap 实测（WGS-84）</p>
+
+  <!-- SVG 示意图 -->
+  <svg viewBox="0 0 1000 850" class="svg-diagram reveal" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#00000022"/></filter>
+      <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0d2847"/></marker>
+    </defs>
+    <!-- 背景水体 -->
+    <rect x="50" y="50" width="900" height="750" rx="12" fill="#f5f1e8" stroke="#ddd" stroke-width="1.5"/>
+    <!-- 东京湾 -->
+    <rect x="50" y="680" width="900" height="120" fill="#c8dae8" opacity="0.5"/>
+    <text x="500" y="750" text-anchor="middle" fill="#8899aa" font-size="14" font-family="DM Sans">东 京 湾</text>
+
+    <!-- 地中海港湾 (入口，北侧) -->
+    <polygon points="420,60 580,60 590,100 600,150 400,150 410,100" fill="#c8956c" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+    <!-- 美国海滨 (东南) -->
+    <polygon points="650,100 800,95 830,140 810,210 740,240 640,230 620,180 630,140" fill="#4a7c9b" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+    <!-- 发现港 (东) -->
+    <polygon points="700,260 840,270 850,340 780,370 690,350 680,300" fill="#7ba7bc" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+    <!-- 神秘岛 (中心) -->
+    <ellipse cx="560" cy="400" rx="100" ry="75" fill="#8b6914" opacity="0.82" stroke="#fff" stroke-width="2.2"/>
+    <ellipse cx="560" cy="390" rx="35" ry="22" fill="#c44" opacity="0.8" stroke="#fff" stroke-width="1.5"/>
+    <!-- 美人鱼礁湖 (西侧) -->
+    <polygon points="420,280 500,270 530,310 520,380 470,420 400,410 380,350" fill="#4aa3a0" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+    <!-- 阿拉伯海岸 (西北) -->
+    <polygon points="320,170 430,160 450,200 440,270 390,300 310,280 280,220" fill="#d4a843" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+    <!-- 失落河三角洲 (西南) -->
+    <polygon points="190,330 300,310 350,340 360,410 310,470 220,480 170,430 160,370" fill="#5d8a3c" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+    <!-- 梦幻泉 (西北角) -->
+    <polygon points="100,120 300,80 330,120 320,180 250,230 120,240 80,190 70,150" fill="#b06ab3" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+
+    <!-- 中央水域 -->
+    <ellipse cx="520" cy="350" rx="160" ry="130" fill="#a8ccd8" opacity="0.5" stroke="#7ba7bc" stroke-width="1" stroke-dasharray="6,3"/>
+    <!-- 铁路环线 -->
+    <ellipse cx="530" cy="370" rx="260" ry="200" fill="none" stroke="#888" stroke-width="1.8" stroke-dasharray="8,4" opacity="0.5"/>
+
+    <!-- 标签 -->
+    <text x="500" y="90" text-anchor="middle" fill="#6b4a2e" font-size="13" font-family="DM Sans" font-weight="600">地中海港湾</text>
+    <text x="720" y="170" text-anchor="middle" fill="#fff" font-size="12" font-family="DM Sans" font-weight="600">美国海滨</text>
+    <text x="770" y="315" text-anchor="middle" fill="#2c4a5e" font-size="12" font-family="DM Sans" font-weight="600">发现港</text>
+    <text x="560" y="400" text-anchor="middle" fill="#fff" font-size="11" font-family="DM Sans" font-weight="700">神秘岛</text>
+    <text x="450" y="355" text-anchor="middle" fill="#1a5a58" font-size="12" font-family="DM Sans" font-weight="600">美人鱼礁湖</text>
+    <text x="355" y="240" text-anchor="middle" fill="#8b6914" font-size="12" font-family="DM Sans" font-weight="600">阿拉伯海岸</text>
+    <text x="270" y="400" text-anchor="middle" fill="#3a5a1e" font-size="12" font-family="DM Sans" font-weight="600">失落河三角洲</text>
+    <text x="200" y="155" text-anchor="middle" fill="#7a3a80" font-size="12" font-family="DM Sans" font-weight="600">梦幻泉</text>
+
+    <!-- 入口箭头 -->
+    <line x1="500" y1="55" x2="500" y2="30" stroke="#0d2847" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+    <text x="500" y="25" text-anchor="middle" fill="#0d2847" font-size="12" font-family="DM Sans" font-weight="600">入口 ↑</text>
+
+    <!-- 指北针 -->
+    <g transform="translate(910,80)">
+      <polygon points="0,18 6,0 12,18 6,13" fill="#0d2847"/>
+      <text x="6" y="30" text-anchor="middle" fill="#0d2847" font-size="12" font-family="DM Sans" font-weight="700">N</text>
+    </g>
+
+    <!-- 比例尺 -->
+    <line x1="100" y1="810" x2="300" y2="810" stroke="#0d2847" stroke-width="2"/>
+    <line x1="100" y1="805" x2="100" y2="815" stroke="#0d2847" stroke-width="2"/>
+    <line x1="300" y1="805" x2="300" y2="815" stroke="#0d2847" stroke-width="2"/>
+    <text x="200" y="825" text-anchor="middle" fill="#0d2847" font-size="12" font-family="DM Sans">约 200m</text>
+
+    <text x="500" y="845" text-anchor="middle" fill="#999" font-size="12" font-family="DM Sans">示意图 · 基于 OSM 坐标投影与官方地图 · 北向上</text>
+  </svg>
+
+  <!-- 园区实景图集 -->
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:#0d2847;margin-top:2.5rem;margin-bottom:1.2rem;" class="reveal">园区实景图集</h3>
+  <div class="gallery-grid reveal">
+    <a href="https://commons.wikimedia.org/wiki/Category:Tokyo_DisneySea" target="_blank" class="gallery-card">
+      <div class="gallery-emoji">🏰</div><div class="gallery-name">地中海港湾</div><div class="gallery-src">Wikimedia Commons</div>
+    </a>
+    <a href="https://commons.wikimedia.org/wiki/Category:Mount_Prometheus_(Tokyo_DisneySea)" target="_blank" class="gallery-card">
+      <div class="gallery-emoji">🌋</div><div class="gallery-name">普罗米修斯火山</div><div class="gallery-src">Wikimedia Commons</div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=Tokyo+DisneySea+Fantasy+Springs+tour" target="_blank" class="gallery-card">
+      <div class="gallery-emoji">✨</div><div class="gallery-name">梦幻泉</div><div class="gallery-src">YouTube 实拍</div>
+    </a>
+    <a href="https://commons.wikimedia.org/wiki/Category:Mermaid_Lagoon" target="_blank" class="gallery-card">
+      <div class="gallery-emoji">🧜</div><div class="gallery-name">美人鱼礁湖</div><div class="gallery-src">Wikimedia Commons</div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=Tokyo+DisneySea+Arabian+Coast" target="_blank" class="gallery-card">
+      <div class="gallery-emoji">🕌</div><div class="gallery-name">阿拉伯海岸</div><div class="gallery-src">YouTube 实拍</div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=Tokyo+DisneySea+Lost+River+Delta+Indiana+Jones" target="_blank" class="gallery-card">
+      <div class="gallery-emoji">🌴</div><div class="gallery-name">失落河三角洲</div><div class="gallery-src">YouTube 实拍</div>
+    </a>
+  </div>
+
+  <div class="card-grid reveal" style="margin-top:2rem;">
+    <div class="card"><h3>地中海港湾 (Mediterranean Harbor)</h3><p>入口 V 形港湾，意大利港口城市 Porto Paradiso 风貌。Hotel MiraCosta 直接建于港湾建筑群之上。Venetian Gondolas 可乘船游览。</p></div>
+    <div class="card"><h3>神秘岛 (Mysterious Island)</h3><p>公园核心地标——普罗米修斯火山所在地。Jules Verne 科幻主题。核心骑乘 Journey to the Center of the Earth 和 20,000 Leagues Under the Sea。</p></div>
+    <div class="card"><h3>美国海滨 (American Waterfront)</h3><p>20 世纪初纽约港 + Cape Cod 渔村。标志性 Tower of Terror 落塔、Toy Story Mania! 互动射击、Big City Vehicles 老爷车。</p></div>
+    <div class="card"><h3>美人鱼礁湖 (Mermaid Lagoon)</h3><p>小美人鱼 IP 专属区，King Triton's Castle 室内大型游乐场。Flying Fish Coaster 家庭过山车 + 多台旋转骑乘。</p></div>
+    <div class="card"><h3>阿拉伯海岸 (Arabian Coast)</h3><p>阿拉丁主题区，中东集市 + 宫殿建筑群。Magic Lamp Theater 3D 秀 + Jasmine's Flying Carpets + Sindbad's Storybook Voyage 乘船。</p></div>
+    <div class="card"><h3>失落河三角洲 (Lost River Delta)</h3><p>1930 年代中美洲考古遗址。Indiana Jones Adventure: Crystal Skull + Raging Spirits 360° 回转过山车。</p></div>
+    <div class="card"><h3>发现港 (Port Discovery)</h3><p>未来主义主题。Aquatopia 无轨水上漂行（2026 年 9 月关闭改造）+ Nemo & Friends SeaRider 模拟器。</p></div>
+    <div class="card"><h3>梦幻泉 (Fantasy Springs)</h3><p>2024 年 6 月新开，三大 Disney 动画世界：Frozen Kingdom、Rapunzel's Forest、Peter Pan's Never Land + 475 间客房酒店，投资 ¥3,200 亿。</p></div>
+  </div>
+</section>
+
+<!-- 6. 投资与建设时序 -->
+<section class="section">
+  <h2 class="section-title reveal">投资与建设时序</h2>
+  <div class="timeline reveal">
+    <div class="timeline-item">
+      <div class="timeline-year">1998 年 10 月</div>
+      <div class="timeline-title">正式动工</div>
+      <div class="timeline-desc">东京迪士尼海洋在东京湾填海地正式开工建设，项目代号 "Project Z"。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2001 年 9 月 4 日</div>
+      <div class="timeline-title">盛大开园</div>
+      <div class="timeline-desc">总投资 ¥3,350 亿（约 $25 亿），7 个主题海港 + Hotel MiraCosta 同步开放。开园首年即突破 1,200 万游客。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2004 年</div>
+      <div class="timeline-title">Tower of Terror 开幕</div>
+      <div class="timeline-desc">美国海滨新增落塔，投资约 ¥210 亿，成为乐园标志性骑乘之一。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2009 年</div>
+      <div class="timeline-title">Turtle Talk + Toy Story Mania!</div>
+      <div class="timeline-desc">美国海滨持续扩建，新增互动式娱乐体验。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2015 年</div>
+      <div class="timeline-title">Nemo & Friends SeaRider 更新</div>
+      <div class="timeline-desc">发现港 StormRider 替换为 Finding Dory 主题的 SeaRider 模拟器。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2019 年</div>
+      <div class="timeline-title">Fantasy Springs 动工</div>
+      <div class="timeline-desc">东京迪士尼海洋史上最大扩建，预算 ¥3,200 亿（约 $25 亿），新增 14 公顷。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2024 年 6 月 6 日</div>
+      <div class="timeline-title">Fantasy Springs 开业</div>
+      <div class="timeline-desc">Frozen Kingdom, Rapunzel's Forest, Peter Pan's Never Land + Fantasy Springs Hotel (475 间) 全面开放。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2026 年（进行中）</div>
+      <div class="timeline-title">25 周年 "Sparkling Jubilee"</div>
+      <div class="timeline-desc">Aquatopia 定于 2026 年 9 月关闭，发现港将启动新一轮改造。Space Mountain 式革新传说在酝酿中。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. 运营指标 -->
+<section class="section">
+  <h2 class="section-title reveal">运营指标</h2>
+  <div class="kpi-grid reveal">
+    <div class="kpi-card"><div class="kpi-num">1,240 万</div><div class="kpi-label">2023 年游客量</div><div class="kpi-sub">全球 TOP 7（TEA/AECOM）</div></div>
+    <div class="kpi-card"><div class="kpi-num">¥7,900-¥10,900</div><div class="kpi-label">一日票价</div><div class="kpi-sub">浮动定价制</div></div>
+    <div class="kpi-card"><div class="kpi-num">¥5,258 亿</div><div class="kpi-label">OLC 2024 财年营收</div><div class="kpi-sub">东京迪士尼度假区整体</div></div>
+    <div class="kpi-card"><div class="kpi-num">¥1,215 亿</div><div class="kpi-label">OLC 2024 财年净利润</div><div class="kpi-sub">净利润率约 23%</div></div>
+    <div class="kpi-card"><div class="kpi-num">~55,000</div><div class="kpi-label">日容量（人）</div><div class="kpi-sub">迪士尼海洋单独</div></div>
+    <div class="kpi-card"><div class="kpi-num">¥13,700</div><div class="kpi-label">人均消费</div><div class="kpi-sub">含门票·餐饮·商品</div></div>
+  </div>
+  <table class="data-table reveal" style="margin-top:2rem;">
+    <thead><tr><th>对比项目</th><th>东京迪士尼海洋</th><th>东京迪士尼乐园</th><th>上海迪士尼</th></tr></thead>
+    <tbody>
+      <tr><td>开业</td><td>2001</td><td>1983</td><td>2016</td></tr>
+      <tr><td>面积</td><td>71 公顷</td><td>51 公顷</td><td>390 公顷（度假区）</td></tr>
+      <tr><td>2023 游客</td><td>1,240 万</td><td>1,510 万</td><td>1,300 万+</td></tr>
+      <tr><td>运营方</td><td>Oriental Land (授权)</td><td>Oriental Land (授权)</td><td>迪士尼 + 上海申迪</td></tr>
+      <tr><td>票价</td><td>¥7,900-¥10,900</td><td>¥7,900-¥10,900</td><td>¥475-¥799</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 8. 核心技术与规模指标 -->
+<section class="section">
+  <h2 class="section-title reveal">核心技术与规模指标</h2>
+  <table class="data-table reveal">
+    <thead><tr><th>类别</th><th>指标</th><th>数据</th></tr></thead>
+    <tbody>
+      <tr><td>设施</td><td>骑乘设施总数</td><td>约 25 项（含 4 项 Fantasy Springs 新增）</td></tr>
+      <tr><td>设施</td><td>过山车</td><td>3 台：Raging Spirits, Flying Fish Coaster, Flounder's Flying Fish</td></tr>
+      <tr><td>设施</td><td>水上游乐</td><td>Aquatopia, Venetian Gondolas, Transit Steamer Line 等 5 项</td></tr>
+      <tr><td>设施</td><td>黑暗骑乘</td><td>Journey to Center of the Earth, Sindbad, 20,000 Leagues, Peter Pan 等 6 项</td></tr>
+      <tr><td>景观</td><td>标志构筑物</td><td>普罗米修斯火山 (高约 56m，内置过山车)</td></tr>
+      <tr><td>景观</td><td>水域系统</td><td>中央港湾约 9 公顷，含全部 8 个海港的连通水道</td></tr>
+      <tr><td>建筑</td><td>主题建筑</td><td>Hotel MiraCosta（世界上唯一建在迪士尼主题公园内的酒店）</td></tr>
+      <tr><td>商业</td><td>商店 + 餐厅</td><td>约 95 家（50 商店 + 45 餐饮）</td></tr>
+      <tr><td>商业</td><td>最大餐厅</td><td>Horizon Bay Restaurant（发现港，650 座）</td></tr>
+      <tr><td>交通</td><td>园区内交通</td><td>DisneySea Electric Railway（高架电气铁路）+ Transit Steamer Line（蒸汽船线）</td></tr>
+      <tr><td>交通</td><td>外部到达</td><td>JR 京叶线舞滨站 → Disney Resort Line 单轨（约 10 分钟）</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 9. 配套设施体系 -->
+<section class="section">
+  <h2 class="section-title reveal">配套设施体系</h2>
+  <div class="card-grid reveal">
+    <div class="card"><h3>园区酒店</h3><p><strong>Hotel MiraCosta</strong> (502 间) — 地中海港湾内，世界唯一迪士尼主题公园内酒店。 <strong>Fantasy Springs Hotel</strong> (475 间) — 2024 年新开，紧邻梦幻泉。房价 ¥35,000-¥300,000+/晚。</p></div>
+    <div class="card"><h3>度假区酒店</h3><p>Tokyo Disneyland Hotel, Disney Ambassador Hotel, Tokyo Disney Celebration Hotel 等共 6 家迪士尼官方酒店。</p></div>
+    <div class="card"><h3>餐饮</h3><p>45 家餐厅覆盖快餐、主题餐厅、高档套餐。SS Columbia Dining Room（美国海滨邮轮上）、Magellan's（地中海港湾）为顶级餐厅。人均 ¥1,200-¥8,000。</p></div>
+    <div class="card"><h3>停车</h3><p>东京迪士尼度假区停车场约 20,000 台容量。普通车 ¥2,500/日。</p></div>
+    <div class="card"><h3>交通</h3><p>JR 京叶线舞滨站步行 5 分钟，Disney Resort Line 单轨环线连接各园区/酒店。成田机场直达巴士约 80 分钟。</p></div>
+    <div class="card"><h3>商业 / 购物</h3><p>Ikspiari 购物中心（迪士尼小镇）位于舞滨站旁，140+ 商铺 + 电影院。园区内 50 家商店，各海港独家商品。</p></div>
+  </div>
+</section>
+
+<!-- 10. 最新动态与扩建展望 -->
+<section class="section">
+  <h2 class="section-title reveal">最新动态与扩建展望</h2>
+  <div class="card-grid reveal">
+    <div class="card"><h3>25 周年 Sparkling Jubilee</h3><p>2026 年 4 月启动，贯穿全年。全新日间港口秀、限定商品、主题装饰。同步推出 Fantasy Springs 两周年纪念活动。</p></div>
+    <div class="card"><h3>Aquatopia 关闭与发现港改造</h3><p>2026 年 9 月起 Aquatopia 永久关闭，发现港将启动新一轮大型改造。传说可能引入 Wreck-It Ralph 或 Big Hero 6 主题骑乘。</p></div>
+    <div class="card"><h3>Space Mountain 级别大修传闻</h3><p>继东京迪士尼乐园 Space Mountain 2027 年全面翻新后，海洋侧传说也将获得类似级别的核心骑乘大修，可能在 2028-2030 期间实施。</p></div>
+  </div>
+</section>
+
+<!-- 11. 延伸资料库 -->
+<section class="section">
+  <h2 class="section-title reveal">延伸资料库</h2>
+  <div class="resource-list reveal">
+    <a href="https://commons.wikimedia.org/wiki/Category:Tokyo_DisneySea" target="_blank" class="resource-card">
+      <span class="resource-icon">📷</span>
+      <div class="resource-info"><h4>Wikimedia Commons — Tokyo DisneySea</h4><p>自由版权高清图片集，数千张园区实景照片</p></div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=Tokyo+DisneySea+full+tour+4K" target="_blank" class="resource-card">
+      <span class="resource-icon">🎬</span>
+      <div class="resource-info"><h4>YouTube — Tokyo DisneySea 4K 全景游览</h4><p>大量 4K 步行游览、骑乘 POV、夜间秀完整版视频</p></div>
+    </a>
+    <a href="https://www.tokyodisneyresort.jp/en/tds/" target="_blank" class="resource-card">
+      <span class="resource-icon">🏰</span>
+      <div class="resource-info"><h4>Tokyo Disney Resort 官方网站</h4><p>实时运营信息、票务、园区地图、活动日程</p></div>
+    </a>
+    <a href="https://tdrexplorer.com/category/tokyo-disneysea/" target="_blank" class="resource-card">
+      <span class="resource-icon">📝</span>
+      <div class="resource-info"><h4>TDR Explorer — 深度攻略博客</h4><p>英文最权威的东京迪士尼度假区深度攻略与新闻解读</p></div>
+    </a>
+    <a href="https://www.themeparx.com/tokyo-disneysea/" target="_blank" class="resource-card">
+      <span class="resource-icon">🔧</span>
+      <div class="resource-info"><h4>ThemeParx — Tokyo DisneySea 供应商数据库</h4><p>骑乘制造商、承包商、设计与施工详情</p></div>
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>Tokyo DisneySea 案例研究 · 数据截至 2026 年 5 月 · 坐标 OSM 验证 (WGS-84)</p>
+  <p style="margin-top:0.4rem;">资金来源：公开报道、TEA/AECOM 年度报告、Oriental Land Company 财报、Wikipedia、OpenStreetMap</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// === Leaflet Maps ===
+const parkCenter = [35.6260, 139.8845];
+
+function makeStreetLayer() {
+  return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; ESRI',
+    maxZoom: 19
+  });
+}
+function makeSatLayer() {
+  return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; ESRI',
+    maxZoom: 19
+  });
+}
+
+const map = L.map('parkmap', {
+  center: parkCenter,
+  zoom: 16,
+  scrollWheelZoom: false,
+  zoomControl: true,
+  layers: [makeStreetLayer()]
+});
+
+const satLayer = makeSatLayer();
+let currentBase = 'street';
+
+window.switchMap = function(type) {
+  document.querySelectorAll('.map-tab').forEach(b => b.classList.remove('active'));
+  if (type === 'street') {
+    map.removeLayer(satLayer);
+    map.addLayer(makeStreetLayer());
+    document.querySelector('.map-tab:first-child').classList.add('active');
+  } else {
+    map.eachLayer(l => { if (l instanceof L.TileLayer) map.removeLayer(l); });
+    map.addLayer(satLayer);
+    document.querySelector('.map-tab:last-child').classList.add('active');
+  }
+  currentBase = type;
+};
+
+// OSM-verified area coordinates
+const areas = [
+  { name: '地中海港湾', lat: 35.6273, lng: 139.8882, color: '#c8956c', textColor: '#6b4a2e', desc: '入口港湾 · Porto Paradiso 意大利风情' },
+  { name: '美国海滨', lat: 35.6247, lng: 139.8876, color: '#4a7c9b', textColor: '#fff', desc: '20 世纪初纽约港 & Cape Cod' },
+  { name: '神秘岛', lat: 35.6258, lng: 139.8846, color: '#8b6914', textColor: '#fff', desc: '普罗米修斯火山 · Jules Verne 科幻' },
+  { name: '发现港', lat: 35.6254, lng: 139.8830, color: '#7ba7bc', textColor: '#2c4a5e', desc: '未来主义 Marina · Aquatopia' },
+  { name: '美人鱼礁湖', lat: 35.6270, lng: 139.8825, color: '#4aa3a0', textColor: '#fff', desc: '小美人鱼水下王国 · King Triton Castle' },
+  { name: '阿拉伯海岸', lat: 35.6284, lng: 139.8822, color: '#d4a843', textColor: '#6b4a2e', desc: '阿拉丁 · Magic Lamp Theater' },
+  { name: '失落河三角洲', lat: 35.6269, lng: 139.8806, color: '#5d8a3c', textColor: '#fff', desc: '印第安纳琼斯 · Raging Spirits' },
+  { name: '梦幻泉', lat: 35.6284, lng: 139.8800, color: '#b06ab3', textColor: '#fff', desc: '2024 新开 · Frozen + Rapunzel + Peter Pan' },
+];
+
+areas.forEach(a => {
+  const icon = L.divIcon({
+    className: 'custom-icon',
+    html: `<div style="background:${a.color};color:${a.textColor};padding:4px 10px;border-radius:4px;font-size:12px;font-weight:600;white-space:nowrap;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.3);font-family:'DM Sans',sans-serif;">${a.name}</div>`,
+    iconAnchor: [40, 14]
+  });
+  L.marker([a.lat, a.lng], { icon }).addTo(map).bindPopup(`<b>${a.name}</b><br><small>${a.desc}</small>`);
+});
+
+// Park boundary
+L.polygon([
+  [35.6290, 139.8795], [35.6290, 139.8905],
+  [35.6238, 139.8905], [35.6238, 139.8795]
+], { color: '#d4af37', weight: 2, fill: false, dashArray: '6,4' }).addTo(map);
+
+setTimeout(() => map.invalidateSize(), 1000);
+
+// === Intersection Observer ===
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discovery Cove 案例研究 — 奥兰多文旅项目深度分析</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+:root {
+  --ocean-deep: #082B3A;
+  --ocean: #0F4C5C;
+  --teal: #1A7A7A;
+  --teal-light: #3BA99C;
+  --coral: #E8784A;
+  --coral-light: #F49B7A;
+  --gold: #D4A853;
+  --sand: #F2E4D0;
+  --sand-light: #FBF6EF;
+  --cream: #FEFCF8;
+  --white: #FFFFFF;
+  --text: #1C1C1C;
+  --text-muted: #5C5C5C;
+  --text-light: #8C8C8C;
+  --border: #E8DCCF;
+  --shadow-sm: 0 1px 3px rgba(8,43,58,0.06);
+  --shadow-md: 0 4px 20px rgba(8,43,58,0.08);
+  --shadow-lg: 0 12px 40px rgba(8,43,58,0.12);
+  --shadow-xl: 0 24px 60px rgba(8,43,58,0.16);
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+  --font-mono: 'DM Mono', 'SF Mono', monospace;
+  --max-width: 1240px;
+  --nav-h: 64px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Navigation ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--nav-h);
+  background: rgba(8,43,58,0.92);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center; gap: 2px;
+  padding: 0 20px; overflow-x: auto;
+}
+nav a {
+  color: rgba(255,255,255,0.72); text-decoration: none;
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.02em;
+  padding: 6px 12px; border-radius: 20px; white-space: nowrap;
+  transition: all 0.25s ease;
+}
+nav a:hover, nav a.active { color: #fff; background: rgba(255,255,255,0.1); }
+
+/* ── Hero ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(170deg, #04161E 0%, #082B3A 25%, #0A3D4F 50%, #0F4C5C 75%, #0D3F4E 100%);
+  overflow: hidden;
+  text-align: center; padding: 120px 24px 80px;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 80%, rgba(26,122,122,0.25) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 20%, rgba(212,168,83,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(59,169,156,0.15) 0%, transparent 70%);
+}
+.hero-waves {
+  position: absolute; bottom: -2px; left: 0; right: 0; height: 200px;
+  opacity: 0.5;
+}
+.hero-content { position: relative; z-index: 2; max-width: 800px; }
+.hero-badge {
+  display: inline-block;
+  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--teal-light); border: 1px solid rgba(59,169,156,0.35);
+  padding: 6px 18px; border-radius: 20px; margin-bottom: 32px;
+}
+.hero h1 {
+  font-family: var(--font-display); font-weight: 900; font-size: clamp(3rem, 7vw, 5.5rem);
+  color: #fff; line-height: 1.08; letter-spacing: -0.015em;
+  margin-bottom: 20px;
+}
+.hero h1 span { color: var(--teal-light); font-style: italic; }
+.hero .subtitle {
+  font-size: 1.1rem; color: rgba(255,255,255,0.6); font-weight: 400;
+  letter-spacing: 0.04em; margin-bottom: 48px;
+}
+.hero-stats {
+  display: flex; gap: 48px; justify-content: center; flex-wrap: wrap;
+}
+.hero-stat { text-align: center; }
+.hero-stat-num {
+  font-family: var(--font-display); font-size: 2.6rem; font-weight: 700;
+  color: #fff; line-height: 1;
+}
+.hero-stat-label {
+  font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 6px;
+  letter-spacing: 0.05em;
+}
+
+/* ── Sections ── */
+section { padding: 100px 24px; }
+.section-inner { max-width: var(--max-width); margin: 0 auto; }
+.section-label {
+  font-family: var(--font-mono); font-size: 0.675rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 12px;
+}
+.section-title {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3rem); color: var(--ocean-deep);
+  letter-spacing: -0.01em; margin-bottom: 16px; line-height: 1.2;
+}
+.section-desc {
+  font-size: 1.05rem; color: var(--text-muted); max-width: 640px;
+  margin-bottom: 60px; line-height: 1.7;
+}
+.sub-heading {
+  font-family: var(--font-display); font-size: 1.2rem; color: var(--ocean-deep);
+  margin: 32px 0 16px;
+}
+
+/* ── Overview Cards ── */
+.overview-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+.ov-card {
+  background: var(--white); border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.ov-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+.ov-card-icon { font-size: 1.8rem; margin-bottom: 14px; }
+.ov-card-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); margin-bottom: 8px; }
+.ov-card-value { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--ocean-deep); line-height: 1.2; }
+.ov-card-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+
+/* ── Info card (shared) ── */
+.info-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 28px 24px; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border); transition: box-shadow 0.3s;
+}
+.info-card:hover { box-shadow: var(--shadow-md); }
+.info-card-icon { font-size: 1.5rem; margin-bottom: 12px; }
+.info-card-label { font-size: 0.7rem; color: var(--text-light); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
+.info-card-value { font-size: 1rem; font-weight: 600; color: var(--ocean-deep); line-height: 1.4; }
+
+/* ── Maps ── */
+.site-plan-wrap {
+  background: var(--white); border-radius: var(--radius-xl);
+  padding: 32px; box-shadow: var(--shadow-md);
+  border: 1px solid var(--border); margin-bottom: 48px;
+}
+
+/* ── SVG site plan ── */
+.map-wrapper {
+  background: var(--white); border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg); border: 1px solid var(--border);
+  overflow: hidden;
+}
+.map-header {
+  background: var(--ocean-deep); padding: 20px 28px;
+  display: flex; align-items: center; gap: 12px;
+}
+.map-dot { width: 10px; height: 10px; border-radius: 50%; }
+.map-dot.front { background: var(--gold); }
+.map-dot.middle { background: var(--teal-light); }
+.map-dot.back { background: #6BB5D0; }
+.map-header span { color: rgba(255,255,255,0.7); font-size: 0.8rem; }
+.map-header strong { color: #fff; }
+.map-svg-wrap {
+  padding: 40px 28px 32px;
+  display: flex; justify-content: center;
+  background: linear-gradient(180deg, #FBF6EF 0%, #FEFCF8 40%, #F2EAE0 100%);
+}
+.map-svg-wrap svg { max-width: 100%; height: auto; }
+
+.zones-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px; padding: 0 28px 40px;
+}
+.zone-card {
+  border-radius: var(--radius); padding: 24px;
+  border-left: 4px solid;
+}
+.zone-card.front { background: #FEF9F0; border-color: var(--gold); }
+.zone-card.middle { background: #F2FAF9; border-color: var(--teal); }
+.zone-card.back { background: #F4F8FA; border-color: #6BB5D0; }
+.zone-card h3 { font-family: var(--font-display); font-size: 1.3rem; color: var(--ocean-deep); margin-bottom: 4px; }
+.zone-card .zone-en { font-size: 0.75rem; color: var(--text-light); margin-bottom: 14px; }
+.zone-card ul { list-style: none; }
+.zone-card li {
+  font-size: 0.9rem; color: var(--text); padding: 5px 0;
+  display: flex; align-items: flex-start; gap: 8px;
+  line-height: 1.45;
+}
+.zone-card li::before { content: '•'; color: var(--teal); font-weight: 700; flex-shrink: 0; }
+.zone-card .tag {
+  display: inline-block; font-size: 0.65rem; font-weight: 600;
+  padding: 2px 8px; border-radius: 10px; margin-left: 4px;
+  letter-spacing: 0.04em;
+}
+.tag.temp { background: #FDE8E0; color: #C05030; }
+.tag.size { background: #E0F0F0; color: #1A6B6B; }
+.tag.new { background: #FEF0D0; color: #8B6914; }
+
+/* ── Investment Timeline ── */
+.timeline { position: relative; padding-left: 48px; }
+.timeline::before {
+  content: ''; position: absolute; left: 19px; top: 8px; bottom: 8px;
+  width: 2px; background: var(--border);
+}
+.tl-item { position: relative; margin-bottom: 48px; }
+.tl-item:last-child { margin-bottom: 0; }
+.tl-dot {
+  position: absolute; left: -38px; top: 6px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--teal); border: 3px solid var(--sand-light);
+  box-shadow: 0 0 0 4px var(--cream);
+}
+.tl-item.future .tl-dot { background: var(--gold); }
+.tl-year {
+  font-family: var(--font-mono); font-size: 0.75rem; font-weight: 500;
+  color: var(--teal); letter-spacing: 0.04em;
+}
+.tl-item.future .tl-year { color: var(--gold); }
+.tl-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--ocean-deep); margin: 4px 0 8px; }
+.tl-desc { font-size: 1rem; color: var(--text-muted); line-height: 1.65; }
+.tl-meta {
+  display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px;
+}
+.tl-meta-item {
+  font-size: 0.82rem; color: var(--text-light);
+  display: flex; align-items: center; gap: 4px;
+}
+
+/* ── KPI Dashboard ── */
+.kpi-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px; margin-bottom: 48px;
+}
+.kpi-card {
+  background: var(--white); border-radius: var(--radius-lg);
+  padding: 28px; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border); text-align: center;
+  transition: box-shadow 0.3s ease;
+}
+.kpi-card:hover { box-shadow: var(--shadow-md); }
+.kpi-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-light); margin-bottom: 10px; }
+.kpi-value { font-family: var(--font-display); font-size: 2.8rem; font-weight: 700; color: var(--ocean-deep); line-height: 1.1; }
+.kpi-sub { font-size: 0.82rem; color: var(--text-muted); margin-top: 6px; }
+
+.parent-kpi {
+  background: linear-gradient(135deg, var(--ocean-deep), #0A3D4F);
+  color: #fff; border: none; border-radius: var(--radius-xl);
+  padding: 36px;
+}
+.parent-kpi .kpi-label { color: rgba(255,255,255,0.55); }
+.parent-kpi .kpi-value { color: #fff; }
+.parent-kpi .kpi-sub { color: rgba(255,255,255,0.6); }
+.parent-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 24px; margin-top: 24px; text-align: center;
+}
+.parent-stat-num { font-family: var(--font-display); font-size: 2rem; font-weight: 700; }
+.parent-stat-label { font-size: 0.72rem; color: rgba(255,255,255,0.55); margin-top: 4px; letter-spacing: 0.04em; }
+
+/* ── Tables ── */
+.tech-table-wrap {
+  background: var(--white); border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md); border: 1px solid var(--border);
+  overflow: hidden;
+}
+.tech-table-wrap .table-header {
+  background: var(--ocean-deep); padding: 18px 28px;
+}
+.tech-table-wrap .table-header h3 { color: #fff; font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; }
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--text-light);
+  text-align: left; padding: 16px 28px;
+  border-bottom: 2px solid var(--border);
+  background: var(--sand-light);
+}
+tbody td {
+  padding: 16px 28px; font-size: 0.92rem; color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: rgba(59,169,156,0.04); }
+td.highlight { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--ocean-deep); }
+
+.data-table {
+  width: 100%; border-collapse: collapse;
+  background: var(--white); border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+.data-table th {
+  background: var(--ocean-deep); color: var(--white);
+  font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 14px 20px; text-align: left;
+}
+.data-table td {
+  padding: 12px 20px; font-size: 0.88rem; color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table .cat-cell { font-weight: 600; color: var(--ocean-deep); background: var(--sand-light); }
+
+/* ── Animal Grid ── */
+.animal-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+.animal-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 24px; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  display: flex; align-items: flex-start; gap: 16px;
+  transition: box-shadow 0.25s ease;
+}
+.animal-card:hover { box-shadow: var(--shadow-md); }
+.animal-emoji { font-size: 2.4rem; flex-shrink: 0; line-height: 1; }
+.animal-name { font-weight: 600; color: var(--ocean-deep); font-size: 1rem; }
+.animal-detail { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+
+/* ── Amenities Grid ── */
+.amenities-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+.amenity-item {
+  background: var(--white); border-radius: var(--radius);
+  padding: 24px 20px; text-align: center;
+  box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+}
+.amenity-icon { font-size: 2rem; margin-bottom: 8px; }
+.amenity-name { font-weight: 600; font-size: 0.9rem; color: var(--ocean-deep); }
+.amenity-note { font-size: 0.75rem; color: var(--text-light); margin-top: 2px; }
+
+/* ─── Grids ── */
+.cards-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.cards-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+/* ── Summary Table ── */
+.summary-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  background: var(--white); border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg); border: 1px solid var(--border);
+  overflow: hidden;
+}
+.summary-table thead th {
+  background: var(--ocean-deep); color: #fff;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 18px 28px; text-align: left;
+}
+.summary-table thead th:first-child { border-radius: var(--radius-xl) 0 0 0; }
+.summary-table thead th:last-child { border-radius: 0 var(--radius-xl) 0 0; }
+.summary-table tbody td {
+  padding: 14px 28px; font-size: 0.9rem; color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+.summary-table tbody tr:last-child td { border-bottom: none; }
+.summary-table tbody tr:hover { background: rgba(59,169,156,0.04); }
+.summary-table .cat-cell {
+  font-weight: 700; color: var(--teal); font-size: 0.82rem;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  background: var(--sand-light);
+}
+
+/* ── Footer ── */
+footer {
+  background: var(--ocean-deep); color: rgba(255,255,255,0.5);
+  text-align: center; padding: 48px 24px; font-size: 0.8rem;
+}
+footer strong { color: rgba(255,255,255,0.8); }
+
+/* ── Reveal Animation ── */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .cards-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  nav { gap: 0; overflow-x: auto; justify-content: flex-start; padding: 0 12px; }
+  nav a { font-size: 0.68rem; padding: 6px 10px; white-space: nowrap; }
+  .hero-stats { gap: 24px; }
+  .hero-stat-num { font-size: 2rem; }
+  section { padding: 64px 18px; }
+  .zones-grid { grid-template-columns: 1fr; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .kpi-value { font-size: 2rem; }
+  .cards-4, .cards-3, .cards-2 { grid-template-columns: 1fr; }
+  table { font-size: 0.8rem; }
+  thead th, tbody td { padding: 12px 14px; }
+  .timeline { padding-left: 32px; }
+  .tl-dot { left: -22px; }
+}
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+  .overview-grid { grid-template-columns: 1fr; }
+  .summary-table { font-size: 0.75rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav id="nav">
+  <a href="#hero">总览</a>
+  <a href="#overview">概览</a>
+  <a href="#design">设计与建设</a>
+  <a href="#summary">技术总表</a>
+  <a href="#layout">空间布局</a>
+  <a href="#investment">投资时序</a>
+  <a href="#operations">运营指标</a>
+  <a href="#water">水体技术</a>
+  <a href="#animals">动物生态</a>
+  <a href="#amenities">配套设施</a>
+  <a href="#references">资料库</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Cultural Tourism Case Study · 数据截至 2026 年 5 月</div>
+    <h1>Discovery Cove<br><span>案例研究</span></h1>
+    <p class="subtitle">奥兰多文旅项目深度分析 · 投资 · 建设 · 空间 · 运营</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">14.2<small style="font-size:1rem"> 公顷</small></div>
+        <div class="hero-stat-label">占地面积</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">~1,300</div>
+        <div class="hero-stat-label">日最大容量（人）</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">800<small style="font-size:1rem"> 万+</small></div>
+        <div class="hero-stat-label">累计游客（2000–2025）</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">¥4.35–6.53亿</div>
+        <div class="hero-stat-label">估算年营收（$60–90M）</div>
+      </div>
+    </div>
+  </div>
+  <svg class="hero-waves" viewBox="0 0 1440 200" preserveAspectRatio="none">
+    <path fill="rgba(59,169,156,0.15)" d="M0,64 C240,160 480,0 720,80 C960,160 1200,0 1440,64 L1440,200 L0,200 Z"/>
+    <path fill="rgba(26,122,122,0.1)" d="M0,120 C320,40 640,160 960,80 C1120,40 1280,120 1440,80 L1440,200 L0,200 Z"/>
+  </svg>
+</section>
+
+<!-- Overview -->
+<section id="overview">
+  <div class="section-inner">
+    <div class="section-label">01 — 项目概览</div>
+    <h2 class="section-title">全包式一日度假村</h2>
+    <p class="section-desc">Discovery Cove（探索湾）是 United Parks & Resorts 旗下高端精品公园，毗邻 SeaWorld Orlando，以严格限流和全包模式打造私密热带绿洲体验，开创了主题公园行业的"反主题公园"范式。</p>
+
+    <div class="overview-grid reveal">
+      <div class="ov-card">
+        <div class="ov-card-icon">📅</div>
+        <div class="ov-card-label">开业时间</div>
+        <div class="ov-card-value">2000.7.1</div>
+        <div class="ov-card-sub">运营已超过 25 年</div>
+      </div>
+      <div class="ov-card">
+        <div class="ov-card-icon">🏗️</div>
+        <div class="ov-card-label">开发商</div>
+        <div class="ov-card-value" style="font-size:1.3rem;">Busch Entertainment</div>
+        <div class="ov-card-sub">安海斯-布希集团旗下（现 United Parks）</div>
+      </div>
+      <div class="ov-card">
+        <div class="ov-card-icon">📍</div>
+        <div class="ov-card-label">地理位置</div>
+        <div class="ov-card-value" style="font-size:1.2rem;">Orlando, FL</div>
+        <div class="ov-card-sub">6000 Discovery Cove Way · 毗邻 SeaWorld</div>
+      </div>
+      <div class="ov-card">
+        <div class="ov-card-icon">📐</div>
+        <div class="ov-card-label">总占地面积</div>
+        <div class="ov-card-value">14.2 公顷</div>
+        <div class="ov-card-sub">核心区约 14.2 公顷 · 含景观带 24.3 公顷</div>
+      </div>
+      <div class="ov-card">
+        <div class="ov-card-icon">👥</div>
+        <div class="ov-card-label">日容量限制</div>
+        <div class="ov-card-value">~1,000–1,300</div>
+        <div class="ov-card-sub">严格预约制 · 确保不拥挤</div>
+      </div>
+      <div class="ov-card">
+        <div class="ov-card-icon">🎟️</div>
+        <div class="ov-card-label">门票价格 (2025)</div>
+        <div class="ov-card-value" style="font-size:1.3rem;">¥1,718–2,654</div>
+        <div class="ov-card-sub">含海豚游泳 · 全包式一日体验（$237–$366）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Design & Construction -->
+<section id="design" style="background:var(--sand-light);">
+  <div class="section-inner">
+    <div class="section-label">02 — Design & Construction</div>
+    <h2 class="section-title">设计与建设 · 供应商体系</h2>
+    <p class="section-desc">从 2000 年 Busch Entertainment 初建到 2026 年 Project Canopy 酒店落成，Discovery Cove 采用"核心开业 + 持续迭代"的长周期策略，顶级设计机构持续参与。</p>
+
+    <h3 class="sub-heading" style="margin-top:0;">设计方</h3>
+    <div class="cards-4 reveal">
+      <div class="info-card"><div class="info-card-icon">🏛️</div><div class="info-card-label">建筑设计</div><div class="info-card-value">Cooper Carry (Atlanta)<br><span style="font-size:0.75rem;color:var(--text-light)">Project Canopy 酒店主创设计</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🌿</div><div class="info-card-label">景观设计</div><div class="info-card-value">EDSA (Fort Lauderdale)<br><span style="font-size:0.75rem;color:var(--text-light)">热带景观与水体环境营造</span></div></div>
+      <div class="info-card"><div class="info-card-icon">📐</div><div class="info-card-label">土木工程</div><div class="info-card-value">AtkinsRéalis<br><span style="font-size:0.75rem;color:var(--text-light)">基础设施与结构工程设计</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🎨</div><div class="info-card-label">概念创意</div><div class="info-card-value">Busch Entertainment 内部团队<br><span style="font-size:0.75rem;color:var(--text-light)">"反主题公园"全包度假村概念原创</span></div></div>
+    </div>
+
+    <h3 class="sub-heading">主要承包商与供应商</h3>
+    <table class="data-table reveal">
+      <thead><tr><th>类别</th><th>供应商 / 承包商</th><th>供应/施工内容</th></tr></thead>
+      <tbody>
+        <tr><td class="cat-cell">水体工程</td><td>Life Support Systems (LSS) 专业团队</td><td>超过15,000m³人工水体 · 盐水/淡水双系统 · 温控过滤</td></tr>
+        <tr><td class="cat-cell">珊瑚礁建造</td><td>人工礁体专业施工</td><td>Grand Reef 约3,785+m³ · 水下洞穴 · 峡谷地形 · 125+物种栖息地</td></tr>
+        <tr><td class="cat-cell">沙滩景观</td><td>进口白沙供应商</td><td>3,000吨白沙 · Serenity Bay + Grand Reef沙滩</td></tr>
+        <tr><td class="cat-cell">鸟舍建造</td><td>专业鸟舍承包商</td><td>Explorer's Aviary 自由飞行鸟舍 · 瀑布屏障隔离系统</td></tr>
+        <tr><td class="cat-cell">酒店建设</td><td>总承包商（招标中）</td><td>Project Canopy · 250间 · 约26,816m² · 树顶餐厅约669m² · 水疗约1,022m²</td></tr>
+        <tr><td class="cat-cell">潜水装备</td><td>专业潜水设备供应商</td><td>浮潜面镜 · 呼吸管 · 脚蹼 · SeaVenture 水下头盔系统</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Technical Summary Table (moved to page 3) -->
+<section id="summary">
+  <div class="section-inner">
+    <div class="section-label">03 — Master Data Table</div>
+    <h2 class="section-title">Discovery Cove 完整技术参数</h2>
+    <p class="section-desc">涵盖投资、空间、水体、运营、动物五大维度的综合技术指标汇总。</p>
+
+    <div class="reveal" style="overflow-x:auto;">
+      <table class="summary-table">
+        <thead>
+          <tr><th>维度</th><th>指标</th><th>数据</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="cat-cell" rowspan="4">📌 基础信息</td><td>项目名称</td><td>Discovery Cove（探索湾）</td></tr>
+          <tr><td>开业时间</td><td>2000年7月1日</td></tr>
+          <tr><td>位置</td><td>6000 Discovery Cove Way, Orlando, FL 32821</td></tr>
+          <tr><td>运营商</td><td>United Parks & Resorts（NYSE: PRKS）</td></tr>
+
+          <tr><td class="cat-cell" rowspan="5">📐 空间规模</td><td>核心园区面积</td><td>约 14.2 公顷</td></tr>
+          <tr><td>含景观带总面积</td><td>~24.3 公顷</td></tr>
+          <tr><td>功能分区数</td><td>三大区（前区·中区·后区）</td></tr>
+          <tr><td>主要水体数量</td><td>5 个（潟湖×2 · 泳池×1 · 河流×1 · 绿洲×1）</td></tr>
+          <tr><td>人工沙滩</td><td>3,000 吨进口白沙</td></tr>
+
+          <tr><td class="cat-cell" rowspan="6">💰 投资数据</td><td>初始投资 (2000)</td><td>未公开披露</td></tr>
+          <tr><td>Grand Reef 扩建 (2011)</td><td>材料成本 >¥1.23亿（$1,700万）</td></tr>
+          <tr><td>Freshwater Oasis (2012)</td><td>未单独披露</td></tr>
+          <tr><td>Project Canopy 酒店 (2024–2026)</td><td>估算 >¥7.25亿（$1亿）· 250间 · 约 26,816 m²</td></tr>
+          <tr><td>酒店设计师</td><td>Cooper Carry (建筑) · EDSA (景观) · AtkinsRéalis (土木)</td></tr>
+          <tr><td>投资回报预期</td><td>CEO 预计股权回报率 >20%</td></tr>
+
+          <tr><td class="cat-cell" rowspan="5">🌊 水体技术</td><td>Dolphin Lagoon</td><td>约 9,085 m³ · 盐水 · 22–24°C</td></tr>
+          <tr><td>The Grand Reef</td><td>约 3,785+ m³ · 盐水 · 22–24°C · 1.0 公顷</td></tr>
+          <tr><td>Serenity Bay</td><td>约 3,123 m³ · 淡水 · 29–31°C</td></tr>
+          <tr><td>Wind-Away River</td><td>循环系统 · 淡水 · 加热恒温</td></tr>
+          <tr><td>Freshwater Oasis</td><td>涉水池 · 淡水 · 加热恒温</td></tr>
+
+          <tr><td class="cat-cell" rowspan="5">📊 运营指标</td><td>日容量上限</td><td>~1,000–1,300 人</td></tr>
+          <tr><td>年游客量（估算）</td><td>~30–35 万人次</td></tr>
+          <tr><td>累计游客 (2000–2025)</td><td>800 万+ 人次</td></tr>
+          <tr><td>门票价格 (2025)</td><td>¥1,718–2,654（$237–$366·含海豚） · ¥1,225–1,805（$169–$249·基础）</td></tr>
+          <tr><td>估算年营收</td><td>¥4.35–6.53亿（$6,000–9,000万）</td></tr>
+
+          <tr><td class="cat-cell" rowspan="4">🦜 动物生态</td><td>海洋物种</td><td>125+种 · ~10,000只（Grand Reef）</td></tr>
+          <tr><td>鸟类</td><td>250+只 · 自由飞行（Explorer's Aviary）</td></tr>
+          <tr><td>哺乳动物</td><td>大西洋宽吻海豚 · 亚洲小爪水獭 · 白顶狨猴</td></tr>
+          <tr><td>特色物种</td><td>鲨鱼（隔离观赏）· 鹰鳐 · 火烈鸟</td></tr>
+
+          <tr><td class="cat-cell" rowspan="3">🔗 联动生态</td><td>姊妹公园</td><td>SeaWorld Orlando · Aquatica Orlando</td></tr>
+          <tr><td>联票权益</td><td>14天无限次进入 SeaWorld + Aquatica</td></tr>
+          <tr><td>商业模式</td><td>全包式一日度假村 · 预约制限流</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Spatial Layout -->
+<section id="layout" style="background:var(--sand-light);">
+  <div class="section-inner">
+    <div class="section-label">04 — 空间布局与功能分区</div>
+    <h2 class="section-title">三区递进 · 从绿洲到深海</h2>
+    <p class="section-desc">园区自北向南分三大区域，空间叙事从入口接待→海豚互动→深海探索逐级展开。Wind-Away River 作为环形水系串联全局。</p>
+
+    <!-- Interactive Map: Leaflet + OpenStreetMap -->
+    <div class="site-plan-wrap">
+      <div id="parkmap" style="width:100%;height:480px;border-radius:12px;z-index:0;"></div>
+      <p style="text-align:center;font-size:0.72rem;color:var(--text-light);margin-top:8px;">▲ 交互地图：ESRI 全球街道图 + 卫星图，可缩放平移。标注基于卫星影像综合研判。</p>
+    </div>
+
+    <!-- Satellite view -->
+    <div class="site-plan-wrap" style="margin-top:24px;">
+      <h4 style="font-family:var(--font-display);font-size:1rem;color:var(--ocean-deep);margin-bottom:4px;text-align:center;">卫星影像 · 功能区参考</h4>
+      <p style="text-align:center;font-size:0.72rem;color:var(--text-light);margin-bottom:12px;">ESRI 卫星底图 × 园区标注（可缩放平移）</p>
+      <div id="satmap" style="width:100%;height:420px;border-radius:12px;z-index:0;"></div>
+    </div>
+
+    <!-- SVG Reference Diagram -->
+    <div class="map-wrapper reveal">
+      <div class="map-header">
+        <span class="map-dot front"></span><span>前区 · 迎宾探索 <strong>·</strong></span>
+        <span class="map-dot middle"></span><span>中区 · 核心互动 <strong>·</strong></span>
+        <span class="map-dot back"></span><span>后区 · 深海探索</span>
+      </div>
+      <div class="map-svg-wrap">
+        <svg viewBox="0 0 800 700" width="800" height="700" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="softShadow"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#082B3A" flood-opacity="0.1"/></filter>
+            <linearGradient id="grandReef" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3BA5C8"/><stop offset="100%" stop-color="#1A6A85"/></linearGradient>
+            <linearGradient id="dolphin" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#48B5A8"/><stop offset="100%" stop-color="#1A7068"/></linearGradient>
+            <linearGradient id="serenity" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7DD0E0"/><stop offset="100%" stop-color="#48A8B8"/></linearGradient>
+            <linearGradient id="river" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5BC0C8"/><stop offset="100%" stop-color="#38A0A8"/></linearGradient>
+            <linearGradient id="oasis" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#78C8D4"/><stop offset="100%" stop-color="#48A8B4"/></linearGradient>
+          </defs>
+
+          <path d="M120,50 Q400,20 680,50 Q760,60 770,180 Q780,350 760,500 Q740,640 620,670 Q400,695 200,670 Q60,640 40,500 Q20,350 35,180 Q45,60 120,50Z"
+                fill="#F9F3E8" stroke="#D8C8B0" stroke-width="2.5"/>
+
+          <rect x="310" y="68" width="180" height="42" rx="10" fill="#FFF" stroke="#C8B898" stroke-width="1.8" filter="url(#softShadow)"/>
+          <text x="400" y="87" text-anchor="middle" font-size="10" fill="#8B6914" font-family="DM Sans,sans-serif" font-weight="600">🏛 入口 · CHECK-IN</text>
+
+          <rect x="240" y="130" width="110" height="42" rx="8" fill="#FFF" stroke="#D8C8B0" stroke-width="1.5" filter="url(#softShadow)"/>
+          <text x="295" y="148" text-anchor="middle" font-size="12" fill="#5C5C5C" font-family="DM Sans,sans-serif">🍽️</text>
+          <text x="295" y="163" text-anchor="middle" font-size="8" fill="#8B6914" font-family="DM Sans,sans-serif" font-weight="600">Laguna Grill</text>
+
+          <path d="M55,180 Q45,280 80,330 Q120,370 190,365 Q250,355 270,310 Q290,260 260,210 Q220,170 140,175 Q80,178 55,180Z"
+                fill="url(#serenity)" opacity="0.65" stroke="#48A8B8" stroke-width="1.5"/>
+          <text x="155" y="268" text-anchor="middle" font-size="12" fill="#fff" font-family="DM Sans,sans-serif" font-weight="700">🏖️ Serenity Bay</text>
+          <text x="155" y="286" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.85)" font-family="DM Sans,sans-serif">约 3,123 m³ · 淡水 · 29–31°C</text>
+
+          <path d="M250,210 Q280,195 330,192 Q420,185 510,195 Q560,200 580,215 Q610,240 600,285 Q590,330 530,345 Q420,365 310,345 Q245,330 225,300 Q210,260 225,230 Q235,215 250,210Z"
+                fill="url(#dolphin)" opacity="0.6" stroke="#1A7068" stroke-width="2" filter="url(#softShadow)"/>
+          <text x="400" y="275" text-anchor="middle" font-size="15" fill="#fff" font-family="DM Sans,sans-serif" font-weight="700">🐬 Dolphin Lagoon</text>
+          <text x="400" y="295" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.85)" font-family="DM Sans,sans-serif">约 9,085 m³ · 盐水 · 22–24°C</text>
+
+          <rect x="140" y="280" width="75" height="48" rx="8" fill="#FFF" stroke="#C8C0B8" stroke-width="1.2" filter="url(#softShadow)"/>
+          <text x="177" y="298" text-anchor="middle" font-size="11" fill="#5C5C5C" font-family="DM Sans,sans-serif">🎒 🔒</text>
+          <text x="177" y="314" text-anchor="middle" font-size="7.5" fill="#8B6914" font-family="DM Sans,sans-serif" font-weight="600">储物柜 · 装备领取</text>
+
+          <ellipse cx="475" cy="290" rx="78" ry="50" fill="#E8F0DD" stroke="#A8C090" stroke-width="1.5" stroke-dasharray="10,4"/>
+          <text x="475" y="282" text-anchor="middle" font-size="13" fill="#5C7A4A" font-family="DM Sans,sans-serif">🦜</text>
+          <text x="475" y="300" text-anchor="middle" font-size="9" fill="#5C7A4A" font-family="DM Sans,sans-serif" font-weight="600">Explorer's Aviary</text>
+          <text x="475" y="316" text-anchor="middle" font-size="7" fill="#8C8C8C" font-family="DM Sans,sans-serif">250+只热带鸟类 · 自由飞行</text>
+
+          <path d="M640,330 Q660,320 685,325 Q710,335 715,360 Q718,390 695,405 Q665,412 642,400 Q625,385 628,358 Q630,340 640,330Z"
+                fill="url(#oasis)" opacity="0.55" stroke="#48A8B4" stroke-width="1.2"/>
+          <text x="670" y="370" text-anchor="middle" font-size="9" fill="#fff" font-family="DM Sans,sans-serif" font-weight="600">🦦 Freshwater Oasis</text>
+
+          <path d="M400,195 Q440,180 490,185 Q540,192 570,210 Q600,235 595,280 Q590,330 550,360 Q490,395 430,385 Q370,375 340,350 Q310,320 315,280 Q320,240 340,220 Q360,200 400,195Z"
+                fill="none" stroke="url(#river)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+          <path d="M400,195 Q440,180 490,185 Q540,192 570,210 Q600,235 595,280 Q590,330 550,360 Q490,395 430,385 Q370,375 340,350 Q310,320 315,280 Q320,240 340,220 Q360,200 400,195Z"
+                fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="3" stroke-dasharray="16,28" stroke-linecap="round"/>
+          <text x="530" y="300" text-anchor="middle" font-size="8" fill="#1A7068" font-family="DM Sans,sans-serif" font-weight="600" transform="rotate(20,530,300)">Wind-Away River</text>
+
+          <path d="M100,400 Q130,380 200,375 Q320,365 420,370 Q550,378 650,395 Q720,410 735,450 Q745,500 720,545 Q680,590 580,610 Q450,630 320,620 Q200,608 125,575 Q80,540 75,490 Q72,440 100,400Z"
+                fill="url(#grandReef)" opacity="0.55" stroke="#1A6A85" stroke-width="2.2" filter="url(#softShadow)"/>
+          <text x="400" y="475" text-anchor="middle" font-size="16" fill="#fff" font-family="DM Sans,sans-serif">🐠</text>
+          <text x="400" y="497" text-anchor="middle" font-size="13" fill="#fff" font-family="DM Sans,sans-serif" font-weight="700">The Grand Reef</text>
+          <text x="400" y="516" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.85)" font-family="DM Sans,sans-serif">约 3,785+ m³ · 1.0 公顷 · 盐水 · 22–24°C · 125+物种</text>
+
+          <rect x="600" y="58" width="140" height="80" rx="8" fill="rgba(255,255,255,0.92)" stroke="#D8C8B0" stroke-width="1"/>
+          <text x="610" y="74" font-size="7.5" fill="#8B6914" font-family="DM Sans,sans-serif" font-weight="700">图例 LEGEND</text>
+          <rect x="610" y="80" width="14" height="8" rx="2" fill="url(#dolphin)" opacity="0.6"/><text x="630" y="88" font-size="6.5" fill="#5C5C5C" font-family="DM Sans,sans-serif">盐水水体</text>
+          <rect x="610" y="93" width="14" height="8" rx="2" fill="url(#serenity)" opacity="0.65"/><text x="630" y="101" font-size="6.5" fill="#5C5C5C" font-family="DM Sans,sans-serif">淡水水体</text>
+          <rect x="610" y="106" width="14" height="8" rx="2" fill="#FFF" stroke="#C8B898" stroke-width="1"/><text x="630" y="114" font-size="6.5" fill="#5C5C5C" font-family="DM Sans,sans-serif">建筑物</text>
+          <ellipse cx="617" cy="123" rx="3" ry="2.5" fill="#8CB880" opacity="0.7"/><text x="630" y="126" font-size="6.5" fill="#5C5C5C" font-family="DM Sans,sans-serif">绿化植被</text>
+
+          <g transform="translate(750,68)">
+            <polygon points="0,0 -6,16 6,16" fill="#5C5C5C"/>
+            <polygon points="0,0 -4,16 0,12 4,16" fill="#FFF"/>
+            <text x="0" y="30" text-anchor="middle" font-size="9" fill="#5C5C5C" font-family="DM Sans,sans-serif" font-weight="700">N</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="zones-grid">
+        <div class="zone-card front">
+          <h3>前区 · 迎宾与探索层</h3>
+          <div class="zone-en">Front Zone — Welcome, Dining & Exploration</div>
+          <ul>
+            <li>🍽️ <span><strong>Laguna Grill</strong> 主餐厅 + Blue Bamboo Bar + Hibiscus Hideaway <span class="tag tag.new">2024翻新</span></span></li>
+            <li>🦜 <span><strong>Explorer's Aviary</strong> 探险者鸟舍 — 250+只自由飞行热带鸟类，可亲手喂食</span></li>
+            <li>🦦 <span><strong>Freshwater Oasis</strong> 淡水绿洲 — 亚洲小爪水獭 + 白顶狨猴 <span class="tag tag.new">2012新增</span></span></li>
+            <li>🌊 <span><strong>Wind-Away River</strong> 漂流河 — 加热淡水，流经鸟舍内部（瀑布隔离鸟类）</span></li>
+            <li>🏖️ <span><strong>Serenity Bay</strong> 宁静湾 — 大型淡水泳池 <span class="tag tag.temp">29–31°C</span>，进口白沙沙滩</span></li>
+            <li>🦩 <span><strong>Flamingo Point</strong> 火烈鸟点 <span class="tag tag.new">2024新增</span></span></li>
+          </ul>
+        </div>
+        <div class="zone-card middle">
+          <h3>中区 · 核心互动层</h3>
+          <div class="zone-en">Middle Zone — Dolphin Interaction Hub</div>
+          <ul>
+            <li>🐬 <span><strong>Dolphin Lagoon</strong> 海豚泻湖 — 大西洋宽吻海豚 <span class="tag tag.size">约 9,085 m³</span> <span class="tag tag.temp">22–24°C</span> 盐水</span></li>
+            <li>🤿 <span>潜水装备 & 潜水衣领取处</span></li>
+            <li>🔒 <span>中央储物柜区（推荐选此处，距各区间最近）</span></li>
+            <li>🥤 <span>小型餐饮补给站</span></li>
+          </ul>
+        </div>
+        <div class="zone-card back">
+          <h3>后区 · 深海探索层</h3>
+          <div class="zone-en">Back Zone — Deep Reef & Snorkeling</div>
+          <ul>
+            <li>🐠 <span><strong>The Grand Reef</strong> 大堡礁 — 浮潜礁湖 <span class="tag tag.size">约 3,785+ m³</span> <span class="tag tag.size">1.0 公顷</span> — 125+物种、约10,000只海洋生物</span></li>
+            <li>🤿 <span><strong>SeaVenture</strong> 海底漫步 — 约 3.7 米深戴头盔水下行走 <span class="tag tag.new">最低年龄10岁</span></span></li>
+            <li>🦈 <span>鲨鱼观赏桥（玻璃隔离）+ 鹰鳐喂食体验</span></li>
+            <li>🥤 <span>隐藏小吃站（据称排队最短）</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Photo Gallery -->
+    <div style="margin-top:48px;">
+      <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--ocean-deep);margin-bottom:8px;">园区实景图集</h3>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:24px;">各功能区高清实景照片链接。点击跳转至外部图库或游记页面。</p>
+      <div class="cards-4 reveal">
+        <a href="https://commons.wikimedia.org/wiki/Category:Discovery_Cove" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-item"><div class="amenity-icon">🐬</div><div class="amenity-name">Dolphin Lagoon</div><div class="amenity-note">Wikimedia Commons · 海豚互动高清图集</div></div>
+        </a>
+        <a href="https://www.youtube.com/results?search_query=Discovery+Cove+Grand+Reef+snorkeling" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-item"><div class="amenity-icon">🐠</div><div class="amenity-name">The Grand Reef</div><div class="amenity-note">YouTube · 浮潜与海底漫步实拍视频</div></div>
+        </a>
+        <a href="https://www.youtube.com/results?search_query=Discovery+Cove+Serenity+Bay+walkthrough" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-item"><div class="amenity-icon">🏖️</div><div class="amenity-name">Serenity Bay</div><div class="amenity-note">YouTube · 沙滩泳池区完整游览</div></div>
+        </a>
+        <a href="https://www.youtube.com/results?search_query=Discovery+Cove+Explorer%27s+Aviary+birds" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-item"><div class="amenity-icon">🦜</div><div class="amenity-name">Explorer's Aviary</div><div class="amenity-note">YouTube · 自由飞行鸟舍实拍</div></div>
+        </a>
+        <a href="https://www.youtube.com/results?search_query=Discovery+Cove+Freshwater+Oasis+otter" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-item"><div class="amenity-icon">🦦</div><div class="amenity-name">Freshwater Oasis</div><div class="amenity-note">YouTube · 水獭与狨猴涉水体验</div></div>
+        </a>
+        <a href="https://www.youtube.com/results?search_query=Discovery+Cove+Wind+Away+River" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-item"><div class="amenity-icon">🌊</div><div class="amenity-name">Wind-Away River</div><div class="amenity-note">YouTube · 漂流河穿越洞穴瀑布</div></div>
+        </a>
+        <a href="https://www.flickr.com/search/?text=Discovery%20Cove%20Orlando" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-item"><div class="amenity-icon">📷</div><div class="amenity-name">Flickr 游客实拍</div><div class="amenity-note">大量游客视角高质量照片</div></div>
+        </a>
+        <a href="https://www.tripadvisor.com/Attraction_Review-g34515-d214095-Reviews-Discovery_Cove-Orlando_Florida.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-item"><div class="amenity-icon">✈️</div><div class="amenity-name">TripAdvisor 全园区</div><div class="amenity-note">游客评论附带海量实拍照片</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Investment Timeline -->
+<section id="investment">
+  <div class="section-inner">
+    <div class="section-label">05 — 投资与建设时序</div>
+    <h2 class="section-title">分阶段投资 · 持续迭代</h2>
+    <p class="section-desc">从 2000 年开业到 2026 年酒店落成，Discovery Cove 采用"核心开业 + 持续升级"的长周期投资策略，单次扩建材料成本可达数千万美元。</p>
+
+    <div class="timeline reveal">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">1999 – 2000</div>
+        <div class="tl-title">初始建设 · 开业启幕</div>
+        <div class="tl-desc">Anheuser-Busch 旗下 Busch Entertainment 投资建设，定位"高端一日度假村"，门票开价 ¥1,298/天（$179/天），当时其他奥兰多公园约 ¥319/天（$44/天），颠覆行业定价体系。确切初始投资额未公开披露。</div>
+        <div class="tl-meta">
+          <span class="tl-meta-item">🏗️ 开发商：Busch Entertainment</span>
+          <span class="tl-meta-item">📐 面积：约 12.1 公顷</span>
+          <span class="tl-meta-item">🎯 日容量：~1,000人</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2011</div>
+        <div class="tl-title">大堡礁扩建 · The Grand Reef</div>
+        <div class="tl-desc">替代原有珊瑚礁，新建超约 3,785 m³盐水礁湖（1.0 公顷），容纳125+物种、约10,000只海洋生物。新增 SeaVenture 海底漫步体验。建筑许可材料成本已超 ¥1.23亿（$1,700万）。</div>
+        <div class="tl-meta">
+          <span class="tl-meta-item">💰 材料成本：>¥1.23亿（>$17M）</span>
+          <span class="tl-meta-item">🌊 水量：约 3,785+ m³</span>
+          <span class="tl-meta-item">🐠 物种：125+</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2012</div>
+        <div class="tl-title">淡水绿洲新增 · Freshwater Oasis</div>
+        <div class="tl-desc">新增雨林天蓬下的涉水步道，引入亚洲小爪水獭和白顶狨猴，丰富非海洋动物互动体验。</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2021 – 2024</div>
+        <div class="tl-title">设施翻新 · 餐饮升级</div>
+        <div class="tl-desc">Laguna Grill 餐厅从自助食堂模式升级为档口式供餐。新增 Flamingo Point 火烈鸟观察区（2024）。</div>
+        <div class="tl-meta">
+          <span class="tl-meta-item">🍽️ 餐饮模式升级</span>
+          <span class="tl-meta-item">🦩 Flamingo Point 2024</span>
+        </div>
+      </div>
+
+      <div class="tl-item future">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2024 – 2026 (进行中)</div>
+        <div class="tl-title">Project Canopy · 园内酒店</div>
+        <div class="tl-desc">SeaWorld 第二座园内酒店，250间客房、6层、约 26,816 平方米。配备树顶餐厅(约 669 m²)、水疗中心(约 1,022 m²)、会议空间(约 650 m²)、泳池、酒吧、健身中心、零售空间、小屋。估算投资超 ¥7.25亿（$1亿）。CEO 预计股权回报率超 20%。</div>
+        <div class="tl-meta">
+          <span class="tl-meta-item">💰 估算投资：>¥7.25亿（>$100M）</span>
+          <span class="tl-meta-item">🏨 客房：250间</span>
+          <span class="tl-meta-item">🏗️ 建筑：Cooper Carry (Atlanta)</span>
+          <span class="tl-meta-item">🌿 景观：EDSA (Fort Lauderdale)</span>
+          <span class="tl-meta-item">📐 土木：AtkinsRéalis</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Operations -->
+<section id="operations" style="background:var(--sand-light);">
+  <div class="section-inner">
+    <div class="section-label">06 — 运营指标</div>
+    <h2 class="section-title">高端限量 · 高客单价模式</h2>
+    <p class="section-desc">以严格限流换溢价能力，全包模式提升人均消费，门票收入为基础、附加体验和餐饮零售为补充。</p>
+
+    <div class="kpi-grid reveal">
+      <div class="kpi-card"><div class="kpi-label">年游客量（估算）</div><div class="kpi-value">30–35<small style="font-size:1rem"> 万</small></div><div class="kpi-sub">日均约 850–950 人</div></div>
+      <div class="kpi-card"><div class="kpi-label">累计游客 (2000–2025)</div><div class="kpi-value">800<small style="font-size:1rem"> 万+</small></div><div class="kpi-sub">25年运营 · 1,000万次浮潜</div></div>
+      <div class="kpi-card"><div class="kpi-label">门票区间 (2025·含海豚)</div><div class="kpi-value" style="font-size:2rem;">¥1,718–2,654</div><div class="kpi-sub">含全包餐饮、装备、SeaWorld通票（$237–366）</div></div>
+      <div class="kpi-card"><div class="kpi-label">估算年营收</div><div class="kpi-value">¥4.35–6.53亿</div><div class="kpi-sub">基于客流量 × 人均消费估算（$60–90M）</div></div>
+    </div>
+
+    <div class="parent-kpi reveal">
+      <div class="kpi-label">母公司 United Parks & Resorts · 2023 全年数据（NYSE: PRKS）</div>
+      <div class="parent-grid">
+        <div><div class="parent-stat-num">¥125.2亿</div><div class="parent-stat-label">总营收（$1.727B）</div></div>
+        <div><div class="parent-stat-num">¥16.98亿</div><div class="parent-stat-label">净利润（$234.2M）</div></div>
+        <div><div class="parent-stat-num">¥51.73亿</div><div class="parent-stat-label">调整后 EBITDA（$713.5M）</div></div>
+        <div><div class="parent-stat-num">21.6M</div><div class="parent-stat-label">总游客量</div></div>
+        <div><div class="parent-stat-num">¥579</div><div class="parent-stat-label">人均消费（$79.91·创纪录）</div></div>
+        <div><div class="parent-stat-num">12–13</div><div class="parent-stat-label">旗下公园总数</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Water Technology -->
+<section id="water">
+  <div class="section-inner">
+    <div class="section-label">07 — 核心水体技术指标</div>
+    <h2 class="section-title">超过 15,000 m³ 人工水体</h2>
+    <p class="section-desc">园区内五大核心水体统一管理，盐水/淡水分系统运行，温度精确控制以满足动物福利和游客舒适度双重标准。</p>
+
+    <div class="tech-table-wrap reveal">
+      <div class="table-header"><h3>水体参数一览</h3></div>
+      <table>
+        <thead><tr><th>水体名称</th><th>水量</th><th>水温</th><th>类型</th><th>主要功能</th></tr></thead>
+        <tbody>
+          <tr><td class="highlight">Dolphin Lagoon</td><td>约 9,085 m³</td><td>22–24°C</td><td>盐水</td><td>大西洋宽吻海豚互动体验</td></tr>
+          <tr><td class="highlight">The Grand Reef</td><td>约 3,785+ m³</td><td>22–24°C</td><td>盐水</td><td>浮潜 · 海底漫步 · 海洋生物展示</td></tr>
+          <tr><td class="highlight">Serenity Bay</td><td>约 3,123 m³</td><td>29–31°C</td><td>淡水</td><td>游泳 · 休闲 · 沙滩躺椅</td></tr>
+          <tr><td class="highlight">Wind-Away River</td><td>—（循环系统）</td><td>加热恒温</td><td>淡水</td><td>漂流河 · 穿越鸟舍 · 洞穴 · 瀑布</td></tr>
+          <tr><td class="highlight">Freshwater Oasis</td><td>—（涉水池）</td><td>加热恒温</td><td>淡水</td><td>涉水观赏水獭 · 狨猴栖息地</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Animals -->
+<section id="animals" style="background:var(--sand-light);">
+  <div class="section-inner">
+    <div class="section-label">08 — 动物生态体系</div>
+    <h2 class="section-title">海洋 · 鸟类 · 淡水多维覆盖</h2>
+    <p class="section-desc">从大西洋宽吻海豚到热带雨林鸟类，园区构建了跨越三大栖息地类型的动物矩阵，所有动物均为保育和教育目的展示。</p>
+
+    <div class="animal-grid reveal">
+      <div class="animal-card"><div class="animal-emoji">🐬</div><div><div class="animal-name">大西洋宽吻海豚</div><div class="animal-detail">Dolphin Lagoon · 30分钟互动体验 · 限龄6岁+</div></div></div>
+      <div class="animal-card"><div class="animal-emoji">🐠</div><div><div class="animal-name">热带鱼 & 海洋生物</div><div class="animal-detail">Grand Reef · 125+物种 · 约10,000只</div></div></div>
+      <div class="animal-card"><div class="animal-emoji">🦜</div><div><div class="animal-name">热带鸟类</div><div class="animal-detail">Explorer's Aviary · 250+只 · 自由飞行</div></div></div>
+      <div class="animal-card"><div class="animal-emoji">🦦</div><div><div class="animal-name">亚洲小爪水獭</div><div class="animal-detail">Freshwater Oasis · 涉水观赏窗口</div></div></div>
+      <div class="animal-card"><div class="animal-emoji">🐒</div><div><div class="animal-name">白顶狨猴</div><div class="animal-detail">Primate Island · Freshwater Oasis 内</div></div></div>
+      <div class="animal-card"><div class="animal-emoji">🦩</div><div><div class="animal-name">火烈鸟</div><div class="animal-detail">Flamingo Point · 2024年新增展示区</div></div></div>
+      <div class="animal-card"><div class="animal-emoji">🦈</div><div><div class="animal-name">鲨鱼</div><div class="animal-detail">Grand Reef · 玻璃隔离 · 绳索桥观赏</div></div></div>
+      <div class="animal-card"><div class="animal-emoji">🪶</div><div><div class="animal-name">鹰鳐</div><div class="animal-detail">Grand Reef · 鳐鱼喂食体验 · 浮潜可见</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Amenities -->
+<section id="amenities">
+  <div class="section-inner">
+    <div class="section-label">09 — 配套设施体系</div>
+    <h2 class="section-title">全包服务 · 零隐形消费</h2>
+    <p class="section-desc">从入园到离开，所有基础服务均包含在门票内。即将新增的 Project Canopy 酒店将实现"住宿+体验"闭环。</p>
+
+    <div class="amenities-grid reveal">
+      <div class="amenity-item"><div class="amenity-icon">🍽️</div><div class="amenity-name">主餐厅</div><div class="amenity-note">Laguna Grill · 档口式</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🍹</div><div class="amenity-name">酒吧 ×2</div><div class="amenity-note">Blue Bamboo + Hibiscus</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🥤</div><div class="amenity-name">小吃饮料站 ×3</div><div class="amenity-note">全园分布 · 无限取用</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🚿</div><div class="amenity-name">更衣 · 淋浴</div><div class="amenity-note">含热水 · 洗浴用品</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🔒</div><div class="amenity-name">储物柜</div><div class="amenity-note">免费 · 前中区两处</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🤿</div><div class="amenity-name">浮潜装备</div><div class="amenity-note">面镜 · 呼吸管 · 脚蹼</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🦺</div><div class="amenity-name">潜水衣 · 救生衣</div><div class="amenity-note">各尺码 · 免费提供</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🅿️</div><div class="amenity-name">免费停车场</div><div class="amenity-note">含无障碍车位</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🏖️</div><div class="amenity-name">沙滩躺椅 · 遮阳伞</div><div class="amenity-note">3,000吨进口白沙</div></div>
+      <div class="amenity-item"><div class="amenity-icon">📸</div><div class="amenity-name">摄影服务</div><div class="amenity-note">付费加购 · 全园跟拍</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🎁</div><div class="amenity-name">礼品店</div><div class="amenity-note">纪念品 · 泳装 · 防晒</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🏨</div><div class="amenity-name">Project Canopy 酒店</div><div class="amenity-note">2026 · 250间 · 水疗 · 会议</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Reference Links -->
+<section id="references" style="background:var(--sand-light);">
+  <div class="section-inner">
+    <div class="section-label">10 — External Resources</div>
+    <h2 class="section-title">延伸资料库</h2>
+    <p class="section-desc">精选5个高质量外部站点，涵盖自由版权图库、高清视频、官方资料和深度报道。</p>
+    <div class="cards-2 reveal">
+      <a href="https://commons.wikimedia.org/wiki/Category:Discovery_Cove" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+        <div class="info-card" style="cursor:pointer;">
+          <div class="info-card-icon">🖼️</div>
+          <div class="info-card-label">01 / Wikimedia Commons</div>
+          <div class="info-card-value">自由版权图库 — Discovery Cove 高清照片，可直接用于报告引用。</div>
+        </div>
+      </a>
+      <a href="https://discoverycove.com/orlando/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+        <div class="info-card" style="cursor:pointer;">
+          <div class="info-card-icon">🏛️</div>
+          <div class="info-card-label">02 / Discovery Cove 官网</div>
+          <div class="info-card-value">官方信息 — 门票预订、体验项目介绍、最新动态公告。</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/results?search_query=Discovery+Cove+Orlando+full+walkthrough+4K" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+        <div class="info-card" style="cursor:pointer;">
+          <div class="info-card-icon">🎬</div>
+          <div class="info-card-label">03 / YouTube · 4K 游园视频</div>
+          <div class="info-card-value">海量高清游园视频 — 浮潜第一视角、海豚互动、全园walkthrough。</div>
+        </div>
+      </a>
+      <a href="https://www.flickr.com/search/?text=Discovery%20Cove%20Orlando" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+        <div class="info-card" style="cursor:pointer;">
+          <div class="info-card-icon">📸</div>
+          <div class="info-card-label">04 / Flickr 游客实拍</div>
+          <div class="info-card-value">大量游客视角高质量照片 — 覆盖所有功能区与季节变化。</div>
+        </div>
+      </a>
+      <a href="https://www.tripadvisor.com/Attraction_Review-g34515-d214095-Reviews-Discovery_Cove-Orlando_Florida.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+        <div class="info-card" style="cursor:pointer;">
+          <div class="info-card-icon">✈️</div>
+          <div class="info-card-label">05 / TripAdvisor 游客评价</div>
+          <div class="info-card-value">数万条真实游客评价 + 海量实拍照片 — 最新体验反馈。</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Discovery Cove 案例研究</strong> — 奥兰多文旅项目深度分析</p>
+  <p style="margin-top:6px;">数据来源：United Parks & Resorts 公开文件 · 行业报道 · 官方资料 &nbsp;|&nbsp; 编制时间：2026年5月</p>
+  <p style="margin-top:4px;font-size:0.72rem;color:rgba(255,255,255,0.3);">本工具仅供案例研究参考，不构成投资建议。</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ── Interactive maps ──
+// Each map needs its OWN tile layer instances — Leaflet tile layers cannot be shared across maps.
+// ESRI tiles: globally accessible including from mainland China.
+// OSM (tile.openstreetmap.org) is blocked in China; Gaode only covers China.
+function makeStreetLayer() {
+  return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; Esri &mdash; Esri, DeLorme, NAVTEQ', maxZoom: 19
+  });
+}
+function makeSatLayer() {
+  return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community', maxZoom: 19
+  });
+}
+
+// Zone markers — verified against ESRI World Imagery satellite basemap.
+// Wikipedia center: 28.4054, -81.4617
+// Park extent: ~28.4068 N to ~28.4040 S, ~-81.4630 W to ~-81.4603 E (~310m x 265m)
+// Entrance at SOUTH (Discovery Cove Way), Grand Reef southern half, Dolphin Lagoon central-north
+var zones = [
+	  { name: '入口 · Laguna Grill', lat: 28.40375, lng: -81.46326, color: '#D4A853' },
+	  { name: 'Grand Reef 大堡礁', lat: 28.40433, lng: -81.46367, color: '#1A6A85' },
+	  { name: 'Dolphin Lagoon 海豚泻湖', lat: 28.40501, lng: -81.46408, color: '#1A7068' },
+	  { name: 'Freshwater Oasis 淡水绿洲', lat: 28.40492, lng: -81.46306, color: '#78C8D4' },
+	  { name: 'Flamingo Point', lat: 28.40465, lng: -81.46377, color: '#E8784A' },
+	  { name: 'Serenity Bay 宁静湾', lat: 28.40573, lng: -81.46459, color: '#48A8B8' },
+	  { name: 'Explorer\'s Aviary 鸟舍', lat: 28.40618, lng: -81.46306, color: '#8CB880' }
+];
+
+function addZoneMarkers(map, zoneData) {
+  zoneData.forEach(function(z) {
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:4px 10px;border-radius:14px;font-size:11px;font-weight:600;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.3);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;">' + z.name + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(map).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultSat) {
+  var el = document.getElementById(mapId);
+  if (!el) return;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([28.4050, -81.4641], 17);
+
+  // Create fresh tile layer instances for THIS map
+  var street = makeStreetLayer();
+  var sat = makeSatLayer();
+
+  if (defaultSat) {
+    sat.addTo(map);
+    L.control.layers({ '卫星图': sat, '街道图': street }, null, { position: 'topright' }).addTo(map);
+  } else {
+    street.addTo(map);
+    L.control.layers({ '街道图': street, '卫星图': sat }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zones);
+  setTimeout(function() { map.invalidateSize(); }, 1000);
+
+  // Click to show coordinates (for marker position verification)
+  var coordDisplay = L.control({position: 'bottomleft'});
+  coordDisplay.onAdd = function() {
+    var div = L.DomUtil.create('div', 'coord-display');
+    div.style.cssText = 'background:rgba(0,0,0,0.75);color:#fff;padding:6px 12px;border-radius:6px;font-size:13px;font-family:monospace;pointer-events:none;';
+    div.innerHTML = '点击地图查看坐标';
+    return div;
+  };
+  coordDisplay.addTo(map);
+
+  map.on('click', function(e) {
+    var lat = e.latlng.lat.toFixed(6);
+    var lng = e.latlng.lng.toFixed(6);
+    document.querySelectorAll('.coord-display').forEach(function(el) {
+      el.innerHTML = 'lat: ' + lat + '  lng: ' + lng + '  <button onclick="navigator.clipboard.writeText(\'' + lat + ', ' + lng + '\')" style="margin-left:8px;padding:2px 6px;font-size:11px;cursor:pointer;background:#fff;color:#000;border:none;border-radius:3px;">复制</button>';
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', false);
+  initMap('satmap', true);
+});
+
+// Scroll reveal
+var observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Nav highlight
+var sections = document.querySelectorAll('section[id]');
+var navLinks = document.querySelectorAll('nav a');
+window.addEventListener('scroll', function() {
+  var current = '';
+  sections.forEach(function(s) { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
+  navLinks.forEach(function(a) {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+
+</body>
+</html>

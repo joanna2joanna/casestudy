@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>奥兰多史诗宇宙 · Universal Epic Universe — 文旅案例深度研究</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 17px; }
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #FEFCF8;
+  color: #1C1C1C;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1, h2, h3, h4 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.data, .stat, .kpi, table {
+  font-family: 'DM Mono', 'SF Mono', Consolas, monospace;
+}
+
+/* ===== REVEAL ANIMATION ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 40%, #2D2450 0%, #1A1540 65%, #0F0C2D 100%);
+}
+
+.hero-stars {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1px 1px at 10% 20%, rgba(212,168,83,0.6), transparent),
+    radial-gradient(1px 1px at 25% 15%, rgba(240,237,242,0.7), transparent),
+    radial-gradient(1.5px 1.5px at 40% 30%, rgba(107,63,160,0.5), transparent),
+    radial-gradient(1px 1px at 55% 10%, rgba(212,168,83,0.4), transparent),
+    radial-gradient(1px 1px at 70% 25%, rgba(240,237,242,0.6), transparent),
+    radial-gradient(1.5px 1.5px at 85% 18%, rgba(107,63,160,0.5), transparent),
+    radial-gradient(1px 1px at 15% 60%, rgba(212,168,83,0.5), transparent),
+    radial-gradient(1px 1px at 33% 75%, rgba(240,237,242,0.5), transparent),
+    radial-gradient(1.5px 1.5px at 50% 55%, rgba(107,63,160,0.4), transparent),
+    radial-gradient(1px 1px at 62% 70%, rgba(212,168,83,0.45), transparent),
+    radial-gradient(1px 1px at 78% 65%, rgba(240,237,242,0.5), transparent),
+    radial-gradient(1.5px 1.5px at 90% 50%, rgba(107,63,160,0.4), transparent),
+    radial-gradient(1px 1px at 20% 85%, rgba(212,168,83,0.4), transparent),
+    radial-gradient(1px 1px at 45% 90%, rgba(240,237,242,0.45), transparent),
+    radial-gradient(1.5px 1.5px at 68% 88%, rgba(107,63,160,0.35), transparent);
+}
+
+.hero-glow {
+  position: absolute;
+  width: 60vw;
+  height: 60vw;
+  max-width: 800px;
+  max-height: 800px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(107,63,160,0.18) 0%, rgba(212,168,83,0.06) 40%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem;
+  max-width: 900px;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(107,63,160,0.25);
+  border: 1px solid rgba(212,168,83,0.35);
+  color: #D4A853;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  padding: 0.4rem 1.2rem;
+  border-radius: 20px;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.05em;
+}
+
+.hero h1 {
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 900;
+  background: linear-gradient(180deg, #F0EDF2 0%, #D4A853 50%, #6B3FA0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.75rem;
+}
+
+.hero-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  color: rgba(240,237,242,0.65);
+  font-weight: 400;
+  margin-bottom: 2rem;
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem 3rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.85rem;
+  color: rgba(240,237,242,0.55);
+}
+
+.hero-meta span { color: #D4A853; }
+
+/* ===== SECTION ===== */
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.section-number {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  color: #6B3FA0;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.section-header h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #8B6914;
+  font-weight: 800;
+}
+
+.section-header .divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #6B3FA0, #D4A853);
+  margin: 1rem auto 0;
+}
+
+/* ===== CARDS ===== */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background: #FFFFFF;
+  border: 1px solid #E8DCCF;
+  border-radius: 12px;
+  padding: 1.75rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  border-color: #D4A853;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.card h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6B3FA0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.card .card-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1C1C1C;
+  line-height: 1.1;
+}
+
+.card .card-note {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: #8C8C8C;
+  margin-top: 0.4rem;
+}
+
+/* ===== TABLES ===== */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #E8DCCF;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  min-width: 700px;
+}
+
+thead th {
+  background: rgba(107,63,160,0.08);
+  color: #6B3FA0;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-align: left;
+  padding: 0.85rem 1rem;
+  border-bottom: 2px solid #6B3FA0;
+  letter-spacing: 0.04em;
+}
+
+tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #E8DCCF;
+  color: #1C1C1C;
+}
+
+tbody tr:hover { background: rgba(107,63,160,0.04); }
+
+.highlight-row { background: rgba(212,168,83,0.1); }
+
+/* ===== MAPS ===== */
+.map-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.map-panel h4 {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: #D4A853;
+  margin-bottom: 0.6rem;
+  letter-spacing: 0.05em;
+}
+
+.map-container {
+  width: 100%;
+  height: 420px;
+  border-radius: 12px;
+  border: 2px solid #E8DCCF;
+  overflow: hidden;
+  background: #F5F0E8;
+}
+
+@media (max-width: 768px) {
+  .map-group { grid-template-columns: 1fr; }
+  .map-container { height: 320px; }
+}
+
+/* ===== SVG DIAGRAM ===== */
+.diagram-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.diagram-wrap svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ===== TIMELINE ===== */
+.timeline {
+  position: relative;
+  padding-left: 2.5rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, #D4A853, #6B3FA0, #D4A853);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2rem;
+  padding-left: 1.5rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -2.5rem;
+  top: 0.5rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #D4A853;
+  border: 2px solid #FEFCF8;
+  box-shadow: 0 0 0 2px rgba(212,168,83,0.4);
+}
+
+.timeline-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: #6B3FA0;
+  margin-bottom: 0.2rem;
+}
+
+.timeline-desc {
+  font-size: 1rem;
+  color: #1C1C1C;
+}
+
+/* ===== KPI GRID ===== */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.kpi-card {
+  background: #FFFFFF;
+  border: 1px solid #E8DCCF;
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+
+.kpi-card .kpi-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: #6B3FA0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.kpi-card .kpi-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #D4A853;
+}
+
+.kpi-card .kpi-sub {
+  font-size: 0.78rem;
+  color: #8C8C8C;
+  margin-top: 0.3rem;
+}
+
+/* ===== LAND CARDS ===== */
+.land-card {
+  background: #FFFFFF;
+  border: 1px solid #E8DCCF;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #D4A853;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+
+.land-card h3 {
+  font-size: 1.5rem;
+  color: #1C1C1C;
+  margin-bottom: 0.3rem;
+}
+
+.land-card .land-subtitle {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: #6B3FA0;
+  margin-bottom: 1rem;
+}
+
+.land-card p {
+  color: #5C5C5C;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.land-card .land-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.land-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  background: rgba(107,63,160,0.08);
+  color: #6B3FA0;
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  border: 1px solid rgba(107,63,160,0.2);
+}
+
+/* ===== AMENITIES GRID ===== */
+.amenity-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.amenity-card {
+  background: #FFFFFF;
+  border: 1px solid #E8DCCF;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+
+.amenity-card h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  color: #8B6914;
+  margin-bottom: 0.6rem;
+  font-weight: 600;
+}
+
+.amenity-card p {
+  font-size: 0.88rem;
+  color: #5C5C5C;
+}
+
+/* ===== REFERENCE ===== */
+.ref-list {
+  list-style: none;
+  padding: 0;
+}
+
+.ref-list li {
+  margin-bottom: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(107,63,160,0.08);
+  border-radius: 8px;
+  border: 1px solid rgba(212,168,83,0.08);
+}
+
+.ref-list li a {
+  color: #D4A853;
+  text-decoration: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.82rem;
+  word-break: break-all;
+  transition: color 0.2s;
+}
+
+.ref-list li a:hover { color: #F0EDF2; }
+
+.ref-list li .ref-label {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  color: #F0EDF2;
+  margin-bottom: 0.25rem;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  text-align: center;
+  padding: 3rem 2rem;
+  border-top: 1px solid rgba(212,168,83,0.1);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  color: rgba(240,237,242,0.35);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .section { padding: 3rem 1rem; }
+  .hero h1 { font-size: 2.2rem; }
+  .card-grid { grid-template-columns: 1fr; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .amenity-row { grid-template-columns: 1fr; }
+  .map-container { height: 280px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================= -->
+<!-- MODULE 1: HERO -->
+<!-- ============================================= -->
+<section class="hero">
+  <div class="hero-stars"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge">数据截至 2026 年 5 月</div>
+    <h1>Universal Epic Universe</h1>
+    <p class="hero-subtitle">奥兰多史诗宇宙 · 主题公园史上最大单笔投资深度研究</p>
+    <div class="hero-meta">
+      <div>开园 <span>2025.5.22</span></div>
+      <div>投资 <span>约¥500—550亿</span></div>
+      <div>占地 <span>300公顷</span></div>
+      <div>年客流 <span>>900万</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- MODULE 2: OVERVIEW -->
+<!-- ============================================= -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-number">Module 01</div>
+    <h2>项目总览 Overview</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="reveal" style="margin-bottom:2rem;">
+    <p style="font-size:1.05rem;color:#5C5C5C;max-width:800px;margin:0 auto;text-align:center;">
+      Universal Epic Universe（奥兰多史诗宇宙）是环球影城旗下第四个主题公园园区，由 Comcast NBCUniversal 旗下 Universal Destinations &amp; Experiences 运营。位于佛罗里达州奥兰多 Sand Lake Road 4700 号，总占地面积约 300 公顷，其中主题公园核心区约 45 公顷。项目于 2025 年 5 月 22 日正式开园，是北美近 20 年来最大规模的主题公园新建项目。
+    </p>
+  </div>
+
+  <div class="card-grid reveal">
+    <div class="card">
+      <h4>开发商 Developer</h4>
+      <div class="card-value">Universal Creative</div>
+      <div class="card-note">Comcast NBCUniversal 旗下</div>
+    </div>
+    <div class="card">
+      <h4>运营商 Operator</h4>
+      <div class="card-value">Universal Destinations &amp; Experiences</div>
+    </div>
+    <div class="card">
+      <h4>地址 Location</h4>
+      <div class="card-value" style="font-size:1.2rem;">4700 East Sand Lake Road</div>
+      <div class="card-note">Orlando, FL 32819, USA</div>
+    </div>
+    <div class="card">
+      <h4>总占地面积</h4>
+      <div class="card-value">300 公顷</div>
+      <div class="card-note">公园核心区约 45 公顷</div>
+    </div>
+    <div class="card">
+      <h4>日容量 / 年客流</h4>
+      <div class="card-value">45,000–50,000</div>
+      <div class="card-note">年客流: 920万(2026) / 1,070万(2028) / ~1,300万(成熟期)</div>
+    </div>
+    <div class="card">
+      <h4>总投资</h4>
+      <div class="card-value">约¥500–550亿</div>
+      <div class="card-note">~$7–7.7 billion USD</div>
+    </div>
+    <div class="card">
+      <h4>单日门票</h4>
+      <div class="card-value">¥990–1,420</div>
+      <div class="card-note">$139–199 USD</div>
+    </div>
+    <div class="card">
+      <h4>开业日期</h4>
+      <div class="card-value">2025.5.22</div>
+      <div class="card-note">距今已运营一整年</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- MODULE 3: DESIGN & CONSTRUCTION -->
+<!-- ============================================= -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-number">Module 02</div>
+    <h2>设计与建造 Design &amp; Construction</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="reveal" style="margin-bottom:2.5rem;">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>角色 Role</th><th>公司/团队</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td style="color:#D4A853;">总体规划 Master Plan</td><td>Universal Creative</td><td>环球内部创意设计团队，总控全局</td></tr>
+          <tr><td>博克岛设计 Lead</td><td>Forrec (加拿大)</td><td>Isle of Berk 主题区主创设计</td></tr>
+          <tr><td>天穹乐园总包</td><td>WG Yates &amp; Sons</td><td>Celestial Park 施工总承包</td></tr>
+          <tr><td>博克岛总包</td><td>Hensel Phelps</td><td>承包面积达 $675/sq ft（约¥52,000/m²）</td></tr>
+          <tr><td>魔法部景观</td><td>PCL Construction</td><td>Wizarding World 景观与硬景施工</td></tr>
+          <tr><td>景观 / 灌溉</td><td>RCI</td><td>全园景观及灌溉系统</td></tr>
+          <tr><td>景观种植安装</td><td>Cherrylake</td><td>大规模树木及植被种植</td></tr>
+          <tr><td>主题木制品</td><td>JK2 Scenic</td><td>定制主题 millwork</td></tr>
+          <tr><td>装饰混凝土</td><td>David Allen Company</td><td>全园主题铺装与装饰混凝土</td></tr>
+          <tr><td>造价估算</td><td>Cumming Group</td><td>项目全过程成本咨询</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-bottom:2.5rem;">
+    <h3 style="color:#D4A853;font-size:1.3rem;margin-bottom:1rem;">骑乘设备制造商 Ride Manufacturers</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>制造商</th><th>骑乘项目</th><th>类型 &amp; 技术指标</th></tr>
+        </thead>
+        <tbody>
+          <tr><td style="color:#D4A853;">Mack Rides (德)</td><td>Stardust Racers 星尘竞速</td><td>双轨发射竞速过山车，高 40.5 m，极速 100 km/h</td></tr>
+          <tr><td>Mack Rides (德)</td><td>Curse of the Werewolf 狼人诅咒</td><td>旋转式过山车 (spinning coaster)</td></tr>
+          <tr><td>Mack Rides (德)</td><td>Fyre Drill 烈焰水战</td><td>交互式水上游乐设施</td></tr>
+          <tr><td>Intamin (瑞士)</td><td>Hiccup's Wing Gliders</td><td>家庭发射过山车 (family launch coaster)</td></tr>
+          <tr><td>KUKA (德)</td><td>Monsters Unchained</td><td>机械臂轨道黑暗骑乘 (robotic-arm dark ride)</td></tr>
+          <tr><td>Producers Group / Scenario</td><td>Mine-Cart Madness</td><td>大金刚矿车 (Boom Coaster 错觉技术)</td></tr>
+          <tr><td>Gerstlauer (德)</td><td>Dragon Racer's Rally 龙骑竞速</td><td>双摆锤式惊险项目</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="reveal" style="font-size:0.9rem;color:#8C8C8C;text-align:center;">
+    注：以上所有供应商信息均基于公开资料整理，部分细节可能随项目变更而调整。
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- MODULE 4: TECHNICAL SUMMARY TABLE -->
+<!-- ============================================= -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-number">Module 03</div>
+    <h2>技术指标总表 Technical Summary</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="reveal">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>指标</th><th>数值</th><th>备注</th></tr>
+        </thead>
+        <tbody>
+          <tr class="highlight-row"><td>总占地面积</td><td>300 公顷</td><td>含酒店、停车场、后勤区</td></tr>
+          <tr class="highlight-row"><td>公园核心区</td><td>约 45 公顷</td><td>5 大主题区 + 天穹乐园</td></tr>
+          <tr><td>主题区数量</td><td>5 个</td><td>含中央枢纽天穹乐园</td></tr>
+          <tr><td>骑乘项目总数</td><td>12+</td><td>含大型过山车、黑暗骑乘、水上游乐</td></tr>
+          <tr><td>表演场馆</td><td>3+</td><td>The Untrainable Dragon / Le Cirque Arcanus 等</td></tr>
+          <tr><td>园内酒店</td><td>1 家（500 间客房）</td><td>Helios Grand Hotel，园区内直通</td></tr>
+          <tr><td>配套酒店</td><td>2 家</td><td>Terra Luna Resort / Stella Nova Resort</td></tr>
+          <tr><td>日设计容量</td><td>45,000—50,000 人</td><td>含各主题区合理分布</td></tr>
+          <tr><td>年客流预测 (2026)</td><td>920—950 万</td><td>运营首全年</td></tr>
+          <tr><td>年客流预测 (2028)</td><td>1,070 万</td><td>成熟爬坡期</td></tr>
+          <tr><td>年客流预测（成熟期）</td><td>约 1,300 万</td><td>预计 2030+</td></tr>
+          <tr><td>总投资额</td><td>约¥500—550亿 ($7—7.7B)</td><td>含土地、基建、骑乘、IP 授权</td></tr>
+          <tr><td>单日票价</td><td>¥990—1,420 ($139—199)</td><td>淡旺季浮动</td></tr>
+          <tr><td>创造就业</td><td>约 14,000 岗位</td><td>直接 + 间接</td></tr>
+          <tr><td>经济影响（佛罗里达）</td><td>约 ¥830 亿 ($11.5B)</td><td>估算值</td></tr>
+          <tr><td>停车场分区</td><td>5 个主题区</td><td>Gamer / Hero / Monster / Viking / Explorer</td></tr>
+          <tr><td>Kirkman Road 延伸段</td><td>$315M / 约 2.7 km (1.7 mi)</td><td>市政配套道路</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- MODULE 5: SPATIAL LAYOUT -->
+<!-- ============================================= -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-number">Module 04</div>
+    <h2>空间布局 Spatial Layout</h2>
+    <div class="divider"></div>
+  </div>
+
+  <!-- SVG Hub-and-Spoke Diagram -->
+  <div class="reveal">
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 800 700" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:750px;">
+        <defs>
+          <radialGradient id="celestialGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#D4A853" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#D4A853" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="shadow"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity="0.4"/></filter>
+        </defs>
+
+        <!-- Background ring -->
+        <circle cx="400" cy="330" r="200" fill="none" stroke="rgba(212,168,83,0.15)" stroke-width="1" stroke-dasharray="6,4"/>
+        <circle cx="400" cy="330" r="260" fill="none" stroke="rgba(107,63,160,0.1)" stroke-width="1" stroke-dasharray="4,6"/>
+
+        <!-- Hub: Celestial Park -->
+        <circle cx="400" cy="330" r="85" fill="url(#celestialGlow)" stroke="#D4A853" stroke-width="2.5"/>
+        <circle cx="400" cy="330" r="65" fill="rgba(10,14,39,0.85)" stroke="#D4A853" stroke-width="1.5"/>
+        <text x="400" y="320" text-anchor="middle" fill="#D4A853" font-family="Playfair Display,serif" font-size="17" font-weight="700">Celestial Park</text>
+        <text x="400" y="340" text-anchor="middle" fill="#F0EDF2" font-family="DM Sans,sans-serif" font-size="12">天穹乐园 · 中心枢纽</text>
+
+        <!-- Spoke lines from center to each land -->
+        <line x1="400" y1="330" x2="400" y2="85" stroke="#C8A050" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+        <line x1="400" y1="330" x2="590" y2="180" stroke="#E52521" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+        <line x1="400" y1="330" x2="610" y2="400" stroke="#6B3FA0" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+        <line x1="400" y1="330" x2="570" y2="560" stroke="#2B5C3B" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+        <line x1="400" y1="330" x2="220" y2="530" stroke="#3B7DD8" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+        <line x1="400" y1="330" x2="160" y2="380" stroke="#3B7DD8" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+
+        <!-- Helios Grand Hotel (top) -->
+        <rect x="345" y="60" width="110" height="38" rx="6" fill="rgba(200,160,80,0.12)" stroke="#C8A050" stroke-width="1.8"/>
+        <text x="400" y="84" text-anchor="middle" fill="#C8A050" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">Helios Grand</text>
+
+        <!-- Super Nintendo World (upper right) -->
+        <rect x="530" y="155" width="125" height="50" rx="6" fill="rgba(229,37,33,0.1)" stroke="#E52521" stroke-width="2"/>
+        <text x="592" y="175" text-anchor="middle" fill="#E52521" font-family="Playfair Display,serif" font-size="14" font-weight="700">Nintendo</text>
+        <text x="592" y="193" text-anchor="middle" fill="#F0EDF2" font-family="DM Sans,sans-serif" font-size="10">超级任天堂世界</text>
+
+        <!-- Dark Universe (right) -->
+        <rect x="555" y="375" width="115" height="50" rx="6" fill="rgba(107,63,160,0.12)" stroke="#6B3FA0" stroke-width="2"/>
+        <text x="612" y="395" text-anchor="middle" fill="#6B3FA0" font-family="Playfair Display,serif" font-size="14" font-weight="700">Dark Universe</text>
+        <text x="612" y="413" text-anchor="middle" fill="#F0EDF2" font-family="DM Sans,sans-serif" font-size="10">暗黑宇宙</text>
+
+        <!-- Wizarding World (lower right) -->
+        <rect x="510" y="535" width="125" height="50" rx="6" fill="rgba(43,92,59,0.12)" stroke="#2B5C3B" stroke-width="2"/>
+        <text x="572" y="555" text-anchor="middle" fill="#2B5C3B" font-family="Playfair Display,serif" font-size="14" font-weight="700">Wizarding World</text>
+        <text x="572" y="573" text-anchor="middle" fill="#F0EDF2" font-family="DM Sans,sans-serif" font-size="10">魔法部</text>
+
+        <!-- Isle of Berk (lower left) -->
+        <rect x="140" y="500" width="130" height="50" rx="6" fill="rgba(59,125,216,0.1)" stroke="#3B7DD8" stroke-width="2"/>
+        <text x="205" y="520" text-anchor="middle" fill="#3B7DD8" font-family="Playfair Display,serif" font-size="14" font-weight="700">Isle of Berk</text>
+        <text x="205" y="538" text-anchor="middle" fill="#F0EDF2" font-family="DM Sans,sans-serif" font-size="10">博克岛</text>
+
+        <!-- Entrance (bottom) -->
+        <polygon points="370,620 430,620 415,650 385,650" fill="rgba(74,144,217,0.15)" stroke="#4A90D9" stroke-width="1.8"/>
+        <text x="400" y="660" text-anchor="middle" fill="#4A90D9" font-family="DM Sans,sans-serif" font-size="12" font-weight="600">入口 Entrance</text>
+
+        <!-- Portal gateways -->
+        <circle cx="482" cy="290" r="8" fill="none" stroke="#E52521" stroke-width="1.5"/>
+        <circle cx="530" cy="360" r="8" fill="none" stroke="#6B3FA0" stroke-width="1.5"/>
+        <circle cx="490" cy="490" r="8" fill="none" stroke="#2B5C3B" stroke-width="1.5"/>
+        <circle cx="310" cy="460" r="8" fill="none" stroke="#3B7DD8" stroke-width="1.5"/>
+
+        <!-- Compass Rose (top right corner) -->
+        <g transform="translate(720,70)">
+          <circle cx="0" cy="0" r="24" fill="none" stroke="#D4A853" stroke-width="1" opacity="0.5"/>
+          <polygon points="0,-20 4,-5 20,0 4,5 0,20 -4,5 -20,0 -4,-5" fill="#D4A853" opacity="0.8"/>
+          <polygon points="0,-20 0,0 -4,-5" fill="#6B3FA0" opacity="0.6"/>
+          <polygon points="0,0 4,5 20,0" fill="#D4A853" opacity="0.5"/>
+          <polygon points="0,0 4,-5 0,-20" fill="#D4A853" opacity="0.9"/>
+          <polygon points="0,0 -4,5 0,20" fill="#D4A853" opacity="0.9"/>
+          <text x="0" y="-28" text-anchor="middle" fill="#D4A853" font-family="DM Sans,sans-serif" font-size="10" font-weight="700">N</text>
+        </g>
+      </svg>
+    </div>
+    <p style="text-align:center;font-size:0.82rem;color:#8C8C8C;margin-top:1rem;">枢纽—辐条式布局示意 | Hub-and-Spoke Layout</p>
+  </div>
+
+  <!-- Maps (NO .reveal on map containers — prevents opacity: 0 breaking Leaflet) -->
+  <div style="margin-top:3rem;">
+    <div class="map-group">
+      <div class="map-panel">
+        <h4>街道地图 Street Map</h4>
+        <div id="parkmap" class="map-container"></div>
+      </div>
+      <div class="map-panel">
+        <h4>卫星影像 Satellite</h4>
+        <div id="satmap" class="map-container"></div>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:0.78rem;color:#8C8C8C;margin-top:0.5rem;">
+      坐标系统: WGS-84 | 底图: ESRI ArcGIS | 5 大主题区 + 入口 + 酒店定位
+    </p>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- MODULE 6: INVESTMENT TIMELINE -->
+<!-- ============================================= -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-number">Module 05</div>
+    <h2>投资与建设时间线 Investment Timeline</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="reveal" style="max-width:700px;margin:0 auto;">
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">2019 年 8 月</div>
+        <div class="timeline-desc"><strong>正式宣布</strong> — Universal 在新闻发布会上公布 Epic Universe 计划，确认第四个主题公园园区。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2020—2021 年</div>
+        <div class="timeline-desc"><strong>COVID-19 暂停</strong> — 全球疫情导致施工全面暂停，项目面临不确定性。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2021 年 12 月</div>
+        <div class="timeline-desc"><strong>Hensel Phelps 加入，施工恢复</strong> — 总承包商到位，项目全面重启，进入加速建设阶段。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2025 年 3 月</div>
+        <div class="timeline-desc"><strong>首批官方照片发布</strong> — 园区内部实景首次向公众披露，引发全球媒体关注。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2025 年 5 月 22 日</div>
+        <div class="timeline-desc"><strong>盛大开幕</strong> — 史诗宇宙正式对公众开放，五个主题区同时亮相。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2025 年 11 月</div>
+        <div class="timeline-desc"><strong>首个扩建许可提交</strong> — 约 14,000 m²（150,000 sq ft）新建设申请。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2026 年 3 月</div>
+        <div class="timeline-desc"><strong>Project 680 备案</strong> — "未来景点"前期工程启动，预示重大扩建计划。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2026 年及以后</div>
+        <div class="timeline-desc"><strong>多块扩建预留地就绪</strong> — 各主题区之间预留扩建用地，为持续增长提供空间。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- MODULE 7: OPERATIONS KPIs -->
+<!-- ============================================= -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-number">Module 06</div>
+    <h2>运营关键指标 Operations KPIs</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="reveal">
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">2025 部分年份客流</div>
+        <div class="kpi-value">~520万</div>
+        <div class="kpi-sub">5 月底开园，约 7 个月运营</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">2026 年预测客流</div>
+        <div class="kpi-value">920—950万</div>
+        <div class="kpi-sub">运营首全年</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Q2 2025 主题公园收入</div>
+        <div class="kpi-value">¥168亿</div>
+        <div class="kpi-sub">$2.349B / 同比增长 19% YoY</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Q3 2025 主题公园收入</div>
+        <div class="kpi-value">¥194亿</div>
+        <div class="kpi-sub">$2.717B / 同比增长 18.7% YoY</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">创造就业</div>
+        <div class="kpi-value">~14,000</div>
+        <div class="kpi-sub">直接 + 间接岗位</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">佛罗里达经济影响</div>
+        <div class="kpi-value">约¥830亿</div>
+        <div class="kpi-sub">$11.5B 估算值</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">母公司</div>
+        <div class="kpi-value" style="font-size:1.2rem;">Comcast</div>
+        <div class="kpi-sub">NBCUniversal 母公司</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">主题区开放数</div>
+        <div class="kpi-value">5</div>
+        <div class="kpi-sub">全部于开幕日同步开放</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- MODULE 8: CORE TECH INDICATORS -->
+<!-- ============================================= -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-number">Module 07</div>
+    <h2>核心骑乘技术指标 Core Tech Indicators</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="reveal">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>骑乘项目</th><th>主题区</th><th>制造商</th><th>类型</th><th>高度</th><th>速度</th><th>核心亮点</th></tr>
+        </thead>
+        <tbody>
+          <tr class="highlight-row">
+            <td style="color:#D4A853;">Stardust Racers 星尘竞速</td>
+            <td>天穹乐园</td>
+            <td>Mack Rides</td>
+            <td>双轨发射竞速过山车</td>
+            <td>40.5 m</td>
+            <td>100 km/h</td>
+            <td>双车同步发射、镜像轨道竞速</td>
+          </tr>
+          <tr>
+            <td>Monsters Unchained</td>
+            <td>暗黑宇宙</td>
+            <td>KUKA</td>
+            <td>机械臂黑暗骑乘</td>
+            <td>—</td>
+            <td>—</td>
+            <td>KUKA 机械臂载具、高自由度运动</td>
+          </tr>
+          <tr>
+            <td>Curse of the Werewolf</td>
+            <td>暗黑宇宙</td>
+            <td>Mack Rides</td>
+            <td>旋转式过山车</td>
+            <td>—</td>
+            <td>—</td>
+            <td>载具自旋 + 轨道行进</td>
+          </tr>
+          <tr>
+            <td>Hiccup's Wing Gliders</td>
+            <td>博克岛</td>
+            <td>Intamin</td>
+            <td>家庭发射过山车</td>
+            <td>—</td>
+            <td>—</td>
+            <td>悬挂式飞行体验、适合家庭</td>
+          </tr>
+          <tr>
+            <td>Fyre Drill 烈焰水战</td>
+            <td>博克岛</td>
+            <td>Mack Rides</td>
+            <td>交互式水上游乐</td>
+            <td>—</td>
+            <td>—</td>
+            <td>双向射击、水炮交互</td>
+          </tr>
+          <tr>
+            <td>Dragon Racer's Rally</td>
+            <td>博克岛</td>
+            <td>Gerstlauer</td>
+            <td>双摆锤</td>
+            <td>—</td>
+            <td>—</td>
+            <td>双翼摆锤、龙骑竞速模拟</td>
+          </tr>
+          <tr>
+            <td>Mario Kart: Bowser's Challenge</td>
+            <td>任天堂世界</td>
+            <td>Universal Creative</td>
+            <td>AR 黑暗骑乘</td>
+            <td>—</td>
+            <td>—</td>
+            <td>增强现实 + 实体场景融合</td>
+          </tr>
+          <tr>
+            <td>Mine-Cart Madness</td>
+            <td>任天堂世界</td>
+            <td>Producers Group / Scenario</td>
+            <td>"Boom Coaster" 错觉过山车</td>
+            <td>—</td>
+            <td>—</td>
+            <td>模拟矿车跳跃断轨错觉</td>
+          </tr>
+          <tr>
+            <td>Battle at the Ministry</td>
+            <td>魔法部</td>
+            <td>—</td>
+            <td>全向升降黑暗骑乘</td>
+            <td>—</td>
+            <td>—</td>
+            <td>omni-directional elevator 技术</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- MODULE 9: FIVE THEMED LANDS (DETAIL) -->
+<!-- ============================================= -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-number">Module 08</div>
+    <h2>五大主题区深度解析 Themed Lands</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="reveal">
+    <div class="land-card" style="border-left-color:#D4A853;">
+      <h3>1. Celestial Park 天穹乐园</h3>
+      <div class="land-subtitle">中央枢纽 · Hub Land</div>
+      <p>园区的地理与叙事中心，以天文学和星象为主题。游客经南侧主入口进入后首先抵达此区，由此通过四座主题"门户"进入其他四个世界。</p>
+      <div class="land-details">
+        <span class="land-tag">Stardust Racers 星尘竞速</span>
+        <span class="land-tag">Constellation Carousel 星座旋转木马</span>
+        <span class="land-tag">Astronomica 水上游乐区</span>
+        <span class="land-tag">Helios Grand Hotel 赫利俄斯大酒店 · 500间客房</span>
+        <span class="land-tag">Portals to 4 lands</span>
+      </div>
+    </div>
+
+    <div class="land-card" style="border-left-color:#6B3FA0;">
+      <h3>2. Dark Universe 暗黑宇宙</h3>
+      <div class="land-subtitle">环球经典怪物 · Classic Monsters</div>
+      <p>以环球经典怪物宇宙为主题，包含狼人、吸血鬼、弗兰肯斯坦等经典 IP。Darkmoor 村落营造哥特式沉浸氛围，是整个园区最具沉浸感的黑暗主题区。</p>
+      <div class="land-details">
+        <span class="land-tag">Monsters Unchained · KUKA 机械臂黑暗骑乘</span>
+        <span class="land-tag">Curse of the Werewolf · 旋转过山车</span>
+        <span class="land-tag">Darkmoor Village 暗沼村</span>
+        <span class="land-tag">哥特式建筑群</span>
+      </div>
+    </div>
+
+    <div class="land-card" style="border-left-color:#3B7DD8;">
+      <h3>3. Isle of Berk 博克岛</h3>
+      <div class="land-subtitle">How to Train Your Dragon · 最大主题区</div>
+      <p>占地面积最大的主题区，基于梦工厂《驯龙高手》IP。拥有丰富的家庭向游乐设施、维京村落景观、壮观的水上表演，并有无人机模拟龙群飞行表演。</p>
+      <div class="land-details">
+        <span class="land-tag">Hiccup's Wing Gliders · Intamin 家庭发射过山车</span>
+        <span class="land-tag">Fyre Drill · Mack Rides 水战</span>
+        <span class="land-tag">Dragon Racer's Rally · Gerstlauer 双摆锤</span>
+        <span class="land-tag">The Untrainable Dragon 剧场秀</span>
+        <span class="land-tag">无人机龙群飞行表演</span>
+        <span class="land-tag">最大主题区</span>
+      </div>
+    </div>
+
+    <div class="land-card" style="border-left-color:#E52521;">
+      <h3>4. Super Nintendo World 超级任天堂世界</h3>
+      <div class="land-subtitle">Mario + Donkey Kong · 美国首个大金刚区</div>
+      <p>继日本大阪和好莱坞之后的第三座超级任天堂世界，也是美国首个包含大金刚主题区的版本。Power-Up Band 互动手环贯穿全区域游戏化体验。</p>
+      <div class="land-details">
+        <span class="land-tag">Mario Kart: Bowser's Challenge · AR 黑暗骑乘</span>
+        <span class="land-tag">Mine-Cart Madness · Boom Coaster 错觉过山车</span>
+        <span class="land-tag">Power-Up Bands 互动手环</span>
+        <span class="land-tag">Yoshi's Adventure</span>
+        <span class="land-tag">Toadstool Cafe</span>
+      </div>
+    </div>
+
+    <div class="land-card" style="border-left-color:#2B5C3B;">
+      <h3>5. Wizarding World - Ministry of Magic 魔法部</h3>
+      <div class="land-subtitle">1920s Paris + Fantastic Beasts · 哈利波特魔法世界第三园区</div>
+      <p>哈利波特魔法世界的第三座园区，以 1920 年代巴黎街景和法国魔法部为背景，融合《神奇动物在哪里》世界观。首次引入触觉反馈互动魔杖技术。</p>
+      <div class="land-details">
+        <span class="land-tag">Battle at the Ministry · 全向升降黑暗骑乘</span>
+        <span class="land-tag">Le Cirque Arcanus 马戏表演</span>
+        <span class="land-tag">互动魔杖 · 触觉反馈 haptic feedback</span>
+        <span class="land-tag">1920s 巴黎街道还原</span>
+        <span class="land-tag">Cafe L'air de la Sirene</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- MODULE 10: AMENITIES -->
+<!-- ============================================= -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-number">Module 09</div>
+    <h2>配套设施 Amenities</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="reveal">
+    <div class="amenity-row">
+      <div class="amenity-card">
+        <h4>Helios Grand Hotel 赫利俄斯大酒店</h4>
+        <p>500 间客房，直接坐落于天穹乐园之内，宾客可在酒店内俯瞰园区景观。这是环球首个真正意义上的"园内酒店"（in-park hotel），宾客享有专属入园通道。建筑风格融合希腊神话与太空美学。</p>
+      </div>
+      <div class="amenity-card">
+        <h4>Terra Luna Resort</h4>
+        <p>配套度假酒店，以地球与月球为主题，提供中高端住宿体验。与 Stella Nova 共同构成 Epic Universe 的外部住宿体系，距离园区主入口约 1.5 km。</p>
+      </div>
+      <div class="amenity-card">
+        <h4>Stella Nova Resort</h4>
+        <p>以星辰与新星为主题的配套度假酒店，提供面向家庭游客的舒适住宿。与 Terra Luna 互补定位，合计提供数千间客房供应。</p>
+      </div>
+      <div class="amenity-card">
+        <h4>停车场 Parking</h4>
+        <p>5 大主题停车场分区：Gamer（玩家）、Hero（英雄）、Monster（怪物）、Viking（维京）、Explorer（探险家）。每区对应不同主题色彩与标识，提升抵达体验。</p>
+      </div>
+      <div class="amenity-card">
+        <h4>Kirkman Road 延伸段</h4>
+        <p>市政配套工程，总投资 $315M（约 ¥22.5 亿），全长约 2.7 km（1.7 mi），将园区与奥兰多主要交通干道连接，大幅改善可达性。</p>
+      </div>
+      <div class="amenity-card">
+        <h4>Epic Boulevard 主入口大道</h4>
+        <p>通往园区主入口的林荫大道，两侧布置景观、标识系统及游客服务设施，构成从城市界面到主题沉浸空间的第一重过渡。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- MODULE 11: LATEST NEWS & EXPANSION -->
+<!-- ============================================= -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-number">Module 10</div>
+    <h2>最新动态与扩建计划 Latest News &amp; Expansion</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="reveal">
+    <div class="card-grid">
+      <div class="card">
+        <h4>Project 680</h4>
+        <div class="card-value" style="font-size:1.2rem;">首个扩建景点启动</div>
+        <div class="card-note">2026 年 3 月备案，"未来景点"前期工程，标志着扩建正式进入实施阶段。具体 IP 和内容尚未公布，业界推测可能为全新主题区或现有区域的重大升级。</div>
+      </div>
+      <div class="card">
+        <h4>扩建预留地</h4>
+        <div class="card-value" style="font-size:1.2rem;">多块用地就绪</div>
+        <div class="card-note">各主题区之间均预留了扩建用地（expansion pads），布局设计之初已考虑未来 10—15 年的持续增长需求。首个扩建许可（2025年11月）面积约 14,000 m²。</div>
+      </div>
+      <div class="card">
+        <h4>天穹乐园餐饮完善</h4>
+        <div class="card-value" style="font-size:1.2rem;">2026 年持续推进</div>
+        <div class="card-note">Celestial Park 区域内多家特色餐厅在 2026 年陆续完工开业，进一步完善中央枢纽的游客服务能力与停留时间。</div>
+      </div>
+      <div class="card">
+        <h4>Universal Kids Resort</h4>
+        <div class="card-value" style="font-size:1.2rem;">德克萨斯州 Frisco</div>
+        <div class="card-note">环球旗下全新儿童主题度假村，2026 年开业，标志着环球品牌向家庭细分市场的进一步拓展，与 Epic Universe 形成品牌矩阵互补。</div>
+      </div>
+      <div class="card">
+        <h4>英国环球主题公园</h4>
+        <div class="card-value" style="font-size:1.2rem;">规划阶段</div>
+        <div class="card-note">Universal 在英国推进首个欧洲主题公园项目，目前处于规划阶段，将借鉴 Epic Universe 的设计与管理经验。</div>
+      </div>
+      <div class="card">
+        <h4>技术迭代储备</h4>
+        <div class="card-value" style="font-size:1.2rem;">持续创新</div>
+        <div class="card-note">全向升降载具、触觉反馈魔杖、无人机群表演、AR 融合骑乘等技术储备已就绪，可快速部署至扩建项目。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- MODULE 12: REFERENCE LIBRARY -->
+<!-- ============================================= -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-number">Module 11</div>
+    <h2>参考资源 Reference Library</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="reveal">
+    <ul class="ref-list">
+      <li>
+        <span class="ref-label">1. Wikimedia Commons — 图片资源库</span>
+        <a href="https://commons.wikimedia.org/wiki/Category:Universal_Epic_Universe" target="_blank" rel="noopener">commons.wikimedia.org/wiki/Category:Universal_Epic_Universe</a>
+      </li>
+      <li>
+        <span class="ref-label">2. YouTube — 全园完整导览视频</span>
+        <a href="https://www.youtube.com/results?search_query=Epic+Universe+full+tour+2025" target="_blank" rel="noopener">youtube.com/results?search_query=Epic+Universe+full+tour+2025</a>
+      </li>
+      <li>
+        <span class="ref-label">3. Universal Orlando 官方网站</span>
+        <a href="https://www.universalorlando.com/web/en/us/theme-parks/epic-universe" target="_blank" rel="noopener">universalorlando.com/theme-parks/epic-universe</a>
+      </li>
+      <li>
+        <span class="ref-label">4. Attractions Magazine — 五大世界全览照片导览</span>
+        <a href="https://attractionsmagazine.com/epic-universe-photo-tour-inside-all-5-worlds-from-nintendo-to-harry-potter/" target="_blank" rel="noopener">attractionsmagazine.com/epic-universe-photo-tour</a>
+      </li>
+      <li>
+        <span class="ref-label">5. ThemeParkBrochures — 官方园区地图</span>
+        <a href="https://www.themeparkbrochures.net/universal-epic-universe-map/" target="_blank" rel="noopener">themeparkbrochures.net/universal-epic-universe-map</a>
+      </li>
+    </ul>
+    <p style="text-align:center;font-size:0.78rem;color:#8C8C8C;margin-top:2rem;">
+      本报告所有数据来源于公开资料，仅供参考研究使用。&copy; 2026 文旅案例深度研究
+    </p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  Universal Epic Universe Case Study &middot; 奥兰多史诗宇宙案例深度研究 &middot; 数据截至 2026 年 5 月 &middot; 所有数据使用中国大陆公制单位
+</footer>
+
+<!-- ============================================= -->
+<!-- SCRIPTS -->
+<!-- ============================================= -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function() {
+
+  // ===== INTERSECTION OBSERVER for scroll reveal =====
+  var revealEls = document.querySelectorAll('.reveal');
+  if (revealEls.length) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function(el) { observer.observe(el); });
+  }
+
+  // ===== MAP FACTORY FUNCTIONS =====
+  function makeStreetLayer() {
+    return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+      maxZoom: 20
+    });
+  }
+
+  function makeSatLayer() {
+    return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+      maxZoom: 20
+    });
+  }
+
+  // Zone markers data
+  var zones = [
+    { name: 'Celestial Park 天穹乐园', lat: 28.4422, lng: -81.4490, color: '#D4A853' },
+    { name: 'Super Nintendo World 任天堂', lat: 28.4425, lng: -81.4480, color: '#E52521' },
+    { name: 'Dark Universe 暗黑宇宙', lat: 28.4430, lng: -81.4482, color: '#6B3FA0' },
+    { name: 'Wizarding World 魔法部', lat: 28.4418, lng: -81.4500, color: '#2B5C3B' },
+    { name: 'Isle of Berk 博克岛', lat: 28.4415, lng: -81.4495, color: '#3B7DD8' },
+    { name: 'Helios Grand Hotel', lat: 28.4432, lng: -81.4490, color: '#C8A050' },
+    { name: '入口 · Entrance', lat: 28.4412, lng: -81.4490, color: '#4A90D9' }
+  ];
+
+  function makeDivIcon(color) {
+    return L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="width:14px;height:14px;background:' + color + ';border:2.5px solid #F0EDF2;border-radius:50%;box-shadow:0 0 8px ' + color + ';"></div>',
+      iconSize: [14, 14],
+      iconAnchor: [7, 7],
+      popupAnchor: [0, -10]
+    });
+  }
+
+  function bindZoneMarkers(map) {
+    zones.forEach(function(z) {
+      var marker = L.marker([z.lat, z.lng], { icon: makeDivIcon(z.color) }).addTo(map);
+      marker.bindPopup(
+        '<div style="font-family:\'DM Sans\',sans-serif;font-size:13px;text-align:center;color:#0A0E27;">' +
+        '<strong style="color:' + z.color + ';">' + z.name + '</strong>' +
+        '</div>',
+        { closeButton: false, offset: [0, -8] }
+      );
+    });
+  }
+
+  // ===== MAP 1: PARK MAP (street default) =====
+  (function initParkMap() {
+    var el = document.getElementById('parkmap');
+    if (!el) return;
+    var map = L.map('parkmap', {
+      center: [28.4422, -81.4490],
+      zoom: 16,
+      scrollWheelZoom: false,
+      zoomControl: true
+    });
+
+    var street = makeStreetLayer().addTo(map);
+    var sat = makeSatLayer();
+
+    L.control.layers(
+      { 'Street 街道': street, 'Satellite 卫星': sat },
+      {},
+      { collapsed: true, position: 'topright' }
+    ).addTo(map);
+
+    bindZoneMarkers(map);
+
+    setTimeout(function() { map.invalidateSize(); }, 1000);
+  })();
+
+  // ===== MAP 2: SATELLITE MAP (satellite default) =====
+  (function initSatMap() {
+    var el = document.getElementById('satmap');
+    if (!el) return;
+    var map = L.map('satmap', {
+      center: [28.4422, -81.4490],
+      zoom: 16,
+      scrollWheelZoom: false,
+      zoomControl: true
+    });
+
+    var street = makeStreetLayer();
+    var sat = makeSatLayer().addTo(map);
+
+    L.control.layers(
+      { 'Street 街道': street, 'Satellite 卫星': sat },
+      {},
+      { collapsed: true, position: 'topright' }
+    ).addTo(map);
+
+    bindZoneMarkers(map);
+
+    setTimeout(function() { map.invalidateSize(); }, 1000);
+  })();
+
+})();
+</script>
+
+</body>
+</html>

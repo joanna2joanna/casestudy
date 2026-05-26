@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>北京环球影城 案例研究 — 全球最大环球影城深度分析</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+:root {
+  --red: #C41E3A;
+  --red-deep: #8B1A2B;
+  --gold: #D4A843;
+  --gold-light: #F0D078;
+  --navy: #0A1628;
+  --navy-light: #122040;
+  --ink: #1A1A1A;
+  --warm-white: #FDF8F3;
+  --cream: #F5EDE0;
+  --white: #FFFFFF;
+  --text: #1C1C1C;
+  --text-muted: #5C5048;
+  --text-light: #8C8078;
+  --border: #E0D5C8;
+  --shadow-sm: 0 1px 3px rgba(10,22,40,0.06);
+  --shadow-md: 0 4px 20px rgba(10,22,40,0.08);
+  --shadow-lg: 0 12px 40px rgba(10,22,40,0.12);
+  --shadow-xl: 0 24px 60px rgba(10,22,40,0.16);
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+  --font-mono: 'DM Mono', 'SF Mono', monospace;
+  --max-width: 1240px;
+  --nav-h: 64px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+
+body {
+  font-family: var(--font-body);
+  background: var(--warm-white);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Navigation ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--nav-h);
+  background: rgba(10,22,40,0.94);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center; gap: 2px;
+  padding: 0 20px; overflow-x: auto;
+}
+nav a {
+  color: rgba(255,255,255,0.68); text-decoration: none;
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.03em;
+  padding: 6px 12px; border-radius: 20px; white-space: nowrap;
+  transition: all 0.25s ease;
+}
+nav a:hover, nav a.active { color: var(--gold-light); background: rgba(212,168,67,0.12); }
+
+/* ── Hero ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(165deg, #060D1A 0%, #0A1628 20%, #122040 50%, #0E1A35 75%, #0A1628 100%);
+  overflow: hidden;
+  text-align: center; padding: 120px 24px 80px;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 25% 80%, rgba(196,30,58,0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 75% 25%, rgba(212,168,67,0.1) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(240,208,120,0.06) 0%, transparent 70%);
+}
+.hero-bg-pattern {
+  position: absolute; inset: 0; opacity: 0.03;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.5) 2px, rgba(255,255,255,0.5) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.5) 2px, rgba(255,255,255,0.5) 4px);
+}
+.hero-content { position: relative; z-index: 2; max-width: 800px; }
+.hero-badge {
+  display: inline-block;
+  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gold); border: 1px solid rgba(212,168,67,0.35);
+  padding: 6px 18px; border-radius: 20px; margin-bottom: 32px;
+}
+.hero h1 {
+  font-family: var(--font-display); font-size: clamp(2.6rem, 5vw, 4rem);
+  font-weight: 900; color: var(--white); line-height: 1.15;
+  letter-spacing: 0.03em; margin-bottom: 20px;
+}
+.hero h1 span { color: var(--gold); }
+.hero-sub {
+  font-size: 1.05rem; color: rgba(255,255,255,0.55); line-height: 1.6;
+  max-width: 580px; margin: 0 auto 48px;
+}
+.hero-kpis {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+  max-width: 720px; margin: 0 auto;
+  background: rgba(255,255,255,0.06); border-radius: 16px; overflow: hidden;
+}
+.hero-kpi {
+  background: rgba(10,22,40,0.6); padding: 28px 20px;
+  backdrop-filter: blur(8px);
+}
+.hero-kpi-num {
+  font-family: var(--font-display); font-size: 2rem; font-weight: 900;
+  color: var(--gold); line-height: 1.1;
+}
+.hero-kpi-label {
+  font-size: 0.72rem; color: rgba(255,255,255,0.5); margin-top: 6px;
+  letter-spacing: 0.03em;
+}
+
+/* ── Sections ── */
+section { padding: 88px 24px; }
+.section-inner { max-width: var(--max-width); margin: 0 auto; }
+.section-tag {
+  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 12px;
+}
+.section-title {
+  font-family: var(--font-display); font-size: 2rem; font-weight: 700;
+  color: var(--navy); margin-bottom: 12px; letter-spacing: 0.02em;
+}
+.section-desc {
+  font-size: 0.95rem; color: var(--text-muted); max-width: 560px;
+  margin-bottom: 48px; line-height: 1.7;
+}
+.sub-heading {
+  font-family: var(--font-display); font-size: 1.1rem; color: var(--navy);
+  margin: 32px 0 16px;
+}
+
+/* ── Cards ── */
+.cards-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+.cards-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.cards-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+.info-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 28px 24px; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border); transition: box-shadow 0.3s;
+}
+.info-card:hover { box-shadow: var(--shadow-md); }
+.info-card-icon { font-size: 1.5rem; margin-bottom: 12px; }
+.info-card-label { font-size: 0.72rem; color: var(--text-light); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
+.info-card-value { font-size: 0.95rem; font-weight: 600; color: var(--navy); line-height: 1.4; }
+
+/* ── SVG site plan container ── */
+.site-plan-wrap {
+  background: var(--white); border-radius: var(--radius-lg);
+  padding: 32px; box-shadow: var(--shadow-md);
+  border: 1px solid var(--border); margin-bottom: 48px;
+}
+.site-plan-wrap svg { width: 100%; height: auto; }
+
+/* ── Timeline ── */
+.timeline { position: relative; padding-left: 32px; }
+.timeline::before {
+  content: ''; position: absolute; left: 10px; top: 8px; bottom: 8px;
+  width: 2px; background: linear-gradient(to bottom, var(--red), var(--gold));
+}
+.timeline-item { position: relative; margin-bottom: 32px; }
+.timeline-item::before {
+  content: ''; position: absolute; left: -26px; top: 6px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--red); border: 2px solid var(--warm-white);
+  box-shadow: 0 0 0 2px var(--red);
+}
+.timeline-item:nth-child(even)::before { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+.timeline-year {
+  font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
+  color: var(--red); letter-spacing: 0.06em;
+}
+.timeline-item:nth-child(even) .timeline-year { color: var(--gold); }
+.timeline-title { font-weight: 600; font-size: 0.95rem; color: var(--navy); margin-top: 2px; }
+.timeline-desc { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; }
+
+/* ── KPI cards ── */
+.kpi-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 32px 28px; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border); text-align: center;
+}
+.kpi-num {
+  font-family: var(--font-display); font-size: 2.4rem; font-weight: 900;
+  color: var(--navy); line-height: 1.1;
+}
+.kpi-num.red { color: var(--red); }
+.kpi-num.gold { color: #B8972E; }
+.kpi-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; }
+.kpi-sub { font-size: 0.72rem; color: var(--text-light); margin-top: 4px; }
+
+/* ── Tables ── */
+.data-table {
+  width: 100%; border-collapse: collapse;
+  background: var(--white); border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+.data-table th {
+  background: var(--navy); color: var(--white);
+  font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 14px 20px; text-align: left;
+}
+.data-table td {
+  padding: 12px 20px; font-size: 0.88rem; color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table .cat-cell { font-weight: 600; color: var(--navy); background: var(--cream); }
+
+/* ── Section alt bg ── */
+.section-alt { background: var(--cream); }
+
+/* ── Zone cards ── */
+.zone-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 24px; box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--red); transition: box-shadow 0.3s;
+}
+.zone-card:nth-child(2) { border-left-color: #E8784A; }
+.zone-card:nth-child(3) { border-left-color: #D4A843; }
+.zone-card:nth-child(4) { border-left-color: var(--navy); }
+.zone-card:nth-child(5) { border-left-color: #2E7D32; }
+.zone-card:nth-child(6) { border-left-color: #6A1B9A; }
+.zone-card:nth-child(7) { border-left-color: #0277BD; }
+.zone-card:hover { box-shadow: var(--shadow-md); }
+.zone-card h4 { font-size: 0.95rem; color: var(--navy); margin-bottom: 6px; }
+.zone-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+.zone-tag {
+  display: inline-block; font-family: var(--font-mono); font-size: 0.6rem;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 10px; margin-bottom: 8px;
+  background: rgba(196,30,58,0.08); color: var(--red);
+}
+
+/* ── Amenity grid ── */
+.amenity-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 28px 24px; text-align: center; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border); transition: box-shadow 0.3s;
+}
+.amenity-card:hover { box-shadow: var(--shadow-md); }
+.amenity-icon { font-size: 2rem; margin-bottom: 10px; }
+.amenity-name { font-weight: 600; font-size: 0.9rem; color: var(--navy); }
+.amenity-detail { font-size: 0.76rem; color: var(--text-muted); margin-top: 4px; }
+
+/* ── Footer ── */
+footer {
+  background: var(--navy); text-align: center; padding: 48px 24px;
+  color: rgba(255,255,255,0.5); font-size: 0.8rem; line-height: 1.8;
+}
+footer strong { color: var(--gold); }
+
+/* ── Scroll reveal ── */
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .cards-6 { grid-template-columns: repeat(3, 1fr); }
+  .cards-4 { grid-template-columns: repeat(2, 1fr); }
+  .hero-kpis { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .cards-6, .cards-4, .cards-3, .cards-2 { grid-template-columns: 1fr; }
+  .hero-kpis { grid-template-columns: 1fr 1fr; }
+  nav { gap: 0; }
+  nav a { padding: 6px 10px; font-size: 0.68rem; }
+  .section-title { font-size: 1.5rem; }
+  .hero h1 { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav id="nav">
+  <a href="#hero">总览</a>
+  <a href="#overview">概览</a>
+  <a href="#design">设计与建设</a>
+  <a href="#summary">技术总表</a>
+  <a href="#layout">空间布局</a>
+  <a href="#investment">投资时序</a>
+  <a href="#operations">运营指标</a>
+  <a href="#tech">规模指标</a>
+  <a href="#amenities">配套设施</a>
+  <a href="#future">二期展望</a>
+  <a href="#references">资料库</a>
+</nav>
+
+<!-- 01 Hero -->
+<section class="hero" id="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Theme Park Case Study · 数据截至 2026 年 5 月</div>
+    <h1><span>北京环球影城</span><br>案例研究</h1>
+    <p class="hero-sub">全球最大环球影城 · 中美合资标杆 · 中国文化 × 世界IP<br>历经二十年筹备，中国首个、亚洲第三个环球主题公园</p>
+    <div class="hero-kpis reveal">
+      <div class="hero-kpi"><div class="hero-kpi-num">¥460亿</div><div class="hero-kpi-label">一期总投资</div></div>
+      <div class="hero-kpi"><div class="hero-kpi-num">980万</div><div class="hero-kpi-label">年均游客量</div></div>
+      <div class="hero-kpi"><div class="hero-kpi-num">169公顷</div><div class="hero-kpi-label">一期占地面积</div></div>
+      <div class="hero-kpi"><div class="hero-kpi-num">7大</div><div class="hero-kpi-label">主题景区</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 Overview -->
+<section id="overview">
+  <div class="section-inner">
+    <div class="section-tag">01 — Project Overview</div>
+    <h2 class="section-title">项目概览</h2>
+    <p class="section-desc">北京环球影城是环球影业在全球的第5座主题公园，也是迄今规模最大的一座。一期项目含7大主题景区、37处骑乘设施、24场娱乐演出，于2021年9月20日正式开业。</p>
+    <div class="cards-6 reveal">
+      <div class="info-card"><div class="info-card-icon">🎢</div><div class="info-card-label">开业时间</div><div class="info-card-value">2021年9月20日</div></div>
+      <div class="info-card"><div class="info-card-icon">🏗️</div><div class="info-card-label">开发商 / 运营商</div><div class="info-card-value">首寰投资（70%）+ NBCUniversal（30%）/ 北京国际度假区有限公司</div></div>
+      <div class="info-card"><div class="info-card-icon">📍</div><div class="info-card-label">位置</div><div class="info-card-value">北京市通州区文景街道<br>东六环与京哈高速交汇处</div></div>
+      <div class="info-card"><div class="info-card-icon">📐</div><div class="info-card-label">面积</div><div class="info-card-value">总体规划 4 km²（400公顷）<br>一期 1.69 km²（169公顷）</div></div>
+      <div class="info-card"><div class="info-card-icon">👥</div><div class="info-card-label">日容量峰值</div><div class="info-card-value">超 50,000 人次</div></div>
+      <div class="info-card"><div class="info-card-icon">🎫</div><div class="info-card-label">门票价格区间</div><div class="info-card-value">¥418–748<br><span style="font-size:0.75rem;color:var(--text-light)">淡季/平季/旺季/特定日</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 Design & Construction -->
+<section id="design" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag">02 — Design & Construction</div>
+    <h2 class="section-title">设计与建设 · 供应商体系</h2>
+    <p class="section-desc">北京环球影城一期工程汇集中国顶级建筑设计院、施工企业和国际专业供应商。高峰期约36,000名工人同时在场，创环球主题公园建设史上最大规模施工纪录。</p>
+
+    <h3 class="sub-heading" style="margin-top:0;">设计方</h3>
+    <div class="cards-4 reveal">
+      <div class="info-card"><div class="info-card-icon">🏛️</div><div class="info-card-label">总体设计 & 两大园区</div><div class="info-card-value">北京市建筑设计研究院（北京建院/BIAD）<br><span style="font-size:0.75rem;color:var(--text-light)">总体规划控制 + 功夫熊猫盖世之地 + 未来水世界 + 环球大酒店</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🏢</div><div class="info-card-label">CityWalk & 专项咨询</div><div class="info-card-value">中国建筑科学研究院（中国建研院/CABR）<br><span style="font-size:0.75rem;color:var(--text-light)">城市大道设计总包 + 绿色建筑 + 消防评估</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🦖</div><div class="info-card-label">两大园区深化设计</div><div class="info-card-value">中冶建筑研究总院（中国京冶）<br><span style="font-size:0.75rem;color:var(--text-light)">侏罗纪世界努布拉岛 + 小黄人乐园 BIM正向设计</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🌍</div><div class="info-card-label">概念设计</div><div class="info-card-value">Universal Creative + 全球38家设计公司<br><span style="font-size:0.75rem;color:var(--text-light)">BIM360云平台跨国协同，500余名设计师与艺术家</span></div></div>
+    </div>
+
+    <h3 class="sub-heading">施工方（六大标段，总投资约¥87亿）</h3>
+    <table class="data-table reveal" style="margin-bottom:24px;">
+      <thead><tr><th>标段</th><th>中标单位</th><th>中标金额</th><th>负责区域</th></tr></thead>
+      <tbody>
+        <tr><td>标段一</td><td>中国有色金属工业第六冶金建设</td><td>~¥12.6亿</td><td>主题公园基础设施</td></tr>
+        <tr><td>标段二</td><td>中建二局（唯一参与深化设计的总包）</td><td>~¥21.5亿</td><td>侏罗纪世界努布拉岛 + 小黄人乐园</td></tr>
+        <tr><td>标段三</td><td>中建一局集团建设发展</td><td>~¥15.9亿</td><td>功夫熊猫盖世之地（含714骑乘设备安装）</td></tr>
+        <tr><td>标段四</td><td>中铁建设集团</td><td>~¥12.0亿</td><td>哈利·波特的魔法世界 + 诺金度假酒店</td></tr>
+        <tr><td>标段五</td><td>上海宝冶集团（中冶集团）</td><td>~¥11.1亿</td><td>变形金刚基地（含霸天虎过山车）</td></tr>
+        <tr><td>标段六</td><td>中国京冶（中冶建研院）</td><td>~¥13.0亿</td><td>好莱坞大道景区（辉煌剧院、特效剧场等）</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="sub-heading">关键供应商</h3>
+    <table class="data-table reveal">
+      <thead><tr><th>类别</th><th>供应商</th><th>供应内容</th></tr></thead>
+      <tbody>
+        <tr><td class="cat-cell" rowspan="4">🎢 骑乘设备</td><td>B&M / Bolliger & Mabillard（瑞士）</td><td>霸天虎过山车 — 发射型坐式，高34m，极速108km/h，7个翻转</td></tr>
+        <tr><td>Mack Rides（德国）</td><td>飞越侏罗纪（倒挂动力过山车）+ 鹰马飞行（Youngstar Coaster）</td></tr>
+        <tr><td>金马游乐 / Jinma Rides（中国中山）</td><td>环球影城唯一中国骑乘设备供应商 — 萌转过山车 + 超萌漩漩涡 + 灯影传奇</td></tr>
+        <tr><td>Intamin（列支敦士登/瑞士）</td><td>环球长期合作伙伴，全球顶级过山车/黑暗骑乘/水上游乐设备</td></tr>
+        <tr><td class="cat-cell" rowspan="2">🎨 主题包装</td><td>中冶建研院 / 中国京冶</td><td>唯一覆盖全产业链企业 — 概念设计落地/施工图/总承包/监理/主题包装/音视频集成</td></tr>
+        <tr><td>梦客豪思</td><td>哈利波特、变形金刚等标段装饰设计与施工</td></tr>
+        <tr><td class="cat-cell">💡 主题灯具</td><td>华艺灯饰 / HUAYI Lighting（中国中山）</td><td>侏罗纪+小黄人区 5,000+套主题灯具，300+款式（室内照明/景观灯柱/泛光照明）</td></tr>
+        <tr><td class="cat-cell">🧱 建筑材料</td><td>金隅集团 / BBMG（多家子公司）</td><td>环球唯一防火涂料品牌 — 累计4,600吨；岩棉4,200吨；混凝土月产10万m³+</td></tr>
+        <tr><td class="cat-cell">🔌 智能化</td><td>中建电子 / 中建安装 / 中冶建研院</td><td>全园弱电智能化 + 暖通机电 + 音视频系统集成</td></tr>
+        <tr><td class="cat-cell">🌳 景观绿化</td><td>北京顺景园林 / 北京园林集团</td><td>80.78 万m²绿化景观施工</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 04 Technical Summary Table -->
+<section id="summary">
+  <div class="section-inner">
+    <div class="section-tag">03 — Master Data Table</div>
+    <h2 class="section-title">技术指标总表</h2>
+    <p class="section-desc">全维度汇总：从投资规模到运营表现，一站式数据速查。</p>
+    <div style="overflow-x:auto;">
+    <table class="data-table reveal" style="min-width:900px;">
+      <thead><tr><th>维度</th><th>指标</th><th>数据</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td class="cat-cell">基础</td><td>开业时间</td><td>2021年9月20日</td><td></td></tr>
+        <tr><td class="cat-cell">基础</td><td>位置</td><td>北京市通州区文景街道</td><td>东六环与G1京哈高速交汇</td></tr>
+        <tr><td class="cat-cell">规模</td><td>总规划面积</td><td>4 km²（400公顷）</td><td>一+二+三期</td></tr>
+        <tr><td class="cat-cell">规模</td><td>一期面积</td><td>1.69 km²（169公顷）</td><td>含主题公园+酒店+城市大道</td></tr>
+        <tr><td class="cat-cell">投资</td><td>一期总投资</td><td>约¥460亿元（约$65亿）</td><td>中方70% + 美方30%</td></tr>
+        <tr><td class="cat-cell">运营</td><td>2024年游客量</td><td>约978万人次</td><td>TEA全球第12位</td></tr>
+        <tr><td class="cat-cell">运营</td><td>2024年营收</td><td>约¥79.2亿元</td><td></td></tr>
+        <tr><td class="cat-cell">运营</td><td>累计净利润</td><td style="color:var(--red)">亏损超¥30亿</td><td>高折旧+利息</td></tr>
+        <tr><td class="cat-cell">体验</td><td>主题景区</td><td>7大主题区</td><td>含3个专属定制区</td></tr>
+        <tr><td class="cat-cell">体验</td><td>骑乘设施</td><td>37处</td><td>含4台过山车</td></tr>
+        <tr><td class="cat-cell">体验</td><td>日容量峰值</td><td>超50,000人次</td><td></td></tr>
+        <tr><td class="cat-cell">票价</td><td>单日成人票</td><td>¥418 – ¥748</td><td>四级动态定价</td></tr>
+        <tr><td class="cat-cell">配套</td><td>酒店</td><td>2家（1,200间客房）</td><td>环球大酒店+诺金度假</td></tr>
+        <tr><td class="cat-cell">配套</td><td>停车位</td><td>超10,000个</td><td></td></tr>
+        <tr><td class="cat-cell">配套</td><td>地铁</td><td>7号线+八通线 环球度假区站</td><td></td></tr>
+        <tr><td class="cat-cell">环保</td><td>LEED认证</td><td>金级（Gold）</td><td>全球首个LEED金级主题公园</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- 05 Spatial Layout -->
+<section id="layout" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag">04 — Spatial Layout</div>
+    <h2 class="section-title">空间布局与功能分区</h2>
+    <p class="section-desc">一轴两区依水，七景核心环湖。一期设7大主题景区，含3个为北京市场量身打造的专属定制园区，中国元素占比约35%。</p>
+
+    <div class="site-plan-wrap reveal">
+      <div id="parkmap" style="width:100%;height:520px;border-radius:12px;z-index:0;"></div>
+      <p style="text-align:center;font-size:0.72rem;color:var(--text-light);margin-top:8px;">▲ 交互地图：可缩放、平移，街道图/卫星图切换。标注位置基于官方地图与卫星影像综合研判。</p>
+    </div>
+
+    <div class="site-plan-wrap reveal" style="margin-top:24px;">
+      <h4 style="font-family:var(--font-display);font-size:1rem;color:var(--navy);margin-bottom:4px;text-align:center;">卫星影像 · 功能区参考</h4>
+      <p style="text-align:center;font-size:0.72rem;color:var(--text-light);margin-bottom:12px;">高德卫星底图 × 园区标注（可缩放平移）</p>
+      <div id="satmap" style="width:100%;height:420px;border-radius:12px;z-index:0;"></div>
+    </div>
+
+    <div class="cards-3 reveal" style="margin-top:32px;">
+      <div class="zone-card"><span class="zone-tag">专属定制</span><h4>🐼 功夫熊猫盖世之地</h4><p>全球首个功夫熊猫主题景区，唯一全室内区。翡翠宫、熊猫村、智慧仙桃树全息投影，"神龙大侠之旅"激流勇进。</p></div>
+      <div class="zone-card"><span class="zone-tag">专属定制</span><h4>🤖 变形金刚基地</h4><p>全球首个变形金刚专属主题区。霸天虎过山车4.5秒加速至104km/h，火种源争夺战，赛博坦风格建筑。</p></div>
+      <div class="zone-card"><h4>🍌 小黄人乐园</h4><p>全球最大的小黄人乐园。神偷奶爸小黄人闹翻天4D影院、萌转过山车、超级萌乐岛，亲子向趣味体验。</p></div>
+      <div class="zone-card"><h4>⚡ 哈利·波特的魔法世界</h4><p>霍格莫德村与霍格沃茨城堡原汁原味复刻。禁忌之旅、鹰马飞行、城堡夜间灯光庆典。</p></div>
+      <div class="zone-card"><h4>🦖 侏罗纪世界努布拉岛</h4><p>全球唯一以努布拉岛为主题的区域。侏罗纪世界大冒险、飞越侏罗纪，均为全球首发或独有。</p></div>
+      <div class="zone-card"><h4>🎬 好莱坞</h4><p>重现洛杉矶好莱坞大道。张艺谋×斯皮尔伯格合作"灯光，摄像，开拍！"电影特效体验。</p></div>
+    </div>
+    <div class="cards-3 reveal" style="margin-top:16px; max-width:400px; margin-left:auto; margin-right:auto;">
+      <div class="zone-card" style="grid-column:1/-1;"><span class="zone-tag">专属定制</span><h4>🌊 未来水世界</h4><p>全球首个未来水世界专属景区。水上摩托艇特技、飞机坠毁特效、爆破表演，设全湿区/半湿区/安全区三级体验。</p></div>
+    </div>
+
+    <!-- Photo resources -->
+    <div style="margin-top:48px;">
+      <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--navy);margin-bottom:8px;">园区实景图集</h3>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:24px;">各主题区高清实景照片链接。点击跳转至外部图库或游记页面。</p>
+      <div class="cards-4 reveal">
+        <a href="https://www.vcg.com/creative/1403133281" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-card"><div class="amenity-icon">⚡</div><div class="amenity-name">哈利·波特魔法世界</div><div class="amenity-detail">视觉中国超高清 · 城堡+湖面倒影+夜景灯光秀</div></div>
+        </a>
+        <a href="https://www.bilibili.com/video/BV1X34y1S7K6/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-card"><div class="amenity-icon">🤖</div><div class="amenity-name">变形金刚基地</div><div class="amenity-detail">B站实拍视频 · 霸天虎过山车360°多角度</div></div>
+        </a>
+        <a href="https://www.bjnews.com.cn/detail/163315429814439.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-card"><div class="amenity-icon">🐼</div><div class="amenity-name">功夫熊猫盖世之地</div><div class="amenity-detail">新京报高清图集 · 翡翠宫+智慧仙桃树+熊猫村</div></div>
+        </a>
+        <a href="https://www.bilibili.com/video/BV1NL4y1q7ja/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-card"><div class="amenity-icon">🦖</div><div class="amenity-name">侏罗纪世界努布拉岛</div><div class="amenity-detail">B站4K视频 · 侏罗纪大冒险+飞越侏罗纪实拍</div></div>
+        </a>
+        <a href="http://mp.weixin.qq.com/s?__biz=MzIwMDQ1MzM5OQ==&mid=2661645133&idx=1&sn=002b0cdb8785636bf24f95ba7907b1ab" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-card"><div class="amenity-icon">🍌</div><div class="amenity-name">小黄人乐园</div><div class="amenity-detail">2025年4月最新游记 · 159张实拍+8段视频</div></div>
+        </a>
+        <a href="https://blog.sina.com.cn/s/blog_5c91c4f50102zfbz.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-card"><div class="amenity-icon">🌊</div><div class="amenity-name">未来水世界</div><div class="amenity-detail">摄影师董聚山实拍 · 特技表演+爆破场景</div></div>
+        </a>
+        <a href="https://commons.wikimedia.org/wiki/Category:Universal%20Beijing%20Resort" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-card"><div class="amenity-icon">🎬</div><div class="amenity-name">好莱坞大道</div><div class="amenity-detail">Wikimedia Commons · 自由版权园区建筑与景观</div></div>
+        </a>
+        <a href="https://www.caixinglobal.com/2021-08-25/gallery-universals-beijing-theme-park-ready-for-trial-run-101759760.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-card"><div class="amenity-icon">📷</div><div class="amenity-name">官方全园区图集</div><div class="amenity-detail">财新全球 · 7大主题区官方授权高清组图</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 Investment Timeline -->
+<section id="investment">
+  <div class="section-inner">
+    <div class="section-tag">05 — Investment Timeline</div>
+    <h2 class="section-title">投资与建设时序</h2>
+    <p class="section-desc">从2001年首次接触到2021年盛大开园，历时整整二十年。一期总投资约¥460亿元（约$65亿），是中国主题公园史上最大单笔外商投资之一。</p>
+    <div class="cards-2 reveal">
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-year">2001</div><div class="timeline-title">首次接触</div><div class="timeline-desc">北京市政府与环球影业首次会面探讨项目可行性</div></div>
+        <div class="timeline-item"><div class="timeline-year">2014.10</div><div class="timeline-title">正式签约</div><div class="timeline-desc">国家发改委批准，初始宣布投资¥200亿，目标2019年开园</div></div>
+        <div class="timeline-item"><div class="timeline-year">2016.10</div><div class="timeline-title">奠基仪式</div><div class="timeline-desc">举办奠基典礼，宣布将创造约40,000个建设岗位</div></div>
+        <div class="timeline-item"><div class="timeline-year">2018 夏</div><div class="timeline-title">全面开工建设</div><div class="timeline-desc">七大景区、酒店、城市大道同步推进</div></div>
+        <div class="timeline-item"><div class="timeline-year">2020.07</div><div class="timeline-title">建设高峰</div><div class="timeline-desc">约36,000名工人同时在场施工，创环球项目建设纪录</div></div>
+        <div class="timeline-item"><div class="timeline-year">2021.09.20</div><div class="timeline-title">正式开园</div><div class="timeline-desc">首日门票一分钟售罄，一期总投资锁定约¥460亿</div></div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-year">2023.08</div><div class="timeline-title">二期启动信号</div><div class="timeline-desc">北京市发布行动方案，明确"启动环球度假区二期建设"</div></div>
+        <div class="timeline-item"><div class="timeline-year">2024.08</div><div class="timeline-title">二期时间表确认</div><div class="timeline-desc">通州文旅产业交流会宣布二期将于2024年内启动</div></div>
+        <div class="timeline-item"><div class="timeline-year">2025.07</div><div class="timeline-title">列入市级重大项目</div><div class="timeline-desc">北京市印发提振消费专项行动方案，二期列为重大项目</div></div>
+        <div class="timeline-item"><div class="timeline-year">2025-2026</div><div class="timeline-title">新IP落地</div><div class="timeline-desc">原神互动主题餐厅、长安三万里唐歌宴餐厅等新体验陆续上线</div></div>
+        <div class="timeline-item"><div class="timeline-year">二期规划</div><div class="timeline-title">165.83公顷扩建</div><div class="timeline-desc">融入孙悟空等中国传统文化超级IP</div></div>
+        <div class="timeline-item"><div class="timeline-year">三期规划</div><div class="timeline-title">水上乐园</div><div class="timeline-desc">预计引入火山湾型水上景点，一+二+三期总面积超4 km²</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 Operations -->
+<section id="operations" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag">06 — Operations</div>
+    <h2 class="section-title">运营指标</h2>
+    <p class="section-desc">尽管年均游客量近千万，因高额折旧与利息支出，开园以来持续亏损。对比上海迪士尼的盈利表现，环球北京仍在爬坡期。</p>
+    <div class="cards-4 reveal">
+      <div class="kpi-card"><div class="kpi-num">988万</div><div class="kpi-label">2023年游客量（人次）</div><div class="kpi-sub">TEA全球排名第12位</div></div>
+      <div class="kpi-card"><div class="kpi-num">978万</div><div class="kpi-label">2024年游客量（人次）</div><div class="kpi-sub">同比增长约8.6%</div></div>
+      <div class="kpi-card"><div class="kpi-num">¥79.5亿</div><div class="kpi-label">2023年营收</div><div class="kpi-sub">含酒店、城市大道等配套收入</div></div>
+      <div class="kpi-card"><div class="kpi-num">¥79.2亿</div><div class="kpi-label">2024年营收</div><div class="kpi-sub">营收基本持平</div></div>
+    </div>
+    <div class="cards-3 reveal" style="margin-top:16px;">
+      <div class="kpi-card"><div class="kpi-num red">超¥30亿</div><div class="kpi-label">累计亏损（自开园）</div><div class="kpi-sub">年折旧+利息负担沉重</div></div>
+      <div class="kpi-card"><div class="kpi-num">5万+</div><div class="kpi-label">日高峰游客容量</div><div class="kpi-sub">实测单日最高接待量</div></div>
+      <div class="kpi-card"><div class="kpi-num gold">¥418–748</div><div class="kpi-label">四级动态票价</div><div class="kpi-sub">淡季/平季/旺季/特定日</div></div>
+    </div>
+
+    <div style="margin-top:48px;">
+      <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--navy);margin-bottom:16px;">母公司对比 — 康卡斯特（Comcast）环球板块</h3>
+      <table class="data-table reveal">
+        <thead><tr><th>指标</th><th>北京环球（2024）</th><th>上海迪士尼（2024）</th><th>环球全球板块（2024）</th></tr></thead>
+        <tbody>
+          <tr><td>游客量</td><td>~978万人次</td><td>~1,400万人次</td><td>—</td></tr>
+          <tr><td>年营收</td><td>¥79.2亿</td><td>¥134亿</td><td>$79.49亿（约¥577亿）</td></tr>
+          <tr><td>净利润</td><td style="color:var(--red)">亏损</td><td style="color:#2E7D32">¥10亿</td><td>—</td></tr>
+          <tr><td>总投资</td><td>~¥460亿</td><td>~¥340亿</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 08 Core Technical Indicators -->
+<section id="tech">
+  <div class="section-inner">
+    <div class="section-tag">07 — Technical Indicators</div>
+    <h2 class="section-title">核心技术与规模指标</h2>
+    <p class="section-desc">一期主题公园核心参数总览，涵盖设施、景观、建筑、演艺、商业配套五大板块。</p>
+    <table class="data-table reveal">
+      <thead><tr><th>类别</th><th>指标</th><th>数值</th></tr></thead>
+      <tbody>
+        <tr><td class="cat-cell" rowspan="4">🎢 游乐设施</td><td>骑乘设施及地标景点</td><td>37 处</td></tr>
+        <tr><td>过山车</td><td>4 台（含霸天虎过山车）</td></tr>
+        <tr><td>娱乐演出</td><td>24 场</td></tr>
+        <tr><td>水上游乐项目</td><td>2 处（未来水世界 + 功夫熊猫激流勇进）</td></tr>
+        <tr><td class="cat-cell" rowspan="4">🌳 景观环境</td><td>景观总面积</td><td>107.2 万 m²</td></tr>
+        <tr><td>绿化面积</td><td>80.78 万 m²</td></tr>
+        <tr><td>硬质景观面积</td><td>26.42 万 m²</td></tr>
+        <tr><td>塑石假山</td><td>6.96 万 m²</td></tr>
+        <tr><td class="cat-cell" rowspan="3">🏛️ 建筑体量</td><td>园林建筑</td><td>33 座（建筑面积 13.62 万 m²）</td></tr>
+        <tr><td>艺术雕塑小品</td><td>80 座</td></tr>
+        <tr><td>LEED认证</td><td>全球首个LEED金级认证主题公园</td></tr>
+        <tr><td class="cat-cell" rowspan="3">🍽️ 商业配套</td><td>餐饮门店</td><td>80 家</td></tr>
+        <tr><td>零售门店</td><td>30 家</td></tr>
+        <tr><td>酒店客房</td><td>~1,200 间（环球大酒店800 + 诺金400）</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 09 Amenities -->
+<section id="amenities" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag">08 — Supporting Facilities</div>
+    <h2 class="section-title">配套设施体系</h2>
+    <p class="section-desc">一期配套含商业综合体、两大主题酒店、大型停车楼及地铁直达，二期交通枢纽与商业项目陆续落地。</p>
+    <div class="cards-3 reveal">
+      <div class="amenity-card"><div class="amenity-icon">🛍️</div><div class="amenity-name">环球城市大道</div><div class="amenity-detail">Universal CityWalk 商业餐饮娱乐综合体，连接景区与停车场</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🏨</div><div class="amenity-name">环球影城大酒店</div><div class="amenity-detail">全球首家以环球品牌命名的酒店，约800间客房，西班牙风格</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🏯</div><div class="amenity-name">诺金度假酒店</div><div class="amenity-detail">约400间客房，中国古典皇家园林风格，融入圆明园设计灵感</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🅿️</div><div class="amenity-name">停车楼</div><div class="amenity-detail">超10,000个停车位，配套充电桩及VIP停车区</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🚇</div><div class="amenity-name">地铁环球度假区站</div><div class="amenity-detail">7号线东延 + 八通线南延交汇，直达园区入口</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🚌</div><div class="amenity-name">北综合交通枢纽</div><div class="amenity-detail">北京首个4.0站城融合综合体，皇冠假日酒店2025年投用</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 Future -->
+<section id="future">
+  <div class="section-inner">
+    <div class="section-tag">09 — Future Outlook</div>
+    <h2 class="section-title">最新动态与二期展望</h2>
+    <p class="section-desc">二期165.83公顷、三期水上乐园……北京环球影城正从单主题公园向综合度假目的地进化。</p>
+    <div class="cards-4 reveal">
+      <div class="info-card"><div class="info-card-icon">🗺️</div><div class="info-card-label">二期占地面积</div><div class="info-card-value">165.83 公顷（略大于一期159.57公顷）</div></div>
+      <div class="info-card"><div class="info-card-icon">🐵</div><div class="info-card-label">二期核心IP</div><div class="info-card-value">融入孙悟空等中国传统文化超级IP</div></div>
+      <div class="info-card"><div class="info-card-icon">🌊</div><div class="info-card-label">三期规划</div><div class="info-card-value">水上乐园（预计火山湾型水上景点）</div></div>
+      <div class="info-card"><div class="info-card-icon">📐</div><div class="info-card-label">终极规模</div><div class="info-card-value">一+二+三期合计超4 km²</div></div>
+    </div>
+    <div class="cards-2 reveal" style="margin-top:16px;">
+      <div class="info-card"><div class="info-card-icon">🎮</div><div class="info-card-label">2025-2026新IP合作</div><div class="info-card-value">原神互动主题餐厅「颂花盈皎宴」+ 羽球节互动主题区<br>长安三万里唐歌宴互动主题餐厅（首部国产动画IP入驻）</div></div>
+      <div class="info-card"><div class="info-card-icon">🏗️</div><div class="info-card-label">配套建设进展</div><div class="info-card-value">"湾里"商业综合体（2025年9月开业）<br>景观水系游船码头（2025年公示）<br>0024、0038地块新建酒店推进中</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 References -->
+<section id="references">
+  <div class="section-inner">
+    <div class="section-tag">10 — External Resources</div>
+    <h2 class="section-title">延伸资料库</h2>
+    <p class="section-desc">精选5个高质量外部站点，涵盖高清图集、航拍视频、官方资料和深度报道，供进一步研究使用。</p>
+    <div class="cards-2 reveal">
+      <a href="https://commons.wikimedia.org/wiki/Category:Universal%20Beijing%20Resort" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+        <div class="info-card" style="cursor:pointer;">
+          <div class="info-card-icon">🖼️</div>
+          <div class="info-card-label">01 / Wikimedia Commons</div>
+          <div class="info-card-value">自由版权图库 — 北京环球影城各园区建筑、标识、公共区域高清照片，可直接用于报告。</div>
+        </div>
+      </a>
+      <a href="https://www.caixinglobal.com/2021-08-25/gallery-universals-beijing-theme-park-ready-for-trial-run-101759760.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+        <div class="info-card" style="cursor:pointer;">
+          <div class="info-card-icon">📰</div>
+          <div class="info-card-label">02 / 财新全球 Caixin Global</div>
+          <div class="info-card-value">开园前官方授权全园区组图 — 7大主题区高清正面照，适合引用标注来源。</div>
+        </div>
+      </a>
+      <a href="http://mp.weixin.qq.com/s?__biz=MzIwMDQ1MzM5OQ==&mid=2661645133&idx=1&sn=002b0cdb8785636bf24f95ba7907b1ab" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+        <div class="info-card" style="cursor:pointer;">
+          <div class="info-card-icon">📸</div>
+          <div class="info-card-label">03 / 跟宇宙结婚 · 2025年4月游记</div>
+          <div class="info-card-value">159张实拍照片 + 8段视频 — 覆盖全部7大园区，最新最全的游客视角实景。</div>
+        </div>
+      </a>
+      <a href="https://www.bilibili.com/search?keyword=%E5%8C%97%E4%BA%AC%E7%8E%AF%E7%90%83%E5%BD%B1%E5%9F%8E%204K" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+        <div class="info-card" style="cursor:pointer;">
+          <div class="info-card-icon">🎬</div>
+          <div class="info-card-label">04 / B站 Bilibili · 4K实拍</div>
+          <div class="info-card-value">海量4K高清游园视频 — 过山车第一视角、特技表演全程、夜间灯光秀等沉浸内容。</div>
+        </div>
+      </a>
+      <a href="https://www.universalbeijingresort.com/en/news" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+        <div class="info-card" style="cursor:pointer;">
+          <div class="info-card-icon">🏛️</div>
+          <div class="info-card-label">05 / 北京环球度假区官网</div>
+          <div class="info-card-value">官方新闻中心 — 最新活动公告、新IP合作发布、扩建进展等一手资讯。</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>北京环球影城 案例研究</strong> — 全球最大环球影城深度分析</p>
+  <p style="margin-top:6px;">数据来源：United Parks & Resorts 公开文件 · 行业报道 · 官方资料 · 康卡斯特财报 &nbsp;|&nbsp; 编制时间：2026年5月</p>
+  <p style="margin-top:4px;font-size:0.72rem;color:rgba(255,255,255,0.3);">本工具仅供案例研究参考，不构成投资建议。</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ── WGS-84 → GCJ-02 (Mars coordinate) converter ──
+function wgs84ToGcj02(wgsLng, wgsLat) {
+  var a = 6378245.0, ee = 0.00669342162296594323;
+  function _transformLat(x, y) {
+    var r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(y*Math.PI) + 40*Math.sin(y/3*Math.PI))*2/3;
+    r += (160*Math.sin(y/12*Math.PI) + 320*Math.sin(y*Math.PI/30))*2/3;
+    return r;
+  }
+  function _transformLng(x, y) {
+    var r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(x*Math.PI) + 40*Math.sin(x/3*Math.PI))*2/3;
+    r += (150*Math.sin(x/12*Math.PI) + 300*Math.sin(x/30*Math.PI))*2/3;
+    return r;
+  }
+  var dLat = _transformLat(wgsLng - 105, wgsLat - 35);
+  var dLng = _transformLng(wgsLng - 105, wgsLat - 35);
+  var radLat = wgsLat/180*Math.PI;
+  var magic = 1 - ee*Math.sin(radLat)*Math.sin(radLat);
+  return {
+    lng: wgsLng + (180*dLng)/((a/Math.sqrt(magic))*Math.cos(radLat)*Math.PI),
+    lat: wgsLat + (180*dLat)/((a*(1-ee))/(magic*Math.sqrt(magic))*Math.PI)
+  };
+}
+
+// ── Zone marker data (WGS-84) ──
+var zonesWgs = [
+  { name: '好莱坞<br><small>Hollywood · 主入口</small>', lat: 39.8535, lng: 116.6745, color: '#7B1FA2' },
+  { name: '小黄人乐园<br><small>Minion Land</small>', lat: 39.8540, lng: 116.6775, color: '#D4A843' },
+  { name: '哈利·波特魔法世界<br><small>Wizarding World</small>', lat: 39.8565, lng: 116.6770, color: '#1A237E' },
+  { name: '未来水世界<br><small>WaterWorld</small>', lat: 39.8560, lng: 116.6730, color: '#0277BD' },
+  { name: '功夫熊猫盖世之地<br><small>Kung Fu Panda · 全室内</small>', lat: 39.8540, lng: 116.6725, color: '#C41E3A' },
+  { name: '变形金刚基地<br><small>Transformers Metrobase</small>', lat: 39.8555, lng: 116.6785, color: '#E64A19' },
+  { name: '侏罗纪世界努布拉岛<br><small>Jurassic World</small>', lat: 39.8530, lng: 116.6740, color: '#2E7D32' },
+  { name: '城市大道 CityWalk', lat: 39.8520, lng: 116.6755, color: '#3E2723' },
+  { name: '环球度假区站 🚇', lat: 39.8510, lng: 116.6755, color: '#C41E3A' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var gcj = wgs84ToGcj02(z.lng, z.lat);
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([gcj.lat, gcj.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([39.855, 116.676], 15);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesWgs);
+
+  if (withBoundary) {
+    var parkCenter = wgs84ToGcj02(116.6755, 39.8547);
+    L.circle([parkCenter.lat, parkCenter.lng], { radius: 580, color: '#C41E3A', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// ── Scroll reveal ──
+var observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── Nav highlight ──
+var sections = document.querySelectorAll('section[id]');
+var navLinks = document.querySelectorAll('nav a');
+window.addEventListener('scroll', function() {
+  var current = '';
+  sections.forEach(function(s) { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
+  navLinks.forEach(function(a) {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+
+</body>
+</html>

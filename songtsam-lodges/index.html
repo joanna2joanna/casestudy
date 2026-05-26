@@ -1186,15 +1186,15 @@ const typeLabels = { lodge:'🏔️ 山居', linka:'🏛️ 林卡', camp:'⛺ �
 
 // ── Map layers ──
 function makeGaodeStreet() {
-  return L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
-    subdomains: ['1','2','3','4'],
+  return L.tileLayer('https://webrd{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['01','02','03','04'],
     attribution: '© 高德地图',
     maxZoom: 18
   });
 }
 function makeGaodeSat() {
-  return L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
-    subdomains: ['1','2','3','4'],
+  return L.tileLayer('https://webst{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['01','02','03','04'],
     attribution: '© 高德地图',
     maxZoom: 18
   });

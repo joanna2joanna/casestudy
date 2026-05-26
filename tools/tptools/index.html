@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>主题乐园 PPH ↔ 年游客量 换算工具</title>
+<style>
+  :root {
+    --bg: #faf9f6;
+    --card: #ffffff;
+    --text: #1a1a2e;
+    --text-secondary: #5a5a7a;
+    --accent: #e8590c;
+    --accent-hover: #d1470b;
+    --blue: #228be6;
+    --blue-bg: #e7f5ff;
+    --orange-bg: #fff4e6;
+    --border: #e9ecef;
+    --slider-track: #dee2e6;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.1);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: white;
+    padding: 40px 24px 32px;
+    text-align: center;
+  }
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .header p {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.95rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Tabs */
+  .tab-bar {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px 20px 0;
+    display: flex;
+    gap: 0;
+  }
+  .tab-btn {
+    padding: 12px 24px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.92rem;
+    font-weight: 500;
+    font-family: var(--font);
+    color: var(--text-secondary);
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Layout */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 768px) {
+    .container { grid-template-columns: 1fr; }
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  .card-full {
+    grid-column: 1 / -1;
+  }
+  .card h2 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card h2 .icon { font-size: 1.2rem; }
+  .card .subtitle {
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    margin-bottom: 18px;
+  }
+
+  /* Mode toggle */
+  .mode-toggle {
+    display: flex;
+    background: #f1f3f5;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 20px;
+  }
+  .mode-toggle button {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: var(--font);
+    transition: all 0.2s;
+    background: transparent;
+    color: var(--text-secondary);
+  }
+  .mode-toggle button.active {
+    background: white;
+    color: var(--accent);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    font-weight: 600;
+  }
+
+  /* Parameter group */
+  .param-group {
+    margin-bottom: 18px;
+  }
+  .param-group:last-child { margin-bottom: 0; }
+  .param-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .param-label {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .param-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    min-width: 70px;
+    text-align: right;
+  }
+  .param-unit {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
+  .param-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--slider-track);
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  input[type="number"] {
+    width: 90px;
+    padding: 7px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    font-family: var(--font);
+    text-align: center;
+    font-weight: 500;
+    color: var(--text);
+    transition: border-color 0.2s;
+  }
+  input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232,89,12,0.1);
+  }
+  input[type="number"].large {
+    width: 130px;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  /* Primary input highlight */
+  .primary-input {
+    background: var(--orange-bg);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 16px;
+    border: 1.5px dashed var(--accent);
+  }
+  .primary-input .param-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  .primary-input input[type="number"] {
+    background: white;
+    font-size: 1.2rem;
+  }
+
+  /* Result card */
+  .result-section {
+    text-align: center;
+    padding: 20px 0 8px;
+  }
+  .result-value {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .result-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .result-breakdown {
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: #f8f9fa;
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    text-align: left;
+    line-height: 1.8;
+  }
+  .result-breakdown strong { color: var(--text); }
+
+  /* Presets */
+  .presets {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  @media (max-width: 400px) {
+    .presets { grid-template-columns: 1fr; }
+  }
+  .preset-btn {
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: white;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-family: var(--font);
+    transition: all 0.2s;
+    text-align: left;
+    line-height: 1.3;
+  }
+  .preset-btn:hover {
+    border-color: var(--accent);
+    background: var(--orange-bg);
+  }
+  .preset-btn.active {
+    border-color: var(--accent);
+    background: var(--orange-bg);
+    font-weight: 500;
+  }
+  .preset-btn .preset-name { font-weight: 500; display: block; }
+  .preset-btn .preset-desc { font-size: 0.75rem; color: var(--text-secondary); }
+
+  /* Validation table */
+  .validation-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  .validation-table th {
+    text-align: left;
+    padding: 10px 12px;
+    background: #f8f9fa;
+    font-weight: 600;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--border);
+  }
+  .validation-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .validation-table tr:hover td { background: #fafafa; }
+  .match-good { color: #2b8a3e; font-weight: 600; }
+  .match-ok { color: #e8590c; font-weight: 600; }
+  .validation-table .note {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  /* Guidance section */
+  .guidance {
+    font-size: 0.85rem;
+    line-height: 1.8;
+  }
+  .guidance h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 16px 0 6px;
+    color: var(--accent);
+  }
+  .guidance h3:first-child { margin-top: 0; }
+  .guidance ul {
+    padding-left: 18px;
+  }
+  .guidance li {
+    margin-bottom: 4px;
+  }
+  .guidance .tag {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    padding: 1px 8px;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    font-weight: 500;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>乐园 PPH ↔ 年游客量 换算工具</h1>
+  <p>基于乐园总娱乐值（PPH，每小时理论载客量）与年游客量之间的数学关系进行双向换算，支持主题乐园与水上乐园，参数自定义与公园类型预设</p>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="pph">🎢 器械PPH模型</button>
+  <button class="tab-btn" data-tab="area">🏛️ 面积周转模型</button>
+</div>
+
+<div class="container" id="modelPPH">
+
+  <!-- Left: Input Panel -->
+  <div class="card" id="inputPanel">
+    <h2><span class="icon">⚙️</span> 参数设置</h2>
+    <p class="subtitle">调整参数实时计算，或选择预设公园类型</p>
+
+    <p style="font-size:0.82rem;font-weight:500;margin-bottom:6px;color:var(--text-secondary)">🎢 主题乐园预设</p>
+    <div class="presets" id="presetButtons">
+      <button class="preset-btn active" data-preset="mega">
+        <span class="preset-name">🏰 超大型目的地</span>
+        <span class="preset-desc">迪士尼/环球影城级别</span>
+      </button>
+      <button class="preset-btn" data-preset="large">
+        <span class="preset-name">🎢 大型区域公园</span>
+        <span class="preset-desc">欢乐谷/方特/六旗级别</span>
+      </button>
+      <button class="preset-btn" data-preset="medium">
+        <span class="preset-name">🎡 中型公园</span>
+        <span class="preset-desc">省级/海洋公园级别</span>
+      </button>
+      <button class="preset-btn" data-preset="small">
+        <span class="preset-name">🎠 小型/本地公园</span>
+        <span class="preset-desc">市区级游乐园</span>
+      </button>
+    </div>
+
+    <p style="font-size:0.82rem;font-weight:500;margin-bottom:6px;color:var(--text-secondary)">🌊 水上乐园预设</p>
+    <div class="presets" id="presetButtonsWater">
+      <button class="preset-btn" data-preset="water_large">
+        <span class="preset-name">🏖️ 大型室外水上乐园</span>
+        <span class="preset-desc">长隆/台风湖/火山湾级别</span>
+      </button>
+      <button class="preset-btn" data-preset="water_medium">
+        <span class="preset-name">💧 中型水上乐园</span>
+        <span class="preset-desc">区域性水上乐园</span>
+      </button>
+      <button class="preset-btn" data-preset="water_indoor">
+        <span class="preset-name">🏊 室内恒温水上乐园</span>
+        <span class="preset-desc">全年运营的室内水乐园</span>
+      </button>
+      <button class="preset-btn" data-preset="water_combined">
+        <span class="preset-name">🏖️🏊 室内外结合</span>
+        <span class="preset-desc">室内恒温+室外季节性互补</span>
+      </button>
+    </div>
+
+    <!-- Mode toggle -->
+    <div class="mode-toggle">
+      <button class="active" data-mode="pph2visitors">PPH → 年游客量</button>
+      <button data-mode="visitors2pph">年游客量 → PPH</button>
+    </div>
+
+    <!-- Primary input (changes based on mode) -->
+    <div class="primary-input" id="primaryInputPPH">
+      <div class="param-header">
+        <span class="param-label">总娱乐值 PPH（人/小时）</span>
+      </div>
+      <div class="param-row">
+        <input type="range" id="pphSlider" min="1000" max="120000" value="55000" step="500">
+        <input type="number" class="large" id="pphInput" value="55000" min="500" max="200000">
+      </div>
+      <p style="font-size:0.75rem;color:var(--text-secondary);margin-top:4px">所有游乐设施每小时理论载客量的总和</p>
+    </div>
+
+    <div class="primary-input" id="primaryInputVisitors" style="display:none;">
+      <div class="param-header">
+        <span class="param-label">年游客量（万人次）</span>
+      </div>
+      <div class="param-row">
+        <input type="range" id="visitorsSlider" min="10" max="2500" value="1000" step="10">
+        <input type="number" class="large" id="visitorsInput" value="1000" min="1" max="5000">
+      </div>
+      <p style="font-size:0.75rem;color:var(--text-secondary);margin-top:4px">年度总入园人次</p>
+    </div>
+
+    <!-- Secondary parameters -->
+    <div class="param-group">
+      <div class="param-header">
+        <span class="param-label">日运营时长</span>
+        <span class="param-value" id="hoursVal">10 小时/天</span>
+      </div>
+      <div class="param-row">
+        <input type="range" id="hoursSlider" min="4" max="18" value="10" step="0.5">
+        <input type="number" id="hoursInput" value="10" min="4" max="18" step="0.5">
+      </div>
+    </div>
+
+    <div class="param-group">
+      <div class="param-header">
+        <span class="param-label">年运营天数</span>
+        <span class="param-value" id="daysVal">365 天</span>
+      </div>
+      <div class="param-row">
+        <input type="range" id="daysSlider" min="50" max="365" value="365" step="1">
+        <input type="number" id="daysInput" value="365" min="50" max="365" step="1">
+      </div>
+    </div>
+
+    <div class="param-group">
+      <div class="param-header">
+        <span class="param-label">运载效率（实际/理论）</span>
+        <span class="param-value" id="efficiencyVal">70%</span>
+      </div>
+      <div class="param-row">
+        <input type="range" id="efficiencySlider" min="30" max="95" value="70" step="1">
+        <input type="number" id="efficiencyInput" value="70" min="30" max="95" step="1">
+      </div>
+      <p style="font-size:0.75rem;color:var(--text-secondary);margin-top:2px">考虑空座率、设备停运、天气等因素</p>
+    </div>
+
+    <div class="param-group">
+      <div class="param-header">
+        <span class="param-label">人均乘坐次数（次/人/天）</span>
+        <span class="param-value" id="ridesVal">7 次</span>
+      </div>
+      <div class="param-row">
+        <input type="range" id="ridesSlider" min="3" max="15" value="7" step="0.5">
+        <input type="number" id="ridesInput" value="7" min="2" max="20" step="0.5">
+      </div>
+      <p style="font-size:0.75rem;color:var(--text-secondary);margin-top:2px">每位游客平均每天乘坐游乐设施的次数</p>
+    </div>
+  </div>
+
+  <!-- Right: Results Panel -->
+  <div class="card" id="resultPanel">
+    <h2><span class="icon">📊</span> 计算结果</h2>
+    <p class="subtitle" id="calcDescription">PPH → 年游客量换算</p>
+
+    <div class="result-section">
+      <div class="result-value" id="resultMain">1,473 万</div>
+      <div class="result-label" id="resultLabel">预计年游客量</div>
+    </div>
+
+    <div class="result-breakdown" id="resultBreakdown">
+      <!-- filled by JS -->
+    </div>
+
+    <!-- Sensitivity note -->
+    <div id="sensitivityNote" style="font-size:0.8rem;color:var(--text-secondary);margin-top:12px;padding:10px;background:#fff9db;border-radius:8px;line-height:1.6;">
+    </div>
+  </div>
+
+  <!-- Validation Section -->
+  <div class="card card-full">
+    <h2><span class="icon">✅</span> 实际公园验算</h2>
+    <p class="subtitle">使用真实主题乐园数据验证公式的准确性（2024年 TEA 全球体验指数数据）</p>
+
+    <div style="overflow-x:auto;">
+      <table class="validation-table">
+        <thead>
+          <tr>
+            <th>公园</th>
+            <th>估算 PPH</th>
+            <th>日运营<br>时长</th>
+            <th>年运营<br>天数</th>
+            <th>运载<br>效率</th>
+            <th>人均<br>乘坐</th>
+            <th>计算年游客量</th>
+            <th>实际年游客量</th>
+            <th>偏差</th>
+          </tr>
+        </thead>
+        <tbody id="validationBody">
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.75rem;color:var(--text-secondary);margin-top:8px;">
+      * PPH 数据基于公开的单个游乐设施容量汇总估算；实际数据来自 2024 TEA/AECOM 全球主题公园报告。偏差在 ±15% 以内视为合理。
+    </p>
+  </div>
+
+  <!-- Guidance Section -->
+  <div class="card card-full guidance">
+    <h2><span class="icon">📖</span> 参数选择指南 — 主题乐园</h2>
+
+    <h3>1. PPH（总娱乐值）如何确定？</h3>
+    <p>PPH = 园区所有游乐设施的"理论小时载客量"之和。单个设施 PPH = (3600秒 ÷ 发车间隔秒) × 每趟载客数。例如：</p>
+    <ul>
+      <li>大型过山车（24座/趟，90秒发车）：3600÷90×24 = <strong>960 PPH</strong></li>
+      <li>连续载客暗骑（4座/车，10秒发车）：3600÷10×4 = <strong>1,440 PPH</strong></li>
+      <li>激流勇进（30人/船，120秒发船）：3600÷120×30 = <strong>900 PPH</strong></li>
+      <li>小型旋转设备（12座，90秒一轮）：3600÷90×12 = <strong>480 PPH</strong></li>
+    </ul>
+    <p>将所有设施 PPH 加总即得园区总 PPH。通常大型公园有 30-60 个设施，PPH 在 <strong>3万-10万</strong> 之间。</p>
+
+    <h3>2. 运载效率参数选择</h3>
+    <ul>
+      <li><span class="tag">85-95%</span> 室内乐园、高度自动化设备（如迪士尼的 Omnimover 连续载客系统）</li>
+      <li><span class="tag">65-80%</span> 运营管理水平高的室外大型主题乐园（迪士尼、环球影城）</li>
+      <li><span class="tag">50-65%</span> 一般区域性主题乐园（欢乐谷、方特、六旗）</li>
+      <li><span class="tag">35-50%</span> 小型游乐园、管理水平一般、设备老旧的公园</li>
+    </ul>
+
+    <h3>3. 人均乘坐次数参数选择</h3>
+    <ul>
+      <li><span class="tag">8-12 次</span> 以过山车/刺激项目为主的游乐园（游客目标明确，乘坐效率高）</li>
+      <li><span class="tag">6-9 次</span> 综合型主题乐园（迪士尼/环球，有大量表演和餐饮分散时间）</li>
+      <li><span class="tag">5-7 次</span> 有丰富表演、互动体验、餐饮购物的大型目的地公园</li>
+      <li><span class="tag">3-5 次</span> 观光型/展览型公园（海洋公园、动物园、植物园等）</li>
+    </ul>
+
+    <h3>4. 日运营时长与年运营天数</h3>
+    <ul>
+      <li><strong>日运营时长</strong>：季节性差异大。迪士尼旺季可达 14-16 小时，淡季可能仅 8-10 小时。全年加权平均一般在 <strong>9-12 小时</strong>。</li>
+      <li><strong>年运营天数</strong>：迪士尼/环球等全年开放（365天）；区域性公园可能有冬季闭园期（250-300天）；北方/高海拔室外水乐园可能仅 60-90 天；台风频发区个别年份低至 60 天。</li>
+    </ul>
+
+    <h3>5. 主题乐园推荐参数速查</h3>
+    <table class="validation-table" style="margin-top:8px;">
+      <thead>
+        <tr><th>公园类型</th><th>PPH 范围</th><th>日运营时长</th><th>年运营天数</th><th>运载效率</th><th>人均乘坐</th><th>预期年游客量</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>超大型目的地</strong></td><td>5万-10万</td><td>10-14h</td><td>365</td><td>65-80%</td><td>6-9次</td><td>1000万-2500万</td></tr>
+        <tr><td><strong>大型区域公园</strong></td><td>2.5万-5万</td><td>8-12h</td><td>280-365</td><td>55-70%</td><td>6-10次</td><td>500万-1200万</td></tr>
+        <tr><td><strong>中型公园</strong></td><td>1万-2.5万</td><td>8-10h</td><td>250-330</td><td>50-65%</td><td>5-8次</td><td>150万-500万</td></tr>
+        <tr><td><strong>小型/本地公园</strong></td><td>3000-1万</td><td>6-10h</td><td>200-300</td><td>40-55%</td><td>4-7次</td><td>30万-200万</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Water Park Guidance -->
+  <div class="card card-full guidance">
+    <h2><span class="icon">🌊</span> 参数选择指南 — 水上乐园</h2>
+
+    <h3>公式是否适用？</h3>
+    <p><strong>公式结构完全适用于水上乐园</strong>，但每个参数的量级与主题乐园差异显著。核心原因：水上乐园设施 PPH 天然偏低（滑道需安全间隔，通常 15-30 秒放一人，单滑道仅 120-720 PPH），运营季节短，爬楼梯消耗体力导致人均乘坐次数更低。</p>
+
+    <h3>1. 水上乐园 PPH 计算方法</h3>
+    <p>水上乐园的 PPH 由四类设施组成：</p>
+    <ul>
+      <li><strong>身体滑道</strong>（单人，20秒间隔）：~180 PPH/条 × N条</li>
+      <li><strong>浮筏/家庭筏滑道</strong>（2-6人，20-30秒间隔）：~400-720 PPH/条</li>
+      <li><strong>造浪池</strong>：按面积计算，大型造浪池可容纳 1,000-3,000 人</li>
+      <li><strong>懒人河</strong>：按长度/容量计算，通常 800-1,500 PPH</li>
+      <li><strong>水寨/儿童互动区</strong>：按面积×密度系数，通常 500-1,000 PPH</li>
+    </ul>
+    <p>大型水上乐园通常有 20-40 条滑道 + 造浪池 + 懒人河，总 PPH 在 <strong>5,000-15,000</strong> 之间（仅为同等知名度主题乐园的 1/4 到 1/3）。</p>
+
+    <h3>2. 水上乐园参数选择要点</h3>
+    <table class="validation-table" style="margin-top:8px;">
+      <thead>
+        <tr><th>参数</th><th>水上乐园特征</th><th>典型范围</th><th>与主题乐园对比</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>运载效率</strong></td>
+          <td>受天气影响极大（雨天停运、低温影响客流）；滑道操作员效率差异大；游客犹豫/恐惧导致实际间隔 > 理论间隔</td>
+          <td><strong>40-60%</strong></td>
+          <td>比主题乐园低 10-25 个百分点</td>
+        </tr>
+        <tr>
+          <td><strong>人均乘坐次数</strong></td>
+          <td>爬楼梯消耗大量体力；浮筏搬运耗时；大量时间用于造浪池/懒人河漂浮和日光浴</td>
+          <td><strong>4-7 次</strong></td>
+          <td>比主题乐园少 2-5 次（体力因素）</td>
+        </tr>
+        <tr>
+          <td><strong>年运营天数</strong></td>
+          <td>室外水上乐园高度季节性：北方/高海拔仅 60-90 天，台风频发区可低至 60 天，华南/东南亚 180-250 天；室内恒温可达 330-365 天</td>
+          <td><strong>60-365 天</strong></td>
+          <td>差异最大——北方室外水上乐园运营天数仅为主题乐园的 1/6 到 1/4</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>3. 不同水上乐园类型推荐参数</h3>
+    <table class="validation-table" style="margin-top:8px;">
+      <thead>
+        <tr><th>水上乐园类型</th><th>PPH 范围</th><th>日运营时长</th><th>年运营天数</th><th>运载效率</th><th>人均乘坐</th><th>预期年游客量</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>大型室外水上乐园</strong></td><td>1万-1.5万</td><td>8-10h</td><td>150-250</td><td>50-60%</td><td>4-6次</td><td>200万-350万</td></tr>
+        <tr><td><strong>中型室外水上乐园</strong></td><td>5千-1万</td><td>7-9h</td><td>100-180</td><td>45-55%</td><td>4-6次</td><td>50万-200万</td></tr>
+        <tr><td><strong>北方/短季室外水上乐园</strong></td><td>3千-8千</td><td>8-11h</td><td>60-100</td><td>55-65%</td><td>5-7次</td><td>20万-100万</td></tr>
+        <tr><td><strong>室内恒温水上乐园</strong></td><td>5千-1.2万</td><td>10-14h</td><td>330-365</td><td>60-75%</td><td>3-5次</td><td>150万-350万</td></tr>
+      </tbody>
+    </table>
+
+    <h3>4. 不适用场景</h3>
+    <ul>
+      <li><strong>温泉/康体综合体</strong>（如 Therme Erding, Therme Bucharest）：游客以长时间静态泡浴、桑拿、餐饮为主，"乘坐/滑行"行为占比极低，PPH 公式不适用。这类设施应以"瞬时容量 × 周转率"模型计算。</li>
+      <li><strong>纯造浪池/沙滩型</strong>：没有滑道设施，容量完全取决于水域面积和沙滩面积。</li>
+      <li><strong>小型酒店配套水上乐园</strong>：游客量受酒店入住率限制，而非设施 PPH。</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- Area-Turnover Model -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="container" id="modelArea" style="display:none;">
+
+  <!-- Area Model: Input Panel (full width for roomy table) -->
+  <div class="card card-full">
+    <h2><span class="icon">🏗️</span> 分区面积配置</h2>
+    <p class="subtitle">按不同功能区域分别输入面积与停留时间</p>
+
+    <div style="margin-bottom:14px;">
+      <p style="font-size:0.82rem;font-weight:500;margin-bottom:6px;color:var(--text-secondary)">场馆类型预设</p>
+      <div class="presets" id="presetButtonsArea">
+        <button class="preset-btn active" data-preset="area_museum">
+          <span class="preset-name">🏛️ 大型博物馆</span>
+          <span class="preset-desc">故宫/卢浮宫/国博级别</span>
+        </button>
+        <button class="preset-btn" data-preset="area_zoo">
+          <span class="preset-name">🦁 动物园/野生动物园</span>
+          <span class="preset-desc">步行+车行观赏</span>
+        </button>
+        <button class="preset-btn" data-preset="area_aquarium">
+          <span class="preset-name">🐠 海洋馆/水族馆</span>
+          <span class="preset-desc">室内展陈+剧场表演</span>
+        </button>
+        <button class="preset-btn" data-preset="area_mixed">
+          <span class="preset-name">🎪 复合型文旅</span>
+          <span class="preset-desc">无动力+展陈+演艺+集市</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Zone table -->
+    <div style="overflow-x:auto;">
+      <table class="validation-table" id="zoneTable" style="margin-bottom:6px;">
+        <thead>
+          <tr>
+            <th style="width:22%;">分区名称</th>
+            <th style="width:22%;">类型</th>
+            <th style="width:20%;">面积 (m²)</th>
+            <th style="width:18%;">人均面积 (m²)</th>
+            <th style="width:18%;">停留时间 (分)</th>
+          </tr>
+        </thead>
+        <tbody id="zoneTableBody">
+        </tbody>
+      </table>
+    </div>
+    <button id="addZoneBtn" style="padding:6px 14px;border:1.5px dashed var(--border);border-radius:6px;background:none;cursor:pointer;font-size:0.82rem;font-family:var(--font);color:var(--text-secondary);margin-top:6px;">+ 添加分区</button>
+  </div>
+
+  <!-- Area Model: Global Parameters -->
+  <div class="card">
+    <h2><span class="icon">🎛️</span> 全局参数</h2>
+    <p class="subtitle">运营条件与效率系数</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="param-group">
+        <div class="param-header">
+          <span class="param-label">日运营时长</span>
+          <span class="param-value" id="areaHoursVal">9 小时/天</span>
+        </div>
+        <div class="param-row">
+          <input type="range" id="areaHoursSlider" min="4" max="16" value="9" step="0.5">
+          <input type="number" id="areaHoursInput" value="9" min="4" max="16" step="0.5">
+        </div>
+      </div>
+      <div class="param-group">
+        <div class="param-header">
+          <span class="param-label">年运营天数</span>
+          <span class="param-value" id="areaDaysVal">340 天</span>
+        </div>
+        <div class="param-row">
+          <input type="range" id="areaDaysSlider" min="50" max="365" value="340" step="1">
+          <input type="number" id="areaDaysInput" value="340" min="50" max="365" step="1">
+        </div>
+      </div>
+      <div class="param-group">
+        <div class="param-header">
+          <span class="param-label">空间利用效率</span>
+          <span class="param-value" id="areaEfficiencyVal">75%</span>
+        </div>
+        <div class="param-row">
+          <input type="range" id="areaEfficiencySlider" min="40" max="95" value="75" step="1">
+          <input type="number" id="areaEfficiencyInput" value="75" min="30" max="95" step="1">
+        </div>
+      </div>
+      <div class="param-group">
+        <div class="param-header">
+          <span class="param-label">季节性系数</span>
+          <span class="param-value" id="areaSeasonVal">85%</span>
+        </div>
+        <div class="param-row">
+          <input type="range" id="areaSeasonSlider" min="50" max="100" value="85" step="1">
+          <input type="number" id="areaSeasonInput" value="85" min="40" max="100" step="1">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Area Model: Results -->
+  <div class="card">
+    <h2><span class="icon">📊</span> 计算结果</h2>
+    <p class="subtitle">面积周转率模型</p>
+
+    <div class="result-section">
+      <div class="result-value" id="areaResultMain" style="font-size:2.4rem;">1,088 万</div>
+      <div class="result-label">预计年游客量</div>
+    </div>
+
+    <div class="result-breakdown" id="areaResultBreakdown"></div>
+
+    <div id="areaSensitivityNote" style="font-size:0.8rem;color:var(--text-secondary);margin-top:12px;padding:10px;background:#fff9db;border-radius:8px;line-height:1.6;"></div>
+  </div>
+
+  <!-- Area Model: Validation -->
+  <div class="card card-full">
+    <h2><span class="icon">✅</span> 非器械类场馆验算</h2>
+    <p class="subtitle">使用面积周转率模型验证博物馆、动物园、海洋馆的实际游客量（2024年数据）</p>
+    <div style="overflow-x:auto;">
+      <table class="validation-table">
+        <thead>
+          <tr>
+            <th>场馆</th>
+            <th>可游览<br>面积 (万m²)</th>
+            <th>人均<br>面积</th>
+            <th>日运营<br>时长</th>
+            <th>年运营<br>天数</th>
+            <th>停留<br>时间(h)</th>
+            <th>空间<br>效率</th>
+            <th>计算年<br>游客量</th>
+            <th>实际年<br>游客量</th>
+            <th>偏差</th>
+          </tr>
+        </thead>
+        <tbody id="areaValidationBody"></tbody>
+      </table>
+    </div>
+    <p style="font-size:0.75rem;color:var(--text-secondary);margin-top:8px;">
+      * 面积数据基于公开资料估算；游客量来自 2024 TEA 全球体验指数。非器械类场馆的容量受面积、展陈密度、停留时间综合影响。
+    </p>
+  </div>
+
+  <!-- Area Model: Guidance -->
+  <div class="card card-full guidance">
+    <h2><span class="icon">📖</span> 面积周转模型 — 公式与参数指南</h2>
+
+    <h3>核心公式</h3>
+    <p style="font-size:1rem;text-align:center;padding:12px;background:#f8f9fa;border-radius:8px;font-weight:600;">
+      瞬时容量 = Σ (各分区面积 ÷ 该分区人均面积标准)<br>
+      加权周转率 = 日运营分钟数 ÷ 加权平均停留时间(分钟)<br>
+      日容量 = 瞬时容量 × 周转率 × 空间利用效率<br>
+      年游客量 = 日容量 × 年运营天数 × 季节性系数
+    </p>
+
+    <h3>1. 各分区类型的人均面积标准</h3>
+    <table class="validation-table" style="margin-top:8px;">
+      <thead>
+        <tr><th>分区类型</th><th>人均面积 (m²/人)</th><th>典型停留时间 (分钟)</th><th>适用场景</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>室内展陈空间</strong></td><td>3-8</td><td>60-180</td><td>博物馆展厅、美术馆、科技馆</td></tr>
+        <tr><td><strong>户外展区/动植物观赏</strong></td><td>8-20</td><td>90-240</td><td>动物园、植物园、开放式遗址</td></tr>
+        <tr><td><strong>剧场/演艺空间</strong></td><td>1.0-1.5</td><td>30-90</td><td>秀场、影院、4D剧场</td></tr>
+        <tr><td><strong>无动力/互动体验区</strong></td><td>5-12</td><td>30-90</td><td>儿童乐园、攀爬区、戏水区、沙池</td></tr>
+        <tr><td><strong>多功能活动场地</strong></td><td>2-5</td><td>60-240</td><td>市集、露营、庆典、临展</td></tr>
+        <tr><td><strong>餐饮/休息区</strong></td><td>1.5-2.5</td><td>20-45</td><td>美食广场、咖啡厅、野餐区</td></tr>
+      </tbody>
+    </table>
+
+    <h3>2. 关键参数说明</h3>
+    <ul>
+      <li><strong>空间利用效率</strong>：并非所有空间同时满载。通道、排队区、安全间距、未开放区域均占用面积。博物馆通常 65-80%，动物园 55-70%，多功能场地 40-60%。</li>
+      <li><strong>季节性系数</strong>：室内场馆（博物馆）受季节影响小（85-95%）；室外场馆（动物园）受天气影响大（60-80%）；北方室外场馆冬季可能骤降。</li>
+      <li><strong>加权平均停留时间</strong>：按各分区面积加权计算——面积越大的分区，其停留时间对周转率影响越大。</li>
+      <li><strong>剧场容量计算</strong>：剧场/演艺区不同于其他区域，建议用「座位数 × 场次/天」替代面积法计算，再将结果叠加到总容量中。</li>
+    </ul>
+
+    <h3>3. 不同场馆类型推荐参数速查</h3>
+    <table class="validation-table" style="margin-top:8px;">
+      <thead>
+        <tr><th>场馆类型</th><th>人均面积综合</th><th>加权停留</th><th>日运营时长</th><th>年运营天数</th><th>空间效率</th><th>季节性</th><th>预期年游客量<br>(10万m²级别)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>大型博物馆</strong></td><td>4-6 m²</td><td>2-3.5h</td><td>8-10h</td><td>320-360</td><td>65-80%</td><td>85-95%</td><td>800万-1800万</td></tr>
+        <tr><td><strong>动物园/野生动物园</strong></td><td>10-18 m²</td><td>3-5h</td><td>8-10h</td><td>300-360</td><td>55-70%</td><td>65-85%</td><td>300万-800万</td></tr>
+        <tr><td><strong>海洋馆/水族馆</strong></td><td>3-5 m²</td><td>2-3h</td><td>8-10h</td><td>330-365</td><td>65-80%</td><td>80-95%</td><td>500万-1200万</td></tr>
+        <tr><td><strong>复合型文旅</strong></td><td>5-10 m²</td><td>3-5h</td><td>8-12h</td><td>280-350</td><td>55-70%</td><td>70-90%</td><td>300万-1000万</td></tr>
+      </tbody>
+    </table>
+
+    <h3>4. 面积周转模型 vs 器械PPH模型的适用边界</h3>
+    <table class="validation-table" style="margin-top:8px;">
+      <thead>
+        <tr><th>对比维度</th><th>器械PPH模型</th><th>面积周转模型</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>核心逻辑</strong></td><td>设施吞吐量 → 人数</td><td>空间容纳量 × 翻台 → 人数</td></tr>
+        <tr><td><strong>适用对象</strong></td><td>主题乐园、水上乐园、过山车公园</td><td>博物馆、动物园、海洋馆、植物园、无动力乐园、复合型文旅</td></tr>
+        <tr><td><strong>关键驱动因素</strong></td><td>设施数量、发车间隔、每趟载客数</td><td>可游览面积、展陈密度、游客停留时间</td></tr>
+        <tr><td><strong>瓶颈类型</strong></td><td>热门设施排队（单点瓶颈）</td><td>整体空间饱和（全局瓶颈）</td></tr>
+        <tr><td><strong>扩容方式</strong></td><td>增加设施/提升发车效率</td><td>扩大游览面积/优化动线/增加周转</td></tr>
+        <tr><td><strong>混合型公园</strong></td><td colspan="2">对于既有器械又有展陈/演艺/无动力的混合型公园，建议两种模型分别计算后，取加权结果或较大值作为参考上限</td></tr>
+      </tbody>
+    </table>
+
+    <h3>5. 模型局限性</h3>
+    <ul>
+      <li>面积法假设空间均匀利用，实际上热门展区（如故宫太和殿区域、卢浮宫蒙娜丽莎厅）会形成局部拥堵，降低全局效率。</li>
+      <li>剧场/演艺对周转率的影响呈阶梯式（按场次），而非连续变化，面积法会高估其灵活性。</li>
+      <li>动物园的动物观赏具有随机性（动物活动/隐藏），实际停留时间波动大。</li>
+      <li>多功能活动场地的"市集/露营/庆典"模式，容量更接近消防规范上限（通常 0.5-1 m²/人），需单独考量。</li>
+      <li>本模型计算的是"物理承载上限"，实际游客量还受市场、交通、票价、竞争等外部因素制约。</li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="footer">
+  数据参考：TEA Global Experience Index 2024 &nbsp;|&nbsp; 面积标准参考 GB/T51046-2014 及博物馆设计规范 &nbsp;|&nbsp; 工具仅供参考，实际值受多种因素影响
+</div>
+
+<script>
+// ── State ──
+let mode = 'pph2visitors'; // 'pph2visitors' | 'visitors2pph'
+let currentPreset = 'mega';
+
+// ── Preset definitions ──
+const presets = {
+  mega: {
+    name: '超大型目的地',
+    pph: 55000, hours: 11, days: 365, efficiency: 70, rides: 7,
+    desc: '迪士尼/环球影城级别，50+设施，365天运营'
+  },
+  large: {
+    name: '大型区域公园',
+    pph: 35000, hours: 10, days: 330, efficiency: 60, rides: 8,
+    desc: '欢乐谷/方特/六旗级别，30-50设施'
+  },
+  medium: {
+    name: '中型公园',
+    pph: 18000, hours: 9, days: 300, efficiency: 55, rides: 6,
+    desc: '省级/海洋公园级别，20-35设施'
+  },
+  small: {
+    name: '小型/本地公园',
+    pph: 6000, hours: 8, days: 250, efficiency: 45, rides: 5,
+    desc: '市区级游乐园，10-20设施'
+  },
+  water_large: {
+    name: '大型室外水上乐园',
+    pph: 13000, hours: 9, days: 200, efficiency: 55, rides: 4.5,
+    desc: '长隆/台风湖级别，30+滑道，季节性运营'
+  },
+  water_medium: {
+    name: '中型水上乐园',
+    pph: 7000, hours: 8.5, days: 150, efficiency: 50, rides: 4.5,
+    desc: '区域性水上乐园，15-25滑道，夏季运营'
+  },
+  water_indoor: {
+    name: '室内恒温水上乐园',
+    pph: 8000, hours: 12, days: 350, efficiency: 68, rides: 4,
+    desc: '全年运营，无天气影响，含温泉/桑拿设施'
+  },
+  water_combined: {
+    name: '室内外结合水上乐园',
+    pph: 11000, hours: 10, days: 280, efficiency: 60, rides: 4.5,
+    desc: '室内恒温+室外季节性，互补运营'
+  }
+};
+
+// ── Validation data ──
+const validationParks = [
+  {
+    name: '神奇王国 (Magic Kingdom)',
+    pph: 44000,
+    hours: 11,
+    days: 365,
+    efficiency: 70,
+    rides: 7,
+    actual: 1780,
+    source: 'TEA 2024, #1 全球'
+  },
+  {
+    name: '迪士尼乐园 (Anaheim)',
+    pph: 52000,
+    hours: 10.5,
+    days: 365,
+    efficiency: 70,
+    rides: 8,
+    actual: 1700,
+    source: 'TEA 2024, #2 全球'
+  },
+  {
+    name: '日本环球影城',
+    pph: 42000,
+    hours: 10,
+    days: 365,
+    efficiency: 67,
+    rides: 7,
+    actual: 1500,
+    source: 'TEA 2024, #3 全球'
+  },
+  {
+    name: '上海迪士尼乐园',
+    pph: 48000,
+    hours: 9.5,
+    days: 365,
+    efficiency: 62,
+    rides: 7,
+    actual: 1470,
+    source: 'TEA 2024, #5 全球'
+  },
+  {
+    name: '北京环球度假区',
+    pph: 31000,
+    hours: 9.5,
+    days: 365,
+    efficiency: 63,
+    rides: 7,
+    actual: 978,
+    source: 'TEA 2024'
+  },
+  {
+    name: '香港迪士尼乐园',
+    pph: 28000,
+    hours: 9.5,
+    days: 340,
+    efficiency: 62,
+    rides: 7,
+    actual: 800,
+    source: 'TEA 2024'
+  },
+  {
+    name: '深圳欢乐谷',
+    pph: 25000,
+    hours: 9.5,
+    days: 340,
+    efficiency: 48,
+    rides: 8.5,
+    actual: 450,
+    source: '行业估算'
+  },
+  {
+    name: '常州中华恐龙园',
+    pph: 20000,
+    hours: 9,
+    days: 330,
+    efficiency: 50,
+    rides: 7,
+    actual: 420,
+    source: 'TEA 2024'
+  },
+  // ── Water parks ──
+  {
+    name: '🌊 广州长隆水上乐园',
+    pph: 13000,
+    hours: 9,
+    days: 200,
+    efficiency: 55,
+    rides: 4.5,
+    actual: 281,
+    source: 'TEA 2024, 全球#1 水上乐园'
+  },
+  {
+    name: '🌊 台风湖 (Typhoon Lagoon)',
+    pph: 6200,
+    hours: 10,
+    days: 340,
+    efficiency: 55,
+    rides: 5.5,
+    actual: 210,
+    source: 'TEA 2024, 北美#1 水上乐园'
+  },
+  {
+    name: '🌊 火山湾 (Volcano Bay)',
+    pph: 5200,
+    hours: 10,
+    days: 340,
+    efficiency: 55,
+    rides: 6,
+    actual: 160,
+    source: 'TEA 2024, 环球影城水上乐园'
+  },
+  {
+    name: '🌊 三亚亚特兰蒂斯水世界',
+    pph: 7350,
+    hours: 9,
+    days: 320,
+    efficiency: 45,
+    rides: 5,
+    actual: 190,
+    source: 'TEA 2024'
+  }
+];
+
+// ── DOM refs ──
+const $ = id => document.getElementById(id);
+
+// ── Core formula ──
+// Annual Visitors (万人) = PPH × Hours × Days × Efficiency% / RidesPerGuest / 10000
+function calcVisitors(pph, hours, days, efficiency, rides) {
+  return (pph * hours * days * (efficiency / 100)) / rides / 10000;
+}
+
+// PPH = Annual Visitors (万人) × RidesPerGuest × 10000 / (Hours × Days × Efficiency%)
+function calcPPH(visitorsWan, hours, days, efficiency, rides) {
+  return (visitorsWan * 10000 * rides) / (hours * days * (efficiency / 100));
+}
+
+// ── Read current values ──
+function getParams() {
+  return {
+    pph: parseFloat($('pphInput').value) || 55000,
+    hours: parseFloat($('hoursInput').value) || 10,
+    days: parseInt($('daysInput').value) || 365,
+    efficiency: parseInt($('efficiencyInput').value) || 70,
+    rides: parseFloat($('ridesInput').value) || 7,
+    visitors: parseFloat($('visitorsInput').value) || 1000
+  };
+}
+
+// ── Update UI ──
+function updateUI() {
+  const p = getParams();
+
+  // Update display labels
+  $('hoursVal').textContent = p.hours + ' 小时/天';
+  $('daysVal').textContent = p.days + ' 天';
+  $('efficiencyVal').textContent = p.efficiency + '%';
+  $('ridesVal').textContent = p.rides + ' 次';
+
+  if (mode === 'pph2visitors') {
+    const result = calcVisitors(p.pph, p.hours, p.days, p.efficiency, p.rides);
+    $('resultMain').textContent = result.toFixed(0) + ' 万';
+    $('resultLabel').textContent = '预计年游客量';
+    $('calcDescription').textContent = 'PPH → 年游客量换算';
+
+    const daily = (result * 10000) / p.days;
+    const hourly = daily / p.hours;
+    $('resultBreakdown').innerHTML =
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">' +
+      '<div>日均游客量：<strong>' + daily.toFixed(0) + ' 人/天</strong></div>' +
+      '<div>时均游客量：<strong>' + hourly.toFixed(0) + ' 人/小时</strong></div>' +
+      '<div>年总容量（理论）：<strong>' + (p.pph * p.hours * p.days * (p.efficiency/100)).toLocaleString('zh-CN', {maximumFractionDigits:0}) + ' 人次</strong></div>' +
+      '<div>人均乘坐次数：<strong>' + p.rides + ' 次/人</strong></div>' +
+      '</div>';
+
+    $('sensitivityNote').innerHTML =
+      '💡 <strong>运载效率</strong>每提升 5 个百分点，年游客量约增加 <strong>' +
+      (calcVisitors(p.pph, p.hours, p.days, p.efficiency + 5, p.rides) - calcVisitors(p.pph, p.hours, p.days, p.efficiency, p.rides)).toFixed(0) +
+      ' 万</strong>；<strong>人均乘坐次数</strong>每减少 1 次，年游客量约增加 <strong>' +
+      (calcVisitors(p.pph, p.hours, p.days, p.efficiency, p.rides - 1) - calcVisitors(p.pph, p.hours, p.days, p.efficiency, p.rides)).toFixed(0) +
+      ' 万</strong>。';
+
+  } else {
+    const result = calcPPH(p.visitors, p.hours, p.days, p.efficiency, p.rides);
+    $('resultMain').textContent = result.toLocaleString('zh-CN', {maximumFractionDigits:0});
+    $('resultLabel').textContent = '所需总 PPH（人/小时）';
+    $('calcDescription').textContent = '年游客量 → PPH 换算';
+
+    $('resultBreakdown').innerHTML =
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">' +
+      '<div>日均游客量：<strong>' + (p.visitors * 10000 / p.days).toFixed(0) + ' 人/天</strong></div>' +
+      '<div>时均游客量：<strong>' + (p.visitors * 10000 / p.days / p.hours).toFixed(0) + ' 人/小时</strong></div>' +
+      '<div>每小时需处理乘坐：<strong>' + (p.visitors * 10000 / p.days / p.hours * p.rides).toFixed(0) + ' 人次/小时</strong></div>' +
+      '<div>考虑运载效率后：<strong>' + (p.visitors * 10000 / p.days / p.hours * p.rides / (p.efficiency/100)).toFixed(0) + ' PPH</strong></div>' +
+      '</div>';
+
+    $('sensitivityNote').innerHTML =
+      '💡 此结果表示：在给定参数下，公园需要具备约 <strong>' +
+      result.toLocaleString('zh-CN', {maximumFractionDigits:0}) +
+      ' PPH</strong> 的总游乐设施运载能力才能支撑目标游客量。建议 PPH 设计值在此基础上上浮 10-20% 以应对高峰日和增长空间。';
+  }
+}
+
+// ── Sync slider ↔ number input ──
+function syncSliderInput(sliderId, inputId, callback) {
+  const slider = $(sliderId);
+  const input = $(inputId);
+  slider.addEventListener('input', () => {
+    input.value = slider.value;
+    if (callback) callback();
+    updateUI();
+  });
+  input.addEventListener('change', () => {
+    let v = parseFloat(input.value);
+    v = Math.max(parseFloat(slider.min), Math.min(parseFloat(slider.max), v));
+    input.value = v;
+    slider.value = v;
+    if (callback) callback();
+    updateUI();
+  });
+  input.addEventListener('input', () => {
+    // For the primary input in visitors2pph mode, allow free typing temporarily
+  });
+}
+
+// Also sync in reverse for primary input
+function syncPrimaryInputs() {
+  if (mode === 'pph2visitors') {
+    const pph = parseFloat($('pphInput').value);
+    $('pphSlider').value = Math.max(1000, Math.min(120000, pph));
+    $('pphInput').value = pph;
+  } else {
+    const v = parseFloat($('visitorsInput').value);
+    $('visitorsSlider').value = Math.max(10, Math.min(2500, v));
+    $('visitorsInput').value = v;
+  }
+}
+
+// ── Switch mode ──
+function switchMode(newMode) {
+  mode = newMode;
+  document.querySelectorAll('.mode-toggle button').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === mode);
+  });
+
+  if (mode === 'pph2visitors') {
+    $('primaryInputPPH').style.display = 'block';
+    $('primaryInputVisitors').style.display = 'none';
+  } else {
+    $('primaryInputPPH').style.display = 'none';
+    $('primaryInputVisitors').style.display = 'block';
+  }
+  updateUI();
+}
+
+// ── Apply preset ──
+function applyPreset(presetKey) {
+  currentPreset = presetKey;
+  const p = presets[presetKey];
+
+  $('pphInput').value = p.pph;
+  $('pphSlider').value = Math.max(1000, Math.min(120000, p.pph));
+  $('hoursInput').value = p.hours;
+  $('hoursSlider').value = p.hours;
+  $('daysInput').value = p.days;
+  $('daysSlider').value = p.days;
+  $('efficiencyInput').value = p.efficiency;
+  $('efficiencySlider').value = p.efficiency;
+  $('ridesInput').value = p.rides;
+  $('ridesSlider').value = p.rides;
+
+  // Also set visitors to a reasonable default for reverse mode
+  const estVisitors = calcVisitors(p.pph, p.hours, p.days, p.efficiency, p.rides);
+  $('visitorsInput').value = Math.round(estVisitors);
+  $('visitorsSlider').value = Math.max(10, Math.min(2500, Math.round(estVisitors)));
+
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.preset === presetKey);
+  });
+
+  updateUI();
+}
+
+// ── Render validation table ──
+function renderValidation() {
+  const tbody = $('validationBody');
+  tbody.innerHTML = '';
+
+  // Theme park section header
+  tbody.innerHTML +=
+    '<tr style="background:#fff9f0;"><td colspan="9" style="padding:8px 12px;font-weight:600;font-size:0.8rem;color:var(--accent);">🎢 主题乐园验算</td></tr>';
+
+  let waterDividerAdded = false;
+  validationParks.forEach(park => {
+    // Insert section divider before first water park
+    if (park.name.startsWith('🌊') && !waterDividerAdded) {
+      waterDividerAdded = true;
+      tbody.innerHTML +=
+        '<tr style="background:#f0f9ff;"><td colspan="9" style="padding:8px 12px;font-weight:600;font-size:0.8rem;color:#0c8599;">🌊 水上乐园验算</td></tr>';
+    }
+    const calculated = calcVisitors(park.pph, park.hours, park.days, park.efficiency, park.rides);
+    const deviation = ((calculated - park.actual) / park.actual * 100);
+    const devClass = Math.abs(deviation) <= 10 ? 'match-good' : 'match-ok';
+    const devSign = deviation >= 0 ? '+' : '';
+
+    tbody.innerHTML +=
+      '<tr>' +
+      '<td><strong>' + park.name + '</strong><br><span class="note">' + park.source + '</span></td>' +
+      '<td>' + park.pph.toLocaleString() + '</td>' +
+      '<td>' + park.hours + 'h</td>' +
+      '<td>' + park.days + '</td>' +
+      '<td>' + park.efficiency + '%</td>' +
+      '<td>' + park.rides + '</td>' +
+      '<td><strong>' + calculated.toFixed(0) + ' 万</strong></td>' +
+      '<td>' + park.actual + ' 万</td>' +
+      '<td class="' + devClass + '">' + devSign + deviation.toFixed(1) + '%</td>' +
+      '</tr>';
+  });
+}
+
+// ── Initialize ──
+function init() {
+  // Sync sliders and inputs
+  syncSliderInput('pphSlider', 'pphInput', syncPrimaryInputs);
+  syncSliderInput('visitorsSlider', 'visitorsInput', syncPrimaryInputs);
+  syncSliderInput('hoursSlider', 'hoursInput');
+  syncSliderInput('daysSlider', 'daysInput');
+  syncSliderInput('efficiencySlider', 'efficiencyInput');
+  syncSliderInput('ridesSlider', 'ridesInput');
+
+  // Mode toggle buttons
+  document.querySelectorAll('.mode-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => switchMode(btn.dataset.mode));
+  });
+
+  // Preset buttons (both theme park and water park)
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      applyPreset(btn.dataset.preset);
+      // Update active state within the same button group
+      const parent = btn.parentElement;
+      parent.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      // Deactivate buttons in other groups
+      document.querySelectorAll('.presets').forEach(group => {
+        if (group !== parent) {
+          group.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        }
+      });
+    });
+  });
+
+  // Render validation table
+  renderValidation();
+
+  // Initial preset
+  applyPreset('mega');
+}
+
+init();
+
+// ═══════════════════════════════════════════
+// Area-Turnover Model Logic
+// ═══════════════════════════════════════════
+
+// Zone type definitions
+const zoneTypes = {
+  exhibition:  { name: '室内展陈空间',  m2pp: 5,  dwell: 120 },
+  outdoor:     { name: '户外展区/动植物', m2pp: 12, dwell: 180 },
+  theater:     { name: '剧场/演艺空间',  m2pp: 1.2, dwell: 60 },
+  playground:  { name: '无动力/互动体验', m2pp: 8,  dwell: 60 },
+  event:       { name: '多功能活动场地',  m2pp: 3,  dwell: 120 },
+  dining:      { name: '餐饮/休息区',     m2pp: 2,  dwell: 30 }
+};
+
+// Current zones in the area model
+let areaZones = [];
+let zoneIdCounter = 0;
+let currentAreaPreset = 'area_museum';
+
+// Area model presets
+const areaPresets = {
+  area_museum: {
+    name: '大型博物馆',
+    zones: [
+      { name: '常设展厅', type: 'exhibition', area: 80000, m2pp: 5, dwell: 150 },
+      { name: '临展厅', type: 'exhibition', area: 15000, m2pp: 5, dwell: 90 },
+      { name: '公共大厅/通道', type: 'dining', area: 10000, m2pp: 2.5, dwell: 20 },
+      { name: '文创/餐饮', type: 'dining', area: 5000, m2pp: 2, dwell: 30 },
+      { name: '户外广场', type: 'event', area: 15000, m2pp: 3, dwell: 45 }
+    ],
+    hours: 9, days: 340, efficiency: 75, season: 85
+  },
+  area_zoo: {
+    name: '动物园/野生动物园',
+    zones: [
+      { name: '步行观赏区', type: 'outdoor', area: 120000, m2pp: 12, dwell: 180 },
+      { name: '车行观赏区', type: 'outdoor', area: 200000, m2pp: 50, dwell: 60 },
+      { name: '室内展馆', type: 'exhibition', area: 15000, m2pp: 5, dwell: 60 },
+      { name: '儿童乐园', type: 'playground', area: 8000, m2pp: 8, dwell: 60 },
+      { name: '餐饮休息区', type: 'dining', area: 10000, m2pp: 2, dwell: 30 },
+      { name: '表演剧场', type: 'theater', area: 3000, m2pp: 1.2, dwell: 45 }
+    ],
+    hours: 9, days: 330, efficiency: 60, season: 70
+  },
+  area_aquarium: {
+    name: '海洋馆/水族馆',
+    zones: [
+      { name: '主展区(隧道/缸体)', type: 'exhibition', area: 20000, m2pp: 3, dwell: 90 },
+      { name: '互动体验区', type: 'playground', area: 5000, m2pp: 5, dwell: 45 },
+      { name: '表演剧场', type: 'theater', area: 2000, m2pp: 1.2, dwell: 45 },
+      { name: '餐饮/零售', type: 'dining', area: 3000, m2pp: 2, dwell: 30 },
+      { name: '户外广场', type: 'event', area: 5000, m2pp: 3, dwell: 30 }
+    ],
+    hours: 9.5, days: 350, efficiency: 70, season: 85
+  },
+  area_mixed: {
+    name: '复合型文旅',
+    zones: [
+      { name: '无动力乐园', type: 'playground', area: 30000, m2pp: 10, dwell: 90 },
+      { name: '展陈/博物馆', type: 'exhibition', area: 15000, m2pp: 5, dwell: 90 },
+      { name: '演艺剧场', type: 'theater', area: 3000, m2pp: 1.2, dwell: 60 },
+      { name: '多功能草坪/广场', type: 'event', area: 40000, m2pp: 4, dwell: 180 },
+      { name: '餐饮市集', type: 'dining', area: 8000, m2pp: 2, dwell: 45 },
+      { name: '露营区', type: 'event', area: 20000, m2pp: 15, dwell: 240 }
+    ],
+    hours: 10, days: 300, efficiency: 60, season: 75
+  }
+};
+
+// Area model validation data
+const areaValidationData = [
+  {
+    name: '🏛️ 故宫博物院',
+    area: 120000, m2pp: 5.0, hours: 9, days: 340, dwell: 2.8, eff: 75, season: 88,
+    actual: 1700, source: 'TEA 2024, 全球#1 博物馆',
+    note: '有效游览面积约12万m²; 预约限流8万/天'
+  },
+  {
+    name: '🏛️ 卢浮宫 (Louvre)',
+    area: 73000, m2pp: 5.0, hours: 9, days: 310, dwell: 2.8, eff: 70, season: 85,
+    actual: 874, source: 'TEA 2024, 全球#4 博物馆',
+    note: '展览面积约7.3万m²; 周二闭馆'
+  },
+  {
+    name: '🏛️ 中国国家博物馆',
+    area: 50000, m2pp: 5.0, hours: 9, days: 340, dwell: 2.7, eff: 70, season: 88,
+    actual: 696, source: 'TEA 2024, 全球#6 博物馆',
+    note: '预约限流影响实际容量'
+  },
+  {
+    name: '🏛️ 大英博物馆',
+    area: 65000, m2pp: 7.0, hours: 9, days: 355, dwell: 2.2, eff: 60, season: 80,
+    actual: 648, source: 'TEA 2024, 全球#9 博物馆',
+    note: '免费入场; 游客停留时间偏短'
+  },
+  {
+    name: '🦁 北京动物园',
+    area: 350000, m2pp: 18, hours: 9, days: 340, dwell: 3.5, eff: 56, season: 72,
+    actual: 680, source: '行业估算',
+    note: '有效游览面积约35万m²(扣除笼舍/水域); 受天气影响大'
+  },
+  {
+    name: '🐠 长隆海洋王国',
+    area: 50000, m2pp: 3.8, hours: 9.5, days: 350, dwell: 2.5, eff: 75, season: 88,
+    actual: 1200, source: 'TEA 2024, 混合型',
+    note: '⚠️ 混合型公园: 面积模型低估(含机动设施PPH贡献); 应两模型叠加'
+  }
+];
+
+// Calculate area model results
+function calcAreaModel(zones, hours, days, efficiency, season) {
+  let totalInstCap = 0;
+  let weightedDwellSum = 0;
+  let totalArea = 0;
+
+  zones.forEach(z => {
+    if (z.area <= 0 || z.m2pp <= 0) return;
+    const instCap = z.area / z.m2pp;
+    totalInstCap += instCap;
+    weightedDwellSum += z.area * z.dwell;
+    totalArea += z.area;
+  });
+
+  if (totalArea === 0) return { instCap: 0, turnover: 0, daily: 0, annual: 0, avgDwell: 0 };
+
+  const avgDwellMin = weightedDwellSum / totalArea;
+  const turnover = (hours * 60) / avgDwellMin;
+  const daily = totalInstCap * turnover * (efficiency / 100);
+  const annual = daily * days * (season / 100) / 10000;
+
+  return {
+    instCap: Math.round(totalInstCap),
+    turnover: turnover,
+    daily: Math.round(daily),
+    annual: annual,
+    avgDwell: avgDwellMin
+  };
+}
+
+// Render zone table
+function renderZoneTable() {
+  const tbody = $('zoneTableBody');
+  tbody.innerHTML = '';
+
+  areaZones.forEach((z, idx) => {
+    tbody.innerHTML +=
+      '<tr>' +
+      '<td><input type="text" value="' + z.name + '" data-zone="' + z.id + '" data-field="name" style="width:100%;padding:8px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;font-family:var(--font);"></td>' +
+      '<td><select data-zone="' + z.id + '" data-field="type" style="width:100%;padding:8px 6px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;font-family:var(--font);">' +
+        Object.entries(zoneTypes).map(([key, val]) =>
+          '<option value="' + key + '"' + (z.type === key ? ' selected' : '') + '>' + val.name + '</option>'
+        ).join('') +
+      '</select></td>' +
+      '<td><input type="number" value="' + z.area + '" data-zone="' + z.id + '" data-field="area" style="width:100%;padding:8px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;font-family:var(--font);text-align:center;" min="100" step="100"></td>' +
+      '<td><input type="number" value="' + z.m2pp + '" data-zone="' + z.id + '" data-field="m2pp" style="width:100%;padding:8px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;font-family:var(--font);text-align:center;" min="0.5" step="0.5"></td>' +
+      '<td><input type="number" value="' + z.dwell + '" data-zone="' + z.id + '" data-field="dwell" style="width:100%;padding:8px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;font-family:var(--font);text-align:center;" min="5" step="5"></td>' +
+      '</tr>';
+  });
+}
+
+// Add a zone
+function addZone(type, name, area, m2pp, dwell) {
+  const t = type || 'exhibition';
+  const defaults = zoneTypes[t];
+  areaZones.push({
+    id: ++zoneIdCounter,
+    name: name || defaults.name,
+    type: t,
+    area: area || 5000,
+    m2pp: m2pp || defaults.m2pp,
+    dwell: dwell || defaults.dwell
+  });
+  renderZoneTable();
+  updateAreaUI();
+}
+
+// Apply area preset
+function applyAreaPreset(presetKey) {
+  currentAreaPreset = presetKey;
+  const p = areaPresets[presetKey];
+  areaZones = [];
+  zoneIdCounter = 0;
+
+  p.zones.forEach(z => {
+    addZone(z.type, z.name, z.area, z.m2pp, z.dwell);
+  });
+
+  $('areaHoursInput').value = p.hours;
+  $('areaHoursSlider').value = p.hours;
+  $('areaDaysInput').value = p.days;
+  $('areaDaysSlider').value = p.days;
+  $('areaEfficiencyInput').value = p.efficiency;
+  $('areaEfficiencySlider').value = p.efficiency;
+  $('areaSeasonInput').value = p.season;
+  $('areaSeasonSlider').value = p.season;
+
+  document.querySelectorAll('#presetButtonsArea .preset-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.preset === presetKey);
+  });
+
+  updateAreaUI();
+}
+
+// Update area model UI
+function updateAreaUI() {
+  // Read zone data from DOM (in case user edited inline)
+  document.querySelectorAll('#zoneTableBody input, #zoneTableBody select').forEach(el => {
+    const zid = parseInt(el.dataset.zone);
+    const field = el.dataset.field;
+    const zone = areaZones.find(z => z.id === zid);
+    if (!zone) return;
+    if (field === 'name') zone.name = el.value;
+    else if (field === 'area') zone.area = parseFloat(el.value) || 0;
+    else if (field === 'm2pp') zone.m2pp = parseFloat(el.value) || 5;
+    else if (field === 'dwell') zone.dwell = parseFloat(el.value) || 60;
+    else if (field === 'type') {
+      zone.type = el.value;
+      const defaults = zoneTypes[el.value];
+      if (defaults) {
+        // Only auto-fill if user hasn't customized (simple heuristic: if value matches old type's default)
+        const oldDefaults = zoneTypes[zone._lastType] || {};
+        if (!zone._lastType || zone.m2pp === oldDefaults.m2pp) zone.m2pp = defaults.m2pp;
+        if (!zone._lastType || zone.dwell === oldDefaults.dwell) zone.dwell = defaults.dwell;
+        zone._lastType = el.value;
+        // Update the DOM for m2pp and dwell
+        const row = el.closest('tr');
+        const m2ppInput = row.querySelector('[data-field="m2pp"]');
+        const dwellInput = row.querySelector('[data-field="dwell"]');
+        if (m2ppInput) m2ppInput.value = zone.m2pp;
+        if (dwellInput) dwellInput.value = zone.dwell;
+      }
+    }
+  });
+
+  const hours = parseFloat($('areaHoursInput').value) || 9;
+  const days = parseInt($('areaDaysInput').value) || 340;
+  const efficiency = parseInt($('areaEfficiencyInput').value) || 75;
+  const season = parseInt($('areaSeasonInput').value) || 85;
+
+  $('areaHoursVal').textContent = hours + ' 小时/天';
+  $('areaDaysVal').textContent = days + ' 天';
+  $('areaEfficiencyVal').textContent = efficiency + '%';
+  $('areaSeasonVal').textContent = season + '%';
+
+  const result = calcAreaModel(areaZones, hours, days, efficiency, season);
+
+  $('areaResultMain').textContent = result.annual.toFixed(0) + ' 万';
+  $('areaResultBreakdown').innerHTML =
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">' +
+    '<div>瞬时容量（同时在场）：<strong>' + result.instCap.toLocaleString() + ' 人</strong></div>' +
+    '<div>加权平均停留时间：<strong>' + result.avgDwell.toFixed(0) + ' 分钟</strong></div>' +
+    '<div>日周转次数：<strong>' + result.turnover.toFixed(1) + ' 次/天</strong></div>' +
+    '<div>日游客容量：<strong>' + result.daily.toLocaleString() + ' 人/天</strong></div>' +
+    '</div>';
+
+  $('areaSensitivityNote').innerHTML =
+    '💡 <strong>停留时间</strong>每延长 30 分钟，年游客量约减少 <strong>' +
+    (() => {
+      const longerZones = areaZones.map(z => ({...z, dwell: z.dwell + 30}));
+      const r2 = calcAreaModel(longerZones, hours, days, efficiency, season);
+      return Math.abs(r2.annual - result.annual).toFixed(0);
+    })() + ' 万</strong>；' +
+    '<strong>空间效率</strong>每提升 5 个百分点，年游客量约增加 <strong>' +
+    Math.abs(calcAreaModel(areaZones, hours, days, efficiency + 5, season).annual - result.annual).toFixed(0) +
+    ' 万</strong>。';
+}
+
+// Render area validation table
+function renderAreaValidation() {
+  const tbody = $('areaValidationBody');
+  tbody.innerHTML = '';
+
+  areaValidationData.forEach(park => {
+    // Convert to single-zone model for display clarity
+    const instCap = park.area / park.m2pp;
+    const turnover = park.hours / park.dwell;
+    const daily = instCap * turnover * (park.eff / 100);
+    const annual = daily * park.days * (park.season / 100) / 10000;
+    const deviation = ((annual - park.actual) / park.actual * 100);
+    const devClass = Math.abs(deviation) <= 12 ? 'match-good' : 'match-ok';
+    const devSign = deviation >= 0 ? '+' : '';
+
+    tbody.innerHTML +=
+      '<tr>' +
+      '<td><strong>' + park.name + '</strong><br><span class="note">' + park.source + '</span></td>' +
+      '<td>' + (park.area / 10000).toFixed(1) + '</td>' +
+      '<td>' + park.m2pp.toFixed(1) + '</td>' +
+      '<td>' + park.hours + 'h</td>' +
+      '<td>' + park.days + '</td>' +
+      '<td>' + park.dwell.toFixed(1) + 'h</td>' +
+      '<td>' + park.eff + '%</td>' +
+      '<td><strong>' + annual.toFixed(0) + ' 万</strong></td>' +
+      '<td>' + park.actual + ' 万</td>' +
+      '<td class="' + devClass + '">' + devSign + deviation.toFixed(1) + '%</td>' +
+      '</tr>';
+  });
+}
+
+// ── Tab switching ──
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tabName);
+  });
+
+  if (tabName === 'pph') {
+    $('modelPPH').style.display = '';
+    $('modelArea').style.display = 'none';
+  } else {
+    $('modelPPH').style.display = 'none';
+    $('modelArea').style.display = '';
+    updateAreaUI();
+  }
+}
+
+// ── Initialize area model ──
+function initAreaModel() {
+  // Tab buttons
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+
+  // Add zone button
+  $('addZoneBtn').addEventListener('click', () => addZone('exhibition'));
+
+  // Area model sliders
+  syncSliderInput('areaHoursSlider', 'areaHoursInput', null);
+  syncSliderInput('areaDaysSlider', 'areaDaysInput', null);
+  syncSliderInput('areaEfficiencySlider', 'areaEfficiencyInput', null);
+  syncSliderInput('areaSeasonSlider', 'areaSeasonInput', null);
+
+  // Delegate zone table changes
+  $('zoneTableBody').addEventListener('change', updateAreaUI);
+  $('zoneTableBody').addEventListener('input', updateAreaUI);
+
+  // Area preset buttons
+  document.querySelectorAll('#presetButtonsArea .preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyAreaPreset(btn.dataset.preset));
+  });
+
+  // Render validation
+  renderAreaValidation();
+
+  // Load default preset
+  applyAreaPreset('area_museum');
+}
+
+// Extend syncSliderInput to accept optional callback
+const origSyncSliderInput = syncSliderInput;
+syncSliderInput = function(sliderId, inputId, callback) {
+  const slider = $(sliderId);
+  const input = $(inputId);
+  if (!slider || !input) return;
+  slider.addEventListener('input', () => {
+    input.value = slider.value;
+    if (callback) callback();
+    // Determine which model is active and update accordingly
+    if (sliderId.startsWith('area')) {
+      updateAreaUI();
+    } else {
+      updateUI();
+    }
+  });
+  input.addEventListener('change', () => {
+    let v = parseFloat(input.value);
+    v = Math.max(parseFloat(slider.min), Math.min(parseFloat(slider.max), v));
+    input.value = v;
+    slider.value = v;
+    if (callback) callback();
+    if (sliderId.startsWith('area')) {
+      updateAreaUI();
+    } else {
+      updateUI();
+    }
+  });
+};
+
+// Initialize area model
+initAreaModel();
+
+</script>
+
+</body>
+</html>

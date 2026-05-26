@@ -70,6 +70,28 @@ body {
 .card-accent.water-park { background: linear-gradient(90deg, #007DC5, #00B4D8); }
 .card-accent.hotel { background: linear-gradient(90deg, #5C3A2E, #C8A45C); }
 .card-accent.resort { background: linear-gradient(90deg, #1B5E3A, #00C8A0); }
+.card-accent.tool { background: linear-gradient(90deg, #E8590C, #F08C3E); }
+
+.tools-section {
+  max-width: 1100px;
+  margin: 4rem auto 2rem;
+  padding: 0 2rem;
+}
+.tools-header {
+  margin-bottom: 1.8rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #F08C3E;
+}
+.tools-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: #1A1520;
+  margin-bottom: 0.3rem;
+}
+.tools-header p {
+  font-size: 0.9rem;
+  color: #8B7355;
+}
 
 .card-body { padding: 1.5rem 1.8rem; }
 .card-body .tag {
@@ -207,8 +229,26 @@ body {
 
 </div>
 
+<div class="tools-section">
+  <div class="tools-header">
+    <h2>🛠️ 工具</h2>
+    <p>主题公园行业的实用计算工具</p>
+  </div>
+  <div class="grid">
+    <a href="tools/tptools/" class="case-card">
+      <div class="card-accent tool"></div>
+      <div class="card-body">
+        <div class="tag">计算工具</div>
+        <h2>PPH ↔ 年游客量 换算工具</h2>
+        <div class="location">主题乐园容量规划</div>
+        <div class="desc">输入设施每小时容量（PPH）、日运营时长、年运营天数、运营系数，即可换算年理论游客量，支持反向推算。</div>
+      </div>
+    </a>
+  </div>
+</div>
+
 <div class="footer">
-  <p>案例研究项目 · <a href="https://github.com" style="color:#8B3A4A;">GitHub Pages</a> 托管</p>
+  <p>案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy" style="color:#8B3A4A;">GitHub</a> 托管</p>
 </div>
 
 </body>

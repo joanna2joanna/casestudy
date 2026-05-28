@@ -132,7 +132,7 @@ body {
   <div class="header-inner">
     <h1>文旅项目案例研究</h1>
     <p class="sub">主题公园 · 精品酒店 · 度假村 · 自然景区 —— 从投资、设计到运营的深度分析</p>
-    <div class="count">共 12 个案例 · 持续更新中 · <span id="header-visits"></span></div>
+    <div class="count">共 12 个案例 · 持续更新中</div>
   </div>
 </div>
 
@@ -279,22 +279,12 @@ body {
 
 <div class="footer">
   <p>案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy" style="color:#8B3A4A;">GitHub</a> 托管</p>
-  <p style="font-family:'DM Mono',monospace;font-size:0.85rem;margin-top:0.4rem;color:#8B3A4A;" id="visit-counter"></p>
+  <p style="font-family:'DM Mono',monospace;font-size:0.85rem;margin-top:0.4rem;color:#8B3A4A;">
+    访问 <span id="busuanzi_value_site_pv"></span> 次 · 访客 <span id="busuanzi_value_site_uv"></span> 人
+  </p>
 </div>
 
-<script>
-(function() {
-  var total = parseInt(localStorage.getItem('casestudy_visits') || '0');
-  var visited = sessionStorage.getItem('casestudy_visited');
-  if (!visited) {
-    total++;
-    localStorage.setItem('casestudy_visits', total);
-    sessionStorage.setItem('casestudy_visited', '1');
-  }
-  document.getElementById('visit-counter').textContent = '累计访问 ' + total + ' 次';
-  document.getElementById('header-visits').textContent = '访问 ' + total + ' 次';
-})();
-</script>
 
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>

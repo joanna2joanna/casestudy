@@ -96,6 +96,14 @@ body { font-family: 'DM Sans', sans-serif; background: #faf7f2; color: #2c2c2c; 
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* Responsive */
+
+/* Floating nav */
+.floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: #1565C0; }
+.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: #1565C0; color: #fff; }
+#back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
+#back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
+
 @media (max-width: 768px) {
   .hero h1 { font-size: 2.4rem; }
   .hero-stats { gap: 1.5rem; }
@@ -446,7 +454,16 @@ body { font-family: 'DM Sans', sans-serif; background: #faf7f2; color: #2c2c2c; 
 </section>
 
 <!-- Footer -->
-<footer class="footer">
+<div class="floating-nav">
+  <a href="https://joanna2joanna.github.io/casestudy/" title="回首页">🏠</a>
+  <a href="#" id="back-to-top" title="回顶部">↑</a>
+</div>
+
+<p style="font-family:'DM Mono',monospace;font-size:0.82rem;text-align:center;margin-bottom:0.5rem;opacity:0.7;">
+  访问 <span id="busuanzi_value_site_pv"></span> 次 · 访客 <span id="busuanzi_value_site_uv"></span> 人
+</p>
+
+<footer>
   <p>Tokyo DisneySea 案例研究 · 数据截至 2026 年 5 月 · 坐标 OSM 验证 (WGS-84)</p>
   <p style="margin-top:0.4rem;">资金来源：公开报道、TEA/AECOM 年度报告、Oriental Land Company 财报、Wikipedia、OpenStreetMap</p>
 
@@ -526,10 +543,19 @@ L.polygon([
 setTimeout(() => map.invalidateSize(), 1000);
 
 // === Intersection Observer ===
+
+// Back to top
+var btt = document.getElementById('back-to-top');
+window.addEventListener('scroll', function() {
+  if (window.scrollY > 600) { btt.classList.add('show'); }
+  else { btt.classList.remove('show'); }
+});
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>

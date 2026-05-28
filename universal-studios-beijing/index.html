@@ -281,6 +281,14 @@ footer strong { color: var(--gold); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* ── Responsive ── */
+
+/* Floating nav */
+.floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: #C41E3A; }
+.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: #C41E3A; color: #fff; }
+#back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
+#back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
+
 @media (max-width: 1024px) {
   .cards-6 { grid-template-columns: repeat(3, 1fr); }
   .cards-4 { grid-template-columns: repeat(2, 1fr); }
@@ -659,6 +667,15 @@ footer strong { color: var(--gold); }
   </div>
 </section>
 
+<div class="floating-nav">
+  <a href="https://joanna2joanna.github.io/casestudy/" title="回首页">🏠</a>
+  <a href="#" id="back-to-top" title="回顶部">↑</a>
+</div>
+
+<p style="font-family:'DM Mono',monospace;font-size:0.82rem;text-align:center;margin-bottom:0.5rem;opacity:0.7;">
+  访问 <span id="busuanzi_value_site_pv"></span> 次 · 访客 <span id="busuanzi_value_site_uv"></span> 人
+</p>
+
 <footer>
   <p><strong>北京环球影城 案例研究</strong> — 全球最大环球影城深度分析</p>
   <p style="margin-top:6px;">数据来源：United Parks & Resorts 公开文件 · 行业报道 · 官方资料 · 康卡斯特财报 &nbsp;|&nbsp; 编制时间：2026年5月</p>
@@ -780,5 +797,6 @@ window.addEventListener('scroll', function() {
 });
 </script>
 
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>

@@ -225,6 +225,14 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 .country-heading .flag { font-size: 2rem; }
 .country-heading h3 { color: #0D2818; }
 
+
+/* Floating nav */
+.floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: #2E7D32; }
+.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: #2E7D32; color: #fff; }
+#back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
+#back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
+
 @media (max-width: 768px) {
   html { font-size: 15px; }
   .section { padding: 3rem 1.2rem; }
@@ -686,7 +694,16 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   </div>
 </section>
 
-<footer class="footer">
+<div class="floating-nav">
+  <a href="https://joanna2joanna.github.io/casestudy/" title="回首页">🏠</a>
+  <a href="#" id="back-to-top" title="回顶部">↑</a>
+</div>
+
+<p style="font-family:'DM Mono',monospace;font-size:0.82rem;text-align:center;margin-bottom:0.5rem;opacity:0.7;">
+  访问 <span id="busuanzi_value_site_pv"></span> 次 · 访客 <span id="busuanzi_value_site_uv"></span> 人
+</p>
+
+<footer>
   <p>Center Parcs Europe · 多村品牌案例研究报告</p>
   <p style="margin-top:0.5rem;">数据来源：PVCP 集团年报、Center Parcs 官网、EuroAmusement Professional、Wikipedia | 本报告仅供研究参考</p>
   <p style="margin-top:0.5rem;">© 2026 案例研究项目 · 数据截至 2025 年 10 月</p>
@@ -695,6 +712,14 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 </footer>
 
 <script>
+
+// Back to top
+var btt = document.getElementById('back-to-top');
+window.addEventListener('scroll', function() {
+  if (window.scrollY > 600) { btt.classList.add('show'); }
+  else { btt.classList.remove('show'); }
+});
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
 }, { threshold: 0.1 });
@@ -702,5 +727,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 });
 </script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>

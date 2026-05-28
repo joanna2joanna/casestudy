@@ -105,6 +105,14 @@ footer a { color: rgba(255,255,255,0.8); }
 .park-marker { white-space: nowrap; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.72rem; padding: 2px 8px; border-radius: 3px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.4); letter-spacing: 0.02em; }
 
 /* Responsive */
+
+/* Floating nav */
+.floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: #E65100; }
+.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: #E65100; color: #fff; }
+#back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
+#back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
+
 @media (max-width: 640px) {
   section { padding: 2rem 1rem; }
   .hero-stats { gap: 1rem; }
@@ -620,6 +628,15 @@ footer a { color: rgba(255,255,255,0.8); }
   </div>
 </section>
 
+<div class="floating-nav">
+  <a href="https://joanna2joanna.github.io/casestudy/" title="回首页">🏠</a>
+  <a href="#" id="back-to-top" title="回顶部">↑</a>
+</div>
+
+<p style="font-family:'DM Mono',monospace;font-size:0.82rem;text-align:center;margin-bottom:0.5rem;opacity:0.7;">
+  访问 <span id="busuanzi_value_site_pv"></span> 次 · 访客 <span id="busuanzi_value_site_uv"></span> 人
+</p>
+
 <footer>
   <p>Europa-Park 案例研究 · 2025 年 5 月 · 数据来源：TEA/AECOM 2024 Theme Index、Europa-Park 官方新闻中心、Wikipedia、HSG 圣加仑大学经济影响研究、EAP 杂志</p>
   <p style="margin-top:0.5rem;">所有数据均使用中国大陆公制单位。金额以欧元 (€) 为主，括号备注人民币 (¥) 约值。德国项目使用 WGS-84 坐标，无需 GCJ-02 转换。</p>
@@ -630,6 +647,14 @@ footer a { color: rgba(255,255,255,0.8); }
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 // --- IntersectionObserver for scroll reveal ---
+
+// Back to top
+var btt = document.getElementById('back-to-top');
+window.addEventListener('scroll', function() {
+  if (window.scrollY > 600) { btt.classList.add('show'); }
+  else { btt.classList.remove('show'); }
+});
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.1 });
@@ -762,5 +787,6 @@ function switchMap(type) {
 // Initial size fix
 setTimeout(() => streetMap.invalidateSize(), 800);
 </script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>

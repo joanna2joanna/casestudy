@@ -930,6 +930,14 @@ section:nth-child(even) {
 }
 
 /* ===== RESPONSIVE ===== */
+
+/* Floating nav */
+.floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: #C2185B; }
+.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: #C2185B; color: #fff; }
+#back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
+#back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
+
 @media (max-width: 768px) {
   section { padding: 56px 0; }
 
@@ -1847,7 +1855,16 @@ section:nth-child(even) {
 </section>
 
 <!-- ==================== FOOTER ==================== -->
-<footer class="footer">
+<div class="floating-nav">
+  <a href="https://joanna2joanna.github.io/casestudy/" title="回首页">🏠</a>
+  <a href="#" id="back-to-top" title="回顶部">↑</a>
+</div>
+
+<p style="font-family:'DM Mono',monospace;font-size:0.82rem;text-align:center;margin-bottom:0.5rem;opacity:0.7;">
+  访问 <span id="busuanzi_value_site_pv"></span> 次 · 访客 <span id="busuanzi_value_site_uv"></span> 人
+</p>
+
+<footer>
   <div class="container">
     <p>上海迪士尼乐园文旅项目深度案例研究 &middot; <strong>数据截至 2026 年 5 月</strong></p>
     <p style="margin-top:8px;font-size:0.75rem;">Shanghai Disneyland Resort Case Study Report &middot; Data as of May 2026 &middot; All units in metric (公制) &middot; Currency: RMB (¥)</p>
@@ -2119,5 +2136,6 @@ function createZoneMarkers() {
 })();
 </script>
 
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>

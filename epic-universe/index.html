@@ -284,6 +284,14 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   background: #F5F0E8;
 }
 
+
+/* Floating nav */
+.floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: #6A1B9A; }
+.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: #6A1B9A; color: #fff; }
+#back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
+#back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
+
 @media (max-width: 768px) {
   .map-group { grid-template-columns: 1fr; }
   .map-container { height: 320px; }
@@ -1211,7 +1219,16 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
 </section>
 
 <!-- Footer -->
-<footer class="footer">
+<div class="floating-nav">
+  <a href="https://joanna2joanna.github.io/casestudy/" title="回首页">🏠</a>
+  <a href="#" id="back-to-top" title="回顶部">↑</a>
+</div>
+
+<p style="font-family:'DM Mono',monospace;font-size:0.82rem;text-align:center;margin-bottom:0.5rem;opacity:0.7;">
+  访问 <span id="busuanzi_value_site_pv"></span> 次 · 访客 <span id="busuanzi_value_site_uv"></span> 人
+</p>
+
+<footer>
   Universal Epic Universe Case Study &middot; 奥兰多史诗宇宙案例深度研究 &middot; 数据截至 2026 年 5 月 &middot; 所有数据使用中国大陆公制单位
 
   <p style="margin-top:1rem;text-align:center;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例研究首页</a></p>
@@ -1338,5 +1355,6 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
 })();
 </script>
 
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>

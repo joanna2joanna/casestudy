@@ -18,6 +18,7 @@ h1, h2, h3, .hero-title { font-family: 'Playfair Display', Georgia, serif; }
 /* Hero */
 .hero { min-height: 100vh; background: linear-gradient(160deg, #1a0e08 0%, #3d1f0f 30%, #8b4513 60%, #d4763a 100%); color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden; }
 .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 60%, rgba(255,180,80,0.2) 0%, transparent 60%); }
+.hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 200px; background: linear-gradient(to top, rgba(251,248,240,1), transparent); }
 .hero-badge { font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.4); padding: 0.4rem 1.2rem; border-radius: 99px; margin-bottom: 2rem; z-index: 1; }
 .hero-title { font-size: clamp(3rem, 8vw, 6rem); font-weight: 800; line-height: 1.1; margin-bottom: 0.5rem; z-index: 1; }
 .hero-sub { font-size: 1.2rem; opacity: 0.85; font-weight: 400; margin-bottom: 3rem; z-index: 1; }
@@ -89,13 +90,22 @@ section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
 footer { background: #1a0e08; color: #c4a882; text-align: center; padding: 3rem 2rem; font-size: 0.85rem; }
 footer a { color: #d4763a; }
 
-/* Hero media: 720 VR iframe + fallback */
-.hero-media { max-width: 1100px; margin: -1rem auto 0; padding: 0 2rem; position: relative; z-index: 2; }
-.hero-media iframe { width: 100%; height: 520px; border: 0; border-radius: 16px; box-shadow: 0 8px 40px rgba(0,0,0,0.2); }
-.media-fallback { display: none; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; height: 520px; background: #fff; border-radius: 16px; border: 2px dashed #d4c4a0; text-align: center; padding: 2rem; }
-.media-fallback .icon { font-size: 3.5rem; }
-.media-fallback a { color: #d4763a; font-weight: 700; font-size: 1.1rem; }
-.media-fallback .hint { color: #8b7355; font-size: 0.85rem; }
+/* Photo gallery */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; }
+.gallery-card { background: #fff; border-radius: 14px; padding: 1.8rem 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.06); display: flex; flex-direction: column; align-items: center; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
+.gallery-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,0.1); }
+.gallery-card .g-icon { font-size: 2.6rem; margin-bottom: 0.7rem; line-height: 1; }
+.gallery-card h4 { font-size: 1rem; font-weight: 700; color: #3d1f0f; margin-bottom: 0.3rem; }
+.gallery-card .g-desc { font-size: 0.82rem; color: #8b7355; margin-bottom: 1rem; line-height: 1.45; }
+.gallery-card .g-link { display: inline-block; padding: 0.5rem 1.4rem; background: #d4763a; color: #fff; border-radius: 99px; text-decoration: none; font-weight: 600; font-size: 0.84rem; transition: background 0.2s; }
+.gallery-card .g-link:hover { background: #b8551f; }
+
+/* Floating nav */
+.floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: #3d1f0f; }
+.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: #d4763a; color: #fff; }
+#back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
+#back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
 
 @media (max-width: 768px) {
   section { padding: 2.5rem 1rem; }
@@ -119,32 +129,6 @@ footer a { color: #d4763a; }
     <div class="hero-num-item"><div class="hero-num-val">¥20亿</div><div class="hero-num-label">累计投资总额</div></div>
   </div>
 </header>
-
-<!-- Hero 互动全景 -->
-<div class="hero-media reveal">
-  <iframe id="vr-frame"
-    src="https://www.720real.com/t/44abedb170f9dc1c"
-    allowfullscreen loading="lazy">
-  </iframe>
-  <div id="vr-fallback" class="media-fallback">
-    <span class="icon">🚁</span>
-    <strong>互动全景未能在此加载</strong>
-    <a href="https://www.720real.com/t/44abedb170f9dc1c" target="_blank">👉 点击在新窗口打开全景（19个鸟瞰视角）</a>
-    <span class="hint">拍摄于 2025年3月 · 拍摄高度约236米</span>
-  </div>
-</div>
-<script>
-const vrFrame = document.getElementById('vr-frame');
-const vrFallback = document.getElementById('vr-fallback');
-let vrLoaded = false;
-vrFrame.addEventListener('load', function() { vrLoaded = true; });
-setTimeout(function() {
-  if (!vrLoaded) {
-    vrFrame.style.display = 'none';
-    vrFallback.style.display = 'flex';
-  }
-}, 5000);
-</script>
 
 <!-- 项目概览 -->
 <section class="reveal">
@@ -423,6 +407,38 @@ setTimeout(function() {
   </div>
 </section>
 
+<!-- 实景图集 -->
+<section class="reveal">
+  <h2 class="section-title">实景图集</h2>
+  <p class="section-sub">通过以下链接浏览项目实景照片与互动全景</p>
+  <div class="gallery-grid">
+    <div class="gallery-card">
+      <div class="g-icon">🚁</div>
+      <h4>720° 互动全景</h4>
+      <p class="g-desc">19个鸟瞰视角，拍摄高度约236米，2025年3月</p>
+      <a class="g-link" href="https://www.720real.com/t/44abedb170f9dc1c" target="_blank">打开全景</a>
+    </div>
+    <div class="gallery-card">
+      <div class="g-icon">🎬</div>
+      <h4>B站过山车POV</h4>
+      <p class="g-desc">弹射式过山车第一视角实拍，全园项目合集</p>
+      <a class="g-link" href="https://search.bilibili.com/all?keyword=深圳欢乐谷POV" target="_blank">浏览视频</a>
+    </div>
+    <div class="gallery-card">
+      <div class="g-icon">📷</div>
+      <h4>携程攻略实拍</h4>
+      <p class="g-desc">游客深度游记，各主题区实景照片全覆盖</p>
+      <a class="g-link" href="https://you.ctrip.com/sight/shenzhen26/13720.html" target="_blank">查看攻略</a>
+    </div>
+    <div class="gallery-card">
+      <div class="g-icon">🖼️</div>
+      <h4>Wikimedia Commons</h4>
+      <p class="g-desc">自由版权图片库，含园区鸟瞰及设施高清图</p>
+      <a class="g-link" href="https://commons.wikimedia.org/wiki/Category:Happy_Valley_Shenzhen" target="_blank">浏览图库</a>
+    </div>
+  </div>
+</section>
+
 <!-- 延伸资料库 -->
 <section class="reveal">
   <h2 class="section-title">延伸资料库</h2>
@@ -437,6 +453,11 @@ setTimeout(function() {
     </tbody>
   </table>
 </section>
+
+<div class="floating-nav">
+  <a href="https://joanna2joanna.github.io/casestudy/" title="回首页">🏠</a>
+  <a href="#" id="back-to-top" title="回顶部">↑</a>
+</div>
 
 <footer>
   <p>案例研究报告 · 深圳欢乐谷 · 数据截至 2026 年 5 月</p>
@@ -519,6 +540,13 @@ setTimeout(function() {
 }, 5000);
 
 // Scroll reveal
+// Back to top button
+const btt = document.getElementById('back-to-top');
+window.addEventListener('scroll', function() {
+  if (window.scrollY > 600) { btt.classList.add('show'); }
+  else { btt.classList.remove('show'); }
+});
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.1 });

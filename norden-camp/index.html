@@ -80,16 +80,22 @@ section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
 footer { background: #0d1a08; color: #a0b88a; text-align: center; padding: 3rem 2rem; font-size: 0.85rem; }
 footer a { color: #6b8f3a; }
 
-/* Hero media */
-.hero-media { max-width: 1100px; margin: -1rem auto 0; padding: 0 2rem; position: relative; z-index: 2; }
-.hero-gallery-card { display: flex; align-items: center; gap: 2rem; background: #fff; border-radius: 16px; padding: 2rem 2.5rem; box-shadow: 0 8px 40px rgba(0,0,0,0.12); }
-.hero-gallery-icon { font-size: 4rem; flex-shrink: 0; }
-.hero-gallery-info h3 { font-size: 1.3rem; color: #1a3a12; margin-bottom: 0.3rem; }
-.hero-gallery-info p { font-size: 0.9rem; color: #6b7f5a; margin-bottom: 0.8rem; }
-.hero-gallery-info a { display: inline-block; padding: 0.6rem 1.5rem; background: #1a3a12; color: #c8d4a0; border-radius: 99px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: background 0.2s; }
-.hero-gallery-info a:hover { background: #3d6228; }
-.hero-gallery-sources { margin-top: 1rem; font-size: 0.78rem; color: #6b7f5a; display: flex; gap: 1rem; flex-wrap: wrap; }
-.hero-gallery-sources a { color: #3d6228; }
+/* Photo gallery */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; }
+.gallery-card { background: #fff; border-radius: 14px; padding: 1.8rem 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
+.gallery-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,0.1); }
+.gallery-card .g-icon { font-size: 2.6rem; margin-bottom: 0.7rem; line-height: 1; }
+.gallery-card h4 { font-size: 1rem; font-weight: 700; color: #1a3a12; margin-bottom: 0.3rem; }
+.gallery-card .g-desc { font-size: 0.82rem; color: #6b7f5a; margin-bottom: 1rem; line-height: 1.45; }
+.gallery-card .g-link { display: inline-block; padding: 0.5rem 1.4rem; background: #1a3a12; color: #c8d4a0; border-radius: 99px; text-decoration: none; font-weight: 600; font-size: 0.84rem; transition: background 0.2s; }
+.gallery-card .g-link:hover { background: #3d6228; }
+
+/* Floating nav */
+.floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: #1a3a12; }
+.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: #1a3a12; color: #c8d4a0; }
+#back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
+#back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
 
 @media (max-width: 768px) {
   section { padding: 2.5rem 1rem; }
@@ -112,24 +118,6 @@ footer a { color: #6b8f3a; }
     <div class="hero-num-item"><div class="hero-num-val">¥8,600+</div><div class="hero-num-label">每晚房价（一价全包）</div></div>
   </div>
 </header>
-
-<!-- Hero 实景图集入口 -->
-<div class="hero-media reveal">
-  <div class="hero-gallery-card">
-    <div class="hero-gallery-icon">⛺</div>
-    <div class="hero-gallery-info">
-      <h3>3,200米桑科草原上的隐世木屋</h3>
-      <p>9间独栋木屋散布草原 · 诺乐工坊牦牛绒铺陈 · 每年仅开放184天</p>
-      <a href="https://www.sohu.com/a/1010180683_121124408" target="_blank">📷 查看2026年重建后实拍（搜狐）</a>
-      <div class="hero-gallery-sources">
-        <span>更多实拍：</span>
-        <a href="https://www.xiaohongshu.com/search_result/诺尔丹营地" target="_blank">小红书旅拍</a>
-        <a href="https://www.flyert.com.cn/t-4221285-1-1.html" target="_blank">飞客茶馆深度报告</a>
-        <a href="https://www.vcg.com/creative/1282672404" target="_blank">视觉中国专业摄影</a>
-      </div>
-    </div>
-  </div>
-</div>
 
 <section class="reveal">
   <h2 class="section-title">项目概览</h2>
@@ -384,6 +372,37 @@ footer a { color: #6b8f3a; }
 </section>
 
 <section class="reveal">
+  <h2 class="section-title">实景图集</h2>
+  <p class="section-sub">通过以下链接浏览项目实景照片与航拍影像</p>
+  <div class="gallery-grid">
+    <div class="gallery-card">
+      <div class="g-icon">📷</div>
+      <h4>搜狐2026年重建实拍</h4>
+      <p class="g-desc">最新木屋照片，9间独栋全部重建后首次公开</p>
+      <a class="g-link" href="https://www.sohu.com/a/1010180683_121124408" target="_blank">查看报道</a>
+    </div>
+    <div class="gallery-card">
+      <div class="g-icon">🎬</div>
+      <h4>小红书旅拍合集</h4>
+      <p class="g-desc">住客真实体验图文，草原木屋与营地生活细节</p>
+      <a class="g-link" href="https://www.xiaohongshu.com/search_result/诺尔丹营地" target="_blank">浏览笔记</a>
+    </div>
+    <div class="gallery-card">
+      <div class="g-icon">✈️</div>
+      <h4>飞客茶馆深度报告</h4>
+      <p class="g-desc">入住全流程实录，含餐饮、活动、交通全攻略</p>
+      <a class="g-link" href="https://www.flyert.com.cn/t-4221285-1-1.html" target="_blank">阅读报告</a>
+    </div>
+    <div class="gallery-card">
+      <div class="g-icon">📸</div>
+      <h4>视觉中国专业摄影</h4>
+      <p class="g-desc">专业摄影师镜头下的诺尔丹，高原光影质感</p>
+      <a class="g-link" href="https://www.vcg.com/creative/1282672404" target="_blank">浏览摄影</a>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
   <h2 class="section-title">延伸资料库</h2>
   <p class="section-sub">5个精选高质量外部站点</p>
   <table class="data-table">
@@ -396,6 +415,11 @@ footer a { color: #6b8f3a; }
     </tbody>
   </table>
 </section>
+
+<div class="floating-nav">
+  <a href="https://joanna2joanna.github.io/casestudy/" title="回首页">🏠</a>
+  <a href="#" id="back-to-top" title="回顶部">↑</a>
+</div>
 
 <footer>
   <p>案例研究报告 · 甘南诺尔丹营地 Norden Camp · 数据截至 2026 年 5 月</p>
@@ -457,6 +481,13 @@ setTimeout(function() {
     document.getElementById('map-fallback').style.display = 'flex';
   }
 }, 5000);
+
+// Back to top button
+const btt = document.getElementById('back-to-top');
+window.addEventListener('scroll', function() {
+  if (window.scrollY > 600) { btt.classList.add('show'); }
+  else { btt.classList.remove('show'); }
+});
 
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });

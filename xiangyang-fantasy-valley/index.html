@@ -456,13 +456,13 @@ function wgs84ToGcj02(wgsLng, wgsLat) {
 
 // ── Zone markers (WGS-84 → GCJ-02 for Gaode tiles) ──
 var xyZonesWgs = [
-  { name: '奇幻大道<br><small>主入口·星球集市</small>', lat: 32.045, lng: 112.205, color: '#6A1B9A' },
-  { name: '发现港湾<br><small>达芬奇飞翔·秘境漂流</small>', lat: 32.046, lng: 112.203, color: '#E64A19' },
-  { name: '异星港<br><small>星际历险·虫巢突围</small>', lat: 32.044, lng: 112.207, color: '#00BCD4' },
-  { name: '疯狂机械城<br><small>机械麒麟金璃</small>', lat: 32.045, lng: 112.206, color: '#F5A623' },
-  { name: '鲲之方舟<br><small>方舟大冒险·熊猫</small>', lat: 32.043, lng: 112.204, color: '#2E7D32' },
-  { name: '昆仑幻境<br><small>雪山飞车·地宫历险</small>', lat: 32.044, lng: 112.202, color: '#1565C0' },
-  { name: '云海酒店<br><small>五星·海洋主题</small>', lat: 32.041, lng: 112.200, color: '#00838F' }
+  { name: '奇幻大道<br><small>主入口·星球集市</small>', lat: 31.9948, lng: 112.2580, color: '#6A1B9A' },
+  { name: '发现港湾<br><small>达芬奇飞翔·秘境漂流</small>', lat: 31.9962, lng: 112.2595, color: '#E64A19' },
+  { name: '异星港<br><small>星际历险·虫巢突围</small>', lat: 31.9978, lng: 112.2582, color: '#00BCD4' },
+  { name: '疯狂机械城<br><small>机械麒麟金璃</small>', lat: 31.9980, lng: 112.2565, color: '#F5A623' },
+  { name: '鲲之方舟<br><small>方舟大冒险·熊猫</small>', lat: 31.9985, lng: 112.2555, color: '#2E7D32' },
+  { name: '昆仑幻境<br><small>雪山飞车·地宫历险</small>', lat: 31.9960, lng: 112.2545, color: '#1565C0' },
+  { name: '云海酒店<br><small>五星·海洋主题</small>', lat: 31.9935, lng: 112.2540, color: '#00838F' }
 ];
 
 function addZoneMarkers(targetMap, zones) {
@@ -482,7 +482,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var el = document.getElementById('parkmap');
   if (!el) return;
 
-  var center = wgs84ToGcj02(112.204, 32.044);
+  var center = wgs84ToGcj02(112.25737, 31.99667);
   var map = L.map('parkmap', { scrollWheelZoom: false }).setView([center.lat, center.lng], 16);
 
   var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
@@ -500,7 +500,7 @@ document.addEventListener('DOMContentLoaded', function() {
   L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
   addZoneMarkers(map, xyZonesWgs);
 
-  var parkCenter = wgs84ToGcj02(112.204, 32.044);
+  var parkCenter = wgs84ToGcj02(112.25737, 31.99667);
   L.circle([parkCenter.lat, parkCenter.lng], { radius: 400, color: '#6A1B9A', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
 
   setTimeout(function() { map.invalidateSize(); }, 800);

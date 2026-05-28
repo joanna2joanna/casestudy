@@ -473,18 +473,21 @@ footer a { color: #d4763a; }
 
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-// GCJ-02 transform
+// GCJ-02 transform (WGS-84 → GCJ-02)
 function wgs2gcj(lng, lat) {
-  const a = 6378245.0, ee = 0.00669342162296594323;
-  function transformLat(x, y) { let r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x)); r += (20*Math.sin(6*x*Math.PI)+20*Math.sin(2*x*Math.PI))*2/3; r += (20*Math.sin(y*Math.PI)+40*Math.sin(y/3*Math.PI))*2/3; r += (160*Math.sin(y/12*Math.PI)+320*Math.sin(y*Math.PI/30))*2/3; return r; }
-  function transformLng(x, y) { let r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x)); r += (20*Math.sin(6*x*Math.PI)+20*Math.sin(2*x*Math.PI))*2/3; r += (20*Math.sin(x*Math.PI)+40*Math.sin(x/3*Math.PI))*2/3; r += (150*Math.sin(x/12*Math.PI)+300*Math.sin(x/30*Math.PI))*2/3; return r; }
-  const dLat = transformLat(lng-105, lat-35), dLng = transformLng(lng-105, lat-35);
-  const radLat = lat / 180 * Math.PI, magic = Math.sin(radLat), m = 1 - ee * magic * magic;
-  return [lng + dLng/(m*Math.cos(radLat)*Math.PI*111.32)*180, lat + dLat/(m*Math.PI*111.32)*180];
+  var a = 6378245.0, ee = 0.00669342162296594323;
+  function transformLat(x, y) { var r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x)); r += (20*Math.sin(6*x*Math.PI)+20*Math.sin(2*x*Math.PI))*2/3; r += (20*Math.sin(y*Math.PI)+40*Math.sin(y/3*Math.PI))*2/3; r += (160*Math.sin(y/12*Math.PI)+320*Math.sin(y*Math.PI/30))*2/3; return r; }
+  function transformLng(x, y) { var r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x)); r += (20*Math.sin(6*x*Math.PI)+20*Math.sin(2*x*Math.PI))*2/3; r += (20*Math.sin(x*Math.PI)+40*Math.sin(x/3*Math.PI))*2/3; r += (150*Math.sin(x/12*Math.PI)+300*Math.sin(x/30*Math.PI))*2/3; return r; }
+  var dLat = transformLat(lng-105, lat-35), dLng = transformLng(lng-105, lat-35);
+  var radLat = lat/180*Math.PI, magic = 1 - ee*Math.sin(radLat)*Math.sin(radLat);
+  return [
+    lng + (180*dLng)/((a/Math.sqrt(magic))*Math.cos(radLat)*Math.PI),
+    lat + (180*dLat)/((a*(1-ee))/(magic*Math.sqrt(magic))*Math.PI)
+  ];
 }
 
 // Shenzhen Happy Valley WGS-84
-const parkWGS = [113.98029, 22.54159];
+const parkWGS = [113.97395, 22.54157];
 const parkGCJ = wgs2gcj(parkWGS[0], parkWGS[1]);
 
 function makeStreetLayer() {
@@ -527,15 +530,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Zone markers data
 const zones = [
-  { name:'西班牙广场', lat: 22.53875, lng: 113.97980, color: '#c0392b' },
-  { name:'欢乐时光', lat: 22.53980, lng: 113.98020, color: '#e67e22' },
-  { name:'魔幻城堡', lat: 22.53990, lng: 113.97810, color: '#8e44ad' },
-  { name:'冒险山', lat: 22.54100, lng: 113.97840, color: '#27ae60' },
-  { name:'西部矿镇', lat: 22.54270, lng: 113.97890, color: '#c0392b' },
-  { name:'飓风湾', lat: 22.54260, lng: 113.98120, color: '#2980b9' },
-  { name:'阳光海岸', lat: 22.54190, lng: 113.98180, color: '#d4a017' },
-  { name:'香格里拉', lat: 22.54330, lng: 113.98280, color: '#1a5276' },
-  { name:'玛雅水公园', lat: 22.54050, lng: 113.97800, color: '#16a085' }
+  { name:'西班牙广场', lat: 22.53875, lng: 113.9725, color: '#c0392b' },
+  { name:'欢乐时光', lat: 22.53980, lng: 113.9730, color: '#e67e22' },
+  { name:'魔幻城堡', lat: 22.53990, lng: 113.9715, color: '#8e44ad' },
+  { name:'冒险山', lat: 22.54100, lng: 113.9718, color: '#27ae60' },
+  { name:'西部矿镇', lat: 22.54270, lng: 113.9722, color: '#c0392b' },
+  { name:'飓风湾', lat: 22.54260, lng: 113.9740, color: '#2980b9' },
+  { name:'阳光海岸', lat: 22.54190, lng: 113.9745, color: '#d4a017' },
+  { name:'香格里拉', lat: 22.54330, lng: 113.9752, color: '#1a5276' },
+  { name:'玛雅水公园', lat: 22.54050, lng: 113.9715, color: '#16a085' }
 ];
 
 function switchMap(type) {

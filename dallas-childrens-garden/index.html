@@ -392,14 +392,15 @@ footer strong { color: var(--lime-light); }
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 var dallasZones = [
-  { name: '迎宾中心<br><small>Entry Plaza</small>', lat: 32.8255, lng: -96.7185, color: '#2E7D32' },
-  { name: 'Plants Are Alive<br><small>植物科学展馆</small>', lat: 32.8253, lng: -96.7180, color: '#4CAF50' },
-  { name: 'Moody Oasis<br><small>水绿洲互动区</small>', lat: 32.8250, lng: -96.7175, color: '#0288D1' },
-  { name: 'OmniGlobe<br><small>数字地球剧场</small>', lat: 32.8252, lng: -96.7182, color: '#7B1FA2' },
-  { name: 'Walk in Clouds<br><small>73m树冠步道</small>', lat: 32.8247, lng: -96.7170, color: '#E65100' },
-  { name: '可食用花园<br><small>Edible Garden</small>', lat: 32.8256, lng: -96.7190, color: '#FF8F00' },
-  { name: '德州湿地<br><small>Texas Wetlands</small>', lat: 32.8245, lng: -96.7168, color: '#00838F' },
-  { name: '白岩湖<br><small>White Rock Lake</small>', lat: 32.8220, lng: -96.7140, color: '#1565C0' }
+  { name: '迎宾中心<br><small>Entry Plaza · 入园第一站</small>', lat: 32.8245, lng: -96.7180, color: '#2E7D32' },
+  { name: '可食用花园<br><small>Edible Garden · 食物教育</small>', lat: 32.8246, lng: -96.7185, color: '#FF8F00' },
+  { name: '植物科学馆<br><small>Plants Are Alive · 巨型花盆</small>', lat: 32.8248, lng: -96.7176, color: '#4CAF50' },
+  { name: '万花筒花园<br><small>Kaleidoscope · 科学+艺术</small>', lat: 32.8250, lng: -96.7183, color: '#7B1FA2' },
+  { name: '绿洲·探索中心<br><small>The Oasis · OmniGlobe剧场</small>', lat: 32.8251, lng: -96.7180, color: '#0288D1' },
+  { name: '树冠步道<br><small>Texas Skywalk · 73m</small>', lat: 32.8250, lng: -96.7173, color: '#E65100' },
+  { name: '纯能量区<br><small>Pure Energy · 太阳能风能</small>', lat: 32.8253, lng: -96.7184, color: '#F5A623' },
+  { name: '地球周期<br><small>Earth Cycles · 秘密花园</small>', lat: 32.8255, lng: -96.7178, color: '#6A1B9A' },
+  { name: '野生湿地<br><small>Wild Wetlands · 2,880m²</small>', lat: 32.8257, lng: -96.7175, color: '#00838F' }
 ];
 
 function addZoneMarkers(targetMap, zones) {
@@ -430,7 +431,7 @@ document.addEventListener('DOMContentLoaded', function() {
   L.control.layers({ '卫星图': satLayer, '地形图': topoLayer }, null, { position: 'topright' }).addTo(map);
   addZoneMarkers(map, dallasZones);
 
-  L.circle([32.825, -96.718], { radius: 180, color: '#2E7D32', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  L.circle([32.825, -96.718], { radius: 110, color: '#2E7D32', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
 
   setTimeout(function() { map.invalidateSize(); }, 800);
   var tileLoaded = false;

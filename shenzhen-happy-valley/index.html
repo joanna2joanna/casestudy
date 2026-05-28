@@ -498,11 +498,34 @@ function makeSatLayer() {
   });
 }
 
-const map = L.map('parkmap', { scrollWheelZoom: false, zoomControl: true });
-let currentLayer = makeStreetLayer().addTo(map);
-map.setView([parkGCJ[1], parkGCJ[0]], 16);
+let map, currentLayer;
 
-// Zone markers (GCJ-02 coords based on known layout relative to park center)
+document.addEventListener('DOMContentLoaded', function() {
+  map = L.map('parkmap', { scrollWheelZoom: false, zoomControl: true });
+  currentLayer = makeStreetLayer().addTo(map);
+  map.setView([parkGCJ[1], parkGCJ[0]], 16);
+
+  zones.forEach(z => {
+    const gcj = wgs2gcj(z.lng, z.lat);
+    const icon = L.divIcon({
+      className: 'leaflet-div-icon',
+      html: `<div class="zone-marker" style="background:${z.color}">${z.name}</div>`,
+      iconSize: [80, 26], iconAnchor: [40, 13]
+    });
+    L.marker([gcj[1], gcj[0]], { icon }).addTo(map);
+  });
+
+  setTimeout(() => map.invalidateSize(), 1000);
+  // 8秒超时降级
+  setTimeout(function() {
+    var loaded = document.querySelectorAll('#parkmap .leaflet-tile-loaded');
+    if (loaded.length === 0) {
+      document.getElementById('map-fallback').style.display = 'flex';
+    }
+  }, 8000);
+});
+
+// Zone markers data
 const zones = [
   { name:'西班牙广场', lat: 22.53875, lng: 113.97980, color: '#c0392b' },
   { name:'欢乐时光', lat: 22.53980, lng: 113.98020, color: '#e67e22' },
@@ -515,16 +538,6 @@ const zones = [
   { name:'玛雅水公园', lat: 22.54050, lng: 113.97800, color: '#16a085' }
 ];
 
-zones.forEach(z => {
-  const gcj = wgs2gcj(z.lng, z.lat);
-  const icon = L.divIcon({
-    className: 'leaflet-div-icon',
-    html: `<div class="zone-marker" style="background:${z.color}">${z.name}</div>`,
-    iconSize: [80, 26], iconAnchor: [40, 13]
-  });
-  L.marker([gcj[1], gcj[0]], { icon }).addTo(map);
-});
-
 function switchMap(type) {
   map.removeLayer(currentLayer);
   document.querySelectorAll('.map-tab').forEach(b => b.classList.remove('active'));
@@ -536,14 +549,6 @@ function switchMap(type) {
     document.querySelectorAll('.map-tab')[0].classList.add('active');
   }
 }
-setTimeout(() => map.invalidateSize(), 1000);
-// 5秒地图瓦片未加载 → 显示降级提示
-setTimeout(function() {
-  var loaded = document.querySelectorAll('#parkmap .leaflet-tile-loaded');
-  if (loaded.length === 0) {
-    document.getElementById('map-fallback').style.display = 'flex';
-  }
-}, 8000);
 
 // Scroll reveal
 // Back to top button

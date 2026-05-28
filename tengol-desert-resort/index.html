@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tengol 沙漠度假酒店 — 案例研究报告</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+html { font-size: 17px; scroll-behavior: smooth; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'DM Sans', -apple-system, sans-serif; background: #f9f4e8; color: #2d2416; line-height: 1.6; }
+h1, h2, h3, .hero-title { font-family: 'Playfair Display', Georgia, serif; }
+.data-mono { font-family: 'DM Mono', 'SF Mono', monospace; }
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Hero — desert sunset palette */
+.hero { min-height: 100vh; background: linear-gradient(160deg, #1a1006 0%, #4a2808 25%, #8b5e2f 55%, #c4945a 85%, #e8c98b 100%); color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 70%, rgba(200,160,100,0.25) 0%, transparent 60%); }
+.hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 200px; background: linear-gradient(to top, rgba(249,244,232,1), transparent); }
+.hero-badge { font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.4); padding: 0.4rem 1.2rem; border-radius: 99px; margin-bottom: 2rem; z-index: 1; }
+.hero-title { font-size: clamp(2.5rem, 6.5vw, 5rem); font-weight: 800; line-height: 1.1; margin-bottom: 0.5rem; z-index: 1; }
+.hero-sub { font-size: 1.1rem; opacity: 0.85; font-weight: 400; margin-bottom: 3rem; z-index: 1; }
+.hero-nums { display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center; z-index: 1; }
+.hero-num-item { text-align: center; }
+.hero-num-val { font-size: 2.8rem; font-weight: 800; font-family: 'DM Mono', monospace; line-height: 1; }
+.hero-num-label { font-size: 0.85rem; opacity: 0.75; margin-top: 0.3rem; }
+
+section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
+.section-title { font-size: 2.2rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; color: #4a2808; }
+.section-sub { text-align: center; color: #8b7355; margin-bottom: 3rem; font-size: 0.95rem; }
+
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.card { background: #fff; border-radius: 16px; padding: 1.6rem; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.06); }
+.card-emoji { font-size: 2rem; margin-bottom: 0.6rem; }
+.card-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: #8b7355; margin-bottom: 0.4rem; }
+.card-val { font-size: 1.4rem; font-weight: 700; color: #4a2808; }
+
+.data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+.data-table th { background: #4a2808; color: #e8c98b; padding: 0.9rem 1.2rem; text-align: left; font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.data-table td { padding: 0.8rem 1.2rem; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 0.9rem; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
+
+.timeline { position: relative; padding-left: 2.5rem; }
+.timeline::before { content: ''; position: absolute; left: 0.8rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #e8c98b, #8b5e2f); }
+.tl-item { position: relative; margin-bottom: 2rem; }
+.tl-item::before { content: ''; position: absolute; left: -2.1rem; top: 0.4rem; width: 12px; height: 12px; border-radius: 50%; background: #c4945a; border: 3px solid #f9f4e8; box-shadow: 0 0 0 2px #c4945a; }
+.tl-year { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: #8b5e2f; font-weight: 700; }
+.tl-title { font-size: 1.1rem; font-weight: 700; color: #4a2808; }
+.tl-desc { font-size: 0.9rem; color: #6b5b4f; margin-top: 0.2rem; }
+
+.map-container { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.05); margin-bottom: 2rem; }
+.map-tabs { display: flex; border-bottom: 1px solid rgba(0,0,0,0.08); }
+.map-tab { flex: 1; padding: 0.8rem; text-align: center; cursor: pointer; font-size: 0.9rem; font-weight: 600; border: none; background: none; color: #8b7355; transition: all 0.2s; }
+.map-tab.active { color: #4a2808; border-bottom: 2px solid #c4945a; }
+.map-wrap { height: 450px; width: 100%; }
+.map-wrap .leaflet-container { height: 100%; width: 100%; }
+.leaflet-div-icon { background: none; border: none; }
+.zone-marker { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 2px solid #fff; font-family: 'DM Sans', sans-serif; }
+
+.svg-map-wrap { max-width: 100%; margin: 0 auto; background: #fff; border-radius: 16px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+.svg-map-wrap svg { width: 100%; height: auto; }
+
+.photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+.photo-card { background: #fff; border-radius: 12px; padding: 1.2rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.photo-card a { color: #8b5e2f; text-decoration: none; font-weight: 600; }
+.photo-emoji { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+.kpi-card { background: linear-gradient(135deg, #4a2808, #8b5e2f); color: #e8c98b; border-radius: 16px; padding: 1.5rem; text-align: center; }
+.kpi-val { font-size: 2.2rem; font-family: 'DM Mono', monospace; font-weight: 800; color: #fff; }
+.kpi-label { font-size: 0.82rem; opacity: 0.75; margin-top: 0.3rem; color: #e8c98b; }
+
+footer { background: #1a1006; color: #c4a882; text-align: center; padding: 3rem 2rem; font-size: 0.85rem; }
+footer a { color: #c4945a; }
+
+@media (max-width: 768px) {
+  section { padding: 2.5rem 1rem; }
+  .hero-nums { gap: 1.5rem; }
+  .hero-num-val { font-size: 2rem; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-badge">数据截至 2026 年 5 月</div>
+  <h1 class="hero-title">Tengol 沙漠度假酒店</h1>
+  <p class="hero-sub">中国首个沙漠夯土建筑群 · 丝路野奢标杆 · 《蜜语纪》取景地</p>
+  <div class="hero-nums">
+    <div class="hero-num-item"><div class="hero-num-val">105</div><div class="hero-num-label">间客房</div></div>
+    <div class="hero-num-item"><div class="hero-num-val">¥1.3亿</div><div class="hero-num-label">总投资</div></div>
+    <div class="hero-num-item"><div class="hero-num-val">70%+</div><div class="hero-num-label">年均入住率</div></div>
+    <div class="hero-num-item"><div class="hero-num-val">¥150万</div><div class="hero-num-label">单日最高营收</div></div>
+  </div>
+</header>
+
+<section class="reveal">
+  <h2 class="section-title">项目概览</h2>
+  <p class="section-sub">腾格里沙漠腹地的"新龙门客栈"——温州商人陈祖品的又一野奢力作</p>
+  <div class="card-grid">
+    <div class="card"><div class="card-emoji">🎂</div><div class="card-title">开业时间</div><div class="card-val">2024年7月10日</div></div>
+    <div class="card"><div class="card-emoji">👤</div><div class="card-title">创始人 / 业主</div><div class="card-val">陈祖品 (华正文旅集团)</div></div>
+    <div class="card"><div class="card-emoji">📍</div><div class="card-title">地理位置</div><div class="card-val">宁夏中卫市·腾格里沙漠腹地</div></div>
+    <div class="card"><div class="card-emoji">📐</div><div class="card-title">建筑规模</div><div class="card-val">20栋建筑 · 105间客房</div></div>
+    <div class="card"><div class="card-emoji">🏗️</div><div class="card-title">建设周期</div><div class="card-val">4 年 (2020-2024)</div></div>
+    <div class="card"><div class="card-emoji">💰</div><div class="card-title">均价区间</div><div class="card-val">¥4,000-4,500/间夜</div></div>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">设计与建设</h2>
+  <p class="section-sub">中国首个沙漠夯土建筑群——从沙海中"生长"出来的西域聚落</p>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-emoji">🏛️</div>
+      <div class="card-title">建筑设计理念</div>
+      <div class="card-val" style="font-size:1rem;">受徐克《新龙门客栈》启发，以半掩沙海的古城形态匍匐沙丘之间，夯土质感+圆拱门廊+洞穴造型</div>
+    </div>
+    <div class="card">
+      <div class="card-emoji">🎨</div>
+      <div class="card-title">室内设计 / 软装</div>
+      <div class="card-val" style="font-size:1rem;">陈祖品私人收藏中古家具 · 400+条手工羊毛地毯 · 尼泊尔/埃塞俄比亚古董家具</div>
+    </div>
+    <div class="card">
+      <div class="card-emoji">🏗️</div>
+      <div class="card-title">施工方</div>
+      <div class="card-val" style="font-size:1rem;">华正文旅集团自建团队 · 本地工匠 · 传统夯土工艺</div>
+    </div>
+    <div class="card">
+      <div class="card-emoji">🌿</div>
+      <div class="card-title">景观设计</div>
+      <div class="card-val" style="font-size:1rem;">原生态沙漠景观 · 无边际泳池 · 沙丘庭院 · 露天篝火区</div>
+    </div>
+  </div>
+  <table class="data-table" style="margin-top:1.5rem;">
+    <thead><tr><th>供应商类别</th><th>公司/来源</th><th>供应内容</th></tr></thead>
+    <tbody>
+      <tr><td>手工地毯</td><td>尼泊尔/埃塞俄比亚/土耳其工坊</td><td>400+条手工羊毛地毯 · 百年古董毯 · 大麦地岩画图案定制毯</td></tr>
+      <tr><td>中古家具</td><td>陈祖品全球私藏</td><td>来自尼泊尔·埃塞俄比亚·欧洲等地的中古家具</td></tr>
+      <tr><td>夯土建材</td><td>本地沙漠材料</td><td>就地取材沙漠沙土 · 传统夯土工艺</td></tr>
+      <tr><td>布艺/床品</td><td>进口定制</td><td>超3m大床 · 定制亚麻床品 · 手工羊毛毯</td></tr>
+      <tr><td>智能化</td><td>定制化方案</td><td>地暖系统 · 空调 · 高端卫浴</td></tr>
+      <tr><td>演艺合作</td><td>《大漠升海市》团队</td><td>国内首部素人实景演艺</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">技术指标总表</h2>
+  <p class="section-sub">野奢沙漠度假酒店一站式数据速查</p>
+  <table class="data-table">
+    <thead><tr><th>指标</th><th>数值</th><th>备注</th></tr></thead>
+    <tbody>
+      <tr><td>总投资额</td><td class="num">¥1.3 亿</td><td>含建筑·软装·景观·艺术品</td></tr>
+      <tr><td>建筑数量</td><td class="num">20 栋</td><td>古驿站巷道式布局</td></tr>
+      <tr><td>客房总数</td><td class="num">105 间</td><td>含基础房·套房·泡池套房</td></tr>
+      <tr><td>基础房价</td><td class="num">¥2,000+ /晚</td><td>淡季促销两晚¥3,000</td></tr>
+      <tr><td>均价</td><td class="num">¥4,000-4,500 /晚</td><td>旺季供不应求</td></tr>
+      <tr><td>泡池套房</td><td class="num">¥6,080 起/晚</td><td>最高房型</td></tr>
+      <tr><td>年均入住率</td><td class="num">65-70%</td><td>2024-2025年数据</td></tr>
+      <tr><td>单房年产值</td><td class="num">¥70万+ </td><td>行业顶尖水平</td></tr>
+      <tr><td>ROE</td><td class="num">35%</td><td>净资产收益率</td></tr>
+      <tr><td>非客房收入占比</td><td class="num">40%+</td><td>餐饮·活动·演艺</td></tr>
+      <tr><td>单日运营成本</td><td class="num">约 ¥4万/天</td><td>人力·维护·能耗</td></tr>
+      <tr><td>投资回收预期</td><td class="num">约 4 年</td><td>基于当前运营表现</td></tr>
+      <tr><td>淡季预售额</td><td class="num">¥3,000万+</td><td>2025双11/双12</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">空间布局与场地分析</h2>
+  <p class="section-sub">古驿站巷道式聚落 · 20栋建筑匍匐于沙丘之间</p>
+
+  <div class="map-container">
+    <div class="map-tabs">
+      <button class="map-tab active" onclick="switchMap('street')">街道图</button>
+      <button class="map-tab" onclick="switchMap('satellite')">卫星图</button>
+    </div>
+    <div id="parkmap" class="map-wrap"></div>
+  </div>
+
+  <div class="svg-map-wrap">
+    <svg viewBox="0 0 1000 850" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="0" width="1000" height="850" fill="#f5eed8" rx="12"/>
+      <!-- Desert background texture -->
+      <ellipse cx="500" cy="450" rx="480" ry="400" fill="#e8d5a0" opacity="0.5"/>
+      <!-- Dune shapes -->
+      <path d="M0,700 Q200,550 400,680 Q600,810 800,620 Q900,520 1000,600 L1000,850 L0,850Z" fill="#d4b87a" opacity="0.4"/>
+      <path d="M0,750 Q150,680 300,750 Q500,820 700,730 Q850,670 1000,750 L1000,850 L0,850Z" fill="#c4a060" opacity="0.3"/>
+      <!-- North arrow -->
+      <g transform="translate(920,60)"><polygon points="0,30 8,0 16,30 8,22" fill="#4a2808"/><text x="8" y="45" text-anchor="middle" font-size="11" font-family="DM Sans">N</text></g>
+      <!-- Central cluster -->
+      <rect x="300" y="350" width="120" height="80" rx="8" fill="#8b5e2f" opacity="0.9" stroke="#fff" stroke-width="2"/>
+      <text x="360" y="395" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">大堂·接待</text>
+      <!-- Guest room clusters around center -->
+      <rect x="150" y="200" width="140" height="120" rx="8" fill="#a0703a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="220" y="255" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">客房区A</text>
+      <text x="220" y="275" text-anchor="middle" fill="#fff" font-size="9">标准/豪华房</text>
+      <rect x="440" y="180" width="140" height="140" rx="8" fill="#a0703a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="510" y="245" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">客房区B</text>
+      <text x="510" y="265" text-anchor="middle" fill="#fff" font-size="9">泡池套房</text>
+      <rect x="600" y="380" width="130" height="130" rx="8" fill="#a0703a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="665" y="440" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">客房区C</text>
+      <rect x="460" y="480" width="140" height="120" rx="8" fill="#a0703a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="530" y="535" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">客房区D</text>
+      <!-- Amenities -->
+      <rect x="180" y="500" width="140" height="90" rx="8" fill="#2980b9" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="250" y="540" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">无边际泳池</text>
+      <rect x="630" y="580" width="120" height="85" rx="8" fill="#e67e22" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="690" y="618" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">餐厅·酒吧</text>
+      <rect x="80" y="370" width="100" height="80" rx="8" fill="#16a085" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="130" y="405" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">SPA·桑拿</text>
+      <rect x="750" y="250" width="120" height="80" rx="8" fill="#8e44ad" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="810" y="285" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">篝火·观星</text>
+      <!-- Sand dunes around edges -->
+      <text x="120" y="130" fill="#8b7355" font-size="9" font-style="italic">沙丘</text>
+      <text x="820" y="140" fill="#8b7355" font-size="9" font-style="italic">沙丘</text>
+      <text x="50" y="680" fill="#8b7355" font-size="9" font-style="italic">沙丘</text>
+      <text x="800" y="700" fill="#8b7355" font-size="9" font-style="italic">沙丘</text>
+      <!-- Legend -->
+      <rect x="720" y="760" width="14" height="14" fill="#a0703a" opacity="0.85"/><text x="740" y="772" font-size="10" fill="#4a2808">客房区</text>
+      <rect x="800" y="760" width="14" height="14" fill="#2980b9" opacity="0.85"/><text x="820" y="772" font-size="10" fill="#4a2808">泳池</text>
+      <rect x="870" y="760" width="14" height="14" fill="#e67e22" opacity="0.85"/><text x="890" y="772" font-size="10" fill="#4a2808">餐饮</text>
+    </svg>
+    <p style="text-align:center;color:#8b7355;font-size:0.78rem;margin-top:0.6rem;">示意图，基于公开报道与卫星影像 | 北向上 | 实际布局以酒店官方为准</p>
+  </div>
+
+  <div class="card-grid" style="margin-top:2rem;">
+    <div class="card"><div class="card-emoji">🏛️</div><div class="card-title">大堂·接待区</div><div class="card-val" style="font-size:1rem;">夯土穹顶 · 手工地毯 · 中古家具 · 丝路艺术藏品展示</div></div>
+    <div class="card"><div class="card-emoji">🛏️</div><div class="card-title">客房区 (4组)</div><div class="card-val" style="font-size:1rem;">105间 · 洞穴式夯土外墙 · 私人内院 · 观景露台· 专属泳池 · 超3m大床</div></div>
+    <div class="card"><div class="card-emoji">🏊</div><div class="card-title">无边际沙漠泳池</div><div class="card-val" style="font-size:1rem;">蓝色水面 × 金色沙海 · 酒店最具视觉冲击力的地标</div></div>
+    <div class="card"><div class="card-emoji">🍽️</div><div class="card-title">餐饮娱乐区</div><div class="card-val" style="font-size:1rem;">丝路主题餐厅 · 离岛咖啡 · 沙漠酒吧 · 黑帐篷晚宴</div></div>
+    <div class="card"><div class="card-emoji">🧖</div><div class="card-title">康体区</div><div class="card-val" style="font-size:1rem;">沙漠SPA · 桑拿 · 健身房 · 瑜伽平台</div></div>
+    <div class="card"><div class="card-emoji">🔥</div><div class="card-title">户外体验区</div><div class="card-val" style="font-size:1rem;">篝火广场 · 星空观测点 · 沙漠影院 · 骆驼骑行出发点</div></div>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">酒店实景图集</h2>
+  <p class="section-sub">各功能区实景照片参考</p>
+  <div class="photo-grid">
+    <div class="photo-card"><span class="photo-emoji">🏜️</span><a href="https://www.douyin.com/note/7394380664805543187" target="_blank">建筑全景航拍</a><br><span style="font-size:0.75rem;color:#8b7355;">抖音实拍图文</span></div>
+    <div class="photo-card"><span class="photo-emoji">🏊</span><a href="https://hk.trip.com/moments/detail/zhongwei-1184-145290300/" target="_blank">无边际泳池 & 沙漠写真</a><br><span style="font-size:0.75rem;color:#8b7355;">Trip.com 旅拍</span></div>
+    <div class="photo-card"><span class="photo-emoji">🛏️</span><a href="https://tw.trip.com/moments/detail/zhongwei-1184-144218117/" target="_blank">客房内饰精拍</a><br><span style="font-size:0.75rem;color:#8b7355;">Trip.com Moments</span></div>
+    <div class="photo-card"><span class="photo-emoji">🎬</span><a href="https://www.douyin.com/video/7568697391419870474" target="_blank">沙漠活动Vlog</a><br><span style="font-size:0.75rem;color:#8b7355;">抖音全程实拍</span></div>
+    <div class="photo-card"><span class="photo-emoji">🌅</span><a href="https://hk.weibo.com/5181499954/Ox6LzoRkV" target="_blank">黄昏篝火 & 沙漠晚宴</a><br><span style="font-size:0.75rem;color:#8b7355;">微博达人分享</span></div>
+    <div class="photo-card"><span class="photo-emoji">🌟</span><a href="https://mp.weixin.qq.com/s?__biz=Mzg5OTYzNzI2NA==&mid=2247681379&idx=1" target="_blank">沙漠星空夜景</a><br><span style="font-size:0.75rem;color:#8b7355;">微信公众号深度推送</span></div>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">投资与建设时序</h2>
+  <p class="section-sub">从矿业老板到西北文旅标杆的四年打磨</p>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2013年</div><div class="tl-title">创始人陈祖品转型文旅</div><div class="tl-desc">原温州矿业老板，考察西北后决定投身文旅产业</div></div>
+    <div class="tl-item"><div class="tl-year">2015-2019年</div><div class="tl-title">前期项目：黄河·宿集</div><div class="tl-desc">投资超1亿元打造中卫废弃古村改造项目，成为现象级西北文旅标杆</div></div>
+    <div class="tl-item"><div class="tl-year">2020年前后</div><div class="tl-title">Tengol 项目启动</div><div class="tl-desc">疫情期间毅然启动沙漠酒店建设，选址腾格里沙漠腹地</div></div>
+    <div class="tl-item"><div class="tl-year">2020-2024年</div><div class="tl-title">四年打磨</div><div class="tl-desc">中国首个沙漠夯土建筑群施工 · 全球采购中古家具 · 搜集400+条手工地毯 · 反复推敲每个空间细节</div></div>
+    <div class="tl-item"><div class="tl-year">2024年7月</div><div class="tl-title">试运营开业</div><div class="tl-desc">仅开放半数客房即一房难求 · 单日最高预订额突破¥150万</div></div>
+    <div class="tl-item"><div class="tl-year">2025年</div><div class="tl-title">快速迭代出圈</div><div class="tl-desc">陈祖品获"年度风云浙商" · 《大漠升海市》素人演艺上线 · 冬季运营首次开放 · 双11预售破¥3,000万</div></div>
+    <div class="tl-item"><div class="tl-year">2026年</div><div class="tl-title">影视IP加持</div><div class="tl-desc">钟汉良·朱珠主演《蜜语纪》以酒店为取景地播出 · 全网8.5亿播放 · 卫视黄金档年度冠军</div></div>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">运营指标</h2>
+  <p class="section-sub">野奢度假酒店的运营天花板</p>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kpi-val">¥150万</div><div class="kpi-label">单日最高营业额</div></div>
+    <div class="kpi-card"><div class="kpi-val">35%</div><div class="kpi-label">净资产收益率 (ROE)</div></div>
+    <div class="kpi-card"><div class="kpi-val">¥70万+</div><div class="kpi-label">单房年产值</div></div>
+    <div class="kpi-card"><div class="kpi-val">40%+</div><div class="kpi-label">非客房收入占比</div></div>
+    <div class="kpi-card"><div class="kpi-val">65-70%</div><div class="kpi-label">年均入住率</div></div>
+    <div class="kpi-card"><div class="kpi-val">4年</div><div class="kpi-label">预计投资回收期</div></div>
+  </div>
+
+  <h3 style="margin-top:2.5rem;margin-bottom:1rem;color:#4a2808;">同类野奢酒店对比</h3>
+  <table class="data-table">
+    <thead><tr><th>项目</th><th>位置</th><th>开业</th><th>客房</th><th>均价(¥)</th><th>特色</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Tengol沙漠度假酒店</strong></td><td>宁夏中卫</td><td class="num">2024</td><td class="num">105</td><td class="num">4,000-4,500</td><td>夯土建筑群·无边际泳池·实景演艺</td></tr>
+      <tr><td>黄河·宿集</td><td>宁夏中卫</td><td class="num">2019</td><td class="num">~80</td><td class="num">2,000-3,500</td><td>古村改造·黄河景观·民宿集群</td></tr>
+      <tr><td>沙漠星星酒店</td><td>宁夏中卫</td><td class="num">2020</td><td class="num">~200</td><td class="num">1,500-2,500</td><td>星空主题·观星台·沙坡头景区内</td></tr>
+      <tr><td>诺尔丹营地</td><td>甘南夏河</td><td class="num">2015</td><td class="num">9(重建后)</td><td class="num">8,600-12,000</td><td>草原野奢·5-10月限定·一价全包</td></tr>
+      <tr><td>Amanjiwo</td><td>印尼</td><td class="num">1997</td><td class="num">36</td><td class="num">~6,500</td><td>婆罗浮屠·安缦·丛林禅修</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">配套设施体系</h2>
+  <div class="card-grid">
+    <div class="card"><div class="card-emoji">🍜</div><div class="card-title">餐饮</div><div class="card-val" style="font-size:1rem;">丝路主题餐厅 · 离岛咖啡 · 沙漠酒吧 · 黑帐篷晚宴区 · 泳池池畔吧</div></div>
+    <div class="card"><div class="card-emoji">🧖</div><div class="card-title">康体</div><div class="card-val" style="font-size:1rem;">沙漠SPA · 桑拿房 · 健身房 · 河畔沐浴区 · 瑜伽冥想平台</div></div>
+    <div class="card"><div class="card-emoji">🏊</div><div class="card-title">泳池</div><div class="card-val" style="font-size:1rem;">无边际沙漠泳池（地标打卡点）· 部分套房独立泳池</div></div>
+    <div class="card"><div class="card-emoji">🎭</div><div class="card-title">演艺</div><div class="card-val" style="font-size:1rem;">《大漠升海市》素人实景演艺 · 篝火晚会 · 沙漠电影院</div></div>
+    <div class="card"><div class="card-emoji">🐪</div><div class="card-title">沙漠活动</div><div class="card-val" style="font-size:1rem;">骆驼骑行 · UTV/ATV越野 · 滑沙 · 沙漠徒步 · 星空观测</div></div>
+    <div class="card"><div class="card-emoji">🛍️</div><div class="card-title">零售</div><div class="card-val" style="font-size:1rem;">诺乐工坊手工艺品 · 沙漠特产商店 · 文创精品店</div></div>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">最新动态与战略展望</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-emoji">🎬</div>
+      <div class="card-title">影视IP引爆</div>
+      <div class="card-val" style="font-size:1rem;">《蜜语纪》全网8.5亿播放 · 卫视黄金档年度冠军 · 酒店借势出圈</div>
+    </div>
+    <div class="card">
+      <div class="card-emoji">🎭</div>
+      <div class="card-title">产品深度迭代</div>
+      <div class="card-val" style="font-size:1rem;">《大漠升海市》素人演艺持续打磨 · 淡季体验产品线扩充</div>
+    </div>
+    <div class="card">
+      <div class="card-emoji">🌍</div>
+      <div class="card-title">国际化</div>
+      <div class="card-val" style="font-size:1rem;">2025年接待超百名外国游客 · 海外OTA渠道拓展 · 丝路文化IP输出</div>
+    </div>
+    <div class="card">
+      <div class="card-emoji">🏗️</div>
+      <div class="card-title">区域联动</div>
+      <div class="card-val" style="font-size:1rem;">沙坡头区"一核两带"全域旅游 · 周边沙漠美术馆·冰雪乐园·康养中心相继落地</div>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">延伸资料库</h2>
+  <p class="section-sub">5个精选高质量外部站点</p>
+  <table class="data-table">
+    <tbody>
+      <tr><td style="width:60px;text-align:center;font-size:1.5rem;">📷</td><td><strong>小红书搜索"Tengol沙漠酒店"</strong> — 大量住客实拍图文</td><td><a href="https://www.xiaohongshu.com/search_result/Tengol沙漠酒店" target="_blank">xiaohongshu.com</a></td></tr>
+      <tr><td style="text-align:center;font-size:1.5rem;">🎬</td><td><strong>抖音"Tengol沙漠度假酒店"</strong> — 高清Vlog及航拍视频</td><td><a href="https://www.douyin.com/search/Tengol沙漠度假酒店" target="_blank">douyin.com</a></td></tr>
+      <tr><td style="text-align:center;font-size:1.5rem;">🏛️</td><td><strong>华正文旅 / 黄河宿集</strong> — 母公司项目矩阵</td><td><a href="https://www.163.com/dy/article/J6IJ2N4G0524BDFD.html" target="_blank">163.com 深度报道</a></td></tr>
+      <tr><td style="text-align:center;font-size:1.5rem;">✈️</td><td><strong>Trip.com Tengol酒店</strong> — 官方预订+住客旅拍</td><td><a href="https://uk.trip.com/hotels/zhongwei-hotel-detail-121658133/hotel/" target="_blank">trip.com</a></td></tr>
+      <tr><td style="text-align:center;font-size:1.5rem;">📰</td><td><strong>温州网深度报道</strong> — 创始人专访全集</td><td><a href="https://news.66wz.com/system/2024/07/11/105643839.shtml" target="_blank">66wz.com</a></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  <p>案例研究报告 · 宁夏中卫 Tengol 沙漠度假酒店 · 数据截至 2026 年 5 月</p>
+  <p style="margin-top:0.5rem;">数据来源：华正文旅 · 温州网 · Trip.com · 中国旅游协会 · 新华每日电讯 · 行业报道</p>
+  <p style="margin-top:0.5rem;font-size:0.75rem;opacity:0.6;">所有金额为人民币 · 面积单位使用公制</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+function wgs2gcj(lng, lat) {
+  const a = 6378245.0, ee = 0.00669342162296594323;
+  function transformLat(x, y) { let r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x)); r += (20*Math.sin(6*x*Math.PI)+20*Math.sin(2*x*Math.PI))*2/3; r += (20*Math.sin(y*Math.PI)+40*Math.sin(y/3*Math.PI))*2/3; r += (160*Math.sin(y/12*Math.PI)+320*Math.sin(y*Math.PI/30))*2/3; return r; }
+  function transformLng(x, y) { let r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x)); r += (20*Math.sin(6*x*Math.PI)+20*Math.sin(2*x*Math.PI))*2/3; r += (20*Math.sin(x*Math.PI)+40*Math.sin(x/3*Math.PI))*2/3; r += (150*Math.sin(x/12*Math.PI)+300*Math.sin(x/30*Math.PI))*2/3; return r; }
+  const dLat = transformLat(lng-105, lat-35), dLng = transformLng(lng-105, lat-35);
+  const radLat = lat / 180 * Math.PI, magic = Math.sin(radLat), m = 1 - ee * magic * magic;
+  return [lng + dLng/(m*Math.cos(radLat)*Math.PI*111.32)*180, lat + dLat/(m*Math.PI*111.32)*180];
+}
+
+// Tengol Desert Resort approximate location (WGS-84)
+const resortWGS = [105.07, 37.52];
+const resortGCJ = wgs2gcj(resortWGS[0], resortWGS[1]);
+
+function makeStreetLayer() {
+  return L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: '12', maxZoom: 18, attribution: '高德地图'
+  });
+}
+function makeSatLayer() {
+  return L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: '1234', maxZoom: 18, attribution: '高德卫星图'
+  });
+}
+
+const map = L.map('parkmap', { scrollWheelZoom: false, zoomControl: true });
+let currentLayer = makeSatLayer().addTo(map);
+map.setView([resortGCJ[1], resortGCJ[0]], 16);
+document.querySelectorAll('.map-tab')[1].classList.add('active');
+document.querySelectorAll('.map-tab')[0].classList.remove('active');
+
+const zones = [
+  { name:'Tengol度假酒店', lat: 37.520, lng: 105.070, color: '#8b5e2f' },
+  { name:'沙漠体验区', lat: 37.515, lng: 105.060, color: '#c4945a' },
+  { name:'腾格里沙漠', lat: 37.540, lng: 105.090, color: '#d4a060' }
+];
+
+zones.forEach(z => {
+  const gcj = wgs2gcj(z.lng, z.lat);
+  const icon = L.divIcon({
+    className: 'leaflet-div-icon',
+    html: `<div class="zone-marker" style="background:${z.color}">${z.name}</div>`,
+    iconSize: [100, 26], iconAnchor: [50, 13]
+  });
+  L.marker([gcj[1], gcj[0]], { icon }).addTo(map);
+});
+
+function switchMap(type) {
+  map.removeLayer(currentLayer);
+  document.querySelectorAll('.map-tab').forEach(b => b.classList.remove('active'));
+  if (type === 'satellite') {
+    currentLayer = makeSatLayer().addTo(map);
+    document.querySelectorAll('.map-tab')[1].classList.add('active');
+  } else {
+    currentLayer = makeStreetLayer().addTo(map);
+    document.querySelectorAll('.map-tab')[0].classList.add('active');
+  }
+}
+setTimeout(() => map.invalidateSize(), 1000);
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

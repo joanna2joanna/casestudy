@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>诺尔丹营地 — 案例研究报告</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+html { font-size: 17px; scroll-behavior: smooth; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'DM Sans', -apple-system, sans-serif; background: #f4f6ef; color: #1e2618; line-height: 1.6; }
+h1, h2, h3, .hero-title { font-family: 'Playfair Display', Georgia, serif; }
+.data-mono { font-family: 'DM Mono', 'SF Mono', monospace; }
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Hero — Tibetan grassland palette */
+.hero { min-height: 100vh; background: linear-gradient(160deg, #0d1a08 0%, #1a3a12 20%, #3d6228 45%, #6b8f3a 70%, #b8c47a 100%); color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 30%, rgba(180,200,120,0.2) 0%, transparent 60%); }
+.hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 200px; background: linear-gradient(to top, rgba(244,246,239,1), transparent); }
+.hero-badge { font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.4); padding: 0.4rem 1.2rem; border-radius: 99px; margin-bottom: 2rem; z-index: 1; }
+.hero-title { font-size: clamp(2.5rem, 6.5vw, 5rem); font-weight: 800; line-height: 1.1; margin-bottom: 0.5rem; z-index: 1; }
+.hero-sub { font-size: 1.1rem; opacity: 0.85; font-weight: 400; margin-bottom: 3rem; z-index: 1; }
+.hero-nums { display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center; z-index: 1; }
+.hero-num-item { text-align: center; }
+.hero-num-val { font-size: 2.8rem; font-weight: 800; font-family: 'DM Mono', monospace; line-height: 1; }
+.hero-num-label { font-size: 0.85rem; opacity: 0.75; margin-top: 0.3rem; }
+
+section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
+.section-title { font-size: 2.2rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; color: #1a3a12; }
+.section-sub { text-align: center; color: #6b7f5a; margin-bottom: 3rem; font-size: 0.95rem; }
+
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.card { background: #fff; border-radius: 16px; padding: 1.6rem; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.05); }
+.card-emoji { font-size: 2rem; margin-bottom: 0.6rem; }
+.card-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7f5a; margin-bottom: 0.4rem; }
+.card-val { font-size: 1.4rem; font-weight: 700; color: #1a3a12; }
+
+.data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+.data-table th { background: #1a3a12; color: #c8d4a0; padding: 0.9rem 1.2rem; text-align: left; font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.data-table td { padding: 0.8rem 1.2rem; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.9rem; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
+
+.timeline { position: relative; padding-left: 2.5rem; }
+.timeline::before { content: ''; position: absolute; left: 0.8rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #6b8f3a, #1a3a12); }
+.tl-item { position: relative; margin-bottom: 2rem; }
+.tl-item::before { content: ''; position: absolute; left: -2.1rem; top: 0.4rem; width: 12px; height: 12px; border-radius: 50%; background: #6b8f3a; border: 3px solid #f4f6ef; box-shadow: 0 0 0 2px #6b8f3a; }
+.tl-year { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: #3d6228; font-weight: 700; }
+.tl-title { font-size: 1.1rem; font-weight: 700; color: #1a3a12; }
+.tl-desc { font-size: 0.9rem; color: #4a5a3f; margin-top: 0.2rem; }
+
+.map-container { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.04); margin-bottom: 2rem; }
+.map-tabs { display: flex; border-bottom: 1px solid rgba(0,0,0,0.06); }
+.map-tab { flex: 1; padding: 0.8rem; text-align: center; cursor: pointer; font-size: 0.9rem; font-weight: 600; border: none; background: none; color: #6b7f5a; transition: all 0.2s; }
+.map-tab.active { color: #1a3a12; border-bottom: 2px solid #6b8f3a; }
+.map-wrap { height: 450px; width: 100%; }
+.map-wrap .leaflet-container { height: 100%; width: 100%; }
+.leaflet-div-icon { background: none; border: none; }
+.zone-marker { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 2px solid #fff; font-family: 'DM Sans', sans-serif; }
+
+.svg-map-wrap { max-width: 100%; margin: 0 auto; background: #fff; border-radius: 16px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+.svg-map-wrap svg { width: 100%; height: auto; }
+
+.photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+.photo-card { background: #fff; border-radius: 12px; padding: 1.2rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+.photo-card a { color: #3d6228; text-decoration: none; font-weight: 600; }
+.photo-emoji { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+.kpi-card { background: linear-gradient(135deg, #1a3a12, #3d6228); color: #c8d4a0; border-radius: 16px; padding: 1.5rem; text-align: center; }
+.kpi-val { font-size: 2.2rem; font-family: 'DM Mono', monospace; font-weight: 800; color: #fff; }
+.kpi-label { font-size: 0.82rem; opacity: 0.75; margin-top: 0.3rem; color: #c8d4a0; }
+
+footer { background: #0d1a08; color: #a0b88a; text-align: center; padding: 3rem 2rem; font-size: 0.85rem; }
+footer a { color: #6b8f3a; }
+
+@media (max-width: 768px) {
+  section { padding: 2.5rem 1rem; }
+  .hero-nums { gap: 1.5rem; }
+  .hero-num-val { font-size: 2rem; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-badge">数据截至 2026 年 5 月</div>
+  <h1 class="hero-title">诺尔丹营地</h1>
+  <p class="hero-sub">《国家地理》全球十大野趣营地 · 3,200米青藏高原上的可持续野奢</p>
+  <div class="hero-nums">
+    <div class="hero-num-item"><div class="hero-num-val">9</div><div class="hero-num-label">间独栋木屋（2026重建后）</div></div>
+    <div class="hero-num-item"><div class="hero-num-val">4.4</div><div class="hero-num-label">公顷占地面积</div></div>
+    <div class="hero-num-item"><div class="hero-num-val">184天</div><div class="hero-num-label">每年营业天数 (5-10月)</div></div>
+    <div class="hero-num-item"><div class="hero-num-val">¥8,600+</div><div class="hero-num-label">每晚房价（一价全包）</div></div>
+  </div>
+</header>
+
+<section class="reveal">
+  <h2 class="section-title">项目概览</h2>
+  <p class="section-sub">一个跨国家庭在海拔3,200米的桑科草原上建立的世界级野奢营地</p>
+  <div class="card-grid">
+    <div class="card"><div class="card-emoji">🎂</div><div class="card-title">首次开业</div><div class="card-val">2015年（重建后2026年5月再开）</div></div>
+    <div class="card"><div class="card-emoji">👥</div><div class="card-title">创始人</div><div class="card-val">依旦杰布 & Dechen Yeshi（德钦·叶希）</div></div>
+    <div class="card"><div class="card-emoji">📍</div><div class="card-title">地理位置</div><div class="card-val">甘肃甘南州夏河县·桑科草原冬季牧场</div></div>
+    <div class="card"><div class="card-emoji">📐</div><div class="card-title">营地面积</div><div class="card-val">4.4 公顷</div></div>
+    <div class="card"><div class="card-emoji">🏔️</div><div class="card-title">海拔</div><div class="card-val">约 3,200 米</div></div>
+    <div class="card"><div class="card-emoji">🐂</div><div class="card-title">关联品牌</div><div class="card-val">诺乐工坊（Norlha）· LV/Hermès面料供应商</div></div>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">设计与建设</h2>
+  <p class="section-sub">可移动建筑——每年秋末全部拆除，将草原归还牛羊</p>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-emoji">🏛️</div>
+      <div class="card-title">建筑师</div>
+      <div class="card-val" style="font-size:1rem;">Blake Civiello（北京）· 设计根植于藏族传统建筑与游牧生活</div>
+    </div>
+    <div class="card">
+      <div class="card-emoji">🎨</div>
+      <div class="card-title">室内设计师</div>
+      <div class="card-val" style="font-size:1rem;">Ileana Niki Liaskoviti · 天然材料 · 定制陶瓷 · 空间节奏把控</div>
+    </div>
+    <div class="card">
+      <div class="card-emoji">🧵</div>
+      <div class="card-title">纺织/面料</div>
+      <div class="card-val" style="font-size:1rem;">诺乐工坊 Norlha · 130名藏族工匠 · Hermès/LV/Lanvin指定供应商</div>
+    </div>
+    <div class="card">
+      <div class="card-emoji">🔨</div>
+      <div class="card-title">施工</div>
+      <div class="card-val" style="font-size:1rem;">安多本地藏族工匠团队 · 传统土墙+木材工艺</div>
+    </div>
+  </div>
+  <table class="data-table" style="margin-top:1.5rem;">
+    <thead><tr><th>供应商/来源</th><th>内容</th><th>特点</th></tr></thead>
+    <tbody>
+      <tr><td>诺乐工坊（仁多玛村）</td><td>牦牛绒床毯·地毯·靠枕·毛毡帐篷</td><td>130名藏族工匠 · 100%手工 · 每件独一无二</td></tr>
+      <tr><td>定制陶瓷</td><td>营地专属餐具·洗浴器皿</td><td>室内设计师亲自设计监制</td></tr>
+      <tr><td>当地天然材料</td><td>土墙·木材·草皮屋顶</td><td>不涂装粗犷质感 · 与草原浑然一体</td></tr>
+      <tr><td>藏式古董家具</td><td>室内陈设</td><td>从藏区各地搜集的老物件</td></tr>
+      <tr><td>芬兰旱厕系统</td><td>卫浴</td><td>无自来水·无地下管道·堆肥还田</td></tr>
+      <tr><td>摄影记录</td><td>官方影像</td><td>Jérôme Galland</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">技术指标总表</h2>
+  <p class="section-sub">世界级野奢营地的技术参数</p>
+  <table class="data-table">
+    <thead><tr><th>指标</th><th>数值</th><th>备注</th></tr></thead>
+    <tbody>
+      <tr><td>占地面积</td><td class="num">4.4 公顷 (44,000 m²)</td><td>帐篷间距≥100m</td></tr>
+      <tr><td>海拔高度</td><td class="num">3,200 m</td><td>桑科草原冬季牧场</td></tr>
+      <tr><td>客房数量（重建后）</td><td class="num">9 间</td><td>6单卧+2复式+1家庭双卧</td></tr>
+      <tr><td>单卧木屋面积</td><td class="num">90 m² 起</td><td>配黑帐篷起居室</td></tr>
+      <tr><td>年接待上限</td><td class="num">约 662 组客人</td><td>受限于极短的营业季</td></tr>
+      <tr><td>营业季节</td><td class="num">5月-10月（约184天）</td><td>冬季拆除归还草原</td></tr>
+      <tr><td>一价全包房价</td><td class="num">¥8,600-12,000/晚</td><td>含三餐·接送·活动</td></tr>
+      <tr><td>员工人数</td><td class="num">约 30人</td><td>客房比约 3:1</td></tr>
+      <tr><td>诺乐工坊工匠</td><td class="num">130 人</td><td>仁多玛村</td></tr>
+      <tr><td>无自来水·无WiFi·无电视</td><td class="num">100% 回归自然</td><td>芬兰旱厕 · 陶土水缸取水</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">空间布局与场地分析</h2>
+  <p class="section-sub">桑科草原上散落的9间木屋——"隐没于大地"的建筑哲学</p>
+
+  <div class="map-container">
+    <div class="map-tabs">
+      <button class="map-tab active" onclick="switchMap('street')">街道图</button>
+      <button class="map-tab" onclick="switchMap('satellite')">卫星图</button>
+    </div>
+    <div id="parkmap" class="map-wrap"></div>
+  </div>
+
+  <div class="svg-map-wrap">
+    <svg viewBox="0 0 1000 850" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="0" width="1000" height="850" fill="#f4f6ef"/>
+      <!-- Grassland background -->
+      <ellipse cx="500" cy="450" rx="480" ry="400" fill="#d4e0c0" opacity="0.3"/>
+      <!-- Stream through center -->
+      <path d="M0,350 Q200,320 400,380 Q600,440 800,350 Q900,310 1000,330" fill="none" stroke="#6b8f3a" stroke-width="3" opacity="0.5"/>
+      <text x="500" y="460" text-anchor="middle" fill="#6b8f3a" font-size="9" opacity="0.6">桑科草原溪流</text>
+      <!-- North arrow -->
+      <g transform="translate(920,60)"><polygon points="0,30 8,0 16,30 8,22" fill="#1a3a12"/><text x="8" y="45" text-anchor="middle" font-size="11">N</text></g>
+      <!-- Central facilities -->
+      <rect x="380" y="480" width="240" height="70" rx="10" fill="#3d6228" opacity="0.9" stroke="#fff" stroke-width="2"/>
+      <text x="500" y="515" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">主餐厅 · 大堂 · 精品店</text>
+      <rect x="420" y="570" width="160" height="50" rx="8" fill="#6b8f3a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="500" y="600" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">Menlha Lounge</text>
+      <!-- Cabins scattered across grassland -->
+      <rect x="80" y="150" width="100" height="70" rx="8" fill="#8b6b3a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="130" y="185" text-anchor="middle" fill="#fff" font-size="9">木屋 1</text>
+      <rect x="250" y="80" width="100" height="70" rx="8" fill="#8b6b3a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="300" y="115" text-anchor="middle" fill="#fff" font-size="9">木屋 2</text>
+      <rect x="550" y="100" width="100" height="70" rx="8" fill="#8b6b3a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="600" y="135" text-anchor="middle" fill="#fff" font-size="9">木屋 3</text>
+      <rect x="750" y="130" width="100" height="70" rx="8" fill="#8b6b3a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="800" y="165" text-anchor="middle" fill="#fff" font-size="9">木屋 4</text>
+      <rect x="700" y="300" width="100" height="70" rx="8" fill="#8b6b3a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="750" y="335" text-anchor="middle" fill="#fff" font-size="9">木屋 5</text>
+      <rect x="150" y="320" width="100" height="70" rx="8" fill="#8b6b3a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="200" y="355" text-anchor="middle" fill="#fff" font-size="9">木屋 6</text>
+      <rect x="50" y="550" width="100" height="70" rx="8" fill="#8b6b3a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="100" y="585" text-anchor="middle" fill="#fff" font-size="9">复式 7</text>
+      <rect x="650" y="520" width="100" height="70" rx="8" fill="#8b6b3a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="700" y="555" text-anchor="middle" fill="#fff" font-size="9">复式 8</text>
+      <rect x="280" y="660" width="120" height="70" rx="8" fill="#8b6b3a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="340" y="695" text-anchor="middle" fill="#fff" font-size="9">家庭木屋 9</text>
+      <!-- Amenities -->
+      <rect x="750" y="650" width="130" height="55" rx="8" fill="#2980b9" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="815" y="682" text-anchor="middle" fill="#fff" font-size="10">河畔桑拿·淋浴</text>
+      <rect x="30" y="720" width="120" height="55" rx="8" fill="#8e44ad" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="90" y="752" text-anchor="middle" fill="#fff" font-size="10">瑜伽·冥想平台</text>
+      <!-- Distance indicators -->
+      <line x1="130" y1="260" x2="190" y2="300" stroke="#6b7f5a" stroke-width="1" stroke-dasharray="4" opacity="0.5"/>
+      <text x="100" y="290" fill="#6b7f5a" font-size="8" opacity="0.5">≥100m</text>
+      <!-- Legend -->
+      <rect x="700" y="760" width="14" height="14" fill="#8b6b3a" opacity="0.85"/><text x="720" y="772" font-size="10" fill="#1a3a12">木屋</text>
+      <rect x="780" y="760" width="14" height="14" fill="#3d6228" opacity="0.9"/><text x="800" y="772" font-size="10" fill="#1a3a12">公共</text>
+      <rect x="850" y="760" width="14" height="14" fill="#2980b9" opacity="0.85"/><text x="870" y="772" font-size="10" fill="#1a3a12">康体</text>
+    </svg>
+    <p style="text-align:center;color:#6b7f5a;font-size:0.78rem;margin-top:0.6rem;">示意图，基于公开报道与卫星影像 | 北向上 | 木屋间距≥100m | 实际布局以营地官方为准</p>
+  </div>
+
+  <div class="card-grid" style="margin-top:2rem;">
+    <div class="card"><div class="card-emoji">🏡</div><div class="card-title">单卧木屋（6间）</div><div class="card-val" style="font-size:1rem;">90m²起 · 黑帐篷起居室 · 私人露台 · 落地玻璃窗 · 壁炉 · 牦牛绒床品</div></div>
+    <div class="card"><div class="card-emoji">🏘️</div><div class="card-title">复式木屋（2间）</div><div class="card-val" style="font-size:1rem;">二层观景露台 · 俯瞰草原全景 · 适合2-3人</div></div>
+    <div class="card"><div class="card-emoji">👨‍👩‍👧</div><div class="card-title">家庭双卧木屋（1间）</div><div class="card-val" style="font-size:1rem;">独立儿童卧室 · 最多住4人 · 家庭出游首选</div></div>
+    <div class="card"><div class="card-emoji">🍽️</div><div class="card-title">餐饮区</div><div class="card-val" style="font-size:1rem;">主餐厅（前安缦主厨定制菜单）· 黑帐篷晚宴 · 日落青稞鸡尾酒</div></div>
+    <div class="card"><div class="card-emoji">🧖</div><div class="card-title">康体设施</div><div class="card-val" style="font-size:1rem;">河畔桑拿房 · 室内外淋浴+浴缸 · 日晒床 · 瑜伽冥想室</div></div>
+    <div class="card"><div class="card-emoji">🏕️</div><div class="card-title">户外体验</div><div class="card-val" style="font-size:1rem;">桑科草原徒步 · 骑马 · 拉卜楞寺参访 · 诺乐工坊参观 · 篝火晚会</div></div>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">营地实景图集</h2>
+  <p class="section-sub">3,200米高原上的隐世之美</p>
+  <div class="photo-grid">
+    <div class="photo-card"><span class="photo-emoji">🏕️</span><a href="https://www.sohu.com/a/1010180683_121124408" target="_blank">重建后木屋全景</a><br><span style="font-size:0.75rem;color:#6b7f5a;">搜狐深度图文报道</span></div>
+    <div class="photo-card"><span class="photo-emoji">🛏️</span><a href="https://www.flyert.com.cn/t-4221285-1-1.html" target="_blank">住客实拍·木屋内饰</a><br><span style="font-size:0.75rem;color:#6b7f5a;">飞客茶馆深度入住报告</span></div>
+    <div class="photo-card"><span class="photo-emoji">🌟</span><a href="https://news.qq.com/rain/a/20250704A02FHS00" target="_blank">2026新开营实拍</a><br><span style="font-size:0.75rem;color:#6b7f5a;">腾讯新闻独家探访</span></div>
+    <div class="photo-card"><span class="photo-emoji">🧵</span><a href="https://www.pchouse.com.cn/designer/424/4244334.html" target="_blank">诺乐工坊探秘</a><br><span style="font-size:0.75rem;color:#6b7f5a;">PChouse设计师专访</span></div>
+    <div class="photo-card"><span class="photo-emoji">📸</span><a href="https://www.vcg.com/creative/1282672404" target="_blank">专业摄影高清图</a><br><span style="font-size:0.75rem;color:#6b7f5a;">视觉中国VCG</span></div>
+    <div class="photo-card"><span class="photo-emoji">🏇</span><a href="https://m.sohu.com/a/938995629_121124408/" target="_blank">草原活动全记录</a><br><span style="font-size:0.75rem;color:#6b7f5a;">搜狐旅行深度体验</span></div>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">发展时序</h2>
+  <p class="section-sub">从牦牛绒工坊到世界级野奢营地的十年</p>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">2004年</div><div class="tl-title">Dechen Yeshi 进入甘南寻根</div><div class="tl-desc">美籍藏族后裔，母亲Kim Yeshi在巴黎长大、研习人类学与佛学。进入甘南仁多玛村后深受触动</div></div>
+    <div class="tl-item"><div class="tl-year">2007年</div><div class="tl-title">诺乐工坊 Norlha 创立</div><div class="tl-desc">在仁多玛村建立牦牛绒手工工坊，培训本地藏族工匠。后成为Hermès、Louis Vuitton、Lanvin等奢侈品牌指定面料供应商</div></div>
+    <div class="tl-item"><div class="tl-year">2015年</div><div class="tl-title">诺尔丹营地首次开业</div><div class="tl-desc">依旦杰布与Dechen夫妇在桑科草原建立营地。7-8间松木小屋+4顶牦牛毛毡帐篷。建筑师Blake Civiello操刀设计</div></div>
+    <div class="tl-item"><div class="tl-year">2015-2023年</div><div class="tl-title">国际声誉累积</div><div class="tl-desc">《国家地理》全球十大野趣营地 · 《Travel+Leisure》世界最美43家酒店 · 全球野奢爱好者朝圣地</div></div>
+    <div class="tl-item"><div class="tl-year">2023-2025年</div><div class="tl-title">21个月闭营重建</div><div class="tl-desc">帐篷全部升级为独栋木屋 · 从11-13间精简至9间 · 新增全屋暖气+地暖 · 河畔浴室升级 · 品质全面跃升</div></div>
+    <div class="tl-item"><div class="tl-year">2026年5月</div><div class="tl-title">全新开营</div><div class="tl-desc">9间木屋 · 软硬件全面升级 · 全年仅接待约662组客人 · "野奢天花板"强势回归</div></div>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">运营指标</h2>
+  <p class="section-sub">极稀缺即极高溢价——野奢营地的经济学</p>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kpi-val">¥8,600+</div><div class="kpi-label">最低房价/晚</div></div>
+    <div class="kpi-card"><div class="kpi-val">¥19,000</div><div class="kpi-label">4天3晚套餐/2人</div></div>
+    <div class="kpi-card"><div class="kpi-val">662组</div><div class="kpi-label">年最大接待量</div></div>
+    <div class="kpi-card"><div class="kpi-val">3:1</div><div class="kpi-label">员工客房比</div></div>
+    <div class="kpi-card"><div class="kpi-val">约6个月</div><div class="kpi-label">年营业时间</div></div>
+    <div class="kpi-card"><div class="kpi-val">一价全包</div><div class="kpi-label">三餐·接送·活动·税费</div></div>
+  </div>
+
+  <h3 style="margin-top:2.5rem;margin-bottom:1rem;color:#1a3a12;">同类野奢营地对比</h3>
+  <table class="data-table">
+    <thead><tr><th>项目</th><th>位置</th><th>海拔(m)</th><th>客房</th><th>均价(¥/晚)</th><th>年营业期</th></tr></thead>
+    <tbody>
+      <tr><td><strong>诺尔丹营地</strong></td><td>甘南夏河</td><td class="num">3,200</td><td class="num">9</td><td class="num">8,600-12,000</td><td class="num">5-10月</td></tr>
+      <tr><td>Tengol沙漠酒店</td><td>宁夏中卫</td><td class="num">~1,300</td><td class="num">105</td><td class="num">4,000-4,500</td><td class="num">全年</td></tr>
+      <tr><td>松赞林卡</td><td>云南迪庆</td><td class="num">3,300</td><td class="num">~75</td><td class="num">1,500-3,000</td><td class="num">全年</td></tr>
+      <tr><td>Amangiri</td><td>美国犹他</td><td class="num">~1,500</td><td class="num">34</td><td class="num">约 ¥17,000</td><td class="num">全年</td></tr>
+      <tr><td>&Beyond Sandibe</td><td>博茨瓦纳</td><td class="num">~950</td><td class="num">12</td><td class="num">约 ¥14,000</td><td class="num">全年</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">生态设计哲学</h2>
+  <p class="section-sub">全球最彻底的可持续野奢模型</p>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-emoji">🏗️</div>
+      <div class="card-title">可移动建筑</div>
+      <div class="card-val" style="font-size:1rem;">所有木屋和帐篷均为可移动结构 · 无混凝土基础 · 不破坏草场根系 · 每年秋末全部拆除，将草原归还牛羊</div>
+    </div>
+    <div class="card">
+      <div class="card-emoji">🚽</div>
+      <div class="card-title">芬兰旱厕系统</div>
+      <div class="card-val" style="font-size:1rem;">无抽水马桶 · 无地下管道 · 无自来水系统 · 生活用水以陶土水缸+黄铜勺舀取 · 堆肥还田</div>
+    </div>
+    <div class="card">
+      <div class="card-emoji">🌱</div>
+      <div class="card-title">零污染运营</div>
+      <div class="card-val" style="font-size:1rem;">无一次性洗漱用品 · 夜间极低光害（配手电筒）· 无电视WiFi · 顺应游牧民族迁徙传统</div>
+    </div>
+    <div class="card">
+      <div class="card-emoji">🧵</div>
+      <div class="card-title">全供应链本地化</div>
+      <div class="card-val" style="font-size:1rem;">所有织物均由诺乐工坊本地生产 · 建材取自当地 · 雇佣当地藏族员工 · 文化和经济双重反哺</div>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">最新动态与战略展望</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-emoji">🔄</div>
+      <div class="card-title">2026全新回归</div>
+      <div class="card-val" style="font-size:1rem;">21个月重建后5月正式开营 · 全部升级为独栋木屋 · 软硬件全面跃升</div>
+    </div>
+    <div class="card">
+      <div class="card-emoji">🎓</div>
+      <div class="card-title">诺乐艺术家驻地</div>
+      <div class="card-val" style="font-size:1rem;">4天3晚套餐新增诺乐工坊艺术家驻地体验 · 深度文化沉浸</div>
+    </div>
+    <div class="card">
+      <div class="card-emoji">🌍</div>
+      <div class="card-title">国际认可深化</div>
+      <div class="card-val" style="font-size:1rem;">持续位列《国家地理》《Travel+Leisure》全球榜单 · 中国野奢的全球名片</div>
+    </div>
+    <div class="card">
+      <div class="card-emoji">📈</div>
+      <div class="card-title">稀缺性驱动</div>
+      <div class="card-val" style="font-size:1rem;">9间客房×184天=极端稀缺 · 需提前数月预订 · 旺季一位难求</div>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <h2 class="section-title">延伸资料库</h2>
+  <p class="section-sub">5个精选高质量外部站点</p>
+  <table class="data-table">
+    <tbody>
+      <tr><td style="width:60px;text-align:center;font-size:1.5rem;">📷</td><td><strong>视觉中国VCG</strong> — 诺尔丹营地专业摄影</td><td><a href="https://www.vcg.com/creative/1282672404" target="_blank">vcg.com</a></td></tr>
+      <tr><td style="text-align:center;font-size:1.5rem;">🎬</td><td><strong>小红书"诺尔丹营地"</strong> — 住客实拍高清合集</td><td><a href="https://www.xiaohongshu.com/search_result/诺尔丹营地" target="_blank">xiaohongshu.com</a></td></tr>
+      <tr><td style="text-align:center;font-size:1.5rem;">🏛️</td><td><strong>诺乐 Norlha 官网</strong> — 牦牛绒工坊·品牌故事</td><td><a href="https://www.norlha.com" target="_blank">norlha.com</a></td></tr>
+      <tr><td style="text-align:center;font-size:1.5rem;">✈️</td><td><strong>飞客茶馆深度报告</strong> — 入住全流程实录</td><td><a href="https://www.flyert.com.cn/t-4221285-1-1.html" target="_blank">flyert.com.cn</a></td></tr>
+      <tr><td style="text-align:center;font-size:1.5rem;">📰</td><td><strong>PChouse设计师专访</strong> — 创始人×建筑师深度对话</td><td><a href="https://www.pchouse.com.cn/designer/424/4244334.html" target="_blank">pchouse.com.cn</a></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  <p>案例研究报告 · 甘南诺尔丹营地 Norden Camp · 数据截至 2026 年 5 月</p>
+  <p style="margin-top:0.5rem;">数据来源：PChouse · 飞客茶馆 · 搜狐 · 腾讯新闻 · Trip.com · 《国家地理》· 《Travel+Leisure》</p>
+  <p style="margin-top:0.5rem;font-size:0.75rem;opacity:0.6;">所有金额为人民币 · 面积单位使用公制</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+function wgs2gcj(lng, lat) {
+  const a = 6378245.0, ee = 0.00669342162296594323;
+  function transformLat(x, y) { let r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x)); r += (20*Math.sin(6*x*Math.PI)+20*Math.sin(2*x*Math.PI))*2/3; r += (20*Math.sin(y*Math.PI)+40*Math.sin(y/3*Math.PI))*2/3; r += (160*Math.sin(y/12*Math.PI)+320*Math.sin(y*Math.PI/30))*2/3; return r; }
+  function transformLng(x, y) { let r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x)); r += (20*Math.sin(6*x*Math.PI)+20*Math.sin(2*x*Math.PI))*2/3; r += (20*Math.sin(x*Math.PI)+40*Math.sin(x/3*Math.PI))*2/3; r += (150*Math.sin(x/12*Math.PI)+300*Math.sin(x/30*Math.PI))*2/3; return r; }
+  const dLat = transformLat(lng-105, lat-35), dLng = transformLng(lng-105, lat-35);
+  const radLat = lat / 180 * Math.PI, magic = Math.sin(radLat), m = 1 - ee * magic * magic;
+  return [lng + dLng/(m*Math.cos(radLat)*Math.PI*111.32)*180, lat + dLat/(m*Math.PI*111.32)*180];
+}
+
+// Norden Camp approximate WGS-84 coordinates (Sangke Grassland, Xiahe, Gannan)
+const campWGS = [102.52, 35.12];
+const campGCJ = wgs2gcj(campWGS[0], campWGS[1]);
+
+function makeStreetLayer() {
+  return L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: '12', maxZoom: 18, attribution: '高德地图'
+  });
+}
+function makeSatLayer() {
+  return L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: '1234', maxZoom: 18, attribution: '高德卫星图'
+  });
+}
+
+const map = L.map('parkmap', { scrollWheelZoom: false, zoomControl: true });
+let currentLayer = makeSatLayer().addTo(map);
+map.setView([campGCJ[1], campGCJ[0]], 16);
+document.querySelectorAll('.map-tab')[1].classList.add('active');
+document.querySelectorAll('.map-tab')[0].classList.remove('active');
+
+const zones = [
+  { name:'诺尔丹营地', lat: 35.120, lng: 102.520, color: '#3d6228' },
+  { name:'桑科草原', lat: 35.130, lng: 102.510, color: '#6b8f3a' },
+  { name:'拉卜楞寺(15km)', lat: 35.200, lng: 102.520, color: '#8b6b3a' }
+];
+
+zones.forEach(z => {
+  const gcj = wgs2gcj(z.lng, z.lat);
+  const icon = L.divIcon({
+    className: 'leaflet-div-icon',
+    html: `<div class="zone-marker" style="background:${z.color}">${z.name}</div>`,
+    iconSize: [110, 26], iconAnchor: [55, 13]
+  });
+  L.marker([gcj[1], gcj[0]], { icon }).addTo(map);
+});
+
+function switchMap(type) {
+  map.removeLayer(currentLayer);
+  document.querySelectorAll('.map-tab').forEach(b => b.classList.remove('active'));
+  if (type === 'satellite') {
+    currentLayer = makeSatLayer().addTo(map);
+    document.querySelectorAll('.map-tab')[1].classList.add('active');
+  } else {
+    currentLayer = makeStreetLayer().addTo(map);
+    document.querySelectorAll('.map-tab')[0].classList.add('active');
+  }
+}
+setTimeout(() => map.invalidateSize(), 1000);
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

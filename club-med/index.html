@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Club Med 地中海俱乐部 | 品牌深度案例研究</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 17px; scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #fbf8f4;
+  color: #2c2c2c;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* Nav */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 99;
+  height: 56px; background: rgba(10,37,64,0.94);
+  backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center; gap: 2px;
+  padding: 0 16px; overflow-x: auto; white-space: nowrap;
+}
+nav a {
+  color: rgba(255,255,255,0.66); text-decoration: none;
+  font-size: 0.68rem; font-weight: 500; letter-spacing: 0.04em;
+  padding: 6px 12px; border-radius: 18px; transition: all 0.25s;
+}
+nav a:hover, nav a.active { color: #4dc9f6; background: rgba(77,201,246,0.1); }
+
+/* ===== Hero ===== */
+.hero {
+  min-height: 95vh; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; text-align: center; padding: 6rem 1.5rem 4rem;
+  background: linear-gradient(165deg, #0A1628 0%, #0A2847 20%, #0D3555 50%, #0A2847 75%, #0A1628 100%);
+  position: relative; overflow: hidden; color: #fff;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 65% 45% at 25% 80%, rgba(0,120,212,0.22) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 60% at 75% 25%, rgba(232,168,23,0.12) 0%, transparent 55%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block; padding: 0.3rem 1.1rem;
+  border: 1.5px solid rgba(255,255,255,0.25); border-radius: 2rem;
+  font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 2rem;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 6vw, 4.8rem);
+  font-weight: 700; line-height: 1.13; margin-bottom: 1.2rem; letter-spacing: -0.01em;
+}
+.hero h1 span { color: #4dc9f6; }
+.hero h2 {
+  font-size: clamp(0.9rem, 2vw, 1.1rem); font-weight: 400;
+  color: rgba(255,255,255,0.58); max-width: 36rem; margin: 0 auto 2.5rem; line-height: 1.65;
+}
+.hero-stats { display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.5rem; }
+.hero-stat { text-align: center; min-width: 5.5rem; }
+.hero-stat-num {
+  font-family: 'DM Mono', monospace; font-size: 2.2rem; font-weight: 500;
+  color: #4dc9f6; line-height: 1.2;
+}
+.hero-stat-label { font-size: 0.72rem; color: rgba(255,255,255,0.48); letter-spacing: 0.04em; margin-top: 0.25rem; }
+.hero-date {
+  font-family: 'DM Mono', monospace; font-size: 0.66rem;
+  color: rgba(255,255,255,0.32); margin-top: 1.5rem;
+}
+
+/* ===== Sections ===== */
+section { padding: 4rem 1.5rem; max-width: 1160px; margin: 0 auto; }
+section.section-alt { background: #f0f4f8; max-width: 100%; }
+section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
+
+.section-tag {
+  font-family: 'DM Mono', monospace; font-size: 0.66rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase; color: #1a6da8; margin-bottom: 0.6rem;
+}
+.section-title {
+  font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700;
+  color: #0a2540; margin-bottom: 0.5rem; letter-spacing: -0.01em;
+}
+.section-subtitle { font-size: 0.92rem; color: #6b7280; margin-bottom: 2.5rem; max-width: 34rem; line-height: 1.6; }
+
+/* ===== Cards ===== */
+.cards-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
+.cards-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.cards-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+
+.info-card {
+  background: #fff; border-radius: 0.85rem; padding: 1.4rem 1.2rem;
+  border: 1px solid #e8e3db; transition: transform 0.25s, box-shadow 0.25s;
+}
+.info-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.07); }
+.info-card-icon { font-size: 1.5rem; margin-bottom: 0.6rem; opacity: 0.8; }
+.info-card-label {
+  font-size: 0.66rem; color: #9ca3af; letter-spacing: 0.06em;
+  text-transform: uppercase; margin-bottom: 0.3rem;
+}
+.info-card-value { font-size: 0.88rem; font-weight: 600; color: #0a2540; line-height: 1.4; }
+
+/* ===== Timeline ===== */
+.timeline { position: relative; padding-left: 2.2rem; }
+.timeline::before {
+  content: ''; position: absolute; left: 0.48rem; top: 0.4rem; bottom: 0.4rem;
+  width: 2px; background: linear-gradient(to bottom, #1a6da8, #4dc9f6);
+}
+.tl-item { position: relative; margin-bottom: 1.6rem; }
+.tl-item::before {
+  content: ''; position: absolute; left: -1.86rem; top: 0.3rem;
+  width: 0.52rem; height: 0.52rem; border-radius: 50%;
+  background: #1a6da8; border: 2px solid #fbf8f4; box-shadow: 0 0 0 2px #1a6da8;
+}
+.tl-year {
+  font-family: 'DM Mono', monospace; font-size: 0.7rem; font-weight: 500;
+  color: #1a6da8; letter-spacing: 0.06em; margin-bottom: 0.1rem;
+}
+.tl-title { font-weight: 600; font-size: 0.9rem; color: #1a1a1a; }
+.tl-desc { font-size: 0.78rem; color: #6b7280; line-height: 1.5; margin-top: 0.15rem; }
+
+/* ===== KPI cards ===== */
+.kpi-card {
+  background: #fff; border-radius: 0.85rem; padding: 1.8rem 1.2rem;
+  border: 1px solid #e8e3db; text-align: center; transition: transform 0.25s;
+}
+.kpi-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
+.kpi-num {
+  font-family: 'DM Mono', monospace; font-size: 2rem; font-weight: 500;
+  color: #1a6da8; line-height: 1.2;
+}
+.kpi-label { font-size: 0.76rem; color: #6b7280; margin-top: 0.3rem; }
+.kpi-sub { font-size: 0.68rem; color: #9ca3af; margin-top: 0.15rem; }
+
+/* ===== Resort Cards ===== */
+.resort-card {
+  background: #fff; border-radius: 0.85rem; padding: 1.4rem 1.5rem;
+  border-left: 4px solid #1a6da8; border-top: 1px solid #e8e3db;
+  border-right: 1px solid #e8e3db; border-bottom: 1px solid #e8e3db;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.resort-card:nth-child(3n+2) { border-left-color: #e8a817; }
+.resort-card:nth-child(3n+3) { border-left-color: #2e7d32; }
+.resort-card:nth-child(3n+4) { border-left-color: #c62828; }
+.resort-card:nth-child(3n+5) { border-left-color: #7b1fa2; }
+.resort-card:nth-child(3n+6) { border-left-color: #00838f; }
+.resort-card:nth-child(3n+7) { border-left-color: #e64a19; }
+.resort-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+.resort-card h4 { font-size: 1rem; font-weight: 600; color: #0a2540; margin-bottom: 0.3rem; }
+.resort-card .resort-loc { font-size: 0.7rem; color: #9ca3af; margin-bottom: 0.5rem; }
+.resort-card p { font-size: 0.78rem; color: #6b7280; line-height: 1.52; }
+.resort-tags { margin-top: 0.6rem; display: flex; gap: 0.35rem; flex-wrap: wrap; }
+.resort-tag {
+  display: inline-block; padding: 0.12rem 0.55rem; border-radius: 0.7rem;
+  background: #f0f4f8; font-size: 0.62rem; color: #1a6da8; border: 1px solid #dce5ef;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ===== Data Tables ===== */
+.data-table {
+  width: 100%; border-collapse: collapse; background: #fff;
+  border-radius: 0.85rem; overflow: hidden; border: 1px solid #e8e3db;
+  font-size: 0.82rem; margin-bottom: 1rem;
+}
+.data-table thead { background: #0a2540; color: #fff; }
+.data-table th {
+  padding: 0.7rem 1rem; text-align: left; font-weight: 500;
+  font-family: 'DM Mono', monospace; font-size: 0.66rem;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.data-table td { padding: 0.6rem 1rem; border-top: 1px solid #f0ece6; color: #3c3c3c; }
+.data-table tbody tr:hover { background: #f8f9fb; }
+.data-table .num { font-family: 'DM Mono', monospace; color: #1a6da8; }
+.data-table .cat { font-weight: 600; color: #0a2540; background: #f8f9fb; }
+
+/* ===== Model Cards ===== */
+.model-card {
+  background: #fff; border-radius: 0.85rem; padding: 1.5rem;
+  border: 1px solid #e8e3db; text-align: center; transition: transform 0.25s;
+}
+.model-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
+.model-card-icon { font-size: 2rem; margin-bottom: 0.6rem; }
+.model-card h4 { font-size: 0.9rem; font-weight: 600; color: #0a2540; margin-bottom: 0.35rem; }
+.model-card p { font-size: 0.76rem; color: #6b7280; line-height: 1.5; }
+
+/* ===== Feature Card ===== */
+.feat-card {
+  background: #fff; border-radius: 0.85rem; padding: 1.4rem; text-align: center;
+  border: 1px solid #e8e3db; transition: transform 0.25s;
+}
+.feat-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
+.feat-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.feat-name { font-weight: 600; font-size: 0.88rem; color: #0a2540; }
+.feat-detail { font-size: 0.74rem; color: #6b7280; margin-top: 0.3rem; line-height: 1.45; }
+
+/* ===== Gallery ===== */
+.gallery-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.2rem;
+}
+.gallery-card {
+  background: #fff; border-radius: 0.85rem; overflow: hidden;
+  border: 1px solid #e8e3db; text-align: center; transition: transform 0.25s, box-shadow 0.25s;
+}
+.gallery-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.07); }
+.gallery-img {
+  width: 100%; height: 140px; object-fit: cover; display: flex;
+  align-items: center; justify-content: center; font-size: 2.5rem;
+}
+.gallery-body { padding: 0.9rem 1rem 1.2rem; }
+.gallery-body h4 { font-size: 0.82rem; font-weight: 600; color: #0a2540; margin-bottom: 0.2rem; }
+.gallery-body p { font-size: 0.7rem; color: #6b7280; margin-bottom: 0.7rem; }
+.gallery-btn {
+  display: inline-block; padding: 0.3rem 1.1rem;
+  background: #1a6da8; color: #fff; border-radius: 1.5rem;
+  text-decoration: none; font-size: 0.68rem; font-weight: 500; transition: background 0.2s;
+}
+.gallery-btn:hover { background: #14507a; }
+
+/* ===== Reference Cards ===== */
+.ref-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.9rem;
+}
+.ref-card {
+  background: #fff; border-radius: 0.75rem; padding: 1rem;
+  border: 1px solid #e8e3db; text-decoration: none; color: inherit;
+  display: block; transition: transform 0.2s, box-shadow 0.2s;
+}
+.ref-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.05); }
+.ref-type {
+  font-family: 'DM Mono', monospace; font-size: 0.56rem;
+  letter-spacing: 0.1em; color: #1a6da8; text-transform: uppercase; margin-bottom: 0.25rem;
+}
+.ref-title { font-weight: 600; font-size: 0.78rem; color: #0a2540; }
+.ref-desc { font-size: 0.68rem; color: #6b7280; margin-top: 0.15rem; }
+
+/* ===== Map ===== */
+.site-plan-wrap {
+  background: #fff; border-radius: 0.85rem; padding: 1.5rem;
+  border: 1px solid #e8e3db; margin-bottom: 1rem;
+}
+#parkmap { width: 100%; height: 500px; border-radius: 0.6rem; z-index: 1; }
+.map-legend {
+  display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.6rem;
+  font-size: 0.72rem; color: #6b7280;
+}
+.map-legend span { display: flex; align-items: center; gap: 0.3rem; }
+.map-dot {
+  display: inline-block; width: 0.5rem; height: 0.5rem; border-radius: 50%;
+}
+
+/* ===== Footer ===== */
+.site-footer {
+  background: #0a2540; color: rgba(255,255,255,0.55);
+  padding: 2.5rem 1.5rem; text-align: center; font-size: 0.76rem; line-height: 1.8;
+}
+.site-footer a { color: rgba(255,255,255,0.75); text-decoration: none; }
+.site-footer a:hover { color: #4dc9f6; }
+
+/* ===== Floating Nav ===== */
+.float-nav {
+  position: fixed; bottom: 2rem; right: 2rem;
+  display: flex; flex-direction: column; gap: 0.55rem; z-index: 9999;
+}
+.float-nav a {
+  display: flex; align-items: center; justify-content: center;
+  width: 2.4rem; height: 2.4rem; border-radius: 50%;
+  background: #fff; color: #1a6da8; text-decoration: none;
+  border: 1px solid #e8e3db; font-size: 1rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.float-nav a:hover { transform: translateY(-2px); background: #1a6da8; color: #fff; box-shadow: 0 4px 16px rgba(26,109,168,0.3); }
+#backToTop { opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+#backToTop.show { opacity: 1; pointer-events: auto; }
+
+/* ===== Competitive Cards ===== */
+.comp-card {
+  background: #fff; border-radius: 0.75rem; padding: 1.2rem 1.4rem;
+  border: 1px solid #e8e3db; text-align: center; transition: transform 0.25s;
+}
+.comp-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.05); }
+.comp-card.highlight { border: 2px solid #1a6da8; background: #f0f7fc; }
+.comp-name { font-weight: 600; font-size: 0.86rem; color: #0a2540; }
+.comp-detail { font-size: 0.7rem; color: #6b7280; margin-top: 0.2rem; line-height: 1.45; }
+
+/* ===== Reveal ===== */
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== Responsive ===== */
+@media (max-width: 1100px) { .cards-6 { grid-template-columns: repeat(3, 1fr); } .cards-4 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 700px) { .cards-6, .cards-4, .cards-3, .cards-2 { grid-template-columns: 1fr; } html { font-size: 15px; } .hero-stats { gap: 1.8rem; } .hero-stat-num { font-size: 1.6rem; } .section-title { font-size: 1.5rem; } }
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav id="nav">
+  <a href="#hero">总览</a>
+  <a href="#overview">概览</a>
+  <a href="#history">历史</a>
+  <a href="#business">模式</a>
+  <a href="#globallayout">全球</a>
+  <a href="#flagships">旗舰</a>
+  <a href="#china">中国</a>
+  <a href="#finance">运营</a>
+  <a href="#compete">竞争</a>
+  <a href="#recent">动态</a>
+  <a href="#gallery">图集</a>
+  <a href="#references">资料库</a>
+</nav>
+
+<!-- ==================== 1. HERO ==================== -->
+<header class="hero" id="hero">
+  <div class="hero-badge">Hospitality Brand Case Study &middot; 1950&ndash;2026</div>
+  <h1><span>Club Med</span><br>地中海俱乐部</h1>
+  <h2>全球一价全包度假模式的开创者。从马略卡岛上的帐篷村起步，历经75年发展为遍布五大洲近70座度假村的全球化高端度假品牌。2015年由复星集团以9.6亿欧元完成私有化收购，成为中国企业海外投资与中法合作共赢的经典范本。</h2>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">~70</div>
+      <div class="hero-stat-label">全球度假村</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">26</div>
+      <div class="hero-stat-label">覆盖国家/地区</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">&euro;21亿</div>
+      <div class="hero-stat-label">2024全球营业额</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">150万+</div>
+      <div class="hero-stat-label">年接待宾客</div>
+    </div>
+  </div>
+  <p class="hero-date">数据截至：2026年5月 &middot; 来源：Club Med 企业官网、复星旅文公告、百度百科、维基百科、公开新闻报道</p>
+</header>
+
+<!-- ==================== 2. 品牌概览 ==================== -->
+<section id="overview">
+  <div class="section-tag reveal">01 &mdash; Brand Overview</div>
+  <h2 class="section-title reveal">品牌概览</h2>
+  <p class="section-subtitle reveal">从战后乌托邦到全球度假帝国 &mdash; 地中海俱乐部的75年进化简史</p>
+  <div class="cards-6 reveal">
+    <div class="info-card">
+      <div class="info-card-icon">&#9878;</div>
+      <div class="info-card-label">创立</div>
+      <div class="info-card-value">1950年，杰拉德&middot;布利兹（G&eacute;rard Blitz）在西班牙马略卡岛创立</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">&#127465;&#127472;</div>
+      <div class="info-card-label">总部</div>
+      <div class="info-card-value">法国巴黎，全球运营中心</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">&#127970;</div>
+      <div class="info-card-label">母公司</div>
+      <div class="info-card-value">复星旅游文化集团（复星国际持股约98%）</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">&#127760;</div>
+      <div class="info-card-label">业务覆盖</div>
+      <div class="info-card-value">26个国家/地区运营近70座度假村</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">&#128176;</div>
+      <div class="info-card-label">收购对价</div>
+      <div class="info-card-value">2015年复星以约9.6亿欧元（约人民币75亿元）私有化</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">&#127919;</div>
+      <div class="info-card-label">长期目标</div>
+      <div class="info-card-value">2030年80座，2035年100座度假村</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 3. 品牌历史 ==================== -->
+<section id="history" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag reveal">02 &mdash; Historical Timeline</div>
+    <h2 class="section-title reveal">75年品牌历史时间线</h2>
+    <div class="cards-2 reveal">
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-year">1950</div>
+          <div class="tl-title">创立：马略卡岛帐篷村</div>
+          <div class="tl-desc">杰拉德&middot;布利兹在西班牙马略卡岛Alc&uacute;dia支起帐篷，首创&ldquo;一价全包&rdquo;度假概念。首个夏季接待2,400人。帐篷由合伙人吉尔贝&middot;特里加诺供应。</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1953&ndash;1956</div>
+          <div class="tl-title">特里加诺接手 + 首个滑雪村</div>
+          <div class="tl-desc">布利兹破产后特里加诺接管公司。1955年塔希提开设首个非地中海度假村；1956年瑞士莱森开设首个滑雪度假村。</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1961</div>
+          <div class="tl-title">罗斯柴尔德注资救险</div>
+          <div class="tl-desc">公司濒临破产，埃德蒙&middot;德&middot;罗斯柴尔德男爵出手注资拯救Club Med于危难。</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1965&ndash;1967</div>
+          <div class="tl-title">自助餐 + 儿童俱乐部</div>
+          <div class="tl-desc">1965年率先将自助餐引入度假体验；1967年设立全球首个度假儿童俱乐部（Mini Club），奠定亲子度假品类基础。</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1995</div>
+          <div class="tl-title">转制为公众公司</div>
+          <div class="tl-desc">结束非营利协会身份，改制为公众有限公司（SA），为后续资本市场运作铺路。</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">2004</div>
+          <div class="tl-title">高端化转型启动</div>
+          <div class="tl-desc">CEO Henri Giscard d'Estaing主导品牌向精品市场转型，引入&ldquo;叉级&rdquo;（Trident）评级体系。</div>
+        </div>
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-year">2010</div>
+          <div class="tl-title">复星入股 + 进入中国</div>
+          <div class="tl-desc">复星以2,832万欧元收购7.6%股权，为复星历史上第一笔海外直接投资。同日中国首家度假村&mdash;&mdash;黑龙江亚布力滑雪度假村开业。</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">2015</div>
+          <div class="tl-title">复星完成私有化</div>
+          <div class="tl-desc">历时近2年的竞购战，复星最终以每股24.6欧元、总价约9.6亿欧元取得约98%股权。被法国总统马克龙赞为中法合作&ldquo;教科书&rdquo;。</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">2015&ndash;2025</div>
+          <div class="tl-title">复星时代高速扩张</div>
+          <div class="tl-desc">全球新增26个度假村；营业额从15亿欧元增至21亿欧元；经营利润增长超5倍；中国客户从2万增至31万。</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">2018</div>
+          <div class="tl-title">地中海&middot;邻境 Joyview</div>
+          <div class="tl-desc">针对中国城市中产的短途周边游产品线推出，首家落地安吉。</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">2023</div>
+          <div class="tl-title">地中海&middot;白日方舟 Urban Oasis</div>
+          <div class="tl-desc">城市度假新产品线，首家落地南京仙林，重构城市度假竞争力。</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">2024&ndash;2026</div>
+          <div class="tl-title">100%高端化 + 新CEO + 百店计划</div>
+          <div class="tl-desc">全球度假村100%完成高端化转型；2025年St&eacute;phane Maquaire出任新CEO；2026年南非、婆罗洲、杭州龙坞先后开业；2035年目标100家。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 4. 商业模式 ==================== -->
+<section id="business">
+  <div class="section-tag reveal">03 &mdash; Business Model</div>
+  <h2 class="section-title reveal">商业模式解构</h2>
+  <p class="section-subtitle reveal">一价全包 + G.O文化 + 亲子友好 + 四产品线 + 轻资产运营</p>
+
+  <div class="cards-3 reveal" style="margin-bottom:1.5rem;">
+    <div class="model-card">
+      <div class="model-card-icon">&#127865;</div>
+      <h4>一价全包 All-Inclusive</h4>
+      <p>一张价格覆盖住宿、三餐（自助餐+特色餐厅）、开放酒吧（高端烈酒、葡萄酒、鸡尾酒）、20+项水陆运动及教练指导、儿童俱乐部、晚间娱乐。首创&ldquo;度假不用带钱包&rdquo;理念。</p>
+    </div>
+    <div class="model-card">
+      <div class="model-card-icon">&#128101;</div>
+      <h4>G.O &amp; G.M 文化</h4>
+      <p>G.O（Gentils Organisateurs，亲切的东道主）是品牌灵魂&mdash;&mdash;来自96国、使用30+种语言的15,000+名G.O，白天是教练、夜晚是表演者。宾客称为G.M（Gentils Membres，亲切的会员）。</p>
+    </div>
+    <div class="model-card">
+      <div class="model-card-icon">&#128118;</div>
+      <h4>全龄段儿童俱乐部</h4>
+      <p>从2岁（Petit Club）到17岁（Teen Club），四个年龄段专业照管和活动全含。1967年首创，持续定义&ldquo;亲子度假&rdquo;品类标准。</p>
+    </div>
+    <div class="model-card">
+      <div class="model-card-icon">&#127979;</div>
+      <h4>轻资产运营</h4>
+      <p>租赁及管理模式占85%，自持物业仅15%。品牌输出管理能力与客户资源。直销渠道占比从低于50%提升至约73%。</p>
+    </div>
+    <div class="model-card">
+      <div class="model-card-icon">&#128200;</div>
+      <h4>四产品线矩阵</h4>
+      <p>精致一价全包（核心）&middot; Exclusive Collection（5叉奢华）&middot; Joyview邻境（短途）&middot; Urban Oasis白日方舟（城市），覆盖全客群全场景。</p>
+    </div>
+    <div class="model-card">
+      <div class="model-card-icon">&#127758;</div>
+      <h4>全球直销 + 会员</h4>
+      <p>40+国销售网络；中国一年发展超40万会员。CRM串联四条产品线，最大化客户生命周期价值。</p>
+    </div>
+  </div>
+
+  <div class="reveal">
+    <h3 style="font-size:1.1rem;color:#0a2540;margin-bottom:0.8rem;">产品线矩阵详情</h3>
+    <table class="data-table">
+      <thead>
+        <tr><th>产品线</th><th>定位</th><th>目标客群</th><th>客单价</th><th>代表项目</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>精致一价全包</strong></td>
+          <td>4叉高端度假村</td>
+          <td>家庭亲子、长线度假</td>
+          <td class="num">&asymp;240 &euro;/晚</td>
+          <td>三亚、桂林、北大壶、Canc&uacute;n</td>
+        </tr>
+        <tr>
+          <td><strong>Exclusive Collection</strong></td>
+          <td>5叉奢华尊享</td>
+          <td>高净值客群、蜜月</td>
+          <td class="num">360&ndash;380 &euro;/晚</td>
+          <td>Finolhu Maldives、苏梅岛（2028）</td>
+        </tr>
+        <tr>
+          <td><strong>地中海&middot;邻境 Joyview</strong></td>
+          <td>短途周边游</td>
+          <td>城市中产家庭</td>
+          <td class="num">&asymp;1,500 &yen;/晚</td>
+          <td>安吉、延庆、千岛湖</td>
+        </tr>
+        <tr>
+          <td><strong>地中海&middot;白日方舟</strong></td>
+          <td>城市度假</td>
+          <td>都市白领、短假期</td>
+          <td class="num">&asymp;1,800 &yen;/晚</td>
+          <td>南京仙林、太仓、杭州龙坞</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ==================== 5. 全球版图 + 地图 ==================== -->
+<section id="globallayout">
+  <div class="section-tag reveal">04 &mdash; Global Distribution</div>
+  <h2 class="section-title reveal">全球版图与度假村分类</h2>
+  <p class="section-subtitle reveal">覆盖五大洲26个国家和地区，近70座度假村按主题分为三大类别</p>
+
+  <div class="site-plan-wrap">
+    <div id="parkmap" style="position:relative;">
+      <div id="mapFallback" style="display:none;position:absolute;top:0;left:0;right:0;bottom:0;align-items:center;justify-content:center;background:rgba(255,255,255,0.92);z-index:10;border-radius:0.6rem;font-size:0.85rem;color:#6b7280;flex-direction:column;">
+        <span style="font-size:2rem;margin-bottom:0.5rem;">&#127760;</span>
+        <span>地图瓦片加载超时，请检查网络后刷新页面</span>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:0.7rem;color:#9ca3af;margin-top:0.5rem;">ESRI卫星底图 &middot; WGS-84 &middot; 25座度假村（含已开业及即将开业）</p>
+  </div>
+  <div class="map-legend reveal">
+    <span><span class="map-dot" style="background:#ff6b6b;"></span> 阳光海滩度假村</span>
+    <span><span class="map-dot" style="background:#4ecdc4;"></span> 滑雪山地度假村</span>
+    <span><span class="map-dot" style="background:#ffd93d;"></span> Exclusive Collection 奢华尊享</span>
+    <span><span class="map-dot" style="background:#6c5ce7;"></span> 中国度假村（含Joyview/白日方舟）</span>
+    <span><span class="map-dot" style="background:#27ae60;"></span> 生态/文化度假村 + 即将开业</span>
+  </div>
+
+  <div class="cards-3 reveal" style="margin-top:2rem;">
+    <div class="info-card">
+      <div class="info-card-icon">&#127796;</div>
+      <div class="info-card-label">Sun &amp; Beach</div>
+      <div class="info-card-value">阳光海滩度假村（占比最大核心品类）。分布于加勒比海、印度洋、东南亚、地中海沿岸。代表：Finolhu Maldives、Canc&uacute;n、三亚、毛里求斯。提供浮潜、帆船、桨板、深潜等水上运动。</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">&#9968;</div>
+      <div class="info-card-label">Ski &amp; Mountain</div>
+      <div class="info-card-value">全球运营超20家滑雪度假村，分布于阿尔卑斯山、日本北海道、中国东北。2024年山地度假村营业额占全球35%（同比+20%）。代表：Val Thorens（欧洲最高，2,300米）、Tomamu、北大壶。</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">&#128142;</div>
+      <div class="info-card-label">Exclusive Collection</div>
+      <div class="info-card-value">5叉级别顶级产品线，管家服务、私密别墅、高端餐饮。客单价360&ndash;380欧元/晚。代表：Finolhu Villas（52栋别墅，成人专属）、苏梅岛（2028）、南非Safari+海滩双概念。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 6. 旗舰度假村详解 ==================== -->
+<section id="flagships" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag reveal">05 &mdash; Flagship Resorts</div>
+    <h2 class="section-title reveal">旗舰度假村详解</h2>
+    <p class="section-subtitle reveal">覆盖海滩、滑雪、生态、文化四大类型的七座标杆度假村</p>
+
+    <div class="cards-3 reveal" style="gap:1.2rem;">
+      <div class="resort-card">
+        <span class="resort-tag">Exclusive Collection</span>
+        <h4>Finolhu Villas &mdash; 马尔代夫</h4>
+        <div class="resort-loc">北马累环礁 Gasfinolhu 私人岛屿</div>
+        <p>占地5公顷，成人专属（Adults Only）。52栋别墅（水上+沙滩），由建筑师Yuji Yamazaki设计。水上别墅面积151&ndash;168m&sup2;（室内），配私人无边际泳池、玻璃地板、专属管家服务。6,000m&sup2;太阳能电池板供电，零一次性塑料。评分4.9/5（1,900+评论）。</p>
+      </div>
+
+      <div class="resort-card">
+        <span class="resort-tag">欧洲最高滑雪度假村</span>
+        <h4>Val Thorens Sensations &mdash; 法国</h4>
+        <div class="resort-loc">阿尔卑斯山萨瓦省，海拔2,300米</div>
+        <p>接入世界最大滑雪区&ldquo;三山谷&rdquo;（Les 3 Vall&eacute;es），600公里雪道、180条缆车。Ski-in/Ski-out，384间客房。获评&ldquo;世界最佳滑雪度假村&rdquo;9次（World Ski Awards）。Sothys水疗中心600m&sup2;，室内10米攀岩墙。从Cime Caron山顶可俯瞰勃朗峰及1,000+座阿尔卑斯山峰。</p>
+      </div>
+
+      <div class="resort-card">
+        <span class="resort-tag">粉雪天堂</span>
+        <h4>Tomamu &mdash; 日本北海道</h4>
+        <div class="resort-loc">北海道占冠村，占地145公顷</div>
+        <p>世界级粉雪资源，Ski-in/Ski-out。多栋9层建筑，含高级房、豪华房、套房。北海道特有美食&mdash;&mdash;和牛、新鲜海鲜、当地精酿。Green Globe金牌认证。评分4.8/5（3,200+评论）。冬季运营至5月，毗邻安藤忠雄&ldquo;水之教堂&rdquo;。2026/2027季早鸟优惠最高20%折扣。</p>
+      </div>
+
+      <div class="resort-card">
+        <span class="resort-tag">热带海滨旗舰</span>
+        <h4>三亚度假村 &mdash; 中国海南</h4>
+        <div class="resort-loc">三亚湾西线，距凤凰机场15分钟</div>
+        <p>2016年开业，占地12公顷，384间客房（含2间总统套房、22间海景套房），私享22公里黄金海岸（Club Med亚洲最长沙滩）。主泳池含水滑道和人工沙滩。水陆运动涵盖风帆、空中飞人、攀岩、射箭、独木舟。三亚与复星旗下亚特兰蒂斯形成协同效应。</p>
+      </div>
+
+      <div class="resort-card">
+        <span class="resort-tag">全球唯一艺术主题</span>
+        <h4>桂林度假村 &mdash; 中国广西</h4>
+        <div class="resort-loc">桂林雁山区大埠乡，占地46公顷</div>
+        <p>前身为台商愚自乐园雕塑公园，保留30国近250位艺术家创作的200+件雕塑作品，被誉为&ldquo;住进露天艺术馆&rdquo;。由Marc Hertrich &amp; Nicolas Adnet设计，接待中心为全玻璃建筑，1800m&sup2;天然过滤泳池（无化学消毒专利技术）。溶洞可举办婚礼和晚宴。</p>
+      </div>
+
+      <div class="resort-card">
+        <span class="resort-tag">中国冰雪旗舰</span>
+        <h4>北大壶（北大湖）&mdash; 中国吉林</h4>
+        <div class="resort-loc">吉林长春附近，雾凇奇观</div>
+        <p>Club Med在中国第二个滑雪度假村，2016年底开业。一价全包含分级滑雪课程、雪票、国际美食。2024年春节七天平均入住率超九成，多日满房。入境游客占酒店总接待量超20%。冬奥后中国冰雪热潮的核心受益者。</p>
+      </div>
+
+      <div class="resort-card">
+        <span class="resort-tag">加勒比海经典</span>
+        <h4>Canc&uacute;n 尤卡坦 &mdash; 墨西哥</h4>
+        <div class="resort-loc">Riviera Maya半岛，距坎昆机场15分钟</div>
+        <p>三片白色沙滩，毗邻世界第二大珊瑚礁。12栋三层白色建筑散布椰林间，含Exclusive Collection &ldquo;Jade&rdquo;奢华区。32项免费活动+34项付费项目。空中飞人马戏学校为招牌。评分4.5/5（20,000+评论）。2026年9月启动全面翻新。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 7. 中国市场 ==================== -->
+<section id="china">
+  <div class="section-tag reveal">06 &mdash; China Market</div>
+  <h2 class="section-title reveal">中国市场深度分析</h2>
+  <p class="section-subtitle reveal">从0到第二大客源市场 &mdash; Club Med在中国的12年深耕</p>
+
+  <div class="cards-4 reveal" style="margin-bottom:1.5rem;">
+    <div class="kpi-card">
+      <div class="kpi-num">12</div>
+      <div class="kpi-label">中国区度假村</div>
+      <div class="kpi-sub">精致6+Joyview 3+白日方舟3</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">31万</div>
+      <div class="kpi-label">2024年中国客户数</div>
+      <div class="kpi-sub">2010年仅2万，增长15倍</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">第2</div>
+      <div class="kpi-label">全球客源市场排名</div>
+      <div class="kpi-sub">仅次于法国，预计2026超越</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">40万+</div>
+      <div class="kpi-label">中国忠诚会员</div>
+      <div class="kpi-sub">本土化CRM，一年内发展</div>
+    </div>
+  </div>
+
+  <div class="reveal">
+    <h3 style="font-size:1.1rem;color:#0a2540;margin-bottom:0.8rem;">中国12座度假村全览</h3>
+    <table class="data-table">
+      <thead>
+        <tr><th>度假村</th><th>产品线</th><th>类型</th><th>开业</th><th>所在地</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>亚布力</td><td>精致一价全包</td><td>滑雪</td><td class="num">2010</td><td>黑龙江</td></tr>
+        <tr><td>桂林</td><td>精致一价全包</td><td>山水文化</td><td class="num">2013</td><td>广西桂林</td></tr>
+        <tr><td>珠海东澳岛</td><td>精致一价全包</td><td>海岛</td><td class="num">2014</td><td>广东珠海</td></tr>
+        <tr><td>三亚</td><td>精致一价全包</td><td>热带海滨</td><td class="num">2016</td><td>海南三亚</td></tr>
+        <tr><td>北大壶（北大湖）</td><td>精致一价全包</td><td>滑雪</td><td class="num">2016</td><td>吉林</td></tr>
+        <tr><td>丽江</td><td>精致一价全包</td><td>高原文化</td><td class="num">2018</td><td>云南丽江</td></tr>
+        <tr><td>安吉</td><td>Joyview 邻境</td><td>短途山水</td><td class="num">2018</td><td>浙江安吉</td></tr>
+        <tr><td>北京延庆</td><td>Joyview 邻境</td><td>京郊度假</td><td class="num">2019</td><td>北京</td></tr>
+        <tr><td>千岛湖</td><td>Joyview 邻境</td><td>短途湖景</td><td class="num">2022</td><td>浙江淳安</td></tr>
+        <tr><td>南京仙林</td><td>白日方舟</td><td>城市度假</td><td class="num">2023</td><td>江苏南京</td></tr>
+        <tr><td>太仓</td><td>白日方舟</td><td>城市度假</td><td class="num">2024</td><td>江苏太仓</td></tr>
+        <tr><td>杭州龙坞</td><td>白日方舟</td><td>城市文化</td><td class="num">2026</td><td>浙江杭州</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="cards-3 reveal" style="margin-top:1.5rem;">
+    <div class="info-card">
+      <div class="info-card-icon">&#127939;</div>
+      <div class="info-card-label">滑雪度假优先战略</div>
+      <div class="info-card-value">滑雪客单价约300欧元/晚，平均入住6.9晚/人。计划在中国再建7座滑雪度假村，布局东北、新疆、北京周边。</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">&#9992;</div>
+      <div class="info-card-label">入境游爆发增长</div>
+      <div class="info-card-value">2026年1月中国区入境营业额同比增300%。2025年五个度假村入境游收入近1亿元（+60%）。人均入住从3.1晚增至3.5晚。</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">&#127965;</div>
+      <div class="info-card-label">中国区增长目标</div>
+      <div class="info-card-value">预计2026年中国客户超50万人次，有望超越法国成为第一大客源地。2026春节预订收入已提前突破5,000万元。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 8. 运营指标与财务数据 ==================== -->
+<section id="finance" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag reveal">07 &mdash; Operations &amp; Finance</div>
+    <h2 class="section-title reveal">运营指标与财务数据</h2>
+    <p class="section-subtitle reveal">Club Med 核心运营KPI &mdash; 2024全年 &amp; 2025上半年</p>
+
+    <div class="cards-4 reveal" style="margin-bottom:1.5rem;">
+      <div class="kpi-card">
+        <div class="kpi-num">&euro;20.9亿</div>
+        <div class="kpi-label">2024全球营业额</div>
+        <div class="kpi-sub">约人民币163亿（汇率1:7.8）</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num">75%</div>
+        <div class="kpi-label">2024平均入住率</div>
+        <div class="kpi-sub">精品及尊享系列同比+2ppt</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num">&euro;232</div>
+        <div class="kpi-label">2024平均每日房价(ADR)</div>
+        <div class="kpi-sub">同比+7%（固定汇率）</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num">35%</div>
+        <div class="kpi-label">山地度假村营业额占比</div>
+        <div class="kpi-sub">同比+20%，增长最快品类</div>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <table class="data-table">
+        <thead>
+          <tr><th>指标</th><th>2024全年</th><th>2025上半年</th><th>同比变动(H1)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>全球营业额</td><td class="num">&euro;20.9亿</td><td class="num">人民币92.5亿 (&asymp;&euro;12亿)</td><td>+3.8%</td></tr>
+          <tr><td>经营利润</td><td class="num">与2023持平</td><td class="num">人民币12.7亿</td><td>+11.0%</td></tr>
+          <tr><td>平均入住率</td><td class="num">75%</td><td class="num">69.8%</td><td>基本持平</td></tr>
+          <tr><td>平均每日房价(ADR)</td><td class="num">&euro;232</td><td class="num">人民币2,021元</td><td>+5.1%</td></tr>
+          <tr><td>床位数容纳能力</td><td class="num">+5%</td><td class="num">+1.2%</td><td>增长</td></tr>
+          <tr><td>2025下半年预订量</td><td class="num">&mdash;</td><td class="num">+9% (vs 2024 H2)</td><td>&mdash;</td></tr>
+          <tr><td>2026上半年预订量</td><td class="num">&mdash;</td><td class="num">+17% (vs 2025 H1)</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:0.66rem;color:#9ca3af;">* 2025上半年数据来源：复星旅文2025年8月中期业绩公告。汇率按约1:7.8折算。</p>
+    </div>
+
+    <div class="reveal" style="margin-top:2rem;">
+      <h3 style="font-size:1.1rem;color:#0a2540;margin-bottom:0.8rem;">复星入主前后对比（2015 vs 2024）</h3>
+      <table class="data-table">
+        <thead>
+          <tr><th>指标</th><th>2015年（收购年）</th><th>2024年</th><th>变化幅度</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>全球度假村</td><td class="num">约40家</td><td class="num">近70家</td><td>+26家（新增）</td></tr>
+          <tr><td>年营业额</td><td class="num">&euro;15亿</td><td class="num">&euro;21亿</td><td>+40%</td></tr>
+          <tr><td>运营利润</td><td class="num">基准</td><td class="num">超5倍增长</td><td>5x+</td></tr>
+          <tr><td>中国客户数</td><td class="num">2万</td><td class="num">31万</td><td>15倍</td></tr>
+          <tr><td>中国度假村</td><td class="num">1家（亚布力）</td><td class="num">12家</td><td>+11家</td></tr>
+          <tr><td>高端化比例</td><td class="num">约60%</td><td class="num">100%</td><td>全面高端化</td></tr>
+          <tr><td>客单价（ADR）</td><td class="num">&asymp;&euro;150</td><td class="num">&euro;232</td><td>+55%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="reveal" style="margin-top:2rem;">
+      <h3 style="font-size:1.1rem;color:#0a2540;margin-bottom:0.8rem;">复星旅文集团财务关联（2025年上半年）</h3>
+      <table class="data-table">
+        <thead>
+          <tr><th>指标</th><th>数据</th><th>备注</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>复星旅文集团总收入</td><td class="num">约人民币95亿元</td><td>创历史新高</td></tr>
+          <tr><td>复星旅文净利润同比</td><td class="num">+40%</td><td>净利润增长超四成</td></tr>
+          <tr><td>Club Med 在复星旅文收入占比</td><td class="num">&gt;97%</td><td>Club Med为绝对核心资产</td></tr>
+          <tr><td>Club Med 营业额（含度假村）</td><td class="num">人民币92.5亿元</td><td>度假村及旅游目的地板块</td></tr>
+          <tr><td>三亚&middot;亚特兰蒂斯</td><td class="num">人民币8.3亿元</td><td>营业额同比下降（酒店改造影响）</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:0.66rem;color:#9ca3af;">* 复星旅文（港交所退市前代码01992）为Club Med母公司，2024年底启动私有化退市程序。以上数据来自2025年8月28日中期业绩公告。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 9. 竞争格局 ==================== -->
+<section id="compete">
+  <div class="section-tag reveal">08 &mdash; Competitive Landscape</div>
+  <h2 class="section-title reveal">竞争格局</h2>
+  <p class="section-subtitle reveal">Club Med在全球全包式度假村市场的定位与对比分析</p>
+
+  <div class="reveal" style="overflow-x:auto;">
+    <table class="data-table" style="min-width:850px;">
+      <thead>
+        <tr><th>维度</th><th style="background:#1a6da8;">Club Med</th><th>Sandals</th><th>Banyan Tree 悦榕庄</th><th>Meli&aacute;</th><th>Robinson Club</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="cat">总部</td><td>法国巴黎（复星控股）</td><td>牙买加</td><td>新加坡</td><td>西班牙</td><td>德国（途易集团）</td></tr>
+        <tr><td class="cat">度假村数</td><td class="num">~70</td><td class="num">~18</td><td class="num">~70</td><td class="num">~350</td><td class="num">~24</td></tr>
+        <tr><td class="cat">模式</td><td>一价全包</td><td>奢华全包</td><td>非全包（单点）</td><td>混合模式</td><td>一价全包</td></tr>
+        <tr><td class="cat">定位</td><td>高端亲子+运动度假</td><td>成人情侣专属</td><td>高端养生度假</td><td>中高端城市+海滨</td><td>中高端家庭</td></tr>
+        <tr><td class="cat">客单价</td><td class="num">&asymp;240&ndash;380 &euro;</td><td class="num">&asymp;400&ndash;800 USD</td><td class="num">&asymp;300&ndash;600 USD</td><td class="num">&asymp;150&ndash;350 &euro;</td><td class="num">&asymp;180&ndash;280 &euro;</td></tr>
+        <tr><td class="cat">核心差异化</td><td>G.O文化、亲子、滑雪品类</td><td>情侣专属、管家、加勒比海</td><td>东方SPA、私密别墅</td><td>西班牙风情、规模最大</td><td>德式运动、自然体验</td></tr>
+        <tr><td class="cat">中国市场</td><td>12座（强劲）</td><td>无</td><td>10+酒店/度假村</td><td>数家酒店</td><td>无</td></tr>
+        <tr><td class="cat">儿童友好</td><td>全年龄段（核心特色）</td><td>不接待儿童</td><td>有限</td><td>部分度假村</td><td>全年龄段</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="cards-2 reveal" style="margin-top:1.5rem;">
+    <div class="comp-card highlight">
+      <div class="comp-name">Club Med 核心竞争壁垒</div>
+      <div class="comp-detail">75年品牌历史 + G.O文化无法复制 + 亲子度假品类开创者 + 滑雪品类全球最大全包品牌 + 中国本土化最深入的国际度假品牌 + 15,000+名多国籍G.O团队构成差异化服务高地</div>
+    </div>
+    <div class="comp-card">
+      <div class="comp-name">市场定位与挑战</div>
+      <div class="comp-detail">Sandals在加勒比海情侣市场单点精深；Banyan Tree以东方SPA和品牌住宅为差异化；Club Med的"家庭运动度假"定位独特，但需在奢华线和短途线持续证明竞争力，尤其面对中国本土品牌的崛起</div>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top:1rem;">
+    <h3 style="font-size:1rem;color:#0a2540;margin-bottom:0.6rem;">建筑与设计哲学</h3>
+    <div class="cards-4">
+      <div class="info-card">
+        <div class="info-card-icon">&#127963;</div>
+        <div class="info-card-value"><strong>Marc Hertrich &amp; Nicolas Adnet</strong> &mdash; Club Med御用法国设计事务所，主导全球多数度假村设计。理念核心：&ldquo;让建筑消隐于自然，让文化融入空间&rdquo;。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#127757;</div>
+        <div class="info-card-value"><strong>在地文化融合</strong> &mdash; 桂林融喀斯特与雕塑；三亚取黎苗文化；杭州龙坞化用宋代&ldquo;七般闲事&rdquo;；北海道Tomamu以日式极简融入雪山。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#127793;</div>
+        <div class="info-card-value"><strong>生态设计</strong> &mdash; Finolhu 6,000m&sup2;太阳能板；桂林1,800m&sup2;天然过滤泳池（无化学消毒专利）；南非目标Green Globe认证；全品牌&ldquo;零一次性塑料&rdquo;。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#127968;</div>
+        <div class="info-card-value"><strong>空间组织逻辑</strong> &mdash; 主建筑（大堂+餐厅+酒吧）为中心，客房环绕分布，运动设施散布，儿童俱乐部独立。&ldquo;主广场&rdquo;为晚间社交核心。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 10. 最新动态与展望 ==================== -->
+<section id="recent" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag reveal">09 &mdash; Latest Developments</div>
+    <h2 class="section-title reveal">最新动态与未来展望</h2>
+    <p class="section-subtitle reveal">2025&ndash;2028年的关键战略动向与市场布局</p>
+
+    <div class="cards-3 reveal">
+      <div class="info-card">
+        <div class="info-card-icon">&#127976;</div>
+        <div class="info-card-label">2026年7月 · 南非首座</div>
+        <div class="info-card-value">德班北部海豚海岸，32公顷，411间客房。首创&ldquo;海滩+Safari&rdquo;双概念，Safari营地位于18,000公顷私人保护区（75顶豪华帐篷）。投资约1亿欧元（约20亿兰特），创造800个直接就业岗位。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#127795;</div>
+        <div class="info-card-label">2026年11月 · 婆罗洲生态度假村</div>
+        <div class="info-card-value">马来西亚沙巴Kuala Penyu海岸，17公顷。豪华生态度假村定位&ldquo;慢旅行&rdquo;。环保建筑+雨林徒步+河流巡游+可持续餐饮。Exclusive Collection专属区39间套房。方圆80公里内唯一度假村。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#127861;</div>
+        <div class="info-card-label">2026年4月已开业 · 杭州龙坞</div>
+        <div class="info-card-value">中国第12家度假村，Club Med白日方舟第3家。位于西湖龙井原产地保护区，260间客房，基础房型55m&sup2;起（中国最大）。主打&ldquo;茶山下的法式自在假期&rdquo;，融宋代七般闲事文化。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#127947;</div>
+        <div class="info-card-label">Sportcation 运动度假企划</div>
+        <div class="info-card-value">2026年启动全球运动度假企划，围绕滑雪、山野、水上、陆地四大场景。全球运营超20家滑雪度假村，将运动体验升级为核心差异化竞争力。涵盖攀岩、徒步、冰川徒步、潜水、帆船、冲浪、网球、空中飞人、泰拳等。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#128260;</div>
+        <div class="info-card-label">管理层与资本动态</div>
+        <div class="info-card-value">2025年7月St&eacute;phane Maquaire出任全球总裁兼CEO。复星旅文2024年底启动港交所私有化退市程序。据媒体报道，Club Med计划2026年赴香港IPO，目标募资逾5亿美元。2035年100家目标不变。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#128640;</div>
+        <div class="info-card-label">2028年管线项目</div>
+        <div class="info-card-value">泰国苏梅岛Exclusive Collection（303间客房，200米私人海滩）；加拿大蒙特布朗特滑雪度假村（北美拓展）；印尼美娜多水上探险度假村。未来五年全球新开53座（含Joyview 30座）。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 11. 实景图集 ==================== -->
+<section id="gallery">
+  <div class="section-tag reveal">10 &mdash; Photo Gallery</div>
+  <h2 class="section-title reveal">实景图集</h2>
+  <p class="section-subtitle reveal">精选外部图片与多媒体资源（点击跳转来源）</p>
+
+  <div class="gallery-grid reveal">
+    <div class="gallery-card">
+      <div class="gallery-img" style="background:linear-gradient(135deg,#0cf,#0af);color:#fff;">&#127965;</div>
+      <div class="gallery-body">
+        <h4>Finolhu Maldives 水上别墅</h4>
+        <p>马尔代夫 Exclusive Collection，52栋别墅，成人专属奢华岛屿</p>
+        <a href="https://www.clubmed.com/r/the-finolhu-villas/y" target="_blank" rel="noopener" class="gallery-btn">Club Med 官网</a>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-img" style="background:linear-gradient(135deg,#fff,#cde);color:#448;">&#9968;</div>
+      <div class="gallery-body">
+        <h4>Val Thorens 三山谷滑雪区</h4>
+        <p>欧洲最高滑雪度假村，海拔2,300米，600公里雪道</p>
+        <a href="https://www.clubmed.co.uk/r/val-thorens-sensations/y" target="_blank" rel="noopener" class="gallery-btn">Club Med 英国官网</a>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-img" style="background:linear-gradient(135deg,#e8d5f5,#d4c5f0);color:#556;">&#127912;</div>
+      <div class="gallery-body">
+        <h4>桂林度假村 雕塑与山水</h4>
+        <p>200+件国际雕塑镶嵌于46公顷桂林峰林之间</p>
+        <a href="https://www.clubmed.com.cn" target="_blank" rel="noopener" class="gallery-btn">Club Med 中国官网</a>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-img" style="background:linear-gradient(135deg,#ffd89b,#19547b);color:#fff;">&#127754;</div>
+      <div class="gallery-body">
+        <h4>Cancun 尤卡坦半岛</h4>
+        <p>加勒比海三片白沙滩，12栋椰林建筑，32项免费活动</p>
+        <a href="https://www.clubmed.com/r/cancun/y" target="_blank" rel="noopener" class="gallery-btn">Club Med 官网</a>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-img" style="background:linear-gradient(135deg,#ffefba,#fff);color:#665;">&#10052;</div>
+      <div class="gallery-body">
+        <h4>Tomamu 北海道粉雪</h4>
+        <p>145公顷滑雪场，Green Globe金牌认证，评分4.8/5</p>
+        <a href="https://www.clubmed.com/r/tomamu-hokkaido/w" target="_blank" rel="noopener" class="gallery-btn">Club Med Tomamu</a>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-img" style="background:linear-gradient(135deg,#13547a,#80d0c7);color:#fff;">&#127958;</div>
+      <div class="gallery-body">
+        <h4>三亚度假村 椰林海滩</h4>
+        <p>12公顷热带海滨，384间客房，22公里私享沙滩</p>
+        <a href="https://www.clubmed.com.cn/r/sanya/y" target="_blank" rel="noopener" class="gallery-btn">Club Med 中国官网</a>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-img" style="background:linear-gradient(135deg,#a8e063,#56ab2f);color:#fff;">&#127809;</div>
+      <div class="gallery-body">
+        <h4>北大壶 冰雪旗舰</h4>
+        <p>吉林雾凇奇观雪场，2024春节入住率超90%</p>
+        <a href="https://www.clubmed.com.cn" target="_blank" rel="noopener" class="gallery-btn">Club Med 中国官网</a>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-img" style="background:linear-gradient(135deg,#f5af19,#f12711);color:#fff;">&#127979;</div>
+      <div class="gallery-body">
+        <h4>桂林度假村 溶洞空间</h4>
+        <p>天然溶洞用于鸡尾酒会、晚宴及婚礼，独特&ldquo;洞盟水誓&rdquo;</p>
+        <a href="https://www.clubmed.com.cn/r/guilin/y" target="_blank" rel="noopener" class="gallery-btn">Club Med 桂林</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 12. 延伸资料库 ==================== -->
+<section id="references" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag reveal">11 &mdash; Reference Resources</div>
+    <h2 class="section-title reveal">延伸资料库</h2>
+    <p class="section-subtitle reveal">5个精选高质量参考来源</p>
+
+    <div class="ref-grid reveal">
+      <a href="https://corporate.clubmed/" class="ref-card" target="_blank" rel="noopener">
+        <div class="ref-type">官方来源</div>
+        <div class="ref-title">Club Med 企业官网</div>
+        <div class="ref-desc">官方企业信息、年度业绩、品牌故事、新闻发布</div>
+      </a>
+      <a href="https://www.fosunholiday.com/" class="ref-card" target="_blank" rel="noopener">
+        <div class="ref-type">母公司财报</div>
+        <div class="ref-title">复星旅文集团</div>
+        <div class="ref-desc">中期及年度业绩公告、投资者关系、企业新闻</div>
+      </a>
+      <a href="https://zh.wikipedia.org/wiki/Club_Med" class="ref-card" target="_blank" rel="noopener">
+        <div class="ref-type">百科全书</div>
+        <div class="ref-title">维基百科 &mdash; Club Med（中文）</div>
+        <div class="ref-desc">品牌完整历史、收购历程、全球度假村列表</div>
+      </a>
+      <a href="https://www.clubmed.com.cn/" class="ref-card" target="_blank" rel="noopener">
+        <div class="ref-type">官方预订</div>
+        <div class="ref-title">Club Med 中国官网</div>
+        <div class="ref-desc">中国区度假村详情、价格查询、实时预订</div>
+      </a>
+      <a href="https://en.wikipedia.org/wiki/Club_Med" class="ref-card" target="_blank" rel="noopener">
+        <div class="ref-type">深度研究</div>
+        <div class="ref-title">Wikipedia &mdash; Club Med（英文）</div>
+        <div class="ref-desc">国际视角的企业历史、商业模式分析、关键数据</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 13. 访客计数 + Footer ==================== -->
+<div style="text-align:center;padding:1.2rem 1.5rem 0;font-size:0.76rem;color:#9ca3af;">
+  访问 <span id="busuanzi_value_site_pv"></span> 次 &middot; 访客 <span id="busuanzi_value_site_uv"></span> 人
+</div>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<footer class="site-footer">
+  <p><strong>Club Med 地中海俱乐部</strong> &middot; 品牌深度案例研究</p>
+  <p style="margin-top:0.3rem;">数据截至 2026年5月 &middot; 来源：Club Med企业官网、复星旅文公告、百度百科、维基百科、公开新闻报道</p>
+  <p style="margin-top:0.3rem;font-size:0.66rem;">本报告仅供研究参考，数据可能存在滞后。金额单位：EUR（欧元）、RMB（人民币），汇率按约1:7.8（2026年5月参考值）。</p>
+  <p style="margin-top:1rem;"><a href="/">&#127968; 返回首页</a></p>
+</footer>
+
+<!-- ==================== Floating Nav ==================== -->
+<div class="float-nav">
+  <a href="/" title="返回首页">&#127968;</a>
+  <a href="#" id="backToTop" title="回到顶部">&uarr;</a>
+</div>
+
+<!-- ==================== Scripts ==================== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script>
+(function() {
+  // ===== Scroll Reveal =====
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+
+  // ===== Back to Top =====
+  var btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 600) {
+      btn.classList.add('show');
+    } else {
+      btn.classList.remove('show');
+    }
+  });
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // ===== Nav Active State =====
+  var sections = document.querySelectorAll('section[id]');
+  var navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', function() {
+    var current = '';
+    sections.forEach(function(s) {
+      if (window.scrollY >= s.offsetTop - 200) current = s.id;
+    });
+    navLinks.forEach(function(a) {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+})();
+
+// ===== Global Map (ESRI World Imagery) =====
+document.addEventListener('DOMContentLoaded', function() {
+  var mapContainer = document.getElementById('parkmap');
+  if (!mapContainer) return;
+
+  var map = L.map('parkmap', {
+    scrollWheelZoom: false,
+    zoomControl: true,
+    worldCopyJump: true
+  }).setView([25, 10], 2);
+
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    maxZoom: 18
+  }).addTo(map);
+
+  var legends = {
+    beach: '#ff6b6b',
+    ski: '#4ecdc4',
+    luxury: '#ffd93d',
+    china: '#6c5ce7',
+    eco: '#27ae60'
+  };
+
+  var resorts = [
+    { name: 'Cancún 坎昆', lat: 21.049, lng: -86.779, cat: 'beach', desc: '墨西哥 · 12栋建筑，32项免费活动' },
+    { name: '三亚 Sanya', lat: 18.259, lng: 109.442, cat: 'beach', desc: '中国海南 · 12公顷，384间客房' },
+    { name: 'Finolhu Villas', lat: 4.212, lng: 73.429, cat: 'luxury', desc: '马尔代夫 · 52栋别墅，成人专属' },
+    { name: 'Kani Maldives', lat: 4.334, lng: 73.569, cat: 'beach', desc: '马尔代夫卡尼岛 · 姊妹岛' },
+    { name: 'Mauritius 毛里求斯', lat: -20.348, lng: 57.738, cat: 'beach', desc: '印度洋海岛度假村' },
+    { name: 'Val Thorens', lat: 45.298, lng: 6.580, cat: 'ski', desc: '法国阿尔卑斯 · 海拔2,300m · 600km雪道' },
+    { name: 'Tomamu 北海道', lat: 43.055, lng: 142.617, cat: 'ski', desc: '日本北海道 · 145公顷 · 粉雪天堂' },
+    { name: '北大壶 Beidahu', lat: 43.432, lng: 126.608, cat: 'ski', desc: '中国吉林 · 雾凇奇观 · 入住率90%+' },
+    { name: '亚布力 Yabuli', lat: 44.778, lng: 128.455, cat: 'ski', desc: '中国首家 Club Med（2010）' },
+    { name: '长白山', lat: 42.058, lng: 128.058, cat: 'ski', desc: '中国长白山滑雪度假村' },
+    { name: '桂林 Guilin', lat: 25.034, lng: 110.408, cat: 'eco', desc: '中国广西 · 46公顷 · 200+雕塑 · 艺术主题' },
+    { name: '丽江 Lijiang', lat: 26.858, lng: 100.233, cat: 'eco', desc: '中国云南 · 高原文化 · Green Globe认证' },
+    { name: '安吉 Anji', lat: 30.652, lng: 119.607, cat: 'china', desc: 'Joyview · 短途山水 · 茶园竹林' },
+    { name: '延庆 Yanqing', lat: 40.466, lng: 115.986, cat: 'china', desc: 'Joyview · 京郊亲子首选' },
+    { name: '千岛湖', lat: 29.604, lng: 119.036, cat: 'china', desc: 'Joyview · 湖景度假' },
+    { name: '南京仙林', lat: 32.103, lng: 118.950, cat: 'china', desc: '白日方舟 · 城市度假首发' },
+    { name: '太仓 Taicang', lat: 31.461, lng: 121.129, cat: 'china', desc: '白日方舟 · 长三角微度假' },
+    { name: '杭州龙坞', lat: 30.221, lng: 120.060, cat: 'china', desc: '白日方舟 · 2026开业 · 茶山法式假期' },
+    { name: '珠海东澳岛', lat: 22.022, lng: 113.690, cat: 'beach', desc: '中国广东 · 海岛度假' },
+    { name: '巴黎总部', lat: 48.857, lng: 2.352, cat: 'luxury', desc: '法国巴黎 · 全球总部' },
+    { name: '南非 Dolphin Coast', lat: -29.453, lng: 31.276, cat: 'eco', desc: '2026.7开业 · 海滩+Safari · 32公顷' },
+    { name: '婆罗洲 Borneo', lat: 5.432, lng: 115.667, cat: 'eco', desc: '2026.11开业 · 17公顷 · 生态度假村' },
+    { name: '苏梅岛 Koh Samui', lat: 9.512, lng: 99.994, cat: 'luxury', desc: '2028年 · Exclusive Collection · 303间客房' },
+    { name: '蒙特布朗特 Mont-Tremblant', lat: 46.212, lng: -74.585, cat: 'ski', desc: '2028.12 · 加拿大 · 北美滑雪' },
+    { name: '美娜多 Manado', lat: 1.493, lng: 124.842, cat: 'eco', desc: '2028年 · 印尼 · 水上探险' }
+  ];
+
+  resorts.forEach(function(r) {
+    var color = legends[r.cat] || '#999';
+    var marker = L.circleMarker([r.lat, r.lng], {
+      radius: r.cat === 'luxury' ? 7 : 5.5,
+      fillColor: color,
+      color: '#fff',
+      weight: 1.5,
+      fillOpacity: 0.9
+    }).addTo(map);
+
+    marker.bindTooltip('<strong>' + r.name + '</strong><br><small>' + r.desc + '</small>', {
+      direction: 'top', offset: [0, -6]
+    });
+  });
+
+  // Tile timeout fallback (8s)
+  var tileLoaded = false;
+  var fallback = document.getElementById('mapFallback');
+  map.on('tileload', function() { tileLoaded = true; });
+  setTimeout(function() {
+    if (!tileLoaded && fallback) {
+      fallback.style.display = 'flex';
+    }
+  }, 8000);
+});
+</script>
+
+</body>
+</html>

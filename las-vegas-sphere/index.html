@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>拉斯维加斯 Sphere 案例研究 — 全球最大球形建筑 · 沉浸式娱乐革命</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 17px; scroll-padding-top: 64px; }
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #F8FAFB;
+  color: #1C1C1C;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1, h2, h3, h4 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.data, .stat, .kpi, table {
+  font-family: 'DM Mono', 'SF Mono', Consolas, monospace;
+}
+
+/* ===== TOP NAV ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 64px;
+  background: rgba(2,8,16,0.94);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center; gap: 2px;
+  padding: 0 20px; overflow-x: auto;
+}
+nav a {
+  color: rgba(255,255,255,0.68); text-decoration: none;
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.03em;
+  padding: 6px 12px; border-radius: 20px; white-space: nowrap;
+  transition: all 0.25s ease;
+  font-family: 'DM Mono', monospace;
+}
+nav a:hover, nav a.active { color: #00C8FF; background: rgba(0,200,255,0.12); }
+
+/* ===== REVEAL ANIMATION ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 35%, #0A1A2E 0%, #06101E 55%, #020810 100%);
+}
+
+.hero-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,168,232,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,168,232,0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at 50% 50%, black 30%, transparent 70%);
+}
+
+.hero-sphere {
+  position: absolute;
+  width: min(80vw, 700px);
+  height: min(80vw, 700px);
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%,
+    rgba(0,168,232,0.25) 0%,
+    rgba(0,120,210,0.12) 30%,
+    rgba(0,80,180,0.05) 55%,
+    transparent 72%
+  );
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 120px rgba(0,168,232,0.15),
+    0 0 300px rgba(0,200,255,0.06);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem;
+  max-width: 900px;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(0,168,232,0.18);
+  border: 1px solid rgba(0,200,255,0.3);
+  color: #00C8FF;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  padding: 0.4rem 1.2rem;
+  border-radius: 20px;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.05em;
+}
+
+.hero h1 {
+  font-size: clamp(2.6rem, 6.5vw, 5rem);
+  font-weight: 900;
+  background: linear-gradient(180deg, #E8F4FD 0%, #00C8FF 40%, #0078D4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.hero h1 small {
+  display: block;
+  font-size: 0.45em;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  -webkit-text-fill-color: rgba(200,230,255,0.5);
+  letter-spacing: 0.06em;
+  margin-top: 0.3rem;
+}
+
+.hero-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(1rem, 2.2vw, 1.35rem);
+  color: rgba(200,230,255,0.55);
+  font-weight: 400;
+  margin-bottom: 2.2rem;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-kpi-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem 3rem;
+  margin-bottom: 2rem;
+}
+
+.hero-kpi {
+  text-align: center;
+}
+
+.hero-kpi .val {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #00C8FF;
+  display: block;
+}
+
+.hero-kpi .label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  color: rgba(200,230,255,0.45);
+  letter-spacing: 0.04em;
+  margin-top: 0.2rem;
+}
+
+.hero-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  color: rgba(200,230,255,0.4);
+}
+
+.hero-meta span { color: #00C8FF; }
+
+/* ===== SECTION ===== */
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+}
+
+.section-alt { background: #EDF2F7; }
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.section-number {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  color: #0078D4;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.section-header h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #003C6E;
+  font-weight: 800;
+}
+
+.section-header .divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #0078D4, #00C8FF);
+  margin: 1rem auto 0;
+}
+
+/* ===== CARDS ===== */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.card-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.card-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.card-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .card-grid-3, .card-grid-4 { grid-template-columns: 1fr; }
+  .card-grid-2 { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: #FFFFFF;
+  border: 1px solid #DDE8F0;
+  border-radius: 12px;
+  padding: 1.75rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  border-color: #00A8E8;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,120,210,0.12);
+}
+
+.card h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0078D4;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.card .card-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1C1C1C;
+  line-height: 1.1;
+}
+
+.card .card-note {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: #6B7B8D;
+  margin-top: 0.4rem;
+}
+
+/* ===== TABLES ===== */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #DDE8F0;
+  margin-bottom: 1.5rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  min-width: 700px;
+}
+
+thead th {
+  background: rgba(0,120,210,0.06);
+  color: #0078D4;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-align: left;
+  padding: 0.85rem 1rem;
+  border-bottom: 2px solid #0078D4;
+  letter-spacing: 0.04em;
+}
+
+tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #DDE8F0;
+  color: #1C1C1C;
+}
+
+tbody tr:hover { background: rgba(0,120,210,0.03); }
+
+.highlight-row { background: rgba(0,200,255,0.06); }
+
+/* ===== MAPS ===== */
+.map-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.map-panel h4 {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: #0078D4;
+  margin-bottom: 0.6rem;
+  letter-spacing: 0.05em;
+}
+
+.map-container {
+  width: 100%;
+  height: 420px;
+  border-radius: 12px;
+  border: 2px solid #DDE8F0;
+  overflow: hidden;
+  background: #EDF2F7;
+  position: relative;
+}
+
+.map-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #EDF2F7;
+  color: #6B7B8D;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 1.5rem;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.map-fallback.show { opacity: 1; }
+
+@media (max-width: 768px) {
+  .map-group { grid-template-columns: 1fr; }
+  .map-container { height: 320px; }
+}
+
+/* ===== TIMELINE ===== */
+.timeline {
+  position: relative;
+  padding-left: 2.5rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 2px;
+  background: linear-gradient(180deg, #0078D4, #00C8FF, #0078D4);
+  border-radius: 1px;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2.2rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -2.5rem;
+  top: 0.45rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #0078D4;
+  border: 3px solid #F0F5FA;
+  box-shadow: 0 0 0 3px rgba(0,120,210,0.2);
+}
+
+.timeline-year {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: #0078D4;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.timeline-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #003C6E;
+  margin-bottom: 0.3rem;
+}
+
+.timeline-desc {
+  font-size: 0.9rem;
+  color: #4A5B6B;
+  line-height: 1.6;
+}
+
+/* ===== KPI ROW ===== */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.kpi-card {
+  background: linear-gradient(135deg, #002B4D 0%, #003C6E 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  color: #fff;
+}
+
+.kpi-card .kpi-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #00C8FF;
+  display: block;
+}
+
+.kpi-card .kpi-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: rgba(200,230,255,0.6);
+  letter-spacing: 0.04em;
+  margin-top: 0.3rem;
+}
+
+/* ===== GALLERY ===== */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.gallery-card {
+  background: #FFFFFF;
+  border: 1px solid #DDE8F0;
+  border-radius: 12px;
+  overflow: hidden;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.gallery-card:hover {
+  border-color: #00A8E8;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,120,210,0.12);
+}
+
+.gallery-card .gallery-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.gallery-card h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #003C6E;
+  margin-bottom: 0.4rem;
+}
+
+.gallery-card p {
+  font-size: 0.85rem;
+  color: #6B7B8D;
+  margin-bottom: 1.2rem;
+  line-height: 1.5;
+}
+
+.gallery-card .btn {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: #0078D4;
+  text-decoration: none;
+  padding: 0.5rem 1.2rem;
+  border: 1px solid #0078D4;
+  border-radius: 20px;
+  transition: all 0.25s;
+}
+
+.gallery-card .btn:hover {
+  background: #0078D4;
+  color: #fff;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  background: #020810;
+  color: rgba(200,230,255,0.5);
+  text-align: center;
+  padding: 3rem 2rem 2rem;
+  font-size: 0.82rem;
+}
+
+.footer a { color: #00C8FF; text-decoration: none; }
+
+.busuanzi {
+  margin-top: 1.2rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: rgba(200,230,255,0.35);
+}
+
+/* Floating nav */
+.floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: #0078D4; }
+.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: #0078D4; color: #fff; }
+#back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
+#back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
+
+/* ===== SVG DIAGRAM ===== */
+.svg-diagram {
+  max-width: 900px;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.svg-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ===== INFO-BLOCK ===== */
+.info-block {
+  background: #FFFFFF;
+  border: 1px solid #DDE8F0;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.info-block h3 {
+  font-size: 1.3rem;
+  color: #003C6E;
+  margin-bottom: 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid #DDE8F0;
+}
+
+.info-block p {
+  font-size: 0.92rem;
+  color: #4A5B6B;
+  line-height: 1.75;
+  margin-bottom: 0.8rem;
+}
+
+/* ===== TECH COMPARISON ===== */
+.tech-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .tech-grid { grid-template-columns: 1fr; }
+}
+
+.tech-item {
+  background: linear-gradient(135deg, #F0F7FD 0%, #E8F4FD 100%);
+  border-radius: 12px;
+  padding: 1.75rem;
+  border: 1px solid #D0E8F8;
+}
+
+.tech-item h4 {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: #0078D4;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+.tech-item .tech-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #003C6E;
+  margin-bottom: 0.3rem;
+}
+
+.tech-item .tech-desc {
+  font-size: 0.85rem;
+  color: #6B7B8D;
+  line-height: 1.5;
+}
+
+/* ===== FOOTER HOME LINK ===== */
+.footer-home-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: rgba(200,230,255,0.4);
+  text-decoration: none;
+  font-size: 0.85rem;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  padding-bottom: 2px;
+  transition: all 0.2s;
+}
+.footer-home-link:hover { color: #00C8FF; border-color: rgba(0,200,255,0.5); }
+
+/* Ref card link */
+.ref-card-link { text-decoration: none; color: inherit; display: block; }
+.ref-card-link .card { cursor: pointer; }
+.ref-card-link .card:hover { border-color: #00A8E8; }
+</style>
+</head>
+<body>
+
+<!-- ===== TOP NAV ===== -->
+<nav id="nav">
+  <a href="#hero">总览</a><a href="#overview">概览</a><a href="#design">设计</a><a href="#specs">技术</a><a href="#summary">总表</a><a href="#layout">布局</a><a href="#timeline-sec">历史</a><a href="#operations">运营</a><a href="#tech">创新</a><a href="#amenities">亮点</a><a href="#future">展望</a><a href="#gallery">图集</a><a href="#references">资料库</a>
+</nav>
+
+<!-- ===== 1. HERO ===== -->
+<header class="hero" id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-sphere"></div>
+  <div class="hero-content">
+    <div class="hero-badge">NEXT-GENERATION ENTERTAINMENT VENUE</div>
+    <h1>
+      拉斯维加斯 Sphere
+      <small>Sphere at The Venetian Resort · Las Vegas</small>
+    </h1>
+    <p class="hero-subtitle">
+      全球最大球形建筑，融合16K环绕LED屏幕、波束成形音频系统与4D多感官体验的新一代沉浸式娱乐场馆
+    </p>
+    <div class="hero-kpi-row">
+      <div class="hero-kpi">
+        <span class="val">$23亿</span>
+        <span class="label">总投资（约166亿人民币）</span>
+      </div>
+      <div class="hero-kpi">
+        <span class="val">54,000 m²</span>
+        <span class="label">外部LED显示屏（全球最大）</span>
+      </div>
+      <div class="hero-kpi">
+        <span class="val">167,000</span>
+        <span class="label">独立扬声器驱动单元</span>
+      </div>
+      <div class="hero-kpi">
+        <span class="val">18,600</span>
+        <span class="label">座位容量（含站位20,000人）</span>
+      </div>
+    </div>
+    <div class="hero-meta">
+      开业日期 <span>2023年9月29日</span> · 数据截至 <span>2026年5月</span>
+    </div>
+  </div>
+</header>
+
+<!-- ===== 2. 项目概览 ===== -->
+<section class="section" id="overview">
+  <div class="section-header reveal">
+    <div class="section-number">01 · OVERVIEW</div>
+    <h2>项目概览</h2>
+    <div class="divider"></div>
+  </div>
+  <p style="text-align:center;max-width:600px;margin:0 auto 2.5rem;color:#5C6058;font-size:0.95rem;">Sphere at The Venetian Resort 是 Sphere Entertainment Co.（NYSE: SPHR，前身为麦迪逊广场花园娱乐公司）斥资23亿美元打造的下一代沉浸式娱乐场馆。2023年9月29日开业，以其全球最大的球形结构和前所未有的LED显示与音频技术，重新定义了现场娱乐体验的可能边界。</p>
+  <div class="card-grid reveal">
+    <div class="card">
+      <h4>项目名称</h4>
+      <div class="card-value" style="font-size:1.2rem;">Sphere at The Venetian Resort</div>
+      <div class="card-note">简称 "Sphere"，原名 MSG Sphere</div>
+    </div>
+    <div class="card">
+      <h4>地理位置</h4>
+      <div class="card-value" style="font-size:1.2rem;">255 Sands Ave, Las Vegas, NV</div>
+      <div class="card-note">36.12111°N, 115.16194°W · 拉斯维加斯大道东侧</div>
+    </div>
+    <div class="card">
+      <h4>开业日期</h4>
+      <div class="card-value">2023.09.29</div>
+      <div class="card-note">U2:UV 驻场演出首秀</div>
+    </div>
+    <div class="card">
+      <h4>开发方 / 运营商</h4>
+      <div class="card-value" style="font-size:1.2rem;">Sphere Entertainment Co.</div>
+      <div class="card-note">NYSE: SPHR · 从MSG集团分拆 · CEO James Dolan</div>
+    </div>
+    <div class="card">
+      <h4>总投资</h4>
+      <div class="card-value">$23 亿美元</div>
+      <div class="card-note">约166亿人民币（按2024年均汇率1:7.20计算）· 最初预算$12亿</div>
+    </div>
+    <div class="card">
+      <h4>场地类型</h4>
+      <div class="card-value" style="font-size:1.2rem;">沉浸式娱乐场馆</div>
+      <div class="card-note">演唱会 · 电影放映 · 体育赛事 · 企业活动 · 广告</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. 设计与建设方 ===== -->
+<section class="section section-alt" id="design" style="padding-top:5rem;padding-bottom:5rem;max-width:none;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
+  <div class="section-header reveal">
+    <div class="section-number">02 · DESIGN & BUILD</div>
+    <h2>设计与建设团队</h2>
+    <div class="divider"></div>
+  </div>
+  <div class="table-wrap reveal">
+    <table>
+      <thead>
+        <tr><th>角色</th><th>公司/团队</th><th>所在地</th><th>职责说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>建筑设计</strong></td>
+          <td>Populous</td>
+          <td>美国堪萨斯城</td>
+          <td>全球体育娱乐建筑领军事务所，负责球体整体建筑概念、双球体结构设计、观众席碗状布局、中庭设计、寻路系统</td>
+        </tr>
+        <tr>
+          <td><strong>室内设计</strong></td>
+          <td>ICRAVE</td>
+          <td>美国纽约</td>
+          <td>29个公共室内空间设计，包括中庭、廊桥、15个全服务餐饮区、VIP俱乐部、定制化灯光编程</td>
+        </tr>
+        <tr class="highlight-row">
+          <td><strong>内部LED屏幕</strong></td>
+          <td>SACO Technologies</td>
+          <td>加拿大蒙特利尔</td>
+          <td>64,000块定制曲面LED面板，16K×16K分辨率，约15,000 m²，透声设计</td>
+        </tr>
+        <tr>
+          <td><strong>外部LED（Exosphere）</strong></td>
+          <td>SACO Technologies</td>
+          <td>加拿大蒙特利尔</td>
+          <td>约120万个LED发光单元（pucks），每个含48颗独立二极管，覆盖54,000 m²</td>
+        </tr>
+        <tr class="highlight-row">
+          <td><strong>音频系统</strong></td>
+          <td>HOLOPLOT</td>
+          <td>德国柏林</td>
+          <td>全球最大波束成形音频系统，约167,000个独立扬声器驱动单元，约1,600个X1模组</td>
+        </tr>
+        <tr>
+          <td><strong>媒体服务器 / 演出控制</strong></td>
+          <td>7thSense</td>
+          <td>英国</td>
+          <td>媒体服务器、像素处理、Exosphere实时节目控制系统</td>
+        </tr>
+        <tr class="highlight-row">
+          <td><strong>总承包商</strong></td>
+          <td>AECOM（前期）→ MSG自营（后期）</td>
+          <td>美国</td>
+          <td>2020年12月MSG接管总承包角色，AECOM转为支持方</td>
+        </tr>
+        <tr>
+          <td><strong>内容制作</strong></td>
+          <td>Sphere Studios</td>
+          <td>美国加州Burbank</td>
+          <td>专属制作园区，含Big Sky 18K摄像机系统和1/4比例Big Dome预演球幕</td>
+        </tr>
+        <tr>
+          <td><strong>结构工程</strong></td>
+          <td>Severud Associates</td>
+          <td>美国纽约</td>
+          <td>球形钢结构外骨骼与内部混凝土壳体独立支撑系统，顶部170吨压缩环</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</section>
+
+<!-- ===== 4. 技术指标总表 ===== -->
+<section class="section" id="specs">
+  <div class="section-header reveal">
+    <div class="section-number">03 · TECH SPECS</div>
+    <h2>核心技术规格</h2>
+    <div class="divider"></div>
+  </div>
+
+  <h3 style="font-family:var(--font-display);font-size:1.3rem;color:#003C6E;margin-bottom:16px;font-family:'Playfair Display',serif;">外立面 — Exosphere（"外球层"）</h3>
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>指标</th><th>数据</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td>LED显示面积</td><td>54,000 m²</td><td>全球最大LED屏幕</td></tr>
+        <tr><td>LED发光单元（pucks）</td><td>约120万个</td><td>每个含48颗独立LED二极管 = 约5,760万颗总LED</td></tr>
+        <tr><td>颜色能力</td><td>每单元可显示2.56亿色</td><td>远超人类肉眼辨识范围</td></tr>
+        <tr><td>单元间距</td><td>约20 cm</td><td>8英寸间距 · 黑色硅胶密封防水</td></tr>
+        <tr><td>可见范围</td><td>超远距离清晰可见</td><td>从拉斯维加斯大道及周边数公里外均可辨识</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="font-family:var(--font-display);font-size:1.3rem;color:#003C6E;margin:32px 0 16px;font-family:'Playfair Display',serif;">内部显示 — 16K LED 环绕屏</h3>
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>指标</th><th>数据</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td>显示面积</td><td>约15,000 m²</td><td>约160,000 sq ft · 全球最高分辨率LED屏幕</td></tr>
+        <tr><td>分辨率</td><td>16K × 16K（约2.56亿像素）</td><td>270度环绕 · 屏幕高约73m</td></tr>
+        <tr><td>LED面板数量</td><td>64,000块曲面面板</td><td>SACO Technologies制造 · 透声设计</td></tr>
+        <tr><td>像素间距</td><td>约9 mm（平均）</td><td>12-bit色深 · 4:4:4子采样</td></tr>
+        <tr><td>帧率</td><td>3层16K@60fps</td><td>从Burbank Sphere Studios实时流传输</td></tr>
+        <tr><td>数据传输</td><td>SMPTE ST 2110 IP协议</td><td>>400 GB/秒吞吐量 · 延迟<5ms</td></tr>
+        <tr><td>存储</td><td>4 PB闪存</td><td>27节点Hitachi Vantara文件系统</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="font-family:var(--font-display);font-size:1.3rem;color:#003C6E;margin:32px 0 16px;font-family:'Playfair Display',serif;">音频系统 — HOLOPLOT 波束成形</h3>
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>指标</th><th>数据</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td>扬声器驱动单元</td><td>约167,000个</td><td>全部独立放大 · 安装于LED屏幕后方</td></tr>
+        <tr><td>HOLOPLOT模组</td><td>约1,578个固定 + 300个移动</td><td>X1 Modul 96 / Modul 80-S</td></tr>
+        <tr><td>主舞台阵列尺寸</td><td>33.6m宽 × 6.6m高（464个模组）</td><td>全球最大单体扬声器阵列</td></tr>
+        <tr><td>环境/环绕阵列</td><td>28组环境 + 71组环绕 + 6组FX</td><td>配合12组看台下方补声阵列</td></tr>
+        <tr><td>核心技术</td><td>3D波束成形 + 波场合成</td><td>可精准定位至约6个座位范围</td></tr>
+        <tr><td>声道支持</td><td>最高256声道粒度</td><td>支持立体声、5.1、Dolby Atmos等格式</td></tr>
+        <tr><td>LED传输损耗补偿</td><td>角度/频率依赖算法</td><td>补偿曲面LED屏幕造成的音频衰减</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== 5. 技术指标总表 ===== -->
+<section class="section section-alt" id="summary" style="padding-top:5rem;padding-bottom:5rem;max-width:none;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
+  <div class="section-header reveal">
+    <div class="section-number">04 · MASTER DATA TABLE</div>
+    <h2>全维度技术指标总表</h2>
+    <div class="divider"></div>
+  </div>
+  <div style="overflow-x:auto;">
+  <table class="data-table reveal" style="min-width:900px;width:100%;border-collapse:collapse;background:#FFFFFF;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.04);border:1px solid #DDE8F0;">
+    <thead style="background:#003C6E;"><tr style="color:#fff;"><th style="padding:14px 20px;text-align:left;font-size:0.72rem;font-weight:500;letter-spacing:0.06em;">维度</th><th style="padding:14px 20px;text-align:left;font-size:0.72rem;font-weight:500;letter-spacing:0.06em;">指标</th><th style="padding:14px 20px;text-align:left;font-size:0.72rem;font-weight:500;letter-spacing:0.06em;">数据</th><th style="padding:14px 20px;text-align:left;font-size:0.72rem;font-weight:500;letter-spacing:0.06em;">备注</th></tr></thead>
+    <tbody style="font-size:0.82rem;">
+      <tr><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">基础</td><td style="padding:12px 20px;">开业时间</td><td style="padding:12px 20px;">2023年9月29日</td><td style="padding:12px 20px;">U2乐队40场驻场首演</td></tr>
+      <tr><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">基础</td><td style="padding:12px 20px;">位置</td><td style="padding:12px 20px;">255 Sands Ave, Las Vegas, NV</td><td style="padding:12px 20px;">威尼斯人度假村东侧 · 坐标 36.12111°N, 115.16194°W</td></tr>
+      <tr><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">规模</td><td style="padding:12px 20px;">建筑高度</td><td style="padding:12px 20px;">112 m</td><td style="padding:12px 20px;">世界最高球形建筑</td></tr>
+      <tr><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">规模</td><td style="padding:12px 20px;">建筑宽度（最大直径）</td><td style="padding:12px 20px;">157 m</td><td style="padding:12px 20px;">世界最大球形结构</td></tr>
+      <tr><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">规模</td><td style="padding:12px 20px;">总建筑面积</td><td style="padding:12px 20px;">约81,300 m²</td><td style="padding:12px 20px;">9层 · 含地下室</td></tr>
+      <tr><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">规模</td><td style="padding:12px 20px;">占地面积</td><td style="padding:12px 20px;">约7.3 公顷</td><td style="padding:12px 20px;">18英亩地块 · Las Vegas Sands提供</td></tr>
+      <tr><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">投资</td><td style="padding:12px 20px;">建设总投资</td><td style="padding:12px 20px;">$23亿（约166亿人民币）</td><td style="padding:12px 20px;">最初预算$12亿 · 超支$11亿 · 汇率1:7.20（2024年均值）</td></tr>
+      <tr style="background:rgba(0,200,255,0.04);"><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">显示</td><td style="padding:12px 20px;">外立面LED面积</td><td style="padding:12px 20px;">54,000 m²</td><td style="padding:12px 20px;">全球最大LED屏幕 · 约120万个LED发光单元</td></tr>
+      <tr style="background:rgba(0,200,255,0.04);"><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">显示</td><td style="padding:12px 20px;">内部LED面积</td><td style="padding:12px 20px;">约15,000 m²</td><td style="padding:12px 20px;">全球最高分辨率LED屏幕 · 16K×16K · 64,000块面板</td></tr>
+      <tr><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">音频</td><td style="padding:12px 20px;">扬声器驱动单元</td><td style="padding:12px 20px;">约167,000个</td><td style="padding:12px 20px;">全部独立放大 · HOLOPLOT X1模组 · 安装于屏幕后方</td></tr>
+      <tr><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">座位</td><td style="padding:12px 20px;">座位数</td><td style="padding:12px 20px;">17,600-18,600座（含站席20,000）</td><td style="padding:12px 20px;">含约10,000个触觉反馈座椅</td></tr>
+      <tr style="background:rgba(0,200,255,0.04);"><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">运营</td><td style="padding:12px 20px;">FY2024公司总营收</td><td style="padding:12px 20px;">$10.27亿（约73.9亿人民币）</td><td style="padding:12px 20px;">含MSG Networks板块$5.297亿</td></tr>
+      <tr style="background:rgba(0,200,255,0.04);"><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">运营</td><td style="padding:12px 20px;">2024年演唱会总票房</td><td style="padding:12px 20px;">$4.205亿（约30.3亿人民币）</td><td style="padding:12px 20px;">Billboard Boxscore史上15,000+容量场馆年度第一</td></tr>
+      <tr><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">内容</td><td style="padding:12px 20px;">Big Sky摄像机</td><td style="padding:12px 20px;">18K×18K · 120fps</td><td style="padding:12px 20px;">Sphere专属原生内容拍摄系统</td></tr>
+      <tr><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">内容</td><td style="padding:12px 20px;">Big Dome预演球幕</td><td style="padding:12px 20px;">约2,600 m² · 高约30m</td><td style="padding:12px 20px;">1/4比例的Sphere · 位于加州Burbank</td></tr>
+      <tr><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">票价</td><td style="padding:12px 20px;">The Sphere Experience</td><td style="padding:12px 20px;">$79-355（约569-2,556人民币）</td><td style="padding:12px 20px;">含中庭体验45分钟+电影50分钟</td></tr>
+      <tr><td style="font-weight:600;color:#003C6E;background:#F0F5FA;padding:12px 20px;">票价</td><td style="padding:12px 20px;">演唱会门票</td><td style="padding:12px 20px;">$125-数千美元</td><td style="padding:12px 20px;">取决于艺人、座位区域和场次</td></tr>
+    </tbody>
+  </table>
+  </div>
+  </div>
+</section>
+
+<!-- ===== 6. 空间布局 ===== -->
+<section class="section" id="layout">
+  <div class="section-header reveal">
+    <div class="section-number">05 · SPATIAL LAYOUT</div>
+    <h2>空间布局分析</h2>
+    <div class="divider"></div>
+  </div>
+
+  <p style="text-align:center;max-width:580px;margin:0 auto 2rem;color:#6B7B8D;font-size:0.9rem;">Sphere位于拉斯维加斯大道东侧，毗邻威尼斯人度假村（The Venetian Resort），通过人行天桥直连。ESRI卫星底图，WGS-84坐标系。</p>
+
+  <!-- Map (no reveal class on the map container itself to keep Leaflet working) -->
+  <div class="map-group">
+    <div class="map-panel">
+      <h4>卫星影像 · 拉斯维加斯大道东侧</h4>
+      <div class="map-container" id="parkmap">
+        <div class="map-fallback" id="map-fb">地图瓦片加载中...</div>
+      </div>
+      <p style="text-align:center;font-size:0.72rem;color:#8C9098;margin-top:6px;">ESRI ArcGIS 卫星底图 · WGS-84坐标系 · 可缩放平移</p>
+    </div>
+    <div class="map-panel">
+      <h4>SVG 空间结构示意</h4>
+      <div class="map-container" style="background:#F0F5FA; display:flex; align-items:center; justify-content:center; padding:1rem;">
+        <div class="svg-diagram">
+          <svg viewBox="0 0 500 420" xmlns="http://www.w3.org/2000/svg" style="max-height:400px;">
+            <!-- Outer Sphere shell -->
+            <circle cx="250" cy="190" r="160" fill="none" stroke="#0078D4" stroke-width="2" stroke-dasharray="6,3" opacity="0.5"/>
+            <!-- Inner auditorium -->
+            <circle cx="250" cy="190" r="110" fill="rgba(0,120,210,0.06)" stroke="#00A8E8" stroke-width="2"/>
+            <!-- Exosphere label -->
+            <text x="250" y="18" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="#0078D4">EXOSPHERE 外部LED球幕 · 54,000 m²</text>
+            <line x1="250" y1="22" x2="250" y2="32" stroke="#0078D4" stroke-width="0.8"/>
+            <!-- LED Screen Arc -->
+            <path d="M 80 190 A 170 170 0 0 1 420 190" fill="none" stroke="#00C8FF" stroke-width="2.5" stroke-dasharray="4,2"/>
+            <text x="250" y="65" text-anchor="middle" font-family="DM Mono,monospace" font-size="8" fill="#00C8FF">内部16K LED环绕屏 · 15,000 m² · 270° · 高73m</text>
+
+            <!-- Stage area -->
+            <rect x="195" y="295" width="110" height="18" rx="3" fill="#003C6E" opacity="0.8"/>
+            <text x="250" y="306" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#fff" font-weight="600">STAGE 舞台区</text>
+
+            <!-- Seating tiers -->
+            <ellipse cx="250" cy="280" rx="135" ry="15" fill="none" stroke="#00A8E8" stroke-width="0.8" opacity="0.4"/>
+            <text x="400" y="283" font-family="DM Mono,monospace" font-size="7" fill="#00A8E8">100层</text>
+            <ellipse cx="250" cy="268" rx="150" ry="16" fill="none" stroke="#00A8E8" stroke-width="0.7" opacity="0.35"/>
+            <text x="405" y="271" font-family="DM Mono,monospace" font-size="7" fill="#00A8E8">200层</text>
+            <ellipse cx="250" cy="254" rx="155" ry="14" fill="none" stroke="#00A8E8" stroke-width="0.6" opacity="0.3"/>
+            <text x="410" y="257" font-family="DM Mono,monospace" font-size="7" fill="#00A8E8">300层</text>
+            <ellipse cx="250" cy="242" rx="156" ry="12" fill="none" stroke="#00A8E8" stroke-width="0.5" opacity="0.25"/>
+            <text x="412" y="245" font-family="DM Mono,monospace" font-size="7" fill="#00A8E8">400层</text>
+
+            <!-- Atrium -->
+            <rect x="195" y="312" width="110" height="38" rx="5" fill="rgba(0,168,232,0.08)" stroke="#00A8E8" stroke-width="1" stroke-dasharray="3,2"/>
+            <text x="250" y="327" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="8" fill="#0078D4">中庭 ATRIUM</text>
+            <text x="250" y="340" text-anchor="middle" font-family="DM Mono,monospace" font-size="6.5" fill="#6B7B8D">24m挑高 · 全息墙 · 机器人Aura</text>
+
+            <!-- Audio annotation -->
+            <line x1="80" y1="170" x2="130" y2="145" stroke="#00C8FF" stroke-width="0.8"/>
+            <circle cx="75" cy="173" r="3" fill="#00C8FF"/>
+            <text x="135" y="143" font-family="DM Mono,monospace" font-size="7" fill="#00C8FF">HOLOPLOT音频系统</text>
+            <text x="135" y="153" font-family="DM Mono,monospace" font-size="6.5" fill="#6B7B8D">167,000驱动单元 隐藏于屏后</text>
+
+            <!-- Haptic seats annotation -->
+            <line x1="380" y1="230" x2="430" y2="215" stroke="#0078D4" stroke-width="0.8"/>
+            <text x="370" y="240" text-anchor="end" font-family="DM Mono,monospace" font-size="7" fill="#0078D4">触觉座椅区</text>
+            <text x="370" y="252" text-anchor="end" font-family="DM Mono,monospace" font-size="6.5" fill="#6B7B8D">约10,000座触觉反馈</text>
+
+            <!-- Height dimension -->
+            <line x1="442" y1="30" x2="442" y2="312" stroke="#003C6E" stroke-width="1" opacity="0.4"/>
+            <text x="450" y="175" font-family="DM Mono,monospace" font-size="8" fill="#003C6E">112m</text>
+            <line x1="437" y1="30" x2="447" y2="30" stroke="#003C6E" stroke-width="0.8"/>
+            <line x1="437" y1="312" x2="447" y2="312" stroke="#003C6E" stroke-width="0.8"/>
+
+            <!-- Width dimension -->
+            <line x1="35" y1="370" x2="465" y2="370" stroke="#003C6E" stroke-width="1" opacity="0.4"/>
+            <text x="250" y="382" text-anchor="middle" font-family="DM Mono,monospace" font-size="8" fill="#003C6E">157m（最大直径）</text>
+            <line x1="35" y1="365" x2="35" y2="375" stroke="#003C6E" stroke-width="0.8"/>
+            <line x1="465" y1="365" x2="465" y2="375" stroke="#003C6E" stroke-width="0.8"/>
+
+            <!-- 4D effects -->
+            <text x="250" y="402" text-anchor="middle" font-family="DM Mono,monospace" font-size="7" fill="#6B7B8D">4D多感官: 风效 · 气味释放 · 温度控制 · 次声触觉</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-block reveal">
+    <h3>空间结构详解</h3>
+    <p><strong>双球体独立结构：</strong>Sphere采用"建筑中的建筑"设计理念，内部为混凝土壳体（容纳观众厅），外部为钢结构网格外骨骼（支撑Exosphere LED），两者在结构上完全独立。顶部170吨钢压缩环支撑320吨穹顶，底部张力环平衡外推力。</p>
+    <p><strong>观众厅碗状布局：</strong>采用古罗马圆形剧场式阶梯座席设计，共4层座位（100/200/300/400层）+ Floor站席 + 2层VIP包厢。所有座位朝向舞台方向。100层座位Row 22及以上存在屏幕顶部遮挡问题。400层距离最远但提供最均衡的全屏幕视野。6条内部猫道位于屏幕上方用于制作支持，228个机械化面板可打开用于吊装点降入。</p>
+    <p><strong>中庭（Atrium）：</strong>高约24m，立柱高度为罗马万神殿的两倍。设有交叉阳台、4部中央自动扶梯、之字形楼梯。配备15m高全息墙（史上最大）、仿真人形机器人"Aura"、3D全身扫描站和空间音频演示区。中庭容积约16.1万立方米，设计理念强调无重力感与流动线条。</p>
+    <p><strong>威尼斯人连接：</strong>Sphere通过新建人行天桥直连威尼斯人展览中心（Venetian Expo）。威尼斯人酒店提供7,000+套房，是Sphere最大的住宿配套设施。</p>
+  </div>
+</section>
+
+<!-- ===== 7. 投资与建设时序 ===== -->
+<section class="section section-alt" id="timeline-sec" style="padding-top:5rem;padding-bottom:5rem;max-width:none;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
+  <div class="section-header reveal">
+    <div class="section-number">06 · DEVELOPMENT TIMELINE</div>
+    <h2>投资与建设时序</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="card-grid-3 reveal" style="margin-bottom:2.5rem;">
+    <div class="card" style="text-align:center;">
+      <h4>初始预算 (2018)</h4>
+      <div class="card-value">$12亿</div>
+      <div class="card-note">约86亿人民币</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <h4>中期修订 (2020.02)</h4>
+      <div class="card-value">$16.6亿</div>
+      <div class="card-note">约120亿人民币</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <h4>最终成本 (2023)</h4>
+      <div class="card-value" style="color:#D4343E;">$23亿</div>
+      <div class="card-note" style="color:#D4343E;">约166亿人民币 · 超支$11亿 · 涨幅92%</div>
+    </div>
+  </div>
+
+  <div class="card-grid-2 reveal" style="margin-bottom:2rem;">
+    <div class="card">
+      <h4>成本超支主要原因</h4>
+      <div class="card-note" style="line-height:1.7;">
+        1. COVID-19疫情导致施工停滞与供应链中断<br>
+        2. 2021-2023年全球供应链危机<br>
+        3. 2021-2022年通胀飙升（钢材、混凝土、人工成本暴涨）<br>
+        4. 项目本身的空前复杂性——大量定制技术无先例可循<br>
+        5. 全球最大起重机Demag CC-8800从比利时运抵（需120辆卡车运输）
+      </div>
+    </div>
+    <div class="card">
+      <h4>融资与所有权结构</h4>
+      <div class="card-note" style="line-height:1.7;">
+        开发方/运营商: Sphere Entertainment Co.（MSG分拆 · James Dolan控制）<br>
+        土地共有人: Vici Properties<br>
+        2022年Apollo Global Management收购威尼斯人酒店，替代Las Vegas Sands成为MSG新合作伙伴<br>
+        项目累计产生超100项专利技术
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline reveal">
+    <div class="timeline-item">
+      <div class="timeline-year">2018年2月</div>
+      <div class="timeline-title">项目正式宣布</div>
+      <div class="timeline-desc">MSG与Las Vegas Sands Corporation合作宣布建造"MSG Sphere"。Sands提供7.3公顷地块。同步宣布伦敦第二座Sphere计划。初期预算12亿美元。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2018年9月27日</div>
+      <div class="timeline-title">奠基仪式</div>
+      <div class="timeline-desc">约300人出席典礼，包括Las Vegas Sands主席Sheldon Adelson和内华达州州长Brian Sandoval。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2019年全年</div>
+      <div class="timeline-title">主体施工全面启动</div>
+      <div class="timeline-desc">AECOM为总承包商。挖掘约84,000立方米土方，最深开挖至地下6.4m。完成地下室和首层地面。现场工人峰值约1,500人。至12月结构已达20m高度（第4层/共8层）。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2020年2月-3月</div>
+      <div class="timeline-title">最大起重机到位 · 疫情停工</div>
+      <div class="timeline-desc">全球第四大起重机Demag CC-8800从比利时经海路和120辆卡车运抵现场。成本修订至$16.6亿。3月31日因COVID-19停工，原定2021年开业计划废止。8月恢复施工，目标改至2023年。12月MSG接管总承包商角色。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2021年2月-6月</div>
+      <div class="timeline-title">穹顶结构攻坚</div>
+      <div class="timeline-desc">2月完成170吨钢压缩环吊装（项目最重单体）。3月安装32根屋顶桁架（每根100吨），屋顶总用钢3,000吨。6月18日穹顶封顶。10月屋顶铺设10英寸厚混凝土层（约10,000吨）。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2022年5月24日</div>
+      <div class="timeline-title">Exosphere结构完工</div>
+      <div class="timeline-desc">外部球体钢结构完成（比内部穹顶高30%）。Apollo Global Management收购威尼斯人酒店，成为MSG新合作伙伴。Vici Properties购入地块所有权。内外LED屏幕安装全面展开。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2023年4月-7月</div>
+      <div class="timeline-title">公司重组 · Exosphere首次点亮</div>
+      <div class="timeline-desc">4月20日MSG Entertainment分拆，Sphere Entertainment Co.成立，"MSG Sphere"正式更名"Sphere"。7月4日美国独立日，54,000 m²外部LED首次全面点亮——"Hello World"、烟花动画、地球影像等瞬间引爆全球社交媒体。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2023年9月29日</div>
+      <div class="timeline-title">盛大开幕 · U2:UV驻场首演</div>
+      <div class="timeline-desc">U2举办"U2:UV Achtung Baby Live at Sphere"驻场演出开幕，这是乐队自2019年以来首次现场演出。10月6日Darren Aronofsky执导的沉浸式电影《Postcard from Earth》首映。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2024年全年</div>
+      <div class="timeline-title">创纪录商业成功</div>
+      <div class="timeline-desc">演唱会总票房$4.205亿（Billboard Boxscore史上15,000+容量场馆年度第一）。U2 40场$2.445亿、Dead & Company 30场$1.318亿。公司FY2024总营收突破$10.27亿。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2024年10月</div>
+      <div class="timeline-title">阿布扎比分馆确认 · 伦敦正式取消</div>
+      <div class="timeline-desc">Sphere Entertainment与阿布扎比文化旅游部正式签约，全球第二座Sphere落地阿布扎比。伦敦项目因市长否决彻底终止，公司计提$1.165亿减值损失。</div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ===== 8. 运营指标 ===== -->
+<section class="section" id="operations">
+  <div class="section-header reveal">
+    <div class="section-number">07 · OPERATIONS & FINANCE</div>
+    <h2>运营模式与财务表现</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="kpi-row reveal">
+    <div class="kpi-card">
+      <span class="kpi-val">$10.27亿</span>
+      <span class="kpi-label">FY2024公司总营收（约74亿人民币）</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-val">$4.97亿</span>
+      <span class="kpi-label">Sphere板块营收（约36亿人民币）</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-val">$4.205亿</span>
+      <span class="kpi-label">2024演唱会总票房（约30亿人民币）</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-val">130万+</span>
+      <span class="kpi-label">2024年演唱会门票销售张数</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-val">-$4.8亿</span>
+      <span class="kpi-label">FY2024 Sphere运营亏损（含折旧摊销）</span>
+    </div>
+  </div>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead>
+        <tr><th>驻场演出 / 内容</th><th>场次</th><th>票房收入 (USD)</th><th>售票张数</th><th>场均票房 (USD)</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong>U2: UV Achtung Baby Live</strong></td>
+          <td>40场</td><td>$2.445亿</td><td>663,000</td><td>$611万</td>
+        </tr>
+        <tr>
+          <td><strong>Dead & Company</strong></td>
+          <td>30场</td><td>$1.318亿</td><td>477,000</td><td>$439万</td>
+        </tr>
+        <tr>
+          <td><strong>Eagles</strong></td>
+          <td>20场（首批8场数据）</td><td>$4,220万（8场）</td><td>131,000（8场）</td><td>$528万</td>
+        </tr>
+        <tr>
+          <td><strong>Phish</strong></td>
+          <td>4场</td><td>$1,340万</td><td>66,700</td><td>$335万</td>
+        </tr>
+        <tr class="highlight-row">
+          <td><strong>Postcard from Earth（沉浸式电影）</strong></td>
+          <td>208场（Q4单季）</td><td>$7,450万（Q4）</td><td>—</td><td>日均超$100万票房</td>
+        </tr>
+        <tr>
+          <td><strong>UFC 306（综合格斗）</strong></td>
+          <td>1场（2024年9月）</td><td>$2,200万</td><td>—</td><td>Sphere史上单场最高利润活动</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead>
+        <tr><th>收入结构 (FY2024 Sphere板块)</th><th>金额 (USD)</th><th>占比</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>演出/活动 + Sphere Experience 电影放映</td><td>约$4.2亿</td><td>~85%</td><td>驻场演唱会 + 《Postcard from Earth》日常放映（Q4 208场）</td>
+        </tr>
+        <tr class="highlight-row">
+          <td>赞助、广告与Exosphere</td><td>$8,720万</td><td>~17%</td><td>高利润率（直接成本仅$100-160万/季）。Super Bowl周创单周广告收入纪录</td>
+        </tr>
+        <tr>
+          <td>餐饮与商品</td><td>$6,670万</td><td>~13%</td><td>场内特许经营与衍生品销售</td>
+        </tr>
+        <tr>
+          <td>分租与其他</td><td>约$800万</td><td>~2%</td><td>含HOLOPLOT技术收购相关收入</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead>
+        <tr><th>Exosphere广告收入 (季度明细)</th><th>季度</th><th>金额 (USD)</th><th>关键驱动因素</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Q2 FY2024</td><td>2023年10-12月</td><td>$1,750万</td><td>开业后初始广告投放</td>
+        </tr>
+        <tr class="highlight-row">
+          <td>Q3 FY2024</td><td>2024年1-3月</td><td>$3,290万</td><td>Super Bowl LVIII在拉斯维加斯举办，创单周广告收入纪录</td>
+        </tr>
+        <tr>
+          <td>Q4 FY2024</td><td>2024年4-6月</td><td>$1,590万</td><td>Super Bowl后季节性回落</td>
+        </tr>
+        <tr>
+          <td>Q1 FY2025</td><td>2024年7-9月</td><td>约$1,300万</td><td>淡季但仍有UFC 306 + 政治广告补充</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-block reveal" style="margin-top:1.5rem;">
+    <h3>财务表现要点</h3>
+    <p><strong>营收增长强劲：</strong>FY2024（截至2024年6月30日）公司总营收$10.27亿，同比增长约$4.53亿，几乎全部由Sphere新场馆驱动。Q4单季（2024年4-6月）总营收$2.734亿，其中Sphere板块贡献$1.512亿，超90万观众参加230+场活动。</p>
+    <p><strong>运营亏损持续：</strong>尽管收入可观，FY2024公司整体运营亏损$3.412亿，Sphere板块运营亏损$4.804亿。主要原因：$23亿建设成本的巨额折旧摊销、以及伦敦项目$1.165亿减值。调整后运营利润为+$8,070万——表明核心业务模式已具备盈利能力。</p>
+    <p><strong>场馆No.1地位：</strong>2024年以$4.205亿演唱会票房成为Billboard Boxscore 50年历史上15,000+容量场馆中的年度票房冠军——超越所有传统体育场和竞技场。2024全年售出130万张演唱会门票。</p>
+    <p><strong>季节性挑战与多元化应对：</strong>CEO James Dolan承认7-8月存在"结构性疲软"问题。公司通过拓展体育赛事（UFC 306创$2,200万票房、NHL选秀）、企业活动（HP Enterprise）、政治广告（Kamala Harris竞选）和沉浸式电影（《V-U2》、《绿野仙踪》4D版）等多元化内容应对。</p>
+  </div>
+</section>
+
+<!-- ===== 9. 核心技术与创新体系 ===== -->
+<section class="section section-alt" id="tech" style="padding-top:5rem;padding-bottom:5rem;max-width:none;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
+  <div class="section-header reveal">
+    <div class="section-number">08 · TECHNICAL INNOVATIONS</div>
+    <h2>六大核心技术突破</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="tech-grid reveal">
+    <div class="tech-item">
+      <h4>01 · 3D波束成形音频</h4>
+      <div class="tech-val">HOLOPLOT X1 矩阵系统</div>
+      <div class="tech-desc">
+        全球最大波束成形音频部署。主舞台阵列宽33.6m×高6.6m（464个模组），配合28组环境阵列、71组环绕阵列等。可精准控制声束方向和覆盖范围，精度可达约6个座位。不同座位区可同时听到不同语言或乐器声部——实现无需耳机的多语言同声传译。
+      </div>
+    </div>
+    <div class="tech-item">
+      <h4>02 · 波场合成技术</h4>
+      <div class="tech-val">虚拟声源精准定位</div>
+      <div class="tech-desc">
+        在空间中创建虚拟声源，声音"不像是从扬声器发出的"。后排观众可体验到"耳边低语"的精准空间音效。声学避开区算法防止球形穹顶的异常声反射——非观众区域（包括穹顶高反射表面）均被指定为避开区。支持单声道至256声道粒度。
+      </div>
+    </div>
+    <div class="tech-item">
+      <h4>03 · 16K×16K 沉浸式显示</h4>
+      <div class="tech-val">2.56亿像素 · 15,000 m² · 270°环绕</div>
+      <div class="tech-desc">
+        高约73m，12-bit色深，4:4:4子采样。64,000块SACO LED透声面板，像素间距约9mm。通过SMPTE ST 2110 IP协议传输，7thSense Actor媒体服务器驱动（需40+路4K@60fps同步流）。>400GB/s数据吞吐量，延迟<5ms。4PB闪存存储。
+      </div>
+    </div>
+    <div class="tech-item">
+      <h4>04 · Exosphere 外部显示</h4>
+      <div class="tech-val">54,000 m² 可编程LED外立面</div>
+      <div class="tech-desc">
+        约120万个LED发光单元（pucks），每个含48颗独立LED二极管，总计约5,760万颗。每单元可显示2.56亿种颜色。7thSense提供像素处理与演出控制系统。作为"活体建筑"全天候运行，已成为拉斯维加斯天际线标志性地标和全球最大广告媒介。
+      </div>
+    </div>
+    <div class="tech-item">
+      <h4>05 · 4D 多感官系统</h4>
+      <div class="tech-val">触觉 · 风 · 气味 · 温度</div>
+      <div class="tech-desc">
+        约10,000个座位内置触觉反馈执行器，可与屏幕内容实时频率匹配。"次声触觉"低音产生物理振动感——观众可"感受"地震、闻到花香、体验沙漠热浪。配合场馆级风效、香氛释放和温控系统，实现超越视听的全感官沉浸。
+      </div>
+    </div>
+    <div class="tech-item">
+      <h4>06 · Big Sky 摄像机系统与制作生态</h4>
+      <div class="tech-val">18K×18K · 120fps · Big Dome预演球幕</div>
+      <div class="tech-desc">
+        Sphere Studios（加州Burbank）研发的定制化摄像机系统，专为Sphere原生内容拍摄设计。配合1/4比例Big Dome（约2,600 m²、高约30m）用于内容预演、筛选和混音。项目累计产生超100项专利技术，构建完整的内容制作-分发-放映生态闭环。
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ===== 10. 配套设施体系 ===== -->
+<section class="section" id="amenities">
+  <div class="section-header reveal">
+    <div class="section-number">09 · AMENITIES & HIGHLIGHTS</div>
+    <h2>配套设施与特色亮点</h2>
+    <div class="divider"></div>
+  </div>
+  <div class="card-grid reveal">
+    <div class="card">
+      <h4>餐饮设施</h4>
+      <div class="card-value">29个</div>
+      <div class="card-note">15个全服务餐厅 + 14个快捷餐饮点，全部由ICRAVE设计，分布在中庭及各层</div>
+    </div>
+    <div class="card">
+      <h4>VIP与包厢</h4>
+      <div class="card-value">2层VIP包厢层</div>
+      <div class="card-note">私人艺术家化妆间 · VIP俱乐部 · VIP专属通道 · 空中套房</div>
+    </div>
+    <div class="card">
+      <h4>展览与活动空间</h4>
+      <div class="card-value">2个Expo空间</div>
+      <div class="card-note">中庭包含数百个隐藏吊装点 · 大型物料升降机 · 可举办各类商业展览</div>
+    </div>
+    <div class="card">
+      <h4>互动机器人 "Aura"</h4>
+      <div class="card-value">仿真人形机器人</div>
+      <div class="card-note">中庭互动体验核心 · 可与观众对话互动 · 是Sphere Experience参观流程的亮点环节</div>
+    </div>
+    <div class="card">
+      <h4>15m高全息墙</h4>
+      <div class="card-value">史上最大全息显示墙</div>
+      <div class="card-note">位于入口中庭 · 展示沉浸式数字艺术与信息导览</div>
+    </div>
+    <div class="card">
+      <h4>停车与交通连接</h4>
+      <div class="card-value">现场停车库</div>
+      <div class="card-note">自助停车$25-$40 · 代客泊车可选 · 人行天桥直连威尼斯人度假村</div>
+    </div>
+    <div class="card">
+      <h4>U2开创"驻场新时代"</h4>
+      <div class="card-value" style="font-size:1.3rem;">40场 · $2.445亿票房</div>
+      <div class="card-note">专为球形屏幕设计的演出内容，无法在其他任何场馆复制。单场收入$611万创演唱会历史纪录。</div>
+    </div>
+    <div class="card">
+      <h4>"Postcard from Earth"</h4>
+      <div class="card-value" style="font-size:1.3rem;">Darren Aronofsky执导</div>
+      <div class="card-note">原创沉浸式电影，利用16K分辨率+4D效果让观众"环游地球"。证明了非演唱会内容的商业可行性，Q4单季创收$7,450万。</div>
+    </div>
+    <div class="card">
+      <h4>城市级公共艺术媒介</h4>
+      <div class="card-value" style="font-size:1.3rem;">Exosphere广告新物种</div>
+      <div class="card-note">从微笑emoji到地球自转，Xbox、NBA、F1品牌投放——每次点亮都引发全球社交媒体传播。Super Bowl周创单周广告收入纪录。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 11. 最新动态与展望 ===== -->
+<section class="section section-alt" id="future" style="padding-top:5rem;padding-bottom:5rem;max-width:none;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
+  <div class="section-header reveal">
+    <div class="section-number">10 · FUTURE OUTLOOK</div>
+    <h2>最新动态与全球扩张展望</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="card-grid reveal">
+    <div class="card">
+      <h4>阿布扎比第二座Sphere</h4>
+      <div class="card-value" style="font-size:1.3rem;color:#2E8B57;">目标2026年开业</div>
+      <div class="card-note">阿布扎比文化旅游部全额出资，Sphere Entertainment收取"特许经营启动费"。规模对标拉斯维加斯（高约112m、容量约20,000人）。预计Populous继续担任建筑师，无明确位置公布。</div>
+    </div>
+    <div class="card">
+      <h4>伦敦项目正式终止</h4>
+      <div class="card-value" style="font-size:1.3rem;color:#D4343E;">永久取消</div>
+      <div class="card-note">原定Stratford选址遭伦敦市长Sadiq Khan否决（光污染等争议），MSG抨击英国规划流程为"政党间的政治皮球"。公司计提$1.165亿减值损失后正式撤出，无重启计划。</div>
+    </div>
+    <div class="card">
+      <h4>National Harbor 迷你Sphere</h4>
+      <div class="card-value" style="font-size:1.3rem;">马里兰州 · 约$2亿预算</div>
+      <div class="card-note">第二座美国Sphere计划落地华盛顿特区附近的National Harbor。规模较小（约6,000座），采用公私合作融资模式，仍处于规划阶段。</div>
+    </div>
+    <div class="card">
+      <h4>内容多元化拓展</h4>
+      <div class="card-value" style="font-size:1.3rem;">超越音乐驻场</div>
+      <div class="card-note">2024年UFC 306创$2,200万票房（Sphere单场最高利润活动）。NHL选秀、HP Enterprise企业大会、政治广告（Kamala Harris竞选）等新形式持续扩展收入来源。</div>
+    </div>
+    <div class="card">
+      <h4>沉浸式电影产品线扩展</h4>
+      <div class="card-value" style="font-size:1.3rem;">经典IP + 原创内容</div>
+      <div class="card-note">《V-U2》以U2驻场为主题的专属影片、《绿野仙踪》4D沉浸式重制版已上映。标志着场馆从纯现场演出向沉浸式电影内容制作生态延伸。</div>
+    </div>
+    <div class="card">
+      <h4>100+项专利技术壁垒</h4>
+      <div class="card-value" style="font-size:1.3rem;">核心技术护城河</div>
+      <div class="card-note">从LED面板制造工艺到波束成形音频算法，Sphere积累了超过100项专利。Big Sky摄像机和Big Dome预演设施构建了专属内容制作生态，竞争者短期内难以复制。</div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ===== 12. 实景图集 ===== -->
+<section class="section" id="gallery">
+  <div class="section-header reveal">
+    <div class="section-number">11 · PHOTO GALLERY</div>
+    <h2>实景图集与媒体资源</h2>
+    <div class="divider"></div>
+  </div>
+  <div class="gallery-grid reveal">
+    <div class="gallery-card">
+      <div class="gallery-icon">&#127760;</div>
+      <h4>维基百科图库</h4>
+      <p>高清建筑外观、内部LED屏幕、Exosphere夜间全景照片——CC授权与公共领域图片</p>
+      <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:#8C9098;display:block;margin-bottom:0.8rem;">自由版权图库</span>
+      <a class="btn" href="https://en.wikipedia.org/wiki/Sphere_(venue)" target="_blank" rel="noopener">浏览图集 &rarr;</a>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-icon">&#127916;</div>
+      <h4>YouTube 官方纪录片</h4>
+      <p>"The Making of Sphere"——从设计蓝图到盛大开幕的全过程影像记录</p>
+      <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:#8C9098;display:block;margin-bottom:0.8rem;">高清视频平台</span>
+      <a class="btn" href="https://www.youtube.com/results?search_query=sphere+las+vegas+making+of+documentary" target="_blank" rel="noopener">观看视频 &rarr;</a>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-icon">&#127753;</div>
+      <h4>BroadwayWorld 首次点亮</h4>
+      <p>2023年7月4日Exosphere首次全面点亮官方授权高清照片——Hello World、地球影像、烟花动画</p>
+      <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:#8C9098;display:block;margin-bottom:0.8rem;">媒体高清组图</span>
+      <a class="btn" href="https://www.broadwayworld.com/las-vegas/article/Photos-Sphere-in-Las-Vegas-Illuminates-Entire-Exterior-For-The-First-Time-20230705" target="_blank" rel="noopener">查看组图 &rarr;</a>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-icon">&#128248;</div>
+      <h4>Review-Journal 每日图集</h4>
+      <p>Exosphere每日动画展示持续更新图集——Emoji表情、篮球、星球、品牌广告</p>
+      <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:#8C9098;display:block;margin-bottom:0.8rem;">深度实拍报道</span>
+      <a class="btn" href="https://neon.reviewjournal.com/entertainment/the-las-vegas-spheres-displays-so-far-photos-2805144/" target="_blank" rel="noopener">查看图集 &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 13. 延伸资料库 ===== -->
+<section class="section section-alt" id="references" style="padding-top:5rem;padding-bottom:5rem;max-width:none;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
+  <div class="section-header reveal">
+    <div class="section-number">12 · EXTERNAL REFERENCES</div>
+    <h2>延伸资料库</h2>
+    <div class="divider"></div>
+  </div>
+  <div class="card-grid reveal">
+    <a href="https://www.thespherevegas.com" target="_blank" rel="noopener" class="ref-card-link">
+      <div class="card">
+        <h4>01 · 官方来源</h4>
+        <div class="card-value" style="font-size:1.15rem;">Sphere 官方网站</div>
+        <div class="card-note">活动日程、票务信息、The Sphere Experience介绍、场馆导览</div>
+      </div>
+    </a>
+    <a href="https://en.wikipedia.org/wiki/Sphere_(venue)" target="_blank" rel="noopener" class="ref-card-link">
+      <div class="card">
+        <h4>02 · 权威百科</h4>
+        <div class="card-value" style="font-size:1.15rem;">Wikipedia · Sphere (venue)</div>
+        <div class="card-note">完整技术参数、历史沿革、财务数据、参考文献链接</div>
+      </div>
+    </a>
+    <a href="https://www.holoplot.com/case-studies/msg-sphere-case-study" target="_blank" rel="noopener" class="ref-card-link">
+      <div class="card">
+        <h4>03 · 音频系统技术详解</h4>
+        <div class="card-value" style="font-size:1.15rem;">HOLOPLOT 官方案例研究</div>
+        <div class="card-note">波束成形系统完整配置、阵列布局图、声学性能数据、LED传输损耗补偿算法</div>
+      </div>
+    </a>
+    <a href="https://vfxvoice.com/las-vegas-sphere-worlds-largest-high-res-led-screen-for-live-action-and-vfx/" target="_blank" rel="noopener" class="ref-card-link">
+      <div class="card">
+        <h4>04 · 显示技术深度解析</h4>
+        <div class="card-value" style="font-size:1.15rem;">VFX Voice 技术专题</div>
+        <div class="card-note">SACO LED面板制造工艺、Big Sky摄像机系统、7thSense媒体服务器、Big Dome预演设施</div>
+      </div>
+    </a>
+    <a href="https://www.popularmechanics.com/technology/infrastructure/a45499347/las-vegas-sphere/" target="_blank" rel="noopener" class="ref-card-link">
+      <div class="card">
+        <h4>05 · 工程深度报道</h4>
+        <div class="card-value" style="font-size:1.15rem;">Popular Mechanics 工程特写</div>
+        <div class="card-note">从结构工程到精密制造的全流程工程奇迹深度报道，含施工过程与超100项专利说明</div>
+      </div>
+    </a>
+  </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <p><strong>拉斯维加斯 Sphere 案例研究</strong> — 全球最大球形建筑 · 沉浸式娱乐革命</p>
+  <p style="margin-top:6px;">数据来源：Sphere Entertainment Co. (NYSE: SPHR) · Wikipedia · Billboard Boxscore · HOLOPLOT · Populous · ICRAVE</p>
+  <p style="margin-top:4px;font-size:0.72rem;color:rgba(255,255,255,0.3);">本报告仅供案例研究参考。汇率：1 USD ≈ 7.20 RMB（2024年均值）· 所有度量单位为公制。报告时间：2026年5月</p>
+  <div class="busuanzi">
+    访问 <span id="busuanzi_value_site_pv"></span> 次 · 访客 <span id="busuanzi_value_site_uv"></span> 人
+  </div>
+  <a href="https://joanna2joanna.github.io/casestudy/" class="footer-home-link">返回案例研究首页</a>
+</footer>
+
+<!-- ===== 浮动导航 ===== -->
+<div class="floating-nav">
+  <a href="../index.html" title="返回首页">&#127968;</a>
+  <a href="#" id="back-to-top" title="返回顶部">&uarr;</a>
+</div>
+
+<!-- ===== SCRIPTS ===== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// IntersectionObserver for reveal animations
+(function() {
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+})();
+
+// Back to top button
+(function() {
+  var btn = document.getElementById('back-to-top');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 600) {
+      btn.classList.add('show');
+    } else {
+      btn.classList.remove('show');
+    }
+  });
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+
+// Active nav link tracking
+(function() {
+  var sections = document.querySelectorAll('section[id], header[id]');
+  var navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', function() {
+    var current = '';
+    sections.forEach(function(s) {
+      if (window.scrollY >= s.offsetTop - 200) current = s.id;
+    });
+    navLinks.forEach(function(a) {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+})();
+
+// Map initialization
+document.addEventListener('DOMContentLoaded', function() {
+  var mapContainer = document.getElementById('parkmap');
+  if (!mapContainer) return;
+
+  var map = L.map('parkmap', { scrollWheelZoom: false, zoomControl: true }).setView([36.12111, -115.1635], 16);
+
+  // ESRI ArcGIS satellite layer (WGS-84, for overseas locations)
+  var satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    maxZoom: 20
+  });
+
+  var topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; Esri',
+    maxZoom: 19
+  });
+
+  satLayer.addTo(map);
+  L.control.layers({ '卫星图': satLayer, '地形图': topoLayer }, null, { position: 'topright' }).addTo(map);
+
+  // Markers
+  var markers = [
+    { name: 'Sphere<br><small>球体主场馆 · 36.12111°N, 115.16194°W</small>', lat: 36.12111, lng: -115.16194, color: '#0078D4' },
+    { name: '威尼斯人度假村<br><small>The Venetian Resort</small>', lat: 36.1212, lng: -115.1694, color: '#D4A853' },
+    { name: 'Wynn Las Vegas<br><small>永利酒店</small>', lat: 36.1268, lng: -115.1657, color: '#D4A853' },
+    { name: '拉斯维加斯大道<br><small>Las Vegas Strip (核心段)</small>', lat: 36.1147, lng: -115.1720, color: '#E02060' }
+  ];
+
+  markers.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: '',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:4px 10px;border-radius:14px;font-size:11px;font-weight:600;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.3);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;">' + label + '</div>',
+      iconSize: [0, 0],
+      iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(map).bindPopup(z.name);
+  });
+
+  // Highlight circle around Sphere
+  L.circle([36.12111, -115.16194], { radius: 120, color: '#0078D4', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+
+  // Fix map size after render
+  setTimeout(function() { map.invalidateSize(); }, 600);
+
+  // Tile load timeout (8 seconds)
+  var tileLoaded = false;
+  map.on('tileload', function() { tileLoaded = true; });
+
+  setTimeout(function() {
+    if (!tileLoaded) {
+      var fb = document.getElementById('map-fb');
+      if (fb) { fb.classList.add('show'); fb.textContent = '地图瓦片加载超时，请检查网络连接后刷新页面'; }
+    }
+  }, 8000);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>蒂沃利公园 案例研究 — 世界最古老游乐园之一 · 迪士尼灵感源泉</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+:root {
+  --green: #1B5E3A;
+  --green-deep: #0D3320;
+  --gold: #C8A45C;
+  --gold-light: #E8D5A3;
+  --navy: #0A1628;
+  --ink: #1A1A1A;
+  --warm-white: #FDF8F3;
+  --cream: #F5EDE0;
+  --white: #FFFFFF;
+  --text: #1C1C1C;
+  --text-muted: #5C5048;
+  --text-light: #8C8078;
+  --border: #E0D5C8;
+  --shadow-sm: 0 1px 3px rgba(10,22,40,0.06);
+  --shadow-md: 0 4px 20px rgba(10,22,40,0.08);
+  --shadow-lg: 0 12px 40px rgba(10,22,40,0.12);
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+  --font-mono: 'DM Mono', 'SF Mono', monospace;
+  --max-width: 1240px;
+  --nav-h: 64px;
+}
+
+html { font-size: 17px; scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--warm-white);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--nav-h);
+  background: rgba(13,51,32,0.94);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center; gap: 2px;
+  padding: 0 20px; overflow-x: auto;
+}
+nav a {
+  color: rgba(255,255,255,0.68); text-decoration: none;
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.03em;
+  padding: 6px 12px; border-radius: 20px; white-space: nowrap;
+  transition: all 0.25s ease;
+}
+nav a:hover, nav a.active { color: var(--gold-light); background: rgba(200,164,92,0.12); }
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(165deg, #0D1F12 0%, #0D3320 20%, #1B5E3A 50%, #0D3320 75%, #0D1F12 100%);
+  overflow: hidden;
+  text-align: center; padding: 120px 24px 80px;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 25% 80%, rgba(27,94,58,0.3) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 75% 25%, rgba(200,164,92,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(232,213,163,0.06) 0%, transparent 70%);
+}
+.hero-bg-pattern {
+  position: absolute; inset: 0; opacity: 0.03;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.5) 2px, rgba(255,255,255,0.5) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.5) 2px, rgba(255,255,255,0.5) 4px);
+}
+.hero-content { position: relative; z-index: 2; max-width: 800px; }
+.hero-badge {
+  display: inline-block;
+  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gold-light); border: 1px solid rgba(200,164,92,0.35);
+  padding: 6px 18px; border-radius: 20px; margin-bottom: 32px;
+}
+.hero h1 {
+  font-family: var(--font-display); font-size: clamp(2.6rem, 5vw, 4rem);
+  font-weight: 900; color: var(--white); line-height: 1.15;
+  letter-spacing: 0.03em; margin-bottom: 20px;
+}
+.hero h1 span { color: var(--gold-light); }
+.hero-sub {
+  font-size: 1.05rem; color: rgba(255,255,255,0.55); line-height: 1.6;
+  max-width: 580px; margin: 0 auto 48px;
+}
+.hero-kpis {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+  max-width: 720px; margin: 0 auto;
+  background: rgba(255,255,255,0.06); border-radius: 16px; overflow: hidden;
+}
+.hero-kpi {
+  background: rgba(13,51,32,0.7); padding: 28px 20px;
+  backdrop-filter: blur(8px);
+}
+.hero-kpi-num {
+  font-family: var(--font-display); font-size: 2rem; font-weight: 900;
+  color: var(--gold-light); line-height: 1.1;
+}
+.hero-kpi-label {
+  font-size: 0.72rem; color: rgba(255,255,255,0.5); margin-top: 6px;
+  letter-spacing: 0.03em;
+}
+
+section { padding: 88px 24px; }
+.section-inner { max-width: var(--max-width); margin: 0 auto; }
+.section-tag {
+  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--green); margin-bottom: 12px;
+}
+.section-title {
+  font-family: var(--font-display); font-size: 2rem; font-weight: 700;
+  color: var(--green-deep); margin-bottom: 12px; letter-spacing: 0.02em;
+}
+.section-desc {
+  font-size: 0.95rem; color: var(--text-muted); max-width: 560px;
+  margin-bottom: 48px; line-height: 1.7;
+}
+
+.cards-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+.cards-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.cards-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+.info-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 28px 24px; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border); transition: box-shadow 0.3s;
+}
+.info-card:hover { box-shadow: var(--shadow-md); }
+.info-card-icon { font-size: 1.5rem; margin-bottom: 12px; }
+.info-card-label { font-size: 0.72rem; color: var(--text-light); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
+.info-card-value { font-size: 0.95rem; font-weight: 600; color: var(--green-deep); line-height: 1.4; }
+
+.site-plan-wrap {
+  background: var(--white); border-radius: var(--radius-lg);
+  padding: 32px; box-shadow: var(--shadow-md);
+  border: 1px solid var(--border); margin-bottom: 48px;
+}
+
+.timeline { position: relative; padding-left: 32px; }
+.timeline::before {
+  content: ''; position: absolute; left: 10px; top: 8px; bottom: 8px;
+  width: 2px; background: linear-gradient(to bottom, var(--green), var(--gold));
+}
+.timeline-item { position: relative; margin-bottom: 32px; }
+.timeline-item::before {
+  content: ''; position: absolute; left: -26px; top: 6px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--green); border: 2px solid var(--warm-white);
+  box-shadow: 0 0 0 2px var(--green);
+}
+.timeline-item:nth-child(even)::before { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+.timeline-year {
+  font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
+  color: var(--green); letter-spacing: 0.06em;
+}
+.timeline-item:nth-child(even) .timeline-year { color: #B8972E; }
+.timeline-title { font-weight: 600; font-size: 0.95rem; color: var(--green-deep); margin-top: 2px; }
+.timeline-desc { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; }
+
+.kpi-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 32px 28px; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border); text-align: center;
+}
+.kpi-num {
+  font-family: var(--font-display); font-size: 2.4rem; font-weight: 900;
+  color: var(--green-deep); line-height: 1.1;
+}
+.kpi-num.gold { color: #B8972E; }
+.kpi-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; }
+.kpi-sub { font-size: 0.72rem; color: var(--text-light); margin-top: 4px; }
+
+.data-table {
+  width: 100%; border-collapse: collapse;
+  background: var(--white); border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+.data-table th {
+  background: var(--green-deep); color: var(--white);
+  font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 14px 20px; text-align: left;
+}
+.data-table td {
+  padding: 12px 20px; font-size: 0.88rem; color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table .cat-cell { font-weight: 600; color: var(--green-deep); background: var(--cream); }
+
+.section-alt { background: var(--cream); }
+
+.zone-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 24px; box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--green); transition: box-shadow 0.3s;
+}
+.zone-card:nth-child(2) { border-left-color: #E8784A; }
+.zone-card:nth-child(3) { border-left-color: #C8A45C; }
+.zone-card:nth-child(4) { border-left-color: #1A237E; }
+.zone-card:nth-child(5) { border-left-color: #B71C1C; }
+.zone-card:nth-child(6) { border-left-color: #0277BD; }
+.zone-card:hover { box-shadow: var(--shadow-md); }
+.zone-card h4 { font-size: 0.95rem; color: var(--green-deep); margin-bottom: 6px; }
+.zone-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+.zone-tag {
+  display: inline-block; font-family: var(--font-mono); font-size: 0.6rem;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 10px; margin-bottom: 8px;
+  background: rgba(27,94,58,0.08); color: var(--green);
+}
+
+.amenity-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 28px 24px; text-align: center; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border); transition: box-shadow 0.3s;
+}
+.amenity-card:hover { box-shadow: var(--shadow-md); }
+.amenity-icon { font-size: 2rem; margin-bottom: 10px; }
+.amenity-name { font-weight: 600; font-size: 0.9rem; color: var(--green-deep); }
+.amenity-detail { font-size: 0.76rem; color: var(--text-muted); margin-top: 4px; }
+
+footer {
+  background: var(--green-deep); text-align: center; padding: 48px 24px;
+  color: rgba(255,255,255,0.5); font-size: 0.8rem; line-height: 1.8;
+}
+footer strong { color: var(--gold-light); }
+
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+.floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: var(--green); }
+.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: var(--green); color: #fff; }
+#back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
+#back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
+
+.sub-heading {
+  font-family: var(--font-display); font-size: 1.1rem; color: var(--green-deep);
+  margin: 32px 0 16px;
+}
+
+@media (max-width: 1024px) {
+  .cards-6 { grid-template-columns: repeat(3, 1fr); }
+  .cards-4 { grid-template-columns: repeat(2, 1fr); }
+  .hero-kpis { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .cards-6, .cards-4, .cards-3, .cards-2 { grid-template-columns: 1fr; }
+  .hero-kpis { grid-template-columns: 1fr 1fr; }
+  nav { gap: 0; }
+  nav a { padding: 6px 10px; font-size: 0.68rem; }
+  .section-title { font-size: 1.5rem; }
+  .hero h1 { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="#hero">总览</a>
+  <a href="#overview">概览</a>
+  <a href="#design">历史建筑</a>
+  <a href="#summary">技术总表</a>
+  <a href="#layout">空间布局</a>
+  <a href="#investment">历史时间线</a>
+  <a href="#operations">运营指标</a>
+  <a href="#tech">规模指标</a>
+  <a href="#amenities">特色亮点</a>
+  <a href="#future">活动体系</a>
+  <a href="#references">资料库</a>
+</nav>
+
+<!-- 01 Hero -->
+<section class="hero" id="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Heritage Park Case Study · 数据截至 2026 年 5 月</div>
+    <h1><span>蒂沃利公园</span><br>Tivoli Gardens 案例研究</h1>
+    <p class="hero-sub">世界现存第三古老游乐园 · 迪士尼乐园的灵感源泉<br>1843年开园至今183年，哥本哈根市中心的花园式游乐园</p>
+    <div class="hero-kpis reveal">
+      <div class="hero-kpi"><div class="hero-kpi-num">1843</div><div class="hero-kpi-label">开园年份</div></div>
+      <div class="hero-kpi"><div class="hero-kpi-num">425万</div><div class="hero-kpi-label">年游客量（2024）</div></div>
+      <div class="hero-kpi"><div class="hero-kpi-num">8 公顷</div><div class="hero-kpi-label">占地面积</div></div>
+      <div class="hero-kpi"><div class="hero-kpi-num">¥12.9亿</div><div class="hero-kpi-label">年营收（2024预期）</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 Overview -->
+<section id="overview">
+  <div class="section-inner">
+    <div class="section-tag">01 — Project Overview</div>
+    <h2 class="section-title">项目概览</h2>
+    <p class="section-desc">蒂沃利公园（丹麦语：Tivoli）位于哥本哈根市中心，正对中央火车站，由乔治·卡斯滕森于1843年创立。华特·迪士尼1951年造访后深受启发，称其为"一直是我想要的一切"，四年后迪士尼乐园开业。蒂沃利是北欧访问量最大的游乐园，也是全球第三古老的运营中游乐园。</p>
+    <div class="cards-6 reveal">
+      <div class="info-card"><div class="info-card-icon">🎢</div><div class="info-card-label">开业时间</div><div class="info-card-value">1843年8月15日</div></div>
+      <div class="info-card"><div class="info-card-icon">🏗️</div><div class="info-card-label">创始人 / 运营商</div><div class="info-card-value">乔治·卡斯滕森 / Tivoli A/S（哥本哈根证交所上市：TIV.CO）</div></div>
+      <div class="info-card"><div class="info-card-icon">📍</div><div class="info-card-label">位置</div><div class="info-card-value">丹麦哥本哈根市中心<br>Vesterbrogade 3，正对中央火车站</div></div>
+      <div class="info-card"><div class="info-card-icon">📐</div><div class="info-card-label">面积</div><div class="info-card-value">约8公顷（80,000 m²）<br>绿地与水面占比约50-60%</div></div>
+      <div class="info-card"><div class="info-card-icon">👥</div><div class="info-card-label">年游客量</div><div class="info-card-value">400-460 万人次<br>2024年约425万人次</div></div>
+      <div class="info-card"><div class="info-card-icon">🎫</div><div class="info-card-label">门票价格区间</div><div class="info-card-value">入园 180 DKK（约¥185）<br>通票 349-369 DKK（约¥360-380）</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 Design & Historic Buildings -->
+<section id="design" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag">02 — Historic Architecture & Rides</div>
+    <h2 class="section-title">历史建筑 · 经典游乐设施</h2>
+    <p class="section-desc">蒂沃利以历史建筑与现代游乐设施的和谐共存著称。园内拥有多座丹麦保护建筑，包括1874年建的中国风格孔雀剧院、1914年的木质过山车等珍贵遗产。</p>
+
+    <h3 class="sub-heading" style="margin-top:0;">历史建筑遗产</h3>
+    <div class="cards-4 reveal">
+      <div class="info-card"><div class="info-card-icon">🎭</div><div class="info-card-label">孔雀剧院</div><div class="info-card-value">Pantomime Theatre · 1874年建<br><span style="font-size:0.75rem;color:var(--text-light)">中国风格露天剧场，欧洲最古老运营中剧院之一，机械孔雀尾幕帘需5人操作</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🏨</div><div class="info-card-label">Nimb 酒店</div><div class="info-card-value">摩尔风格建筑 · 1909年建<br><span style="font-size:0.75rem;color:var(--text-light)">五星级精品酒店，内含米其林推荐餐厅</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🎵</div><div class="info-card-label">蒂沃利音乐厅</div><div class="info-card-value">Tivoli Concert Hall · 1956年重建<br><span style="font-size:0.75rem;color:var(--text-light)">当时北欧最大音乐厅，古典与流行演出</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🏯</div><div class="info-card-label">玻璃厅剧院</div><div class="info-card-value">Glass Hall Theatre · 1946年重建<br><span style="font-size:0.75rem;color:var(--text-light)">1944年被纳粹纵火，两年后重建</span></div></div>
+    </div>
+
+    <h3 class="sub-heading">核心游乐设施</h3>
+    <table class="data-table reveal">
+      <thead><tr><th>设施名称</th><th>类型</th><th>建成/引进</th><th>关键参数</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Rutschebanen</strong></td><td>木质侧摩擦过山车</td><td>1914年</td><td>世界最古老仍在运营木质过山车之一，需手动刹车员操作，2014年投资€450万修复</td></tr>
+        <tr><td><strong>The Demon (Dæmonen)</strong></td><td>无地板钢制过山车</td><td>2004年</td><td>B&M制造，高28m，长564m，3个翻转</td></tr>
+        <tr><td><strong>Star Flyer (Himmelskibet)</strong></td><td>旋转观景塔</td><td>2006年</td><td>高80m，北欧最高旋转秋千之一，可俯瞰全哥本哈根</td></tr>
+        <tr><td><strong>Vertigo</strong></td><td>大型秋千</td><td>2009年</td><td>获奖飞行秋千，高速旋转+摇摆</td></tr>
+        <tr><td><strong>The Flying Trunk</strong></td><td>安徒生主题暗骑乘</td><td>近年更新</td><td>基于安徒生童话《飞箱》的室内黑暗骑乘</td></tr>
+        <tr><td><strong>Golden Tower</strong></td><td>自由落体塔</td><td>—</td><td>经典垂直坠落体验</td></tr>
+        <tr><td><strong>The Mine (Minen)</strong></td><td>黑暗水道船游</td><td>2003年</td><td>地下矿洞主题漂流</td></tr>
+        <tr><td><strong>摩天轮</strong></td><td>观景摩天轮</td><td>1943年</td><td>经典城市地标景观</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 04 Technical Summary -->
+<section id="summary">
+  <div class="section-inner">
+    <div class="section-tag">03 — Master Data Table</div>
+    <h2 class="section-title">技术指标总表</h2>
+    <p class="section-desc">全维度数据速查。丹麦克朗按2025年5月汇率折算：1 DKK ≈ 1.03 CNY。</p>
+    <div style="overflow-x:auto;">
+    <table class="data-table reveal" style="min-width:900px;">
+      <thead><tr><th>维度</th><th>指标</th><th>数据</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td class="cat-cell">基础</td><td>开业时间</td><td>1843年8月15日</td><td>世界第三古老运营中游乐园</td></tr>
+        <tr><td class="cat-cell">基础</td><td>位置</td><td>丹麦哥本哈根市中心 Vesterbrogade 3</td><td>正对中央火车站</td></tr>
+        <tr><td class="cat-cell">规模</td><td>占地面积</td><td>约8公顷（80,000 m²）</td><td>原始用地约6.1公顷</td></tr>
+        <tr><td class="cat-cell">规模</td><td>绿地水面占比</td><td>约50-60%</td><td>花园+草坪+中央湖区</td></tr>
+        <tr><td class="cat-cell">投资</td><td>所有权</td><td>Tivoli A/S（上市公司）</td><td>哥本哈根证交所 TIV.CO</td></tr>
+        <tr><td class="cat-cell">运营</td><td>2024年游客量</td><td>约425万人次</td><td>北欧第一</td></tr>
+        <tr><td class="cat-cell">运营</td><td>2024年营收（预期）</td><td>约12.50亿DKK（约¥12.9亿）</td><td>同比小幅增长</td></tr>
+        <tr><td class="cat-cell">运营</td><td>2023年EBITDA</td><td>2.281亿DKK（约¥2.35亿）</td><td>EBITDA利润率~18.8%</td></tr>
+        <tr><td class="cat-cell">体验</td><td>游乐设施</td><td>约25座（含4座过山车）</td><td>经典+现代混合</td></tr>
+        <tr><td class="cat-cell">体验</td><td>餐饮门店</td><td>30余家</td><td>含Fine Dining至街头小吃</td></tr>
+        <tr><td class="cat-cell">体验</td><td>剧场/演出场所</td><td>4处</td><td>含孔雀剧院、音乐厅等</td></tr>
+        <tr><td class="cat-cell">票价</td><td>成人入园票</td><td>180 DKK（约¥185）</td><td>不含乘坐，仅入园</td></tr>
+        <tr><td class="cat-cell">票价</td><td>成人通票</td><td>349-369 DKK（约¥360-380）</td><td>含无限次乘坐</td></tr>
+        <tr><td class="cat-cell">人力</td><td>全职员工</td><td>约1,088人</td><td>含季节工约2,000人</td></tr>
+        <tr><td class="cat-cell">环保</td><td>碳中和</td><td>2018年实现</td><td></td></tr>
+        <tr><td class="cat-cell">运营</td><td>年运营天数</td><td>约240-250天</td><td>夏季+万圣节+圣诞季</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- 05 Spatial Layout -->
+<section id="layout" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag">04 — Spatial Layout</div>
+    <h2 class="section-title">空间布局与功能分区</h2>
+    <p class="section-desc">公园以中央湖泊为核心，花园小径呈放射状分布。游乐设施分布在历史建筑之间，低密度、高绿化率，夜间禁止霓虹灯，使用暖色白炽灯光——正是这种氛围启发了迪士尼乐园的"Main Street, U.S.A."。</p>
+
+    <div class="site-plan-wrap reveal">
+      <div id="parkmap" style="width:100%;height:520px;border-radius:12px;z-index:0;"></div>
+      <p style="text-align:center;font-size:0.72rem;color:var(--text-light);margin-top:8px;">▲ 交互地图：ESRI卫星底图 · WGS-84坐标 · 可缩放平移</p>
+    </div>
+
+    <div class="cards-3 reveal" style="margin-top:32px;">
+      <div class="zone-card"><span class="zone-tag">核心区</span><h4>中央湖区 (Tivoli Søen)</h4><p>公园核心景观，夜间灯光喷泉秀，仿古帆船 Fregatten Sct. Georg III。环绕湖泊分布主要餐饮和休憩区。</p></div>
+      <div class="zone-card"><span class="zone-tag">历史建筑</span><h4>孔雀剧院区</h4><p>1874年中国风格露天剧场，机械孔雀尾幕帘。上演意大利即兴喜剧，丹麦保护建筑。</p></div>
+      <div class="zone-card"><span class="zone-tag">中式文化</span><h4>亚洲区 / 中国塔</h4><p>中国风格宝塔与戏台，上书孟子名言"与民偕乐"。安徒生受此启发，两天内写出童话《夜莺》。</p></div>
+      <div class="zone-card"><span class="zone-tag">过山车区</span><h4>The Demon & 游乐集中区</h4><p>Dæmonen无地板过山车、Star Flyer高塔、Golden Tower等大型设施集中于此，面向年轻游客。</p></div>
+      <div class="zone-card"><span class="zone-tag">高端区</span><h4>Nimb 酒店 & 美食区</h4><p>摩尔风格五星级精品酒店、米其林餐厅、屋顶酒吧、美食大厅（Food Hall）构成高端餐饮住宿区。</p></div>
+      <div class="zone-card"><span class="zone-tag">演艺区</span><h4>露天舞台 & 音乐厅</h4><p>夏季周五摇滚音乐会主场地，1956年重建音乐厅。Hans Christian Lumbye（"北欧施特劳斯"）曾任音乐总监。</p></div>
+    </div>
+
+    <div style="margin-top:48px;">
+      <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--green-deep);margin-bottom:8px;">园区实景图集</h3>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:24px;">高清实景照片链接，来自Wikimedia Commons等开放许可平台。</p>
+      <div class="cards-4 reveal">
+        <a href="https://commons.wikimedia.org/wiki/File:Tivoli_Gardens_birds_view.JPG" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-card"><div class="amenity-icon">🦅</div><div class="amenity-name">鸟瞰全景</div><div class="amenity-detail">Wikimedia Commons · 公园整体鸟瞰</div></div>
+        </a>
+        <a href="https://commons.wikimedia.org/wiki/Category:D%C3%A6monen" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-card"><div class="amenity-icon">🎢</div><div class="amenity-name">The Demon 过山车</div><div class="amenity-detail">Wikimedia · B&M无地板过山车35张图集</div></div>
+        </a>
+        <a href="https://commons.wikimedia.org/wiki/File:Tivoli_-_Rutschebanen_02.JPG" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-card"><div class="amenity-icon">🚂</div><div class="amenity-name">Rutschebanen 1914</div><div class="amenity-detail">Wikimedia · 世界最古老木质过山车之一</div></div>
+        </a>
+        <a href="https://commons.wikimedia.org/wiki/Category:Pantomimeteatret" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-card"><div class="amenity-icon">🎭</div><div class="amenity-name">孔雀剧院</div><div class="amenity-detail">Wikimedia · 42张中国风格剧院照片</div></div>
+        </a>
+        <a href="https://commons.wikimedia.org/wiki/Category:Tivoli_S%C3%B8en" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-card"><div class="amenity-icon">🌊</div><div class="amenity-name">中央湖区</div><div class="amenity-detail">Wikimedia · 54张湖泊喷泉照片</div></div>
+        </a>
+        <a href="https://commons.wikimedia.org/wiki/Category:Night_in_Tivoli_Gardens_(Copenhagen)" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-card"><div class="amenity-icon">✨</div><div class="amenity-name">夜景集</div><div class="amenity-detail">Wikimedia · 130张夜间灯光照片</div></div>
+        </a>
+        <a href="https://commons.wikimedia.org/wiki/Category:Christmas_2016_in_Tivoli_Gardens" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-card"><div class="amenity-icon">🎄</div><div class="amenity-name">圣诞装饰</div><div class="amenity-detail">Wikimedia · 百万彩灯圣诞主题</div></div>
+        </a>
+        <a href="https://www.flickr.com/photos/tags/tivolicopenhagen" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+          <div class="amenity-card"><div class="amenity-icon">📷</div><div class="amenity-name">Flickr 社区</div><div class="amenity-detail">Flickr · 全球游客实拍照片</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 Investment Timeline -->
+<section id="investment">
+  <div class="section-inner">
+    <div class="section-tag">05 — Historical Timeline</div>
+    <h2 class="section-title">183年历史时间线</h2>
+    <p class="section-desc">从1843年皇家特许到2024年创纪录的425万游客，蒂沃利以"经典+小更新"策略穿越三个世纪。创始人卡斯滕森1844年名言："蒂沃利永远不会被完工。"</p>
+    <div class="cards-2 reveal">
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-year">1843</div><div class="timeline-title">正式开园</div><div class="timeline-desc">8月15日开幕，设旋转木马、风景铁路、音乐台、花圃。安徒生为首批访客</div></div>
+        <div class="timeline-item"><div class="timeline-year">1844</div><div class="timeline-title">巴扎尔大楼建成</div><div class="timeline-desc">Bazar大楼开业，带来东方集市风情。安徒生受中国风格建筑启发写出《夜莺》</div></div>
+        <div class="timeline-item"><div class="timeline-year">1874</div><div class="timeline-title">孔雀剧院建成</div><div class="timeline-desc">中国风格Pantomime Theatre，机械孔雀尾幕帘，至今每天展开</div></div>
+        <div class="timeline-item"><div class="timeline-year">1883</div><div class="timeline-title">率先引入电灯</div><div class="timeline-desc">欧洲最早使用电灯照明的公共场所之一，开创夜间经济模式</div></div>
+        <div class="timeline-item"><div class="timeline-year">1914</div><div class="timeline-title">Rutschebanen 建成</div><div class="timeline-desc">木质过山车6月12日开建，至今仍由手动刹车员操作，世界最古老之一</div></div>
+        <div class="timeline-item"><div class="timeline-year">1944</div><div class="timeline-title">二战纵火袭击</div><div class="timeline-desc">纳粹合作者纵火烧毁音乐厅、玻璃厅剧院，Rutschebanen受损，25天内修复重开</div></div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-year">1951</div><div class="timeline-title">迪士尼造访</div><div class="timeline-desc">华特·迪士尼到访，详记灯光、座椅、氛围，称"一直是我想要的一切"。4年后迪士尼乐园开业</div></div>
+        <div class="timeline-item"><div class="timeline-year">1956</div><div class="timeline-title">新音乐厅建成</div><div class="timeline-desc">重建Tivoli Concert Hall，当时北欧最大音乐厅</div></div>
+        <div class="timeline-item"><div class="timeline-year">2004</div><div class="timeline-title">The Demon 开建</div><div class="timeline-desc">B&M无地板过山车，开园年创历史游客纪录</div></div>
+        <div class="timeline-item"><div class="timeline-year">2006</div><div class="timeline-title">Star Flyer 落成</div><div class="timeline-desc">80米高旋转观景塔，北欧最高之一</div></div>
+        <div class="timeline-item"><div class="timeline-year">2018</div><div class="timeline-title">实现碳中和</div><div class="timeline-desc">全面采用可再生能源，成为全球最绿色游乐园之一</div></div>
+        <div class="timeline-item"><div class="timeline-year">2023-24</div><div class="timeline-title">营收创纪录</div><div class="timeline-desc">180周年庆，2023年营收12.14亿DKK，2024年前三季游客增势强劲</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 Operations -->
+<section id="operations" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag">06 — Operations</div>
+    <h2 class="section-title">运营指标</h2>
+    <p class="section-desc">Tivoli A/S为哥本哈根证交所上市公司（TIV.CO），自创立以来从未出现赤字。收入结构为"30%门票+40%餐饮零售+18%演出+12%其他"的多元组合。</p>
+    <div class="cards-4 reveal">
+      <div class="kpi-card"><div class="kpi-num">425万</div><div class="kpi-label">2024年游客量（人次）</div><div class="kpi-sub">北欧第一，欧洲第五热门游乐园</div></div>
+      <div class="kpi-card"><div class="kpi-num gold">12.50亿</div><div class="kpi-label">2024年营收（DKK，预期）</div><div class="kpi-sub">约合人民币12.9亿元</div></div>
+      <div class="kpi-card"><div class="kpi-num">2.28亿</div><div class="kpi-label">2023年EBITDA（DKK）</div><div class="kpi-sub">EBITDA利润率约18.8%</div></div>
+      <div class="kpi-card"><div class="kpi-num gold">1.11亿</div><div class="kpi-label">2023年税前利润（DKK）</div><div class="kpi-sub">约合人民币1.14亿元</div></div>
+    </div>
+
+    <div style="margin-top:48px;">
+      <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--green-deep);margin-bottom:16px;">收入结构分析</h3>
+      <div class="cards-4 reveal">
+        <div class="amenity-card"><div class="amenity-icon">🎫</div><div class="amenity-name">门票收入 ~35%</div><div class="amenity-detail">入园票+通票，会员复购率超60%</div></div>
+        <div class="amenity-card"><div class="amenity-icon">🍽️</div><div class="amenity-name">餐饮零售 ~38%</div><div class="amenity-detail">最大收入来源，30余家餐饮店</div></div>
+        <div class="amenity-card"><div class="amenity-icon">🎵</div><div class="amenity-name">演出活动 ~18%</div><div class="amenity-detail">音乐会、烟花秀、季节性活动</div></div>
+        <div class="amenity-card"><div class="amenity-icon">🏨</div><div class="amenity-name">其他 ~10%</div><div class="amenity-detail">Nimb酒店、景观休憩、租赁</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 Core Technical -->
+<section id="tech">
+  <div class="section-inner">
+    <div class="section-tag">07 — Technical Indicators</div>
+    <h2 class="section-title">核心技术与规模指标</h2>
+    <p class="section-desc">涵盖游乐设施、景观环境、建筑遗产、商业配套四大板块（1 DKK ≈ 1.03 CNY，2025年5月）。</p>
+    <table class="data-table reveal">
+      <thead><tr><th>类别</th><th>指标</th><th>数值</th></tr></thead>
+      <tbody>
+        <tr><td class="cat-cell" rowspan="4">🎢 游乐设施</td><td>游乐设施总数</td><td>约25座</td></tr>
+        <tr><td>过山车</td><td>4座（含1914年Rutschebanen木质、2004年Dæmonen无地板）</td></tr>
+        <tr><td>水上游乐</td><td>2项（The Mine黑暗水道、Flying Trunk暗骑乘）</td></tr>
+        <tr><td>儿童设施</td><td>约15项（Petzi's World、Vintage Cars等）</td></tr>
+        <tr><td class="cat-cell" rowspan="4">🌳 景观环境</td><td>花卉种植量</td><td>超40万株（季节性更换）</td></tr>
+        <tr><td>绿地与水面比例</td><td>约50-60%</td></tr>
+        <tr><td>圣诞彩灯</td><td>超100万盏+1,000棵装饰圣诞树</td></tr>
+        <tr><td>照明风格</td><td>禁止霓虹灯，全园暖色白炽灯光</td></tr>
+        <tr><td class="cat-cell" rowspan="4">🏛️ 建筑遗产</td><td>保护建筑</td><td>多座丹麦国家级保护建筑</td></tr>
+        <tr><td>剧场/演出场所</td><td>4座（孔雀剧院、音乐厅、露天舞台、Orangery）</td></tr>
+        <tr><td>酒店</td><td>Nimb Hotel · 五星级精品 · 38间客房</td></tr>
+        <tr><td>历史建筑群</td><td>Bazar大楼、玻璃厅剧院、主入口摩尔风格门楼</td></tr>
+        <tr><td class="cat-cell" rowspan="3">🍽️ 商业配套</td><td>餐饮门店</td><td>30余家（Fine Dining→街头小吃全覆盖）</td></tr>
+        <tr><td>零售门店</td><td>主题商店、纪念品店</td></tr>
+        <tr><td>年运营天数</td><td>约240-250天（夏季+万圣节+圣诞三季）</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 09 Highlights -->
+<section id="amenities" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag">08 — Cultural Significance</div>
+    <h2 class="section-title">文化意义与特色亮点</h2>
+    <p class="section-desc">蒂沃利不仅是一座游乐园，更是全球主题公园产业的"精神原点"。其主要文化贡献远超娱乐范畴。</p>
+    <div class="cards-3 reveal">
+      <div class="amenity-card"><div class="amenity-icon">🏰</div><div class="amenity-name">迪士尼乐园的灵感源泉</div><div class="amenity-detail">1951年华特·迪士尼造访后深受启发。卡斯滕森"永不完工"理念被迪士尼引用为核心信条。Main Street, U.S.A.的灯光氛围直接取材于蒂沃利。</div></div>
+      <div class="amenity-card"><div class="amenity-icon">📖</div><div class="amenity-name">安徒生与《夜莺》</div><div class="amenity-detail">1843年安徒生受园内中国风格建筑启发，两天内写出其唯以中国为背景的童话《夜莺》，成为丹麦文学与中国文化的桥梁。</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🎭</div><div class="amenity-name">孔雀剧院 · 喜剧传统</div><div class="amenity-detail">欧洲最古老运营中的中国风格露天剧场。每天上演意大利即兴喜剧（commedia dell'arte），机械孔雀尾幕帘需5名操作员展开。</div></div>
+      <div class="amenity-card"><div class="amenity-icon">💡</div><div class="amenity-name">夜间经济开创者</div><div class="amenity-detail">1883年率先引入电灯照明。至今坚持暖色白炽灯、拒绝霓虹灯，营造独一无二的"黄金时代"夜间氛围。</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🎺</div><div class="amenity-name">蒂沃利少年卫队</div><div class="amenity-detail">世界历史最悠久的少年卫队，免费向7-16岁青少年提供音乐教育。红色制服+熊皮帽，丹麦国民文化象征。</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🌿</div><div class="amenity-name">碳中和先行者</div><div class="amenity-detail">2018年全面实现碳中和。坐落在市中心的8公顷花园，是哥本哈根的"城市绿肺"。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 Seasonal Activities -->
+<section id="future">
+  <div class="section-inner">
+    <div class="section-tag">09 — Seasonal Operations</div>
+    <h2 class="section-title">四季活动体系</h2>
+    <p class="section-desc">蒂沃利以四季主题活动著称，将年运营周期分为四大特色季节，各季节主题鲜明、活动独特。</p>
+    <div class="cards-4 reveal">
+      <div class="info-card"><div class="info-card-icon">🌸</div><div class="info-card-label">夏季季 3月-9月</div><div class="info-card-value">周五摇滚露天音乐会（Friday Rock）· 古典与爵士演出 · 每周六23:45烟花表演 · 超40万株花卉</div></div>
+      <div class="info-card"><div class="info-card-icon">🎃</div><div class="info-card-label">万圣节季 10月-11月</div><div class="info-card-value">家庭友好+成人惊悚双线主题 · 南瓜装饰 · 鬼屋体验 · 10月中旬至11月初</div></div>
+      <div class="info-card"><div class="info-card-icon">🎄</div><div class="info-card-label">圣诞季 11月-12月</div><div class="info-card-value">超100万盏彩灯 · 1,000棵圣诞树 · 16万件装饰品 · 真冰滑冰场 · 北欧圣诞集市</div></div>
+      <div class="info-card"><div class="info-card-icon">🔧</div><div class="info-card-label">冬季闭园 1月-3月</div><div class="info-card-value">年度检修与维护 · 新设施筹备 · 花园重新种植规划 · 约8-10周</div></div>
+    </div>
+    <div class="cards-3 reveal" style="margin-top:16px;">
+      <div class="kpi-card"><div class="kpi-num gold">30+场</div><div class="kpi-label">夏季Friday Rock演唱会</div><div class="kpi-sub">国际知名乐队+本土音乐人</div></div>
+      <div class="kpi-card"><div class="kpi-num">100万+</div><div class="kpi-label">圣诞彩灯数量</div><div class="kpi-sub">全园暖色灯光矩阵</div></div>
+      <div class="kpi-card"><div class="kpi-num">182年</div><div class="kpi-label">持续运营历史</div><div class="kpi-sub">1843-2025，从未中断</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 References -->
+<section id="references">
+  <div class="section-inner">
+    <div class="section-tag">10 — External Resources</div>
+    <h2 class="section-title">延伸资料库</h2>
+    <p class="section-desc">精选5个高质量外部站点，涵盖官方资料、深度分析、自由图库和视频平台。</p>
+    <div class="cards-2 reveal">
+      <a href="https://www.tivoli.dk/en/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+        <div class="info-card" style="cursor:pointer;">
+          <div class="info-card-icon">🏛️</div>
+          <div class="info-card-label">01 / 蒂沃利公园官网</div>
+          <div class="info-card-value">官方英文网站 — 园区信息、活动日历、门票预订、历史资料等权威一手来源。</div>
+        </div>
+      </a>
+      <a href="https://commons.wikimedia.org/wiki/Category:Tivoli_Gardens_(Copenhagen)" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+        <div class="info-card" style="cursor:pointer;">
+          <div class="info-card-icon">🖼️</div>
+          <div class="info-card-label">02 / Wikimedia Commons</div>
+          <div class="info-card-value">自由版权图库 — 数百张蒂沃利高清照片，涵盖建筑、夜景、四季装饰，可直接用于报告。</div>
+        </div>
+      </a>
+      <a href="https://www.thepaper.cn/newsDetail_forward_22710638" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+        <div class="info-card" style="cursor:pointer;">
+          <div class="info-card-icon">📰</div>
+          <div class="info-card-label">03 / 澎湃新闻 · 深度分析</div>
+          <div class="info-card-value">"给迪士尼灵感的乐园到底什么来头？" —— 中文世界最全面的蒂沃利历史与运营分析。</div>
+        </div>
+      </a>
+      <a href="https://www.euronews.com/travel/2018/02/07/the-place-that-inspired-walt-disney-celebrates-its-175th-anniversary" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+        <div class="info-card" style="cursor:pointer;">
+          <div class="info-card-icon">🎬</div>
+          <div class="info-card-label">04 / Euronews 专题报道</div>
+          <div class="info-card-value">"启发迪士尼的地方庆祝175周年" —— 英文深度视频报道，含历史影像资料。</div>
+        </div>
+      </a>
+      <a href="https://en.wikipedia.org/wiki/Tivoli_Gardens" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+        <div class="info-card" style="cursor:pointer;">
+          <div class="info-card-icon">📚</div>
+          <div class="info-card-label">05 / Wikipedia · Tivoli Gardens</div>
+          <div class="info-card-value">英文维基百科条目 — 历史沿革、设施清单、文化影响等系统文献综述，含完整引用来源。</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="floating-nav">
+  <a href="https://joanna2joanna.github.io/casestudy/" title="回首页">&#127968;</a>
+  <a href="#" id="back-to-top" title="回顶部">&#8593;</a>
+</div>
+
+<p style="font-family:'DM Mono',monospace;font-size:0.82rem;text-align:center;margin-bottom:0.5rem;opacity:0.7;">
+  访问 <span id="busuanzi_value_site_pv"></span> 次 · 访客 <span id="busuanzi_value_site_uv"></span> 人
+</p>
+
+<footer>
+  <p><strong>蒂沃利公园 案例研究</strong> — 世界最古老游乐园之一 · 迪士尼灵感源泉</p>
+  <p style="margin-top:6px;">数据来源：Tivoli A/S 公开财报 · Wikipedia · 澎湃新闻 · Euronews · Wikimedia Commons &nbsp;|&nbsp; 编制时间：2026年5月</p>
+  <p style="margin-top:4px;font-size:0.72rem;color:rgba(255,255,255,0.3);">本报告仅供案例研究参考，不构成投资建议。汇率：1 DKK ≈ 1.03 CNY（2025年5月）</p>
+  <p style="margin-top:1rem;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例研究首页</a></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ── Zone markers (WGS-84, ESRI tiles for overseas project) ──
+var tivoliZones = [
+  { name: '主入口<br><small>Main Entrance</small>', lat: 55.6738, lng: 12.5678, color: '#1B5E3A' },
+  { name: 'The Demon<br><small>Dæmonen过山车</small>', lat: 55.6728, lng: 12.5703, color: '#C62828' },
+  { name: 'Rutschebanen<br><small>1914木质过山车</small>', lat: 55.6727, lng: 12.5670, color: '#6D4C41' },
+  { name: 'Star Flyer<br><small>80m观景塔</small>', lat: 55.6725, lng: 12.5678, color: '#0277BD' },
+  { name: '孔雀剧院<br><small>Pantomime Theatre</small>', lat: 55.6745, lng: 12.5665, color: '#D4A843' },
+  { name: 'Nimb 酒店<br><small>Hotel & Dining</small>', lat: 55.6738, lng: 12.5675, color: '#4A148C' },
+  { name: '中央湖<br><small>Tivoli Søen</small>', lat: 55.6735, lng: 12.5685, color: '#00838F' },
+  { name: '音乐厅<br><small>Concert Hall</small>', lat: 55.6740, lng: 12.5690, color: '#E65100' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('parkmap');
+  if (!el) return;
+  var map = L.map('parkmap', { scrollWheelZoom: false }).setView([55.6736, 12.5683], 17);
+
+  var satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+  var topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+
+  satLayer.addTo(map);
+  L.control.layers({ '卫星图': satLayer, '地形图': topoLayer }, null, { position: 'topright' }).addTo(map);
+
+  addZoneMarkers(map, tivoliZones);
+
+  var parkCenter = { lat: 55.6736, lng: 12.5683 };
+  L.circle([parkCenter.lat, parkCenter.lng], { radius: 160, color: '#1B5E3A', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+
+  // ── Fallback for tile loading ──
+  var tileLoaded = false;
+  map.on('tileload', function() { tileLoaded = true; });
+  setTimeout(function() {
+    if (!tileLoaded) {
+      var fb = document.createElement('div');
+      fb.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.9);z-index:10;border-radius:12px;font-size:0.9rem;color:#8C8078;';
+      fb.textContent = '地图瓦片加载超时，请检查网络连接后刷新页面';
+      el.appendChild(fb);
+    }
+  }, 8000);
+});
+
+// ── Scroll reveal ──
+var observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── Nav highlight ──
+var sections = document.querySelectorAll('section[id]');
+var navLinks = document.querySelectorAll('nav a');
+window.addEventListener('scroll', function() {
+  var current = '';
+  sections.forEach(function(s) { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
+  navLinks.forEach(function(a) {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+
+// ── Back to top ──
+var backToTop = document.getElementById('back-to-top');
+window.addEventListener('scroll', function() {
+  if (window.scrollY > 600) { backToTop.classList.add('show'); }
+  else { backToTop.classList.remove('show'); }
+});
+backToTop.addEventListener('click', function(e) { e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>

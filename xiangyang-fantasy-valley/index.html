@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>襄阳华侨城奇幻谷 案例研究 — 中国首个宇宙探索主题乐园 · 华侨城3.0代旗舰</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+:root {
+  --purple: #6A1B9A;
+  --purple-deep: #1A0A2E;
+  --gold: #F5A623;
+  --gold-light: #FCD34D;
+  --cyan: #00BCD4;
+  --warm-white: #FDF8F3;
+  --cream: #F5F0F8;
+  --white: #FFFFFF;
+  --text: #1C1C1C;
+  --text-muted: #5C5858;
+  --text-light: #8C8888;
+  --border: #E0D8E8;
+  --shadow-sm: 0 1px 3px rgba(10,22,40,0.06);
+  --shadow-md: 0 4px 20px rgba(10,22,40,0.08);
+  --shadow-lg: 0 12px 40px rgba(10,22,40,0.12);
+  --radius-sm: 6px; --radius: 12px; --radius-lg: 20px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+  --font-mono: 'DM Mono', 'SF Mono', monospace;
+  --max-width: 1240px;
+  --nav-h: 64px;
+}
+
+html { font-size: 17px; scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--warm-white);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--nav-h);
+  background: rgba(26,10,46,0.94);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center; gap: 2px;
+  padding: 0 20px; overflow-x: auto;
+}
+nav a {
+  color: rgba(255,255,255,0.68); text-decoration: none;
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.03em;
+  padding: 6px 12px; border-radius: 20px; white-space: nowrap;
+  transition: all 0.25s ease;
+}
+nav a:hover, nav a.active { color: var(--gold-light); background: rgba(245,166,35,0.12); }
+
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(165deg, #0D0715 0%, #1A0A2E 20%, #2D1548 50%, #1A0A2E 75%, #0D0715 100%);
+  overflow: hidden; text-align: center; padding: 120px 24px 80px;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 25% 80%, rgba(106,27,154,0.3) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 75% 25%, rgba(0,188,212,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(252,211,77,0.06) 0%, transparent 70%);
+}
+.hero-bg-pattern {
+  position: absolute; inset: 0; opacity: 0.03;
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.5) 2px, rgba(255,255,255,0.5) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.5) 2px, rgba(255,255,255,0.5) 4px);
+}
+.hero-content { position: relative; z-index: 2; max-width: 800px; }
+.hero-badge {
+  display: inline-block; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gold-light); border: 1px solid rgba(252,211,77,0.35);
+  padding: 6px 18px; border-radius: 20px; margin-bottom: 32px;
+}
+.hero h1 {
+  font-family: var(--font-display); font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 900; color: var(--white); line-height: 1.15;
+  letter-spacing: 0.03em; margin-bottom: 20px;
+}
+.hero h1 span { color: var(--gold-light); }
+.hero-sub {
+  font-size: 1.05rem; color: rgba(255,255,255,0.55); line-height: 1.6;
+  max-width: 580px; margin: 0 auto 48px;
+}
+.hero-kpis {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+  max-width: 720px; margin: 0 auto;
+  background: rgba(255,255,255,0.06); border-radius: 16px; overflow: hidden;
+}
+.hero-kpi { background: rgba(26,10,46,0.7); padding: 28px 20px; backdrop-filter: blur(8px); }
+.hero-kpi-num { font-family: var(--font-display); font-size: 2rem; font-weight: 900; color: var(--gold-light); line-height: 1.1; }
+.hero-kpi-label { font-size: 0.72rem; color: rgba(255,255,255,0.5); margin-top: 6px; letter-spacing: 0.03em; }
+
+section { padding: 88px 24px; }
+.section-inner { max-width: var(--max-width); margin: 0 auto; }
+.section-tag { font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; }
+.section-title { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--purple-deep); margin-bottom: 12px; letter-spacing: 0.02em; }
+.section-desc { font-size: 0.95rem; color: var(--text-muted); max-width: 560px; margin-bottom: 48px; line-height: 1.7; }
+.sub-heading { font-family: var(--font-display); font-size: 1.1rem; color: var(--purple-deep); margin: 32px 0 16px; }
+
+.cards-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+.cards-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.cards-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+.info-card { background: var(--white); border-radius: var(--radius); padding: 28px 24px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); transition: box-shadow 0.3s; }
+.info-card:hover { box-shadow: var(--shadow-md); }
+.info-card-icon { font-size: 1.5rem; margin-bottom: 12px; }
+.info-card-label { font-size: 0.72rem; color: var(--text-light); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
+.info-card-value { font-size: 0.95rem; font-weight: 600; color: var(--purple-deep); line-height: 1.4; }
+
+.site-plan-wrap { background: var(--white); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-md); border: 1px solid var(--border); margin-bottom: 48px; }
+
+.timeline { position: relative; padding-left: 32px; }
+.timeline::before { content: ''; position: absolute; left: 10px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(to bottom, var(--purple), var(--cyan)); }
+.timeline-item { position: relative; margin-bottom: 32px; }
+.timeline-item::before { content: ''; position: absolute; left: -26px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--purple); border: 2px solid var(--warm-white); box-shadow: 0 0 0 2px var(--purple); }
+.timeline-item:nth-child(even)::before { background: var(--cyan); box-shadow: 0 0 0 2px var(--cyan); }
+.timeline-year { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500; color: var(--purple); letter-spacing: 0.06em; }
+.timeline-item:nth-child(even) .timeline-year { color: #00838F; }
+.timeline-title { font-weight: 600; font-size: 0.95rem; color: var(--purple-deep); margin-top: 2px; }
+.timeline-desc { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; }
+
+.kpi-card { background: var(--white); border-radius: var(--radius); padding: 32px 28px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); text-align: center; }
+.kpi-num { font-family: var(--font-display); font-size: 2.4rem; font-weight: 900; color: var(--purple-deep); line-height: 1.1; }
+.kpi-num.gold { color: #B88A1E; }
+.kpi-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; }
+.kpi-sub { font-size: 0.72rem; color: var(--text-light); margin-top: 4px; }
+
+.data-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
+.data-table th { background: var(--purple-deep); color: var(--white); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 14px 20px; text-align: left; }
+.data-table td { padding: 12px 20px; font-size: 0.88rem; color: var(--text); border-bottom: 1px solid var(--border); }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table .cat-cell { font-weight: 600; color: var(--purple-deep); background: var(--cream); }
+
+.section-alt { background: var(--cream); }
+
+.zone-card { background: var(--white); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow-sm); border-left: 4px solid var(--purple); transition: box-shadow 0.3s; }
+.zone-card:nth-child(2) { border-left-color: #00BCD4; }
+.zone-card:nth-child(3) { border-left-color: #E64A19; }
+.zone-card:nth-child(4) { border-left-color: #F5A623; }
+.zone-card:nth-child(5) { border-left-color: #2E7D32; }
+.zone-card:nth-child(6) { border-left-color: #1565C0; }
+.zone-card:hover { box-shadow: var(--shadow-md); }
+.zone-card h4 { font-size: 0.95rem; color: var(--purple-deep); margin-bottom: 6px; }
+.zone-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+.zone-tag { display: inline-block; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 10px; margin-bottom: 8px; background: rgba(106,27,154,0.08); color: var(--purple); }
+
+.amenity-card { background: var(--white); border-radius: var(--radius); padding: 28px 24px; text-align: center; box-shadow: var(--shadow-sm); border: 1px solid var(--border); transition: box-shadow 0.3s; }
+.amenity-card:hover { box-shadow: var(--shadow-md); }
+.amenity-icon { font-size: 2rem; margin-bottom: 10px; }
+.amenity-name { font-weight: 600; font-size: 0.9rem; color: var(--purple-deep); }
+.amenity-detail { font-size: 0.76rem; color: var(--text-muted); margin-top: 4px; }
+
+footer { background: var(--purple-deep); text-align: center; padding: 48px 24px; color: rgba(255,255,255,0.5); font-size: 0.8rem; line-height: 1.8; }
+footer strong { color: var(--gold-light); }
+
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+.floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: var(--purple); }
+.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: var(--purple); color: #fff; }
+#back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
+#back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
+
+@media (max-width: 1024px) { .cards-6 { grid-template-columns: repeat(3, 1fr); } .cards-4 { grid-template-columns: repeat(2, 1fr); } .hero-kpis { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .cards-6, .cards-4, .cards-3, .cards-2 { grid-template-columns: 1fr; } .hero-kpis { grid-template-columns: 1fr 1fr; } nav { gap: 0; } nav a { padding: 6px 10px; font-size: 0.68rem; } .section-title { font-size: 1.5rem; } .hero h1 { font-size: 2rem; } }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="#hero">总览</a><a href="#overview">概览</a><a href="#design">设施</a><a href="#summary">总表</a><a href="#layout">布局</a><a href="#investment">历史</a><a href="#operations">运营</a><a href="#tech">指标</a><a href="#amenities">亮点</a><a href="#references">资料库</a>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Theme Park Case Study · 数据截至 2026 年 5 月</div>
+    <h1><span>襄阳华侨城奇幻谷</span><br>案例研究</h1>
+    <p class="hero-sub">中国首个大型宇宙探索主题乐园 · 华侨城3.0代旗舰<br>六大平行宇宙主题区 · 22台国际级游乐设备 · 11座沉浸式科技场馆</p>
+    <div class="hero-kpis reveal">
+      <div class="hero-kpi"><div class="hero-kpi-num">2022</div><div class="hero-kpi-label">开园年份</div></div>
+      <div class="hero-kpi"><div class="hero-kpi-num">45 公顷</div><div class="hero-kpi-label">奇幻谷面积</div></div>
+      <div class="hero-kpi"><div class="hero-kpi-num">¥40亿</div><div class="hero-kpi-label">单园投资</div></div>
+      <div class="hero-kpi"><div class="hero-kpi-num">1000万+</div><div class="hero-kpi-label">度假区累计游客</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="overview">
+  <div class="section-inner">
+    <div class="section-tag">01 — Project Overview</div>
+    <h2 class="section-title">项目概览</h2>
+    <p class="section-desc">襄阳华侨城奇幻谷是华侨城集团旗下"奇幻系"（3.0代）旗舰项目，2022年4月29日开园。以"平行时空，宇宙探索"为主题，六大主题区代表六个平行宇宙。度假区总面积8.48平方公里，总投资约700亿元（文旅投资超80亿元），属华侨城在中部地区最大手笔。</p>
+    <div class="cards-6 reveal">
+      <div class="info-card"><div class="info-card-icon">🎢</div><div class="info-card-label">开业时间</div><div class="info-card-value">2022年4月29日试营<br>2022年5月20日正式</div></div>
+      <div class="info-card"><div class="info-card-icon">🏗️</div><div class="info-card-label">开发商</div><div class="info-card-value">华侨城集团（OCT）<br>联合湖北交投集团</div></div>
+      <div class="info-card"><div class="info-card-icon">📍</div><div class="info-card-label">位置</div><div class="info-card-value">湖北省襄阳市东津新区<br>奇幻大道66号</div></div>
+      <div class="info-card"><div class="info-card-icon">📐</div><div class="info-card-label">面积</div><div class="info-card-value">奇幻谷45公顷<br>度假区8.48 km²</div></div>
+      <div class="info-card"><div class="info-card-icon">⭐</div><div class="info-card-label">景区等级</div><div class="info-card-value">国家4A级旅游景区<br>2023年评定</div></div>
+      <div class="info-card"><div class="info-card-icon">🎫</div><div class="info-card-label">门票价格</div><div class="info-card-value">¥199-268（成人全日）<br>年卡¥399（成人）</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="design" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag">02 — Core Attractions</div>
+    <h2 class="section-title">核心游乐设施 · 供应商</h2>
+    <p class="section-desc">22台国际级游乐设备 + 11座沉浸式科技场馆。金马游乐（国产龙头A股上市公司）提供5项核心设备，国际品牌补充高端设施。</p>
+    <table class="data-table reveal">
+      <thead><tr><th>项目名称</th><th>类型</th><th>所属主题区</th><th>关键参数</th><th>制造商</th></tr></thead>
+      <tbody>
+        <tr><td><strong>达芬奇飞翔</strong></td><td>宽翼过山车</td><td>发现湾</td><td>高55m，长1,059m，时速100km/h，华中最长科幻风格宽翼过山车</td><td>国际品牌</td></tr>
+        <tr><td><strong>雪山飞车</strong></td><td>雪崩主题过山车</td><td>昆仑幻境</td><td>中国首座雪山剧情式过山车，倒轨俯冲+雪崩特效</td><td>金马游乐</td></tr>
+        <tr><td><strong>星际历险</strong></td><td>7D飞行影院</td><td>异星港</td><td>国内首个星际穿越7D影院，8K LED球幕，85度倾斜座椅，1,230m²</td><td>—</td></tr>
+        <tr><td><strong>地宫历险</strong></td><td>元宇宙互动演艺</td><td>昆仑幻境</td><td>国内首台元宇宙互动演艺秀，沉浸式地宫探险</td><td>—</td></tr>
+        <tr><td><strong>方舟大冒险</strong></td><td>激流勇进</td><td>鲲之方舟</td><td>国内最高动物主题激流勇进，26m高台冲下</td><td>金马游乐</td></tr>
+        <tr><td><strong>深蓝探秘</strong></td><td>观光潜水艇水族馆</td><td>鲲之方舟</td><td>国内首个创新潜水艇水族馆，含美人鱼表演</td><td>—</td></tr>
+        <tr><td><strong>虫巢突围</strong></td><td>行走式互动射击</td><td>异星港</td><td>国内首个行走式互动射击，2条路线3个关卡</td><td>—</td></tr>
+        <tr><td><strong>秘境漂流</strong></td><td>火山主题漂流</td><td>发现湾</td><td>680m蜿蜒河道，穿越熔岩山洞</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="summary">
+  <div class="section-inner">
+    <div class="section-tag">03 — Master Data Table</div>
+    <h2 class="section-title">技术指标总表</h2>
+    <div style="overflow-x:auto;">
+    <table class="data-table reveal" style="min-width:900px;">
+      <thead><tr><th>维度</th><th>指标</th><th>数据</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td class="cat-cell">基础</td><td>开业时间</td><td>2022年4月29日</td><td>试运营</td></tr>
+        <tr><td class="cat-cell">基础</td><td>位置</td><td>湖北襄阳东津新区奇幻大道66号</td><td>距襄阳东站约5km</td></tr>
+        <tr><td class="cat-cell">规模</td><td>奇幻谷面积</td><td>45万平方米（45公顷）</td><td>0.45 km²</td></tr>
+        <tr><td class="cat-cell">规模</td><td>度假区总面积</td><td>8.48 km²</td><td>四园一镇七酒店</td></tr>
+        <tr><td class="cat-cell">投资</td><td>度假区总投资</td><td>约¥700亿元</td><td>含住宅等综合开发</td></tr>
+        <tr><td class="cat-cell">投资</td><td>文旅部分投资</td><td>超¥80亿元</td><td></td></tr>
+        <tr><td class="cat-cell">投资</td><td>奇幻谷单园投资</td><td>约¥40亿元</td><td></td></tr>
+        <tr><td class="cat-cell">运营</td><td>度假区累计游客</td><td>超1,000万人次（截至2025年底）</td><td></td></tr>
+        <tr><td class="cat-cell">运营</td><td>累计文旅消费</td><td>¥70亿元</td><td></td></tr>
+        <tr><td class="cat-cell">体验</td><td>主题区</td><td>6大区</td><td>平行宇宙主题</td></tr>
+        <tr><td class="cat-cell">体验</td><td>游乐设备</td><td>22台国际级</td><td></td></tr>
+        <tr><td class="cat-cell">体验</td><td>科技场馆</td><td>11座</td><td>AI+AR+元宇宙技术</td></tr>
+        <tr><td class="cat-cell">票价</td><td>成人全日票</td><td>¥199-268</td><td>动态定价</td></tr>
+        <tr><td class="cat-cell">票价</td><td>成人年卡</td><td>¥399（畅玩卡）</td><td>单园</td></tr>
+        <tr><td class="cat-cell">人力</td><td>度假区员工</td><td>约3,000人（直接就业）</td><td></td></tr>
+        <tr><td class="cat-cell">景区</td><td>等级</td><td>国家4A级</td><td>2023年评定</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<section id="layout" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag">04 — Spatial Layout</div>
+    <h2 class="section-title">空间布局：六大平行宇宙主题区</h2>
+    <p class="section-desc">以"平行时空，宇宙探索"为主题，六个主题区围绕中心湖区展开。高德卫星底图，GCJ-02坐标系。</p>
+
+    <div class="site-plan-wrap reveal">
+      <div id="parkmap" style="width:100%;height:520px;border-radius:12px;z-index:0;"></div>
+      <p style="text-align:center;font-size:0.72rem;color:var(--text-light);margin-top:8px;">▲ 交互地图：高德卫星底图 · GCJ-02坐标 · 可缩放平移</p>
+    </div>
+
+    <div class="cards-3 reveal" style="margin-top:32px;">
+      <div class="zone-card"><span class="zone-tag">主入口</span><h4>奇幻大道 / 星球集市</h4><p>星际宇宙主题入口区。星云城堡、主题商店、游客服务中心。作为六大平行宇宙的"门户"。</p></div>
+      <div class="zone-card"><span class="zone-tag">科幻探险</span><h4>发现港湾 / 发现湾</h4><p>中世纪×科幻探险风格。达芬奇飞翔（55m宽翼过山车）+秘境漂流（680m火山漂流）。</p></div>
+      <div class="zone-card"><span class="zone-tag">未来科技</span><h4>异星港</h4><p>未来高科技外星世界。星际历险（7D飞行影院）+虫巢突围（行走式互动射击）。</p></div>
+      <div class="zone-card"><span class="zone-tag">蒸汽朋克</span><h4>疯狂机械城</h4><p>蒸汽朋克机械世界。觉醒战神特技秀 + 巨型机械麒麟"金璃"（高9m/长15m/重40吨）。</p></div>
+      <div class="zone-card"><span class="zone-tag">中国神话</span><h4>鲲之方舟</h4><p>庄子《逍遥游》鲲鹏IP主题。方舟大冒险（26m激流勇进）+深蓝探秘（潜水艇水族馆）+熊猫部落。</p></div>
+      <div class="zone-card"><span class="zone-tag">东方奇幻</span><h4>昆仑幻境</h4><p>中国传统奇幻考古。雪山飞车（雪崩过山车）+地宫历险（元宇宙互动演艺）。</p></div>
+    </div>
+
+    <div style="margin-top:48px;">
+      <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--purple-deep);margin-bottom:8px;">园区实景图集</h3>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:24px;">来自官方媒体、视觉中国、穷游网等来源。</p>
+      <div class="cards-4 reveal">
+        <a href="https://www.vcg.com/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="amenity-card"><div class="amenity-icon">📷</div><div class="amenity-name">视觉中国 · 航拍</div><div class="amenity-detail">VCG高分辨率航拍星云城堡</div></div></a>
+        <a href="https://biu.qyer.com/p/feGLI5dlnL_WK8j0YdQS0Q.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="amenity-card"><div class="amenity-icon">📝</div><div class="amenity-name">穷游网游记</div><div class="amenity-detail">游客实拍·过山车+金璃+烟花</div></div></a>
+        <a href="https://www.earthol.com/view-14195.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="amenity-card"><div class="amenity-icon">🛰️</div><div class="amenity-name">地球在线 · 卫星图</div><div class="amenity-detail">高清卫星影像+园区标注</div></div></a>
+        <a href="http://hb.cri.cn/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="amenity-card"><div class="amenity-icon">📰</div><div class="amenity-name">国际在线 · 官方供图</div><div class="amenity-detail">摄影杜元·官方授权高清图</div></div></a>
+        <a href="http://m.cnhubei.com/content/2023-08/01/content_16327256.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="amenity-card"><div class="amenity-icon">📊</div><div class="amenity-name">湖北日报 · 运营报道</div><div class="amenity-detail">2023上半年迎客156万人次</div></div></a>
+        <a href="https://www.tripvivid.com/deep/38837.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="amenity-card"><div class="amenity-icon">🔬</div><div class="amenity-name">Tripvivid · 行业分析</div><div class="amenity-detail">"从欢乐系到奇幻系"深度研究</div></div></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="investment">
+  <div class="section-inner">
+    <div class="section-tag">05 — Development Timeline</div>
+    <h2 class="section-title">发展时间线</h2>
+    <div class="cards-2 reveal">
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-year">2018.02</div><div class="timeline-title">项目公司注册</div><div class="timeline-desc">襄阳华侨城文旅发展有限公司正式成立</div></div>
+        <div class="timeline-item"><div class="timeline-year">2018.08.30</div><div class="timeline-title">正式开工奠基</div><div class="timeline-desc">东津新区举行开工仪式，华侨城集团总经理姚军、襄阳市长出席</div></div>
+        <div class="timeline-item"><div class="timeline-year">2020.06</div><div class="timeline-title">奇梦海滩率先开园</div><div class="timeline-desc">水乐园为度假区首个开放项目</div></div>
+        <div class="timeline-item"><div class="timeline-year">2021</div><div class="timeline-title">奇趣童年+奇妙镇+云海汤泉</div><div class="timeline-desc">亲子乐园、商业小镇、温泉酒店密集开业</div></div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-year">2022.04.29</div><div class="timeline-title">奇幻谷试运营</div><div class="timeline-desc">盛大庆典启幕，五一假期接待约25万人次</div></div>
+        <div class="timeline-item"><div class="timeline-year">2022</div><div class="timeline-title">省级旅游度假区</div><div class="timeline-desc">获评湖北省省级旅游度假区</div></div>
+        <div class="timeline-item"><div class="timeline-year">2023</div><div class="timeline-title">国家4A级景区</div><div class="timeline-desc">获评国家4A级旅游景区</div></div>
+        <div class="timeline-item"><div class="timeline-year">2025年底</div><div class="timeline-title">累计千万游客</div><div class="timeline-desc">度假区累计游客超1,000万，文旅消费70亿元</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="operations" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag">06 — Operations</div>
+    <h2 class="section-title">运营指标 · "四园一镇七酒店"格局</h2>
+    <p class="section-desc">华侨城从"欢乐系"到"奇幻系"的战略转型之作。80%以上项目适合亲子全龄段，实现全季节运营。</p>
+    <div class="cards-4 reveal">
+      <div class="kpi-card"><div class="kpi-num">1,000万+</div><div class="kpi-label">度假区累计游客（截至2025底）</div><div class="kpi-sub"></div></div>
+      <div class="kpi-card"><div class="kpi-num gold">¥70亿</div><div class="kpi-label">累计文旅消费</div><div class="kpi-sub"></div></div>
+      <div class="kpi-card"><div class="kpi-num">156万</div><div class="kpi-label">2023上半年游客（人次）</div><div class="kpi-sub">含度假区各园</div></div>
+      <div class="kpi-card"><div class="kpi-num gold">25万</div><div class="kpi-label">2023五一假期游客</div><div class="kpi-sub">奇幻谷单园</div></div>
+    </div>
+
+    <div style="margin-top:48px;">
+      <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--purple-deep);margin-bottom:16px;">度假区配套体系</h3>
+      <div class="cards-4 reveal">
+        <div class="amenity-card"><div class="amenity-icon">🎢</div><div class="amenity-name">奇幻谷</div><div class="amenity-detail">陆公园·45公顷·6大主题区</div></div>
+        <div class="amenity-card"><div class="amenity-icon">🌊</div><div class="amenity-name">奇梦海滩</div><div class="amenity-detail">水乐园·2020年率先开业</div></div>
+        <div class="amenity-card"><div class="amenity-icon">👶</div><div class="amenity-name">奇趣童年</div><div class="amenity-detail">亲子乐园·2021年开业</div></div>
+        <div class="amenity-card"><div class="amenity-icon">♨️</div><div class="amenity-name">云海汤泉</div><div class="amenity-detail">温泉·冬季运营核心</div></div>
+        <div class="amenity-card"><div class="amenity-icon">🏘️</div><div class="amenity-name">奇妙镇</div><div class="amenity-detail">城市文旅小镇</div></div>
+        <div class="amenity-card"><div class="amenity-icon">🏨</div><div class="amenity-name">七酒店</div><div class="amenity-detail">云海酒店(五星·海洋主题)+奇趣童年等</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tech">
+  <div class="section-inner">
+    <div class="section-tag">07 — Technical Indicators</div>
+    <h2 class="section-title">核心技术与规模指标</h2>
+    <table class="data-table reveal">
+      <thead><tr><th>类别</th><th>指标</th><th>数值</th></tr></thead>
+      <tbody>
+        <tr><td class="cat-cell" rowspan="4">🎢 游乐设备</td><td>国际级游乐设备</td><td>22台</td></tr>
+        <tr><td>过山车</td><td>2台主要（达芬奇飞翔+雪山飞车）</td></tr>
+        <tr><td>水上游乐</td><td>2项（方舟大冒险26m+秘境漂流680m）</td></tr>
+        <tr><td>国产品牌设备</td><td>金马游乐提供5项核心设备</td></tr>
+        <tr><td class="cat-cell" rowspan="4">🔬 科技场馆</td><td>沉浸式科技场馆</td><td>11座</td></tr>
+        <tr><td>7D飞行影院</td><td>星际历险 · 8K LED球幕 · 85度倾斜座椅</td></tr>
+        <tr><td>元宇宙演艺</td><td>地宫历险 · 国内首台</td></tr>
+        <tr><td>潜水艇水族馆</td><td>深蓝探秘 · 国内首个</td></tr>
+        <tr><td class="cat-cell" rowspan="4">🤖 机械IP</td><td>机械麒麟"金璃"</td><td>高9m/长15m/重40吨/100+可动关节</td></tr>
+        <tr><td>功能</td><td>喷火·吐雾·对话·互动祈福</td></tr>
+        <tr><td>巡游</td><td>山海麒麟夜光大巡游</td></tr>
+        <tr><td>IP来源</td><td>庄子《逍遥游》鲲鹏文化体系</td></tr>
+        <tr><td class="cat-cell" rowspan="3">🎆 夜间经济</td><td>烟花光影秀</td><td>7D全息投影+城堡光影</td></tr>
+        <tr><td>非遗表演</td><td>水上火龙钢花（国家级非遗）</td></tr>
+        <tr><td>灯会</td><td>45万m²灯海+30余组自贡非遗彩灯</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="amenities" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag">08 — Key Highlights</div>
+    <h2 class="section-title">特色亮点</h2>
+    <div class="cards-3 reveal">
+      <div class="amenity-card"><div class="amenity-icon">🚀</div><div class="amenity-name">华侨城3.0代旗舰</div><div class="amenity-detail">从"欢乐系"到"奇幻系"的战略升级。欢乐谷面向年轻人；奇幻谷80%+项目适合亲子全龄段。科技赋能（AI+AR+元宇宙）远超上一代。</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🌌</div><div class="amenity-name">中国首个宇宙探索主题</div><div class="amenity-detail">"平行时空，宇宙探索"六大平行宇宙主题，首次将元宇宙概念融入大型主题公园设计。</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🐉</div><div class="amenity-name">巨型机械麒麟"金璃"</div><div class="amenity-detail">世界最大机械麒麟IP，高9m/长15m/重40吨/100+关节，可喷火吐雾对话。源自《庄子·逍遥游》鲲鹏。</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🎆</div><div class="amenity-name">夜游经济矩阵</div><div class="amenity-detail">7D城堡光影秀+火龙钢花非遗+千架无人机+夜光大巡游+万人篝火+自贡彩灯——六大夜间产品。</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🇨🇳</div><div class="amenity-name">国产设备深度合作</div><div class="amenity-detail">金马游乐（A股上市游乐设备龙头）提供雪山飞车、方舟大冒险等5项核心设备，品质达国际水准。</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🏨</div><div class="amenity-name">全季节全时段运营</div><div class="amenity-detail">"四园一镇七酒店"格局：陆公园+水乐园+亲子园+温泉+商业小镇——实现全年无淡季。</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="references">
+  <div class="section-inner">
+    <div class="section-tag">09 — External Resources</div>
+    <h2 class="section-title">延伸资料库</h2>
+    <div class="cards-2 reveal">
+      <a href="https://www.xyoct.com" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="info-card" style="cursor:pointer;"><div class="info-card-icon">🏛️</div><div class="info-card-label">01 / 襄阳华侨城奇幻度假区官网</div><div class="info-card-value">官方票务+活动日历+园区信息——www.xyoct.com。</div></div></a>
+      <a href="https://baike.baidu.com/item/%E8%A5%84%E9%98%B3%E5%8D%8E%E4%BE%A8%E5%9F%8E%E5%A5%87%E5%B9%BB%E5%BA%A6%E5%81%87%E5%8C%BA/67160296" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="info-card" style="cursor:pointer;"><div class="info-card-icon">📚</div><div class="info-card-label">02 / 百度百科 · 奇幻度假区</div><div class="info-card-value">中文百科条目——度假区全面介绍、发展历程、技术参数。</div></div></a>
+      <a href="https://www.tripvivid.com/deep/38837.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="info-card" style="cursor:pointer;"><div class="info-card-icon">📊</div><div class="info-card-label">03 / Tripvivid 行业深度分析</div><div class="info-card-value">"从欢乐系到奇幻系"——华侨城产品代际对比、商业模式解读。</div></div></a>
+      <a href="http://m.cnhubei.com/content/2023-08/01/content_16327256.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="info-card" style="cursor:pointer;"><div class="info-card-icon">📰</div><div class="info-card-label">04 / 湖北日报 运营报道</div><div class="info-card-value">"黑科技赋能 上半年迎客156万人次"——官方数据+采访。</div></div></a>
+      <a href="https://www.chinaoct.com/hqc/xwzx/jtxw/704744/index.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="info-card" style="cursor:pointer;"><div class="info-card-icon">🏢</div><div class="info-card-label">05 / 华侨城集团官网</div><div class="info-card-value">华侨城集团官方新闻——奇幻谷启幕报道、集团战略发布。</div></div></a>
+    </div>
+  </div>
+</section>
+
+<div class="floating-nav">
+  <a href="https://joanna2joanna.github.io/casestudy/" title="回首页">&#127968;</a>
+  <a href="#" id="back-to-top" title="回顶部">&#8593;</a>
+</div>
+
+<p style="font-family:'DM Mono',monospace;font-size:0.82rem;text-align:center;margin-bottom:0.5rem;opacity:0.7;">
+  访问 <span id="busuanzi_value_site_pv"></span> 次 · 访客 <span id="busuanzi_value_site_uv"></span> 人
+</p>
+
+<footer>
+  <p><strong>襄阳华侨城奇幻谷 案例研究</strong> — 中国首个宇宙探索主题乐园 · 华侨城3.0代旗舰</p>
+  <p style="margin-top:6px;">数据来源：华侨城集团公开资料 · 百度百科 · 湖北日报 · Tripvivid &nbsp;|&nbsp; 编制时间：2026年5月</p>
+  <p style="margin-top:4px;font-size:0.72rem;color:rgba(255,255,255,0.3);">本报告仅供案例研究参考，不构成投资建议。</p>
+  <p style="margin-top:1rem;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例研究首页</a></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ── WGS-84 → GCJ-02 converter ──
+function wgs84ToGcj02(wgsLng, wgsLat) {
+  var a = 6378245.0, ee = 0.00669342162296594323;
+  function _transformLat(x, y) {
+    var r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(y*Math.PI) + 40*Math.sin(y/3*Math.PI))*2/3;
+    r += (160*Math.sin(y/12*Math.PI) + 320*Math.sin(y*Math.PI/30))*2/3;
+    return r;
+  }
+  function _transformLng(x, y) {
+    var r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(x*Math.PI) + 40*Math.sin(x/3*Math.PI))*2/3;
+    r += (150*Math.sin(x/12*Math.PI) + 300*Math.sin(x/30*Math.PI))*2/3;
+    return r;
+  }
+  var dLat = _transformLat(wgsLng - 105, wgsLat - 35);
+  var dLng = _transformLng(wgsLng - 105, wgsLat - 35);
+  var radLat = wgsLat/180*Math.PI;
+  var magic = 1 - ee*Math.sin(radLat)*Math.sin(radLat);
+  return {
+    lng: wgsLng + (180*dLng)/((a/Math.sqrt(magic))*Math.cos(radLat)*Math.PI),
+    lat: wgsLat + (180*dLat)/((a*(1-ee))/(magic*Math.sqrt(magic))*Math.PI)
+  };
+}
+
+// ── Zone markers (WGS-84 → GCJ-02 for Gaode tiles) ──
+var xyZonesWgs = [
+  { name: '奇幻大道<br><small>主入口·星球集市</small>', lat: 32.045, lng: 112.205, color: '#6A1B9A' },
+  { name: '发现港湾<br><small>达芬奇飞翔·秘境漂流</small>', lat: 32.046, lng: 112.203, color: '#E64A19' },
+  { name: '异星港<br><small>星际历险·虫巢突围</small>', lat: 32.044, lng: 112.207, color: '#00BCD4' },
+  { name: '疯狂机械城<br><small>机械麒麟金璃</small>', lat: 32.045, lng: 112.206, color: '#F5A623' },
+  { name: '鲲之方舟<br><small>方舟大冒险·熊猫</small>', lat: 32.043, lng: 112.204, color: '#2E7D32' },
+  { name: '昆仑幻境<br><small>雪山飞车·地宫历险</small>', lat: 32.044, lng: 112.202, color: '#1565C0' },
+  { name: '云海酒店<br><small>五星·海洋主题</small>', lat: 32.041, lng: 112.200, color: '#00838F' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var gcj = wgs84ToGcj02(z.lng, z.lat);
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([gcj.lat, gcj.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('parkmap');
+  if (!el) return;
+
+  var center = wgs84ToGcj02(112.204, 32.044);
+  var map = L.map('parkmap', { scrollWheelZoom: false }).setView([center.lat, center.lng], 16);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  roadLayer.addTo(map);
+  L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  addZoneMarkers(map, xyZonesWgs);
+
+  var parkCenter = wgs84ToGcj02(112.204, 32.044);
+  L.circle([parkCenter.lat, parkCenter.lng], { radius: 400, color: '#6A1B9A', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+
+  var tileLoaded = false;
+  map.on('tileload', function() { tileLoaded = true; });
+  setTimeout(function() {
+    if (!tileLoaded) {
+      var fb = document.createElement('div');
+      fb.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.9);z-index:10;border-radius:12px;font-size:0.9rem;color:#8C8878;';
+      fb.textContent = '地图瓦片加载超时，请检查网络连接后刷新页面';
+      el.appendChild(fb);
+    }
+  }, 8000);
+});
+
+var observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+var sections = document.querySelectorAll('section[id]');
+var navLinks = document.querySelectorAll('nav a');
+window.addEventListener('scroll', function() {
+  var current = '';
+  sections.forEach(function(s) { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
+  navLinks.forEach(function(a) { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+});
+
+var backToTop = document.getElementById('back-to-top');
+window.addEventListener('scroll', function() { if (window.scrollY > 600) backToTop.classList.add('show'); else backToTop.classList.remove('show'); });
+backToTop.addEventListener('click', function(e) { e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>

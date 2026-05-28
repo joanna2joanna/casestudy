@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>格罗纳隆德 案例研究 — 瑞典最古老游乐园 · 极致紧凑的海滨Tivoli</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+:root {
+  --blue: #0277BD;
+  --blue-deep: #0A2E4A;
+  --gold: #F5A623;
+  --gold-light: #FCD34D;
+  --warm-white: #FDF8F3;
+  --cream: #F0F4F8;
+  --white: #FFFFFF;
+  --text: #1C1C1C;
+  --text-muted: #5C6058;
+  --text-light: #8C8880;
+  --border: #D8DEE8;
+  --shadow-sm: 0 1px 3px rgba(10,22,40,0.06);
+  --shadow-md: 0 4px 20px rgba(10,22,40,0.08);
+  --shadow-lg: 0 12px 40px rgba(10,22,40,0.12);
+  --radius-sm: 6px; --radius: 12px; --radius-lg: 20px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+  --font-mono: 'DM Mono', 'SF Mono', monospace;
+  --max-width: 1240px;
+  --nav-h: 64px;
+}
+
+html { font-size: 17px; scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--warm-white);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--nav-h);
+  background: rgba(10,46,74,0.94);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center; gap: 2px;
+  padding: 0 20px; overflow-x: auto;
+}
+nav a {
+  color: rgba(255,255,255,0.68); text-decoration: none;
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.03em;
+  padding: 6px 12px; border-radius: 20px; white-space: nowrap;
+  transition: all 0.25s ease;
+}
+nav a:hover, nav a.active { color: var(--gold-light); background: rgba(245,166,35,0.12); }
+
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(165deg, #061A28 0%, #0A2E4A 20%, #0D3B5C 50%, #0A2E4A 75%, #061A28 100%);
+  overflow: hidden; text-align: center; padding: 120px 24px 80px;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 25% 80%, rgba(2,119,189,0.25) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 75% 25%, rgba(245,166,35,0.1) 0%, transparent 55%);
+}
+.hero-bg-pattern {
+  position: absolute; inset: 0; opacity: 0.03;
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.5) 2px, rgba(255,255,255,0.5) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.5) 2px, rgba(255,255,255,0.5) 4px);
+}
+.hero-content { position: relative; z-index: 2; max-width: 800px; }
+.hero-badge {
+  display: inline-block; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gold-light); border: 1px solid rgba(245,166,35,0.35);
+  padding: 6px 18px; border-radius: 20px; margin-bottom: 32px;
+}
+.hero h1 {
+  font-family: var(--font-display); font-size: clamp(2.6rem, 5vw, 4rem);
+  font-weight: 900; color: var(--white); line-height: 1.15;
+  letter-spacing: 0.03em; margin-bottom: 20px;
+}
+.hero h1 span { color: var(--gold-light); }
+.hero-sub {
+  font-size: 1.05rem; color: rgba(255,255,255,0.55); line-height: 1.6;
+  max-width: 580px; margin: 0 auto 48px;
+}
+.hero-kpis {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+  max-width: 720px; margin: 0 auto;
+  background: rgba(255,255,255,0.06); border-radius: 16px; overflow: hidden;
+}
+.hero-kpi {
+  background: rgba(10,46,74,0.7); padding: 28px 20px; backdrop-filter: blur(8px);
+}
+.hero-kpi-num {
+  font-family: var(--font-display); font-size: 2rem; font-weight: 900;
+  color: var(--gold-light); line-height: 1.1;
+}
+.hero-kpi-label {
+  font-size: 0.72rem; color: rgba(255,255,255,0.5); margin-top: 6px; letter-spacing: 0.03em;
+}
+
+section { padding: 88px 24px; }
+.section-inner { max-width: var(--max-width); margin: 0 auto; }
+.section-tag {
+  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); margin-bottom: 12px;
+}
+.section-title {
+  font-family: var(--font-display); font-size: 2rem; font-weight: 700;
+  color: var(--blue-deep); margin-bottom: 12px; letter-spacing: 0.02em;
+}
+.section-desc {
+  font-size: 0.95rem; color: var(--text-muted); max-width: 560px;
+  margin-bottom: 48px; line-height: 1.7;
+}
+.sub-heading { font-family: var(--font-display); font-size: 1.1rem; color: var(--blue-deep); margin: 32px 0 16px; }
+
+.cards-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+.cards-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.cards-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+.info-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 28px 24px; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border); transition: box-shadow 0.3s;
+}
+.info-card:hover { box-shadow: var(--shadow-md); }
+.info-card-icon { font-size: 1.5rem; margin-bottom: 12px; }
+.info-card-label { font-size: 0.72rem; color: var(--text-light); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
+.info-card-value { font-size: 0.95rem; font-weight: 600; color: var(--blue-deep); line-height: 1.4; }
+
+.site-plan-wrap {
+  background: var(--white); border-radius: var(--radius-lg);
+  padding: 32px; box-shadow: var(--shadow-md);
+  border: 1px solid var(--border); margin-bottom: 48px;
+}
+
+.timeline { position: relative; padding-left: 32px; }
+.timeline::before { content: ''; position: absolute; left: 10px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(to bottom, var(--blue), var(--gold)); }
+.timeline-item { position: relative; margin-bottom: 32px; }
+.timeline-item::before { content: ''; position: absolute; left: -26px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--blue); border: 2px solid var(--warm-white); box-shadow: 0 0 0 2px var(--blue); }
+.timeline-item:nth-child(even)::before { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+.timeline-year { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500; color: var(--blue); letter-spacing: 0.06em; }
+.timeline-item:nth-child(even) .timeline-year { color: #B88A1E; }
+.timeline-title { font-weight: 600; font-size: 0.95rem; color: var(--blue-deep); margin-top: 2px; }
+.timeline-desc { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; }
+
+.kpi-card { background: var(--white); border-radius: var(--radius); padding: 32px 28px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); text-align: center; }
+.kpi-num { font-family: var(--font-display); font-size: 2.4rem; font-weight: 900; color: var(--blue-deep); line-height: 1.1; }
+.kpi-num.gold { color: #B88A1E; }
+.kpi-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; }
+.kpi-sub { font-size: 0.72rem; color: var(--text-light); margin-top: 4px; }
+
+.data-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
+.data-table th { background: var(--blue-deep); color: var(--white); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 14px 20px; text-align: left; }
+.data-table td { padding: 12px 20px; font-size: 0.88rem; color: var(--text); border-bottom: 1px solid var(--border); }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table .cat-cell { font-weight: 600; color: var(--blue-deep); background: var(--cream); }
+
+.section-alt { background: var(--cream); }
+
+.zone-card { background: var(--white); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow-sm); border-left: 4px solid var(--blue); transition: box-shadow 0.3s; }
+.zone-card:nth-child(2) { border-left-color: #F5A623; }
+.zone-card:nth-child(3) { border-left-color: #E64A19; }
+.zone-card:nth-child(4) { border-left-color: #7B1FA2; }
+.zone-card:nth-child(5) { border-left-color: #2E7D32; }
+.zone-card:nth-child(6) { border-left-color: #C62828; }
+.zone-card:hover { box-shadow: var(--shadow-md); }
+.zone-card h4 { font-size: 0.95rem; color: var(--blue-deep); margin-bottom: 6px; }
+.zone-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+.zone-tag { display: inline-block; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 10px; margin-bottom: 8px; background: rgba(2,119,189,0.08); color: var(--blue); }
+
+.amenity-card { background: var(--white); border-radius: var(--radius); padding: 28px 24px; text-align: center; box-shadow: var(--shadow-sm); border: 1px solid var(--border); transition: box-shadow 0.3s; }
+.amenity-card:hover { box-shadow: var(--shadow-md); }
+.amenity-icon { font-size: 2rem; margin-bottom: 10px; }
+.amenity-name { font-weight: 600; font-size: 0.9rem; color: var(--blue-deep); }
+.amenity-detail { font-size: 0.76rem; color: var(--text-muted); margin-top: 4px; }
+
+footer { background: var(--blue-deep); text-align: center; padding: 48px 24px; color: rgba(255,255,255,0.5); font-size: 0.8rem; line-height: 1.8; }
+footer strong { color: var(--gold-light); }
+
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+.floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: var(--blue); }
+.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: var(--blue); color: #fff; }
+#back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
+#back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
+
+@media (max-width: 1024px) { .cards-6 { grid-template-columns: repeat(3, 1fr); } .cards-4 { grid-template-columns: repeat(2, 1fr); } .hero-kpis { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .cards-6, .cards-4, .cards-3, .cards-2 { grid-template-columns: 1fr; } .hero-kpis { grid-template-columns: 1fr 1fr; } nav { gap: 0; } nav a { padding: 6px 10px; font-size: 0.68rem; } .section-title { font-size: 1.5rem; } .hero h1 { font-size: 2rem; } }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="#hero">总览</a><a href="#overview">概览</a><a href="#design">设施</a><a href="#summary">总表</a><a href="#layout">布局</a><a href="#investment">历史</a><a href="#operations">运营</a><a href="#tech">指标</a><a href="#amenities">亮点</a><a href="#references">资料库</a>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Heritage Park Case Study · 数据截至 2026 年 5 月</div>
+    <h1><span>格罗纳隆德</span><br>Gröna Lund 案例研究</h1>
+    <p class="hero-sub">瑞典最古老游乐园 · 极致紧凑的海滨Tivoli<br>仅3.8公顷容纳30座设施，Bob Marley创32,000人纪录的传奇演出地</p>
+    <div class="hero-kpis reveal">
+      <div class="hero-kpi"><div class="hero-kpi-num">1883</div><div class="hero-kpi-label">开园年份</div></div>
+      <div class="hero-kpi"><div class="hero-kpi-num">168万</div><div class="hero-kpi-label">年游客量（2019高峰）</div></div>
+      <div class="hero-kpi"><div class="hero-kpi-num">3.8 公顷</div><div class="hero-kpi-label">占地面积</div></div>
+      <div class="hero-kpi"><div class="hero-kpi-num">121 m</div><div class="hero-kpi-label">Eclipse 飞椅高度</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="overview">
+  <div class="section-inner">
+    <div class="section-tag">01 — Project Overview</div>
+    <h2 class="section-title">项目概览</h2>
+    <p class="section-desc">格罗纳隆德（Gröna Lund，意为"绿色小树林"）位于斯德哥尔摩动物园岛（Djurgården）海滨，由德国移民Jacob Schultheis于1883年创立。以欧洲单位面积游乐设施密度最高著称，在3.8公顷内布局约30座设施，含7座过山车。Stora Scen主舞台自1928年起为斯德哥尔摩最重要演出场地之一。</p>
+    <div class="cards-6 reveal">
+      <div class="info-card"><div class="info-card-icon">🎢</div><div class="info-card-label">开业时间</div><div class="info-card-value">1883年8月3日</div></div>
+      <div class="info-card"><div class="info-card-icon">🏗️</div><div class="info-card-label">所有者</div><div class="info-card-value">Parks & Resorts Scandinavia AB（Tidstrand家族，2006年收购）</div></div>
+      <div class="info-card"><div class="info-card-icon">📍</div><div class="info-card-label">位置</div><div class="info-card-value">瑞典斯德哥尔摩动物园岛<br>Lilla Allmänna Gränd 9</div></div>
+      <div class="info-card"><div class="info-card-icon">📐</div><div class="info-card-label">面积</div><div class="info-card-value">3.8公顷<br>欧洲密度最高的游乐园之一</div></div>
+      <div class="info-card"><div class="info-card-icon">👥</div><div class="info-card-label">年游客量</div><div class="info-card-value">约100-168万人次<br>2019年高峰167.6万</div></div>
+      <div class="info-card"><div class="info-card-icon">🎫</div><div class="info-card-label">门票价格</div><div class="info-card-value">415-695 SEK（约¥290-490）<br>入园+无限乘坐通票</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="design" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag">02 — Rides & Facilities</div>
+    <h2 class="section-title">核心游乐设施</h2>
+    <p class="section-desc">30座设施挤在3.8公顷土地上，Monster过山车轨道紧贴历史建筑穿行，形成独特的城市游乐园体验。</p>
+    <table class="data-table reveal">
+      <thead><tr><th>设施名称</th><th>类型</th><th>制造商</th><th>年份</th><th>高度</th><th>速度</th><th>特点</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Monster</strong></td><td>悬挂倒置过山车</td><td>B&M</td><td>2021</td><td>34m</td><td>90km/h</td><td>4个翻转，地下车站，轨道穿行历史建筑</td></tr>
+        <tr><td><strong>Eclipse</strong></td><td>巨型飞椅 Starflyer</td><td>Funtime</td><td>2013</td><td>121m</td><td>70km/h</td><td>世界最高飞椅之一，360度俯瞰斯德哥尔摩</td></tr>
+        <tr><td><strong>Ikaros</strong></td><td>天降跳楼机</td><td>Intamin</td><td>2017</td><td>95m</td><td>90km/h</td><td>面部朝下俯冲，3.5G，全球第二座</td></tr>
+        <tr><td><strong>Fritt Fall Tilt</strong></td><td>倾斜自由落体</td><td>Intamin</td><td>1998</td><td>80m</td><td>100km/h</td><td>倾斜后垂直坠落</td></tr>
+        <tr><td><strong>Twister</strong></td><td>木制过山车</td><td>Gravity Group</td><td>2011</td><td>15m</td><td>61km/h</td><td>园内唯一木制过山车</td></tr>
+        <tr><td><strong>Kvasten</strong></td><td>悬挂式家庭过山车</td><td>Vekoma</td><td>2007</td><td>20m</td><td>55km/h</td><td>适合全家</td></tr>
+        <tr><td><strong>Insane</strong></td><td>4D ZacSpin</td><td>Intamin</td><td>2009</td><td>33m</td><td>55km/h</td><td>座椅自由翻转，极致刺激</td></tr>
+        <tr><td><strong>Vilda Musen</strong></td><td>野鼠过山车</td><td>Gerstlauer</td><td>2003</td><td>21m</td><td>55km/h</td><td>急转弯，2027年将升级为Vildare Musen</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="summary">
+  <div class="section-inner">
+    <div class="section-tag">03 — Master Data Table</div>
+    <h2 class="section-title">技术指标总表</h2>
+    <p class="section-desc">全维度数据速查。瑞典克朗按2025年5月汇率折算：1 SEK ≈ 0.70 CNY。</p>
+    <div style="overflow-x:auto;">
+    <table class="data-table reveal" style="min-width:900px;">
+      <thead><tr><th>维度</th><th>指标</th><th>数据</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td class="cat-cell">基础</td><td>开业时间</td><td>1883年8月3日</td><td>瑞典最古老游乐园</td></tr>
+        <tr><td class="cat-cell">基础</td><td>位置</td><td>斯德哥尔摩动物园岛 Djurgården</td><td>滨水区，正对老城</td></tr>
+        <tr><td class="cat-cell">规模</td><td>占地面积</td><td>3.8公顷</td><td>欧洲密度最高游乐园之一</td></tr>
+        <tr><td class="cat-cell">规模</td><td>游乐设施数</td><td>约30座（含7座过山车）</td><td>含儿童区设施</td></tr>
+        <tr><td class="cat-cell">投资</td><td>Eclipse投资（2013）</td><td>约5,000万SEK（约¥3,500万）</td><td>单设施参考</td></tr>
+        <tr><td class="cat-cell">运营</td><td>2019年游客量</td><td>约167.6万人次（历史高峰）</td><td></td></tr>
+        <tr><td class="cat-cell">运营</td><td>年收入（估算）</td><td>约5亿SEK（约¥3.5亿）</td><td>2022年5.51亿，2023年因事故降至3.51亿</td></tr>
+        <tr><td class="cat-cell">运营</td><td>母公司集团年收入</td><td>约16亿SEK（约¥11.2亿）</td><td>含Kolmarden等</td></tr>
+        <tr><td class="cat-cell">票价</td><td>成人通票</td><td>415-695 SEK（约¥290-490）</td><td>动态定价</td></tr>
+        <tr><td class="cat-cell">票价</td><td>季卡 Gröna Kortet</td><td>440 SEK（约¥310）</td><td>含音乐会+夏季无限次</td></tr>
+        <tr><td class="cat-cell">人力</td><td>员工</td><td>旺季约1,400人；固定约540人</td><td>季节性波动大</td></tr>
+        <tr><td class="cat-cell">演艺</td><td>夏季音乐会</td><td>50+场/季</td><td>Stora Scen主舞台</td></tr>
+        <tr><td class="cat-cell">环保</td><td>太阳能</td><td>~20MW太阳能公园</td><td>母公司投资，PPA供电</td></tr>
+        <tr><td class="cat-cell">项目</td><td>过山车</td><td>7座在运营</td><td>Jetline 2023年事故后关闭</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<section id="layout" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag">04 — Spatial Layout</div>
+    <h2 class="section-title">空间布局与功能分区</h2>
+    <p class="section-desc">世界罕见的"城市游乐园"——3.8公顷滨水地块，过山车轨道穿越历史建筑群，高空设施俯瞰群岛风光。ESRI卫星底图，WGS-84坐标。</p>
+
+    <div class="site-plan-wrap reveal">
+      <div id="parkmap" style="width:100%;height:520px;border-radius:12px;z-index:0;"></div>
+      <p style="text-align:center;font-size:0.72rem;color:var(--text-light);margin-top:8px;">▲ 交互地图：ESRI卫星底图 · WGS-84坐标 · 可缩放平移</p>
+    </div>
+
+    <div class="cards-3 reveal" style="margin-top:32px;">
+      <div class="zone-card"><span class="zone-tag">入口区</span><h4>主入口 & 中心广场</h4><p>位于Lilla Allmänna Gränd 9，正对电车站。入口连接主餐饮区和小吃摊位。</p></div>
+      <div class="zone-card"><span class="zone-tag">滨水区</span><h4>Eclipse · Ikaros 高空区</h4><p>海滨区域布置Eclipse（121m飞椅）和Ikaros（95m跳楼机），提供俯瞰斯德哥尔摩全景的体验。</p></div>
+      <div class="zone-card"><span class="zone-tag">过山车集群</span><h4>Monster · Twister · Insane</h4><p>Monster轨道紧贴历史建筑穿过，Twister木制过山车、Insane 4D翻转形成极限刺激区。</p></div>
+      <div class="zone-card"><span class="zone-tag">演艺区</span><h4>Stora Scen 主舞台</h4><p>1928年启用，可容纳数千观众。Bob Marley 1980年创32,000人纪录，ABBA、Jimi Hendrix等曾在此演出。</p></div>
+      <div class="zone-card"><span class="zone-tag">儿童区</span><h4>Lilla Området · Pumpen</h4><p>Nyckelpigan儿童过山车、Tuff-Tuff Tåget小火车、2025年新开Pumpen超级秋千（12m）。</p></div>
+      <div class="zone-card"><span class="zone-tag">万圣节区</span><h4>House of Nightmares</h4><p>多层惊悚鬼屋，Zombiesta等万圣节主题设施，季节性运营。</p></div>
+    </div>
+
+    <div style="margin-top:48px;">
+      <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--blue-deep);margin-bottom:8px;">园区实景图集</h3>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:24px;">来自Wikimedia Commons等开放许可平台。</p>
+      <div class="cards-4 reveal">
+        <a href="https://commons.wikimedia.org/wiki/File:Gr%C3%B6na_Lund_flygfoto.JPG" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="amenity-card"><div class="amenity-icon">🦅</div><div class="amenity-name">航拍全景</div><div class="amenity-detail">Wikimedia · 鸟瞰公园全貌</div></div></a>
+        <a href="https://commons.wikimedia.org/wiki/Category:Monster_(Gr%C3%B6na_Lund)" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="amenity-card"><div class="amenity-icon">🎢</div><div class="amenity-name">Monster 过山车</div><div class="amenity-detail">Wikimedia · B&M悬挂式过山车</div></div></a>
+        <a href="https://commons.wikimedia.org/wiki/Category:Twister_(Gr%C3%B6na_Lund)" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="amenity-card"><div class="amenity-icon">🪵</div><div class="amenity-name">Twister 木制过山车</div><div class="amenity-detail">Wikimedia · Gravity Group木制</div></div></a>
+        <a href="https://commons.wikimedia.org/wiki/File:Gr%C3%B6na_Lund_seen_from_Djurg%C3%A5rdsf%C3%A4rjan_spring_2008-1.JPG" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="amenity-card"><div class="amenity-icon">🌊</div><div class="amenity-name">滨水视角</div><div class="amenity-detail">Wikimedia · 从渡轮拍摄</div></div></a>
+        <a href="https://commons.wikimedia.org/wiki/Category:Gr%C3%B6na_Lund" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="amenity-card"><div class="amenity-icon">📷</div><div class="amenity-name">全部分类</div><div class="amenity-detail">Wikimedia · 所有园区照片</div></div></a>
+        <a href="https://www.flickr.com/photos/tags/gronalund" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="amenity-card"><div class="amenity-icon">🌐</div><div class="amenity-name">Flickr 社区</div><div class="amenity-detail">Flickr · 游客实拍照片</div></div></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="investment">
+  <div class="section-inner">
+    <div class="section-tag">05 — Historical Timeline</div>
+    <h2 class="section-title">140+年历史时间线</h2>
+    <p class="section-desc">从1883年德国移民的游乐园到2021年Monster过山车，Gröna Lund历经火灾、战争、事故与重生。</p>
+    <div class="cards-2 reveal">
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-year">1883</div><div class="timeline-title">正式开园</div><div class="timeline-desc">Jacob Schultheis在动物园岛租地开设游乐园，8月3日开业</div></div>
+        <div class="timeline-item"><div class="timeline-year">1914</div><div class="timeline-title">第二代经营</div><div class="timeline-desc">创始人去世，其子Gustaf Nilsson接管</div></div>
+        <div class="timeline-item"><div class="timeline-year">1928</div><div class="timeline-title">Stora Scen 启用</div><div class="timeline-desc">主舞台成为斯德哥尔摩重要演出场地</div></div>
+        <div class="timeline-item"><div class="timeline-year">1935</div><div class="timeline-title">毁灭性大火</div><div class="timeline-desc">3月22-23日特大火灾近乎摧毁全园，同年夏季即重建完成</div></div>
+        <div class="timeline-item"><div class="timeline-year">1980</div><div class="timeline-title">Bob Marley 创纪录</div><div class="timeline-desc">32,000人创公园历史最高上座纪录，至今未被打破</div></div>
+        <div class="timeline-item"><div class="timeline-year">1988</div><div class="timeline-title">Jetline 开幕</div><div class="timeline-desc">Schwarzkopf过山车成为标志性设施（2023年事故后关闭）</div></div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-year">2006</div><div class="timeline-title">Parks & Resorts收购</div><div class="timeline-desc">Schultheiss家族四代经营结束，Tidstrand家族接手</div></div>
+        <div class="timeline-item"><div class="timeline-year">2011</div><div class="timeline-title">Twister开幕</div><div class="timeline-desc">Gravity Group木制过山车</div></div>
+        <div class="timeline-item"><div class="timeline-year">2013</div><div class="timeline-title">Eclipse · 130周年</div><div class="timeline-desc">121米飞椅，投资5,000万SEK</div></div>
+        <div class="timeline-item"><div class="timeline-year">2017</div><div class="timeline-title">Ikaros 开幕</div><div class="timeline-desc">95m Intamin面部朝下跳楼机，全球第二座</div></div>
+        <div class="timeline-item"><div class="timeline-year">2021</div><div class="timeline-title">Monster 开幕</div><div class="timeline-desc">B&M悬挂过山车，园史最大单笔投资</div></div>
+        <div class="timeline-item"><div class="timeline-year">2027（预计）</div><div class="timeline-title">Fenix + Vildare Musen</div><div class="timeline-desc">Jetline原址新建Gerstlauer弹射过山车</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="operations" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag">06 — Operations & Music Legacy</div>
+    <h2 class="section-title">运营指标 · 音乐遗产</h2>
+    <p class="section-desc">Gröna Lund的收入高度依赖夏季（4-9月每日运营），万圣节季（10-11月初）为第二大收入来源。2023年Jetline事故导致游客量锐减约40%。</p>
+    <div class="cards-4 reveal">
+      <div class="kpi-card"><div class="kpi-num">167.6万</div><div class="kpi-label">2019年游客量（人次·高峰）</div><div class="kpi-sub">北欧主要游乐园之一</div></div>
+      <div class="kpi-card"><div class="kpi-num gold">5.51亿</div><div class="kpi-label">2022年营收（SEK）</div><div class="kpi-sub">约合人民币3.86亿元</div></div>
+      <div class="kpi-card"><div class="kpi-num">3.51亿</div><div class="kpi-label">2023年营收（SEK）</div><div class="kpi-sub">事故影响，约合人民币2.46亿元</div></div>
+      <div class="kpi-card"><div class="kpi-num gold">50+场</div><div class="kpi-label">夏季音乐会/季</div><div class="kpi-sub">免费对持票/季卡游客开放</div></div>
+    </div>
+
+    <div style="margin-top:48px;">
+      <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--blue-deep);margin-bottom:16px;">Stora Scen 传奇演出史</h3>
+      <div class="cards-4 reveal">
+        <div class="amenity-card"><div class="amenity-icon">🎸</div><div class="amenity-name">Bob Marley (1980)</div><div class="amenity-detail">创32,000人纪录</div></div>
+        <div class="amenity-card"><div class="amenity-icon">🎤</div><div class="amenity-name">ABBA</div><div class="amenity-detail">瑞典国宝级乐队</div></div>
+        <div class="amenity-card"><div class="amenity-icon">🎵</div><div class="amenity-name">Jimi Hendrix</div><div class="amenity-detail">吉他之神</div></div>
+        <div class="amenity-card"><div class="amenity-icon">🎺</div><div class="amenity-name">Louis Armstrong</div><div class="amenity-detail">爵士传奇</div></div>
+        <div class="amenity-card"><div class="amenity-icon">🎹</div><div class="amenity-name">Miles Davis</div><div class="amenity-detail">爵士小号大师</div></div>
+        <div class="amenity-card"><div class="amenity-icon">👩‍🎤</div><div class="amenity-name">Lady Gaga</div><div class="amenity-detail">成名前在此演出</div></div>
+        <div class="amenity-card"><div class="amenity-icon">🎼</div><div class="amenity-name">Tina Turner</div><div class="amenity-detail">摇滚女王</div></div>
+        <div class="amenity-card"><div class="amenity-icon">🤘</div><div class="amenity-name">The Offspring</div><div class="amenity-detail">当代摇滚</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tech">
+  <div class="section-inner">
+    <div class="section-tag">07 — Technical Indicators</div>
+    <h2 class="section-title">核心技术与规模指标</h2>
+    <table class="data-table reveal">
+      <thead><tr><th>类别</th><th>指标</th><th>数值</th></tr></thead>
+      <tbody>
+        <tr><td class="cat-cell" rowspan="4">🎢 游乐设施</td><td>游乐设施总数</td><td>约30座</td></tr>
+        <tr><td>过山车</td><td>7座在运营（B&M、Intamin、Gravity Group、Vekoma、Gerstlauer等）</td></tr>
+        <tr><td>高空设施</td><td>3座（Eclipse 121m、Ikaros 95m、Fritt Fall 80m）</td></tr>
+        <tr><td>儿童设施</td><td>约6-8座（Nyckelpigan、Tuff-Tuff Tåget、Pumpen等）</td></tr>
+        <tr><td class="cat-cell" rowspan="4">🏟️ 演艺场地</td><td>Stora Scen</td><td>主舞台，容纳数千人，1928年建</td></tr>
+        <tr><td>Dansbanan / Lilla Scenen</td><td>舞蹈/小型舞台</td></tr>
+        <tr><td>Gröna Lundsteatern</td><td>剧院</td></tr>
+        <tr><td>夏季音乐会</td><td>50+场/季，含国际+本土艺人</td></tr>
+        <tr><td class="cat-cell" rowspan="4">🍽️ 配套</td><td>餐厅</td><td>6+家主题餐厅+多个小吃摊位</td></tr>
+        <tr><td>酒吧</td><td>多处啤酒花园</td></tr>
+        <tr><td>优先排队</td><td>Jetpass +495 SEK</td></tr>
+        <tr><td>交通</td><td>电车7号线直达Djurgården</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="amenities" class="section-alt">
+  <div class="section-inner">
+    <div class="section-tag">08 — Key Highlights</div>
+    <h2 class="section-title">特色亮点</h2>
+    <div class="cards-3 reveal">
+      <div class="amenity-card"><div class="amenity-icon">🏗️</div><div class="amenity-name">极致紧凑密度</div><div class="amenity-detail">3.8公顷约30座设施，Monster轨道紧贴历史建筑穿过，创造独特的"城市过山车"体验。</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🌊</div><div class="amenity-name">滨水高空景观</div><div class="amenity-detail">Eclipse（121m）+Ikaros（95m）+Fritt Fall（80m）三座高空塔沿水岸布局，俯瞰群岛风光。</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🎵</div><div class="amenity-name">传奇音乐遗产</div><div class="amenity-detail">Bob Marley、ABBA、Jimi Hendrix等在此演出。Stora Scen是瑞典国民文化记忆。</div></div>
+      <div class="amenity-card"><div class="amenity-icon">☀️</div><div class="amenity-name">瑞典最大太阳能</div><div class="amenity-detail">母公司投资~20MW太阳能公园，夏季完全满足集团三园电力需求，羊群维护植被。</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🎃</div><div class="amenity-name">万圣节品牌活动</div><div class="amenity-detail">Halloween på Grönan每年10-11月，2025年预计15万人次，多个鬼屋+恐怖体验。</div></div>
+      <div class="amenity-card"><div class="amenity-icon">🔄</div><div class="amenity-name">持续自我更新</div><div class="amenity-detail">2025 Pumpen→2027 Fenix弹射过山车+Vildare Musen升级版，保持设施新鲜度。</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="references">
+  <div class="section-inner">
+    <div class="section-tag">09 — External Resources</div>
+    <h2 class="section-title">延伸资料库</h2>
+    <div class="cards-2 reveal">
+      <a href="https://www.gronalund.com" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="info-card" style="cursor:pointer;"><div class="info-card-icon">🏛️</div><div class="info-card-label">01 / Gröna Lund 官网</div><div class="info-card-value">官方瑞典语/英文网站 — 园区信息、活动日历、门票预订。</div></div></a>
+      <a href="https://commons.wikimedia.org/wiki/Category:Gr%C3%B6na_Lund" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="info-card" style="cursor:pointer;"><div class="info-card-icon">🖼️</div><div class="info-card-label">02 / Wikimedia Commons</div><div class="info-card-value">自由版权图库 — 数百张高清照片，涵盖设施、夜景、历史影像。</div></div></a>
+      <a href="https://en.wikipedia.org/wiki/Gr%C3%B6na_Lund" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="info-card" style="cursor:pointer;"><div class="info-card-icon">📚</div><div class="info-card-label">03 / Wikipedia · Gröna Lund</div><div class="info-card-value">英文维基百科 — 完整历史沿革、设施清单、事故记录。</div></div></a>
+      <a href="https://blooloop.com/theme-park/news/grona-lund-sweden-oldest-park-new-story/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="info-card" style="cursor:pointer;"><div class="info-card-label">04 / Blooloop 深度报道</div><div class="info-card-value">"Gröna Lund: Sweden's oldest park has a new story to tell" (2025)。</div></div></a>
+      <a href="https://artsandculture.google.com/entity/m01g78r" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><div class="info-card" style="cursor:pointer;"><div class="info-card-icon">🎨</div><div class="info-card-label">05 / Google Arts & Culture</div><div class="info-card-value">Google艺术与文化专题 — 历史影像和策展内容。</div></div></a>
+    </div>
+  </div>
+</section>
+
+<div class="floating-nav">
+  <a href="https://joanna2joanna.github.io/casestudy/" title="回首页">&#127968;</a>
+  <a href="#" id="back-to-top" title="回顶部">&#8593;</a>
+</div>
+
+<p style="font-family:'DM Mono',monospace;font-size:0.82rem;text-align:center;margin-bottom:0.5rem;opacity:0.7;">
+  访问 <span id="busuanzi_value_site_pv"></span> 次 · 访客 <span id="busuanzi_value_site_uv"></span> 人
+</p>
+
+<footer>
+  <p><strong>格罗纳隆德 案例研究</strong> — 瑞典最古老游乐园 · 极致紧凑的海滨Tivoli</p>
+  <p style="margin-top:6px;">数据来源：Parks & Resorts公开资料 · Wikipedia · Blooloop · Wikimedia Commons &nbsp;|&nbsp; 编制时间：2026年5月</p>
+  <p style="margin-top:4px;font-size:0.72rem;color:rgba(255,255,255,0.3);">本报告仅供案例研究参考。汇率：1 SEK ≈ 0.70 CNY（2025年5月）</p>
+  <p style="margin-top:1rem;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例研究首页</a></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+var gronaLundZones = [
+  { name: '主入口<br><small>Main Entrance</small>', lat: 59.3230, lng: 18.0960, color: '#0277BD' },
+  { name: 'Monster<br><small>B&M过山车</small>', lat: 59.3237, lng: 18.0972, color: '#C62828' },
+  { name: 'Eclipse<br><small>121m飞椅</small>', lat: 59.3233, lng: 18.0950, color: '#F5A623' },
+  { name: 'Ikaros<br><small>95m跳楼机</small>', lat: 59.3235, lng: 18.0955, color: '#E65100' },
+  { name: 'Stora Scen<br><small>主舞台</small>', lat: 59.3236, lng: 18.0970, color: '#7B1FA2' },
+  { name: 'Twister<br><small>木制过山车</small>', lat: 59.3239, lng: 18.0965, color: '#6D4C41' },
+  { name: 'Insane<br><small>4D ZacSpin</small>', lat: 59.3240, lng: 18.0975, color: '#00838F' },
+  { name: 'Vilda Musen<br><small>野鼠过山车</small>', lat: 59.3241, lng: 18.0968, color: '#2E7D32' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('parkmap');
+  if (!el) return;
+  var map = L.map('parkmap', { scrollWheelZoom: false }).setView([59.3236, 18.0965], 17);
+
+  var satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>', maxZoom: 19
+  });
+  var topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>', maxZoom: 19
+  });
+
+  satLayer.addTo(map);
+  L.control.layers({ '卫星图': satLayer, '地形图': topoLayer }, null, { position: 'topright' }).addTo(map);
+  addZoneMarkers(map, gronaLundZones);
+
+  var parkCenter = { lat: 59.3236, lng: 18.0965 };
+  L.circle([parkCenter.lat, parkCenter.lng], { radius: 110, color: '#0277BD', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  var tileLoaded = false;
+  map.on('tileload', function() { tileLoaded = true; });
+  setTimeout(function() {
+    if (!tileLoaded) {
+      var fb = document.createElement('div');
+      fb.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.9);z-index:10;border-radius:12px;font-size:0.9rem;color:#8C8878;';
+      fb.textContent = '地图瓦片加载超时，请检查网络连接后刷新页面';
+      el.appendChild(fb);
+    }
+  }, 8000);
+});
+
+var observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+var sections = document.querySelectorAll('section[id]');
+var navLinks = document.querySelectorAll('nav a');
+window.addEventListener('scroll', function() {
+  var current = '';
+  sections.forEach(function(s) { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
+  navLinks.forEach(function(a) { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+});
+
+var backToTop = document.getElementById('back-to-top');
+window.addEventListener('scroll', function() { if (window.scrollY > 600) backToTop.classList.add('show'); else backToTop.classList.remove('show'); });
+backToTop.addEventListener('click', function(e) { e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>

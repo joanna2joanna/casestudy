@@ -55,8 +55,12 @@ section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
 .map-tabs { display: flex; border-bottom: 1px solid rgba(0,0,0,0.08); }
 .map-tab { flex: 1; padding: 0.8rem; text-align: center; cursor: pointer; font-size: 0.9rem; font-weight: 600; border: none; background: none; color: #8b7355; transition: all 0.2s; }
 .map-tab.active { color: #4a2808; border-bottom: 2px solid #c4945a; }
-.map-wrap { height: 450px; width: 100%; }
+.map-wrap { height: 450px; width: 100%; position: relative; }
 .map-wrap .leaflet-container { height: 100%; width: 100%; }
+.map-fallback { display: none; position: absolute; inset: 0; align-items: center; justify-content: center; flex-direction: column; gap: 0.8rem; background: #f9f4e8; border-radius: 16px; text-align: center; z-index: 1000; }
+.map-fallback .icon { font-size: 2.5rem; }
+.map-fallback strong { font-size: 1rem; color: #4a2808; }
+.map-fallback span { font-size: 0.82rem; color: #8b7355; }
 .leaflet-div-icon { background: none; border: none; }
 .zone-marker { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 2px solid #fff; font-family: 'DM Sans', sans-serif; }
 
@@ -75,6 +79,17 @@ section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
 
 footer { background: #1a1006; color: #c4a882; text-align: center; padding: 3rem 2rem; font-size: 0.85rem; }
 footer a { color: #c4945a; }
+
+/* Hero media */
+.hero-media { max-width: 1100px; margin: -1rem auto 0; padding: 0 2rem; position: relative; z-index: 2; }
+.hero-gallery-card { display: flex; align-items: center; gap: 2rem; background: #fff; border-radius: 16px; padding: 2rem 2.5rem; box-shadow: 0 8px 40px rgba(0,0,0,0.15); }
+.hero-gallery-icon { font-size: 4rem; flex-shrink: 0; }
+.hero-gallery-info h3 { font-size: 1.3rem; color: #4a2808; margin-bottom: 0.3rem; }
+.hero-gallery-info p { font-size: 0.9rem; color: #8b7355; margin-bottom: 0.8rem; }
+.hero-gallery-info a { display: inline-block; padding: 0.6rem 1.5rem; background: #4a2808; color: #e8c98b; border-radius: 99px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: background 0.2s; }
+.hero-gallery-info a:hover { background: #8b5e2f; }
+.hero-gallery-sources { margin-top: 1rem; font-size: 0.78rem; color: #8b7355; display: flex; gap: 1rem; flex-wrap: wrap; }
+.hero-gallery-sources a { color: #8b5e2f; }
 
 @media (max-width: 768px) {
   section { padding: 2.5rem 1rem; }
@@ -97,6 +112,24 @@ footer a { color: #c4945a; }
     <div class="hero-num-item"><div class="hero-num-val">¥150万</div><div class="hero-num-label">单日最高营收</div></div>
   </div>
 </header>
+
+<!-- Hero 航拍实景入口 -->
+<div class="hero-media reveal">
+  <div class="hero-gallery-card">
+    <div class="hero-gallery-icon">🏜️</div>
+    <div class="hero-gallery-info">
+      <h3>腾格里沙漠中的夯土聚落</h3>
+      <p>20栋建筑匍匐于沙丘之间 · 105间客房 · 无边际泳池与金色沙海</p>
+      <a href="https://m.ctrip.com/html5/hotel/hoteldetail/121658133.html" target="_blank">📷 查看携程官方相册</a>
+      <div class="hero-gallery-sources">
+        <span>更多实拍：</span>
+        <a href="https://www.douyin.com/search/Tengol沙漠度假酒店" target="_blank">抖音航拍</a>
+        <a href="https://www.xiaohongshu.com/search_result/Tengol沙漠酒店" target="_blank">小红书旅拍</a>
+        <a href="https://tw.trip.com/moments/detail/zhongwei-1184-144432877/" target="_blank">Trip.com 游记</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <section class="reveal">
   <h2 class="section-title">项目概览</h2>
@@ -182,6 +215,11 @@ footer a { color: #c4945a; }
       <button class="map-tab" onclick="switchMap('satellite')">卫星图</button>
     </div>
     <div id="parkmap" class="map-wrap"></div>
+    <div id="map-fallback" class="map-fallback">
+      <span class="icon">🗺️</span>
+      <strong>地图瓦片加载超时</strong>
+      <span>请检查网络连接后刷新页面 · 或尝试切换街道图/卫星图</span>
+    </div>
   </div>
 
   <div class="svg-map-wrap">
@@ -398,6 +436,12 @@ function switchMap(type) {
   }
 }
 setTimeout(() => map.invalidateSize(), 1000);
+setTimeout(function() {
+  var loaded = document.querySelectorAll('#parkmap .leaflet-tile-loaded');
+  if (loaded.length === 0) {
+    document.getElementById('map-fallback').style.display = 'flex';
+  }
+}, 5000);
 
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });

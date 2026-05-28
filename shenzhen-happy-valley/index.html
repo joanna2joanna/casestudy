@@ -60,8 +60,12 @@ section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
 .map-tabs { display: flex; border-bottom: 1px solid rgba(0,0,0,0.08); }
 .map-tab { flex: 1; padding: 0.8rem; text-align: center; cursor: pointer; font-size: 0.9rem; font-weight: 600; border: none; background: none; color: #8b7355; transition: all 0.2s; }
 .map-tab.active { color: #3d1f0f; border-bottom: 2px solid #d4763a; }
-.map-wrap { height: 450px; width: 100%; }
+.map-wrap { height: 450px; width: 100%; position: relative; }
 .map-wrap .leaflet-container { height: 100%; width: 100%; }
+.map-fallback { display: none; position: absolute; inset: 0; align-items: center; justify-content: center; flex-direction: column; gap: 0.8rem; background: #f5f0e5; border-radius: 16px; text-align: center; z-index: 1000; }
+.map-fallback .icon { font-size: 2.5rem; }
+.map-fallback strong { font-size: 1rem; color: #3d1f0f; }
+.map-fallback span { font-size: 0.82rem; color: #8b7355; }
 .leaflet-div-icon { background: none; border: none; }
 .zone-marker { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 2px solid #fff; font-family: 'DM Sans', sans-serif; }
 
@@ -85,6 +89,14 @@ section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
 footer { background: #1a0e08; color: #c4a882; text-align: center; padding: 3rem 2rem; font-size: 0.85rem; }
 footer a { color: #d4763a; }
 
+/* Hero media: 720 VR iframe + fallback */
+.hero-media { max-width: 1100px; margin: -1rem auto 0; padding: 0 2rem; position: relative; z-index: 2; }
+.hero-media iframe { width: 100%; height: 520px; border: 0; border-radius: 16px; box-shadow: 0 8px 40px rgba(0,0,0,0.2); }
+.media-fallback { display: none; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; height: 520px; background: #fff; border-radius: 16px; border: 2px dashed #d4c4a0; text-align: center; padding: 2rem; }
+.media-fallback .icon { font-size: 3.5rem; }
+.media-fallback a { color: #d4763a; font-weight: 700; font-size: 1.1rem; }
+.media-fallback .hint { color: #8b7355; font-size: 0.85rem; }
+
 @media (max-width: 768px) {
   section { padding: 2.5rem 1rem; }
   .hero-nums { gap: 1.5rem; }
@@ -107,6 +119,32 @@ footer a { color: #d4763a; }
     <div class="hero-num-item"><div class="hero-num-val">¥20亿</div><div class="hero-num-label">累计投资总额</div></div>
   </div>
 </header>
+
+<!-- Hero 互动全景 -->
+<div class="hero-media reveal">
+  <iframe id="vr-frame"
+    src="https://www.720real.com/t/44abedb170f9dc1c"
+    allowfullscreen loading="lazy">
+  </iframe>
+  <div id="vr-fallback" class="media-fallback">
+    <span class="icon">🚁</span>
+    <strong>互动全景未能在此加载</strong>
+    <a href="https://www.720real.com/t/44abedb170f9dc1c" target="_blank">👉 点击在新窗口打开全景（19个鸟瞰视角）</a>
+    <span class="hint">拍摄于 2025年3月 · 拍摄高度约236米</span>
+  </div>
+</div>
+<script>
+const vrFrame = document.getElementById('vr-frame');
+const vrFallback = document.getElementById('vr-fallback');
+let vrLoaded = false;
+vrFrame.addEventListener('load', function() { vrLoaded = true; });
+setTimeout(function() {
+  if (!vrLoaded) {
+    vrFrame.style.display = 'none';
+    vrFallback.style.display = 'flex';
+  }
+}, 5000);
+</script>
 
 <!-- 项目概览 -->
 <section class="reveal">
@@ -194,6 +232,11 @@ footer a { color: #d4763a; }
       <button class="map-tab" onclick="switchMap('satellite')">卫星图</button>
     </div>
     <div id="parkmap" class="map-wrap"></div>
+    <div id="map-fallback" class="map-fallback">
+      <span class="icon">🗺️</span>
+      <strong>地图瓦片加载超时</strong>
+      <span>请检查网络连接后刷新页面 · 或尝试切换街道图/卫星图</span>
+    </div>
   </div>
 
   <!-- SVG 参考示意图 -->
@@ -467,6 +510,13 @@ function switchMap(type) {
   }
 }
 setTimeout(() => map.invalidateSize(), 1000);
+// 5秒地图瓦片未加载 → 显示降级提示
+setTimeout(function() {
+  var loaded = document.querySelectorAll('#parkmap .leaflet-tile-loaded');
+  if (loaded.length === 0) {
+    document.getElementById('map-fallback').style.display = 'flex';
+  }
+}, 5000);
 
 // Scroll reveal
 const observer = new IntersectionObserver((entries) => {

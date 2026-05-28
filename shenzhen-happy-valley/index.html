@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>深圳欢乐谷 — 案例研究报告</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 html { font-size: 17px; scroll-behavior: smooth; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -471,7 +471,7 @@ footer a { color: #d4763a; }
   <p style="margin-top:0.5rem;font-size:0.75rem;opacity:0.6;">所有金额为人民币 · 面积单位使用公制</p>
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 // GCJ-02 transform
 function wgs2gcj(lng, lat) {
@@ -543,7 +543,7 @@ setTimeout(function() {
   if (loaded.length === 0) {
     document.getElementById('map-fallback').style.display = 'flex';
   }
-}, 5000);
+}, 8000);
 
 // Scroll reveal
 // Back to top button

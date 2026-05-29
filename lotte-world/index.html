@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>乐天世界  Lotte World — 文旅项目案例研究</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<style>
+:root {
+  --clr-primary: #1A237E;
+  --clr-primary-light: #3949AB;
+  --clr-primary-dark: #0D1642;
+  --clr-accent: #E91E63;
+  --clr-accent-warm: #C2185B;
+  --clr-bg: #FAF9F6;
+  --clr-bg-alt: #F0EFEC;
+  --clr-text: #1A1A1A;
+  --clr-text-secondary: #555;
+  --clr-text-muted: #777;
+  --clr-border: #E0DED8;
+  --clr-white: #FFFFFF;
+  --clr-card-bg: #FFFFFF;
+  --clr-card-shadow: rgba(0,0,0,0.06);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --gap-section: 2.5rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 17px; }
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
+/* ---------- Typography ---------- */
+.f-headline { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; }
+.f-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3.5vw, 2.4rem); font-weight: 700; line-height: 1.25; }
+.f-subtitle { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 2.5vw, 1.6rem); font-weight: 600; line-height: 1.35; }
+.f-body { font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 400; line-height: 1.75; }
+.f-caption { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 400; line-height: 1.6; color: var(--clr-text-secondary); }
+.f-mono { font-family: 'DM Mono', monospace; }
+.f-data { font-family: 'DM Mono', monospace; font-size: 0.95rem; }
+
+/* ---------- Hero ---------- */
+.hero {
+  background: linear-gradient(160deg, #0D1642 0%, #1A237E 40%, #3949AB 70%, #5C6BC0 100%);
+  color: white;
+  padding: 5rem 0 4rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 20% 80%, rgba(233,30,99,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+.hero .container { position: relative; z-index: 1; }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 6vw, 4.2rem); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 0.8rem; }
+.hero .hero-subtitle { font-family: 'DM Sans', sans-serif; font-size: clamp(1rem, 2vw, 1.25rem); font-weight: 400; opacity: 0.88; max-width: 650px; margin: 0 auto 2.5rem; }
+.hero .kpi-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; }
+.hero .kpi-card {
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: var(--radius-md);
+  padding: 1.2rem 1.8rem;
+  min-width: 150px;
+  text-align: center;
+}
+.hero .kpi-number { font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 500; }
+.hero .kpi-label { font-family: 'DM Sans', sans-serif; font-size: 0.85rem; opacity: 0.75; margin-top: 0.25rem; }
+
+/* ---------- Section ---------- */
+.section { padding: var(--gap-section) 0; }
+.section-alt { background: var(--clr-bg-alt); }
+.section-header { margin-bottom: 2rem; }
+.section-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: var(--clr-primary-dark); }
+.section-header .section-line { width: 60px; height: 3px; background: var(--clr-accent); margin-top: 0.6rem; border-radius: 2px; }
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--clr-card-bg);
+  border-radius: var(--radius-md);
+  padding: 1.8rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--clr-border);
+  transition: box-shadow 0.3s, transform 0.25s;
+}
+.card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.card h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 600; color: var(--clr-primary-dark); margin-bottom: 0.5rem; }
+
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+
+/* ---------- Tables ---------- */
+.data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+.data-table thead { background: var(--clr-primary-dark); color: white; }
+.data-table thead th { padding: 0.75rem 1rem; text-align: left; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.9rem; }
+.data-table tbody td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--clr-border); }
+.data-table tbody tr:nth-child(even) { background: var(--clr-bg-alt); }
+.data-table tbody tr:hover { background: rgba(26,35,126,0.05); }
+.data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
+
+/* ---------- Map Section ---------- */
+#map-section { padding: var(--gap-section) 0; }
+#map-section .map-card { background: var(--clr-card-bg); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); }
+#parkmap { width: 100%; height: 500px; border-radius: var(--radius-lg); z-index: 0; }
+.map-fallback { display: none; text-align: center; padding: 0.9rem 1rem; margin-top: 0.5rem; background: #FFF3CD; color: #856404; border-radius: var(--radius-sm); font-size: 0.85rem; }
+.map-legend { padding: 1rem 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; font-size: 0.85rem; color: var(--clr-text-secondary); }
+.map-legend span { display: flex; align-items: center; gap: 0.4rem; }
+.map-legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* ---------- SVG Container ---------- */
+.svg-container { display: block; width: 100%; margin-top: 1.5rem; background: var(--clr-card-bg); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); }
+.svg-container svg { width: 100%; height: auto; display: block; }
+
+/* ---------- Timeline ---------- */
+.timeline { position: relative; padding-left: 2.5rem; }
+.timeline::before { content: ''; position: absolute; left: 0.6rem; top: 0; bottom: 0; width: 2px; background: var(--clr-primary-light); }
+.timeline-item { position: relative; margin-bottom: 1.8rem; }
+.timeline-item::before { content: ''; position: absolute; left: -2.05rem; top: 0.5rem; width: 12px; height: 12px; border-radius: 50%; background: var(--clr-accent); border: 2px solid var(--clr-primary); }
+.timeline-year { font-family: 'DM Mono', monospace; font-weight: 700; font-size: 1rem; color: var(--clr-primary); }
+.timeline-content { margin-top: 0.25rem; }
+.timeline-content h4 { font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 600; }
+.timeline-content p { font-size: 0.9rem; color: var(--clr-text-secondary); margin-top: 0.15rem; }
+
+/* ---------- Gallery ---------- */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; }
+.gallery-item { background: var(--clr-card-bg); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow 0.3s; }
+.gallery-item:hover { box-shadow: var(--shadow-lg); }
+.gallery-item img { width: 100%; height: 180px; object-fit: cover; display: block; }
+.gallery-item .gallery-caption { padding: 0.7rem 1rem; font-size: 0.85rem; color: var(--clr-text-secondary); }
+
+/* ---------- Resource Links ---------- */
+.resource-group { margin-bottom: 1.5rem; }
+.resource-group h4 { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--clr-primary-dark); margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--clr-border); }
+.resource-group ul { list-style: none; }
+.resource-group li { margin-bottom: 0.4rem; font-size: 0.9rem; }
+.resource-group a { color: var(--clr-primary); text-decoration: none; transition: color 0.2s; }
+.resource-group a:hover { color: var(--clr-primary-dark); text-decoration: underline; }
+.resource-group .tag { display: inline-block; background: var(--clr-bg-alt); padding: 0.1rem 0.5rem; border-radius: 4px; font-size: 0.78rem; margin-left: 0.4rem; color: var(--clr-text-muted); }
+
+/* ---------- Floating Nav ---------- */
+.floating-nav { position: fixed; right: 1.5rem; bottom: 2rem; display: flex; flex-direction: column; gap: 0.6rem; z-index: 999; }
+.floating-nav a { width: 46px; height: 46px; border-radius: 50%; background: var(--clr-primary-dark); color: white; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.2rem; box-shadow: var(--shadow-md); transition: background 0.25s, transform 0.2s; }
+.floating-nav a:hover { background: var(--clr-accent); transform: scale(1.08); }
+
+/* ---------- Reveal animation ---------- */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ---------- Visitor Counter ---------- */
+.visitor-counter { text-align: center; padding: 0.5rem; font-size: 0.8rem; color: var(--clr-text-muted); }
+.visitor-counter span { font-family: 'DM Mono', monospace; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .hero { padding: 3rem 0 2.5rem; }
+  .hero .kpi-row { gap: 0.8rem; }
+  .hero .kpi-card { padding: 0.8rem 1rem; min-width: 120px; }
+  .hero .kpi-number { font-size: 1.3rem; }
+  #parkmap { height: 350px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>乐天世界 Lotte World</h1>
+    <p class="hero-subtitle">首尔心脏地带的韩流奇幻王国 — 世界最大室内主题公园+湖心魔幻岛，34年累计2.1亿游客</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">1989</div><div class="kpi-label">开业年份</div></div>
+      <div class="kpi-card"><div class="kpi-number">12.8<span style="font-size:0.7em;opacity:0.7"> ha</span></div><div class="kpi-label">占地面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">~510<span style="font-size:0.7em;opacity:0.7"> 万</span></div><div class="kpi-label">年游客量(2023)</div></div>
+      <div class="kpi-card"><div class="kpi-number">40+</span></div><div class="kpi-label">游乐设施</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal"><div class="card"><h3>基本信息</h3><table class="data-table"><tbody>
+<tr><td><strong>项目名称</strong></td><td>乐天世界（Lotte World / 롯데월드）</td></tr>
+<tr><td><strong>开业时间</strong></td><td>室内探险世界 1989年7月12日 / 魔幻岛 1990年3月24日</td></tr>
+<tr><td><strong>地理位置</strong></td><td>韩国首尔特别市松坡区蚕室洞240番地</td></tr>
+<tr><td><strong>占地面积</strong></td><td>约128,246m²（约12.8公顷）</td></tr>
+<tr><td><strong>主题定位</strong></td><td>室内奇幻冒险+湖心户外魔幻岛，韩流文化地标</td></tr>
+<tr><td><strong>主题色系</strong></td><td>深蓝夜空 / 韩粉霓虹</td></tr>
+<tr><td><strong>运营方</strong></td><td>乐天集团（Lotte Corporation）酒店事业部</td></tr>
+<tr><td><strong>吉尼斯纪录</strong></td><td>全球最大室内主题公园（开业时）</td></tr>
+</tbody></table></div>
+<div class="card"><h3>坐标与交通</h3><table class="data-table"><tbody>
+<tr><td><strong>精确坐标</strong></td><td>37°30′40″N, 127°05′53″E</td></tr>
+<tr><td><strong>十进制坐标</strong></td><td>37.5112°N, 127.0981°E</td></tr>
+<tr><td><strong>海拔</strong></td><td>约30m</td></tr>
+<tr><td><strong>地铁</strong></td><td>首尔地铁2号线 · 8号线蚕室站（Jamsil）直达</td></tr>
+<tr><td><strong>距市中心</strong></td><td>首尔站约14km（地铁约30分钟）</td></tr>
+<tr><td><strong>距仁川机场</strong></td><td>约70km（机场大巴约70分钟）</td></tr>
+<tr><td><strong>周边综合体</strong></td><td>乐天百货 · 乐天酒店 · 乐天免税店 · SEOUL SKY观景台 · 石村湖</td></tr>
+</tbody></table></div></div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p class="f-body">乐天世界（Lotte World）是韩国最具代表性的综合主题乐园，也是<b>首尔市中心唯一的奇幻王国</b>。1989年7月12日开业时被吉尼斯世界纪录认证为全球最大室内主题公园，至今仍是亚洲最繁忙的主题公园之一。园区分为两大区域：<b>室内探险世界（Adventure）</b>——四层楼的各国风格街道、40+游乐设施、韩国最大室内溜冰场、每日两次大型巡游；<b>户外魔幻岛（Magic Island）</b>——建于石村湖人工岛上的欧洲城堡式主题区，以70米自然落体"Gyro Drop"为代表的高空冒险设施。作为乐天集团蚕室综合旅游城（Lotte Town）的核心，乐天世界与相邻的乐天世界塔（555m，SEOUL SKY观景台）、乐天百货、乐天酒店、乐天免税店共同构成韩国最大的都市旅游目的地。自开业以来累计游客超2.1亿人次，并因《天国的阶梯》《浪漫满屋》等韩剧拍摄地而成为韩流粉丝的"朝圣地"。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>乐天集团创始人</h3><p class="f-body"><strong>辛格浩（Shin Kyuk-ho / 重光武雄）</strong>（1921-2020）——乐天集团创始人。1980年代提出"在城市中心建造世界级主题乐园"愿景，乐天世界是其晚年最具代表性的文旅作品。他亲自参与选址（蚕室填埋地）和基本概念设计，强调<b>"让普通市民不出首尔就能享受世界级娱乐"</b>。</p></div>
+<div class="card"><h3>设计团队</h3><p class="f-body">乐天世界由韩国建筑事务所<b>正林建筑（Junglim Architecture）</b>与乐天建设（Lotte Engineering & Construction）联合设计建造。室内探险世界的四层中庭设计灵感来自欧洲拱廊街（Galleria），各层以英国康文特花园、意大利文艺复兴、法国香榭丽舍等为主题分区。魔幻岛由美国主题公园设计公司<b>ITEC Productions</b>（现ITEC Entertainment）担任概念设计，石村湖人工岛方案解决了首尔市区寸土寸金的选址难题。</p></div>
+</div>
+<div class="card reveal" style="margin-top:1.2rem;"><h3>设计理念：都市中心的奇幻绿洲</h3><p class="f-body">乐天世界的核心设计创新在于<b>"室内+户外"双区一体化</b>——四层室内中庭以拱形玻璃天顶覆盖（跨度约200m），300天/年不受天气影响；户外魔幻岛通过单轨铁路（Sky Train）连接室内区，将石村湖景观融入游乐体验。乐天世界塔（Lotte World Tower，555m，2017年竣工）的增建，使这组建筑群成为亚洲罕见的"主题公园+摩天楼+湖景"三位一体的城市文旅综合体模式。</p></div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody><tr><td>规模</td><td>总占地面积</td><td class="num">128,246 m²</td><td>约12.8 ha</td></tr>
+<tr><td>规模</td><td>室内探险世界</td><td class="num">4层，约6万m²</td><td>全球三大室内公园之一</td></tr>
+<tr><td>规模</td><td>魔幻岛户外区</td><td class="num">约3万m²</td><td>含石村湖水域</td></tr>
+<tr><td>规模</td><td>游乐设施</td><td class="num">40+项</td><td>含暗黑骑乘 · 过山车 · 落体</td></tr>
+<tr><td>规模</td><td>室内溜冰场</td><td class="num">韩国最大</td><td>全年开放</td></tr>
+<tr><td>景点</td><td>魔幻岛城堡</td><td class="num">欧洲城堡式</td><td>夜间灯光秀地标</td></tr>
+<tr><td>景点</td><td>每日巡游</td><td class="num">2次/天</td><td>14:00 & 19:00（周一除外）</td></tr>
+<tr><td>运营</td><td>年游客量(2023)</td><td class="num">约510万</td><td>全球第23位 · 亚洲第10</td></tr>
+<tr><td>运营</td><td>开业以来累计</td><td class="num">2.1亿+</td><td>至2023年</td></tr>
+<tr><td>运营</td><td>年收入(估算)</td><td class="num">约3,500亿韩元</td><td>约19亿人民币</td></tr>
+<tr><td>运营</td><td>营业时间</td><td class="num">9:30-23:00</td><td>全年365天</td></tr>
+<tr><td>投资</td><td>初始投资(1989)</td><td class="num">约6,500亿韩元</td><td>约4.54亿美元</td></tr>
+<tr><td>投资</td><td>乐天世界塔(2017)</td><td class="num">约4万亿韩元</td><td>含商场·酒店·观景台</td></tr>
+<tr><td>人力</td><td>员工数(含兼职)</td><td class="num">约2,500人</td><td>含演职人员</td></tr>
+<tr><td>人力</td><td>巡游+演出团队</td><td class="num">约200人</td><td>专业演员+韩流艺人嘉宾</td></tr></tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">注：人民币按2026年5月汇率估算（1 KRW ≈ 0.0055 CNY, 1 USD ≈ 7.25 CNY）。数据来自公开报道与行业排名，统计口径可能因来源不同有所差异。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class) -->
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="map-legend"><span><span class="dot" style="background:#E91E63"></span> 入口/交通枢纽</span><span><span class="dot" style="background:#1A237E"></span> 室内探险世界</span><span><span class="dot" style="background:#FF9800"></span> 魔幻岛</span><span><span class="dot" style="background:#4CAF50"></span> 湖景/观景</span></div>
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container"><svg viewBox="0 0 1100 650" xmlns="http://www.w3.org/2000/svg"><defs>
+<linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F0EFEC"/><stop offset="100%" stop-color="#E8E6E0"/></linearGradient>
+<linearGradient id="lakeGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#64B5F6"/><stop offset="100%" stop-color="#1565C0"/></linearGradient>
+<filter id="cardShadow"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-color="#00000020"/></filter></defs>
+<rect width="1100" height="650" fill="url(#bgGrad)" rx="14"/>
+<text x="550" y="35" text-anchor="middle" font-family="Playfair Display,serif" font-size="20" font-weight="700" fill="#0D1642">乐天世界 空间结构示意图</text>
+<text x="550" y="55" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" fill="#777">总占地12.8公顷 | 室内探险世界 + 魔幻岛 双区一体 · 首尔松坡区蚕室</text>
+<!-- Lake -->
+<path d="M0,500 Q200,460 400,480 Q600,500 800,475 Q1000,450 1100,490 L1100,650 L0,650 Z" fill="url(#lakeGrad)" opacity="0.25"/>
+<text x="550" y="560" text-anchor="middle" font-family="Playfair Display,serif" font-size="16" font-weight="600" fill="#1565C0" opacity="0.5">石 村 湖  Seokchon Lake</text>
+<!-- Indoor Adventure (large box, left-center) -->
+<rect x="40" y="80" width="420" height="280" rx="10" fill="#E8EAF6" stroke="#1A237E" stroke-width="2.5" filter="url(#cardShadow)"/>
+<text x="250" y="112" text-anchor="middle" font-family="Playfair Display,serif" font-size="18" font-weight="700" fill="#0D1642">室内探险世界 (Adventure)</text>
+<text x="250" y="132" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#3949AB">4层中庭 · 拱形玻璃天顶 · 365天全天候</text>
+<!-- Indoor subzones -->
+<rect x="60" y="150" width="180" height="55" rx="6" fill="#C5CAE9" stroke="#7986CB" stroke-width="1.5"/>
+<text x="150" y="174" text-anchor="middle" font-family="Playfair Display,serif" font-size="13" font-weight="600" fill="#283593">1F 中央中庭 · 巡游路</text>
+<text x="150" y="192" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#5C6BC0">信息台 · 储物柜 · 演出舞台</text>
+<rect x="260" y="150" width="180" height="55" rx="6" fill="#C5CAE9" stroke="#7986CB" stroke-width="1.5"/>
+<text x="350" y="174" text-anchor="middle" font-family="Playfair Display,serif" font-size="13" font-weight="600" fill="#283593">2F-4F 主题街区</text>
+<text x="350" y="192" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#5C6BC0">各国风格商店·餐厅·游乐设施</text>
+<rect x="60" y="220" width="180" height="45" rx="6" fill="#E3F2FD" stroke="#42A5F5" stroke-width="1.5"/>
+<text x="150" y="241" text-anchor="middle" font-family="Playfair Display,serif" font-size="12" font-weight="600" fill="#0D47A1">B3F 室内溜冰场</text>
+<text x="150" y="257" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#1976D2">韩国最大 · 全年开放</text>
+<rect x="260" y="220" width="180" height="45" rx="6" fill="#E3F2FD" stroke="#42A5F5" stroke-width="1.5"/>
+<text x="350" y="241" text-anchor="middle" font-family="Playfair Display,serif" font-size="12" font-weight="600" fill="#0D47A1">暗黑骑乘区</text>
+<text x="350" y="257" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#1976D2">Pharaoh's Fury · Conquistador</text>
+<rect x="60" y="280" width="380" height="65" rx="6" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+<text x="250" y="302" text-anchor="middle" font-family="Playfair Display,serif" font-size="13" font-weight="600" fill="#E65100">每日大型巡游 (2场/天 · 14:00 & 19:00)</text>
+<text x="250" y="320" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#EF6C00">韩流明星主题 · 花车游行 · 激光秀 · 周一休演</text>
+<text x="250" y="337" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="#F57C00">200+演职人员 · 各季节限定主题</text>
+<!-- Magic Island (right side, on lake) -->
+<rect x="540" y="100" width="260" height="260" rx="10" fill="#FFF8E1" stroke="#FF9800" stroke-width="2.5" filter="url(#cardShadow)"/>
+<text x="670" y="132" text-anchor="middle" font-family="Playfair Display,serif" font-size="18" font-weight="700" fill="#E65100">魔幻岛 Magic Island</text>
+<text x="670" y="152" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#F57C00">石村湖人工岛 · 欧洲城堡式户外主题区</text>
+<rect x="560" y="170" width="220" height="45" rx="6" fill="#FFECB3" stroke="#FFA000" stroke-width="1.5"/>
+<text x="670" y="191" text-anchor="middle" font-family="Playfair Display,serif" font-size="13" font-weight="600" fill="#E65100">魔幻岛城堡</text>
+<text x="670" y="207" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#FF8F00">欧洲城堡式地标 · 夜间灯光秀 · 韩剧取景地</text>
+<rect x="560" y="225" width="100" height="40" rx="6" fill="#FFCCBC" stroke="#E64A19" stroke-width="1.5"/>
+<text x="610" y="245" text-anchor="middle" font-family="Playfair Display,serif" font-size="11" font-weight="600" fill="#BF360C">Gyro Drop</text>
+<text x="610" y="259" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="8" fill="#E64A19">70m自由落体</text>
+<rect x="680" y="225" width="100" height="40" rx="6" fill="#FFCCBC" stroke="#E64A19" stroke-width="1.5"/>
+<text x="730" y="245" text-anchor="middle" font-family="Playfair Display,serif" font-size="11" font-weight="600" fill="#BF360C">Atlantis</text>
+<text x="730" y="259" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="8" fill="#E64A19">水上过山车</text>
+<!-- Sky Train connection -->
+<line x1="460" y1="200" x2="540" y2="200" stroke="#E91E63" stroke-width="2.5" stroke-dasharray="8,4"/>
+<text x="500" y="193" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#E91E63" font-weight="600">Sky Train</text>
+<!-- Lotte World Tower (far right) -->
+<rect x="860" y="80" width="90" height="280" rx="6" fill="#ECEFF1" stroke="#546E7A" stroke-width="2"/>
+<text x="905" y="108" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#37474F">乐天世</text><text x="905" y="126" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#37474F">界塔</text>
+<text x="905" y="148" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#546E7A">555m</text>
+<text x="905" y="310" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#78909C">韩国最高</text>
+<text x="905" y="325" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#78909C">SEOUL SKY</text>
+<!-- Surrounding complex -->
+<rect x="30" y="400" width="200" height="55" rx="6" fill="#FCE4EC" stroke="#E91E63" stroke-width="1.5"/>
+<text x="130" y="424" text-anchor="middle" font-family="Playfair Display,serif" font-size="13" font-weight="600" fill="#880E4F">乐天百货 · 免税店</text>
+<text x="130" y="442" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#AD1457">蚕室店 · B1F连接公园 · 乐天酒店</text>
+<rect x="860" y="400" width="200" height="55" rx="6" fill="#E8EAF6" stroke="#3949AB" stroke-width="1.5"/>
+<text x="960" y="424" text-anchor="middle" font-family="Playfair Display,serif" font-size="13" font-weight="600" fill="#1A237E">石村湖 樱花路</text>
+<text x="960" y="442" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#3949AB">春季樱花名所 · 环湖步道 · 魔幻岛倒影</text>
+<!-- Legend -->
+<rect x="30" y="600" width="12" height="12" rx="2" fill="#1A237E"/>
+<text x="48" y="611" font-family="DM Sans,sans-serif" font-size="10" fill="#666">室内探险世界</text>
+<rect x="160" y="600" width="12" height="12" rx="2" fill="#FF9800" stroke="#FF9800" stroke-width="1"/>
+<text x="178" y="611" font-family="DM Sans,sans-serif" font-size="10" fill="#666">魔幻岛户外区</text>
+<rect x="290" y="600" width="12" height="12" rx="2" fill="#E91E63"/>
+<text x="308" y="611" font-family="DM Sans,sans-serif" font-size="10" fill="#666">商业/酒店综合体</text>
+<text x="550" y="611" font-family="DM Sans,sans-serif" font-size="9" fill="#AAA">示意比例，非精确测绘</text></svg></div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;"><div class="card"><h3>室内探险世界 (Adventure)</h3><p class="f-caption">四层楼中庭式室内主题公园，拱形玻璃天顶跨度约200m，全天候365天运营。各层以不同国家风格为主题。核心设施包括：Conquistador西班牙海盗船暗黑骑乘、Pharaoh's Fury埃及室内过山车、法式旋转木马。每日14:00与19:00两次大型巡游沿1F中央大道行进，配合季节性韩流主题演出。B3F为韩国最大室内溜冰场。</p></div>
+<div class="card"><h3>魔幻岛 (Magic Island)</h3><p class="f-caption">建于石村湖人工岛上的欧洲城堡式户外主题区，通过Sky Train单轨铁路与室内区连接。标志性设施包括70m Gyro Drop自由落体（韩国最高）、Atlantis水上过山车+暗黑骑乘（韩国最快水上设施）、The Conquistador摇摆海盗船。城堡建筑群夜间有灯光秀和烟花表演，是《天国的阶梯》《浪漫满屋》等多部韩剧经典取景地。</p></div>
+<div class="card"><h3>石村湖 · 樱花季</h3><p class="f-caption">石村湖（Seokchon Lake）环绕魔幻岛，每年3月底至4月初樱花盛开时，环湖步道成为韩国最著名的城市赏樱名所之一。湖面倒映魔幻岛城堡和乐天世界塔，形成独特的"传统自然景观+现代摩天楼+主题乐园城堡"三重天际线。夜间湖面灯光与乐天世界塔LED灯光秀联动。</p></div>
+<div class="card"><h3>蚕室综合旅游城</h3><p class="f-caption">乐天世界是蚕室Lotte Town的核心，周边包括：乐天世界塔（555m，韩国最高，123F SEOUL SKY观景台）、乐天百货蚕室店、乐天酒店、乐天免税店、乐天世界Mall、乐天音乐厅。地铁2·8号线蚕室站B1F与公园直接连通，全年不受天气影响。整个综合体年客流超过8,000万人次。</p></div>
+<div class="card"><h3>韩流文化符号</h3><p class="f-caption">因《天国的阶梯》（2003）、《浪漫满屋》（2004）、《来自星星的你》等多部韩剧在此取景，乐天世界成为全球韩流粉丝的"朝圣地"。室内溜冰场、旋转木马、魔幻岛城堡是最常见取景点。乐天集团定期邀请韩流明星参与季节性演出和粉丝见面会，将IP运营融入主题乐园运营。</p></div>
+<div class="card"><h3>40+游乐设施矩阵</h3><p class="f-caption">涵盖暗黑骑乘（Pharaoh's Fury、The Conquistador）、过山车（Atlantis、French Revolution）、自由落体（Gyro Drop）、水上设施（Flume Ride）、4D影院、激光表演、VR体验馆。设施更新节奏约每3-5年一次重大改造或新增，2023年引入全新VR暗黑骑乘体验。</p></div></div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT & CONSTRUCTION TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline"><div class="timeline-item reveal"><div class="timeline-year">1984-1985</div><div class="timeline-content"><h4>立项与开工建设</h4><p>乐天集团创始人辛格浩提出"在首尔市中心建造世界级室内主题乐园"构想。选址蚕室填埋地，总投资约6,500亿韩元。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">1989.07.12</div><div class="timeline-content"><h4>室内探险世界开业</h4><p>上午11时开幕，被吉尼斯世界纪录认证为全球最大室内主题公园。首年即接待游客超500万人次。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">1990.03.24</div><div class="timeline-content"><h4>魔幻岛 (Magic Island) 开放</h4><p>户外区正式开放，通过Sky Train单轨铁路与室内区连接，石村湖人工岛+欧洲城堡地标建成。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2003</div><div class="timeline-content"><h4>韩剧文化效应爆发</h4><p>《天国的阶梯》取景乐天世界（旋转木马+溜冰场），引发韩流粉丝"圣地巡礼"热潮，韩国及海外游客激增。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2007</div><div class="timeline-content"><h4>累计游客突破1亿人次里程碑</h4><p>开业18年后首次达1亿游客里程碑。同年引入季节性大型巡游2.0版。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2017</div><div class="timeline-content"><h4>乐天世界塔 (Lotte World Tower) 竣工</h4><p>555m/123层，韩国最高建筑。SEOUL SKY观景台成为首尔新地标，乐天世界综合体完整成形。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2023</div><div class="timeline-content"><h4>累计游客突破2.1亿 · 引入VR暗黑骑乘</h4><p>年游客量510万人次（全球第23位）。全新VR暗黑骑乘体验开放，室内区进行开园以来最大规模翻新。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2024-2025</div><div class="timeline-content"><h4>数字化转型与可持续升级</h4><p>全面引入智能排队系统（Lotte World App）、AI客服机器人、面部识别入场。承诺2035年碳中和运营，室内区全面更换LED照明。</p></div></div></div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONAL INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>游客量趋势</h3><table class="data-table"><thead><tr><th>指标</th><th>数值</th><th>备注</th></tr></thead><tbody>
+<tr><td>2023年游客量</td><td class="num">510万</td><td>全球第23位 · 亚洲第10</td></tr>
+<tr><td>2011年游客量</td><td class="num">758万</td><td>历史最高（全球第11位）</td></tr>
+<tr><td>累计游客量</td><td class="num">2.1亿+</td><td>自1989年开业</td></tr>
+<tr><td>蚕室综合体年客流</td><td class="num">8,000万+</td><td>含商场·酒店·观景台</td></tr>
+</tbody></table></div>
+<div class="card"><h3>门票价格(2025参考)</h3><table class="data-table"><thead><tr><th>票种</th><th>成人(韩元)</th><th>人民币(约)</th></tr></thead><tbody>
+<tr><td>全日通票</td><td class="num">62,000</td><td class="num">约¥341</td></tr>
+<tr><td>全日通票(青少年)</td><td class="num">54,000</td><td class="num">约¥297</td></tr>
+<tr><td>全日通票(儿童)</td><td class="num">48,000</td><td class="num">约¥264</td></tr>
+<tr><td>下午票(16:00后)</td><td class="num">50,000</td><td class="num">约¥275</td></tr>
+</tbody></table><p class="f-caption">汇率：2026年5月，1 KRW ≈ 0.0055 CNY。</p></div>
+</div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal"><div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">12.8ha</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">总占地面积</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">含室内+魔幻岛+湖面</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">40+</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">游乐设施</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">暗黑骑乘 · 过山车 · VR</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">70m</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">Gyro Drop高度</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">韩国最高自由落体</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">2.1亿+</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">累计游客量</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">开业34年 · 至2023年</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">555m</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">乐天世界塔</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">韩国最高建筑</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">365天</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">全年无休</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">室内全天候+户外</div></div></div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>园区餐饮</h3><table class="data-table"><thead><tr><th>类型</th><th>代表</th><th>特色</th></tr></thead><tbody>
+<tr><td>韩式料理</td><td>Hanwoori · Chosun</td><td>韩定食 · 石锅拌饭 · 烤肉</td></tr>
+<tr><td>国际快餐</td><td>Lotteria · Angel-in-us</td><td>汉堡 · 咖啡 · 甜点</td></tr>
+<tr><td>主题餐厅</td><td>Magic Time</td><td>城堡景观 · 韩流主题套餐</td></tr>
+<tr><td>美食广场</td><td>Food Avenue</td><td>20+档口 · 各楼层分布</td></tr>
+</tbody></table></div>
+<div class="card"><h3>购物与零售</h3><table class="data-table"><thead><tr><th>类型</th><th>代表</th><th>特色</th></tr></thead><tbody>
+<tr><td>主题纪念品</td><td>Lotte World Store</td><td>角色周边 · 限定品</td></tr>
+<tr><td>乐天免税店</td><td>Lotte Duty Free</td><td>蚕室店 · 韩妆 · 奢侈品</td></tr>
+<tr><td>乐天百货</td><td>Lotte Department</td><td>蚕室店 · 综合购物</td></tr>
+</tbody></table></div>
+</div>
+<div class="grid-3 reveal" style="margin-top:1.2rem;">
+<div class="card"><h3>交通配套</h3><p class="f-caption">• 首尔地铁2·8号线蚕室站B1F直连<br>• 多条公交线路（301、341、360等）<br>• 仁川/金浦机场大巴直达<br>• 3,000+车位停车场<br>• Sky Train园区内部单轨<br>• 无障碍通道全覆盖</p></div>
+<div class="card"><h3>服务设施</h3><p class="f-caption">• 多语种导览（韩/英/中/日）<br>• Lotte World App实时排队+地图<br>• 轮椅/婴儿车免费租赁<br>• 大型母婴室<br>• 急救站 + 药店<br>• ATM + 外币兑换</p></div>
+<div class="card"><h3>住宿配套</h3><p class="f-caption">• 乐天酒店首尔（5星）<br>• 乐天城市酒店蚕室<br>• Signiel Seoul（乐天世界塔76-101F）<br>• 周边中端酒店/民宿丰富<br>• 酒店住客享公园门票折扣</p></div>
+</div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>2024-2025最新动态</h3><ul style="list-style:disc;padding-left:1.2rem;font-size:0.95rem;line-height:1.8;">
+<li><strong>数字转型加速：</strong>全面上线Lotte World App智能排队系统，支持韩/英/中/日四语。引入AI客服机器人和面部识别入场系统，减少排队时间。</li>
+<li><strong>2024年春季翻新完工：</strong>室内探险世界1F中庭进行开园以来最大规模翻新，更换拱形天顶LED照明系统，新增沉浸式投影Mapping设备。</li>
+<li><strong>韩流IP合作深化：</strong>与HYBE（BTS所属公司）合作推出限定主题巡游和周边产品线。</li>
+</ul></div>
+<div class="card"><h3>中长期规划</h3><ul style="list-style:disc;padding-left:1.2rem;font-size:0.95rem;line-height:1.8;">
+<li><strong>2035碳中和目标：</strong>乐天集团宣布乐天世界2035年前实现碳中和运营，室内区全面更换LED照明，引入太阳能发电系统。</li>
+<li><strong>VR/AR体验扩展：</strong>计划2026年前新增3个VR/AR沉浸式体验设施，打造"未来探险"主题区。</li>
+<li><strong>釜山第二乐园：</strong>乐天世界釜山（Lotte World Adventure Busan）已作为独立项目运营，与首尔形成双城联动。</li>
+</ul></div>
+</div>
+  </div>
+</section>
+
+<!-- ====== 11. PHOTO GALLERY ====== -->
+<section class="section section-alt" id="gallery">
+  <div class="container">
+    <div class="section-header reveal"><h2>实景图集</h2><div class="section-line"></div></div>
+    <p class="f-caption reveal" style="margin-bottom:1.2rem;">以下图片来源于Unsplash、Google Images公开图库及官方媒体资料，供案例研究参考使用。</p>
+    <div class="gallery-grid reveal"><div class="gallery-item"><img src="https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=600&h=400&fit=crop" alt="Lotte World indoor atrium" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">室内探险世界 — 四层中庭拱形玻璃天顶，365天全天候运营</div></div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=600&h=400&fit=crop" alt="Magic Island castle" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">魔幻岛城堡 — 石村湖上欧洲城堡式地标，夜间灯光秀</div></div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1529686159790-3246c5082afb?w=600&h=400&fit=crop" alt="Seoul Lotte World Tower" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">乐天世界塔（555m）— 韩国最高建筑，123F SEOUL SKY观景台</div></div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1571770094804-80b2a5e9b187?w=600&h=400&fit=crop" alt="Seokchon Lake cherry blossoms" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">石村湖樱花季 — 韩国最著名城市赏樱名所之一</div></div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=600&h=400&fit=crop" alt="Amusement park parade" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">每日大型巡游 — 14:00 & 19:00，韩流主题花车游行</div></div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?w=600&h=400&fit=crop" alt="Lotte World night view" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">乐天世界夜景 — 室内外联动的夜间灯光与烟花表演</div></div></div>
+  </div>
+</section>
+
+<!-- ====== 12. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>1. 自由版权图库</h4><ul>
+<li><a href="https://unsplash.com/s/photos/lotte-world" target="_blank" rel="noopener">Unsplash — Lotte World 主题照片</a> <span class="tag">自由版权</span></li>
+<li><a href="https://commons.wikimedia.org/wiki/Category:Lotte_World" target="_blank" rel="noopener">Wikimedia Commons — Lotte World 分类</a> <span class="tag">自由版权</span></li>
+<li><a href="https://www.flickr.com/search/?text=Lotte%20World&license=2,3,4,5,6,9" target="_blank" rel="noopener">Flickr — Lotte World（可商用许可）</a> <span class="tag">部分自由版权</span></li></ul></div>
+<div class="resource-group reveal"><h4>2. 官方来源</h4><ul>
+<li><a href="https://www.lotteworld.com/" target="_blank" rel="noopener">乐天世界 韩国官网</a> <span class="tag">官方</span></li>
+<li><a href="https://www.lotteworld.com/eng" target="_blank" rel="noopener">乐天世界 英文官网</a> <span class="tag">官方</span></li>
+<li><a href="https://www.lotteworldtower.com/" target="_blank" rel="noopener">乐天世界塔 SEOUL SKY</a> <span class="tag">官方</span></li></ul></div>
+<div class="resource-group reveal"><h4>3. 高清视频</h4><ul>
+<li><a href="https://www.youtube.com/results?search_query=Lotte+World+full+tour+4K" target="_blank" rel="noopener">YouTube — 乐天世界全景导览4K</a> <span class="tag">视频</span></li>
+<li><a href="https://www.youtube.com/results?search_query=Lotte+World+Magic+Island+night+show" target="_blank" rel="noopener">YouTube — 魔幻岛夜间灯光秀</a> <span class="tag">视频</span></li></ul></div>
+<div class="resource-group reveal"><h4>4. 深度分析</h4><ul>
+<li><a href="https://blooloop.com/theme-park/influencer/lotte-world/" target="_blank" rel="noopener">Blooloop — Lotte World 深度分析</a> <span class="tag">行业媒体</span></li>
+<li><a href="https://www.iaapa.org/" target="_blank" rel="noopener">IAAPA — 亚太主题公园行业报告</a> <span class="tag">行业报告</span></li></ul></div>
+<div class="resource-group reveal"><h4>5. 游客攻略</h4><ul>
+<li><a href="https://www.tripadvisor.com/Attraction_Review-g294197-d320704-Reviews-Lotte_World-Seoul.html" target="_blank" rel="noopener">TripAdvisor — 乐天世界游客评价</a> <span class="tag">游客评价</span></li></ul></div>
+  </div>
+</section>
+
+<!-- ====== 13. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="#overview" title="项目概览" aria-label="项目概览">&#9733;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.icodeq.com/busuanzi.pure.mini.js"></script>
+<script>
+// ====== MAP INITIALIZATION (overseas: ESRI ArcGIS + WGS-84) ======
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+  var tilesLoaded = false;
+
+  var map = L.map('parkmap', {
+    center: [37.5112, 127.0983],
+    zoom: 16,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+
+  tileLayer.on('load', function() {
+    tilesLoaded = true;
+    clearTimeout(tileTimer);
+    fallback.style.display = 'none';
+  });
+
+  tileLayer.addTo(map);
+
+  var tileTimer = setTimeout(function() {
+    if (!tilesLoaded) fallback.style.display = 'block';
+  }, 8000);
+
+  // ====== MAP MARKERS ======
+  var entranceIcon = L.divIcon({ className: 'custom-div-icon', html: '<div style="background:#E91E63;color:#fff;width:22px;height:22px;border-radius:50%;text-align:center;line-height:22px;font-weight:bold;font-size:12px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);">&#9733;</div>', iconSize: [22,22], iconAnchor: [11,11] });
+  var indoorIcon = L.divIcon({ className: 'custom-div-icon', html: '<div style="background:#1A237E;color:#fff;width:16px;height:16px;border-radius:50%;text-align:center;line-height:16px;font-size:9px;border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,0.25);"></div>', iconSize: [16,16], iconAnchor: [8,8] });
+  var outdoorIcon = L.divIcon({ className: 'custom-div-icon', html: '<div style="background:#FF9800;color:#fff;width:16px;height:16px;border-radius:50%;text-align:center;line-height:16px;font-size:9px;border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,0.25);"></div>', iconSize: [16,16], iconAnchor: [8,8] });
+  var lakeIcon = L.divIcon({ className: 'custom-div-icon', html: '<div style="background:#4CAF50;color:#fff;width:16px;height:16px;border-radius:50%;text-align:center;line-height:16px;font-size:9px;border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,0.25);"></div>', iconSize: [16,16], iconAnchor: [8,8] });
+  // Indoor Adventure
+  L.marker([37.5115, 127.0985], {icon: entranceIcon}).addTo(map).bindPopup('<b>蚕室站 / 主入口</b><br>地铁2·8号线 · 乐天百货B1F连接通道');
+  L.marker([37.5110, 127.0980], {icon: indoorIcon}).addTo(map).bindPopup('<b>室内探险世界 1F</b><br>中央中庭 · 信息台 · 储物柜 · 轮椅/婴儿车租赁');
+  L.marker([37.5113, 127.0982], {icon: indoorIcon}).addTo(map).bindPopup('<b>室内溜冰场</b><br>B3F · 韩国最大室内冰场 · 全年开放');
+  L.marker([37.5108, 127.0978], {icon: indoorIcon}).addTo(map).bindPopup('<b>Conquistador 西班牙海盗船</b><br>室内暗黑骑乘 · 1989年原装设施');
+  L.marker([37.5112, 127.0975], {icon: indoorIcon}).addTo(map).bindPopup('<b>法老之怒 Pharaoh's Fury</b><br>室内过山车(Indoor Coaster) · 埃及主题');
+  // Magic Island (outdoor)
+  L.marker([37.5120, 127.0988], {icon: outdoorIcon}).addTo(map).bindPopup('<b>魔幻岛入口 / Sky Train站</b><br>单轨铁路连接室内外 · 石村湖景');
+  L.marker([37.5128, 127.0995], {icon: outdoorIcon}).addTo(map).bindPopup('<b>魔幻岛城堡</b><br>欧洲城堡式地标 · 夜间灯光秀 · 韩剧取景地');
+  L.marker([37.5130, 127.0988], {icon: outdoorIcon}).addTo(map).bindPopup('<b>Gyro Drop 自由落体</b><br>70m · 韩国最高自然落体设施 · 湖面景观');
+  L.marker([37.5125, 127.1000], {icon: outdoorIcon}).addTo(map).bindPopup('<b>Atlantis 亚特兰蒂斯</b><br>水上过山车+暗黑骑乘 · 韩国最快水上设施');
+  // Surroundings
+  L.marker([37.5100, 127.0970], {icon: lakeIcon}).addTo(map).bindPopup('<b>石村湖 (Seokchon Lake)</b><br>春季樱花名所 · 环湖步道 · 魔幻岛倒影');
+  L.marker([37.5125, 127.1025], {icon: lakeIcon}).addTo(map).bindPopup('<b>乐天世界塔 · SEOUL SKY</b><br>555m · 韩国最高建筑 · 123F观景台');
+  L.marker([37.5102, 127.0995], {icon: entranceIcon}).addTo(map).bindPopup('<b>乐天百货 · 乐天免税店</b><br>蚕室店 · 乐天酒店 · 乐天塔商场');
+
+  // Fit bounds
+  var bounds = L.latLngBounds([
+    [37.509, 127.095],
+    [37.514, 127.102]
+  ]);
+  map.fitBounds(bounds, {padding: [20, 20]});
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+});
+
+// ====== SCROLL REVEAL ======
+(function() {
+  var revealElements = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    revealElements.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  revealElements.forEach(function(el) { observer.observe(el); });
+})();
+
+// ====== BACK TO TOP ======
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

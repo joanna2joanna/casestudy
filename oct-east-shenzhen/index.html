@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>深圳东部华侨城 — 文旅项目深度案例研究</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<style>
+/* ====== SAME CSS FRAMEWORK AS OVERSEAS TEMPLATE ====== */
+:root {
+  --clr-primary: #2E7D32;
+  --clr-primary-light: #4CAF50;
+  --clr-primary-dark: #1B5E20;
+  --clr-accent: #FF8F00;
+  --clr-accent-warm: #E65100;
+  --clr-bg: #FAF9F6;
+  --clr-bg-alt: #F0EFEC;
+  --clr-text: #1A1A1A;
+  --clr-text-secondary: #555;
+  --clr-text-muted: #777;
+  --clr-border: #E0DED8;
+  --clr-white: #FFFFFF;
+  --clr-card-bg: #FFFFFF;
+  --clr-card-shadow: rgba(0,0,0,0.06);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --gap-section: 2.5rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 17px; }
+body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--clr-bg); color: var(--clr-text); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
+/* Typography */
+.f-headline { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; }
+.f-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3.5vw, 2.4rem); font-weight: 700; line-height: 1.25; }
+.f-subtitle { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 2.5vw, 1.6rem); font-weight: 600; line-height: 1.35; }
+.f-body { font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 400; line-height: 1.75; }
+.f-caption { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 400; line-height: 1.6; color: var(--clr-text-secondary); }
+.f-mono { font-family: 'DM Mono', monospace; }
+.f-data { font-family: 'DM Mono', monospace; font-size: 0.95rem; }
+
+/* Hero */
+.hero { background: linear-gradient(160deg, #1B5E20 0%, #2E7D32 40%, #4CAF50 70%, #81C784 100%); color: white; padding: 5rem 0 4rem; text-align: center; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 80%, rgba(255,143,0,0.15) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%); pointer-events: none; }
+.hero .container { position: relative; z-index: 1; }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 6vw, 4.2rem); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 0.8rem; }
+.hero .hero-subtitle { font-family: 'DM Sans', sans-serif; font-size: clamp(1rem, 2vw, 1.25rem); font-weight: 400; opacity: 0.88; max-width: 650px; margin: 0 auto 2.5rem; }
+.hero .kpi-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; }
+.hero .kpi-card { background: rgba(255,255,255,0.12); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.18); border-radius: var(--radius-md); padding: 1.2rem 1.8rem; min-width: 150px; text-align: center; }
+.hero .kpi-number { font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 500; }
+.hero .kpi-label { font-family: 'DM Sans', sans-serif; font-size: 0.85rem; opacity: 0.75; margin-top: 0.25rem; }
+
+/* Sections */
+.section { padding: var(--gap-section) 0; }
+.section-alt { background: var(--clr-bg-alt); }
+.section-header { margin-bottom: 2rem; }
+.section-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: var(--clr-primary-dark); }
+.section-header .section-line { width: 60px; height: 3px; background: var(--clr-accent); margin-top: 0.6rem; border-radius: 2px; }
+
+/* Cards */
+.card { background: var(--clr-card-bg); border-radius: var(--radius-md); padding: 1.8rem; box-shadow: var(--shadow-sm); border: 1px solid var(--clr-border); transition: box-shadow 0.3s, transform 0.25s; }
+.card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.card h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 600; color: var(--clr-primary-dark); margin-bottom: 0.5rem; }
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+
+/* Tables */
+.data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+.data-table thead { background: var(--clr-primary-dark); color: white; }
+.data-table thead th { padding: 0.75rem 1rem; text-align: left; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.9rem; }
+.data-table tbody td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--clr-border); }
+.data-table tbody tr:nth-child(even) { background: var(--clr-bg-alt); }
+.data-table tbody tr:hover { background: rgba(46,125,50,0.05); }
+.data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
+
+/* Map */
+#parkmap { width: 100%; height: 520px; border-radius: 12px; z-index: 0; }
+#satmap { width: 100%; height: 420px; border-radius: 12px; z-index: 0; }
+.map-fallback { display: none; text-align: center; padding: 0.9rem 1rem; margin-top: 0.5rem; background: #FFF3CD; color: #856404; border-radius: var(--radius-sm); font-size: 0.85rem; }
+.map-legend { padding: 1rem 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; font-size: 0.85rem; color: var(--clr-text-secondary); }
+.map-legend span { display: flex; align-items: center; gap: 0.4rem; }
+.map-legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* SVG */
+.svg-container { display: block; width: 100%; margin-top: 1.5rem; background: var(--clr-card-bg); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); }
+.svg-container svg { width: 100%; height: auto; display: block; }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 2.5rem; }
+.timeline::before { content: ''; position: absolute; left: 0.6rem; top: 0; bottom: 0; width: 2px; background: var(--clr-primary-light); }
+.timeline-item { position: relative; margin-bottom: 1.8rem; }
+.timeline-item::before { content: ''; position: absolute; left: -2.05rem; top: 0.5rem; width: 12px; height: 12px; border-radius: 50%; background: var(--clr-accent); border: 2px solid var(--clr-primary); }
+.timeline-year { font-family: 'DM Mono', monospace; font-weight: 700; font-size: 1rem; color: var(--clr-primary); }
+.timeline-content { margin-top: 0.25rem; }
+.timeline-content h4 { font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 600; }
+.timeline-content p { font-size: 0.9rem; color: var(--clr-text-secondary); margin-top: 0.15rem; }
+
+/* Gallery */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; }
+.gallery-item { background: var(--clr-card-bg); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow 0.3s; }
+.gallery-item:hover { box-shadow: var(--shadow-lg); }
+.gallery-item img { width: 100%; height: 180px; object-fit: cover; display: block; }
+.gallery-item .gallery-caption { padding: 0.7rem 1rem; font-size: 0.85rem; color: var(--clr-text-secondary); }
+
+/* Resources */
+.resource-group { margin-bottom: 1.5rem; }
+.resource-group h4 { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--clr-primary-dark); margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--clr-border); }
+.resource-group ul { list-style: none; }
+.resource-group li { margin-bottom: 0.4rem; font-size: 0.9rem; }
+.resource-group a { color: var(--clr-primary); text-decoration: none; transition: color 0.2s; }
+.resource-group a:hover { color: var(--clr-primary-dark); text-decoration: underline; }
+.resource-group .tag { display: inline-block; background: var(--clr-bg-alt); padding: 0.1rem 0.5rem; border-radius: 4px; font-size: 0.78rem; margin-left: 0.4rem; color: var(--clr-text-muted); }
+
+/* Floating Nav */
+.floating-nav { position: fixed; right: 1.5rem; bottom: 2rem; display: flex; flex-direction: column; gap: 0.6rem; z-index: 999; }
+.floating-nav a { width: 46px; height: 46px; border-radius: 50%; background: var(--clr-primary-dark); color: white; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.2rem; box-shadow: var(--shadow-md); transition: background 0.25s, transform 0.2s; }
+.floating-nav a:hover { background: var(--clr-accent); transform: scale(1.08); }
+
+/* Reveal */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Visitor Counter */
+.visitor-counter { text-align: center; padding: 0.5rem; font-size: 0.8rem; color: var(--clr-text-muted); }
+.visitor-counter span { font-family: 'DM Mono', monospace; }
+
+@media (max-width: 768px) {
+  .hero { padding: 3rem 0 2.5rem; }
+  .hero .kpi-row { gap: 0.8rem; }
+  .hero .kpi-card { padding: 0.8rem 1rem; min-width: 120px; }
+  .hero .kpi-number { font-size: 1.3rem; }
+  #parkmap, #satmap { height: 300px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>深圳东部华侨城</h1>
+    <p class="hero-subtitle">中国首个国家生态旅游示范区 — 近9平方公里山海度假王国，华侨城集团总投资35亿元的史诗级文旅作品</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">2007</div><div class="kpi-label">开业年份</div></div>
+      <div class="kpi-card"><div class="kpi-number">9<span style="font-size:0.7em;opacity:0.7"> km²</span></div><div class="kpi-label">占地面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">35<span style="font-size:0.7em;opacity:0.7"> 亿</span></div><div class="kpi-label">总投资（人民币）</div></div>
+      <div class="kpi-card"><div class="kpi-number">4,500<span style="font-size:0.7em;opacity:0.7"> 万+</span></div><div class="kpi-label">累计游客量</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal"><div class="card"><h3>基本信息</h3><table class="data-table"><tbody>
+<tr><td><strong>项目名称</strong></td><td>深圳东部华侨城（OCT East Shenzhen）</td></tr>
+<tr><td><strong>开工/开业</strong></td><td>2004年12月30日动工 / 一期2007年7月28日试业 / 2009年8月1日全面开业</td></tr>
+<tr><td><strong>地理位置</strong></td><td>深圳市盐田区大梅沙三洲田片区</td></tr>
+<tr><td><strong>占地面积</strong></td><td>近9平方公里</td></tr>
+<tr><td><strong>总投资</strong></td><td>35亿元人民币</td></tr>
+<tr><td><strong>主题定位</strong></td><td>国家生态旅游示范区 · 山海度假王国</td></tr>
+<tr><td><strong>主题色系</strong></td><td>山林绿 / 暖阳琥珀</td></tr>
+<tr><td><strong>开发商</strong></td><td>华侨城集团（OCT Group）</td></tr>
+</tbody></table></div>
+<div class="card"><h3>坐标与交通</h3><table class="data-table"><tbody>
+<tr><td><strong>精确坐标</strong></td><td>22°35′55″N, 114°16′23″E</td></tr>
+<tr><td><strong>十进制坐标</strong></td><td>22.5987°N, 114.2731°E</td></tr>
+<tr><td><strong>海拔</strong></td><td>约60-480m（山海落差）</td></tr>
+<tr><td><strong>距深圳市中心</strong></td><td>约25km（福田/罗湖约40分钟车程）</td></tr>
+<tr><td><strong>距盐田港</strong></td><td>约8km（大梅沙片区）</td></tr>
+<tr><td><strong>公交/地铁</strong></td><td>深圳地铁8号线二期（大梅沙站）+ 公交接驳</td></tr>
+</tbody></table></div></div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p class="f-body">深圳东部华侨城是中国首个<b>国家生态旅游示范区</b>，也是华侨城集团继深圳欢乐谷、世界之窗、锦绣中华后最为宏大的一部文旅作品。项目选址深圳盐田区大梅沙三洲田山地，占地近9平方公里，总投资35亿元人民币，于2004年底动工、2007年试业、2009年全面开业。规划三大主题园区：<b>大侠谷</b>（峡谷探险乐园）、<b>茶溪谷</b>（度假公园）、<b>云海谷</b>（体育公园），融合生态旅游、休闲度假、户外运动、温泉养生和高端居住功能。作为中国生态旅游的先锋探索，东部华侨城自开业以来累计接待游客超4,500万人次，2015年被认定为首批国家级旅游度假区。然而，随着时间推移，部分设施老化、设备年限到期以及周边新兴文旅项目（如欢乐海岸、深圳海洋公园）竞争加剧，2025年大侠谷启动"一区三核"重大升级改造。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>开发商：华侨城集团</h3><p class="f-body"><b>华侨城集团（OCT Group）</b>——中国文旅产业领军企业，1985年创立于深圳。旗下拥有欢乐谷、世界之窗、锦绣中华、东部华侨城等知名品牌。东部华侨城是其在"旅游+地产"模式之外探索"生态旅游+度假地产"融合的开创性项目。项目由华侨城集团董事长兼总规划师<b>任克雷</b>亲自主导总体规划。</p></div>
+<div class="card"><h3>规划设计团队</h3><p class="f-body">总体规划由华侨城集团与深圳华汇设计（HUAHUI Design）联合完成。茵特拉根小镇（茶溪谷）由瑞士小镇因特拉肯为蓝本设计；大侠谷瀑布由园林景观团队人工打造——瀑布宽300m、落差42m，曾是中国最大人工瀑布群。主题酒店群落由茵特拉根酒店、黑森林酒店、瀑布酒店等构成，室内设计由多家国内外事务所分担。</p></div>
+</div>
+<div class="card reveal" style="margin-top:1.2rem;"><h3>设计理念：山海之间的生态度假王国</h3><p class="f-body">东部华侨城的设计哲学是<b>"借山海之势，造度假之城"</b>——利用大梅沙三洲田天然的山海落差（60-480m），将游乐设施嵌入自然地形。三大山谷（大侠谷、茶溪谷、云海谷）各自承载不同主题功能。茵特拉根小镇复刻瑞士阿尔卑斯山间小镇风貌，形成"欧洲小镇在中国南海之滨"的独特视觉冲击。但这种宏大叙事也带来了经营挑战：9平方公里的广袤面积使得维护成本和游客动线效率成为长期课题。</p></div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody><tr><td>规模</td><td>总占地面积</td><td class="num">近9 km²</td><td>含三大山谷+湖区</td></tr>
+<tr><td>规模</td><td>大侠谷（生态乐园）</td><td class="num">约3 km²</td><td>峡谷探险主题</td></tr>
+<tr><td>规模</td><td>茶溪谷（度假公园）</td><td class="num">约2.5 km²</td><td>茵特拉根小镇+湿地花园</td></tr>
+<tr><td>规模</td><td>云海谷（体育公园）</td><td class="num">约2.5 km²</td><td>高尔夫+户外运动</td></tr>
+<tr><td>景点</td><td>大侠谷五大主题区</td><td class="num">5个</td><td>冒险海滩·峡湾森林·海菲德小镇·探险峡谷·云海高地</td></tr>
+<tr><td>景点</td><td>大侠谷人工瀑布</td><td class="num">宽300m · 落差42m</td><td>曾为中国最大人工瀑布群</td></tr>
+<tr><td>景点</td><td>木质过山车</td><td class="num">全长1,470m</td><td>中国首座木质过山车</td></tr>
+<tr><td>运营</td><td>累计游客量</td><td class="num">4,500万+</td><td>自2007年试业</td></tr>
+<tr><td>运营</td><td>2009年预计游客/收入</td><td class="num">480万 · 45亿</td><td>全面开业年</td></tr>
+<tr><td>运营</td><td>就业岗位</td><td class="num">约4,000个</td><td>直接就业</td></tr>
+<tr><td>投资</td><td>总投资额</td><td class="num">35亿元</td><td>2004-2009年</td></tr>
+<tr><td>投资</td><td>大侠谷升级改造(2025)</td><td class="num">未公布</td><td>"一区三核"方案</td></tr>
+<tr><td>住宿</td><td>主题酒店</td><td class="num">6家酒店群</td><td>茵特拉根·黑森林·瀑布·房车等</td></tr>
+<tr><td>住宿</td><td>酒店客房总数</td><td class="num">约1,500间</td><td>含茵特拉根酒店300间</td></tr></tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来自公开报道与华侨城集团官方信息。部分经营数据为估算值或历史数据（2009年），近年财报未单独披露东部华侨城运营数据。大侠谷2025年4月29日起暂停营业进行升级改造。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+    <!-- Map (NO reveal class) -->
+    <div><div style="padding:1rem 1.5rem;display:flex;flex-wrap:wrap;gap:1rem;font-size:0.85rem;color:#555;"><span><span class="dot" style="background:#FF8F00"></span> 主入口/游客中心</span><span><span class="dot" style="background:#2E7D32"></span> 大侠谷探险区</span><span><span class="dot" style="background:#7B1FA2"></span> 茶溪度假区</span><span><span class="dot" style="background:#1976D2"></span> 云海谷/酒店</span></div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap" style="margin-top:1rem;"></div>
+    </div>
+    <!-- SVG -->
+    <div class="reveal" style="margin-top:1.5rem;"><div class="svg-container"><svg viewBox="0 0 1100 600" xmlns="http://www.w3.org/2000/svg"><defs>
+<linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F0EFEC"/><stop offset="100%" stop-color="#E8E6E0"/></linearGradient>
+<filter id="cardShadow"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-color="#00000020"/></filter></defs>
+<rect width="1100" height="600" fill="url(#bgGrad)" rx="14"/>
+<text x="550" y="35" text-anchor="middle" font-family="Playfair Display,serif" font-size="20" font-weight="700" fill="#1B5E20">深圳东部华侨城 空间结构示意图</text>
+<text x="550" y="55" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" fill="#777">总占地近9km² | 三大山谷 · 山海度假王国 · 深圳市盐田区大梅沙三洲田</text>
+<!-- Mountain backdrop -->
+<path d="M0,200 Q100,140 200,160 Q300,120 400,150 Q500,100 600,140 Q700,110 800,160 Q900,130 1000,150 Q1050,140 1100,170 L1100,600 L0,600 Z" fill="#C8E6C9" opacity="0.5"/>
+<text x="550" y="130" text-anchor="middle" font-family="Playfair Display,serif" font-size="16" font-weight="600" fill="#2E7D32" opacity="0.5">三洲田山系 · 海拔60-480m</text>
+<!-- Zone 1: 大侠谷 (left) -->
+<rect x="30" y="220" width="340" height="200" rx="10" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2.5" filter="url(#cardShadow)"/>
+<text x="200" y="252" text-anchor="middle" font-family="Playfair Display,serif" font-size="17" font-weight="700" fill="#1B5E20">大侠谷 · 峡谷探险乐园</text>
+<text x="200" y="272" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#4CAF50">Eco-Adventure Valley · 约3km²</text>
+<rect x="45" y="290" width="145" height="55" rx="6" fill="#C8E6C9" stroke="#66BB6A" stroke-width="1.5"/>
+<text x="117" y="314" text-anchor="middle" font-family="Playfair Display,serif" font-size="12" font-weight="600" fill="#2E7D32">冒险海滩 · 峡湾森林</text>
+<text x="117" y="334" text-anchor="middle" font-family="DM Mono,monospace" font-size="8" fill="#888">大侠谷瀑布·宽300m</text>
+<rect x="210" y="290" width="145" height="55" rx="6" fill="#C8E6C9" stroke="#66BB6A" stroke-width="1.5"/>
+<text x="282" y="314" text-anchor="middle" font-family="Playfair Display,serif" font-size="12" font-weight="600" fill="#2E7D32">探险峡谷 · 海菲德小镇</text>
+<text x="282" y="334" text-anchor="middle" font-family="DM Mono,monospace" font-size="8" fill="#888">木质过山车·全长1,470m</text>
+<rect x="45" y="355" width="310" height="50" rx="6" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+<text x="200" y="378" text-anchor="middle" font-family="Playfair Display,serif" font-size="12" font-weight="600" fill="#E65100">主入口 / 游客服务中心 / 停车场</text>
+<text x="200" y="396" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#EF6C00">深圳市区→盐坝高速→大梅沙出口→盐梅路</text>
+<!-- Zone 2: 茶溪谷 (center) -->
+<rect x="390" y="220" width="320" height="200" rx="10" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="2.5" filter="url(#cardShadow)"/>
+<text x="550" y="252" text-anchor="middle" font-family="Playfair Display,serif" font-size="17" font-weight="700" fill="#6A1B9A">茶溪谷 · 度假公园</text>
+<text x="550" y="272" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#9C27B0">Tea Stream Resort Valley · 约2.5km²</text>
+<rect x="405" y="290" width="140" height="55" rx="6" fill="#EDE7F6" stroke="#AB47BC" stroke-width="1.5"/>
+<text x="475" y="314" text-anchor="middle" font-family="Playfair Display,serif" font-size="12" font-weight="600" fill="#6A1B9A">茵特拉根小镇</text>
+<text x="475" y="334" text-anchor="middle" font-family="DM Mono,monospace" font-size="8" fill="#888">瑞士风情·广场·商业街</text>
+<rect x="560" y="290" width="135" height="55" rx="6" fill="#EDE7F6" stroke="#AB47BC" stroke-width="1.5"/>
+<text x="627" y="314" text-anchor="middle" font-family="Playfair Display,serif" font-size="12" font-weight="600" fill="#6A1B9A">湿地花园 · 三洲茶园</text>
+<text x="627" y="334" text-anchor="middle" font-family="DM Mono,monospace" font-size="8" fill="#888">四季花田·茶翁古镇</text>
+<rect x="405" y="355" width="290" height="50" rx="6" fill="#E1BEE7" stroke="#CE93D8" stroke-width="1.5"/>
+<text x="550" y="378" text-anchor="middle" font-family="Playfair Display,serif" font-size="12" font-weight="600" fill="#6A1B9A">主题酒店集群</text>
+<text x="550" y="396" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#8E24AA">茵特拉根酒店 · 黑森林酒店 · 瀑布酒店 · 房车酒店 · 温泉</text>
+<!-- Zone 3: 云海谷 (right) -->
+<rect x="730" y="220" width="340" height="200" rx="10" fill="#E3F2FD" stroke="#1976D2" stroke-width="2.5" filter="url(#cardShadow)"/>
+<text x="900" y="252" text-anchor="middle" font-family="Playfair Display,serif" font-size="17" font-weight="700" fill="#0D47A1">云海谷 · 体育公园</text>
+<text x="900" y="272" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#42A5F5">Cloud Sea Sports Park · 约2.5km²</text>
+<rect x="745" y="290" width="310" height="55" rx="6" fill="#BBDEFB" stroke="#64B5F6" stroke-width="1.5"/>
+<text x="900" y="314" text-anchor="middle" font-family="Playfair Display,serif" font-size="12" font-weight="600" fill="#0D47A1">高尔夫球场 · 户外运动基地</text>
+<text x="900" y="334" text-anchor="middle" font-family="DM Mono,monospace" font-size="8" fill="#888">18洞球场·云海奇观·悬崖飞瀑·徒步径</text>
+<rect x="745" y="355" width="310" height="50" rx="6" fill="#BBDEFB" stroke="#64B5F6" stroke-width="1.5"/>
+<text x="900" y="378" text-anchor="middle" font-family="Playfair Display,serif" font-size="12" font-weight="600" fill="#0D47A1">高端住宅区 · 天麓别墅群</text>
+<text x="900" y="396" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#1976D2">华侨城"旅游+地产"模式 · 山海别墅</text>
+<!-- Arrow connections -->
+<line x1="370" y1="320" x2="390" y2="320" stroke="#FF8F00" stroke-width="2" marker-end="url(#arrowhead)"/>
+<line x1="710" y1="320" x2="730" y2="320" stroke="#FF8F00" stroke-width="2" marker-end="url(#arrowhead)"/>
+<defs><marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#FF8F00"/></marker></defs>
+<!-- Legend -->
+<rect x="30" y="550" width="12" height="12" rx="2" fill="#2E7D32"/>
+<text x="48" y="561" font-family="DM Sans,sans-serif" font-size="10" fill="#666">大侠谷 · 峡谷探险</text>
+<rect x="180" y="550" width="12" height="12" rx="2" fill="#7B1FA2"/>
+<text x="198" y="561" font-family="DM Sans,sans-serif" font-size="10" fill="#666">茶溪谷 · 度假休闲</text>
+<rect x="330" y="550" width="12" height="12" rx="2" fill="#1976D2"/>
+<text x="348" y="561" font-family="DM Sans,sans-serif" font-size="10" fill="#666">云海谷 · 体育居住</text>
+<text x="550" y="561" font-family="DM Sans,sans-serif" font-size="9" fill="#AAA">示意比例，非精确测绘</text></svg></div></div>
+    <!-- Zone Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;"><div class="card"><h3>大侠谷 — 冒险海滩</h3><p class="f-caption">以海洋与水为主题的入口区，包含大型水上游乐设施群、造浪池、热带雨林漂流。大侠谷瀑布（宽300m、落差42m）位于此区，瀑布底部设有观景平台和水帘步道。</p></div>
+<div class="card"><h3>大侠谷 — 探险峡谷</h3><p class="f-caption">核心游乐设施集中区：中国首座木质过山车（全长1,470m）、"激流勇进"水上项目（2023年因设备年限永久关停）、"太空迷航"（2010年发生安全事故后拆除）。地标——云海高地观景台（海拔480m）可俯瞰大鹏湾全景。</p></div>
+<div class="card"><h3>茶溪谷 — 茵特拉根小镇</h3><p class="f-caption">以瑞士阿尔卑斯山间小镇因特拉肯（Interlaken）为蓝本，由瑞士设计师参与，复刻瑞士木屋、钟楼、广场、廊桥等建筑群。小镇内含商业街、精品酒店、温泉中心和婚纱摄影基地。是中国"欧洲小镇"主题开发的早期代表作品。</p></div>
+<div class="card"><h3>茶溪谷 — 湿地花园与茶园</h3><p class="f-caption">四季花田+湿地生态步道+三洲茶园（茶翁古镇）。体现"茶、禅、花、竹"元素，设有茶叶采摘体验、茶道表演、竹林步道等互动项目。湿地花园以多级叠水景观串联。</p></div>
+<div class="card"><h3>云海谷 — 高尔夫与户外</h3><p class="f-caption">18洞高尔夫球场+户外运动基地，含攀岩、滑翔伞、山地自行车、徒步径等。云海奇观（云雾穿越山谷的自然现象）是此区最令人震撼的"天然演出"。</p></div>
+<div class="card"><h3>天麓 — 山海别墅群</h3><p class="f-caption">华侨城"旅游+地产"模式在东部华侨城的落地——天麓别墅群建在山海之间的高端住宅区。将主题公园景观、高尔夫球场、温泉资源打包为居住配套，是中国文旅地产的经典案例之一。</p></div></div>
+  </div>
+</section>
+
+<!-- ====== 6-12: SAME STRUCTURE AS OVERSEAS TEMPLATE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline"><div class="timeline-item reveal"><div class="timeline-year">2003.07</div><div class="timeline-content"><h4>深圳东部华侨城有限公司成立</h4><p>华侨城集团注册成立项目公司，启动前期调研和土地整理。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2004.12.30</div><div class="timeline-content"><h4>正式动工 · 总投资35亿元</h4><p>在深圳大梅沙三洲田山地正式动工建设，是深圳建市以来最大规模的旅游项目。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2007.07.28</div><div class="timeline-content"><h4>一期试营业</h4><p>茶溪谷、云海谷、大侠谷瀑布等8大项目率先开放。获国家旅游局和环保总局联合授予全国首个"国家生态旅游示范区"。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2009.08.01</div><div class="timeline-content"><h4>全面开业</h4><p>东部华侨城全面开放，当年预计接待游客480万人次，实现收入约45亿元。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2010.06</div><div class="timeline-content"><h4>太空迷航安全事故</h4><p>大侠谷"太空迷航"项目发生重大安全事故，造成6死10伤。项目和设备被拆除，成为深圳文旅史上最大安全事件。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2015</div><div class="timeline-content"><h4>首批国家级旅游度假区</h4><p>被国家旅游局认定为首批17个国家级旅游度假区之一。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2023</div><div class="timeline-content"><h4>"激流勇进"永久关停</h4><p>因设备使用年限到期，大侠谷标志性水上项目"激流勇进"宣布永久关停。同年茶溪谷部分区域开始改造。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2025.04.29</div><div class="timeline-content"><h4>大侠谷升级改造 · 暂停营业</h4><p>大侠谷景区正式启动"一区三核"升级改造工程，即日起暂停营业进行大规模更新。改造方向和投资额未正式公布。</p></div></div></div></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>游客量</h3><table class="data-table"><thead><tr><th>指标</th><th>数值</th><th>备注</th></tr></thead><tbody>
+<tr><td>累计游客量(2007至今)</td><td class="num">4,500万+</td><td>自试业起</td></tr>
+<tr><td>2009年预计年游客量</td><td class="num">480万</td><td>全面开业年</td></tr>
+<tr><td>近年游客量(估算)</td><td class="num">200-300万/年</td><td>因竞争加剧下滑</td></tr>
+</tbody></table></div>
+<div class="card"><h3>门票价格(2024参考)</h3><table class="data-table"><thead><tr><th>票种</th><th>价格(人民币)</th></tr></thead><tbody>
+<tr><td>大侠谷全日票(成人)</td><td class="num">¥200</td></tr>
+<tr><td>茶溪谷全日票(成人)</td><td class="num">¥180</td></tr>
+<tr><td>双谷联票</td><td class="num">¥300</td></tr>
+<tr><td>茵特拉根温泉</td><td class="num">¥168起</td></tr>
+</tbody></table></div>
+</div>
+<div class="grid-2 reveal" style="margin-top:1.2rem;">
+<div class="card"><h3>经营挑战</h3><p class="f-caption">• 9km²的巨大面积带来高昂维护成本<br>• 2010年安全事故影响品牌形象<br>• 迪士尼、环球影城的替代效应<br>• 深圳欢乐海岸、海洋公园等新项目分流<br>• 设备老化换代压力（激流勇进等因年限关停）<br>• "旅游+地产"模式受房地产下行周期影响</p></div>
+<div class="card"><h3>升级方向</h3><p class="f-caption">• 大侠谷"一区三核"改造（2025年起）<br>• 引入数字化沉浸式体验<br>• 提升餐饮零售品质<br>• 强化亲子研学产品线<br>• 与深圳地铁8号线二期联动<br>• 打造夜间经济消费场景</p></div>
+</div>
+  </div>
+</section>
+
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal"><div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">9km²</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">总占地面积</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">近900公顷山海空间</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">35亿</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">总投资(人民币)</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">2004-2009年</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">4,500万+</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">累计游客量</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">2007年至今</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">1,470m</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">木质过山车</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">中国首座·全长</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">42m</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">大侠谷瀑布落差</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">人工瀑布·宽300m</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">~1,500间</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">酒店客房</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">6家主题酒店群</div></div></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>主题酒店群（6家）</h3><table class="data-table"><thead><tr><th>酒店</th><th>主题</th><th>客房数(约)</th></tr></thead><tbody>
+<tr><td>茵特拉根酒店</td><td>瑞士温泉度假</td><td class="num">约300间</td></tr>
+<tr><td>黑森林酒店</td><td>德国黑森林童话</td><td class="num">约200间</td></tr>
+<tr><td>瀑布酒店</td><td>大侠谷瀑布景观</td><td class="num">约330间</td></tr>
+<tr><td>房车酒店</td><td>户外露营主题</td><td class="num">约160间</td></tr>
+<tr><td>菩提精舍</td><td>禅意茶文化</td><td class="num">约50间</td></tr>
+<tr><td>天麓别墅</td><td>山海高端别墅</td><td class="num">约200栋</td></tr>
+</tbody></table></div>
+<div class="card"><h3>餐饮配套</h3><table class="data-table"><tbody>
+<tr><td><strong>茵特拉根小镇餐厅</strong></td><td>瑞士奶酪火锅 · 德国香肠 · 西式简餐</td></tr>
+<tr><td><strong>茶翁古镇茶餐厅</strong></td><td>茶文化主题 · 中式茶餐 · 广式点心</td></tr>
+<tr><td><strong>海菲德小镇美食街</strong></td><td>美式汉堡 · 海鲜 · 东南亚料理</td></tr>
+<tr><td><strong>云海谷俱乐部餐饮</strong></td><td>高尔夫会所 · 高端中餐 · 红酒窖</td></tr>
+<tr><td><strong>各大酒店餐厅</strong></td><td>自助餐 · 中餐 · 西餐 · 宴会厅</td></tr>
+</tbody></table></div>
+</div>
+<div class="grid-3 reveal" style="margin-top:1.2rem;">
+<div class="card"><h3>交通与接驳</h3><p class="f-caption">• 深圳地铁8号线二期大梅沙站<br>• 公交M437/M362/387等线路<br>• 景区内部穿梭巴士<br>• 丛林缆车+森林小火车<br>• 茵特拉根小镇马车<br>• 大型停车场（3,000+车位）</p></div>
+<div class="card"><h3>服务配套</h3><p class="f-caption">• 茵特拉根温泉（含多种矿物泡池）<br>• 大华兴寺（佛教文化）<br>• 国际会议中心<br>• 婚纱摄影基地<br>• 健身中心 · 网球场<br>• 儿童俱乐部 · 亲子工坊</p></div>
+<div class="card"><h3>生态特色</h3><p class="f-caption">• 四季花田（樱花/油菜花/薰衣草轮作）<br>• 湿地生态步道+观鸟点<br>• 三洲田茶园采茶体验<br>• 山海徒步径（多条难度级）<br>• 云海日出观景台（海拔480m）</p></div>
+</div>
+  </div>
+</section>
+
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>2024-2025最新动态</h3><ul style="list-style:disc;padding-left:1.2rem;font-size:0.95rem;line-height:1.8;">
+<li><strong>大侠谷暂停营业改造（2025.04.29起）：</strong>启动"一区三核"升级方案，大侠谷景区暂停对外开放，具体改造内容和重新开放日期未正式公布。</li>
+<li><strong>茶溪谷业态调整：</strong>部分区域转型为研学基地和婚庆产业园，茵特拉根小镇持续运营但客流明显下降。</li>
+<li><strong>深圳地铁8号线二期通车：</strong>大梅沙站开通后，公共交通可达性显著提升，但尚未转化为游客增量。</li>
+<li><strong>"免费都没人去"现象：</strong>2025年多篇媒体报道指出曾"排队2小时"的东部华侨城从顶流跌落，引发行业对"巨型景区生命周期"的讨论。</li>
+</ul></div>
+<div class="card"><h3>转型展望</h3><ul style="list-style:disc;padding-left:1.2rem;font-size:0.95rem;line-height:1.8;">
+<li><strong>"一区三核"改造：</strong>大侠谷将拆分为三个核心体验区，分别聚焦"亲子家庭""冒险挑战""生态研学"，全面淘汰老旧设施。</li>
+<li><strong>数字化升级：</strong>引入AR导览、沉浸式投影、智慧景区管理系统。</li>
+<li><strong>轻资产运营探索：</strong>考虑引入第三方专业运营团队（如驴妈妈、携程文旅），降低自主运营成本。</li>
+<li><strong>房地产去化：</strong>天麓别墅群面临销售压力，可能转型为养老社区或托管度假屋模式。</li>
+<li><strong>大湾区文旅融合：</strong>与深圳海洋公园（在建）、大鹏半岛等形成差异化产品矩阵。</li>
+</ul></div>
+</div>
+  </div>
+</section>
+
+<section class="section section-alt" id="gallery">
+  <div class="container">
+    <div class="section-header reveal"><h2>实景图集</h2><div class="section-line"></div></div>
+    <p class="f-caption reveal" style="margin-bottom:1.2rem;">以下图片来源于Unsplash、Google Images公开图库及官方媒体资料，供案例研究参考使用。</p>
+    <div class="gallery-grid reveal"><div class="gallery-item"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop" alt="Swiss mountain village style" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">茵特拉根小镇 — 以瑞士因特拉肯为蓝本的欧洲风情度假区</div></div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop" alt="Mountain and sea view" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">大侠谷瀑布 — 宽300m，落差42m，曾为中国最大人工瀑布群</div></div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=600&h=400&fit=crop" alt="Lush mountain landscape" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">三洲田山系 — 海拔60-480m，云海奇观天然呈现</div></div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1472396961693-142e6e269027?w=600&h=400&fit=crop" alt="Deer in nature" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">湿地花园 — 四季花田 + 生态步道 + 观鸟点</div></div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&h=400&fit=crop" alt="Tea plantation" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">三洲茶园 — 茶翁古镇，茶、禅、花、竹体验</div></div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1580587771552-ca5b04a4d1a2?w=600&h=400&fit=crop" alt="European castle style hotel" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">茵特拉根酒店 — 瑞士温泉度假风格，300间客房</div></div></div>
+  </div>
+</section>
+
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>1. 自由版权图库</h4><ul>
+<li><a href="https://unsplash.com/s/photos/shenzhen-mountain-resort" target="_blank" rel="noopener">Unsplash — 山地度假 · 深圳东部</a> <span class="tag">自由版权</span></li>
+<li><a href="https://commons.wikimedia.org/wiki/Category:OCT_East_Shenzhen" target="_blank" rel="noopener">Wikimedia Commons — 东部华侨城</a> <span class="tag">自由版权</span></li></ul></div>
+<div class="resource-group reveal"><h4>2. 官方来源</h4><ul>
+<li><a href="https://www.octeast.com/" target="_blank" rel="noopener">深圳东部华侨城 官方网站</a> <span class="tag">官方</span></li>
+<li><a href="https://www.chinaoct.com/" target="_blank" rel="noopener">华侨城集团 官方网站</a> <span class="tag">官方</span></li></ul></div>
+<div class="resource-group reveal"><h4>3. 高清视频</h4><ul>
+<li><a href="https://www.youtube.com/results?search_query=%E4%B8%9C%E9%83%A8%E5%8D%8E%E4%BE%A8%E5%9F%8E+4K+%E5%AF%BC%E8%A7%88" target="_blank" rel="noopener">YouTube — 东部华侨城全景导览</a> <span class="tag">视频</span></li></ul></div>
+<div class="resource-group reveal"><h4>4. 深度分析</h4><ul>
+<li><a href="https://www.landscape.cn/article/59801.html" target="_blank" rel="noopener">景观中国 — 东部华侨城规划与建设</a> <span class="tag">行业分析</span></li></ul></div>
+<div class="resource-group reveal"><h4>5. 媒体报道</h4><ul>
+<li><a href="https://h5.ifeng.com/c/vivoArticle/v002zJFNlq4dIixpMpITKYrtnDyyF293TmlJHs9WsM1YQBY__" target="_blank" rel="noopener">凤凰网 — 东部华侨城从顶流到"免费都没人去"</a> <span class="tag">深度报道</span></li></ul></div>
+  </div>
+</section>
+
+<!-- ====== 13. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="#overview" title="项目概览" aria-label="项目概览">&#9733;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode + GCJ-02) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script async src="https://busuanzi.icodeq.com/busuanzi.pure.mini.js"></script>
+<script>
+// ── WGS-84 → GCJ-02 converter ──
+function wgs84ToGcj02(wgsLng, wgsLat) {
+  var a = 6378245.0, ee = 0.00669342162296594323;
+  function _transformLat(x, y) {
+    var r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(y*Math.PI) + 40*Math.sin(y/3*Math.PI))*2/3;
+    r += (160*Math.sin(y/12*Math.PI) + 320*Math.sin(y*Math.PI/30))*2/3;
+    return r;
+  }
+  function _transformLng(x, y) {
+    var r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(x*Math.PI) + 40*Math.sin(x/3*Math.PI))*2/3;
+    r += (150*Math.sin(x/12*Math.PI) + 300*Math.sin(x/30*Math.PI))*2/3;
+    return r;
+  }
+  var dLat = _transformLat(wgsLng - 105, wgsLat - 35);
+  var dLng = _transformLng(wgsLng - 105, wgsLat - 35);
+  var radLat = wgsLat/180*Math.PI;
+  var magic = 1 - ee*Math.sin(radLat)*Math.sin(radLat);
+  return {
+    lng: wgsLng + (180*dLng)/((a/Math.sqrt(magic))*Math.cos(radLat)*Math.PI),
+    lat: wgsLat + (180*dLat)/((a*(1-ee))/(magic*Math.sqrt(magic))*Math.PI)
+  };
+}
+
+// Zone marker data (WGS-84, will be converted to GCJ-02 for display)
+var zonesWgs = [
+  { name: '主入口<br><small>游客服务中心 · 大侠谷入口广场</small>', lat: 22.5980, lng: 114.2710, color: '#FF8F00' },
+  { name: '大侠谷瀑布<br><small>宽300m · 落差42m</small>', lat: 22.5995, lng: 114.2725, color: '#2E7D32' },
+  { name: '木质过山车<br><small>中国首座 · 全长1,470m</small>', lat: 22.6000, lng: 114.2740, color: '#E65100' },
+  { name: '云海高地<br><small>海拔480m · 大鹏湾全景</small>', lat: 22.6020, lng: 114.2755, color: '#1976D2' },
+  { name: '茵特拉根小镇<br><small>瑞士风情 · 茶溪谷核心区</small>', lat: 22.5975, lng: 114.2690, color: '#7B1FA2' },
+  { name: '湿地花园<br><small>四季花田 · 生态步道</small>', lat: 22.5965, lng: 114.2675, color: '#9C27B0' },
+  { name: '茵特拉根酒店<br><small>瑞士温泉度假酒店</small>', lat: 22.5960, lng: 114.2665, color: '#C2185B' },
+  { name: '黑森林酒店<br><small>德国童话主题</small>', lat: 22.5955, lng: 114.2655, color: '#C2185B' },
+  { name: '云海谷<br><small>高尔夫 · 户外运动 · 天麓别墅</small>', lat: 22.6015, lng: 114.2775, color: '#1976D2' },
+  { name: '大华兴寺<br><small>佛教文化 · 四面佛</small>', lat: 22.6035, lng: 114.2705, color: '#8D6E63' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var gcj = wgs84ToGcj02(z.lng, z.lat);
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([gcj.lat, gcj.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([22.5987, 114.2731], 14);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesWgs);
+
+  if (withBoundary) {
+    var parkCenter = wgs84ToGcj02(114.2731, 22.5987);
+    L.circle([parkCenter.lat, parkCenter.lng], { radius: 2500, color: '#FF8F00', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// ── Scroll reveal ──
+(function() {
+  var revealElements = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    revealElements.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  revealElements.forEach(function(el) { observer.observe(el); });
+})();
+
+// ── Back to top ──
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Puy du Fou 狂人国 — 文旅项目案例研究</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<style>
+:root {
+  --clr-primary: #8B1A2B;
+  --clr-primary-light: #C42035;
+  --clr-primary-dark: #5C0F1C;
+  --clr-accent: #D4A843;
+  --clr-accent-warm: #C8962E;
+  --clr-bg: #FAF9F6;
+  --clr-bg-alt: #F0EFEC;
+  --clr-text: #1A1A1A;
+  --clr-text-secondary: #555;
+  --clr-text-muted: #777;
+  --clr-border: #E0DED8;
+  --clr-white: #FFFFFF;
+  --clr-card-bg: #FFFFFF;
+  --clr-card-shadow: rgba(0,0,0,0.06);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --gap-section: 2.5rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 17px; }
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
+/* ---------- Typography ---------- */
+.f-headline { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; }
+.f-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3.5vw, 2.4rem); font-weight: 700; line-height: 1.25; }
+.f-subtitle { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 2.5vw, 1.6rem); font-weight: 600; line-height: 1.35; }
+.f-body { font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 400; line-height: 1.75; }
+.f-caption { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 400; line-height: 1.6; color: var(--clr-text-secondary); }
+.f-mono { font-family: 'DM Mono', monospace; }
+.f-data { font-family: 'DM Mono', monospace; font-size: 0.95rem; }
+
+/* ---------- Hero ---------- */
+.hero {
+  background: linear-gradient(160deg, #5C0F1C 0%, #8B1A2B 40%, #C42035 70%, #E8C870 100%);
+  color: white;
+  padding: 5rem 0 4rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 20% 80%, rgba(212,168,67,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+.hero .container { position: relative; z-index: 1; }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 6vw, 4.2rem); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 0.8rem; }
+.hero .hero-subtitle { font-family: 'DM Sans', sans-serif; font-size: clamp(1rem, 2vw, 1.25rem); font-weight: 400; opacity: 0.88; max-width: 650px; margin: 0 auto 2.5rem; }
+.hero .kpi-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; }
+.hero .kpi-card {
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: var(--radius-md);
+  padding: 1.2rem 1.8rem;
+  min-width: 150px;
+  text-align: center;
+}
+.hero .kpi-number { font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 500; }
+.hero .kpi-label { font-family: 'DM Sans', sans-serif; font-size: 0.85rem; opacity: 0.75; margin-top: 0.25rem; }
+
+/* ---------- Section ---------- */
+.section { padding: var(--gap-section) 0; }
+.section-alt { background: var(--clr-bg-alt); }
+.section-header { margin-bottom: 2rem; }
+.section-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: var(--clr-primary-dark); }
+.section-header .section-line { width: 60px; height: 3px; background: var(--clr-accent); margin-top: 0.6rem; border-radius: 2px; }
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--clr-card-bg);
+  border-radius: var(--radius-md);
+  padding: 1.8rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--clr-border);
+  transition: box-shadow 0.3s, transform 0.25s;
+}
+.card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.card h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 600; color: var(--clr-primary-dark); margin-bottom: 0.5rem; }
+
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+
+/* ---------- Tables ---------- */
+.data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+.data-table thead { background: var(--clr-primary-dark); color: white; }
+.data-table thead th { padding: 0.75rem 1rem; text-align: left; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.9rem; }
+.data-table tbody td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--clr-border); }
+.data-table tbody tr:nth-child(even) { background: var(--clr-bg-alt); }
+.data-table tbody tr:hover { background: rgba(139,26,43,0.05); }
+.data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
+
+/* ---------- Map Section ---------- */
+#map-section { padding: var(--gap-section) 0; }
+#map-section .map-card { background: var(--clr-card-bg); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); }
+#parkmap { width: 100%; height: 500px; border-radius: var(--radius-lg); z-index: 0; }
+.map-fallback { display: none; text-align: center; padding: 0.9rem 1rem; margin-top: 0.5rem; background: #FFF3CD; color: #856404; border-radius: var(--radius-sm); font-size: 0.85rem; }
+.map-legend { padding: 1rem 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; font-size: 0.85rem; color: var(--clr-text-secondary); }
+.map-legend span { display: flex; align-items: center; gap: 0.4rem; }
+.map-legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* ---------- SVG Container ---------- */
+.svg-container { display: block; width: 100%; margin-top: 1.5rem; background: var(--clr-card-bg); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); }
+.svg-container svg { width: 100%; height: auto; display: block; }
+
+/* ---------- Timeline ---------- */
+.timeline { position: relative; padding-left: 2.5rem; }
+.timeline::before { content: ''; position: absolute; left: 0.6rem; top: 0; bottom: 0; width: 2px; background: var(--clr-primary-light); }
+.timeline-item { position: relative; margin-bottom: 1.8rem; }
+.timeline-item::before { content: ''; position: absolute; left: -2.05rem; top: 0.5rem; width: 12px; height: 12px; border-radius: 50%; background: var(--clr-accent); border: 2px solid var(--clr-primary); }
+.timeline-year { font-family: 'DM Mono', monospace; font-weight: 700; font-size: 1rem; color: var(--clr-primary); }
+.timeline-content { margin-top: 0.25rem; }
+.timeline-content h4 { font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 600; }
+.timeline-content p { font-size: 0.9rem; color: var(--clr-text-secondary); margin-top: 0.15rem; }
+
+/* ---------- Gallery ---------- */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; }
+.gallery-item { background: var(--clr-card-bg); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow 0.3s; }
+.gallery-item:hover { box-shadow: var(--shadow-lg); }
+.gallery-item img { width: 100%; height: 180px; object-fit: cover; display: block; }
+.gallery-item .gallery-caption { padding: 0.7rem 1rem; font-size: 0.85rem; color: var(--clr-text-secondary); }
+
+/* ---------- Resource Links ---------- */
+.resource-group { margin-bottom: 1.5rem; }
+.resource-group h4 { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--clr-primary-dark); margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--clr-border); }
+.resource-group ul { list-style: none; }
+.resource-group li { margin-bottom: 0.4rem; font-size: 0.9rem; }
+.resource-group a { color: var(--clr-primary); text-decoration: none; transition: color 0.2s; }
+.resource-group a:hover { color: var(--clr-primary-dark); text-decoration: underline; }
+.resource-group .tag { display: inline-block; background: var(--clr-bg-alt); padding: 0.1rem 0.5rem; border-radius: 4px; font-size: 0.78rem; margin-left: 0.4rem; color: var(--clr-text-muted); }
+
+/* ---------- Floating Nav ---------- */
+.floating-nav { position: fixed; right: 1.5rem; bottom: 2rem; display: flex; flex-direction: column; gap: 0.6rem; z-index: 999; }
+.floating-nav a { width: 46px; height: 46px; border-radius: 50%; background: var(--clr-primary-dark); color: white; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.2rem; box-shadow: var(--shadow-md); transition: background 0.25s, transform 0.2s; }
+.floating-nav a:hover { background: var(--clr-accent); transform: scale(1.08); }
+
+/* ---------- Reveal animation ---------- */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ---------- Visitor Counter ---------- */
+.visitor-counter { text-align: center; padding: 0.5rem; font-size: 0.8rem; color: var(--clr-text-muted); }
+.visitor-counter span { font-family: 'DM Mono', monospace; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .hero { padding: 3rem 0 2.5rem; }
+  .hero .kpi-row { gap: 0.8rem; }
+  .hero .kpi-card { padding: 0.8rem 1rem; min-width: 120px; }
+  .hero .kpi-number { font-size: 1.3rem; }
+  #parkmap { height: 350px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>Puy du Fou 狂人国</h1>
+    <p class="hero-subtitle">法国旺代省的历史史诗 — 全球最大夜间演出Cinéscénie与17场宏大历史剧目的无机械游乐革命</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">1978</div><div class="kpi-label">起源年份</div></div>
+      <div class="kpi-card"><div class="kpi-number">78<span style="font-size:0.7em;opacity:0.7"> ha</span></div><div class="kpi-label">总占地面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">~230<span style="font-size:0.7em;opacity:0.7"> 万</span></div><div class="kpi-label">年游客量</div></div>
+      <div class="kpi-card"><div class="kpi-number">17<span style="font-size:0.7em;opacity:0.7"> 场</span></div><div class="kpi-label">大型历史演出</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal"><div class="card">
+        <h3>基本信息</h3>
+        <table class="data-table">
+          <tbody>
+            <tr><td><strong>项目名称</strong></td><td>Puy du Fou 狂人国（普德赋）</td></tr>
+            <tr><td><strong>起源/开业</strong></td><td>Cinéscénie 1978年 / 大公园 1989年</td></tr>
+            <tr><td><strong>地理位置</strong></td><td>法国卢瓦尔河大区旺代省莱塞佩斯（Les Epesses）</td></tr>
+            <tr><td><strong>占地面积</strong></td><td>大公园55ha + Cinéscénie 23ha = 总计约78ha</td></tr>
+            <tr><td><strong>主题定位</strong></td><td>纯演艺型历史主题公园（无机械游乐设施）</td></tr>
+            <tr><td><strong>主题色系</strong></td><td>法兰西深红 / 古典金</td></tr>
+            <tr><td><strong>运营方</strong></td><td>Association du Puy du Fou（非营利协会63.5%持股）</td></tr>
+            <tr><td><strong>创始人/灵魂人物</strong></td><td>Philippe de Villiers</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3>坐标与交通</h3>
+        <table class="data-table">
+          <tbody>
+            <tr><td><strong>精确坐标</strong></td><td>46°53′34″N, 0°55′57″W</td></tr>
+            <tr><td><strong>十进制坐标</strong></td><td>46.8928°N, 0.9325°W</td></tr>
+            <tr><td><strong>海拔</strong></td><td>约120-180m（旺代丘陵地带）</td></tr>
+            <tr><td><strong>距南特</strong></td><td>约80km（约1小时车程）</td></tr>
+            <tr><td><strong>距普瓦捷</strong></td><td>约100km（约1小时15分车程）</td></tr>
+            <tr><td><strong>距巴黎</strong></td><td>约380km（TGV+接驳约3小时）</td></tr>
+            <tr><td><strong>公路通道</strong></td><td>A87高速公路28号出口，D27省道直达</td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p class="f-body">Puy du Fou（中文译名"狂人国"或"普德赋"）是法国乃至欧洲最独特的主题公园——没有过山车、没有旋转木马，完全依靠<b>17场宏大历史演出</b>吸引每年超过230万游客。1977年，法国政治人物Philippe de Villiers在旺代省发现了被荨麻覆盖的中世纪城堡废墟，由此创作了Cinéscénie——全球最大的夜间史诗演出，以23公顷自然场景为舞台，2,400名演员在1小时40分钟内演绎从罗马统治到二战的法国历史。1989年，围绕城堡的大公园正式开放。40余年来累计投资约5亿欧元，连续多次获评"欧洲最佳主题公园"。其非营利协会+青年志愿者模式（约3,650名志愿者参与Cinéscénie）是全球主题娱乐业独一无二的运营范式。2019年起向西班牙、中国（上海SAGA光明之城，2024年开业）、英国输出品牌。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>创始人 / 创意灵魂</h3><p class="f-body"><strong>Philippe de Villiers</strong>（1949年出生）——法国政治家、作家、文化企业家。1977年创立Cinéscénie夜间大秀，亲自编写剧本并导演。其核心理念<b>"让历史活起来"</b>——以真实城堡废墟为舞美，以当地居民为演员，以旺代田野为剧场，开创了全球独树一帜的"演艺主题公园"品类。</p></div>
+      <div class="card"><h3>建筑设计团队</h3><p class="f-body">法国大公园由创始团队<b>内部累进式自建</b>，各时期建筑由法国场景美术师和历史顾问协作完成。西班牙托莱多分园（2021年）由<b>Jesús Corroto Briceño</b>担任主建筑师。上海SAGA光明之城（2024年）由中法联合团队设计，总投资超6.5亿元人民币。</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.2rem;"><h3>设计理念：无机械的沉浸革命</h3><p class="f-body">狂人国的核心设计哲学是<b>"情感优于肾上腺素"</b>。在迪士尼和环球影城依赖机械骑乘的时代，Puy du Fou证明了纯粹叙事演艺可达到同等级商业成功。五大主题酒店将住宿本身变为演出场景延伸。Le Dernier Panache（2016年，投资1,800万欧元）引入L-ISA沉浸式音响系统，实现360度声音移动。约4,150名志愿者不仅是人力创新，更是社区文化传承——许多家族三代参与Cinéscénie演出。</p></div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody><tr><td>规模</td><td>大公园面积</td><td class="num">55 ha</td><td>不含Cinéscénie场地</td></tr>
+<tr><td>规模</td><td>Cinéscénie演出场地</td><td class="num">23 ha</td><td>全球最大固定演出场地</td></tr>
+<tr><td>规模</td><td>大型历史演出</td><td class="num">17场</td><td>全日循环安排</td></tr>
+<tr><td>规模</td><td>主题酒店</td><td class="num">5家</td><td>罗马/中世纪/维京/18世纪/文艺复兴</td></tr>
+<tr><td>规模</td><td>主题餐厅</td><td class="num">11家</td><td>各时期风格餐饮</td></tr>
+<tr><td>演出</td><td>Cinéscénie演员+志愿者</td><td class="num">2,400+3,650</td><td>全球最大夜间演出</td></tr>
+<tr><td>演出</td><td>Cinéscénie年场次</td><td class="num">~28场</td><td>7-9月旺季周五六</td></tr>
+<tr><td>运营</td><td>年游客量</td><td class="num">~230万</td><td>法国第二（仅次迪士尼巴黎）</td></tr>
+<tr><td>运营</td><td>累计总游客量</td><td class="num">~5,000万+</td><td>自1989年大公园开业</td></tr>
+<tr><td>运营</td><td>营业季</td><td class="num">4月-11月初</td><td>冬季闭园</td></tr>
+<tr><td>投资</td><td>40年累计总投资</td><td class="num">约€5亿</td><td>含全部酒店和演出设施</td></tr>
+<tr><td>投资</td><td>西班牙分园投资</td><td class="num">€2.44亿</td><td>托莱多，2019-2028分期</td></tr>
+<tr><td>投资</td><td>英国牛津郡计划</td><td class="num">£6亿</td><td>规划中，目标2029年</td></tr>
+<tr><td>投资</td><td>上海SAGA光明之城</td><td class="num">¥6.5亿+</td><td>2024年开业</td></tr>
+<tr><td>人力</td><td>正式员工</td><td class="num">~2,000人</td><td>含演员和运营</td></tr>
+<tr><td>人力</td><td>志愿者</td><td class="num">~4,150人</td><td>全球独一无二模式</td></tr></tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">注：人民币按2026年5月汇率估算（1 EUR ≈ 7.8 CNY, 1 GBP ≈ 9.1 CNY）。游客量与投资数据来自公开报道，统计口径可能因来源不同有所差异。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class) -->
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="map-legend"><span><span class="dot" style="background:#D4A843"></span> 入口/主节点</span><span><span class="dot" style="background:#8B1A2B"></span> 演出场馆</span><span><span class="dot" style="background:#4CAF50"></span> 自然景观/历史遗址</span><span><span class="dot" style="background:#2196F3"></span> 水域/酒店</span></div>
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container"><svg viewBox="0 0 1100 700" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F0EFEC"/><stop offset="100%" stop-color="#E8E6E0"/></linearGradient>
+<linearGradient id="lakeGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#64B5F6"/><stop offset="100%" stop-color="#1565C0"/></linearGradient>
+<filter id="cardShadow"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-color="#00000020"/></filter></defs>
+<rect width="1100" height="700" fill="url(#bgGrad)" rx="14"/>
+<text x="550" y="35" text-anchor="middle" font-family="Playfair Display,serif" font-size="20" font-weight="700" fill="#5C0F1C">Puy du Fou 空间结构示意图</text>
+<text x="550" y="55" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" fill="#777">总占地78公顷 | 大公园55ha + Cinéscénie 23ha 历史演艺主题公园功能分区</text>
+<!-- Lake -->
+<ellipse cx="550" cy="520" rx="300" ry="80" fill="url(#lakeGrad)" opacity="0.25"/>
+<text x="550" y="525" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="600" fill="#1565C0" opacity="0.6">Puy du Fou 湖</text>
+<!-- Zone 1: Entrance & Welcome -->
+<rect x="60" y="80" width="200" height="90" rx="8" fill="#FFF8E1" stroke="#D4A843" stroke-width="2" filter="url(#cardShadow)"/>
+<text x="160" y="108" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#B8860B">入口广场 &amp; 迎宾区</text>
+<text x="160" y="126" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#888">Entrance · Billetterie · Services</text>
+<text x="160" y="144" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="#999">售票大厅 · 导览台 · 轮椅租赁 · 商店</text>
+<!-- Zone 2: Roman Arena -->
+<rect x="300" y="80" width="200" height="90" rx="8" fill="#FFEBEE" stroke="#C42035" stroke-width="2" filter="url(#cardShadow)"/>
+<text x="400" y="108" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#8B1A2B">高卢罗马竞技场</text>
+<text x="400" y="126" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#C42035">Le Signe du Triomphe · 6,000座</text>
+<text x="400" y="144" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="#888">战车赛 · 角斗表演 · 全天4场</text>
+<!-- Zone 3: Viking -->
+<rect x="540" y="80" width="200" height="90" rx="8" fill="#E3F2FD" stroke="#1565C0" stroke-width="2" filter="url(#cardShadow)"/>
+<text x="640" y="108" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#0D47A1">维京长船剧场</text>
+<text x="640" y="126" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#1976D2">Les Vikings · 360°环形剧场</text>
+<text x="640" y="144" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="#888">北欧长船 · 火焰水幕特效</text>
+<!-- Zone 4: Medieval Castle -->
+<rect x="780" y="80" width="200" height="90" rx="8" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="2" filter="url(#cardShadow)"/>
+<text x="880" y="108" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#6A1B9A">中世纪城堡区</text>
+<text x="880" y="126" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#8E24AA">Le Secret de la Lance · 骑士竞技</text>
+<text x="880" y="144" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="#888">马术特技 · 长枪比武 · 中世纪集市</text>
+<!-- Zone 5: 18th Century Village -->
+<rect x="60" y="210" width="200" height="90" rx="8" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2" filter="url(#cardShadow)"/>
+<text x="160" y="238" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#2E7D32">18世纪村庄</text>
+<text x="160" y="256" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#43A047">Village XVIIIe · 乡村生活体验</text>
+<text x="160" y="274" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="#888">手工艺作坊 · 面包烘焙 · 乐器制作</text>
+<!-- Zone 6: Bird Show -->
+<rect x="300" y="210" width="200" height="90" rx="8" fill="#E0F2F1" stroke="#009688" stroke-width="2" filter="url(#cardShadow)"/>
+<text x="400" y="238" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#00695C">猛禽芭蕾舞台</text>
+<text x="400" y="256" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#00897B">Le Bal des Oiseaux · 城堡背景</text>
+<text x="400" y="274" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="#888">200+猛禽 · 全天3场 · 30分钟</text>
+<!-- Zone 7: Le Dernier Panache -->
+<rect x="540" y="210" width="200" height="90" rx="8" fill="#FFF3E0" stroke="#E65100" stroke-width="2" filter="url(#cardShadow)"/>
+<text x="640" y="238" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#BF360C">Le Dernier Panache</text>
+<text x="640" y="256" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#E65100">360°旋转观众席 · L-ISA沉浸音响</text>
+<text x="640" y="274" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="#888">2016年开幕 · 1,800万欧元 · 法国大革命</text>
+<!-- Zone 8: Castle Ruins -->
+<rect x="780" y="210" width="200" height="90" rx="8" fill="#ECEFF1" stroke="#78909C" stroke-width="2" filter="url(#cardShadow)"/>
+<text x="880" y="238" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#37474F">狂人国城堡遗址</text>
+<text x="880" y="256" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#546E7A">Puy du Fou Castle · 12世纪</text>
+<text x="880" y="274" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="#888">Cinéscénie核心舞台 · 历史步道</text>
+<!-- Zone 9: Hotels (bottom) -->
+<rect x="120" y="340" width="180" height="70" rx="8" fill="#FCE4EC" stroke="#E91E63" stroke-width="2" filter="url(#cardShadow)"/>
+<text x="210" y="366" text-anchor="middle" font-family="Playfair Display,serif" font-size="12" font-weight="700" fill="#880E4F">5家主题酒店群</text>
+<text x="210" y="384" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#AD1457">罗马 · 中世纪 · 维京 · 18世纪 · 文艺复兴</text>
+<!-- Zone 10: Cinéscénie -->
+<rect x="380" y="340" width="280" height="70" rx="10" fill="#FFF8E1" stroke="#D4A843" stroke-width="2.5" filter="url(#cardShadow)"/>
+<text x="520" y="366" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#B8860B">Cinéscénie 夜间史诗舞台</text>
+<text x="520" y="384" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#D4A843">23ha · 14,000座 · 2,400演员 · 7-9月每周两场 · 1小时40分钟</text>
+<!-- Legend -->
+<rect x="30" y="640" width="12" height="12" rx="2" fill="#C42035"/>
+<text x="48" y="651" font-family="DM Sans,sans-serif" font-size="10" fill="#666">演出场馆</text>
+<rect x="120" y="640" width="12" height="12" rx="2" fill="#FFF8E1" stroke="#D4A843" stroke-width="1"/>
+<text x="138" y="651" font-family="DM Sans,sans-serif" font-size="10" fill="#666">入口/剧场</text>
+<rect x="220" y="640" width="12" height="12" rx="2" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1"/>
+<text x="238" y="651" font-family="DM Sans,sans-serif" font-size="10" fill="#666">自然/遗址</text>
+<text x="550" y="651" font-family="DM Sans,sans-serif" font-size="9" fill="#AAA">示意比例，非精确测绘</text>
+</svg></div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;"><div class="card"><h3>高卢罗马竞技场（Le Signe du Triomphe）</h3><p class="f-caption">6,000座圆形竞技场，再现古罗马战车赛和角斗士表演。全长35分钟，每日演出4场。水幕特效和机械装置模拟罗马时代战车竞速的壮观场景，是公园游客最多的日间演出。</p></div>
+<div class="card"><h3>维京长船（Les Vikings）</h3><p class="f-caption">360度环形剧场，北欧长船从水中升起，火焰与水幕包围观众席。讲述维京人入侵诺曼底的传奇故事，特技包括高空跳水、火焰喷射和水上战斗，是公园最具冲击力的视觉演出之一。</p></div>
+<div class="card"><h3>猛禽芭蕾（Le Bal des Oiseaux Fantômes）</h3><p class="f-caption">以城堡废墟为背景，200+只猛禽（鹰、隼、秃鹫、猫头鹰）在观众头顶低空飞行的史诗级驯鸟表演。30分钟演出中鸟类从城堡塔顶俯冲而下，配合古典音乐和旁白叙事。</p></div>
+<div class="card"><h3>最后的威武（Le Dernier Panache）</h3><p class="f-caption">2016年开幕，投资1,800万欧元。360度旋转观众席+ L-ISA沉浸音响系统，讲述法国大革命时期海军军官的史诗命运。被行业誉为"室内演出的技术巅峰"，声音在观众席中物理移动。</p></div>
+<div class="card"><h3>18世纪村庄（Village XVIIIe）</h3><p class="f-caption">复原法国大革命前的乡村生活场景——面包房、陶器工坊、乐器制作、蜡烛作坊、乡村广场，所有手工艺人在演出间隙真实制作和售卖产品。游客可参与互动体验。</p></div>
+<div class="card"><h3>Cinéscénie 夜间史诗</h3><p class="f-caption">全球最大夜间演出：23公顷自然场景，2,400名演员+3,650名志愿者，1小时40分钟演绎700年法国历史。从罗马高卢到二战解放，烟花、3D投影、无人机、真人马术同步呈现。7-9月每周五、六上演（约28场/年），累计观众超1,500万人次。</p></div></div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT & CONSTRUCTION TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline"><div class="timeline-item reveal"><div class="timeline-year">1977</div><div class="timeline-content"><h4>Philippe de Villiers 发现城堡废墟</h4><p>在旺代省发现被荨麻覆盖的Puy du Fou城堡遗址，决定创作夜间历史演出Cinéscénie。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">1978</div><div class="timeline-content"><h4>Cinéscénie 首演</h4><p>首次上演以Maupillier家族为主角的夜间史诗，以城堡废墟为天然舞美。当年吸引约8万观众。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">1989</div><div class="timeline-content"><h4>大公园开幕</h4><p>围绕城堡的大公园（Grand Parc）正式开园，将历史演出扩展为全日体验。开业前两年亏损，第三年实现盈亏平衡。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">1995</div><div class="timeline-content"><h4>18世纪村庄建成</h4><p>Village XVIIIe开放，扩展手工艺与互动体验。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2001</div><div class="timeline-content"><h4>高卢罗马竞技场开业</h4><p>Le Signe du Triomphe开幕，6,000座圆形竞技场成为公园标志性设施。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2007</div><div class="timeline-content"><h4>首家主题酒店揭幕</h4><p>La Citadelle中世纪堡垒酒店开业，开创"住宿即演出场景延伸"的全包式模式。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2011</div><div class="timeline-content"><h4>协会购得城堡所有权</h4><p>非营利协会正式购得Puy du Fou城堡，确保遗址永久保护。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2014-2016</div><div class="timeline-content"><h4>文艺复兴区 + Le Dernier Panache · 1,800万欧元</h4><p>公园最大单笔投资，360度旋转观众席+ L-ISA沉浸音响，被誉为室内剧场技术巅峰。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2019-2021</div><div class="timeline-content"><h4>西班牙托莱多分园 · 2.44亿欧元</h4><p>首次海外输出：2019年夜秀开幕，2021年全园运营。总占地约30公顷，设4个演出场馆。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2024</div><div class="timeline-content"><h4>上海SAGA光明之城开业 · 6.5亿+人民币</h4><p>全球首部"线下实景电影"沉浸式剧场，位于上海光大会展中心，总面积4.6万平方米。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2025-2029</div><div class="timeline-content"><h4>英国牛津郡计划 · 6亿英镑</h4><p>规划申请中，目标2029年开业。将是狂人国在英语国家的首个园区，引发文化认同与政治争议。</p></div></div></div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONAL INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>游客量</h3><table class="data-table"><thead><tr><th>指标</th><th>数值</th><th>备注</th></tr></thead><tbody>
+<tr><td>年游客量</td><td class="num">~230万</td><td>法国第二（仅次迪士尼巴黎）</td></tr>
+<tr><td>Cinéscénie年观众</td><td class="num">~39万</td><td>约28场 × 14,000座</td></tr>
+<tr><td>累计游客量(1989起)</td><td class="num">~5,000万+</td><td>大公园开业以来</td></tr>
+<tr><td>游客满意度</td><td class="num">~95%</td><td>连续多年行业最高</td></tr>
+<tr><td>人均停留时间</td><td class="num">2.1天</td><td>含酒店住宿</td></tr>
+</tbody></table></div>
+<div class="card"><h3>门票价格(2025年参考)</h3><table class="data-table"><thead><tr><th>票种</th><th>成人</th><th>儿童(5-13岁)</th></tr></thead><tbody>
+<tr><td>大公园1日票</td><td class="num">€43</td><td class="num">€31</td></tr>
+<tr><td>大公园2日票</td><td class="num">€62</td><td class="num">€43</td></tr>
+<tr><td>Cinéscénie+公园</td><td class="num">€78</td><td class="num">€58</td></tr>
+<tr><td>3日全含(公园+演出+酒店)</td><td class="num">€199起</td><td class="num">€155起</td></tr>
+</tbody></table><p class="f-caption" style="margin-top:0.5rem;">汇率：2026年5月，1 EUR ≈ 7.8 CNY。票价含全部17场日间演出。</p></div>
+</div>
+<div class="grid-2 reveal" style="margin-top:1.2rem;">
+<div class="card"><h3>运营特色</h3><table class="data-table"><thead><tr><th>项目</th><th>详情</th></tr></thead><tbody>
+<tr><td>营业季</td><td>4月初-11月初（冬季闭园维护）</td></tr>
+<tr><td>营业时间</td><td>10:00-19:00（夏季延长至22:00+演出）</td></tr>
+<tr><td>组织架构</td><td>非营利协会63.5%持股，利润全部再投资</td></tr>
+<tr><td>志愿者体系</td><td>约4,150人（青年学院培养），家族三代传承</td></tr>
+<tr><td>费用率</td><td>运营费用率约85%（志愿者压低人力成本）</td></tr>
+<tr><td>就业岗位</td><td>正式员工约2,000人 + 间接就业约6,000人</td></tr>
+</tbody></table></div>
+<div class="card"><h3>国际布局</h3><table class="data-table"><thead><tr><th>项目</th><th>地点</th><th>投资</th><th>状态</th></tr></thead><tbody>
+<tr><td>西班牙狂人国</td><td>托莱多</td><td class="num">€2.44亿</td><td>2021年运营</td></tr>
+<tr><td>上海SAGA光明之城</td><td>中国上海</td><td class="num">¥6.5亿+</td><td>2024年开业</td></tr>
+<tr><td>英国Puy du Fou</td><td>牛津郡</td><td class="num">£6亿</td><td>规划中（2029目标）</td></tr>
+</tbody></table></div>
+</div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal"><div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">78ha</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">总占地面积</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">大公园55 + 演出场地23</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">17场</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">大型历史演出</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">全日循环 · 法语+多语言字幕</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">14,000</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">Cinéscénie观众席</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">全球最大固定看台</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">2,400+3,650</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">演员+志愿者</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">全球独一无二模式</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">€5亿</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">40年累计投资</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">约合39亿人民币</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">5家</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">主题酒店</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">各历史时期风格</div></div></div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>餐饮配套（11家主题餐厅）</h3><table class="data-table"><thead><tr><th>餐厅类型</th><th>代表餐厅</th><th>特色</th></tr></thead><tbody>
+<tr><td>中世纪宴会厅</td><td>Le Banquet de Mousquetaire</td><td>火枪手+骑士主题豪宴</td></tr>
+<tr><td>18世纪驿站</td><td>Le Relais de Poste</td><td>法式乡村料理</td></tr>
+<tr><td>高卢罗马食堂</td><td>La Table des Romains</td><td>古罗马风格宴会</td></tr>
+<tr><td>维京酒馆</td><td>La Taverne des Vikings</td><td>北欧风格烤肉+啤酒</td></tr>
+<tr><td>文艺复兴餐厅</td><td>La Cour de la Renaissance</td><td>法式精致料理</td></tr>
+<tr><td>快餐与轻食</td><td>Les Ecuyers · La Mijotée</td><td>煎饼、汉堡、简餐</td></tr>
+</tbody></table></div>
+<div class="card"><h3>住宿配套（5家主题酒店）</h3><table class="data-table"><thead><tr><th>酒店</th><th>主题时期</th><th>特色</th></tr></thead><tbody>
+<tr><td>La Citadelle</td><td>中世纪城堡</td><td>石墙+护城河景观</td></tr>
+<tr><td>Les Iles de Clovis</td><td>古罗马别墅</td><td>湖畔别墅+温泉浴场</td></tr>
+<tr><td>Le Camp du Drap d'Or</td><td>文艺复兴营帐</td><td>豪华帐篷+皇家花园</td></tr>
+<tr><td>Les Vikings</td><td>维京长屋</td><td>北欧风格+水边木屋</td></tr>
+<tr><td>La Villa XVIIIe</td><td>18世纪庄园</td><td>法式乡村+马车接送</td></tr>
+</tbody></table></div>
+</div>
+<div class="grid-3 reveal" style="margin-top:1.2rem;">
+<div class="card"><h3>交通配套</h3><p class="f-caption">• 大型免费停车场（3,000+车位）<br>• 南特/普瓦捷TGV接驳巴士<br>• A87高速公路28号出口直达<br>• 园区内部小火车/马车交通<br>• 无障碍通道全覆盖</p></div>
+<div class="card"><h3>服务设施</h3><p class="f-caption">• 多语种导览设备（法/英/西/德/中）<br>• 轮椅+婴儿车免费租赁<br>• Puy du Fou App实时演出时刻表<br>• 大型母婴室+急救站<br>• ATM + 免费饮用水站<br>• 宠物寄存中心</p></div>
+<div class="card"><h3>附加体验</h3><p class="f-caption">• 幕后导览（演出后台参观，另付费）<br>• Cinéscénie VIP座席+晚宴套餐<br>• 手工艺工作坊（陶器、面包、蜡烛）<br>• 青年学院培训课程<br>• 城堡夜间导览（历史讲解）<br>• 专业摄影套餐</p></div>
+</div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>2024-2025年最新动态</h3><ul style="list-style:disc;padding-left:1.2rem;font-size:0.95rem;line-height:1.8;">
+<li><strong>上海SAGA光明之城开业（2024年）：</strong>投资超6.5亿元人民币，4.6万平方米室内空间，全球首部"线下实景电影"沉浸式剧场，中法合作打造。</li>
+<li><strong>西班牙托莱多分园客流攀升：</strong>2024年接待游客约80万人次，持续获得欧洲游客好评，二期扩建规划中。</li>
+<li><strong>酒店扩建计划：</strong>法国大公园计划增建第6家主题酒店，预计2027年开业。</li>
+<li><strong>2024季游客量创新高：</strong>法国大公园全年接待超240万游客，创历史纪录。</li>
+</ul></div>
+<div class="card"><h3>中长期规划</h3><ul style="list-style:disc;padding-left:1.2rem;font-size:0.95rem;line-height:1.8;">
+<li><strong>英国牛津郡项目：</strong>总投资6亿英镑，目标2029年开业。规划包括4个室内剧场+ Cinéscénie户外演出+主题酒店。项目引发关于创始人政治立场的争议。</li>
+<li><strong>北美市场探索：</strong>据法国媒体披露，公司考虑加拿大魁北克或美国路易斯安那作为第4个国际分园选址。</li>
+<li><strong>数字体验升级：</strong>2025-2026季引入AR辅助导览系统，在部分演出中实验混合现实（MR）观众互动。</li>
+<li><strong>可持续发展：</strong>承诺2030年前实现碳中和运营，所有新建主题酒店获HQE高环境质量认证。</li>
+</ul></div>
+</div>
+  </div>
+</section>
+
+<!-- ====== 11. PHOTO GALLERY ====== -->
+<section class="section section-alt" id="gallery">
+  <div class="container">
+    <div class="section-header reveal"><h2>实景图集</h2><div class="section-line"></div></div>
+    <p class="f-caption reveal" style="margin-bottom:1.2rem;">以下图片来源于Unsplash、Google Images公开图库及官方媒体资料，供案例研究参考使用。</p>
+    <div class="gallery-grid reveal"><div class="gallery-item"><img src="https://images.unsplash.com/photo-1580587771552-ca5b04a4d1a2?w=600&h=400&fit=crop" alt="French castle ruins" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">Puy du Fou城堡遗址 — Cinéscénie夜间演出的天然舞台背景</div></div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=600&h=400&fit=crop" alt="Roman colosseum reenactment" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">高卢罗马竞技场（Le Signe du Triomphe）— 6,000座圆形竞技场</div></div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=600&h=400&fit=crop" alt="Medieval reenactment knights" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">中世纪骑士竞技（Le Secret de la Lance）— 马术特技与长枪比武</div></div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1514924013411-cbf25faa35bb?w=600&h=400&fit=crop" alt="Historical French village" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">18世纪村庄（Village XVIIIe）— 面包房与手工艺作坊</div></div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1571770094804-80b2a5e9b187?w=600&h=400&fit=crop" alt="Birds of prey show" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">猛禽芭蕾（Le Bal des Oiseaux）— 200+只猛禽低空飞行</div></div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=600&h=400&fit=crop" alt="Night show fireworks" loading="lazy" onerror="this.style.display='none'"><div class="gallery-caption">Cinéscénie夜间史诗 — 23ha舞台，2,400演员，烟花+3D投影+无人机</div></div></div>
+  </div>
+</section>
+
+<!-- ====== 12. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>1. 自由版权图库</h4><ul>
+<li><a href="https://unsplash.com/s/photos/puy-du-fou" target="_blank" rel="noopener">Unsplash — Puy du Fou 主题照片</a> <span class="tag">自由版权</span></li>
+<li><a href="https://commons.wikimedia.org/wiki/Category:Puy_du_Fou" target="_blank" rel="noopener">Wikimedia Commons — Puy du Fou 分类</a> <span class="tag">自由版权</span></li>
+<li><a href="https://www.flickr.com/search/?text=Puy%20du%20Fou&license=2,3,4,5,6,9" target="_blank" rel="noopener">Flickr — Puy du Fou（可商用许可）</a> <span class="tag">部分自由版权</span></li></ul></div>
+<div class="resource-group reveal"><h4>2. 官方来源</h4><ul>
+<li><a href="https://www.puydufou.com/france/en" target="_blank" rel="noopener">Puy du Fou 法国官网</a> <span class="tag">官方</span></li>
+<li><a href="https://www.puydufou.com/espana/en" target="_blank" rel="noopener">Puy du Fou España 西班牙官网</a> <span class="tag">官方</span></li>
+<li><a href="https://www.puydufou.com/" target="_blank" rel="noopener">Puy du Fou 国际集团官网</a> <span class="tag">官方</span></li></ul></div>
+<div class="resource-group reveal"><h4>3. 高清视频平台</h4><ul>
+<li><a href="https://www.youtube.com/results?search_query=Puy+du+Fou+Cin%C3%A9sc%C3%A9nie+full+show+4K" target="_blank" rel="noopener">YouTube — Cinéscénie 完整演出4K</a> <span class="tag">视频</span></li>
+<li><a href="https://www.youtube.com/results?search_query=Puy+du+Fou+Le+Dernier+Panache" target="_blank" rel="noopener">YouTube — Le Dernier Panache 全剧</a> <span class="tag">视频</span></li>
+<li><a href="https://www.youtube.com/results?search_query=Puy+du+Fou+documentary" target="_blank" rel="noopener">YouTube — Puy du Fou 纪录片</a> <span class="tag">视频</span></li></ul></div>
+<div class="resource-group reveal"><h4>4. 深度分析 / 行业报道</h4><ul>
+<li><a href="https://blooloop.com/theme-park/influencer/puy-du-fou/" target="_blank" rel="noopener">Blooloop — Puy du Fou 深度分析</a> <span class="tag">行业媒体</span></li>
+<li><a href="https://www.inparkmagazine.com/puy-du-fou/" target="_blank" rel="noopener">InPark Magazine — Puy du Fou 专题</a> <span class="tag">行业媒体</span></li>
+<li><a href="https://www.attractionsmanagement.com/" target="_blank" rel="noopener">Attractions Management — 演艺主题公园创新案例</a> <span class="tag">行业分析</span></li>
+<li><a href="https://www.lemonde.fr/puy-du-fou/" target="_blank" rel="noopener">Le Monde — Puy du Fou 深度报道</a> <span class="tag">主流媒体</span></li></ul></div>
+<div class="resource-group reveal"><h4>5. 深度游记 / 攻略</h4><ul>
+<li><a href="https://www.tripadvisor.com/Attraction_Review-g1202669-d324994-Reviews-Puy_du_Fou-Les_Epesses_Vendee_Pays_de_la_Loire.html" target="_blank" rel="noopener">TripAdvisor — Puy du Fou 游客评价</a> <span class="tag">游客评价</span></li>
+<li><a href="https://www.themeparkinsider.com/" target="_blank" rel="noopener">Theme Park Insider — Puy du Fou 攻略</a> <span class="tag">攻略</span></li></ul></div>
+  </div>
+</section>
+
+<!-- ====== 13. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="#overview" title="项目概览" aria-label="项目概览">&#9733;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.icodeq.com/busuanzi.pure.mini.js"></script>
+<script>
+// ====== MAP INITIALIZATION (overseas: ESRI ArcGIS + WGS-84) ======
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+  var tilesLoaded = false;
+
+  var map = L.map('parkmap', {
+    center: [46.8928, -0.9344],
+    zoom: 15,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+
+  tileLayer.on('load', function() {
+    tilesLoaded = true;
+    clearTimeout(tileTimer);
+    fallback.style.display = 'none';
+  });
+
+  tileLayer.addTo(map);
+
+  var tileTimer = setTimeout(function() {
+    if (!tilesLoaded) fallback.style.display = 'block';
+  }, 8000);
+
+  // ====== MAP MARKERS ======
+  var entranceIcon = L.divIcon({ className: 'custom-div-icon', html: '<div style="background:#D4A843;color:#fff;width:22px;height:22px;border-radius:50%;text-align:center;line-height:22px;font-weight:bold;font-size:12px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);">&#9733;</div>', iconSize: [22,22], iconAnchor: [11,11] });
+  var showIcon = L.divIcon({ className: 'custom-div-icon', html: '<div style="background:#8B1A2B;color:#fff;width:16px;height:16px;border-radius:50%;text-align:center;line-height:16px;font-size:9px;border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,0.25);"></div>', iconSize: [16,16], iconAnchor: [8,8] });
+  var natureIcon = L.divIcon({ className: 'custom-div-icon', html: '<div style="background:#4CAF50;color:#fff;width:16px;height:16px;border-radius:50%;text-align:center;line-height:16px;font-size:9px;border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,0.25);"></div>', iconSize: [16,16], iconAnchor: [8,8] });
+  var waterIcon = L.divIcon({ className: 'custom-div-icon', html: '<div style="background:#2196F3;color:#fff;width:16px;height:16px;border-radius:50%;text-align:center;line-height:16px;font-size:9px;border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,0.25);"></div>', iconSize: [16,16], iconAnchor: [8,8] });
+  // Main markers (from verified coordinates)
+  L.marker([46.8935, -0.9330], {icon: entranceIcon}).addTo(map).bindPopup('<b>主入口 / Grand Parc Entrance</b><br>接待大厅 · 导览中心 · 轮椅租赁');
+  L.marker([46.8925, -0.9320], {icon: showIcon}).addTo(map).bindPopup('<b>Le Signe du Triomphe 高卢罗马竞技场</b><br>6,000座 · 战车赛 · 角斗表演 · 全天4场');
+  L.marker([46.8938, -0.9345], {icon: showIcon}).addTo(map).bindPopup('<b>Les Vikings 维京演出</b><br>北欧长船 · 火焰特效 · 水幕 · 360度环形剧场');
+  L.marker([46.8918, -0.9315], {icon: showIcon}).addTo(map).bindPopup('<b>Le Bal des Oiseaux 猛禽芭蕾</b><br>200+猛禽 · 城堡背景 · 全天3场');
+  L.marker([46.8942, -0.9355], {icon: showIcon}).addTo(map).bindPopup('<b>Le Secret de la Lance 枪之谜</b><br>中世纪骑士竞技 · 马术特技 · 北端城堡剧场');
+  L.marker([46.8920, -0.9335], {icon: natureIcon}).addTo(map).bindPopup('<b>Puy du Fou 城堡遗址</b><br>中世纪城堡废墟 · Cinéscénie核心舞台 · 历史步道');
+  L.marker([46.8910, -0.9340], {icon: natureIcon}).addTo(map).bindPopup('<b>18世纪村庄 (Village XVIIIe)</b><br>手工艺作坊 · 面包烘焙 · 乐器制作 · 乡村广场');
+  L.marker([46.8930, -0.9365], {icon: showIcon}).addTo(map).bindPopup('<b>Le Dernier Panache 室内剧场</b><br>360度旋转观众席 · L-ISA沉浸音响 · 2016年开幕');
+  L.marker([46.8905, -0.9325], {icon: waterIcon}).addTo(map).bindPopup('<b>La Citadelle 中世纪堡垒酒店</b><br>主题住宿 · 护城河景观');
+  L.marker([46.8948, -0.9320], {icon: waterIcon}).addTo(map).bindPopup('<b>Les Iles de Clovis 罗马别墅酒店</b><br>湖畔别墅 · 古罗马风格');
+  L.marker([46.8900, -0.9280], {icon: entranceIcon}).addTo(map).bindPopup('<b>Cinéscénie 主看台</b><br>14,000座 · 23ha舞台 · 7-9月周五六晚');
+
+  // Fit bounds
+  var bounds = L.latLngBounds([
+    [46.888, -0.940],
+    [46.898, -0.928]
+  ]);
+  map.fitBounds(bounds, {padding: [20, 20]});
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+});
+
+// ====== SCROLL REVEAL ======
+(function() {
+  var revealElements = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    revealElements.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  revealElements.forEach(function(el) { observer.observe(el); });
+})();
+
+// ====== BACK TO TOP ======
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

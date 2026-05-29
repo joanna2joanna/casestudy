@@ -25,20 +25,10 @@
   --clr-text-muted: #8C9098;
 }
 
-/* ===== RESET & BASE ===== */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* overrides & additions on top of shared.css */
+html { scroll-padding-top: 64px; }
+body { overflow-x: hidden; }
 
-html { scroll-behavior: smooth; font-size: 17px; scroll-padding-top: 64px; }
-
-body {
-  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--clr-bg);
-  color: var(--clr-text);
-  line-height: 1.7;
-  overflow-x: hidden;
-}
-
-/* ===== TYPOGRAPHY ===== */
 h1, h2, h3, h4 {
   font-family: 'Playfair Display', Georgia, serif;
   font-weight: 700;
@@ -69,18 +59,6 @@ nav a {
   font-family: 'DM Mono', monospace;
 }
 nav a:hover, nav a.active { color: var(--clr-accent); background: rgba(0,200,255,0.12); }
-
-/* ===== REVEAL ANIMATION ===== */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
-              transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
 
 /* ===== HERO ===== */
 .hero {
@@ -214,10 +192,10 @@ nav a:hover, nav a.active { color: var(--clr-accent); background: rgba(0,200,255
 .section {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 5rem 2rem;
+  padding: var(--gap-section) 2rem;
 }
 
-.section-alt { background: #EDF2F7; }
+.section-alt { background: var(--clr-bg-alt); }
 
 .section-header {
   text-align: center;
@@ -239,41 +217,16 @@ nav a:hover, nav a.active { color: var(--clr-accent); background: rgba(0,200,255
   font-weight: 800;
 }
 
-.section-header .divider {
-  width: 60px;
-  height: 3px;
+.section-header .section-line {
   background: linear-gradient(90deg, var(--clr-primary-mid), var(--clr-accent));
-  margin: 1rem auto 0;
 }
 
 /* ===== CARDS ===== */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
 
-.card-grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
 
-.card-grid-3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
 
-.card-grid-4 {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-}
 
 @media (max-width: 900px) {
-  .card-grid-3, .card-grid-4 { grid-template-columns: 1fr; }
-  .card-grid-2 { grid-template-columns: 1fr; }
 }
 
 .card {
@@ -722,10 +675,10 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
   <div class="section-header reveal">
     <div class="section-number">01 · OVERVIEW</div>
     <h2>项目概览</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
   <p style="text-align:center;max-width:600px;margin:0 auto 2.5rem;color:#5C6058;font-size:0.95rem;">Sphere at The Venetian Resort 是 Sphere Entertainment Co.（NYSE: SPHR，前身为麦迪逊广场花园娱乐公司）斥资23亿美元打造的下一代沉浸式娱乐场馆。2023年9月29日开业，以其全球最大的球形结构和前所未有的LED显示与音频技术，重新定义了现场娱乐体验的可能边界。</p>
-  <div class="card-grid reveal">
+  <div class="grid-2 reveal">
     <div class="card">
       <h4>项目名称</h4>
       <div class="card-value" style="font-size:1.2rem;">Sphere at The Venetian Resort</div>
@@ -765,7 +718,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
   <div class="section-header reveal">
     <div class="section-number">02 · DESIGN & BUILD</div>
     <h2>设计与建设团队</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
   <div class="table-wrap reveal">
     <table>
@@ -838,7 +791,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
   <div class="section-header reveal">
     <div class="section-number">03 · TECH SPECS</div>
     <h2>核心技术规格</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
   <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--clr-primary);margin-bottom:16px;font-family:'Playfair Display',serif;">外立面 — Exosphere（"外球层"）</h3>
@@ -894,7 +847,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
   <div class="section-header reveal">
     <div class="section-number">04 · MASTER DATA TABLE</div>
     <h2>全维度技术指标总表</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
   <div style="overflow-x:auto;">
   <table class="data-table reveal" style="min-width:900px;width:100%;border-collapse:collapse;background:#FFFFFF;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.04);border:1px solid var(--clr-border);">
@@ -928,7 +881,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
   <div class="section-header reveal">
     <div class="section-number">05 · SPATIAL LAYOUT</div>
     <h2>空间布局分析</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
   <p style="text-align:center;max-width:580px;margin:0 auto 2rem;color:#6B7B8D;font-size:0.9rem;">Sphere位于拉斯维加斯大道东侧，毗邻威尼斯人度假村（The Venetian Resort），通过人行天桥直连。ESRI卫星底图，WGS-84坐标系。</p>
@@ -1023,10 +976,10 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
   <div class="section-header reveal">
     <div class="section-number">06 · DEVELOPMENT TIMELINE</div>
     <h2>投资与建设时序</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
-  <div class="card-grid-3 reveal" style="margin-bottom:2.5rem;">
+  <div class="grid-3 reveal" style="margin-bottom:2.5rem;">
     <div class="card" style="text-align:center;">
       <h4>初始预算 (2018)</h4>
       <div class="card-value">$12亿</div>
@@ -1044,7 +997,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
     </div>
   </div>
 
-  <div class="card-grid-2 reveal" style="margin-bottom:2rem;">
+  <div class="grid-2 reveal" style="margin-bottom:2rem;">
     <div class="card">
       <h4>成本超支主要原因</h4>
       <div class="card-note" style="line-height:1.7;">
@@ -1126,7 +1079,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
   <div class="section-header reveal">
     <div class="section-number">07 · OPERATIONS & FINANCE</div>
     <h2>运营模式与财务表现</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
   <div class="kpi-row reveal">
@@ -1245,7 +1198,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
   <div class="section-header reveal">
     <div class="section-number">08 · TECHNICAL INNOVATIONS</div>
     <h2>六大核心技术突破</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
   <div class="tech-grid reveal">
@@ -1300,9 +1253,9 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
   <div class="section-header reveal">
     <div class="section-number">09 · AMENITIES & HIGHLIGHTS</div>
     <h2>配套设施与特色亮点</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
-  <div class="card-grid reveal">
+  <div class="grid-2 reveal">
     <div class="card">
       <h4>餐饮设施</h4>
       <div class="card-value">29个</div>
@@ -1357,10 +1310,10 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
   <div class="section-header reveal">
     <div class="section-number">10 · FUTURE OUTLOOK</div>
     <h2>最新动态与全球扩张展望</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
-  <div class="card-grid reveal">
+  <div class="grid-2 reveal">
     <div class="card">
       <h4>阿布扎比第二座Sphere</h4>
       <div class="card-value" style="font-size:1.3rem;color:#2E8B57;">目标2026年开业</div>
@@ -1400,7 +1353,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
   <div class="section-header reveal">
     <div class="section-number">11 · PHOTO GALLERY</div>
     <h2>实景图集与媒体资源</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
   <div class="gallery-grid reveal">
     <div class="gallery-card">
@@ -1440,9 +1393,9 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
   <div class="section-header reveal">
     <div class="section-number">12 · EXTERNAL REFERENCES</div>
     <h2>延伸资料库</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
-  <div class="card-grid reveal">
+  <div class="grid-2 reveal">
     <a href="https://www.thespherevegas.com" target="_blank" rel="noopener" class="ref-card-link">
       <div class="card">
         <h4>01 · 官方来源</h4>

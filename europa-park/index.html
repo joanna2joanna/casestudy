@@ -43,19 +43,10 @@ section { max-width: 1100px; margin: 0 auto; padding: 3.5rem 2rem; }
 .section-sub { font-size: 0.9rem; color: var(--clr-text-muted); margin-bottom: 2rem; }
 
 /* Cards */
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.3rem; }
-.card { background: #fff; border-radius: 0.8rem; padding: 1.5rem; border: 1px solid var(--clr-border); transition: transform 0.2s, box-shadow 0.2s; }
-.card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.07); }
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.3rem; }
 .card-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
-.card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
 .card p { font-size: 0.85rem; color: var(--clr-text-secondary); }
 .card .big-number { font-family: 'DM Mono', monospace; font-size: 1.6rem; font-weight: 500; color: var(--clr-primary); }
-
-/* Table */
-.data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-.data-table th { text-align: left; padding: 0.6rem 0.8rem; background: var(--clr-bg-alt); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--clr-primary); border-bottom: 2px solid var(--clr-accent); }
-.data-table td { padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--clr-border); vertical-align: top; }
-.data-table tr:hover td { background: #fdfaf6; }
 
 /* Timeline */
 .timeline { position: relative; padding-left: 2rem; }
@@ -130,7 +121,7 @@ footer a { color: rgba(255,255,255,0.8); }
   section { padding: 2rem 1rem; }
   .hero-stats { gap: 1rem; }
   .hero-stat-num { font-size: 1.5rem; }
-  .card-grid { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
   .map-container { height: 320px; }
   .data-table { font-size: 0.72rem; }
 }
@@ -155,7 +146,7 @@ footer a { color: rgba(255,255,255,0.8); }
 <section>
   <h2 class="section-title">项目概览</h2>
   <p class="section-sub">德国巴登-符腾堡州鲁斯特市，家族全资持有运营</p>
-  <div class="card-grid">
+  <div class="grid-2">
     <div class="card"><div class="card-icon">&#x1F4C5;</div><h3>开业时间</h3><p>1975 年 7 月 12 日，由 Franz Mack 与 Roland Mack 父子创办</p></div>
     <div class="card"><div class="card-icon">&#x1F3ED;</div><h3>开发商 / 运营商</h3><p>Mack 家族，Europa-Park GmbH & Co Mack KG。三代经营，全球唯一同时拥有主题乐园和游乐设备制造厂（Mack Rides）的家族</p></div>
     <div class="card"><div class="card-icon">&#x1F4CD;</div><h3>地理位置</h3><p>德国巴登-符腾堡州鲁斯特市（Rust），距弗赖堡约 30 km，距法瑞边境约 10 km</p></div>
@@ -169,7 +160,7 @@ footer a { color: rgba(255,255,255,0.8); }
 <section>
   <h2 class="section-title">设计与建设</h2>
   <p class="section-sub">从游乐设备制造商到主题乐园帝国的垂直整合</p>
-  <div class="card-grid">
+  <div class="grid-2">
     <div class="card">
       <div class="card-icon">&#x270F;&#xFE0F;</div>
       <h3>设计方</h3>
@@ -449,7 +440,7 @@ footer a { color: rgba(255,255,255,0.8); }
 <!-- 园区实景图集 -->
 <section>
   <h3 style="margin-bottom:1rem;">园区实景图集</h3>
-  <div class="card-grid">
+  <div class="grid-2">
     <a href="https://commons.wikimedia.org/wiki/Category:Europa-Park" target="_blank" rel="noopener" class="ref-card">
       <div class="ref-icon">&#x1F3DE;&#xFE0F;</div><h4>全园俯瞰 &amp; 鸟瞰</h4><p>Wikimedia Commons — 高清自由版权图片合集</p>
     </a>
@@ -565,7 +556,7 @@ footer a { color: rgba(255,255,255,0.8); }
 <!-- 9. 配套设施体系 -->
 <section>
   <h2 class="section-title">配套设施体系</h2>
-  <div class="card-grid">
+  <div class="grid-2">
     <div class="card"><div class="card-icon">&#x1F3E8;</div><h3>住宿</h3><p>6 家主题酒店（5,800+ 床位）<br>Silver Lake City：36 木屋 + 120 间河滨旅馆 + 68 房车位 + 帐篷/Tipi/篷车<br>2023/24 酒店过夜 140 万间夜</p></div>
     <div class="card"><div class="card-icon">&#x1F374;</div><h3>餐饮</h3><p>40+ 餐厅，各国正宗美食<br>FoodLoop：世界首个过山车送餐系统<br>Ammolite – House of Light：高档餐厅 &amp; 品酒室<br>2025 新增 Sallys Café、Cold Rush 冰淇淋、Grandpa Will's 热狗</p></div>
     <div class="card"><div class="card-icon">&#x1F6D7;</div><h3>交通与停车</h3><p>A5 高速公路直达（Rust 出口）<br>Europa-Park 快线历史铁路环园运行<br>多层停车楼 + Silver Lake City 580 车位<br>法国/瑞士 30 分钟车程，弗赖堡 30 km</p></div>
@@ -578,7 +569,7 @@ footer a { color: rgba(255,255,255,0.8); }
 <!-- 10. 最新动态与扩建展望 -->
 <section>
   <h2 class="section-title">最新动态与扩建展望</h2>
-  <div class="card-grid">
+  <div class="grid-2">
     <div class="card">
       <div class="card-icon">&#x1F3A2;</div>
       <h3>50 周年庆典（2025）</h3>

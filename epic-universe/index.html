@@ -176,13 +176,9 @@ h1, h2, h3, h4 {
   margin-bottom: 0.5rem;
 }
 
-.section-header h2 {
-  font-size: clamp(2rem, 4vw, 3rem);
-  color: #8B6914;
-  font-weight: 800;
-}
+.section-header h2 { color: #8B6914; }
 
-.section-header .divider {
+.section-header .section-line {
   width: 60px;
   height: 3px;
   background: linear-gradient(90deg, var(--clr-primary), var(--clr-accent));
@@ -190,30 +186,15 @@ h1, h2, h3, h4 {
 }
 
 /* ===== CARDS ===== */
-.card-grid {
+.grid-3 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
 }
 
-.card {
-  background: #FFFFFF;
-  border: 1px solid var(--clr-border);
-  border-radius: 12px;
-  padding: 1.75rem;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-}
-
-.card:hover {
-  border-color: var(--clr-accent);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-}
-
 .card h4 {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--clr-primary);
   text-transform: uppercase;
@@ -529,7 +510,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
 @media (max-width: 640px) {
   .section { padding: 3rem 1rem; }
   .hero h1 { font-size: 2.2rem; }
-  .card-grid { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: 1fr; }
   .kpi-grid { grid-template-columns: 1fr 1fr; }
   .amenity-row { grid-template-columns: 1fr; }
   .map-container { height: 280px; }
@@ -564,7 +545,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   <div class="section-header reveal">
     <div class="section-number">Module 01</div>
     <h2>项目总览 Overview</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
   <div class="reveal" style="margin-bottom:2rem;">
@@ -573,7 +554,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
     </p>
   </div>
 
-  <div class="card-grid reveal">
+  <div class="grid-3 reveal">
     <div class="card">
       <h4>开发商 Developer</h4>
       <div class="card-value">Universal Creative</div>
@@ -623,7 +604,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   <div class="section-header reveal">
     <div class="section-number">Module 02</div>
     <h2>设计与建造 Design &amp; Construction</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
   <div class="reveal" style="margin-bottom:2.5rem;">
@@ -680,7 +661,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   <div class="section-header reveal">
     <div class="section-number">Module 03</div>
     <h2>技术指标总表 Technical Summary</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
   <div class="reveal">
@@ -720,7 +701,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   <div class="section-header reveal">
     <div class="section-number">Module 04</div>
     <h2>空间布局 Spatial Layout</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
   <!-- SVG Hub-and-Spoke Diagram -->
@@ -827,7 +808,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   <div class="section-header reveal">
     <div class="section-number">Module 05</div>
     <h2>投资与建设时间线 Investment Timeline</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
   <div class="reveal" style="max-width:700px;margin:0 auto;">
@@ -875,7 +856,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   <div class="section-header reveal">
     <div class="section-number">Module 06</div>
     <h2>运营关键指标 Operations KPIs</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
   <div class="reveal">
@@ -931,7 +912,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   <div class="section-header reveal">
     <div class="section-number">Module 07</div>
     <h2>核心骑乘技术指标 Core Tech Indicators</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
   <div class="reveal">
@@ -1035,7 +1016,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   <div class="section-header reveal">
     <div class="section-number">Module 08</div>
     <h2>五大主题区深度解析 Themed Lands</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
   <div class="reveal">
@@ -1113,7 +1094,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   <div class="section-header reveal">
     <div class="section-number">Module 09</div>
     <h2>配套设施 Amenities</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
   <div class="reveal">
@@ -1153,11 +1134,11 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   <div class="section-header reveal">
     <div class="section-number">Module 10</div>
     <h2>最新动态与扩建计划 Latest News &amp; Expansion</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
   <div class="reveal">
-    <div class="card-grid">
+    <div class="grid-3">
       <div class="card">
         <h4>Project 680</h4>
         <div class="card-value" style="font-size:1.2rem;">首个扩建景点启动</div>
@@ -1199,7 +1180,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   <div class="section-header reveal">
     <div class="section-number">Module 11</div>
     <h2>参考资源 Reference Library</h2>
-    <div class="divider"></div>
+    <div class="section-line"></div>
   </div>
 
   <div class="reveal">

@@ -31,6 +31,8 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+html { scroll-behavior: smooth; font-size: 17px; }
+
 body {
   font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   color: var(--text);
@@ -105,7 +107,7 @@ section:nth-child(even) { background: var(--white); }
 .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
 .stat-card .stat-value { font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 700; color: var(--primary); display: block; }
 .stat-card .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 6px; }
-.stat-card .stat-note { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+.stat-card .stat-note { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
 
 /* ===== TIMELINE ===== */
 .timeline { position: relative; padding-left: 32px; }
@@ -145,7 +147,7 @@ tbody tr:hover { background: var(--primary-lighter); }
 .area-card .area-features { list-style: none; font-size: 0.88rem; color: var(--text-muted); }
 .area-card .area-features li { padding: 3px 0; padding-left: 16px; position: relative; }
 .area-card .area-features li::before { content: '•'; position: absolute; left: 0; color: var(--accent); }
-.area-card .area-note { display: inline-block; margin-top: 10px; font-size: 0.75rem; color: var(--accent); background: var(--accent-light); padding: 3px 10px; border-radius: 20px; }
+.area-card .area-note { display: inline-block; margin-top: 10px; font-size: 0.8rem; color: var(--accent); background: var(--accent-light); padding: 3px 10px; border-radius: 20px; }
 
 /* ===== IMAGE GRID ===== */
 .img-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
@@ -153,7 +155,7 @@ tbody tr:hover { background: var(--primary-lighter); }
 .img-grid a:hover { transform: scale(1.02); }
 .img-grid .img-placeholder { display: flex; align-items: center; justify-content: center; height: 100%; color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 12px; flex-direction: column; gap: 6px; text-decoration: none; }
 .img-grid .img-label { font-weight: 600; font-size: 0.85rem; color: var(--text); }
-.img-grid .img-src { font-size: 0.7rem; color: var(--text-muted); word-break: break-all; }
+.img-grid .img-src { font-size: 0.78rem; color: var(--text-muted); word-break: break-all; }
 
 /* ===== REF GRID ===== */
 .ref-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }

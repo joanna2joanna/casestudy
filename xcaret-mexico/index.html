@@ -35,7 +35,7 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; font-size: 16px; }
+html { scroll-behavior: smooth; font-size: 17px; }
 
 body {
   font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -949,8 +949,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   try {
     var map = L.map('map-container', {
-      center: [20.5783, -87.1192],
-      zoom: 15,
+      center: [20.5785, -87.1185],
+      zoom: 16,
       zoomControl: true,
       scrollWheelZoom: true
     });
@@ -988,63 +988,64 @@ document.addEventListener('DOMContentLoaded', function() {
     var wildlifeIcon = L.divIcon({ className: 'custom-div-icon', html: '<div style="background:#4CAF50;color:#fff;width:16px;height:16px;border-radius:50%;text-align:center;line-height:16px;font-size:9px;border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,0.25);"></div>', iconSize: [16,16], iconAnchor: [8,8] });
 
     // --- Main markers (coordinates from verified data) ---
+    // Orientation: entrance on WEST (highway side, lng ~-87.119), coast on EAST (lng ~-87.1175)
 
-    // 1. Main Entrance
-    L.marker([20.5783, -87.1192], {icon: entranceIcon}).addTo(map)
+    // 1. Main Entrance (NW corner near highway)
+    L.marker([20.5792, -87.1195], {icon: entranceIcon}).addTo(map)
       .bindPopup('<b>主入口 / Xcaret Plus</b><br>Papantla飞人仪式杆 · 服务区 · 色标路线起点');
 
-    // 2. Mayan Village (inland from entrance)
-    L.marker([20.5773, -87.1177], {icon: cultureIcon}).addTo(map)
+    // 2. Mayan Village (central-inland)
+    L.marker([20.5780, -87.1188], {icon: cultureIcon}).addTo(map)
       .bindPopup('<b>玛雅村 / Mayan Village</b><br>玛雅球赛场 · 手工艺作坊 · 考古遗址步道');
 
-    // 3. Underground River entrance
-    L.marker([20.5778, -87.1180], {icon: waterIcon}).addTo(map)
+    // 3. Underground River entrance (near entrance, west side)
+    L.marker([20.5788, -87.1190], {icon: waterIcon}).addTo(map)
       .bindPopup('<b>地下河入口</b><br>3条路线(Río Maya · Manatí · Azul) · 各约600m · 水温22°C');
 
-    // 4. The Cove / Caleta
-    L.marker([20.5795, -87.1210], {icon: waterIcon}).addTo(map)
+    // 4. The Cove / Caleta (north-east, on coast ~-87.1175)
+    L.marker([20.5795, -87.1180], {icon: waterIcon}).addTo(map)
       .bindPopup('<b>海湾(The Cove)</b><br>浮潜 · Sea Trek · Snuba · 天然泳池 · 淡水泉与海水交汇');
 
-    // 5. Beach area
-    L.marker([20.5787, -87.1218], {icon: waterIcon}).addTo(map)
+    // 5. Beach area (mid-east, on coast)
+    L.marker([20.5787, -87.1178], {icon: waterIcon}).addTo(map)
       .bindPopup('<b>Xcaret海滩</b><br>人工沙滩 · 石防波堤 · 棕榈草棚 · 秘密滑梯');
 
-    // 6. Aviary & Butterfly Pavilion
-    L.marker([20.5789, -87.1162], {icon: wildlifeIcon}).addTo(map)
+    // 6. Aviary & Butterfly Pavilion (central-north)
+    L.marker([20.5790, -87.1185], {icon: wildlifeIcon}).addTo(map)
       .bindPopup('<b>鸟舍 &amp; 蝴蝶馆</b><br>1,500+只鸟 · 金刚鹦鹉保育纪录 · 500+只蝴蝶 · 兰花温室');
 
-    // 7. Jaguar Island & Manatee Lagoon
-    L.marker([20.5781, -87.1155], {icon: wildlifeIcon}).addTo(map)
+    // 7. Jaguar Island & Manatee Lagoon (mid-east, near coast)
+    L.marker([20.5780, -87.1180], {icon: wildlifeIcon}).addTo(map)
       .bindPopup('<b>野生动物区</b><br>美洲豹岛 · 海牛湖(Pompom &amp; Nohoch) · 蝙蝠洞 · 鹿苑 · 海龟区');
 
-    // 8. Coral Reef Aquarium
-    L.marker([20.5775, -87.1148], {icon: wildlifeIcon}).addTo(map)
+    // 8. Coral Reef Aquarium (south-east, near coast)
+    L.marker([20.5775, -87.1180], {icon: wildlifeIcon}).addTo(map)
       .bindPopup('<b>珊瑚礁水族馆</b><br>中美洲大堡礁生态展示 · 海洋生物');
 
-    // 9. Hacienda Henequenera & Folk Art Museum
-    L.marker([20.5771, -87.1170], {icon: cultureIcon}).addTo(map)
+    // 9. Hacienda Henequenera & Folk Art Museum (south-west)
+    L.marker([20.5772, -87.1190], {icon: cultureIcon}).addTo(map)
       .bindPopup('<b>Hacienda Henequenera</b><br>19世纪庄园 · 民间艺术博物馆 · 墨西哥公墓 · 圣方济各教堂');
 
-    // 10. Gran Tlachco Theater
-    L.marker([20.5765, -87.1152], {icon: entranceIcon}).addTo(map)
+    // 10. Gran Tlachco Theater (south end)
+    L.marker([20.5768, -87.1188], {icon: entranceIcon}).addTo(map)
       .bindPopup('<b>Gran Tlachco大剧场</b><br>6,000座 · 300+演员 · México Espectacular每晚19:00');
 
-    // 11. Delphinus Dolphin area
-    L.marker([20.5770, -87.1202], {icon: waterIcon}).addTo(map)
+    // 11. Delphinus Dolphin area (south-west, inland pools)
+    L.marker([20.5770, -87.1195], {icon: waterIcon}).addTo(map)
       .bindPopup('<b>Delphinus海豚区</b><br>墨西哥首个海豚共游项目 · 鲨鱼共游');
 
-    // 12. Hotel Xcaret Mexico
-    L.marker([20.5800, -87.1135], {icon: zoneIcon}).addTo(map)
+    // 12. Hotel Xcaret Mexico (north, separate resort complex)
+    L.marker([20.5805, -87.1175], {icon: zoneIcon}).addTo(map)
       .bindPopup('<b>Hotel Xcaret México</b><br>1,800间客房 · 全包式度假村 · All-Fun Inclusive');
 
-    // 13. Xcaret Archaeological Site (Polé)
-    L.marker([20.5768, -87.1163], {icon: cultureIcon}).addTo(map)
+    // 13. Xcaret Archaeological Site (Polé) (central)
+    L.marker([20.5772, -87.1185], {icon: cultureIcon}).addTo(map)
       .bindPopup('<b>考古遗址区 (Polé)</b><br>~2,000处玛雅遗址 · 神庙 · 城墙 · sacbé仪式道路');
 
-    // Fit bounds to show all markers
+    // Fit bounds
     var bounds = L.latLngBounds([
-      [20.574, -87.1235],
-      [20.5815, -87.1120]
+      [20.5755, -87.1202],
+      [20.5815, -87.1170]
     ]);
     map.fitBounds(bounds, {padding: [20, 20]});
 

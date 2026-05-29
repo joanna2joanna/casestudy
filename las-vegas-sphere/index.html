@@ -14,15 +14,24 @@
   --clr-primary-dark: #020810;
   --clr-primary: #003C6E;
   --clr-primary-mid: #0078D4;
+  --clr-primary-light: #4DA3E0;
   --clr-accent: #00C8FF;
   --clr-accent-dark: #00A8E8;
   --clr-accent-light: #E8F4FD;
   --clr-bg: #F8FAFB;
   --clr-bg-alt: #F0F5FA;
+  --clr-card-bg: #FFFFFF;
   --clr-border: #DDE8F0;
   --clr-text: #1C1C1C;
   --clr-text-secondary: #6B7B8D;
   --clr-text-muted: #8C9098;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.16);
+  --gap-section: 5rem;
 }
 
 /* overrides & additions on top of shared.css */
@@ -69,35 +78,6 @@ nav a:hover, nav a.active { color: var(--clr-accent); background: rgba(0,200,255
   justify-content: center;
   overflow: hidden;
   background: radial-gradient(ellipse at 50% 35%, #0A1A2E 0%, #06101E 55%, #020810 100%);
-}
-
-.hero-grid-bg {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0,168,232,0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,168,232,0.06) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse at 50% 50%, black 30%, transparent 70%);
-}
-
-.hero-sphere {
-  position: absolute;
-  width: min(80vw, 700px);
-  height: min(80vw, 700px);
-  border-radius: 50%;
-  background: radial-gradient(circle at 40% 35%,
-    rgba(0,168,232,0.25) 0%,
-    rgba(0,120,210,0.12) 30%,
-    rgba(0,80,180,0.05) 55%,
-    transparent 72%
-  );
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow:
-    0 0 120px rgba(0,168,232,0.15),
-    0 0 300px rgba(0,200,255,0.06);
 }
 
 .hero-content {
@@ -635,8 +615,6 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
 
 <!-- ===== 1. HERO ===== -->
 <header class="hero" id="hero">
-  <div class="hero-grid-bg"></div>
-  <div class="hero-sphere"></div>
   <div class="hero-content">
     <div class="hero-badge">NEXT-GENERATION ENTERTAINMENT VENUE</div>
     <h1>
@@ -897,9 +875,9 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
     </div>
     <div class="map-panel">
       <h4>SVG 空间结构示意</h4>
-      <div class="map-container" style="background:var(--clr-bg-alt); display:flex; align-items:center; justify-content:center; padding:1rem;">
+      <div class="svg-container" style="background:var(--clr-bg-alt);">
         <div class="svg-diagram">
-          <svg viewBox="0 0 500 420" xmlns="http://www.w3.org/2000/svg" style="max-height:400px;">
+          <svg viewBox="0 0 500 420" xmlns="http://www.w3.org/2000/svg" style="max-height:450px; width:100%;">
             <!-- Outer Sphere shell -->
             <circle cx="250" cy="190" r="160" fill="none" stroke="var(--clr-primary-mid)" stroke-width="2" stroke-dasharray="6,3" opacity="0.5"/>
             <!-- Inner auditorium -->

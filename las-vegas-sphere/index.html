@@ -38,17 +38,6 @@
 html { scroll-padding-top: 64px; }
 body { overflow-x: hidden; }
 
-h1, h2, h3, h4 {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-}
-
-.data, .stat, .kpi, table {
-  font-family: 'DM Mono', 'SF Mono', Consolas, monospace;
-}
-
 /* ===== TOP NAV ===== */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -71,12 +60,10 @@ nav a:hover, nav a.active { color: var(--clr-accent); background: rgba(0,200,255
 
 /* ===== HERO ===== */
 .hero {
-  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
   background: radial-gradient(ellipse at 50% 35%, #0A1A2E 0%, #06101E 55%, #020810 100%);
 }
 
@@ -102,8 +89,6 @@ nav a:hover, nav a.active { color: var(--clr-accent); background: rgba(0,200,255
 }
 
 .hero h1 {
-  font-size: clamp(2.6rem, 6.5vw, 5rem);
-  font-weight: 900;
   background: linear-gradient(180deg, var(--clr-accent-light) 0%, var(--clr-accent) 40%, var(--clr-primary-mid) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -122,42 +107,19 @@ nav a:hover, nav a.active { color: var(--clr-accent); background: rgba(0,200,255
 }
 
 .hero-subtitle {
-  font-family: 'DM Sans', sans-serif;
-  font-size: clamp(1rem, 2.2vw, 1.35rem);
   color: rgba(200,230,255,0.55);
-  font-weight: 400;
-  margin-bottom: 2.2rem;
-  max-width: 620px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
-.hero-kpi-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem 3rem;
-  margin-bottom: 2rem;
-}
-
-.hero-kpi {
-  text-align: center;
-}
-
-.hero-kpi .val {
+.hero .kpi-number {
   font-family: 'Playfair Display', serif;
-  font-size: 2.2rem;
-  font-weight: 800;
   color: var(--clr-accent);
   display: block;
 }
 
-.hero-kpi .label {
+.hero .kpi-label {
   font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
   color: rgba(200,230,255,0.45);
   letter-spacing: 0.04em;
-  margin-top: 0.2rem;
 }
 
 .hero-meta {
@@ -179,12 +141,11 @@ nav a:hover, nav a.active { color: var(--clr-accent); background: rgba(0,200,255
 
 .section-header {
   text-align: center;
-  margin-bottom: 3.5rem;
 }
 
 .section-number {
   font-family: 'DM Mono', monospace;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   color: var(--clr-primary-mid);
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -192,9 +153,7 @@ nav a:hover, nav a.active { color: var(--clr-accent); background: rgba(0,200,255
 }
 
 .section-header h2 {
-  font-size: clamp(2rem, 4vw, 3rem);
   color: var(--clr-primary);
-  font-weight: 800;
 }
 
 .section-header .section-line {
@@ -203,30 +162,9 @@ nav a:hover, nav a.active { color: var(--clr-accent); background: rgba(0,200,255
 
 /* ===== CARDS ===== */
 
-
-
-
-@media (max-width: 900px) {
-}
-
-.card {
-  background: #FFFFFF;
-  border: 1px solid var(--clr-border);
-  border-radius: 12px;
-  padding: 1.75rem;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-}
-
-.card:hover {
-  border-color: var(--clr-accent-dark);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0,120,210,0.12);
-}
-
 .card h4 {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--clr-primary-mid);
   text-transform: uppercase;
@@ -236,15 +174,15 @@ nav a:hover, nav a.active { color: var(--clr-accent); background: rgba(0,200,255
 
 .card .card-value {
   font-family: 'Playfair Display', serif;
-  font-size: 1.8rem;
-  font-weight: 800;
+  font-size: 1.5rem;
+  font-weight: 600;
   color: var(--clr-text);
   line-height: 1.1;
 }
 
 .card .card-note {
   font-family: 'DM Mono', monospace;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   color: var(--clr-text-secondary);
   margin-top: 0.4rem;
 }
@@ -256,33 +194,6 @@ nav a:hover, nav a.active { color: var(--clr-accent); background: rgba(0,200,255
   border: 1px solid var(--clr-border);
   margin-bottom: 1.5rem;
 }
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.82rem;
-  min-width: 700px;
-}
-
-thead th {
-  background: rgba(0,120,210,0.06);
-  color: var(--clr-primary-mid);
-  font-family: 'DM Mono', monospace;
-  font-weight: 500;
-  font-size: 0.75rem;
-  text-align: left;
-  padding: 0.85rem 1rem;
-  border-bottom: 2px solid var(--clr-primary-mid);
-  letter-spacing: 0.04em;
-}
-
-tbody td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--clr-border);
-  color: var(--clr-text);
-}
-
-tbody tr:hover { background: rgba(0,120,210,0.03); }
 
 .highlight-row { background: rgba(0,200,255,0.06); }
 
@@ -336,11 +247,6 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
 }
 
 /* ===== TIMELINE ===== */
-.timeline {
-  position: relative;
-  padding-left: 2.5rem;
-}
-
 .timeline::before {
   content: '';
   position: absolute;
@@ -350,11 +256,6 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
   width: 2px;
   background: linear-gradient(180deg, var(--clr-primary-mid), var(--clr-accent), var(--clr-primary-mid));
   border-radius: 1px;
-}
-
-.timeline-item {
-  position: relative;
-  margin-bottom: 2.2rem;
 }
 
 .timeline-item::before {
@@ -371,19 +272,12 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
 }
 
 .timeline-year {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.78rem;
   color: var(--clr-primary-mid);
   font-weight: 500;
-  margin-bottom: 0.25rem;
 }
 
 .timeline-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.2rem;
-  font-weight: 700;
   color: var(--clr-primary);
-  margin-bottom: 0.3rem;
 }
 
 .timeline-desc {
@@ -408,17 +302,17 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
   color: #fff;
 }
 
-.kpi-card .kpi-val {
+.kpi-card .kpi-number {
   font-family: 'Playfair Display', serif;
-  font-size: 2rem;
-  font-weight: 800;
+  font-size: 1.8rem;
+  font-weight: 500;
   color: var(--clr-accent);
   display: block;
 }
 
 .kpi-card .kpi-label {
   font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   color: rgba(200,230,255,0.6);
   letter-spacing: 0.04em;
   margin-top: 0.3rem;
@@ -533,7 +427,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
 }
 
 .info-block h3 {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   color: var(--clr-primary);
   margin-bottom: 1rem;
   padding-bottom: 0.6rem;
@@ -624,22 +518,22 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
     <p class="hero-subtitle">
       全球最大球形建筑，融合16K环绕LED屏幕、波束成形音频系统与4D多感官体验的新一代沉浸式娱乐场馆
     </p>
-    <div class="hero-kpi-row">
-      <div class="hero-kpi">
-        <span class="val">$23亿</span>
-        <span class="label">总投资（约166亿人民币）</span>
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <span class="kpi-number">$23亿</span>
+        <span class="kpi-label">总投资（约166亿人民币）</span>
       </div>
-      <div class="hero-kpi">
-        <span class="val">54,000 m²</span>
-        <span class="label">外部LED显示屏（全球最大）</span>
+      <div class="kpi-card">
+        <span class="kpi-number">54,000 m²</span>
+        <span class="kpi-label">外部LED显示屏（全球最大）</span>
       </div>
-      <div class="hero-kpi">
-        <span class="val">167,000</span>
-        <span class="label">独立扬声器驱动单元</span>
+      <div class="kpi-card">
+        <span class="kpi-number">167,000</span>
+        <span class="kpi-label">独立扬声器驱动单元</span>
       </div>
-      <div class="hero-kpi">
-        <span class="val">18,600</span>
-        <span class="label">座位容量（含站位20,000人）</span>
+      <div class="kpi-card">
+        <span class="kpi-number">18,600</span>
+        <span class="kpi-label">座位容量（含站位20,000人）</span>
       </div>
     </div>
     <div class="hero-meta">
@@ -691,7 +585,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
 </section>
 
 <!-- ===== 3. 设计与建设方 ===== -->
-<section class="section section-alt" id="design" style="padding-top:5rem;padding-bottom:5rem;max-width:none;">
+<section class="section section-alt" id="design" >
   <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
   <div class="section-header reveal">
     <div class="section-number">02 · DESIGN & BUILD</div>
@@ -699,7 +593,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
     <div class="section-line"></div>
   </div>
   <div class="table-wrap reveal">
-    <table>
+    <table class="data-table reveal">
       <thead>
         <tr><th>角色</th><th>公司/团队</th><th>所在地</th><th>职责说明</th></tr>
       </thead>
@@ -774,7 +668,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
 
   <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--clr-primary);margin-bottom:16px;font-family:'Playfair Display',serif;">外立面 — Exosphere（"外球层"）</h3>
   <div class="table-wrap reveal">
-    <table>
+    <table class="data-table reveal">
       <thead><tr><th>指标</th><th>数据</th><th>备注</th></tr></thead>
       <tbody>
         <tr><td>LED显示面积</td><td>54,000 m²</td><td>全球最大LED屏幕</td></tr>
@@ -788,7 +682,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
 
   <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--clr-primary);margin:32px 0 16px;font-family:'Playfair Display',serif;">内部显示 — 16K LED 环绕屏</h3>
   <div class="table-wrap reveal">
-    <table>
+    <table class="data-table reveal">
       <thead><tr><th>指标</th><th>数据</th><th>备注</th></tr></thead>
       <tbody>
         <tr><td>显示面积</td><td>约15,000 m²</td><td>约160,000 sq ft · 全球最高分辨率LED屏幕</td></tr>
@@ -804,7 +698,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
 
   <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--clr-primary);margin:32px 0 16px;font-family:'Playfair Display',serif;">音频系统 — HOLOPLOT 波束成形</h3>
   <div class="table-wrap reveal">
-    <table>
+    <table class="data-table reveal">
       <thead><tr><th>指标</th><th>数据</th><th>备注</th></tr></thead>
       <tbody>
         <tr><td>扬声器驱动单元</td><td>约167,000个</td><td>全部独立放大 · 安装于LED屏幕后方</td></tr>
@@ -820,7 +714,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
 </section>
 
 <!-- ===== 5. 技术指标总表 ===== -->
-<section class="section section-alt" id="summary" style="padding-top:5rem;padding-bottom:5rem;max-width:none;">
+<section class="section section-alt" id="summary" >
   <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
   <div class="section-header reveal">
     <div class="section-number">04 · MASTER DATA TABLE</div>
@@ -828,9 +722,9 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
     <div class="section-line"></div>
   </div>
   <div style="overflow-x:auto;">
-  <table class="data-table reveal" style="min-width:900px;width:100%;border-collapse:collapse;background:#FFFFFF;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.04);border:1px solid var(--clr-border);">
-    <thead style="background:var(--clr-primary);"><tr style="color:#fff;"><th style="padding:14px 20px;text-align:left;font-size:0.72rem;font-weight:500;letter-spacing:0.06em;">维度</th><th style="padding:14px 20px;text-align:left;font-size:0.72rem;font-weight:500;letter-spacing:0.06em;">指标</th><th style="padding:14px 20px;text-align:left;font-size:0.72rem;font-weight:500;letter-spacing:0.06em;">数据</th><th style="padding:14px 20px;text-align:left;font-size:0.72rem;font-weight:500;letter-spacing:0.06em;">备注</th></tr></thead>
-    <tbody style="font-size:0.82rem;">
+  <table class="data-table reveal" style="min-width:900px;">
+    <thead><tr><th>维度</th><th>指标</th><th>数据</th><th>备注</th></tr></thead>
+    <tbody>
       <tr><td style="font-weight:600;color:var(--clr-primary);background:var(--clr-bg-alt);padding:12px 20px;">基础</td><td style="padding:12px 20px;">开业时间</td><td style="padding:12px 20px;">2023年9月29日</td><td style="padding:12px 20px;">U2乐队40场驻场首演</td></tr>
       <tr><td style="font-weight:600;color:var(--clr-primary);background:var(--clr-bg-alt);padding:12px 20px;">基础</td><td style="padding:12px 20px;">位置</td><td style="padding:12px 20px;">255 Sands Ave, Las Vegas, NV</td><td style="padding:12px 20px;">威尼斯人度假村东侧 · 坐标 36.12111°N, 115.16194°W</td></tr>
       <tr><td style="font-weight:600;color:var(--clr-primary);background:var(--clr-bg-alt);padding:12px 20px;">规模</td><td style="padding:12px 20px;">建筑高度</td><td style="padding:12px 20px;">112 m</td><td style="padding:12px 20px;">世界最高球形建筑</td></tr>
@@ -949,7 +843,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
 </section>
 
 <!-- ===== 7. 投资与建设时序 ===== -->
-<section class="section section-alt" id="timeline-sec" style="padding-top:5rem;padding-bottom:5rem;max-width:none;">
+<section class="section section-alt" id="timeline-sec" >
   <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
   <div class="section-header reveal">
     <div class="section-number">06 · DEVELOPMENT TIMELINE</div>
@@ -1062,29 +956,29 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
 
   <div class="kpi-row reveal">
     <div class="kpi-card">
-      <span class="kpi-val">$10.27亿</span>
+      <span class="kpi-number">$10.27亿</span>
       <span class="kpi-label">FY2024公司总营收（约74亿人民币）</span>
     </div>
     <div class="kpi-card">
-      <span class="kpi-val">$4.97亿</span>
+      <span class="kpi-number">$4.97亿</span>
       <span class="kpi-label">Sphere板块营收（约36亿人民币）</span>
     </div>
     <div class="kpi-card">
-      <span class="kpi-val">$4.205亿</span>
+      <span class="kpi-number">$4.205亿</span>
       <span class="kpi-label">2024演唱会总票房（约30亿人民币）</span>
     </div>
     <div class="kpi-card">
-      <span class="kpi-val">130万+</span>
+      <span class="kpi-number">130万+</span>
       <span class="kpi-label">2024年演唱会门票销售张数</span>
     </div>
     <div class="kpi-card">
-      <span class="kpi-val">-$4.8亿</span>
+      <span class="kpi-number">-$4.8亿</span>
       <span class="kpi-label">FY2024 Sphere运营亏损（含折旧摊销）</span>
     </div>
   </div>
 
   <div class="table-wrap reveal">
-    <table>
+    <table class="data-table reveal">
       <thead>
         <tr><th>驻场演出 / 内容</th><th>场次</th><th>票房收入 (USD)</th><th>售票张数</th><th>场均票房 (USD)</th></tr>
       </thead>
@@ -1118,7 +1012,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
   </div>
 
   <div class="table-wrap reveal">
-    <table>
+    <table class="data-table reveal">
       <thead>
         <tr><th>收入结构 (FY2024 Sphere板块)</th><th>金额 (USD)</th><th>占比</th><th>说明</th></tr>
       </thead>
@@ -1140,7 +1034,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
   </div>
 
   <div class="table-wrap reveal">
-    <table>
+    <table class="data-table reveal">
       <thead>
         <tr><th>Exosphere广告收入 (季度明细)</th><th>季度</th><th>金额 (USD)</th><th>关键驱动因素</th></tr>
       </thead>
@@ -1171,7 +1065,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
 </section>
 
 <!-- ===== 9. 核心技术与创新体系 ===== -->
-<section class="section section-alt" id="tech" style="padding-top:5rem;padding-bottom:5rem;max-width:none;">
+<section class="section section-alt" id="tech" >
   <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
   <div class="section-header reveal">
     <div class="section-number">08 · TECHNICAL INNOVATIONS</div>
@@ -1283,7 +1177,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
 </section>
 
 <!-- ===== 11. 最新动态与展望 ===== -->
-<section class="section section-alt" id="future" style="padding-top:5rem;padding-bottom:5rem;max-width:none;">
+<section class="section section-alt" id="future" >
   <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
   <div class="section-header reveal">
     <div class="section-number">10 · FUTURE OUTLOOK</div>
@@ -1366,7 +1260,7 @@ tbody tr:hover { background: rgba(0,120,210,0.03); }
 </section>
 
 <!-- ===== 13. 延伸资料库 ===== -->
-<section class="section section-alt" id="references" style="padding-top:5rem;padding-bottom:5rem;max-width:none;">
+<section class="section section-alt" id="references" >
   <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
   <div class="section-header reveal">
     <div class="section-number">12 · EXTERNAL REFERENCES</div>

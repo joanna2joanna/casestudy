@@ -532,6 +532,8 @@ body {
   .facility-grid { grid-template-columns: 1fr; }
   .floating-nav { bottom: 20px; right: 20px; }
 }
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
@@ -548,7 +550,7 @@ body {
 </header>
 
 <!-- ===== KPI ROW ===== -->
-<section class="container kpi-row">
+<section class="container kpi-row reveal">
   <div class="kpi-card">
     <div class="kpi-value">58年</div>
     <div class="kpi-label">运营历史（1966-2024）</div>
@@ -572,7 +574,7 @@ body {
 </section>
 
 <!-- ===== 1. 项目概况 ===== -->
-<section class="section">
+<section class="section reveal">
   <div class="container container-narrow">
     <div class="section-header">
       <div class="section-tag">01 · 项目概况</div>
@@ -598,7 +600,7 @@ body {
 </section>
 
 <!-- ===== 2. 投资与建设 ===== -->
-<section class="section section-alt">
+<section class="section section-alt reveal">
   <div class="container">
     <div class="section-header">
       <div class="section-tag">02 · 投资与建设</div>
@@ -702,7 +704,7 @@ body {
 </section>
 
 <!-- ===== 3. 空间布局 ===== -->
-<section class="map-section">
+<section class="map-section reveal">
   <div class="container">
     <div class="section-header">
       <div class="section-tag">03 · 空间布局</div>
@@ -842,7 +844,7 @@ body {
 </section>
 
 <!-- ===== 4. 温泉与水质 ===== -->
-<section class="section section-alt">
+<section class="section section-alt reveal">
   <div class="container container-narrow">
     <div class="section-header">
       <div class="section-tag">04 · 温泉与水质</div>
@@ -871,7 +873,7 @@ body {
 </section>
 
 <!-- ===== 5. 核心设施 ===== -->
-<section class="section">
+<section class="section reveal">
   <div class="container">
     <div class="section-header">
       <div class="section-tag">05 · 核心设施</div>
@@ -979,7 +981,7 @@ body {
 </section>
 
 <!-- ===== 6. 住宿产品 ===== -->
-<section class="section section-alt">
+<section class="section section-alt reveal">
   <div class="container">
     <div class="section-header">
       <div class="section-tag">06 · 住宿产品</div>
@@ -1041,7 +1043,7 @@ body {
 </section>
 
 <!-- ===== 7. 餐饮与会议 ===== -->
-<section class="section">
+<section class="section reveal">
   <div class="container container-narrow">
     <div class="section-header">
       <div class="section-tag">07 · 餐饮与会议</div>
@@ -1062,7 +1064,7 @@ body {
 </section>
 
 <!-- ===== 8. 设计团队与供应商 ===== -->
-<section class="section section-alt">
+<section class="section section-alt reveal">
   <div class="container">
     <div class="section-header">
       <div class="section-tag">08 · 设计团队与供应商</div>
@@ -1094,7 +1096,7 @@ body {
 </section>
 
 <!-- ===== 9. 运营数据 ===== -->
-<section class="section">
+<section class="section reveal">
   <div class="container container-narrow">
     <div class="section-header">
       <div class="section-tag">09 · 运营数据</div>
@@ -1124,7 +1126,7 @@ body {
 </section>
 
 <!-- ===== 10. 历史里程碑 ===== -->
-<section class="section section-alt">
+<section class="section section-alt reveal">
   <div class="container container-narrow">
     <div class="section-header">
       <div class="section-tag">10 · 历史里程碑</div>
@@ -1218,7 +1220,7 @@ body {
 </section>
 
 <!-- ===== 11. 奖项荣誉 ===== -->
-<section class="section">
+<section class="section reveal">
   <div class="container">
     <div class="section-header">
       <div class="section-tag">11 · 奖项与荣誉</div>
@@ -1276,7 +1278,7 @@ body {
 </section>
 
 <!-- ===== 12. 技术指标总表 ===== -->
-<section class="section section-alt">
+<section class="section section-alt reveal">
   <div class="container container-narrow">
     <div class="section-header">
       <div class="section-tag">12 · 技术指标总表</div>
@@ -1314,7 +1316,7 @@ body {
 </section>
 
 <!-- ===== 13. 延伸资料库 ===== -->
-<section class="section">
+<section class="section reveal">
   <div class="container">
     <div class="section-header">
       <div class="section-tag">13 · 延伸资料库</div>
@@ -1420,6 +1422,18 @@ body {
   <a href="/Projects/casestudy/index.html" class="floating-nav-btn" title="返回首页" aria-label="返回首页">&#8962;</a>
   <button class="floating-nav-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部" aria-label="回到顶部">&uarr;</button>
 </div>
+
+<!-- ===== REVEAL ===== -->
+<script>
+(function() {
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+})();
+</script>
 
 <!-- ===== SCRIPTS ===== -->
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>

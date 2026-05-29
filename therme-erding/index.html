@@ -194,6 +194,8 @@ footer a:hover { text-decoration: underline; }
   #parkmap { break-inside: avoid; }
   section { padding: 20px 0; break-inside: avoid; }
 }
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
@@ -212,7 +214,7 @@ footer a:hover { text-decoration: underline; }
 </header>
 
 <!-- ===== SECTION 1: 核心指标 ===== -->
-<section>
+<section class="reveal">
   <div class="container">
     <div class="section-header">
       <h2>核心指标总览</h2>
@@ -237,7 +239,7 @@ footer a:hover { text-decoration: underline; }
 </section>
 
 <!-- ===== SECTION 2: 投资建设时间线 ===== -->
-<section>
+<section class="reveal">
   <div class="container">
     <div class="section-header">
       <h2>投资建设历程</h2>
@@ -298,7 +300,7 @@ footer a:hover { text-decoration: underline; }
 </section>
 
 <!-- ===== SECTION 3: 空间布局 ===== -->
-<section>
+<section class="reveal">
   <div class="container">
     <div class="section-header">
       <h2>空间布局分析</h2>
@@ -383,7 +385,7 @@ footer a:hover { text-decoration: underline; }
 </section>
 
 <!-- ===== SECTION 4: 交互地图 ===== -->
-<section>
+<section class="reveal">
   <div class="container">
     <div class="section-header">
       <h2>交互地图</h2>
@@ -396,7 +398,7 @@ footer a:hover { text-decoration: underline; }
 </section>
 
 <!-- ===== SECTION 5: SVG空间结构示意图 ===== -->
-<section>
+<section class="reveal">
   <div class="container">
     <div class="section-header">
       <h2>空间结构示意图</h2>
@@ -500,7 +502,7 @@ footer a:hover { text-decoration: underline; }
 </section>
 
 <!-- ===== SECTION 6: 技术指标总表 ===== -->
-<section>
+<section class="reveal">
   <div class="container">
     <div class="section-header">
       <h2>技术指标总表</h2>
@@ -545,7 +547,7 @@ footer a:hover { text-decoration: underline; }
 </section>
 
 <!-- ===== SECTION 7: 运营数据 ===== -->
-<section>
+<section class="reveal">
   <div class="container">
     <div class="section-header">
       <h2>运营数据与票价</h2>
@@ -584,7 +586,7 @@ footer a:hover { text-decoration: underline; }
 </section>
 
 <!-- ===== SECTION 8: 配套设施 ===== -->
-<section>
+<section class="reveal">
   <div class="container">
     <div class="section-header">
       <h2>配套设施</h2>
@@ -658,7 +660,7 @@ footer a:hover { text-decoration: underline; }
 </section>
 
 <!-- ===== SECTION 9: 设计建设方 ===== -->
-<section>
+<section class="reveal">
   <div class="container">
     <div class="section-header">
       <h2>设计与建设方</h2>
@@ -683,7 +685,7 @@ footer a:hover { text-decoration: underline; }
 </section>
 
 <!-- ===== SECTION 10: 实景图片 ===== -->
-<section>
+<section class="reveal">
   <div class="container">
     <div class="section-header">
       <h2>实景图片精选</h2>
@@ -733,7 +735,7 @@ footer a:hover { text-decoration: underline; }
 </section>
 
 <!-- ===== SECTION 11: 最新动态 ===== -->
-<section>
+<section class="reveal">
   <div class="container">
     <div class="section-header">
       <h2>最新动态（2024-2025）</h2>
@@ -757,7 +759,7 @@ footer a:hover { text-decoration: underline; }
 </section>
 
 <!-- ===== SECTION 12: 延伸资料库 ===== -->
-<section>
+<section class="reveal">
   <div class="container">
     <div class="section-header">
       <h2>延伸资料库</h2>
@@ -807,7 +809,7 @@ footer a:hover { text-decoration: underline; }
 </section>
 
 <!-- ===== SECTION 13: 项目亮点总结 ===== -->
-<section>
+<section class="reveal">
   <div class="container">
     <div class="section-header">
       <h2>项目亮点总结</h2>
@@ -882,6 +884,18 @@ footer a:hover { text-decoration: underline; }
 
 <!-- ===== BUSUANZI ===== -->
 <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- ===== REVEAL ===== -->
+<script>
+(function() {
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+})();
+</script>
 
 <!-- ===== MAP INIT (overseas standard) ===== -->
 <script>

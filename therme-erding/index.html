@@ -119,9 +119,8 @@ section:nth-child(even) { background: var(--white); }
 .tl-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
 
 /* ===== MAP ===== */
-#map-container { width: 100%; }
-#map { height: 480px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); }
-#map-fallback { display: none; background: var(--primary-light); border-radius: var(--radius); padding: 40px; text-align: center; color: var(--text-muted); font-size: 0.9rem; border: 1px solid var(--border); }
+#parkmap { width: 100%; height: 480px; border-radius: var(--radius); z-index: 0; }
+.map-fallback { display: none; text-align: center; padding: 40px; margin-top: 0.5rem; background: var(--primary-light); border-radius: var(--radius); color: var(--text-muted); font-size: 0.9rem; border: 1px solid var(--border); }
 
 /* ===== SVG ===== */
 .svg-container { display: block; width: 100%; margin-top: 32px; }
@@ -184,7 +183,7 @@ footer a:hover { text-decoration: underline; }
   section { padding: 40px 0; }
   .hero { padding: 50px 20px 40px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  #map { height: 320px; }
+  #parkmap { height: 320px; }
   .timeline { padding-left: 24px; }
   .container { padding: 0 16px; }
 }
@@ -192,7 +191,7 @@ footer a:hover { text-decoration: underline; }
 /* ===== PRINT ===== */
 @media print {
   .floating-nav { display: none; }
-  #map { break-inside: avoid; }
+  #parkmap { break-inside: avoid; }
   section { padding: 20px 0; break-inside: avoid; }
 }
 </style>
@@ -391,10 +390,8 @@ footer a:hover { text-decoration: underline; }
       <div class="section-line"></div>
       <p>ESRI ArcGIS WGS-84 瓦片 | 拖拽探索项目周边</p>
     </div>
-    <div id="map-container">
-      <div id="map"></div>
-      <div id="map-fallback">地图加载中，请稍候...如长时间未显示，请检查网络连接。</div>
-    </div>
+    <div id="parkmap"></div>
+    <div id="map-fallback" class="map-fallback">地图加载中，请稍候...如长时间未显示，请检查网络连接。</div>
   </div>
 </section>
 
@@ -886,93 +883,63 @@ footer a:hover { text-decoration: underline; }
 <!-- ===== BUSUANZI ===== -->
 <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<!-- ===== MAP INIT ===== -->
+<!-- ===== MAP INIT (overseas standard) ===== -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var mapEl = document.getElementById('map');
+  var mapEl = document.getElementById('parkmap');
   var fallback = document.getElementById('map-fallback');
-  var mapLoaded = false;
-  var map;
+  if (!mapEl) return;
+  var tilesLoaded = false;
 
-  function showFallback() {
-    if (!mapLoaded) {
-      mapEl.style.display = 'none';
-      fallback.style.display = 'block';
-    }
-  }
+  var map = L.map('parkmap', {
+    center: [48.2910, 11.8865],
+    zoom: 16,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
 
-  var timeout = setTimeout(showFallback, 8000);
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
 
-  try {
-    map = L.map('map', {
-      center: [48.2910, 11.8865],
-      zoom: 16,
-      zoomControl: true,
-      scrollWheelZoom: true
-    });
+  tileLayer.on('load', function() {
+    tilesLoaded = true;
+    clearTimeout(tileTimer);
+    fallback.style.display = 'none';
+  });
 
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '&copy; Esri, Maxar, Earthstar Geographics',
-      maxZoom: 19
-    }).addTo(map);
+  tileLayer.addTo(map);
 
-    map.on('load', function() {
-      clearTimeout(timeout);
-      mapLoaded = true;
-    });
+  var tileTimer = setTimeout(function() {
+    if (!tilesLoaded) fallback.style.display = 'block';
+  }, 8000);
 
-    // Markers for main areas
-    var areas = [
-      { name: 'Thermenparadies<br>温泉天堂', lat: 48.2908, lng: 11.8862, color: '#2A9D8F' },
-      { name: 'Galaxy Erding<br>银河滑道世界', lat: 48.2913, lng: 11.8870, color: '#4A90D9' },
-      { name: 'Saunaparadies<br>桑拿天堂', lat: 48.2913, lng: 11.8859, color: '#E76F51' },
-      { name: 'VitalOase<br>活力绿洲', lat: 48.2906, lng: 11.8858, color: '#E9C46A' },
-      { name: 'Hotel Victory<br>胜利酒店', lat: 48.2909, lng: 11.8876, color: '#9B5DE5' },
-      { name: '室外温泉花园', lat: 48.2903, lng: 11.8865, color: '#48B5A8' }
-    ];
+  // Markers for main areas
+  var areas = [
+    { name: 'Thermenparadies<br>温泉天堂', lat: 48.2908, lng: 11.8862, color: '#2A9D8F' },
+    { name: 'Galaxy Erding<br>银河滑道世界', lat: 48.2913, lng: 11.8870, color: '#4A90D9' },
+    { name: 'Saunaparadies<br>桑拿天堂', lat: 48.2913, lng: 11.8859, color: '#E76F51' },
+    { name: 'VitalOase<br>活力绿洲', lat: 48.2906, lng: 11.8858, color: '#E9C46A' },
+    { name: 'Hotel Victory<br>胜利酒店', lat: 48.2909, lng: 11.8876, color: '#9B5DE5' },
+    { name: '室外温泉花园', lat: 48.2903, lng: 11.8865, color: '#48B5A8' }
+  ];
 
-    areas.forEach(function(a) {
-      var marker = L.circleMarker([a.lat, a.lng], {
-        radius: 10,
-        color: a.color,
-        fillColor: a.color,
-        fillOpacity: 0.35,
-        weight: 2,
-        opacity: 0.8
-      }).addTo(map);
+  areas.forEach(function(a) {
+    L.circleMarker([a.lat, a.lng], {
+      radius: 10, color: a.color, fillColor: a.color, fillOpacity: 0.35, weight: 2, opacity: 0.8
+    }).bindPopup('<strong>' + a.name + '</strong>').addTo(map);
+  });
 
-      marker.bindPopup('<strong>' + a.name + '</strong>', { offset: [0, -5] });
-    });
+  L.marker([48.2910, 11.8865], {
+    icon: L.divIcon({
+      className: '',
+      html: '<div style="background:rgba(42,157,143,0.9);color:#fff;padding:4px 12px;border-radius:20px;font-family:DM Sans,sans-serif;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.2);">Therme Erding</div>',
+      iconSize: [0,0], iconAnchor: [60, 15]
+    })
+  }).addTo(map);
 
-    // Main label marker at center
-    L.marker([48.2910, 11.8865], {
-      icon: L.divIcon({
-        className: '',
-        html: '<div style="background:rgba(42,157,143,0.9);color:#fff;padding:4px 12px;border-radius:20px;font-family:DM Sans,sans-serif;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.2);">Therme Erding</div>',
-        iconSize: [0,0],
-        iconAnchor: [60, 15]
-      })
-    }).addTo(map);
-
-    // A small delay to account for tile loading
-    setTimeout(function() {
-      clearTimeout(timeout);
-      mapLoaded = true;
-    }, 3000);
-
-    // In case tiles never fire load event but seem to work
-    setTimeout(function() {
-      if (!mapLoaded && mapEl.querySelector('.leaflet-tile-loaded')) {
-        clearTimeout(timeout);
-        mapLoaded = true;
-      }
-    }, 5000);
-
-  } catch(e) {
-    clearTimeout(timeout);
-    showFallback();
-    console.warn('Map initialization failed:', e);
-  }
+  setTimeout(function() { map.invalidateSize(); }, 300);
 });
 </script>
 

@@ -298,30 +298,8 @@ body {
 
 /* ===== MAP ===== */
 .map-section { background: var(--white); padding: 80px 0; }
-.map-container {
-  width: 100%;
-  height: 520px;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--slate-100);
-  position: relative;
-}
-#map { width: 100%; height: 100%; }
-.map-fallback-msg {
-  display: none;
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(255,255,255,0.95);
-  padding: 8px 16px;
-  border-radius: var(--radius-sm);
-  font-size: 0.8rem;
-  color: var(--slate-500);
-  box-shadow: var(--shadow-sm);
-  z-index: 1000;
-}
+#parkmap { width: 100%; height: 500px; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid var(--slate-100); z-index: 0; }
+.map-fallback { display: none; text-align: center; padding: 0.9rem 1rem; margin-top: 0.5rem; background: rgba(255,255,255,0.95); border-radius: var(--radius-sm); font-size: 0.85rem; color: var(--slate-500); box-shadow: var(--shadow-sm); }
 
 /* ===== SVG SPATIAL DIAGRAM ===== */
 .svg-container {
@@ -550,7 +528,7 @@ body {
   .kpi-row { margin-top: -30px; padding: 0 16px; gap: 12px; }
   .kpi-card { padding: 20px 16px; }
   .kpi-value { font-size: 1.3rem; }
-  .map-container { height: 360px; }
+  #parkmap { height: 360px; }
   .facility-grid { grid-template-columns: 1fr; }
   .floating-nav { bottom: 20px; right: 20px; }
 }
@@ -732,10 +710,8 @@ body {
       <p class="body-lg" style="margin-top:16px;">总占地约10公顷，6大功能区沿Sotla河谷展开，地下通道互联</p>
     </div>
 
-    <div class="map-container" id="map-container">
-      <div id="map"></div>
-      <div class="map-fallback-msg" id="map-fallback">地图加载中，如长时间未显示请刷新页面</div>
-    </div>
+    <div id="parkmap"></div>
+    <div id="map-fallback" class="map-fallback">地图加载中，如长时间未显示请刷新页面</div>
 
     <!-- SVG 空间结构示意图 -->
     <div class="svg-container">
@@ -1449,75 +1425,54 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // ===== LEAFLET MAP =====
-  var mapContainer = document.getElementById('map-container');
-  var mapEl = document.getElementById('map');
-  var fallbackMsg = document.getElementById('map-fallback');
-  var tileLoadTimeout;
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
   var tilesLoaded = false;
 
-  try {
-    var map = L.map('map', {
-      center: [46.1587, 15.6070],
-      zoom: 16,
-      zoomControl: true,
-      scrollWheelZoom: true
-    });
+  var map = L.map('parkmap', {
+    center: [46.1587, 15.6070],
+    zoom: 16,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
 
-    // ESRI ArcGIS WGS-84 tile layer
-    var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '&copy; <a href="https://www.esri.com/">Esri</a> &mdash; Source: Esri, Maxar, Earthstar Geographics',
-      maxZoom: 19
-    }).addTo(map);
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
 
-    tileLayer.on('load', function() {
-      tilesLoaded = true;
-      clearTimeout(tileLoadTimeout);
-      fallbackMsg.style.display = 'none';
-    });
+  tileLayer.on('load', function() {
+    tilesLoaded = true;
+    clearTimeout(tileTimer);
+    fallback.style.display = 'none';
+  });
 
-    tileLayer.on('tileerror', function() {
-      if (!tilesLoaded) {
-        fallbackMsg.style.display = 'block';
-        fallbackMsg.textContent = '部分地图瓦片加载失败，请检查网络连接后刷新页面';
-      }
-    });
+  tileLayer.addTo(map);
 
-    // 8秒超时降级
-    tileLoadTimeout = setTimeout(function() {
-      if (!tilesLoaded) {
-        fallbackMsg.style.display = 'block';
-        fallbackMsg.textContent = '地图瓦片加载超时，请刷新页面重试';
-      }
-    }, 8000);
+  var tileTimer = setTimeout(function() {
+    if (!tilesLoaded) fallback.style.display = 'block';
+  }, 8000);
 
-    // ===== MARKERS =====
-    var iconResort = L.divIcon({className: 'custom-marker', html: '<div style="background:#4A8C3F;color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,0.3);border:2px solid white;">&#9733;</div>', iconSize: [28,28], iconAnchor: [14,14], popupAnchor: [0,-14]});
+  // ===== MARKERS =====
+  var iconResort = L.divIcon({className: 'custom-marker', html: '<div style="background:#4A8C3F;color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,0.3);border:2px solid white;">&#9733;</div>', iconSize: [28,28], iconAnchor: [14,14], popupAnchor: [0,-14]});
+  var iconHotel = L.divIcon({className: 'custom-marker', html: '<div style="background:#C8A84E;color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid white;">&#9733;</div>', iconSize: [22,22], iconAnchor: [11,11], popupAnchor: [0,-11]});
+  var iconWater = L.divIcon({className: 'custom-marker', html: '<div style="background:#3B8ED4;color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid white;">&#9679;</div>', iconSize: [22,22], iconAnchor: [11,11], popupAnchor: [0,-11]});
+  var iconSauna = L.divIcon({className: 'custom-marker', html: '<div style="background:#D4956B;color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid white;">&#9679;</div>', iconSize: [22,22], iconAnchor: [11,11], popupAnchor: [0,-11]});
+  var iconOther = L.divIcon({className: 'custom-marker', html: '<div style="background:#777790;color:white;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid white;">&#9679;</div>', iconSize: [18,18], iconAnchor: [9,9], popupAnchor: [0,-9]});
 
-    var iconHotel = L.divIcon({className: 'custom-marker', html: '<div style="background:#C8A84E;color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid white;">&#9733;</div>', iconSize: [22,22], iconAnchor: [11,11], popupAnchor: [0,-11]});
+  L.marker([46.1587, 15.6070], {icon: iconResort}).addTo(map).bindPopup('<b>Terme Olimia</b><br>Zdraviliška cesta 24, Podčetrtek<br>奥林尼亚温泉主入口');
+  L.marker([46.1592, 15.6065], {icon: iconHotel}).addTo(map).bindPopup('<b>Hotel Sotelia ★★★★S</b><br>ENOTA设计·Plečnik奖·2006<br>135-150间房·13300 m²');
+  L.marker([46.1594, 15.6060], {icon: iconSauna}).addTo(map).bindPopup('<b>Wellness Orhidelia</b><br>15+仅限·1700 m²桑拿世界<br>1000 m²水池·2009开业');
+  L.marker([46.1595, 15.6075], {icon: iconWater}).addTo(map).bindPopup('<b>Wellness Termalija Family Fun</b><br>折叠屋顶·7D影院·水滑梯<br>全年龄·2018年€1000万翻新');
+  L.marker([46.1598, 15.6082], {icon: iconWater}).addTo(map).bindPopup('<b>Aqualuna Thermal Park</b><br>3000 m²水面·8条大型滑梯<br>King Cobra·波浪池·Aquajungle 2');
+  L.marker([46.1600, 15.6078], {icon: iconOther}).addTo(map).bindPopup('<b>Hotel Breza ★★★★</b><br>1978开业·连接Wellness Vodian');
+  L.marker([46.1602, 15.6070], {icon: iconOther}).addTo(map).bindPopup('<b>Wellness Vodian</b><br>2025年新开业·2000 m²<br>25m泳池·桑拿画廊·屋顶草药园');
+  L.marker([46.1583, 15.6065], {icon: iconOther}).addTo(map).bindPopup('<b>Aparthotel Rosa</b><br>36-42间公寓·地下暖廊<br>连接Termalija');
+  L.marker([46.1588, 15.6063], {icon: iconOther}).addTo(map).bindPopup('<b>Congress Centre Olimia</b><br>804 m²·7-9间会议室<br>最大容纳350人');
+  L.marker([46.1585, 15.6075], {icon: iconOther}).addTo(map).bindPopup('<b>Olimia Health Centre</b><br>骨科·风湿·脊柱康复<br>Olimia Approach');
 
-    var iconWater = L.divIcon({className: 'custom-marker', html: '<div style="background:#3B8ED4;color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid white;">&#9679;</div>', iconSize: [22,22], iconAnchor: [11,11], popupAnchor: [0,-11]});
-
-    var iconSauna = L.divIcon({className: 'custom-marker', html: '<div style="background:#D4956B;color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid white;">&#9679;</div>', iconSize: [22,22], iconAnchor: [11,11], popupAnchor: [0,-11]});
-
-    var iconOther = L.divIcon({className: 'custom-marker', html: '<div style="background:#777790;color:white;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid white;">&#9679;</div>', iconSize: [18,18], iconAnchor: [9,9], popupAnchor: [0,-9]});
-
-    L.marker([46.1587, 15.6070], {icon: iconResort}).addTo(map).bindPopup('<b>Terme Olimia</b><br>Zdraviliška cesta 24, Podčetrtek<br>奥林尼亚温泉主入口');
-    L.marker([46.1592, 15.6065], {icon: iconHotel}).addTo(map).bindPopup('<b>Hotel Sotelia ★★★★S</b><br>ENOTA设计·Plečnik奖·2006<br>135-150间房·13300 m²');
-    L.marker([46.1594, 15.6060], {icon: iconSauna}).addTo(map).bindPopup('<b>Wellness Orhidelia</b><br>15+仅限·1700 m²桑拿世界<br>1000 m²水池·2009开业');
-    L.marker([46.1595, 15.6075], {icon: iconWater}).addTo(map).bindPopup('<b>Wellness Termalija Family Fun</b><br>折叠屋顶·7D影院·水滑梯<br>全年龄·2018年€1000万翻新');
-    L.marker([46.1598, 15.6082], {icon: iconWater}).addTo(map).bindPopup('<b>Aqualuna Thermal Park</b><br>3000 m²水面·8条大型滑梯<br>King Cobra·波浪池·Aquajungle 2');
-    L.marker([46.1600, 15.6078], {icon: iconOther}).addTo(map).bindPopup('<b>Hotel Breza ★★★★</b><br>1978开业·连接Wellness Vodian');
-    L.marker([46.1602, 15.6070], {icon: iconOther}).addTo(map).bindPopup('<b>Wellness Vodian</b><br>2025年新开业·2000 m²<br>25m泳池·桑拿画廊·屋顶草药园');
-    L.marker([46.1583, 15.6065], {icon: iconOther}).addTo(map).bindPopup('<b>Aparthotel Rosa</b><br>36-42间公寓·地下暖廊<br>连接Termalija');
-    L.marker([46.1588, 15.6063], {icon: iconOther}).addTo(map).bindPopup('<b>Congress Centre Olimia</b><br>804 m²·7-9间会议室<br>最大容纳350人');
-    L.marker([46.1585, 15.6075], {icon: iconOther}).addTo(map).bindPopup('<b>Olimia Health Centre</b><br>骨科·风湿·脊柱康复<br>Olimia Approach');
-
-  } catch(e) {
-    fallbackMsg.style.display = 'block';
-    fallbackMsg.textContent = '地图初始化失败，请刷新页面重试';
-    console.error('Map init error:', e);
-  }
+  setTimeout(function() { map.invalidateSize(); }, 300);
 });
 
 // ===== busuanzi 访客计数 =====

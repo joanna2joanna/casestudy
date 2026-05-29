@@ -124,7 +124,8 @@ body {
 /* ---------- Map Section ---------- */
 #map-section { padding: var(--gap-section) 0; }
 #map-section .map-card { background: var(--clr-card-bg); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); }
-#map-container { width: 100%; height: 520px; position: relative; z-index: 1; }
+#parkmap { width: 100%; height: 500px; border-radius: var(--radius-lg); z-index: 0; }
+.map-fallback { display: none; text-align: center; padding: 0.9rem 1rem; margin-top: 0.5rem; background: #FFF3CD; color: #856404; border-radius: var(--radius-sm); font-size: 0.85rem; }
 .map-legend { padding: 1rem 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; font-size: 0.85rem; color: var(--clr-text-secondary); }
 .map-legend span { display: flex; align-items: center; gap: 0.4rem; }
 .map-legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
@@ -186,7 +187,7 @@ body {
   .hero .kpi-row { gap: 0.8rem; }
   .hero .kpi-card { padding: 0.8rem 1rem; min-width: 120px; }
   .hero .kpi-number { font-size: 1.3rem; }
-  #map-container { height: 350px; }
+  #parkmap { height: 350px; }
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
 }
 </style>
@@ -360,8 +361,8 @@ body {
           <span><span class="dot culture"></span> 文化遗址区</span>
           <span><span class="dot wildlife"></span> 自然生态区</span>
         </div>
-        <div id="map-container"></div>
-        <div class="tile-fallback" id="tile-fallback">⚠️ 地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">⚠️ 地图瓦片加载超时，请检查网络连接后刷新页面。</div>
       </div>
     </div>
 
@@ -940,45 +941,36 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 <script async src="https://busuanzi.icodeq.com/busuanzi.pure.mini.js"></script>
 <script>
-// ====== MAP INITIALIZATION ======
+// ====== MAP INITIALIZATION (overseas standard) ======
 document.addEventListener('DOMContentLoaded', function() {
-  var mapContainer = document.getElementById('map-container');
-  var fallback = document.getElementById('tile-fallback');
-  var mapLoaded = false;
-  var tileTimeout;
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+  var tilesLoaded = false;
 
-  try {
-    var map = L.map('map-container', {
-      center: [20.5785, -87.1185],
-      zoom: 16,
-      zoomControl: true,
-      scrollWheelZoom: true
-    });
+  var map = L.map('parkmap', {
+    center: [20.5785, -87.1185],
+    zoom: 16,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
 
-    // ESRI ArcGIS World Imagery (WGS-84) — overseas projects
-    var esriLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '&copy; <a href="https://www.esri.com/">Esri</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      maxZoom: 19
-    });
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
 
-    // Label overlay
-    var esriLabels = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
-      maxZoom: 19,
-      opacity: 0.8
-    });
+  tileLayer.on('load', function() {
+    tilesLoaded = true;
+    clearTimeout(tileTimer);
+    fallback.style.display = 'none';
+  });
 
-    esriLayer.addTo(map);
-    esriLabels.addTo(map);
+  tileLayer.addTo(map);
 
-    // Tile load timeout
-    tileTimeout = setTimeout(function() {
-      if (!mapLoaded) {
-        fallback.style.display = 'block';
-      }
-    }, 8000);
-
-    esriLayer.on('load', function() { mapLoaded = true; clearTimeout(tileTimeout); fallback.style.display = 'none'; });
-    esriLayer.on('tileerror', function() { /* retry silently */ });
+  var tileTimer = setTimeout(function() {
+    if (!tilesLoaded) fallback.style.display = 'block';
+  }, 8000);
 
     // ====== MAP MARKERS ======
     var entranceIcon = L.divIcon({ className: 'custom-div-icon', html: '<div style="background:#E8A838;color:#fff;width:22px;height:22px;border-radius:50%;text-align:center;line-height:22px;font-weight:bold;font-size:12px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);">&#9733;</div>', iconSize: [22,22], iconAnchor: [11,11] });
@@ -1049,13 +1041,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ]);
     map.fitBounds(bounds, {padding: [20, 20]});
 
-    // Invalidate size after render
-    setTimeout(function() { map.invalidateSize(); }, 200);
-
-  } catch(e) {
-    fallback.style.display = 'block';
-    fallback.textContent = '地图初始化失败，请刷新页面重试。';
-  }
+  setTimeout(function() { map.invalidateSize(); }, 300);
 });
 
 // ====== SCROLL REVEAL (IntersectionObserver) ======

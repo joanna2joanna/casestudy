@@ -16,7 +16,7 @@
   --clr-accent: #6b8f3a;
   --clr-accent-light: #c8d4a0;
   --clr-bg: #f4f6ef;
-  --clr-bg-card: #fff;
+  --clr-card-bg: #fff;
   --clr-text: #1e2618;
   --clr-text-secondary: #4a5a3f;
   --clr-text-muted: #6b7f5a;
@@ -46,17 +46,9 @@ section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
 .section-title { font-size: 2.2rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; color: var(--clr-primary); }
 .section-sub { text-align: center; color: var(--clr-text-muted); margin-bottom: 3rem; font-size: 0.95rem; }
 
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-.card { background: #fff; border-radius: 16px; padding: 1.6rem; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.05); }
 .card-emoji { font-size: 2rem; margin-bottom: 0.6rem; }
 .card-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--clr-text-muted); margin-bottom: 0.4rem; }
 .card-val { font-size: 1.4rem; font-weight: 700; color: var(--clr-primary); }
-
-.data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
-.data-table th { background: var(--clr-primary); color: var(--clr-accent-light); padding: 0.9rem 1.2rem; text-align: left; font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; }
-.data-table td { padding: 0.8rem 1.2rem; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.9rem; }
-.data-table tr:last-child td { border-bottom: none; }
-.data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
 
 .timeline { position: relative; padding-left: 2.5rem; }
 .timeline::before { content: ''; position: absolute; left: 0.8rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #6b8f3a, var(--clr-primary)); }
@@ -116,7 +108,6 @@ footer a { color: #6b8f3a; }
   section { padding: 2.5rem 1rem; }
   .hero-nums { gap: 1.5rem; }
   .hero-num-val { font-size: 2rem; }
-  .card-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -137,7 +128,7 @@ footer a { color: #6b8f3a; }
 <section class="reveal">
   <h2 class="section-title">项目概览</h2>
   <p class="section-sub">一个跨国家庭在海拔3,200米的桑科草原上建立的世界级野奢营地</p>
-  <div class="card-grid">
+  <div class="grid-2">
     <div class="card"><div class="card-emoji">🎂</div><div class="card-title">首次开业</div><div class="card-val">2015年（重建后2026年5月再开）</div></div>
     <div class="card"><div class="card-emoji">👥</div><div class="card-title">创始人</div><div class="card-val">依旦杰布 & Dechen Yeshi（德钦·叶希）</div></div>
     <div class="card"><div class="card-emoji">📍</div><div class="card-title">地理位置</div><div class="card-val">甘肃甘南州夏河县·桑科草原冬季牧场</div></div>
@@ -150,7 +141,7 @@ footer a { color: #6b8f3a; }
 <section class="reveal">
   <h2 class="section-title">设计与建设</h2>
   <p class="section-sub">可移动建筑——每年秋末全部拆除，将草原归还牛羊</p>
-  <div class="card-grid">
+  <div class="grid-2">
     <div class="card">
       <div class="card-emoji">🏛️</div>
       <div class="card-title">建筑师</div>
@@ -274,7 +265,7 @@ footer a { color: #6b8f3a; }
     <p style="text-align:center;color:#6b7f5a;font-size:0.78rem;margin-top:0.6rem;">示意图，基于公开报道与卫星影像 | 北向上 | 木屋间距≥100m | 实际布局以营地官方为准</p>
   </div>
 
-  <div class="card-grid" style="margin-top:2rem;">
+  <div class="grid-2" style="margin-top:2rem;">
     <div class="card"><div class="card-emoji">🏡</div><div class="card-title">单卧木屋（6间）</div><div class="card-val" style="font-size:1rem;">90m²起 · 黑帐篷起居室 · 私人露台 · 落地玻璃窗 · 壁炉 · 牦牛绒床品</div></div>
     <div class="card"><div class="card-emoji">🏘️</div><div class="card-title">复式木屋（2间）</div><div class="card-val" style="font-size:1rem;">二层观景露台 · 俯瞰草原全景 · 适合2-3人</div></div>
     <div class="card"><div class="card-emoji">👨‍👩‍👧</div><div class="card-title">家庭双卧木屋（1间）</div><div class="card-val" style="font-size:1rem;">独立儿童卧室 · 最多住4人 · 家庭出游首选</div></div>
@@ -338,7 +329,7 @@ footer a { color: #6b8f3a; }
 <section class="reveal">
   <h2 class="section-title">生态设计哲学</h2>
   <p class="section-sub">全球最彻底的可持续野奢模型</p>
-  <div class="card-grid">
+  <div class="grid-2">
     <div class="card">
       <div class="card-emoji">🏗️</div>
       <div class="card-title">可移动建筑</div>
@@ -364,7 +355,7 @@ footer a { color: #6b8f3a; }
 
 <section class="reveal">
   <h2 class="section-title">最新动态与战略展望</h2>
-  <div class="card-grid">
+  <div class="grid-2">
     <div class="card">
       <div class="card-emoji">🔄</div>
       <div class="card-title">2026全新回归</div>

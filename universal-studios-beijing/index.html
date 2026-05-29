@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="../shared.css">
 <style>
 :root {
   --red: #C41E3A;
@@ -50,17 +51,10 @@
   --clr-text-muted: var(--text-light);
   --clr-border: var(--border);
   --clr-card-bg: var(--white);
-  --shadow-sm: var(--shadow-sm);
-  --shadow-md: var(--shadow-md);
-  --shadow-lg: var(--shadow-lg);
-  --radius-sm: var(--radius-sm);
   --radius-md: var(--radius);
-  --radius-lg: var(--radius-lg);
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { font-size: 17px; scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+html { scroll-padding-top: var(--nav-h); }
 
 body {
   font-family: var(--font-body);
@@ -230,27 +224,7 @@ section { padding: 88px 24px; }
 .kpi-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; }
 .kpi-sub { font-size: 0.72rem; color: var(--text-light); margin-top: 4px; }
 
-/* ── Tables ── */
-.data-table {
-  width: 100%; border-collapse: collapse;
-  background: var(--white); border-radius: var(--radius);
-  overflow: hidden; box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border);
-}
-.data-table th {
-  background: var(--navy); color: var(--white);
-  font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em;
-  text-transform: uppercase; padding: 14px 20px; text-align: left;
-}
-.data-table td {
-  padding: 12px 20px; font-size: 0.88rem; color: var(--text);
-  border-bottom: 1px solid var(--border);
-}
-.data-table tr:last-child td { border-bottom: none; }
 .data-table .cat-cell { font-weight: 600; color: var(--navy); background: var(--cream); }
-
-/* ── Section alt bg ── */
-.section-alt { background: var(--cream); }
 
 /* ── Zone cards ── */
 .zone-card {
@@ -292,21 +266,7 @@ footer {
 }
 footer strong { color: var(--gold); }
 
-/* ── Scroll reveal ── */
-.reveal {
-  opacity: 0; transform: translateY(24px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-.reveal.visible { opacity: 1; transform: translateY(0); }
-
 /* ── Responsive ── */
-
-/* Floating nav */
-.floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
-.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: #C41E3A; }
-.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: #C41E3A; color: #fff; }
-#back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
-#back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
 
 @media (max-width: 1024px) {
   .cards-6 { grid-template-columns: repeat(3, 1fr); }

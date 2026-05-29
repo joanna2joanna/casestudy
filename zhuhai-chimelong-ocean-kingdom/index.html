@@ -47,18 +47,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--clr-bg); color: var
 .section-title::after { content: ''; display: block; width: 50px; height: 3px; background: var(--clr-accent-alt); margin-top: 0.5rem; }
 
 /* Cards */
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-.card { background: var(--clr-bg-card); border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--clr-border); }
 .card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--clr-primary); margin-bottom: 0.5rem; }
 .card p { font-size: 0.9rem; color: var(--clr-text-secondary); }
 .card .value { font-family: 'DM Mono', monospace; font-size: 1.3rem; color: var(--clr-primary-light); font-weight: 500; }
-
-/* Tables */
-.data-table { width: 100%; border-collapse: collapse; background: var(--clr-bg-card); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
-.data-table th { background: var(--clr-primary); color: #fff; padding: 0.9rem 1.2rem; text-align: left; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
-.data-table td { padding: 0.8rem 1.2rem; border-bottom: 1px solid var(--clr-border); font-size: 0.9rem; }
-.data-table tr:last-child td { border-bottom: none; }
-.data-table tr:hover td { background: var(--clr-bg-hover); }
 
 /* Timeline */
 .timeline { position: relative; padding-left: 2rem; }
@@ -121,7 +112,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--clr-bg); color: var
   .hero h1 { font-size: 2.4rem; }
   .hero-stats { gap: 1.5rem; }
   .section { padding: 2.5rem 1.2rem; }
-  .card-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -145,7 +135,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--clr-bg); color: var
 <!-- 2. 项目概览 -->
 <section class="section">
   <h2 class="section-title reveal">项目概览</h2>
-  <div class="card-grid reveal">
+  <div class="grid-2 reveal">
     <div class="card"><h3>开业时间</h3><div class="value">2014 年 3 月 29 日</div><p>珠海横琴新区首个大型主题公园</p></div>
     <div class="card"><h3>开发商 / 运营商</h3><div class="value">广东长隆集团</div><p>创始人苏志刚，中国文旅龙头企业</p></div>
     <div class="card"><h3>地理位置</h3><div class="value">22.100°N, 113.531°E</div><p>广东省珠海市横琴粤澳深度合作区富祥湾长隆大道 1 号</p></div>
@@ -158,7 +148,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--clr-bg); color: var
 <!-- 3. 设计与建设 -->
 <section class="section">
   <h2 class="section-title reveal">设计与建设</h2>
-  <div class="card-grid reveal" style="grid-template-columns: 1fr 1fr;">
+  <div class="grid-2 reveal" style="grid-template-columns: 1fr 1fr;">
     <div class="card">
       <h3>设计方</h3>
       <p style="margin-top:0.8rem;"><strong>Forrec Ltd（加拿大）</strong> — 总体规划与概念设计</p>
@@ -293,7 +283,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--clr-bg); color: var
     </a>
   </div>
 
-  <div class="card-grid reveal" style="margin-top:2rem;">
+  <div class="grid-2 reveal" style="margin-top:2rem;">
     <div class="card"><h3>海洋大街</h3><p>入口迎宾大道，巨型 LED 天幕穹顶。两侧购物与餐饮，营造沉浸式海底世界到达体验。</p></div>
     <div class="card"><h3>海豚湾</h3><p>海豚保育中心 + 海豚剧场，可近距离观赏瓶鼻海豚。海豚岛为室外展池，5 米深自然海水。</p></div>
     <div class="card"><h3>雨林飞翔</h3><p>亚马逊热带雨林主题。鹦鹉过山车（Mack Rides，高 50m，长 1,278m，极速 108km/h）为标志性骑乘。雨林升降塔为家庭版跳楼机。</p></div>
@@ -398,7 +388,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--clr-bg); color: var
 <!-- 9. 配套设施体系 -->
 <section class="section">
   <h2 class="section-title reveal">配套设施体系</h2>
-  <div class="card-grid reveal">
+  <div class="grid-2 reveal">
     <div class="card"><h3>横琴湾酒店</h3><p>1,888 间客房，五星级，海豚池直达。会议中心 3,000 m²，宴会厅可容纳 1,500 人。</p></div>
     <div class="card"><h3>企鹅酒店</h3><p>2,000 间客房，紧邻海洋王国入口。企鹅馆内嵌酒店大堂，可边用餐边观企鹅。</p></div>
     <div class="card"><h3>马戏酒店</h3><p>700 间客房，连接长隆国际马戏城。杂技主题设计，适合观看马戏表演的住客。</p></div>
@@ -413,7 +403,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--clr-bg); color: var
 <!-- 10. 最新动态与扩建展望 -->
 <section class="section">
   <h2 class="section-title reveal">最新动态与扩建展望</h2>
-  <div class="card-grid reveal">
+  <div class="grid-2 reveal">
     <div class="card"><h3>宇宙飞船新馆</h3><p>2023 年南侧开业，总投资约 ¥50 亿。全球最大室内主题公园之一。飞船酒店 1,250 间同步运营。海洋 + 太空双主题联动。</p></div>
     <div class="card"><h3>横琴国际休闲旅游岛</h3><p>2019 年国务院批复横琴为国际休闲旅游岛。长隆作为核心引擎持续扩建，二期规划含更多室内场馆、主题区与度假酒店。</p></div>
     <div class="card"><h3>深中通道利好</h3><p>深中通道通车后，深圳至珠海车程缩短至约 1 小时，带来深圳及粤东地区增量客源。</p></div>

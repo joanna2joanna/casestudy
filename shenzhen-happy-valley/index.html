@@ -55,18 +55,8 @@ section { max-width: 1040px; margin: 0 auto; padding: 2.5rem 1.5rem; }
 .section-sub { text-align: center; color: var(--clr-text-muted); margin-bottom: 2rem; font-size: 0.9rem; }
 
 /* === Cards === */
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
-.card { background: #fff; border-radius: 8px; padding: 1.2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s; }
-.card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
 .card-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--clr-text-muted); margin-bottom: 0.3rem; }
 .card-value { font-weight: 700; color: var(--clr-primary); }
-
-/* === Tables === */
-.data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-.data-table th { background: var(--clr-primary); color: #fff; padding: 0.7rem 1rem; text-align: left; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
-.data-table td { padding: 0.65rem 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.9rem; }
-.data-table tr:last-child td { border-bottom: none; }
-.data-table .num { font-family: 'DM Mono', monospace; }
 
 /* === Timeline === */
 .timeline { position: relative; padding-left: 2.5rem; }
@@ -125,8 +115,6 @@ footer a { color: var(--clr-accent); }
   section { padding: 2rem 1rem; }
   .hero-nums { gap: 1.5rem; }
   .hero-num-val { font-size: 1.8rem; }
-  .card-grid { grid-template-columns: 1fr; }
-  .data-table { display: block; overflow-x: auto; }
 }
 </style>
 </head>
@@ -149,7 +137,7 @@ footer a { color: var(--clr-accent); }
 <section class="reveal">
   <h2 class="section-title l2">项目概览</h2>
   <p class="section-sub">中国首批 AAAAA 级景区，华侨城"旅游+地产"模式的开山之作</p>
-  <div class="card-grid">
+  <div class="grid-2">
     <div class="card"><div class="card-label">开业时间</div><div class="card-value l3">1998 年 10 月 1 日</div></div>
     <div class="card"><div class="card-label">开发商 / 运营商</div><div class="card-value l3">华侨城集团 (OCT Group)</div></div>
     <div class="card"><div class="card-label">地理位置</div><div class="card-value l3">深圳市南山区侨城西街 18 号</div></div>
@@ -218,7 +206,7 @@ footer a { color: var(--clr-accent); }
 <section class="reveal">
   <h2 class="section-title l2">设计与建设</h2>
   <p class="section-sub">本土主题公园设计与建造的标杆案例</p>
-  <div class="card-grid">
+  <div class="grid-2">
     <div class="card"><div class="card-label">概念规划</div><div class="card-value">华侨城文旅研究院 + 加拿大 Forrec 设计公司</div></div>
     <div class="card"><div class="card-label">施工总包</div><div class="card-value">华侨城建设集团 / 中建系统</div></div>
     <div class="card"><div class="card-label">设备制造</div><div class="card-value">B&M · Intamin · Mack Rides · 金马游乐 · 中山金信</div></div>
@@ -316,7 +304,7 @@ footer a { color: var(--clr-accent); }
     <p style="text-align:center;color:#8b7355;font-size:0.78rem;margin-top:0.5rem;">示意图，基于官方地图与卫星影像 | 北向上</p>
   </div>
 
-  <div class="card-grid" style="margin-top:1rem;">
+  <div class="grid-2" style="margin-top:1rem;">
     <div class="card"><div class="card-label">西班牙广场</div><div class="card-value">入口综合服务区，售票 · 客服 · 餐饮 · 购物 · 欢乐干线站</div></div>
     <div class="card"><div class="card-label">欢乐时光</div><div class="card-value">12 项目 · 19 世纪欧洲小镇 · UFO · 大摆锤 · 四维影院</div></div>
     <div class="card"><div class="card-label">魔幻城堡</div><div class="card-value">20 项目 · 亲子 · 亚洲首创魔幻主题空间</div></div>
@@ -332,7 +320,7 @@ footer a { color: var(--clr-accent); }
 <!-- 8. 配套设施 -->
 <section class="reveal">
   <h2 class="section-title l2">配套设施体系</h2>
-  <div class="card-grid">
+  <div class="grid-2">
     <div class="card"><div class="card-label">餐饮</div><div class="card-value">20+ 主题餐厅与小吃亭，覆盖中餐 · 西式 · 快餐 · 甜品</div></div>
     <div class="card"><div class="card-label">周边住宿</div><div class="card-value">华侨城洲际大酒店 · 威尼斯酒店 · 城市客栈 · 万豪行政公寓</div></div>
     <div class="card"><div class="card-label">停车</div><div class="card-value">约 3,000 车位（地面 + 地下立体车库）</div></div>
@@ -389,7 +377,7 @@ footer a { color: var(--clr-accent); }
 <!-- 10. 最新动态 -->
 <section class="reveal">
   <h2 class="section-title l2">最新动态与战略展望</h2>
-  <div class="card-grid">
+  <div class="grid-2">
     <div class="card">
       <div class="card-label">IP 化战略</div>
       <div class="card-value">"迷你世界 · 冒险山" IP 主题区落地；"欢乐家族""E-maya"自有 IP 孵化中</div>

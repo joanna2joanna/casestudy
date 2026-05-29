@@ -105,25 +105,12 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 .section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
 
 /* Cards */
-.card-grid { display: grid; gap: 1.5rem; }
-.card-grid-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
-.card-grid-3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-.card-grid-4 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-
-.card {
-  background: #FFF;
-  border-radius: 16px;
-  padding: 1.8rem;
-  border: 1px solid var(--clr-border);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
 .card-icon { font-size: 2rem; margin-bottom: 0.8rem; }
 .card h4 { font-size: 0.85rem; color: var(--clr-primary); letter-spacing: 0.06em; margin-bottom: 0.4rem; }
 .card .val { font-size: 1.15rem; font-weight: 600; color: var(--clr-text); }
 
 /* Section header */
-.section-header { text-align: center; margin-bottom: 3.5rem; }
+.section-header { text-align: center; }
 .section-header h2 { color: var(--clr-primary-dark); }
 .section-header p { color: var(--clr-text-muted); max-width: 650px; margin: 0 auto; font-size: 1rem; }
 
@@ -211,14 +198,6 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 .timeline-year { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--clr-primary); font-weight: 600; }
 .timeline-title { font-weight: 600; margin: 0.2rem 0; }
 .timeline-desc { font-size: 0.88rem; color: var(--clr-text-secondary); }
-
-/* Tables */
-.data-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-.data-table th { background: var(--clr-primary-dark); color: #FFF; padding: 0.8rem 1rem; text-align: left; font-weight: 500; font-size: 0.8rem; letter-spacing: 0.05em; }
-.data-table td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--clr-border); }
-.data-table tr:nth-child(even) { background: var(--clr-bg-card); }
-.data-table tr:hover { background: #F5EDE0; }
-.data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
 
 /* Two column comparison */
 .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0; }
@@ -317,7 +296,6 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   .compare-grid { grid-template-columns: 1fr; }
   .hero-kpis { gap: 1.5rem; }
   .hero-kpi-num { font-size: 1.8rem; }
-  .card-grid-2, .card-grid-3, .card-grid-4 { grid-template-columns: 1fr; }
 }
 
 /* Scroll reveal */
@@ -378,7 +356,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
     <h2>项目概览</h2>
     <p>松赞（Songtsam）是中国本土最具影响力的精品酒店品牌之一，被誉为"中国的安缦"</p>
   </div>
-  <div class="card-grid card-grid-3 reveal">
+  <div class="grid-3 reveal">
     <div class="card"><div class="card-icon">🏠</div><h4>创始人</h4><div class="val">白玛多吉</div><p style="font-size:0.82rem;color:#8B7355;margin-top:0.3rem;">前央视纪录片导演，1964年生于云南香格里拉克纳村</p></div>
     <div class="card"><div class="card-icon">📅</div><h4>首店开业</h4><div class="val">2001 年</div><p style="font-size:0.82rem;color:#8B7355;margin-top:0.3rem;">松赞绿谷山居，由创始人祖宅改建</p></div>
     <div class="card"><div class="card-icon">🏛️</div><h4>品牌体系</h4><div class="val">山居 + 林卡 + 帐篷</div><p style="font-size:0.82rem;color:#8B7355;margin-top:0.3rem;">两大产品系列 + 营地体验</p></div>
@@ -586,7 +564,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   </div>
 
   <h3 style="margin:2rem 0 1.2rem;color:var(--clr-primary-dark);">🏔️ 山居系列 —— 隐于山中，回归本质</h3>
-  <div class="card-grid card-grid-3 reveal">
+  <div class="grid-3 reveal">
     <div class="hotel-card">
       <div class="hotel-card-header lodge">
         <div class="hotel-card-badge">山居 · 2001</div>
@@ -709,7 +687,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   </div>
 
   <h3 style="margin:2.5rem 0 1.2rem;color:var(--clr-primary-dark);">🏛️ 林卡系列 —— 藏式园林中的奢华休憩</h3>
-  <div class="card-grid card-grid-3 reveal">
+  <div class="grid-3 reveal">
     <div class="hotel-card">
       <div class="hotel-card-header linka">
         <div class="hotel-card-badge">林卡 · 2009</div>
@@ -772,7 +750,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   </div>
 
   <h3 style="margin:2.5rem 0 1.2rem;color:var(--clr-primary-dark);">⛺ 帐篷营地 —— 与荒野的零距离对话</h3>
-  <div class="card-grid card-grid-2 reveal">
+  <div class="grid-2 reveal">
     <div class="hotel-card">
       <div class="hotel-card-header camp">
         <div class="hotel-card-badge">帐篷营地 · 2020</div>
@@ -852,7 +830,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   <div class="section-header reveal">
     <h2>设计与建设</h2>
   </div>
-  <div class="card-grid card-grid-2 reveal">
+  <div class="grid-2 reveal">
     <div class="card">
       <h4 style="color:var(--clr-primary);">🏛️ 核心设计团队</h4>
       <div style="font-size:0.88rem;color:#6B5E50;line-height:1.8;margin-top:0.8rem;">
@@ -971,7 +949,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
     </div>
   </div>
 
-  <div class="card-grid card-grid-3 reveal" style="margin-top:2rem;">
+  <div class="grid-3 reveal" style="margin-top:2rem;">
     <div class="card" style="text-align:center;">
       <div style="font-size:2.2rem;font-weight:700;color:var(--clr-primary);font-family:'Playfair Display',serif;">¥3亿</div>
       <div style="font-size:0.85rem;color:#8B7355;">2022年A轮融资（招银国际）</div>
@@ -1000,7 +978,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
     <div class="kpi-card"><div class="num">1,600+</div><div class="label">员工总数</div></div>
     <div class="kpi-card"><div class="num">~98%</div><div class="label">本地员工占比</div></div>
   </div>
-  <div class="card-grid card-grid-2 reveal" style="margin-top:1.5rem;">
+  <div class="grid-2 reveal" style="margin-top:1.5rem;">
     <div class="card">
       <h4 style="color:var(--clr-primary);">👥 股权结构（2025）</h4>
       <div style="font-size:0.88rem;color:#6B5E50;line-height:2;">
@@ -1028,7 +1006,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   <div class="section-header reveal">
     <h2>配套设施与服务体系</h2>
   </div>
-  <div class="card-grid card-grid-4 reveal">
+  <div class="grid-4 reveal">
     <div class="card" style="text-align:center;">
       <div style="font-size:2rem;">🍽️</div>
       <h4 style="margin-top:0.5rem;">餐饮体系</h4>
@@ -1078,7 +1056,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   <div class="section-header reveal">
     <h2>最新动态与扩建展望</h2>
   </div>
-  <div class="card-grid card-grid-2 reveal">
+  <div class="grid-2 reveal">
     <div class="card">
       <h4 style="color:var(--clr-primary);">🔜 近期规划（2025-2027）</h4>
       <ul style="font-size:0.88rem;color:#6B5E50;line-height:2;list-style:none;margin-top:0.5rem;">
@@ -1107,7 +1085,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
     <h2>延伸资料库</h2>
     <p>5 个精选高质量外部资源</p>
   </div>
-  <div class="card-grid card-grid-2 reveal">
+  <div class="grid-2 reveal">
     <a href="https://www.songtsam.com" target="_blank" style="text-decoration:none;color:inherit;">
       <div class="resource-card">
         <div class="resource-icon">🏛️</div>

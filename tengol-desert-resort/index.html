@@ -45,17 +45,9 @@ section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
 .section-title { font-size: 2.2rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; color: var(--clr-primary); }
 .section-sub { text-align: center; color: var(--clr-text-muted); margin-bottom: 3rem; font-size: 0.95rem; }
 
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-.card { background: #fff; border-radius: 16px; padding: 1.6rem; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.06); }
 .card-emoji { font-size: 2rem; margin-bottom: 0.6rem; }
 .card-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--clr-text-muted); margin-bottom: 0.4rem; }
 .card-val { font-size: 1.4rem; font-weight: 700; color: var(--clr-primary); }
-
-.data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
-.data-table th { background: var(--clr-primary); color: var(--clr-accent-light); padding: 0.9rem 1.2rem; text-align: left; font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; }
-.data-table td { padding: 0.8rem 1.2rem; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 0.9rem; }
-.data-table tr:last-child td { border-bottom: none; }
-.data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
 
 .timeline { position: relative; padding-left: 2.5rem; }
 .timeline::before { content: ''; position: absolute; left: 0.8rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--clr-accent-light), var(--clr-primary-mid)); }
@@ -115,7 +107,6 @@ footer a { color: var(--clr-accent); }
   section { padding: 2.5rem 1rem; }
   .hero-nums { gap: 1.5rem; }
   .hero-num-val { font-size: 2rem; }
-  .card-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -136,7 +127,7 @@ footer a { color: var(--clr-accent); }
 <section class="reveal">
   <h2 class="section-title">项目概览</h2>
   <p class="section-sub">腾格里沙漠腹地的"新龙门客栈"——温州商人陈祖品的又一野奢力作</p>
-  <div class="card-grid">
+  <div class="grid-2">
     <div class="card"><div class="card-emoji">🎂</div><div class="card-title">开业时间</div><div class="card-val">2024年7月10日</div></div>
     <div class="card"><div class="card-emoji">👤</div><div class="card-title">创始人 / 业主</div><div class="card-val">陈祖品 (华正文旅集团)</div></div>
     <div class="card"><div class="card-emoji">📍</div><div class="card-title">地理位置</div><div class="card-val">宁夏中卫市·腾格里沙漠腹地</div></div>
@@ -149,7 +140,7 @@ footer a { color: var(--clr-accent); }
 <section class="reveal">
   <h2 class="section-title">设计与建设</h2>
   <p class="section-sub">中国首个沙漠夯土建筑群——从沙海中"生长"出来的西域聚落</p>
-  <div class="card-grid">
+  <div class="grid-2">
     <div class="card">
       <div class="card-emoji">🏛️</div>
       <div class="card-title">建筑设计理念</div>
@@ -272,7 +263,7 @@ footer a { color: var(--clr-accent); }
     <p style="text-align:center;color:#8b7355;font-size:0.78rem;margin-top:0.6rem;">示意图，基于公开报道与卫星影像 | 北向上 | 实际布局以酒店官方为准</p>
   </div>
 
-  <div class="card-grid" style="margin-top:2rem;">
+  <div class="grid-2" style="margin-top:2rem;">
     <div class="card"><div class="card-emoji">🏛️</div><div class="card-title">大堂·接待区</div><div class="card-val" style="font-size:1rem;">夯土穹顶 · 手工地毯 · 中古家具 · 丝路艺术藏品展示</div></div>
     <div class="card"><div class="card-emoji">🛏️</div><div class="card-title">客房区 (4组)</div><div class="card-val" style="font-size:1rem;">105间 · 洞穴式夯土外墙 · 私人内院 · 观景露台· 专属泳池 · 超3m大床</div></div>
     <div class="card"><div class="card-emoji">🏊</div><div class="card-title">无边际沙漠泳池</div><div class="card-val" style="font-size:1rem;">蓝色水面 × 金色沙海 · 酒店最具视觉冲击力的地标</div></div>
@@ -336,7 +327,7 @@ footer a { color: var(--clr-accent); }
 
 <section class="reveal">
   <h2 class="section-title">配套设施体系</h2>
-  <div class="card-grid">
+  <div class="grid-2">
     <div class="card"><div class="card-emoji">🍜</div><div class="card-title">餐饮</div><div class="card-val" style="font-size:1rem;">丝路主题餐厅 · 离岛咖啡 · 沙漠酒吧 · 黑帐篷晚宴区 · 泳池池畔吧</div></div>
     <div class="card"><div class="card-emoji">🧖</div><div class="card-title">康体</div><div class="card-val" style="font-size:1rem;">沙漠SPA · 桑拿房 · 健身房 · 河畔沐浴区 · 瑜伽冥想平台</div></div>
     <div class="card"><div class="card-emoji">🏊</div><div class="card-title">泳池</div><div class="card-val" style="font-size:1rem;">无边际沙漠泳池（地标打卡点）· 部分套房独立泳池</div></div>
@@ -348,7 +339,7 @@ footer a { color: var(--clr-accent); }
 
 <section class="reveal">
   <h2 class="section-title">最新动态与战略展望</h2>
-  <div class="card-grid">
+  <div class="grid-2">
     <div class="card">
       <div class="card-emoji">🎬</div>
       <div class="card-title">影视IP引爆</div>

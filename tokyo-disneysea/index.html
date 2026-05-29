@@ -46,18 +46,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--clr-bg); color: var
 .section-title::after { content: ''; display: block; width: 50px; height: 3px; background: var(--clr-accent); margin-top: 0.5rem; }
 
 /* Cards */
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-.card { background: var(--clr-bg-card); border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--clr-border); }
 .card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--clr-primary); margin-bottom: 0.5rem; }
 .card p { font-size: 0.9rem; color: var(--clr-text-secondary); }
 .card .value { font-family: 'DM Mono', monospace; font-size: 1.3rem; color: var(--clr-primary-light); font-weight: 500; }
-
-/* Tables */
-.data-table { width: 100%; border-collapse: collapse; background: var(--clr-bg-card); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
-.data-table th { background: var(--clr-primary); color: #fff; padding: 0.9rem 1.2rem; text-align: left; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
-.data-table td { padding: 0.8rem 1.2rem; border-bottom: 1px solid var(--clr-border); font-size: 0.9rem; }
-.data-table tr:last-child td { border-bottom: none; }
-.data-table tr:hover td { background: var(--clr-bg-hover); }
 
 /* Timeline */
 .timeline { position: relative; padding-left: 2rem; }
@@ -124,7 +115,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--clr-bg); color: var
   .hero h1 { font-size: 2.4rem; }
   .hero-stats { gap: 1.5rem; }
   .section { padding: 2.5rem 1.2rem; }
-  .card-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -151,7 +141,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--clr-bg); color: var
 <!-- 2. 项目概览 -->
 <section class="section">
   <h2 class="section-title reveal">项目概览</h2>
-  <div class="card-grid reveal">
+  <div class="grid-2 reveal">
     <div class="card"><h3>开业时间</h3><div class="value">2001 年 9 月 4 日</div><p>东京迪士尼度假区第二座主题公园</p></div>
     <div class="card"><h3>开发商 / 运营商</h3><div class="value">Oriental Land Company</div><p>日本本土企业，迪士尼授权运营（非迪士尼自有）</p></div>
     <div class="card"><h3>地理位置</h3><div class="value">35.627°N, 139.888°E</div><p>日本千叶县浦安市舞滨，东京湾沿岸</p></div>
@@ -164,7 +154,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--clr-bg); color: var
 <!-- 3. 设计与建设 -->
 <section class="section">
   <h2 class="section-title reveal">设计与建设</h2>
-  <div class="card-grid reveal" style="grid-template-columns: 1fr 1fr;">
+  <div class="grid-2 reveal" style="grid-template-columns: 1fr 1fr;">
     <div class="card">
       <h3>设计方</h3>
       <p style="margin-top:0.8rem;"><strong>Walt Disney Imagineering</strong> — 概念设计与总体创意</p>
@@ -316,7 +306,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--clr-bg); color: var
     </a>
   </div>
 
-  <div class="card-grid reveal" style="margin-top:2rem;">
+  <div class="grid-2 reveal" style="margin-top:2rem;">
     <div class="card"><h3>地中海港湾 (Mediterranean Harbor)</h3><p>入口 V 形港湾，意大利港口城市 Porto Paradiso 风貌。Hotel MiraCosta 直接建于港湾建筑群之上。Venetian Gondolas 可乘船游览。</p></div>
     <div class="card"><h3>神秘岛 (Mysterious Island)</h3><p>公园核心地标——普罗米修斯火山所在地。Jules Verne 科幻主题。核心骑乘 Journey to the Center of the Earth 和 20,000 Leagues Under the Sea。</p></div>
     <div class="card"><h3>美国海滨 (American Waterfront)</h3><p>20 世纪初纽约港 + Cape Cod 渔村。标志性 Tower of Terror 落塔、Toy Story Mania! 互动射击、Big City Vehicles 老爷车。</p></div>
@@ -422,7 +412,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--clr-bg); color: var
 <!-- 9. 配套设施体系 -->
 <section class="section">
   <h2 class="section-title reveal">配套设施体系</h2>
-  <div class="card-grid reveal">
+  <div class="grid-2 reveal">
     <div class="card"><h3>园区酒店</h3><p><strong>Hotel MiraCosta</strong> (502 间) — 地中海港湾内，世界唯一迪士尼主题公园内酒店。 <strong>Fantasy Springs Hotel</strong> (475 间) — 2024 年新开，紧邻梦幻泉。房价 JP¥35,000-300,000+/晚。</p></div>
     <div class="card"><h3>度假区酒店</h3><p>Tokyo Disneyland Hotel, Disney Ambassador Hotel, Tokyo Disney Celebration Hotel 等共 6 家迪士尼官方酒店。</p></div>
     <div class="card"><h3>餐饮</h3><p>45 家餐厅覆盖快餐、主题餐厅、高档套餐。SS Columbia Dining Room（美国海滨邮轮上）、Magellan's（地中海港湾）为顶级餐厅。人均 JP¥1,200-8,000。</p></div>
@@ -435,7 +425,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--clr-bg); color: var
 <!-- 10. 最新动态与扩建展望 -->
 <section class="section">
   <h2 class="section-title reveal">最新动态与扩建展望</h2>
-  <div class="card-grid reveal">
+  <div class="grid-2 reveal">
     <div class="card"><h3>25 周年 Sparkling Jubilee</h3><p>2026 年 4 月启动，贯穿全年。全新日间港口秀、限定商品、主题装饰。同步推出 Fantasy Springs 两周年纪念活动。</p></div>
     <div class="card"><h3>Aquatopia 关闭与发现港改造</h3><p>2026 年 9 月起 Aquatopia 永久关闭，发现港将启动新一轮大型改造。传说可能引入 Wreck-It Ralph 或 Big Hero 6 主题骑乘。</p></div>
     <div class="card"><h3>Space Mountain 级别大修传闻</h3><p>继东京迪士尼乐园 Space Mountain 2027 年全面翻新后，海洋侧传说也将获得类似级别的核心骑乘大修，可能在 2028-2030 期间实施。</p></div>

@@ -277,9 +277,72 @@ footer strong { color: var(--gold-light); }
     <h2 class="section-title">空间布局：六大平行宇宙主题区</h2>
     <p class="section-desc">以"平行时空，宇宙探索"为主题，六个主题区围绕中心湖区展开。高德卫星底图，GCJ-02坐标系。</p>
 
-    <div class="site-plan-wrap reveal">
+    <div class="site-plan-wrap">
       <div id="parkmap" style="width:100%;height:520px;border-radius:12px;z-index:0;"></div>
       <p style="text-align:center;font-size:0.72rem;color:var(--text-light);margin-top:8px;">▲ 交互地图：高德卫星底图 · GCJ-02坐标 · 可缩放平移</p>
+    </div>
+
+    <!-- SVG Site Plan -->
+    <div class="site-plan-wrap" style="margin-top:32px;">
+      <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--purple-deep);margin-bottom:8px;text-align:center;">空间结构示意图</h3>
+      <div style="width:100%;background:var(--purple-deep);border-radius:12px;padding:12px;">
+        <svg viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto;">
+          <defs>
+            <radialGradient id="xyLake" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#4A90D9" stop-opacity="0.7"/>
+              <stop offset="100%" stop-color="#1A3A6C" stop-opacity="0.9"/>
+            </radialGradient>
+          </defs>
+          <rect width="900" height="700" fill="#1A0A2E" rx="12"/>
+          <text x="450" y="30" text-anchor="middle" fill="#F5A623" font-family="Playfair Display,Georgia,serif" font-size="16" font-weight="700">襄阳华侨城奇幻谷 — 空间结构示意图</text>
+          <!-- Compass -->
+          <g transform="translate(830, 55)">
+            <polygon points="0,-16 4,-2 0,-5 -4,-2" fill="#F5A623"/>
+            <polygon points="0,16 4,2 0,5 -4,2" fill="#8A8A9A"/>
+            <text x="0" y="-20" text-anchor="middle" fill="#F5A623" font-size="9" font-family="DM Sans,sans-serif">N</text>
+          </g>
+          <!-- Central lake -->
+          <ellipse cx="450" cy="400" rx="140" ry="90" fill="url(#xyLake)" stroke="#4A90D9" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <text x="450" y="405" text-anchor="middle" fill="#A0C4E8" font-size="10" font-family="DM Sans,sans-serif">中心湖区</text>
+          <!-- 奇幻大道 (south, entrance) -->
+          <rect x="380" y="550" width="140" height="55" rx="6" fill="#6A1B9A" opacity="0.85"/>
+          <text x="450" y="575" text-anchor="middle" fill="#FFF" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">奇幻大道</text>
+          <text x="450" y="593" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">主入口·星球集市</text>
+          <!-- 发现港湾 (west) -->
+          <rect x="180" y="340" width="130" height="60" rx="6" fill="#E64A19" opacity="0.8"/>
+          <text x="245" y="365" text-anchor="middle" fill="#FFF" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">发现港湾</text>
+          <text x="245" y="383" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">达芬奇飞翔·秘境漂流</text>
+          <!-- 异星港 (east-center) -->
+          <rect x="580" y="340" width="120" height="55" rx="6" fill="#00BCD4" opacity="0.8"/>
+          <text x="640" y="363" text-anchor="middle" fill="#FFF" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">异星港</text>
+          <text x="640" y="380" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">星际历险·虫巢突围</text>
+          <!-- 疯狂机械城 (north) -->
+          <rect x="360" y="200" width="140" height="55" rx="6" fill="#F5A623" opacity="0.8"/>
+          <text x="430" y="223" text-anchor="middle" fill="#1A0A2E" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">疯狂机械城</text>
+          <text x="430" y="240" text-anchor="middle" fill="rgba(26,10,46,0.7)" font-size="8" font-family="DM Sans,sans-serif">机械麒麟金璃·觉醒战神</text>
+          <!-- 鲲之方舟 (east) -->
+          <rect x="600" y="480" width="130" height="55" rx="6" fill="#2E7D32" opacity="0.8"/>
+          <text x="665" y="503" text-anchor="middle" fill="#FFF" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">鲲之方舟</text>
+          <text x="665" y="520" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">方舟大冒险·深蓝探秘</text>
+          <!-- 昆仑幻境 (northwest) -->
+          <rect x="200" y="150" width="130" height="55" rx="6" fill="#1565C0" opacity="0.8"/>
+          <text x="265" y="173" text-anchor="middle" fill="#FFF" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">昆仑幻境</text>
+          <text x="265" y="190" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">雪山飞车·地宫历险</text>
+          <!-- Connecting paths -->
+          <g stroke="rgba(255,255,255,0.12)" stroke-width="1" fill="none" stroke-dasharray="4,3">
+            <line x1="450" y1="550" x2="450" y2="470"/>
+            <line x1="310" y1="370" x2="450" y2="450"/>
+            <line x1="640" y1="370" x2="500" y2="440"/>
+            <line x1="430" y1="250" x2="450" y2="350"/>
+            <line x1="265" y1="200" x2="380" y2="360"/>
+            <line x1="665" y1="490" x2="530" y2="440"/>
+          </g>
+          <!-- Legend -->
+          <rect x="30" y="630" width="300" height="50" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+          <text x="180" y="650" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-size="8" font-family="DM Sans,sans-serif">6大平行宇宙主题区 · 环湖布局 · 辐射式连接</text>
+          <text x="180" y="668" text-anchor="middle" fill="rgba(255,255,255,0.28)" font-size="7" font-family="DM Sans,sans-serif">北向朝上 · 奇幻大道为主入口 · 逆时针游览动线</text>
+        </svg>
+      </div>
     </div>
 
     <div class="cards-3 reveal" style="margin-top:32px;">
@@ -454,15 +517,14 @@ function wgs84ToGcj02(wgsLng, wgsLat) {
   };
 }
 
-// ── Zone markers (GCJ-02, earthol.com 验证) ──
-var xyZonesGcj = [
-  { name: '奇幻大道<br><small>主入口·星球集市</small>', lat: 31.9948, lng: 112.2580, color: '#6A1B9A' },
-  { name: '发现港湾<br><small>达芬奇飞翔·秘境漂流</small>', lat: 31.9962, lng: 112.2595, color: '#E64A19' },
-  { name: '异星港<br><small>星际历险·虫巢突围</small>', lat: 31.9978, lng: 112.2582, color: '#00BCD4' },
-  { name: '疯狂机械城<br><small>机械麒麟金璃</small>', lat: 31.9980, lng: 112.2565, color: '#F5A623' },
-  { name: '鲲之方舟<br><small>方舟大冒险·熊猫</small>', lat: 31.9985, lng: 112.2555, color: '#2E7D32' },
-  { name: '昆仑幻境<br><small>雪山飞车·地宫历险</small>', lat: 31.9960, lng: 112.2545, color: '#1565C0' },
-  { name: '云海酒店<br><small>五星·海洋主题</small>', lat: 31.9935, lng: 112.2540, color: '#00838F' }
+// ── Zone anchors (WGS-84, OSM verified) → GCJ-02 on map ──
+var xyZonesWgs = [
+  { name: '奇幻大道<br><small>主入口·星球集市</small>', lat: 31.9940, lng: 112.2540, color: '#6A1B9A' },
+  { name: '发现港湾<br><small>达芬奇飞翔·秘境漂流</small>', lat: 31.9970, lng: 112.2515, color: '#E64A19' },
+  { name: '异星港<br><small>星际历险·虫巢突围</small>', lat: 31.9955, lng: 112.2540, color: '#00BCD4' },
+  { name: '疯狂机械城<br><small>机械麒麟金璃</small>', lat: 31.9990, lng: 112.2540, color: '#F5A623' },
+  { name: '鲲之方舟<br><small>方舟大冒险·熊猫</small>', lat: 31.9965, lng: 112.2550, color: '#2E7D32' },
+  { name: '昆仑幻境<br><small>雪山飞车·地宫历险</small>', lat: 31.9980, lng: 112.2535, color: '#1565C0' },
 ];
 
 function addZoneMarkers(targetMap, zones) {
@@ -481,7 +543,18 @@ document.addEventListener('DOMContentLoaded', function() {
   var el = document.getElementById('parkmap');
   if (!el) return;
 
-  var center = { lat: 31.99667, lng: 112.25737 };
+  // Convert WGS-84 zones to GCJ-02 for 高德 tiles
+  var xyZonesGcj = xyZonesWgs.map(function(z) {
+    var gcj = wgs84ToGcj02(z.lng, z.lat);
+    return { name: z.name, lat: gcj.lat, lng: gcj.lng, color: z.color };
+  });
+
+  // Compute center from WGS-84 zone coords, then convert to GCJ-02
+  var sumLat = 0, sumLng = 0;
+  xyZonesWgs.forEach(function(z) { sumLat += z.lat; sumLng += z.lng; });
+  var centerWgs = { lat: sumLat / xyZonesWgs.length, lng: sumLng / xyZonesWgs.length };
+  var center = wgs84ToGcj02(centerWgs.lng, centerWgs.lat);
+
   var map = L.map('parkmap', { scrollWheelZoom: false }).setView([center.lat, center.lng], 16);
 
   var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
@@ -499,8 +572,7 @@ document.addEventListener('DOMContentLoaded', function() {
   L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
   addZoneMarkers(map, xyZonesGcj);
 
-  var parkCenter = { lat: 31.99667, lng: 112.25737 };
-  L.circle([parkCenter.lat, parkCenter.lng], { radius: 400, color: '#6A1B9A', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  L.circle([center.lat, center.lng], { radius: 400, color: '#6A1B9A', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
 
   setTimeout(function() { map.invalidateSize(); }, 800);
 

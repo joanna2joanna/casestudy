@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 :root {
   --red: #C41E3A;
@@ -451,6 +451,74 @@ footer strong { color: var(--gold); }
       <div id="satmap" style="width:100%;height:420px;border-radius:12px;z-index:0;"></div>
     </div>
 
+    <!-- SVG Site Plan -->
+    <div class="site-plan-wrap" style="margin-top:32px;">
+      <h4 style="font-family:var(--font-display);font-size:1rem;color:var(--navy);margin-bottom:4px;text-align:center;">空间结构示意图</h4>
+      <p style="text-align:center;font-size:0.72rem;color:var(--text-light);margin-bottom:12px;">七景核心环湖 · 一轴两区依水</p>
+      <div style="width:100%;background:var(--navy);border-radius:12px;padding:12px;">
+        <svg viewBox="0 0 1000 750" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto;">
+          <defs>
+            <radialGradient id="bjLake" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#4A90D9" stop-opacity="0.6"/>
+              <stop offset="100%" stop-color="#1A3A5C" stop-opacity="0.85"/>
+            </radialGradient>
+          </defs>
+          <rect width="1000" height="750" fill="#0A1628" rx="12"/>
+          <text x="500" y="32" text-anchor="middle" fill="#D4A843" font-family="Playfair Display,Georgia,serif" font-size="17" font-weight="700">北京环球影城 — 空间结构示意图</text>
+          <!-- Compass -->
+          <g transform="translate(920, 55)">
+            <polygon points="0,-16 4,-2 0,-5 -4,-2" fill="#D4A843"/>
+            <polygon points="0,16 4,2 0,5 -4,2" fill="#5A6A80"/>
+            <text x="0" y="-20" text-anchor="middle" fill="#D4A843" font-size="9" font-family="DM Sans,sans-serif">N</text>
+          </g>
+          <!-- Central lagoon -->
+          <ellipse cx="500" cy="420" rx="180" ry="100" fill="url(#bjLake)" stroke="#4A90D9" stroke-width="1.2" stroke-dasharray="5,3"/>
+          <text x="500" y="425" text-anchor="middle" fill="#A0C4E8" font-size="10" font-family="DM Sans,sans-serif">中心湖 Lagoon</text>
+          <!-- 好莱坞 (south, entrance) -->
+          <rect x="410" y="600" width="180" height="60" rx="6" fill="#C41E3A" opacity="0.85"/>
+          <text x="500" y="627" text-anchor="middle" fill="#FFF" font-size="13" font-family="DM Sans,sans-serif" font-weight="600">好莱坞</text>
+          <text x="500" y="646" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">Hollywood · 主入口大道</text>
+          <!-- 变形金刚基地 (southwest) -->
+          <rect x="230" y="480" width="140" height="65" rx="6" fill="#E8784A" opacity="0.8"/>
+          <text x="300" y="506" text-anchor="middle" fill="#FFF" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">变形金刚基地</text>
+          <text x="300" y="525" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">Transformers · 全球首个专属区</text>
+          <!-- 侏罗纪世界 (center-west) -->
+          <rect x="240" y="340" width="140" height="60" rx="6" fill="#2E7D32" opacity="0.8"/>
+          <text x="310" y="365" text-anchor="middle" fill="#FFF" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">侏罗纪世界</text>
+          <text x="310" y="383" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">Jurassic World · 努布拉岛</text>
+          <!-- 哈利波特 (northwest) -->
+          <rect x="200" y="170" width="150" height="70" rx="6" fill="#6A1B9A" opacity="0.8"/>
+          <text x="275" y="198" text-anchor="middle" fill="#FFF" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">哈利·波特</text>
+          <text x="275" y="216" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">Wizarding World · 霍格沃茨</text>
+          <!-- 未来水世界 (northeast) -->
+          <rect x="630" y="200" width="140" height="60" rx="6" fill="#0277BD" opacity="0.8"/>
+          <text x="700" y="225" text-anchor="middle" fill="#FFF" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">未来水世界</text>
+          <text x="700" y="242" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">WaterWorld · 全球首个专属区</text>
+          <!-- 功夫熊猫 (center-east) -->
+          <rect x="640" y="360" width="150" height="65" rx="6" fill="#D4A843" opacity="0.8"/>
+          <text x="715" y="386" text-anchor="middle" fill="#0A1628" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">功夫熊猫</text>
+          <text x="715" y="405" text-anchor="middle" fill="rgba(10,22,40,0.7)" font-size="8" font-family="DM Sans,sans-serif">Kung Fu Panda · 全室内</text>
+          <!-- 小黄人乐园 (southeast) -->
+          <rect x="660" y="500" width="130" height="60" rx="6" fill="#F0D078" opacity="0.8"/>
+          <text x="725" y="525" text-anchor="middle" fill="#0A1628" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">小黄人乐园</text>
+          <text x="725" y="543" text-anchor="middle" fill="rgba(10,22,40,0.7)" font-size="8" font-family="DM Sans,sans-serif">Minion Land · 全球最大</text>
+          <!-- Connecting paths -->
+          <g stroke="rgba(255,255,255,0.1)" stroke-width="1" fill="none" stroke-dasharray="4,3">
+            <line x1="500" y1="600" x2="500" y2="500"/>
+            <line x1="370" y1="510" x2="310" y2="390"/>
+            <line x1="310" y1="370" x2="275" y2="235"/>
+            <line x1="500" y1="480" x2="640" y2="390"/>
+            <line x1="500" y1="500" x2="660" y2="520"/>
+            <line x1="715" y1="380" x2="700" y2="255"/>
+          </g>
+          <!-- Legend -->
+          <rect x="30" y="670" width="360" height="55" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+          <text x="210" y="692" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="9" font-family="DM Sans,sans-serif">7大主题景区 · 环湖布局 · 3个专属定制区（🐼🤖🌊）</text>
+          <text x="210" y="712" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="7" font-family="DM Sans,sans-serif">北向朝上 · 好莱坞主入口 · 顺时针游览动线</text>
+        </svg>
+      </div>
+    </div>
+
     <div class="cards-3 reveal" style="margin-top:32px;">
       <div class="zone-card"><span class="zone-tag">专属定制</span><h4>🐼 功夫熊猫盖世之地</h4><p>全球首个功夫熊猫主题景区，唯一全室内区。翡翠宫、熊猫村、智慧仙桃树全息投影，"神龙大侠之旅"激流勇进。</p></div>
       <div class="zone-card"><span class="zone-tag">专属定制</span><h4>🤖 变形金刚基地</h4><p>全球首个变形金刚专属主题区。霸天虎过山车4.5秒加速至104km/h，火种源争夺战，赛博坦风格建筑。</p></div>
@@ -684,7 +752,7 @@ footer strong { color: var(--gold); }
   <p style="margin-top:1rem;text-align:center;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例研究首页</a></p>
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 // ── WGS-84 → GCJ-02 (Mars coordinate) converter ──
 function wgs84ToGcj02(wgsLng, wgsLat) {

@@ -10,167 +10,208 @@
 html { font-size: 17px; scroll-behavior: smooth; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'DM Sans', -apple-system, sans-serif; background: #fbf8f0; color: #2d2420; line-height: 1.6; }
-h1, h2, h3, .hero-title { font-family: 'Playfair Display', Georgia, serif; }
+
+/* === 字体层级: 5级 === */
+h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; }
+.l1 { font-size: 2.8rem; font-weight: 800; line-height: 1.1; }          /* Hero 标题 */
+.l2 { font-size: 1.55rem; font-weight: 700; }                           /* 模块标题 */
+.l3 { font-size: 1.12rem; font-weight: 600; }                           /* 卡片/表头 */
+.l4 { font-size: 1rem; font-weight: 400; }                              /* 正文基准 */
+.l5 { font-size: 0.82rem; }                                             /* 辅助/注释 */
 .data-mono { font-family: 'DM Mono', 'SF Mono', monospace; }
-.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+
+/* === 滚动渐显 === */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* Hero */
+/* === Hero === */
 .hero { min-height: 100vh; background: linear-gradient(160deg, #1a0e08 0%, #3d1f0f 30%, #8b4513 60%, #d4763a 100%); color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden; }
 .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 60%, rgba(255,180,80,0.2) 0%, transparent 60%); }
-.hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 200px; background: linear-gradient(to top, rgba(251,248,240,1), transparent); }
+.hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 160px; background: linear-gradient(to top, rgba(251,248,240,1), transparent); }
 .hero-badge { font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.4); padding: 0.4rem 1.2rem; border-radius: 99px; margin-bottom: 2rem; z-index: 1; }
-.hero-title { font-size: clamp(3rem, 8vw, 6rem); font-weight: 800; line-height: 1.1; margin-bottom: 0.5rem; z-index: 1; }
-.hero-sub { font-size: 1.2rem; opacity: 0.85; font-weight: 400; margin-bottom: 3rem; z-index: 1; }
+.hero-title { z-index: 1; margin-bottom: 0.5rem; }
+.hero-sub { font-size: 1.12rem; opacity: 0.85; margin-bottom: 3rem; z-index: 1; }
 .hero-nums { display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center; z-index: 1; }
 .hero-num-item { text-align: center; }
-.hero-num-val { font-size: 2.8rem; font-weight: 800; font-family: 'DM Mono', monospace; line-height: 1; }
-.hero-num-label { font-size: 0.85rem; opacity: 0.75; margin-top: 0.3rem; }
+.hero-num-val { font-size: 2.5rem; font-weight: 800; font-family: 'DM Mono', monospace; line-height: 1; }
+.hero-num-label { font-size: 0.82rem; opacity: 0.75; margin-top: 0.3rem; }
 
-/* Sections */
-section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
-.section-title { font-size: 2.2rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; color: #3d1f0f; }
-.section-sub { text-align: center; color: #8b7355; margin-bottom: 3rem; font-size: 0.95rem; }
+/* === Sections === */
+section { max-width: 1040px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+.section-title { text-align: center; margin-bottom: 0.4rem; color: #3d1f0f; }
+.section-sub { text-align: center; color: #8b7355; margin-bottom: 2rem; font-size: 0.9rem; }
 
-/* Cards grid */
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-.card { background: #fff; border-radius: 16px; padding: 1.6rem; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.06); }
-.card-emoji { font-size: 2rem; margin-bottom: 0.6rem; }
-.card-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: #8b7355; margin-bottom: 0.4rem; }
-.card-val { font-size: 1.4rem; font-weight: 700; color: #3d1f0f; }
+/* === Cards === */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+.card { background: #fff; border-radius: 8px; padding: 1.2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+.card-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: #8b7355; margin-bottom: 0.3rem; }
+.card-value { font-weight: 700; color: #3d1f0f; }
 
-/* Tables */
-.data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
-.data-table th { background: #3d1f0f; color: #fff; padding: 0.9rem 1.2rem; text-align: left; font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; }
-.data-table td { padding: 0.8rem 1.2rem; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 0.9rem; }
+/* === Tables === */
+.data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.data-table th { background: #3d1f0f; color: #fff; padding: 0.7rem 1rem; text-align: left; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+.data-table td { padding: 0.65rem 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.9rem; }
 .data-table tr:last-child td { border-bottom: none; }
-.data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
+.data-table .num { font-family: 'DM Mono', monospace; }
 
-/* Timeline */
+/* === Timeline === */
 .timeline { position: relative; padding-left: 2.5rem; }
 .timeline::before { content: ''; position: absolute; left: 0.8rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #d4763a, #8b4513); }
-.tl-item { position: relative; margin-bottom: 2rem; }
-.tl-item::before { content: ''; position: absolute; left: -2.1rem; top: 0.4rem; width: 12px; height: 12px; border-radius: 50%; background: #d4763a; border: 3px solid #fbf8f0; box-shadow: 0 0 0 2px #d4763a; }
-.tl-year { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: #d4763a; font-weight: 700; }
-.tl-title { font-size: 1.1rem; font-weight: 700; color: #3d1f0f; }
-.tl-desc { font-size: 0.9rem; color: #6b5b4f; margin-top: 0.2rem; }
-.tl-cost { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: #8b4513; font-weight: 600; }
+.tl-item { position: relative; margin-bottom: 1.8rem; }
+.tl-item::before { content: ''; position: absolute; left: -2.1rem; top: 0.3rem; width: 12px; height: 12px; border-radius: 50%; background: #d4763a; border: 3px solid #fbf8f0; box-shadow: 0 0 0 2px #d4763a; }
+.tl-year { font-family: 'DM Mono', monospace; font-size: 0.82rem; color: #d4763a; font-weight: 700; }
+.tl-title { font-weight: 700; color: #3d1f0f; }
+.tl-desc { font-size: 0.88rem; color: #6b5b4f; margin-top: 0.15rem; }
+.tl-cost { font-family: 'DM Mono', monospace; font-size: 0.82rem; color: #8b4513; font-weight: 600; }
 
-/* Map */
-.map-container { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.05); margin-bottom: 2rem; }
+/* === Map === */
+.map-container { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 1.5rem; }
 .map-tabs { display: flex; border-bottom: 1px solid rgba(0,0,0,0.08); }
-.map-tab { flex: 1; padding: 0.8rem; text-align: center; cursor: pointer; font-size: 0.9rem; font-weight: 600; border: none; background: none; color: #8b7355; transition: all 0.2s; }
+.map-tab { flex: 1; padding: 0.6rem; text-align: center; cursor: pointer; font-size: 0.88rem; font-weight: 600; border: none; background: none; color: #8b7355; transition: color 0.2s; }
 .map-tab.active { color: #3d1f0f; border-bottom: 2px solid #d4763a; }
-.map-wrap { height: 450px; width: 100%; position: relative; }
+.map-wrap { height: 420px; width: 100%; position: relative; }
 .map-wrap .leaflet-container { height: 100%; width: 100%; }
-.map-fallback { display: none; position: absolute; inset: 0; align-items: center; justify-content: center; flex-direction: column; gap: 0.8rem; background: #f5f0e5; border-radius: 16px; text-align: center; z-index: 1000; }
-.map-fallback .icon { font-size: 2.5rem; }
-.map-fallback strong { font-size: 1rem; color: #3d1f0f; }
+.map-fallback { display: none; position: absolute; inset: 0; align-items: center; justify-content: center; flex-direction: column; gap: 0.6rem; background: #f5f0e5; border-radius: 8px; text-align: center; z-index: 1000; }
+.map-fallback strong { color: #3d1f0f; }
 .map-fallback span { font-size: 0.82rem; color: #8b7355; }
 .leaflet-div-icon { background: none; border: none; }
-.zone-marker { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 2px solid #fff; font-family: 'DM Sans', sans-serif; }
+.zone-marker { padding: 3px 9px; border-radius: 4px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 2px solid #fff; font-family: 'DM Sans', sans-serif; }
 
-/* SVG map */
-.svg-map-wrap { max-width: 100%; margin: 0 auto; background: #fff; border-radius: 16px; padding: 1rem; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
-.svg-map-wrap svg { width: 100%; height: auto; }
+/* === SVG map === */
+.svg-map-wrap { max-width: 100%; margin: 0 auto; background: #fff; border-radius: 8px; padding: 0.8rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
 
-/* Photo gallery */
-.photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-.photo-card { background: #fff; border-radius: 12px; padding: 1.2rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-.photo-card a { color: #d4763a; text-decoration: none; font-weight: 600; }
-.photo-emoji { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+/* === KPI === */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.8rem; }
+.kpi-card { background: linear-gradient(135deg, #3d1f0f, #5a2d16); color: #fff; border-radius: 8px; padding: 1.2rem; text-align: center; }
+.kpi-val { font-size: 2rem; font-family: 'DM Mono', monospace; font-weight: 800; }
+.kpi-label { font-size: 0.78rem; opacity: 0.75; margin-top: 0.2rem; }
 
-/* KPI */
-.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
-.kpi-card { background: linear-gradient(135deg, #3d1f0f, #5a2d16); color: #fff; border-radius: 16px; padding: 1.5rem; text-align: center; }
-.kpi-val { font-size: 2.2rem; font-family: 'DM Mono', monospace; font-weight: 800; }
-.kpi-label { font-size: 0.82rem; opacity: 0.75; margin-top: 0.3rem; }
-
-/* Footer */
-footer { background: #1a0e08; color: #c4a882; text-align: center; padding: 3rem 2rem; font-size: 0.85rem; }
-footer a { color: #d4763a; }
-
-/* Photo gallery */
-.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; }
-.gallery-card { background: #fff; border-radius: 14px; padding: 1.8rem 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.06); display: flex; flex-direction: column; align-items: center; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
-.gallery-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,0.1); }
-.gallery-card .g-icon { font-size: 2.6rem; margin-bottom: 0.7rem; line-height: 1; }
-.gallery-card h4 { font-size: 1rem; font-weight: 700; color: #3d1f0f; margin-bottom: 0.3rem; }
-.gallery-card .g-desc { font-size: 0.82rem; color: #8b7355; margin-bottom: 1rem; line-height: 1.45; }
-.gallery-card .g-link { display: inline-block; padding: 0.5rem 1.4rem; background: #d4763a; color: #fff; border-radius: 99px; text-decoration: none; font-weight: 600; font-size: 0.84rem; transition: background 0.2s; }
+/* === Gallery === */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; }
+.gallery-card { background: #fff; border-radius: 8px; padding: 1.5rem 1.2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
+.gallery-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+.gallery-card .g-icon { font-size: 2.2rem; margin-bottom: 0.5rem; line-height: 1; }
+.gallery-card h4 { font-weight: 700; color: #3d1f0f; margin-bottom: 0.2rem; }
+.gallery-card .g-desc { font-size: 0.82rem; color: #8b7355; margin-bottom: 0.8rem; line-height: 1.4; }
+.gallery-card .g-link { display: inline-block; padding: 0.4rem 1.2rem; background: #d4763a; color: #fff; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.82rem; transition: background 0.2s; }
 .gallery-card .g-link:hover { background: #b8551f; }
 
-/* Floating nav */
-.floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
-.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: #3d1f0f; }
-.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: #d4763a; color: #fff; }
+/* === Footer === */
+footer { background: #1a0e08; color: #c4a882; text-align: center; padding: 2.5rem 1.5rem; font-size: 0.85rem; }
+footer a { color: #d4763a; }
+
+/* === Floating nav === */
+.floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 50%; background: #fff; box-shadow: 0 1px 6px rgba(0,0,0,0.12); text-decoration: none; font-size: 1rem; transition: all 0.2s; color: #3d1f0f; }
+.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); background: #d4763a; color: #fff; }
 #back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
 #back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
 
 @media (max-width: 768px) {
-  section { padding: 2.5rem 1rem; }
+  section { padding: 2rem 1rem; }
   .hero-nums { gap: 1.5rem; }
-  .hero-num-val { font-size: 2rem; }
+  .hero-num-val { font-size: 1.8rem; }
   .card-grid { grid-template-columns: 1fr; }
+  .data-table { display: block; overflow-x: auto; }
 }
 </style>
 </head>
 <body>
 
-<!-- HERO -->
+<!-- 1. HERO -->
 <header class="hero">
   <div class="hero-badge">数据截至 2026 年 5 月</div>
-  <h1 class="hero-title">深圳欢乐谷</h1>
-  <p class="hero-sub">中国连锁主题公园第一品牌 · 都市娱乐新地标 · 25+年持续进化</p>
+  <h1 class="hero-title l1">深圳欢乐谷</h1>
+  <p class="hero-sub">中国连锁主题公园第一品牌 · 25+ 年持续进化</p>
   <div class="hero-nums">
     <div class="hero-num-item"><div class="hero-num-val">35</div><div class="hero-num-label">公顷占地面积</div></div>
     <div class="hero-num-item"><div class="hero-num-val">100+</div><div class="hero-num-label">游乐项目</div></div>
-    <div class="hero-num-item"><div class="hero-num-val">380万</div><div class="hero-num-label">2023年游客量</div></div>
+    <div class="hero-num-item"><div class="hero-num-val">380万</div><div class="hero-num-label">2023 年游客量</div></div>
     <div class="hero-num-item"><div class="hero-num-val">¥20亿</div><div class="hero-num-label">累计投资总额</div></div>
   </div>
 </header>
 
-<!-- 项目概览 -->
+<!-- 2. 项目概览 -->
 <section class="reveal">
-  <h2 class="section-title">项目概览</h2>
-  <p class="section-sub">中国首批国家5A级旅游景区，华侨城"旅游+地产"模式的开山之作</p>
+  <h2 class="section-title l2">项目概览</h2>
+  <p class="section-sub">中国首批 AAAAA 级景区，华侨城"旅游+地产"模式的开山之作</p>
   <div class="card-grid">
-    <div class="card"><div class="card-emoji">🎂</div><div class="card-title">开业时间</div><div class="card-val">1998年10月1日</div></div>
-    <div class="card"><div class="card-emoji">🏢</div><div class="card-title">开发商 / 运营商</div><div class="card-val">华侨城集团 (OCT Group)</div></div>
-    <div class="card"><div class="card-emoji">📍</div><div class="card-title">地理位置</div><div class="card-val">深圳市南山区侨城西街18号</div></div>
-    <div class="card"><div class="card-emoji">📐</div><div class="card-title">占地面积</div><div class="card-val">35 公顷（35万m²）</div></div>
-    <div class="card"><div class="card-emoji">👥</div><div class="card-title">日最大容量</div><div class="card-val">约 50,000 人次</div></div>
-    <div class="card"><div class="card-emoji">🎫</div><div class="card-title">成人全日票</div><div class="card-val">¥220 / 夜场 ¥110</div></div>
+    <div class="card"><div class="card-label">开业时间</div><div class="card-value l3">1998 年 10 月 1 日</div></div>
+    <div class="card"><div class="card-label">开发商 / 运营商</div><div class="card-value l3">华侨城集团 (OCT Group)</div></div>
+    <div class="card"><div class="card-label">地理位置</div><div class="card-value l3">深圳市南山区侨城西街 18 号</div></div>
+    <div class="card"><div class="card-label">占地面积</div><div class="card-value l3">35 公顷（35 万 m²）</div></div>
+    <div class="card"><div class="card-label">日最大容量</div><div class="card-value l3">约 50,000 人次</div></div>
+    <div class="card"><div class="card-label">成人全日票</div><div class="card-value l3">¥220 / 夜场 ¥110</div></div>
   </div>
 </section>
 
-<!-- 设计与建设 -->
+<!-- 3. 投资与建设时序 -->
 <section class="reveal">
-  <h2 class="section-title">设计与建设</h2>
+  <h2 class="section-title l2">投资与建设时序</h2>
+  <p class="section-sub">六期滚动开发，累计投资 ¥20 亿</p>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-year">1998 年 10 月</div><div class="tl-title">一期开园</div><div class="tl-desc">17 公顷，4 大主题区：卡通城 · 冒险山 · 玛雅海滩 · 欢乐岛</div><div class="tl-cost">投资 ¥4 亿</div></div>
+    <div class="tl-item"><div class="tl-year">2002 年 5 月</div><div class="tl-title">二期扩建</div><div class="tl-desc">新增 18 公顷，金矿区 · 飓风湾区 · 香格里拉森林 · 阳光海岸，年入园突破 230 万人次</div><div class="tl-cost">新增 ¥4 亿</div></div>
+    <div class="tl-item"><div class="tl-year">2005 年 5 月</div><div class="tl-title">三期"欢乐时光"</div><div class="tl-desc">5 公顷，8 大设施：UFO · 发现者 · 激光战车 · 四维影院</div><div class="tl-cost">投资 ¥1.8 亿</div></div>
+    <div class="tl-item"><div class="tl-year">2008 年</div><div class="tl-title">魔幻城堡</div><div class="tl-desc">4 公顷亲子主题区，20 个亲子项目</div><div class="tl-cost">投资 ¥2 亿</div></div>
+    <div class="tl-item"><div class="tl-year">2010 年</div><div class="tl-title">五期升级</div><div class="tl-desc">香格里拉 · 雪域开放，引入弹射过山车"雪域雄鹰"，玛雅水公园升级</div><div class="tl-cost">投资 ¥3 亿</div></div>
+    <div class="tl-item"><div class="tl-year">2016 年</div><div class="tl-title">飓风湾升级</div><div class="tl-desc">XD 动感影院 · 黑暗骑乘剧场，沉浸式体验升级</div><div class="tl-cost">投资 ¥3 亿+</div></div>
+    <div class="tl-item"><div class="tl-year">2019 年</div><div class="tl-title">六期全面升级</div><div class="tl-desc">西部矿镇 · 玛雅水公园 · 阳光海岸三大区改造，"金涛骇浪""环翼飞车"</div><div class="tl-cost">投资 ¥5 亿+</div></div>
+    <div class="tl-item"><div class="tl-year">2022 – 2024 年</div><div class="tl-title">冒险山 IP 化改造</div><div class="tl-desc">"迷你世界·冒险山"主题区，4 大分区 + 6 设施 + 15 景观</div><div class="tl-cost">投资未公开</div></div>
+  </div>
+</section>
+
+<!-- 4. 运营指标 -->
+<section class="reveal">
+  <h2 class="section-title l2">运营指标</h2>
+  <p class="section-sub">城市型主题公园的运营标杆</p>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kpi-val">380 万</div><div class="kpi-label">2023 年游客量（人次）</div></div>
+    <div class="kpi-card"><div class="kpi-val">68%</div><div class="kpi-label">本地游客占比</div></div>
+    <div class="kpi-card"><div class="kpi-val">¥220</div><div class="kpi-label">成人全日票价</div></div>
+    <div class="kpi-card"><div class="kpi-val">8,081 万</div><div class="kpi-label">华侨城 2024 全系游客量</div></div>
+    <div class="kpi-card"><div class="kpi-val">¥272.99 亿</div><div class="kpi-label">华侨城 2024 文旅营收</div></div>
+    <div class="kpi-card"><div class="kpi-val">14.3%</div><div class="kpi-label">2024 文旅板块毛利率</div></div>
+  </div>
+
+  <h3 style="margin:2rem 0 0.8rem;color:#3d1f0f;" class="l3">母公司财务概要（华侨城 A · 000069 · 2024 年报）</h3>
+  <table class="data-table">
+    <thead><tr><th>指标</th><th>2024 年</th><th>同比</th></tr></thead>
+    <tbody>
+      <tr><td>总营收</td><td class="num">¥544.07 亿</td><td class="num">↓ 2.4%</td></tr>
+      <tr><td>文旅板块收入</td><td class="num">¥272.99 亿</td><td class="num">↓ 13.0%</td></tr>
+      <tr><td>全系接待游客</td><td class="num">8,081 万人次</td><td class="num">↓ 13.7%</td></tr>
+      <tr><td>归母净利润</td><td class="num">-¥86.62 亿</td><td class="num">亏损扩大 33.4%</td></tr>
+      <tr><td>经营现金流</td><td class="num">¥53.62 亿</td><td class="num">↑ 56.7%</td></tr>
+      <tr><td>在管主题公园</td><td class="num">25 座</td><td class="num">遍及 13 城</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin:2rem 0 0.8rem;color:#3d1f0f;" class="l3">同类项目对比</h3>
+  <table class="data-table">
+    <thead><tr><th>项目</th><th>城市</th><th>开业</th><th>面积（公顷）</th><th>年游客（万）</th><th>票价（¥）</th></tr></thead>
+    <tbody>
+      <tr><td><strong>深圳欢乐谷</strong></td><td>深圳</td><td class="num">1998</td><td class="num">35</td><td class="num">380</td><td class="num">220</td></tr>
+      <tr><td>北京欢乐谷</td><td>北京</td><td class="num">2006</td><td class="num">56</td><td class="num">~350</td><td class="num">299</td></tr>
+      <tr><td>上海迪士尼</td><td>上海</td><td class="num">2016</td><td class="num">390</td><td class="num">1,200+</td><td class="num">475 – 799</td></tr>
+      <tr><td>北京环球影城</td><td>北京</td><td class="num">2021</td><td class="num">400</td><td class="num">~900</td><td class="num">528 – 748</td></tr>
+      <tr><td>广州长隆欢乐世界</td><td>广州</td><td class="num">2006</td><td class="num">100+</td><td class="num">~350</td><td class="num">250</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 5. 设计与建设 -->
+<section class="reveal">
+  <h2 class="section-title l2">设计与建设</h2>
   <p class="section-sub">本土主题公园设计与建造的标杆案例</p>
   <div class="card-grid">
-    <div class="card">
-      <div class="card-emoji">🏛️</div>
-      <div class="card-title">概念规划</div>
-      <div class="card-val" style="font-size:1rem;">华侨城文旅研究院 + 加拿大Forrec设计公司</div>
-    </div>
-    <div class="card">
-      <div class="card-emoji">🏗️</div>
-      <div class="card-title">施工总包</div>
-      <div class="card-val" style="font-size:1rem;">华侨城建设集团 / 中建系统</div>
-    </div>
-    <div class="card">
-      <div class="card-emoji">🎢</div>
-      <div class="card-title">设备制造</div>
-      <div class="card-val" style="font-size:1rem;">B&M · Intamin · Mack Rides · 金马游乐 · 中山金信</div>
-    </div>
-    <div class="card">
-      <div class="card-emoji">🎨</div>
-      <div class="card-title">主题包装</div>
-      <div class="card-val" style="font-size:1rem;">中冶建研院 · PCL · 深圳华汇设计</div>
-    </div>
+    <div class="card"><div class="card-label">概念规划</div><div class="card-value">华侨城文旅研究院 + 加拿大 Forrec 设计公司</div></div>
+    <div class="card"><div class="card-label">施工总包</div><div class="card-value">华侨城建设集团 / 中建系统</div></div>
+    <div class="card"><div class="card-label">设备制造</div><div class="card-value">B&M · Intamin · Mack Rides · 金马游乐 · 中山金信</div></div>
+    <div class="card"><div class="card-label">主题包装</div><div class="card-value">中冶建研院 · PCL · 深圳华汇设计</div></div>
   </div>
-  <table class="data-table" style="margin-top:1.5rem;">
+  <table class="data-table" style="margin-top:1rem;">
     <thead><tr><th>供应商类别</th><th>公司名称</th><th>供应内容</th></tr></thead>
     <tbody>
       <tr><td>骑乘设备</td><td>Bolliger & Mabillard (B&M)</td><td>悬挂式过山车（雪山飞龙）</td></tr>
@@ -178,251 +219,130 @@ footer a { color: #d4763a; }
       <tr><td>骑乘设备</td><td>中山金马游乐</td><td>矿山车 · 大摆锤 · 多类中型设备</td></tr>
       <tr><td>主题包装</td><td>中冶建筑研究总院</td><td>主题场景施工与包装</td></tr>
       <tr><td>主题包装</td><td>PCL (Pacific Coast Leisure)</td><td>西部矿镇等主题区包装</td></tr>
-      <tr><td>智能化</td><td>华侨城文旅科技</td><td>AR/VR骑乘 · 数字化运营系统</td></tr>
+      <tr><td>智能化</td><td>华侨城文旅科技</td><td>AR / VR 骑乘 · 数字化运营系统</td></tr>
       <tr><td>景观施工</td><td>普邦园林 · 铁汉生态</td><td>园区景观绿化工程</td></tr>
     </tbody>
   </table>
 </section>
 
-<!-- 技术指标总表 -->
+<!-- 6. 技术指标总表 -->
 <section class="reveal">
-  <h2 class="section-title">技术指标总表</h2>
-  <p class="section-sub">一站式数据速查</p>
+  <h2 class="section-title l2">技术指标总表</h2>
+  <p class="section-sub">基础信息 · 设施 · 规模 · 配套 一站式速查</p>
   <table class="data-table">
-    <thead><tr><th>指标</th><th>数值</th><th>备注</th></tr></thead>
+    <thead><tr><th>类别</th><th>指标</th><th>数据</th><th>备注</th></tr></thead>
     <tbody>
-      <tr><td>总占地面积</td><td class="num">35 公顷</td><td>一期17ha + 二期18ha</td></tr>
-      <tr><td>累计总投资</td><td class="num">¥20 亿</td><td>6期滚动开发</td></tr>
-      <tr><td>主题分区</td><td class="num">9 个</td><td>西班牙广场不计入游乐区</td></tr>
-      <tr><td>游乐项目总数</td><td class="num">100+</td><td>含骑乘·演艺·互动·水上游乐</td></tr>
-      <tr><td>过山车数量</td><td class="num">6 台</td><td>含悬挂·弹射·矿山·W型水花·环翼</td></tr>
-      <tr><td>水公园面积</td><td class="num">约 3 公顷</td><td>玛雅水公园，5-10月开放</td></tr>
-      <tr><td>停车场容量</td><td class="num">约 3,000 车位</td><td>含地面 + 地下</td></tr>
-      <tr><td>2023年游客量</td><td class="num">380 万人次</td><td>AECOM/TEA 全球第24位</td></tr>
-      <tr><td>景区等级</td><td class="num">AAAAA</td><td>首批国家级</td></tr>
-      <tr><td>累计接待游客</td><td class="num">6,000万+ 人次</td><td>截至2021年</td></tr>
+      <tr><td>基础</td><td>总占地面积</td><td class="num">35 公顷</td><td>一期 17 ha + 二期 18 ha</td></tr>
+      <tr><td>基础</td><td>累计总投资</td><td class="num">¥20 亿</td><td>6 期滚动开发</td></tr>
+      <tr><td>基础</td><td>主题分区</td><td class="num">9 个</td><td>西班牙广场不计入游乐区</td></tr>
+      <tr><td>基础</td><td>景区等级</td><td class="num">AAAAA</td><td>首批国家级</td></tr>
+      <tr><td>设施</td><td>游乐项目总数</td><td class="num">100+</td><td>含骑乘 · 演艺 · 互动 · 水上游乐</td></tr>
+      <tr><td>设施</td><td>过山车数量</td><td class="num">6 台</td><td>悬挂 · 弹射 · 矿山 · W 型水花 · 环翼</td></tr>
+      <tr><td>设施</td><td>过山车最高时速</td><td class="num">135 km/h</td><td>雪域雄鹰（弹射式）</td></tr>
+      <tr><td>设施</td><td>过山车最大落差</td><td class="num">60 m</td><td>雪域雄鹰</td></tr>
+      <tr><td>设施</td><td>弹射加速</td><td class="num">2 秒至 135 km/h</td><td>雪域雄鹰</td></tr>
+      <tr><td>设施</td><td>最高蹦极跳台</td><td class="num">55 m</td><td>阳光海岸</td></tr>
+      <tr><td>设施</td><td>大摆锤最大摆角</td><td class="num">240°</td><td>发现者</td></tr>
+      <tr><td>规模</td><td>总建筑面积</td><td class="num">约 8 万 m²</td><td>估算</td></tr>
+      <tr><td>规模</td><td>主题建筑数量</td><td class="num">60+ 栋</td><td></td></tr>
+      <tr><td>规模</td><td>绿化覆盖率</td><td class="num">约 40%</td><td></td></tr>
+      <tr><td>规模</td><td>水域面积</td><td class="num">约 2 公顷</td><td></td></tr>
+      <tr><td>运营</td><td>2023 年游客量</td><td class="num">380 万人次</td><td>AECOM / TEA 全球第 24 位</td></tr>
+      <tr><td>运营</td><td>累计接待游客</td><td class="num">6,000 万+ 人次</td><td>截至 2021 年</td></tr>
+      <tr><td>运营</td><td>停车场容量</td><td class="num">约 3,000 车位</td><td>含地面 + 地下</td></tr>
+      <tr><td>配套</td><td>主题餐厅 / 小吃亭</td><td class="num">20+</td><td></td></tr>
+      <tr><td>配套</td><td>主题商店</td><td class="num">15+</td><td></td></tr>
+      <tr><td>配套</td><td>玛雅水公园面积</td><td class="num">约 3 公顷</td><td>5 – 10 月开放</td></tr>
     </tbody>
   </table>
 </section>
 
-<!-- 空间布局 -->
+<!-- 7. 空间布局 -->
 <section>
   <div class="reveal" style="text-align:center;">
-    <h2 class="section-title">空间布局与功能分区</h2>
+    <h2 class="section-title l2">空间布局与功能分区</h2>
     <p class="section-sub">九大主题区 · 环线组织 + 树状串联</p>
   </div>
 
   <div class="map-container">
     <div class="map-tabs">
-      <button class="map-tab active" onclick="switchMap('street')">街道图</button>
-      <button class="map-tab" onclick="switchMap('satellite')">卫星图</button>
+      <button class="map-tab" onclick="switchMap('street')">街道图</button>
+      <button class="map-tab active" onclick="switchMap('satellite')">卫星图</button>
     </div>
     <div id="parkmap" class="map-wrap"></div>
     <div id="map-fallback" class="map-fallback">
-      <span class="icon">🗺️</span>
+      <span style="font-size:2rem;">🗺️</span>
       <strong>地图瓦片加载超时</strong>
-      <span>请检查网络连接后刷新页面 · 或尝试切换街道图/卫星图</span>
+      <span>请检查网络连接后刷新页面 · 或尝试切换街道图 / 卫星图</span>
     </div>
   </div>
 
-  <!-- SVG 参考示意图 -->
   <div class="svg-map-wrap">
     <svg viewBox="0 0 1000 850" xmlns="http://www.w3.org/2000/svg">
-      <!-- Park boundary -->
-      <rect x="50" y="50" width="900" height="750" rx="30" fill="#f5eed8" stroke="#3d1f0f" stroke-width="3"/>
-      <!-- North arrow -->
-      <g transform="translate(920,80)"><polygon points="0,30 8,0 16,30 8,22" fill="#3d1f0f"/><text x="8" y="45" text-anchor="middle" font-size="11" font-family="DM Sans">N</text></g>
-      <!-- Entry at bottom-center -->
-      <rect x="380" y="720" width="240" height="70" rx="12" fill="#c0392b" opacity="0.9" stroke="#fff" stroke-width="2.5"/>
-      <text x="500" y="758" text-anchor="middle" fill="#fff" font-size="14" font-weight="700" font-family="DM Sans">西班牙广场 (入口)</text>
-      <!-- Zones -->
-      <rect x="380" y="590" width="240" height="125" rx="10" fill="#e67e22" opacity="0.85" stroke="#fff" stroke-width="2.5"/>
+      <rect x="50" y="50" width="900" height="750" rx="20" fill="#f5eed8" stroke="#3d1f0f" stroke-width="2.5"/>
+      <g transform="translate(920,80)"><polygon points="0,30 8,0 16,30 8,22" fill="#3d1f0f"/><text x="8" y="45" text-anchor="middle" font-size="10" font-family="DM Sans">N</text></g>
+      <rect x="380" y="720" width="240" height="70" rx="10" fill="#c0392b" opacity="0.9" stroke="#fff" stroke-width="2"/>
+      <text x="500" y="758" text-anchor="middle" fill="#fff" font-size="13" font-weight="700" font-family="DM Sans">西班牙广场（入口）</text>
+      <rect x="380" y="590" width="240" height="125" rx="10" fill="#e67e22" opacity="0.85" stroke="#fff" stroke-width="2"/>
       <text x="500" y="645" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">欢乐时光</text>
-      <rect x="50" y="530" width="300" height="160" rx="10" fill="#8e44ad" opacity="0.85" stroke="#fff" stroke-width="2.5"/>
-      <text x="200" y="600" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">魔幻城堡</text>
-      <text x="200" y="620" text-anchor="middle" fill="#fff" font-size="10" font-family="DM Sans">亲子·20项目</text>
-      <rect x="50" y="310" width="300" height="210" rx="10" fill="#27ae60" opacity="0.85" stroke="#fff" stroke-width="2.5"/>
-      <text x="200" y="400" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">冒险山</text>
-      <text x="200" y="420" text-anchor="middle" fill="#fff" font-size="10" font-family="DM Sans">迷你世界·2022改造</text>
-      <rect x="50" y="60" width="300" height="240" rx="10" fill="#c0392b" opacity="0.85" stroke="#fff" stroke-width="2.5"/>
-      <text x="200" y="150" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">西部矿镇（金矿镇）</text>
-      <text x="200" y="170" text-anchor="middle" fill="#fff" font-size="10" font-family="DM Sans">淘金风·7项目·矿山车</text>
-      <rect x="380" y="120" width="260" height="200" rx="10" fill="#2980b9" opacity="0.85" stroke="#fff" stroke-width="2.5"/>
-      <text x="510" y="200" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">飓风湾</text>
-      <text x="510" y="220" text-anchor="middle" fill="#fff" font-size="10" font-family="DM Sans">加勒比风·4项目</text>
-      <rect x="380" y="330" width="260" height="180" rx="10" fill="#d4a017" opacity="0.85" stroke="#fff" stroke-width="2.5"/>
-      <text x="510" y="400" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">阳光海岸</text>
-      <text x="510" y="420" text-anchor="middle" fill="#fff" font-size="10" font-family="DM Sans">海滨休闲·6项目</text>
-      <rect x="660" y="60" width="290" height="400" rx="10" fill="#1a5276" opacity="0.85" stroke="#fff" stroke-width="2.5"/>
-      <text x="805" y="240" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">香格里拉</text>
-      <text x="805" y="260" text-anchor="middle" fill="#fff" font-size="10" font-family="DM Sans">核心刺激区·10项目</text>
-      <text x="805" y="280" text-anchor="middle" fill="#fff" font-size="10" font-family="DM Sans">雪域雄鹰·雪山飞龙</text>
-      <rect x="660" y="500" width="290" height="270" rx="10" fill="#16a085" opacity="0.85" stroke="#fff" stroke-width="2.5"/>
-      <text x="805" y="620" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">玛雅水公园</text>
-      <text x="805" y="640" text-anchor="middle" fill="#fff" font-size="10" font-family="DM Sans">13项目·5-10月开放</text>
+      <rect x="50" y="530" width="300" height="160" rx="10" fill="#8e44ad" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="200" y="600" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">魔幻城堡</text><text x="200" y="618" text-anchor="middle" fill="#fff" font-size="9" font-family="DM Sans">亲子 · 20 项目</text>
+      <rect x="50" y="310" width="300" height="210" rx="10" fill="#27ae60" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="200" y="400" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">冒险山</text><text x="200" y="418" text-anchor="middle" fill="#fff" font-size="9" font-family="DM Sans">迷你世界 · 2022 改造</text>
+      <rect x="50" y="60" width="300" height="240" rx="10" fill="#c0392b" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="200" y="150" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">西部矿镇（金矿镇）</text><text x="200" y="168" text-anchor="middle" fill="#fff" font-size="9" font-family="DM Sans">淘金风 · 7 项目 · 矿山车</text>
+      <rect x="380" y="120" width="260" height="200" rx="10" fill="#2980b9" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="510" y="200" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">飓风湾</text><text x="510" y="218" text-anchor="middle" fill="#fff" font-size="9" font-family="DM Sans">加勒比风 · 4 项目</text>
+      <rect x="380" y="330" width="260" height="180" rx="10" fill="#d4a017" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="510" y="400" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">阳光海岸</text><text x="510" y="418" text-anchor="middle" fill="#fff" font-size="9" font-family="DM Sans">海滨休闲 · 6 项目</text>
+      <rect x="660" y="60" width="290" height="400" rx="10" fill="#1a5276" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="805" y="240" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">香格里拉</text><text x="805" y="258" text-anchor="middle" fill="#fff" font-size="9" font-family="DM Sans">核心刺激区 · 10 项目</text><text x="805" y="274" text-anchor="middle" fill="#fff" font-size="9" font-family="DM Sans">雪域雄鹰 · 雪山飞龙</text>
+      <rect x="660" y="500" width="290" height="270" rx="10" fill="#16a085" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <text x="805" y="620" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">玛雅水公园</text><text x="805" y="638" text-anchor="middle" fill="#fff" font-size="9" font-family="DM Sans">13 项目 · 5 – 10 月开放</text>
     </svg>
-    <p style="text-align:center;color:#8b7355;font-size:0.78rem;margin-top:0.6rem;">示意图，基于官方地图与卫星影像 | 北向上</p>
+    <p style="text-align:center;color:#8b7355;font-size:0.78rem;margin-top:0.5rem;">示意图，基于官方地图与卫星影像 | 北向上</p>
   </div>
 
-  <!-- 分区详解 -->
-  <div class="card-grid" style="margin-top:2rem;">
-    <div class="card"><div class="card-emoji">🏰</div><div class="card-title">西班牙广场</div><div class="card-val" style="font-size:1rem;">入口综合服务区，售票·客服·餐饮·购物·欢乐干线站</div></div>
-    <div class="card"><div class="card-emoji">🎡</div><div class="card-title">欢乐时光</div><div class="card-val" style="font-size:1rem;">12项目 · 19世纪欧洲小镇 · UFO · 大摆锤 · 四维影院</div></div>
-    <div class="card"><div class="card-emoji">🏰</div><div class="card-title">魔幻城堡</div><div class="card-val" style="font-size:1rem;">20项目 · 亲子 · 亚洲首创魔幻主题空间</div></div>
-    <div class="card"><div class="card-emoji">🗻</div><div class="card-title">冒险山</div><div class="card-val" style="font-size:1rem;">3.5万㎡ · 迷你世界IP · 2022年改建 · 6设施+15景观</div></div>
-    <div class="card"><div class="card-emoji">⛏️</div><div class="card-title">西部矿镇</div><div class="card-val" style="font-size:1rem;">7项目 · 金涛骇浪W型过山车 · 环翼飞车 · 矿山车</div></div>
-    <div class="card"><div class="card-emoji">🌊</div><div class="card-title">飓风湾</div><div class="card-val" style="font-size:1rem;">4项目 · 激流勇进世界最高 · 完美风暴 · 7D互动剧场</div></div>
-    <div class="card"><div class="card-emoji">☀️</div><div class="card-title">阳光海岸</div><div class="card-val" style="font-size:1rem;">6项目 · 沙滩 · 55m蹦极 · 游船 · 佛陀树</div></div>
-    <div class="card"><div class="card-emoji">🏔️</div><div class="card-title">香格里拉</div><div class="card-val" style="font-size:1rem;">10项目 · 雪域雄鹰弹射过山车 · 雪山飞龙悬挂式 · 藏文化主题</div></div>
-    <div class="card"><div class="card-emoji">🏛️</div><div class="card-title">玛雅水公园</div><div class="card-val" style="font-size:1rem;">13项目 · 古玛雅文明 · 5-10月开放 · 雨林巨蟒水上过山车</div></div>
-  </div>
-</section>
-
-<!-- 园区实景图集 -->
-<section class="reveal">
-  <h2 class="section-title">园区实景图集</h2>
-  <p class="section-sub">各主题区实景照片参考</p>
-  <div class="photo-grid">
-    <div class="photo-card"><span class="photo-emoji">🏰</span><a href="https://you.ctrip.com/photos/sight/shenzhen26/r13720.html" target="_blank">西班牙广场 & 欢乐时光</a><br><span style="font-size:0.75rem;color:#8b7355;">携程图库</span></div>
-    <div class="photo-card"><span class="photo-emoji">🎢</span><a href="https://www.bilibili.com/video/BV1cb4y1q7kb/" target="_blank">雪域雄鹰过山车</a><br><span style="font-size:0.75rem;color:#8b7355;">B站高清实拍</span></div>
-    <div class="photo-card"><span class="photo-emoji">⛏️</span><a href="https://www.sohu.com/a/450532683_116840" target="_blank">西部矿镇航拍</a><br><span style="font-size:0.75rem;color:#8b7355;">搜狐航拍图集</span></div>
-    <div class="photo-card"><span class="photo-emoji">🌊</span><a href="https://blog.sina.com.cn/s/blog_4073a1a301017as0.html" target="_blank">飓风湾 & 激流勇进</a><br><span style="font-size:0.75rem;color:#8b7355;">新浪博客游记</span></div>
-    <div class="photo-card"><span class="photo-emoji">🏛️</span><a href="https://www.douyin.com/search/深圳欢乐谷玛雅水公园" target="_blank">玛雅水公园</a><br><span style="font-size:0.75rem;color:#8b7355;">抖音实拍合集</span></div>
-    <div class="photo-card"><span class="photo-emoji">🌃</span><a href="https://www.xiaohongshu.com/search_result/深圳欢乐谷夜景" target="_blank">欢乐光年夜景</a><br><span style="font-size:0.75rem;color:#8b7355;">小红书夜景打卡</span></div>
+  <div class="card-grid" style="margin-top:1rem;">
+    <div class="card"><div class="card-label">西班牙广场</div><div class="card-value">入口综合服务区，售票 · 客服 · 餐饮 · 购物 · 欢乐干线站</div></div>
+    <div class="card"><div class="card-label">欢乐时光</div><div class="card-value">12 项目 · 19 世纪欧洲小镇 · UFO · 大摆锤 · 四维影院</div></div>
+    <div class="card"><div class="card-label">魔幻城堡</div><div class="card-value">20 项目 · 亲子 · 亚洲首创魔幻主题空间</div></div>
+    <div class="card"><div class="card-label">冒险山</div><div class="card-value">3.5 万 m² · 迷你世界 IP · 2022 改建 · 6 设施 + 15 景观</div></div>
+    <div class="card"><div class="card-label">西部矿镇</div><div class="card-value">7 项目 · 金涛骇浪 W 型过山车 · 环翼飞车 · 矿山车</div></div>
+    <div class="card"><div class="card-label">飓风湾</div><div class="card-value">4 项目 · 激流勇进世界最高 · 完美风暴 · 7D 互动剧场</div></div>
+    <div class="card"><div class="card-label">阳光海岸</div><div class="card-value">6 项目 · 沙滩 · 55 m 蹦极 · 游船 · 佛陀树</div></div>
+    <div class="card"><div class="card-label">香格里拉</div><div class="card-value">10 项目 · 雪域雄鹰弹射过山车 · 雪山飞龙悬挂式 · 藏文化主题</div></div>
+    <div class="card"><div class="card-label">玛雅水公园</div><div class="card-value">13 项目 · 古玛雅文明 · 5 – 10 月开放 · 雨林巨蟒水上过山车</div></div>
   </div>
 </section>
 
-<!-- 投资与建设时序 -->
+<!-- 8. 配套设施 -->
 <section class="reveal">
-  <h2 class="section-title">投资与建设时序</h2>
-  <p class="section-sub">六期滚动开发，从4亿到20亿的持续进化</p>
-  <div class="timeline">
-    <div class="tl-item"><div class="tl-year">1998年10月</div><div class="tl-title">一期开园</div><div class="tl-desc">占地17公顷，4大主题区：卡通城·冒险山·玛雅海滩·欢乐岛</div><div class="tl-cost">投资 ¥4亿</div></div>
-    <div class="tl-item"><div class="tl-year">2002年5月</div><div class="tl-title">二期扩建</div><div class="tl-desc">新增18公顷，引入金矿区·飓风湾区·香格里拉森林·阳光海岸，年入园突破230万人次</div><div class="tl-cost">新增投资 ¥4亿</div></div>
-    <div class="tl-item"><div class="tl-year">2005年5月</div><div class="tl-title">三期"欢乐时光"</div><div class="tl-desc">5公顷新增面积，8大新设施：UFO·发现者·激光战车·四维影院等</div><div class="tl-cost">投资 ¥1.8亿</div></div>
-    <div class="tl-item"><div class="tl-year">2008年</div><div class="tl-title">魔幻城堡</div><div class="tl-desc">4公顷亲子主题区：梦幻岛·魔法森林·魔幻城堡，20个亲子项目</div><div class="tl-cost">投资 ¥2亿</div></div>
-    <div class="tl-item"><div class="tl-year">2010年</div><div class="tl-title">五期香格里拉升级</div><div class="tl-desc">香格里拉·雪域 + 玛雅水公园升级，引入¥1.6亿弹射过山车"雪域雄鹰"</div><div class="tl-cost">投资 ¥3亿</div></div>
-    <div class="tl-item"><div class="tl-year">2016年</div><div class="tl-title">飓风湾全新升级</div><div class="tl-desc">XD动感影院·黑暗骑乘剧场，沉浸式体验升级</div><div class="tl-cost">投资 ¥3亿+</div></div>
-    <div class="tl-item"><div class="tl-year">2019年</div><div class="tl-title">六期全面升级</div><div class="tl-desc">西部矿镇·玛雅水公园·阳光海岸三大区改造，引入"金涛骇浪""环翼飞车"</div><div class="tl-cost">投资 ¥5亿+</div></div>
-    <div class="tl-item"><div class="tl-year">2022-2024年</div><div class="tl-title">冒险山IP化改造</div><div class="tl-desc">"迷你世界·冒险山"主题区，4大分区+6设施+15景观</div><div class="tl-cost">投资数据未公开</div></div>
-  </div>
-</section>
-
-<!-- 运营指标 -->
-<section class="reveal">
-  <h2 class="section-title">运营指标</h2>
-  <p class="section-sub">城市型主题公园的运营标杆</p>
-  <div class="kpi-grid">
-    <div class="kpi-card"><div class="kpi-val">380万</div><div class="kpi-label">2023年游客量（人次）</div></div>
-    <div class="kpi-card"><div class="kpi-val">68%</div><div class="kpi-label">本地游客占比</div></div>
-    <div class="kpi-card"><div class="kpi-val">¥220</div><div class="kpi-label">成人全日票价</div></div>
-    <div class="kpi-card"><div class="kpi-val">8,081万</div><div class="kpi-label">华侨城2024全系游客量</div></div>
-    <div class="kpi-card"><div class="kpi-val">¥272.99亿</div><div class="kpi-label">华侨城2024文旅营收</div></div>
-    <div class="kpi-card"><div class="kpi-val">14.3%</div><div class="kpi-label">2024文旅板块毛利率</div></div>
-  </div>
-
-  <h3 style="margin-top:2.5rem;margin-bottom:1rem;color:#3d1f0f;">母公司财务概要 (华侨城A·000069·2024年报)</h3>
-  <table class="data-table">
-    <thead><tr><th>指标</th><th>2024年</th><th>同比</th></tr></thead>
-    <tbody>
-      <tr><td>总营收</td><td class="num">¥544.07亿</td><td class="num">↓2.4%</td></tr>
-      <tr><td>文旅板块收入</td><td class="num">¥272.99亿</td><td class="num">↓13.0%</td></tr>
-      <tr><td>全系接待游客</td><td class="num">8,081万人次</td><td class="num">↓13.7%</td></tr>
-      <tr><td>归母净利润</td><td class="num">-¥86.62亿</td><td class="num">亏损扩大33.4%</td></tr>
-      <tr><td>经营现金流</td><td class="num">¥53.62亿</td><td class="num">↑56.7%</td></tr>
-      <tr><td>在管主题公园</td><td class="num">25座</td><td class="num">遍及13城</td></tr>
-    </tbody>
-  </table>
-
-  <h3 style="margin-top:2.5rem;margin-bottom:1rem;color:#3d1f0f;">同类项目对比</h3>
-  <table class="data-table">
-    <thead><tr><th>项目</th><th>城市</th><th>开业</th><th>面积(公顷)</th><th>年游客(万)</th><th>票价(¥)</th></tr></thead>
-    <tbody>
-      <tr><td><strong>深圳欢乐谷</strong></td><td>深圳</td><td class="num">1998</td><td class="num">35</td><td class="num">380</td><td class="num">220</td></tr>
-      <tr><td>北京欢乐谷</td><td>北京</td><td class="num">2006</td><td class="num">56</td><td class="num">~350</td><td class="num">299</td></tr>
-      <tr><td>上海迪士尼</td><td>上海</td><td class="num">2016</td><td class="num">390</td><td class="num">1,200+</td><td class="num">475-799</td></tr>
-      <tr><td>北京环球影城</td><td>北京</td><td class="num">2021</td><td class="num">400</td><td class="num">~900</td><td class="num">528-748</td></tr>
-      <tr><td>广州长隆欢乐世界</td><td>广州</td><td class="num">2006</td><td class="num">100+</td><td class="num">~350</td><td class="num">250</td></tr>
-    </tbody>
-  </table>
-</section>
-
-<!-- 核心技术与规模指标 -->
-<section class="reveal">
-  <h2 class="section-title">核心技术与规模指标</h2>
-  <p class="section-sub">分类参数汇总</p>
-  <table class="data-table">
-    <thead><tr><th>类别</th><th>指标</th><th>数据</th></tr></thead>
-    <tbody>
-      <tr><td>🎢 设施</td><td>过山车最高时速</td><td class="num">135 km/h (雪域雄鹰)</td></tr>
-      <tr><td>🎢 设施</td><td>过山车最大落差</td><td class="num">60 m (雪域雄鹰)</td></tr>
-      <tr><td>🎢 设施</td><td>弹射加速时间</td><td class="num">2 秒 至135km/h</td></tr>
-      <tr><td>🎢 设施</td><td>最高蹦极跳台</td><td class="num">55 m (阳光海岸)</td></tr>
-      <tr><td>🎢 设施</td><td>大摆锤最大摆角</td><td class="num">240° (发现者)</td></tr>
-      <tr><td>🏗️ 建筑</td><td>总建筑面积</td><td class="num">约 8万 m² (估算)</td></tr>
-      <tr><td>🏗️ 建筑</td><td>主题建筑数量</td><td class="num">60+ 栋</td></tr>
-      <tr><td>🌳 景观</td><td>绿化覆盖率</td><td class="num">约 40%</td></tr>
-      <tr><td>🌳 景观</td><td>水域面积</td><td class="num">约 2 公顷</td></tr>
-      <tr><td>🏪 商业</td><td>主题餐厅/小吃亭</td><td class="num">20+</td></tr>
-      <tr><td>🏪 商业</td><td>主题商店</td><td class="num">15+</td></tr>
-    </tbody>
-  </table>
-</section>
-
-<!-- 配套设施 -->
-<section class="reveal">
-  <h2 class="section-title">配套设施体系</h2>
+  <h2 class="section-title l2">配套设施体系</h2>
   <div class="card-grid">
-    <div class="card"><div class="card-emoji">🍜</div><div class="card-title">餐饮</div><div class="card-val" style="font-size:1rem;">20+主题餐厅与小吃亭，覆盖中餐·西式·快餐·甜品</div></div>
-    <div class="card"><div class="card-emoji">🏨</div><div class="card-title">周边住宿</div><div class="card-val" style="font-size:1rem;">华侨城洲际大酒店·威尼斯酒店·城市客栈·万豪行政公寓</div></div>
-    <div class="card"><div class="card-emoji">🚗</div><div class="card-title">停车</div><div class="card-val" style="font-size:1rem;">约3,000车位（地面+地下立体车库）</div></div>
-    <div class="card"><div class="card-emoji">🚇</div><div class="card-title">交通</div><div class="card-val" style="font-size:1rem;">地铁1/2号线世界之窗站 · 欢乐干线 · 多路公交枢纽</div></div>
-    <div class="card"><div class="card-emoji">🛍️</div><div class="card-title">商业配套</div><div class="card-val" style="font-size:1rem;">西班牙广场商业街 · 欢乐海岸综合体 · 益田假日广场</div></div>
-    <div class="card"><div class="card-emoji">🎭</div><div class="card-title">演艺设施</div><div class="card-val" style="font-size:1rem;">欢乐剧场 · 四维影院 · 7D互动剧场 · 街头表演点</div></div>
+    <div class="card"><div class="card-label">餐饮</div><div class="card-value">20+ 主题餐厅与小吃亭，覆盖中餐 · 西式 · 快餐 · 甜品</div></div>
+    <div class="card"><div class="card-label">周边住宿</div><div class="card-value">华侨城洲际大酒店 · 威尼斯酒店 · 城市客栈 · 万豪行政公寓</div></div>
+    <div class="card"><div class="card-label">停车</div><div class="card-value">约 3,000 车位（地面 + 地下立体车库）</div></div>
+    <div class="card"><div class="card-label">交通</div><div class="card-value">地铁 1 / 2 号线世界之窗站 · 欢乐干线 · 多路公交枢纽</div></div>
+    <div class="card"><div class="card-label">商业配套</div><div class="card-value">西班牙广场商业街 · 欢乐海岸综合体 · 益田假日广场</div></div>
+    <div class="card"><div class="card-label">演艺设施</div><div class="card-value">欢乐剧场 · 四维影院 · 7D 互动剧场 · 街头表演点</div></div>
   </div>
 </section>
 
-<!-- 最新动态 -->
+<!-- 9. 实景图集 -->
 <section class="reveal">
-  <h2 class="section-title">最新动态与战略展望</h2>
-  <div class="card-grid">
-    <div class="card">
-      <div class="card-emoji">🎮</div>
-      <div class="card-title">IP化战略</div>
-      <div class="card-val" style="font-size:1rem;">"迷你世界·冒险山"IP主题区落地；"欢乐家族""E-maya"自有IP孵化中</div>
-    </div>
-    <div class="card">
-      <div class="card-emoji">💡</div>
-      <div class="card-title">数字化转型</div>
-      <div class="card-val" style="font-size:1rem;">"IP+科技"双驱动；AR/VR骑乘升级；数字化运营系统全面铺开</div>
-    </div>
-    <div class="card">
-      <div class="card-emoji">⚔️</div>
-      <div class="card-title">竞争格局</div>
-      <div class="card-val" style="font-size:1rem;">深圳乐高乐园2025夏季开业；迪士尼·环球影城品牌下沉压力</div>
-    </div>
-    <div class="card">
-      <div class="card-emoji">📊</div>
-      <div class="card-title">经营挑战</div>
-      <div class="card-val" style="font-size:1rem;">华侨城三年累亏超260亿；文旅毛利率从32%跌至14%；客流同比下滑</div>
-    </div>
-  </div>
-</section>
-
-<!-- 实景图集 -->
-<section class="reveal">
-  <h2 class="section-title">实景图集</h2>
+  <h2 class="section-title l2">实景图集</h2>
   <p class="section-sub">通过以下链接浏览项目实景照片与互动全景</p>
   <div class="gallery-grid">
     <div class="gallery-card">
       <div class="g-icon">🚁</div>
       <h4>720° 互动全景</h4>
-      <p class="g-desc">19个鸟瞰视角，拍摄高度约236米，2025年3月</p>
+      <p class="g-desc">19 个鸟瞰视角，拍摄高度约 236 米，2025 年 3 月</p>
       <a class="g-link" href="https://www.720real.com/t/44abedb170f9dc1c" target="_blank">打开全景</a>
     </div>
     <div class="gallery-card">
       <div class="g-icon">🎬</div>
-      <h4>B站过山车POV</h4>
+      <h4>B 站过山车 POV</h4>
       <p class="g-desc">弹射式过山车第一视角实拍，全园项目合集</p>
       <a class="g-link" href="https://search.bilibili.com/all?keyword=深圳欢乐谷POV" target="_blank">浏览视频</a>
     </div>
@@ -438,20 +358,54 @@ footer a { color: #d4763a; }
       <p class="g-desc">自由版权图片库，含园区鸟瞰及设施高清图</p>
       <a class="g-link" href="https://commons.wikimedia.org/wiki/Category:Happy_Valley_Shenzhen" target="_blank">浏览图库</a>
     </div>
+    <div class="gallery-card">
+      <div class="g-icon">✈️</div>
+      <h4>西部矿镇航拍</h4>
+      <p class="g-desc">搜狐航拍图集，金矿镇主题区空中视角</p>
+      <a class="g-link" href="https://www.sohu.com/a/450532683_116840" target="_blank">查看航拍</a>
+    </div>
+    <div class="gallery-card">
+      <div class="g-icon">🌃</div>
+      <h4>欢乐光年夜景</h4>
+      <p class="g-desc">小红书夜景打卡合集，灯光秀实拍</p>
+      <a class="g-link" href="https://www.xiaohongshu.com/search_result/深圳欢乐谷夜景" target="_blank">浏览打卡</a>
+    </div>
   </div>
 </section>
 
-<!-- 延伸资料库 -->
+<!-- 10. 最新动态 -->
 <section class="reveal">
-  <h2 class="section-title">延伸资料库</h2>
-  <p class="section-sub">5个精选高质量外部站点</p>
+  <h2 class="section-title l2">最新动态与战略展望</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label">IP 化战略</div>
+      <div class="card-value">"迷你世界 · 冒险山" IP 主题区落地；"欢乐家族""E-maya"自有 IP 孵化中</div>
+    </div>
+    <div class="card">
+      <div class="card-label">数字化转型</div>
+      <div class="card-value">"IP + 科技"双驱动；AR / VR 骑乘升级；数字化运营系统全面铺开</div>
+    </div>
+    <div class="card">
+      <div class="card-label">竞争格局</div>
+      <div class="card-value">深圳乐高乐园 2025 夏季开业；迪士尼 · 环球影城品牌下沉压力</div>
+    </div>
+    <div class="card">
+      <div class="card-label">经营挑战</div>
+      <div class="card-value">华侨城三年累亏超 260 亿；文旅毛利率从 32% 跌至 14%；客流同比下滑</div>
+    </div>
+  </div>
+</section>
+
+<!-- 11. 延伸资料库 -->
+<section class="reveal">
+  <h2 class="section-title l2">延伸资料库</h2>
   <table class="data-table">
     <tbody>
-      <tr><td style="width:60px;text-align:center;font-size:1.5rem;">📷</td><td><strong>Wikimedia Commons</strong> — 自由版权图片</td><td><a href="https://commons.wikimedia.org/wiki/Category:Happy_Valley_Shenzhen" target="_blank">commons.wikimedia.org</a></td></tr>
-      <tr><td style="text-align:center;font-size:1.5rem;">🎬</td><td><strong>B站高清POV合集</strong> — 过山车第一视角实拍</td><td><a href="https://search.bilibili.com/all?keyword=深圳欢乐谷POV" target="_blank">search.bilibili.com</a></td></tr>
-      <tr><td style="text-align:center;font-size:1.5rem;">🏛️</td><td><strong>华侨城集团官网</strong> — 官方新闻中心</td><td><a href="https://www.chinaoct.com" target="_blank">chinaoct.com</a></td></tr>
-      <tr><td style="text-align:center;font-size:1.5rem;">✈️</td><td><strong>携程深圳欢乐谷攻略</strong> — 深度游记实拍</td><td><a href="https://you.ctrip.com/sight/shenzhen26/13720.html" target="_blank">you.ctrip.com</a></td></tr>
-      <tr><td style="text-align:center;font-size:1.5rem;">📰</td><td><strong>AECOM & TEA 全球主题公园报告</strong> — 行业权威数据</td><td><a href="https://aecom.com/theme-index/" target="_blank">aecom.com/theme-index</a></td></tr>
+      <tr><td style="width:48px;text-align:center;font-size:1.3rem;">📷</td><td><strong>Wikimedia Commons</strong> — 自由版权图片</td><td><a href="https://commons.wikimedia.org/wiki/Category:Happy_Valley_Shenzhen" target="_blank">commons.wikimedia.org</a></td></tr>
+      <tr><td style="text-align:center;font-size:1.3rem;">🎬</td><td><strong>B 站高清 POV 合集</strong> — 过山车第一视角实拍</td><td><a href="https://search.bilibili.com/all?keyword=深圳欢乐谷POV" target="_blank">search.bilibili.com</a></td></tr>
+      <tr><td style="text-align:center;font-size:1.3rem;">🏛️</td><td><strong>华侨城集团官网</strong> — 官方新闻中心</td><td><a href="https://www.chinaoct.com" target="_blank">chinaoct.com</a></td></tr>
+      <tr><td style="text-align:center;font-size:1.3rem;">✈️</td><td><strong>携程深圳欢乐谷攻略</strong> — 深度游记实拍</td><td><a href="https://you.ctrip.com/sight/shenzhen26/13720.html" target="_blank">you.ctrip.com</a></td></tr>
+      <tr><td style="text-align:center;font-size:1.3rem;">📰</td><td><strong>AECOM & TEA 全球主题公园报告</strong> — 行业权威数据</td><td><a href="https://aecom.com/theme-index/" target="_blank">aecom.com/theme-index</a></td></tr>
     </tbody>
   </table>
 </section>
@@ -461,44 +415,35 @@ footer a { color: #d4763a; }
   <a href="#" id="back-to-top" title="回顶部">↑</a>
 </div>
 
-<p style="font-family:'DM Mono',monospace;font-size:0.82rem;margin-top:0.6rem;opacity:0.7;">
-      访问 <span id="busuanzi_value_site_pv"></span> 次 · 访客 <span id="busuanzi_value_site_uv"></span> 人
-    </p>
-    
+<p style="text-align:center;font-family:'DM Mono',monospace;font-size:0.78rem;margin:1rem 0;opacity:0.6;">
+  访问 <span id="busuanzi_value_site_pv"></span> 次 · 访客 <span id="busuanzi_value_site_uv"></span> 人
+</p>
+
 <footer>
   <p>案例研究报告 · 深圳欢乐谷 · 数据截至 2026 年 5 月</p>
-  <p style="margin-top:0.5rem;">数据来源：百度百科 · 维基百科 · AECOM/TEA · 华侨城年报 · 行业报道</p>
-  <p style="margin-top:0.5rem;font-size:0.75rem;opacity:0.6;">所有金额为人民币 · 面积单位使用公制</p>
+  <p style="margin-top:0.4rem;">数据来源：百度百科 · 维基百科 · AECOM / TEA · 华侨城年报 · 行业报道</p>
+  <p style="margin-top:0.3rem;font-size:0.75rem;opacity:0.5;">所有金额为人民币 · 面积单位使用公制</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-// GCJ-02 transform (WGS-84 → GCJ-02)
+// 高德瓦片 (GCJ-02) + OSM 锚点坐标
 function wgs2gcj(lng, lat) {
-  var a = 6378245.0, ee = 0.00669342162296594323;
-  function transformLat(x, y) { var r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x)); r += (20*Math.sin(6*x*Math.PI)+20*Math.sin(2*x*Math.PI))*2/3; r += (20*Math.sin(y*Math.PI)+40*Math.sin(y/3*Math.PI))*2/3; r += (160*Math.sin(y/12*Math.PI)+320*Math.sin(y*Math.PI/30))*2/3; return r; }
-  function transformLng(x, y) { var r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x)); r += (20*Math.sin(6*x*Math.PI)+20*Math.sin(2*x*Math.PI))*2/3; r += (20*Math.sin(x*Math.PI)+40*Math.sin(x/3*Math.PI))*2/3; r += (150*Math.sin(x/12*Math.PI)+300*Math.sin(x/30*Math.PI))*2/3; return r; }
-  var dLat = transformLat(lng-105, lat-35), dLng = transformLng(lng-105, lat-35);
-  var radLat = lat/180*Math.PI, magic = 1 - ee*Math.sin(radLat)*Math.sin(radLat);
-  return [
-    lng + (180*dLng)/((a/Math.sqrt(magic))*Math.cos(radLat)*Math.PI),
-    lat + (180*dLat)/((a*(1-ee))/(magic*Math.sqrt(magic))*Math.PI)
-  ];
+  var a = 6378245.0, ee = 0.00669342162296594323, PI = Math.PI;
+  var x = lng-105, y = lat-35;
+  function tL(x,y){var r=-100+2*x+3*y+0.2*y*y+0.1*x*y+0.2*Math.sqrt(Math.abs(x));r+=(20*Math.sin(6*x*PI)+20*Math.sin(2*x*PI))*2/3;r+=(20*Math.sin(y*PI)+40*Math.sin(y/3*PI))*2/3;r+=(160*Math.sin(y/12*PI)+320*Math.sin(y*PI/30))*2/3;return r;}
+  function tG(x,y){var r=300+x+2*y+0.1*x*x+0.1*x*y+0.1*Math.sqrt(Math.abs(x));r+=(20*Math.sin(6*x*PI)+20*Math.sin(2*x*PI))*2/3;r+=(20*Math.sin(x*PI)+40*Math.sin(x/3*PI))*2/3;r+=(150*Math.sin(x/12*PI)+300*Math.sin(x/30*PI))*2/3;return r;}
+  var dL=tL(x,y),dG=tG(x,y),rL=lat/180*PI,m=1-ee*Math.sin(rL)*Math.sin(rL);
+  return [lng+(180*dG)/((a/Math.sqrt(m))*Math.cos(rL)*PI), lat+(180*dL)/((a*(1-ee))/(m*Math.sqrt(m))*PI)];
 }
 
-// Shenzhen Happy Valley WGS-84
-const parkWGS = [113.97395, 22.54157];
-const parkGCJ = wgs2gcj(parkWGS[0], parkWGS[1]);
+var centerGCJ = wgs2gcj(113.97428, 22.54113); // OSM 欢乐谷 center
 
 function makeStreetLayer() {
-  return L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
-    subdomains: '12', maxZoom: 18, attribution: '高德地图'
-  });
+  return L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', { subdomains: '12', maxZoom: 18, attribution: '高德地图' });
 }
 function makeSatLayer() {
-  return L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
-    subdomains: '1234', maxZoom: 18, attribution: '高德卫星图'
-  });
+  return L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', { subdomains: '1234', maxZoom: 18, attribution: '高德卫星图' });
 }
 
 let map, currentLayer;
@@ -506,59 +451,48 @@ let map, currentLayer;
 document.addEventListener('DOMContentLoaded', function() {
   map = L.map('parkmap', { scrollWheelZoom: false, zoomControl: true });
   currentLayer = makeStreetLayer().addTo(map);
-  map.setView([parkGCJ[1], parkGCJ[0]], 16);
+  map.setView([centerGCJ[1], centerGCJ[0]], 16);
 
   zones.forEach(z => {
-    const gcj = wgs2gcj(z.lng, z.lat);
+    var gcj = wgs2gcj(z.lng, z.lat);
     const icon = L.divIcon({
       className: 'leaflet-div-icon',
       html: `<div class="zone-marker" style="background:${z.color}">${z.name}</div>`,
-      iconSize: [80, 26], iconAnchor: [40, 13]
+      iconSize: [76, 24], iconAnchor: [38, 12]
     });
     L.marker([gcj[1], gcj[0]], { icon }).addTo(map);
   });
 
   setTimeout(() => map.invalidateSize(), 1000);
-  // 8秒超时降级
   setTimeout(function() {
     var loaded = document.querySelectorAll('#parkmap .leaflet-tile-loaded');
-    if (loaded.length === 0) {
-      document.getElementById('map-fallback').style.display = 'flex';
-    }
+    if (loaded.length === 0) document.getElementById('map-fallback').style.display = 'flex';
   }, 8000);
 });
 
-// Zone markers data
+// Zone coordinates WGS-84 (OSM anchors: 魔幻城堡·太空梭·金涛骇浪·密林历险)
 const zones = [
-  { name:'西班牙广场', lat: 22.53875, lng: 113.9725, color: '#c0392b' },
-  { name:'欢乐时光', lat: 22.53980, lng: 113.9730, color: '#e67e22' },
-  { name:'魔幻城堡', lat: 22.53990, lng: 113.9715, color: '#8e44ad' },
-  { name:'冒险山', lat: 22.54100, lng: 113.9718, color: '#27ae60' },
-  { name:'西部矿镇', lat: 22.54270, lng: 113.9722, color: '#c0392b' },
-  { name:'飓风湾', lat: 22.54260, lng: 113.9740, color: '#2980b9' },
-  { name:'阳光海岸', lat: 22.54190, lng: 113.9745, color: '#d4a017' },
-  { name:'香格里拉', lat: 22.54330, lng: 113.9752, color: '#1a5276' },
-  { name:'玛雅水公园', lat: 22.54050, lng: 113.9715, color: '#16a085' }
+  { name:'西班牙广场', lng: 113.9740, lat: 22.5390, color: '#c0392b' },
+  { name:'欢乐时光',   lng: 113.9735, lat: 22.5400, color: '#e67e22' },
+  { name:'魔幻城堡',   lng: 113.9770, lat: 22.5411, color: '#8e44ad' },
+  { name:'冒险山',     lng: 113.9771, lat: 22.5430, color: '#27ae60' },
+  { name:'西部矿镇',   lng: 113.9758, lat: 22.5435, color: '#c0392b' },
+  { name:'飓风湾',     lng: 113.9785, lat: 22.5420, color: '#2980b9' },
+  { name:'阳光海岸',   lng: 113.9788, lat: 22.5410, color: '#d4a017' },
+  { name:'香格里拉',   lng: 113.9790, lat: 22.5435, color: '#1a5276' },
+  { name:'玛雅水公园', lng: 113.9785, lat: 22.5400, color: '#16a085' }
 ];
 
 function switchMap(type) {
   map.removeLayer(currentLayer);
   document.querySelectorAll('.map-tab').forEach(b => b.classList.remove('active'));
-  if (type === 'satellite') {
-    currentLayer = makeSatLayer().addTo(map);
-    document.querySelectorAll('.map-tab')[1].classList.add('active');
-  } else {
-    currentLayer = makeStreetLayer().addTo(map);
-    document.querySelectorAll('.map-tab')[0].classList.add('active');
-  }
+  if (type === 'satellite') { currentLayer = makeSatLayer().addTo(map); document.querySelectorAll('.map-tab')[1].classList.add('active'); }
+  else { currentLayer = makeStreetLayer().addTo(map); document.querySelectorAll('.map-tab')[0].classList.add('active'); }
 }
 
-// Scroll reveal
-// Back to top button
 const btt = document.getElementById('back-to-top');
 window.addEventListener('scroll', function() {
-  if (window.scrollY > 600) { btt.classList.add('show'); }
-  else { btt.classList.remove('show'); }
+  if (window.scrollY > 600) btt.classList.add('show'); else btt.classList.remove('show');
 });
 
 const observer = new IntersectionObserver((entries) => {

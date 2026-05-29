@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>上海迪士尼乐园 — 文旅项目深度案例研究</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
@@ -489,7 +489,8 @@ section:nth-child(even) {
 }
 
 .svg-container {
-  display: inline-block;
+  display: block;
+  width: 100%;
   background: rgba(255,255,255,0.05);
   border-radius: var(--radius);
   padding: 12px;
@@ -497,8 +498,7 @@ section:nth-child(even) {
 }
 
 .svg-container svg {
-  width: 100%;
-  max-width: 100%;
+  display: block;
   width: 100%;
   height: auto;
 }
@@ -1875,7 +1875,7 @@ section:nth-child(even) {
 </footer>
 
 <!-- ==================== SCRIPTS ==================== -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 // ==================== GCJ-02 Coordinate Conversion ====================
 function wgs84ToGcj02(lng, lat) {

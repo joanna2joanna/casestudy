@@ -7,16 +7,30 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
 <style>
+:root {
+  --clr-primary-dark: #0d1a08;
+  --clr-primary: #1a3a12;
+  --clr-primary-mid: #3d6228;
+  --clr-primary-light: #6b8f3a;
+  --clr-accent: #6b8f3a;
+  --clr-accent-light: #c8d4a0;
+  --clr-bg: #f4f6ef;
+  --clr-bg-card: #fff;
+  --clr-text: #1e2618;
+  --clr-text-secondary: #4a5a3f;
+  --clr-text-muted: #6b7f5a;
+  --clr-border: rgba(0,0,0,0.05);
+}
 html { font-size: 17px; scroll-behavior: smooth; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'DM Sans', -apple-system, sans-serif; background: #f4f6ef; color: #1e2618; line-height: 1.6; }
+body { font-family: 'DM Sans', -apple-system, sans-serif; background: var(--clr-bg); color: var(--clr-text); line-height: 1.6; }
 h1, h2, h3, .hero-title { font-family: 'Playfair Display', Georgia, serif; }
 .data-mono { font-family: 'DM Mono', 'SF Mono', monospace; }
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* Hero — Tibetan grassland palette */
-.hero { min-height: 100vh; background: linear-gradient(160deg, #0d1a08 0%, #1a3a12 20%, #3d6228 45%, #6b8f3a 70%, #b8c47a 100%); color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden; }
+.hero { min-height: 100vh; background: linear-gradient(160deg, #0d1a08 0%, var(--clr-primary) 20%, #3d6228 45%, #6b8f3a 70%, #b8c47a 100%); color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden; }
 .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 30%, rgba(180,200,120,0.2) 0%, transparent 60%); }
 .hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 200px; background: linear-gradient(to top, rgba(244,246,239,1), transparent); }
 .hero-badge { font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.4); padding: 0.4rem 1.2rem; border-radius: 99px; margin-bottom: 2rem; z-index: 1; }
@@ -28,39 +42,39 @@ h1, h2, h3, .hero-title { font-family: 'Playfair Display', Georgia, serif; }
 .hero-num-label { font-size: 0.85rem; opacity: 0.75; margin-top: 0.3rem; }
 
 section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
-.section-title { font-size: 2.2rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; color: #1a3a12; }
-.section-sub { text-align: center; color: #6b7f5a; margin-bottom: 3rem; font-size: 0.95rem; }
+.section-title { font-size: 2.2rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; color: var(--clr-primary); }
+.section-sub { text-align: center; color: var(--clr-text-muted); margin-bottom: 3rem; font-size: 0.95rem; }
 
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
 .card { background: #fff; border-radius: 16px; padding: 1.6rem; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.05); }
 .card-emoji { font-size: 2rem; margin-bottom: 0.6rem; }
-.card-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7f5a; margin-bottom: 0.4rem; }
-.card-val { font-size: 1.4rem; font-weight: 700; color: #1a3a12; }
+.card-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--clr-text-muted); margin-bottom: 0.4rem; }
+.card-val { font-size: 1.4rem; font-weight: 700; color: var(--clr-primary); }
 
 .data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
-.data-table th { background: #1a3a12; color: #c8d4a0; padding: 0.9rem 1.2rem; text-align: left; font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.data-table th { background: var(--clr-primary); color: var(--clr-accent-light); padding: 0.9rem 1.2rem; text-align: left; font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; }
 .data-table td { padding: 0.8rem 1.2rem; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.9rem; }
 .data-table tr:last-child td { border-bottom: none; }
 .data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
 
 .timeline { position: relative; padding-left: 2.5rem; }
-.timeline::before { content: ''; position: absolute; left: 0.8rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #6b8f3a, #1a3a12); }
+.timeline::before { content: ''; position: absolute; left: 0.8rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #6b8f3a, var(--clr-primary)); }
 .tl-item { position: relative; margin-bottom: 2rem; }
 .tl-item::before { content: ''; position: absolute; left: -2.1rem; top: 0.4rem; width: 12px; height: 12px; border-radius: 50%; background: #6b8f3a; border: 3px solid #f4f6ef; box-shadow: 0 0 0 2px #6b8f3a; }
 .tl-year { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: #3d6228; font-weight: 700; }
-.tl-title { font-size: 1.1rem; font-weight: 700; color: #1a3a12; }
-.tl-desc { font-size: 0.9rem; color: #4a5a3f; margin-top: 0.2rem; }
+.tl-title { font-size: 1.1rem; font-weight: 700; color: var(--clr-primary); }
+.tl-desc { font-size: 0.9rem; color: var(--clr-text-secondary); margin-top: 0.2rem; }
 
 .map-container { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.04); margin-bottom: 2rem; }
 .map-tabs { display: flex; border-bottom: 1px solid rgba(0,0,0,0.06); }
-.map-tab { flex: 1; padding: 0.8rem; text-align: center; cursor: pointer; font-size: 0.9rem; font-weight: 600; border: none; background: none; color: #6b7f5a; transition: all 0.2s; }
-.map-tab.active { color: #1a3a12; border-bottom: 2px solid #6b8f3a; }
+.map-tab { flex: 1; padding: 0.8rem; text-align: center; cursor: pointer; font-size: 0.9rem; font-weight: 600; border: none; background: none; color: var(--clr-text-muted); transition: all 0.2s; }
+.map-tab.active { color: var(--clr-primary); border-bottom: 2px solid #6b8f3a; }
 .map-wrap { height: 450px; width: 100%; position: relative; }
 .map-wrap .leaflet-container { height: 100%; width: 100%; }
-.map-fallback { display: none; position: absolute; inset: 0; align-items: center; justify-content: center; flex-direction: column; gap: 0.8rem; background: #f4f6ef; border-radius: 16px; text-align: center; z-index: 1000; }
+.map-fallback { display: none; position: absolute; inset: 0; align-items: center; justify-content: center; flex-direction: column; gap: 0.8rem; background: var(--clr-bg); border-radius: 16px; text-align: center; z-index: 1000; }
 .map-fallback .icon { font-size: 2.5rem; }
-.map-fallback strong { font-size: 1rem; color: #1a3a12; }
-.map-fallback span { font-size: 0.82rem; color: #6b7f5a; }
+.map-fallback strong { font-size: 1rem; color: var(--clr-primary); }
+.map-fallback span { font-size: 0.82rem; color: var(--clr-text-muted); }
 .leaflet-div-icon { background: none; border: none; }
 .zone-marker { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 2px solid #fff; font-family: 'DM Sans', sans-serif; }
 
@@ -73,11 +87,11 @@ section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
 .photo-emoji { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
 
 .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
-.kpi-card { background: linear-gradient(135deg, #1a3a12, #3d6228); color: #c8d4a0; border-radius: 16px; padding: 1.5rem; text-align: center; }
+.kpi-card { background: linear-gradient(135deg, var(--clr-primary), #3d6228); color: var(--clr-accent-light); border-radius: 16px; padding: 1.5rem; text-align: center; }
 .kpi-val { font-size: 2.2rem; font-family: 'DM Mono', monospace; font-weight: 800; color: #fff; }
-.kpi-label { font-size: 0.82rem; opacity: 0.75; margin-top: 0.3rem; color: #c8d4a0; }
+.kpi-label { font-size: 0.82rem; opacity: 0.75; margin-top: 0.3rem; color: var(--clr-accent-light); }
 
-footer { background: #0d1a08; color: #a0b88a; text-align: center; padding: 3rem 2rem; font-size: 0.85rem; }
+footer { background: var(--clr-primary-dark); color: var(--clr-accent-light); text-align: center; padding: 3rem 2rem; font-size: 0.85rem; }
 footer a { color: #6b8f3a; }
 
 /* Photo gallery */
@@ -85,15 +99,15 @@ footer a { color: #6b8f3a; }
 .gallery-card { background: #fff; border-radius: 14px; padding: 1.8rem 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
 .gallery-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,0.1); }
 .gallery-card .g-icon { font-size: 2.6rem; margin-bottom: 0.7rem; line-height: 1; }
-.gallery-card h4 { font-size: 1rem; font-weight: 700; color: #1a3a12; margin-bottom: 0.3rem; }
-.gallery-card .g-desc { font-size: 0.82rem; color: #6b7f5a; margin-bottom: 1rem; line-height: 1.45; }
-.gallery-card .g-link { display: inline-block; padding: 0.5rem 1.4rem; background: #1a3a12; color: #c8d4a0; border-radius: 99px; text-decoration: none; font-weight: 600; font-size: 0.84rem; transition: background 0.2s; }
+.gallery-card h4 { font-size: 1rem; font-weight: 700; color: var(--clr-primary); margin-bottom: 0.3rem; }
+.gallery-card .g-desc { font-size: 0.82rem; color: var(--clr-text-muted); margin-bottom: 1rem; line-height: 1.45; }
+.gallery-card .g-link { display: inline-block; padding: 0.5rem 1.4rem; background: var(--clr-primary); color: var(--clr-accent-light); border-radius: 99px; text-decoration: none; font-weight: 600; font-size: 0.84rem; transition: background 0.2s; }
 .gallery-card .g-link:hover { background: #3d6228; }
 
 /* Floating nav */
 .floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
-.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: #1a3a12; }
-.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: #1a3a12; color: #c8d4a0; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: var(--clr-primary); }
+.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: var(--clr-primary); color: var(--clr-accent-light); }
 #back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
 #back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
 
@@ -218,7 +232,7 @@ footer a { color: #6b8f3a; }
       <path d="M0,350 Q200,320 400,380 Q600,440 800,350 Q900,310 1000,330" fill="none" stroke="#6b8f3a" stroke-width="3" opacity="0.5"/>
       <text x="500" y="460" text-anchor="middle" fill="#6b8f3a" font-size="9" opacity="0.6">桑科草原溪流</text>
       <!-- North arrow -->
-      <g transform="translate(920,60)"><polygon points="0,30 8,0 16,30 8,22" fill="#1a3a12"/><text x="8" y="45" text-anchor="middle" font-size="11">N</text></g>
+      <g transform="translate(920,60)"><polygon points="0,30 8,0 16,30 8,22" fill="var(--clr-primary)"/><text x="8" y="45" text-anchor="middle" font-size="11">N</text></g>
       <!-- Central facilities -->
       <rect x="380" y="480" width="240" height="70" rx="10" fill="#3d6228" opacity="0.9" stroke="#fff" stroke-width="2"/>
       <text x="500" y="515" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">主餐厅 · 大堂 · 精品店</text>
@@ -252,9 +266,9 @@ footer a { color: #6b8f3a; }
       <line x1="130" y1="260" x2="190" y2="300" stroke="#6b7f5a" stroke-width="1" stroke-dasharray="4" opacity="0.5"/>
       <text x="100" y="290" fill="#6b7f5a" font-size="8" opacity="0.5">≥100m</text>
       <!-- Legend -->
-      <rect x="700" y="760" width="14" height="14" fill="#8b6b3a" opacity="0.85"/><text x="720" y="772" font-size="10" fill="#1a3a12">木屋</text>
-      <rect x="780" y="760" width="14" height="14" fill="#3d6228" opacity="0.9"/><text x="800" y="772" font-size="10" fill="#1a3a12">公共</text>
-      <rect x="850" y="760" width="14" height="14" fill="#2980b9" opacity="0.85"/><text x="870" y="772" font-size="10" fill="#1a3a12">康体</text>
+      <rect x="700" y="760" width="14" height="14" fill="#8b6b3a" opacity="0.85"/><text x="720" y="772" font-size="10" fill="var(--clr-primary)">木屋</text>
+      <rect x="780" y="760" width="14" height="14" fill="#3d6228" opacity="0.9"/><text x="800" y="772" font-size="10" fill="var(--clr-primary)">公共</text>
+      <rect x="850" y="760" width="14" height="14" fill="#2980b9" opacity="0.85"/><text x="870" y="772" font-size="10" fill="var(--clr-primary)">康体</text>
     </svg>
     <p style="text-align:center;color:#6b7f5a;font-size:0.78rem;margin-top:0.6rem;">示意图，基于公开报道与卫星影像 | 北向上 | 木屋间距≥100m | 实际布局以营地官方为准</p>
   </div>
@@ -307,7 +321,7 @@ footer a { color: #6b8f3a; }
     <div class="kpi-card"><div class="kpi-val">一价全包</div><div class="kpi-label">三餐·接送·活动·税费</div></div>
   </div>
 
-  <h3 style="margin-top:2.5rem;margin-bottom:1rem;color:#1a3a12;">同类野奢营地对比</h3>
+  <h3 style="margin-top:2.5rem;margin-bottom:1rem;color:var(--clr-primary);">同类野奢营地对比</h3>
   <table class="data-table">
     <thead><tr><th>项目</th><th>位置</th><th>海拔(m)</th><th>客房</th><th>均价(¥/晚)</th><th>年营业期</th></tr></thead>
     <tbody>

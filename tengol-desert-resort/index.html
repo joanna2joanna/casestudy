@@ -7,16 +7,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
 <style>
+:root {
+  --clr-primary-dark: #1a1006;
+  --clr-primary: #4a2808;
+  --clr-primary-mid: #8b5e2f;
+  --clr-accent: #c4945a;
+  --clr-accent-light: #e8c98b;
+  --clr-accent-dark: #a0703a;
+  --clr-bg: #f9f4e8;
+  --clr-text: #2d2416;
+  --clr-text-secondary: #6b5b4f;
+  --clr-text-muted: #8b7355;
+}
+
 html { font-size: 17px; scroll-behavior: smooth; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'DM Sans', -apple-system, sans-serif; background: #f9f4e8; color: #2d2416; line-height: 1.6; }
+body { font-family: 'DM Sans', -apple-system, sans-serif; background: var(--clr-bg); color: var(--clr-text); line-height: 1.6; }
 h1, h2, h3, .hero-title { font-family: 'Playfair Display', Georgia, serif; }
 .data-mono { font-family: 'DM Mono', 'SF Mono', monospace; }
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* Hero — desert sunset palette */
-.hero { min-height: 100vh; background: linear-gradient(160deg, #1a1006 0%, #4a2808 25%, #8b5e2f 55%, #c4945a 85%, #e8c98b 100%); color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden; }
+.hero { min-height: 100vh; background: linear-gradient(160deg, #1a1006 0%, var(--clr-primary) 25%, var(--clr-primary-mid) 55%, var(--clr-accent) 85%, var(--clr-accent-light) 100%); color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden; }
 .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 70%, rgba(200,160,100,0.25) 0%, transparent 60%); }
 .hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 200px; background: linear-gradient(to top, rgba(249,244,232,1), transparent); }
 .hero-badge { font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.4); padding: 0.4rem 1.2rem; border-radius: 99px; margin-bottom: 2rem; z-index: 1; }
@@ -28,39 +41,39 @@ h1, h2, h3, .hero-title { font-family: 'Playfair Display', Georgia, serif; }
 .hero-num-label { font-size: 0.85rem; opacity: 0.75; margin-top: 0.3rem; }
 
 section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
-.section-title { font-size: 2.2rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; color: #4a2808; }
-.section-sub { text-align: center; color: #8b7355; margin-bottom: 3rem; font-size: 0.95rem; }
+.section-title { font-size: 2.2rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; color: var(--clr-primary); }
+.section-sub { text-align: center; color: var(--clr-text-muted); margin-bottom: 3rem; font-size: 0.95rem; }
 
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
 .card { background: #fff; border-radius: 16px; padding: 1.6rem; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.06); }
 .card-emoji { font-size: 2rem; margin-bottom: 0.6rem; }
-.card-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: #8b7355; margin-bottom: 0.4rem; }
-.card-val { font-size: 1.4rem; font-weight: 700; color: #4a2808; }
+.card-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--clr-text-muted); margin-bottom: 0.4rem; }
+.card-val { font-size: 1.4rem; font-weight: 700; color: var(--clr-primary); }
 
 .data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
-.data-table th { background: #4a2808; color: #e8c98b; padding: 0.9rem 1.2rem; text-align: left; font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.data-table th { background: var(--clr-primary); color: var(--clr-accent-light); padding: 0.9rem 1.2rem; text-align: left; font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; }
 .data-table td { padding: 0.8rem 1.2rem; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 0.9rem; }
 .data-table tr:last-child td { border-bottom: none; }
 .data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
 
 .timeline { position: relative; padding-left: 2.5rem; }
-.timeline::before { content: ''; position: absolute; left: 0.8rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #e8c98b, #8b5e2f); }
+.timeline::before { content: ''; position: absolute; left: 0.8rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--clr-accent-light), var(--clr-primary-mid)); }
 .tl-item { position: relative; margin-bottom: 2rem; }
-.tl-item::before { content: ''; position: absolute; left: -2.1rem; top: 0.4rem; width: 12px; height: 12px; border-radius: 50%; background: #c4945a; border: 3px solid #f9f4e8; box-shadow: 0 0 0 2px #c4945a; }
-.tl-year { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: #8b5e2f; font-weight: 700; }
-.tl-title { font-size: 1.1rem; font-weight: 700; color: #4a2808; }
-.tl-desc { font-size: 0.9rem; color: #6b5b4f; margin-top: 0.2rem; }
+.tl-item::before { content: ''; position: absolute; left: -2.1rem; top: 0.4rem; width: 12px; height: 12px; border-radius: 50%; background: var(--clr-accent); border: 3px solid #f9f4e8; box-shadow: 0 0 0 2px var(--clr-accent); }
+.tl-year { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--clr-primary-mid); font-weight: 700; }
+.tl-title { font-size: 1.1rem; font-weight: 700; color: var(--clr-primary); }
+.tl-desc { font-size: 0.9rem; color: var(--clr-text-secondary); margin-top: 0.2rem; }
 
 .map-container { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.05); margin-bottom: 2rem; }
 .map-tabs { display: flex; border-bottom: 1px solid rgba(0,0,0,0.08); }
-.map-tab { flex: 1; padding: 0.8rem; text-align: center; cursor: pointer; font-size: 0.9rem; font-weight: 600; border: none; background: none; color: #8b7355; transition: all 0.2s; }
-.map-tab.active { color: #4a2808; border-bottom: 2px solid #c4945a; }
+.map-tab { flex: 1; padding: 0.8rem; text-align: center; cursor: pointer; font-size: 0.9rem; font-weight: 600; border: none; background: none; color: var(--clr-text-muted); transition: all 0.2s; }
+.map-tab.active { color: var(--clr-primary); border-bottom: 2px solid var(--clr-accent); }
 .map-wrap { height: 450px; width: 100%; position: relative; }
 .map-wrap .leaflet-container { height: 100%; width: 100%; }
-.map-fallback { display: none; position: absolute; inset: 0; align-items: center; justify-content: center; flex-direction: column; gap: 0.8rem; background: #f9f4e8; border-radius: 16px; text-align: center; z-index: 1000; }
+.map-fallback { display: none; position: absolute; inset: 0; align-items: center; justify-content: center; flex-direction: column; gap: 0.8rem; background: var(--clr-bg); border-radius: 16px; text-align: center; z-index: 1000; }
 .map-fallback .icon { font-size: 2.5rem; }
-.map-fallback strong { font-size: 1rem; color: #4a2808; }
-.map-fallback span { font-size: 0.82rem; color: #8b7355; }
+.map-fallback strong { font-size: 1rem; color: var(--clr-primary); }
+.map-fallback span { font-size: 0.82rem; color: var(--clr-text-muted); }
 .leaflet-div-icon { background: none; border: none; }
 .zone-marker { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 2px solid #fff; font-family: 'DM Sans', sans-serif; }
 
@@ -69,31 +82,31 @@ section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
 
 .photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
 .photo-card { background: #fff; border-radius: 12px; padding: 1.2rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-.photo-card a { color: #8b5e2f; text-decoration: none; font-weight: 600; }
+.photo-card a { color: var(--clr-primary-mid); text-decoration: none; font-weight: 600; }
 .photo-emoji { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
 
 .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
-.kpi-card { background: linear-gradient(135deg, #4a2808, #8b5e2f); color: #e8c98b; border-radius: 16px; padding: 1.5rem; text-align: center; }
+.kpi-card { background: linear-gradient(135deg, var(--clr-primary), var(--clr-primary-mid)); color: var(--clr-accent-light); border-radius: 16px; padding: 1.5rem; text-align: center; }
 .kpi-val { font-size: 2.2rem; font-family: 'DM Mono', monospace; font-weight: 800; color: #fff; }
-.kpi-label { font-size: 0.82rem; opacity: 0.75; margin-top: 0.3rem; color: #e8c98b; }
+.kpi-label { font-size: 0.82rem; opacity: 0.75; margin-top: 0.3rem; color: var(--clr-accent-light); }
 
 footer { background: #1a1006; color: #c4a882; text-align: center; padding: 3rem 2rem; font-size: 0.85rem; }
-footer a { color: #c4945a; }
+footer a { color: var(--clr-accent); }
 
 /* Photo gallery */
 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; }
 .gallery-card { background: #fff; border-radius: 14px; padding: 1.8rem 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.06); display: flex; flex-direction: column; align-items: center; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
 .gallery-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,0.1); }
 .gallery-card .g-icon { font-size: 2.6rem; margin-bottom: 0.7rem; line-height: 1; }
-.gallery-card h4 { font-size: 1rem; font-weight: 700; color: #4a2808; margin-bottom: 0.3rem; }
-.gallery-card .g-desc { font-size: 0.82rem; color: #8b7355; margin-bottom: 1rem; line-height: 1.45; }
-.gallery-card .g-link { display: inline-block; padding: 0.5rem 1.4rem; background: #4a2808; color: #e8c98b; border-radius: 99px; text-decoration: none; font-weight: 600; font-size: 0.84rem; transition: background 0.2s; }
-.gallery-card .g-link:hover { background: #8b5e2f; }
+.gallery-card h4 { font-size: 1rem; font-weight: 700; color: var(--clr-primary); margin-bottom: 0.3rem; }
+.gallery-card .g-desc { font-size: 0.82rem; color: var(--clr-text-muted); margin-bottom: 1rem; line-height: 1.45; }
+.gallery-card .g-link { display: inline-block; padding: 0.5rem 1.4rem; background: var(--clr-primary); color: var(--clr-accent-light); border-radius: 99px; text-decoration: none; font-weight: 600; font-size: 0.84rem; transition: background 0.2s; }
+.gallery-card .g-link:hover { background: var(--clr-primary-mid); }
 
 /* Floating nav */
 .floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
-.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: #4a2808; }
-.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: #4a2808; color: #e8c98b; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: var(--clr-primary); }
+.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: var(--clr-primary); color: var(--clr-accent-light); }
 #back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
 #back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
 
@@ -221,20 +234,20 @@ footer a { color: #c4945a; }
       <path d="M0,700 Q200,550 400,680 Q600,810 800,620 Q900,520 1000,600 L1000,850 L0,850Z" fill="#d4b87a" opacity="0.4"/>
       <path d="M0,750 Q150,680 300,750 Q500,820 700,730 Q850,670 1000,750 L1000,850 L0,850Z" fill="#c4a060" opacity="0.3"/>
       <!-- North arrow -->
-      <g transform="translate(920,60)"><polygon points="0,30 8,0 16,30 8,22" fill="#4a2808"/><text x="8" y="45" text-anchor="middle" font-size="11" font-family="DM Sans">N</text></g>
+      <g transform="translate(920,60)"><polygon points="0,30 8,0 16,30 8,22" fill="var(--clr-primary)"/><text x="8" y="45" text-anchor="middle" font-size="11" font-family="DM Sans">N</text></g>
       <!-- Central cluster -->
-      <rect x="300" y="350" width="120" height="80" rx="8" fill="#8b5e2f" opacity="0.9" stroke="#fff" stroke-width="2"/>
+      <rect x="300" y="350" width="120" height="80" rx="8" fill="var(--clr-primary-mid)" opacity="0.9" stroke="#fff" stroke-width="2"/>
       <text x="360" y="395" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">大堂·接待</text>
       <!-- Guest room clusters around center -->
-      <rect x="150" y="200" width="140" height="120" rx="8" fill="#a0703a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <rect x="150" y="200" width="140" height="120" rx="8" fill="var(--clr-accent-dark)" opacity="0.85" stroke="#fff" stroke-width="2"/>
       <text x="220" y="255" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">客房区A</text>
       <text x="220" y="275" text-anchor="middle" fill="#fff" font-size="9">标准/豪华房</text>
-      <rect x="440" y="180" width="140" height="140" rx="8" fill="#a0703a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <rect x="440" y="180" width="140" height="140" rx="8" fill="var(--clr-accent-dark)" opacity="0.85" stroke="#fff" stroke-width="2"/>
       <text x="510" y="245" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">客房区B</text>
       <text x="510" y="265" text-anchor="middle" fill="#fff" font-size="9">泡池套房</text>
-      <rect x="600" y="380" width="130" height="130" rx="8" fill="#a0703a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <rect x="600" y="380" width="130" height="130" rx="8" fill="var(--clr-accent-dark)" opacity="0.85" stroke="#fff" stroke-width="2"/>
       <text x="665" y="440" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">客房区C</text>
-      <rect x="460" y="480" width="140" height="120" rx="8" fill="#a0703a" opacity="0.85" stroke="#fff" stroke-width="2"/>
+      <rect x="460" y="480" width="140" height="120" rx="8" fill="var(--clr-accent-dark)" opacity="0.85" stroke="#fff" stroke-width="2"/>
       <text x="530" y="535" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">客房区D</text>
       <!-- Amenities -->
       <rect x="180" y="500" width="140" height="90" rx="8" fill="#2980b9" opacity="0.85" stroke="#fff" stroke-width="2"/>
@@ -251,9 +264,9 @@ footer a { color: #c4945a; }
       <text x="50" y="680" fill="#8b7355" font-size="9" font-style="italic">沙丘</text>
       <text x="800" y="700" fill="#8b7355" font-size="9" font-style="italic">沙丘</text>
       <!-- Legend -->
-      <rect x="720" y="760" width="14" height="14" fill="#a0703a" opacity="0.85"/><text x="740" y="772" font-size="10" fill="#4a2808">客房区</text>
-      <rect x="800" y="760" width="14" height="14" fill="#2980b9" opacity="0.85"/><text x="820" y="772" font-size="10" fill="#4a2808">泳池</text>
-      <rect x="870" y="760" width="14" height="14" fill="#e67e22" opacity="0.85"/><text x="890" y="772" font-size="10" fill="#4a2808">餐饮</text>
+      <rect x="720" y="760" width="14" height="14" fill="var(--clr-accent-dark)" opacity="0.85"/><text x="740" y="772" font-size="10" fill="var(--clr-primary)">客房区</text>
+      <rect x="800" y="760" width="14" height="14" fill="#2980b9" opacity="0.85"/><text x="820" y="772" font-size="10" fill="var(--clr-primary)">泳池</text>
+      <rect x="870" y="760" width="14" height="14" fill="#e67e22" opacity="0.85"/><text x="890" y="772" font-size="10" fill="var(--clr-primary)">餐饮</text>
     </svg>
     <p style="text-align:center;color:#8b7355;font-size:0.78rem;margin-top:0.6rem;">示意图，基于公开报道与卫星影像 | 北向上 | 实际布局以酒店官方为准</p>
   </div>
@@ -307,7 +320,7 @@ footer a { color: #c4945a; }
     <div class="kpi-card"><div class="kpi-val">4年</div><div class="kpi-label">预计投资回收期</div></div>
   </div>
 
-  <h3 style="margin-top:2.5rem;margin-bottom:1rem;color:#4a2808;">同类野奢酒店对比</h3>
+  <h3 style="margin-top:2.5rem;margin-bottom:1rem;color:var(--clr-primary);">同类野奢酒店对比</h3>
   <table class="data-table">
     <thead><tr><th>项目</th><th>位置</th><th>开业</th><th>客房</th><th>均价(¥)</th><th>特色</th></tr></thead>
     <tbody>
@@ -440,8 +453,8 @@ document.querySelectorAll('.map-tab')[0].classList.remove('active');
 
 // WGS-84 coordinates (ESRI tiles use WGS-84, no GCJ-02 offset needed)
 const zones = [
-  { name:'Tengol度假酒店', lat: 37.52, lng: 105.07, color: '#8b5e2f' },
-  { name:'沙漠体验区', lat: 37.50, lng: 105.04, color: '#c4945a' },
+  { name:'Tengol度假酒店', lat: 37.52, lng: 105.07, color: 'var(--clr-primary-mid)' },
+  { name:'沙漠体验区', lat: 37.50, lng: 105.04, color: 'var(--clr-accent)' },
   { name:'腾格里沙漠', lat: 37.55, lng: 105.10, color: '#d4a060' }
 ];
 

@@ -9,12 +9,24 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
 <style>
+:root {
+  --clr-primary-dark: #1a0e04;
+  --clr-primary: #6b3a1f;
+  --clr-accent: #d4c4ab;
+  --clr-bg: #faf7f2;
+  --clr-bg-alt: #f5efe6;
+  --clr-border: #e8ddd0;
+  --clr-text: #2c2416;
+  --clr-text-secondary: #6b5e4f;
+  --clr-text-muted: #8b7355;
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 17px; scroll-behavior: smooth; }
-body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; background: #faf7f2; color: #2c2416; line-height: 1.6; }
+body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--clr-bg); color: var(--clr-text); line-height: 1.6; }
 
 /* Hero */
-.hero { min-height: 95vh; background: linear-gradient(135deg, #1a0e04 0%, #3d1f0a 30%, #6b3a1f 60%, #2c1810 100%); color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden; }
+.hero { min-height: 95vh; background: linear-gradient(135deg, var(--clr-primary-dark) 0%, #3d1f0a 30%, var(--clr-primary) 60%, #2c1810 100%); color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden; }
 .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 70%, rgba(180,130,60,0.15) 0%, transparent 60%), radial-gradient(ellipse at 70% 30%, rgba(200,160,80,0.1) 0%, transparent 50%); }
 .hero-badge { display: inline-block; border: 1px solid rgba(255,255,255,0.25); border-radius: 2rem; padding: 0.3rem 1.2rem; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1.5rem; backdrop-filter: blur(10px); background: rgba(255,255,255,0.06); }
 .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 7vw, 5.2rem); font-weight: 800; line-height: 1.1; margin-bottom: 1rem; letter-spacing: -0.02em; }
@@ -27,70 +39,70 @@ body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; ba
 /* Sections */
 section { max-width: 1100px; margin: 0 auto; padding: 3.5rem 2rem; }
 .section-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; margin-bottom: 0.4rem; letter-spacing: -0.01em; }
-.section-sub { font-size: 0.9rem; color: #8b7355; margin-bottom: 2rem; }
+.section-sub { font-size: 0.9rem; color: var(--clr-text-muted); margin-bottom: 2rem; }
 
 /* Cards */
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.3rem; }
-.card { background: #fff; border-radius: 0.8rem; padding: 1.5rem; border: 1px solid #e8ddd0; transition: transform 0.2s, box-shadow 0.2s; }
+.card { background: #fff; border-radius: 0.8rem; padding: 1.5rem; border: 1px solid var(--clr-border); transition: transform 0.2s, box-shadow 0.2s; }
 .card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.07); }
 .card-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
 .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
-.card p { font-size: 0.85rem; color: #6b5e4f; }
-.card .big-number { font-family: 'DM Mono', monospace; font-size: 1.6rem; font-weight: 500; color: #6b3a1f; }
+.card p { font-size: 0.85rem; color: var(--clr-text-secondary); }
+.card .big-number { font-family: 'DM Mono', monospace; font-size: 1.6rem; font-weight: 500; color: var(--clr-primary); }
 
 /* Table */
 .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-.data-table th { text-align: left; padding: 0.6rem 0.8rem; background: #f5efe6; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: #6b3a1f; border-bottom: 2px solid #d4c4ab; }
-.data-table td { padding: 0.55rem 0.8rem; border-bottom: 1px solid #e8ddd0; vertical-align: top; }
+.data-table th { text-align: left; padding: 0.6rem 0.8rem; background: var(--clr-bg-alt); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--clr-primary); border-bottom: 2px solid var(--clr-accent); }
+.data-table td { padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--clr-border); vertical-align: top; }
 .data-table tr:hover td { background: #fdfaf6; }
 
 /* Timeline */
 .timeline { position: relative; padding-left: 2rem; }
-.timeline::before { content: ''; position: absolute; left: 0.45rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #6b3a1f, #c4a97d); }
+.timeline::before { content: ''; position: absolute; left: 0.45rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--clr-primary), #c4a97d); }
 .timeline-item { margin-bottom: 1.5rem; position: relative; }
-.timeline-item::before { content: ''; position: absolute; left: -1.65rem; top: 0.4rem; width: 0.65rem; height: 0.65rem; border-radius: 50%; background: #6b3a1f; border: 2px solid #faf7f2; }
-.timeline-year { font-family: 'DM Mono', monospace; font-size: 0.85rem; font-weight: 500; color: #6b3a1f; }
+.timeline-item::before { content: ''; position: absolute; left: -1.65rem; top: 0.4rem; width: 0.65rem; height: 0.65rem; border-radius: 50%; background: var(--clr-primary); border: 2px solid #faf7f2; }
+.timeline-year { font-family: 'DM Mono', monospace; font-size: 0.85rem; font-weight: 500; color: var(--clr-primary); }
 .timeline-text { font-size: 0.85rem; color: #555; }
 
 /* Map containers */
-.map-wrapper { border-radius: 0.8rem; overflow: hidden; border: 1px solid #e8ddd0; margin-bottom: 1.5rem; }
-.map-tabs { display: flex; gap: 0; background: #f5efe6; border-bottom: 1px solid #e8ddd0; }
-.map-tab { padding: 0.6rem 1.2rem; font-size: 0.82rem; font-weight: 500; cursor: pointer; border: none; background: none; color: #8b7355; transition: all 0.2s; font-family: inherit; }
-.map-tab.active { color: #6b3a1f; background: #fff; border-bottom: 2px solid #6b3a1f; margin-bottom: -1px; }
+.map-wrapper { border-radius: 0.8rem; overflow: hidden; border: 1px solid var(--clr-border); margin-bottom: 1.5rem; }
+.map-tabs { display: flex; gap: 0; background: var(--clr-bg-alt); border-bottom: 1px solid var(--clr-border); }
+.map-tab { padding: 0.6rem 1.2rem; font-size: 0.82rem; font-weight: 500; cursor: pointer; border: none; background: none; color: var(--clr-text-muted); transition: all 0.2s; font-family: inherit; }
+.map-tab.active { color: var(--clr-primary); background: #fff; border-bottom: 2px solid var(--clr-primary); margin-bottom: -1px; }
 .map-container { height: 480px; width: 100%; }
 .map-container.sat { height: 480px; width: 100%; }
-.map-note { font-size: 0.78rem; color: #8b7355; margin-top: 0.5rem; }
+.map-note { font-size: 0.78rem; color: var(--clr-text-muted); margin-top: 0.5rem; }
 
 /* Area cards */
-.area-card { background: #fff; border-radius: 0.8rem; padding: 1.2rem 1.4rem; border-left: 4px solid #6b3a1f; margin-bottom: 0.8rem; border: 2px solid #e8ddd0; border-left-width: 5px; display: flex; gap: 1rem; align-items: flex-start; }
+.area-card { background: #fff; border-radius: 0.8rem; padding: 1.2rem 1.4rem; border-left: 4px solid var(--clr-primary); margin-bottom: 0.8rem; border: 2px solid var(--clr-border); border-left-width: 5px; display: flex; gap: 1rem; align-items: flex-start; }
 .area-card .area-emoji { font-size: 1.8rem; flex-shrink: 0; }
 .area-card h4 { font-size: 0.95rem; margin-bottom: 0.15rem; }
-.area-card p { font-size: 0.78rem; color: #6b5e4f; }
+.area-card p { font-size: 0.78rem; color: var(--clr-text-secondary); }
 
 /* SVG diagram */
 .svg-diagram-wrap { text-align: center; margin: 2rem 0; }
-.svg-diagram-wrap svg { max-width: 100%; height: auto; border-radius: 0.8rem; border: 1px solid #e8ddd0; }
+.svg-diagram-wrap svg { max-width: 100%; height: auto; border-radius: 0.8rem; border: 1px solid var(--clr-border); }
 
 /* KPI row */
 .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
-.kpi-card { background: #fff; border-radius: 0.8rem; padding: 1.3rem; text-align: center; border: 1px solid #e8ddd0; }
-.kpi-num { font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 500; color: #6b3a1f; }
-.kpi-label { font-size: 0.78rem; color: #8b7355; margin-top: 0.2rem; }
+.kpi-card { background: #fff; border-radius: 0.8rem; padding: 1.3rem; text-align: center; border: 1px solid var(--clr-border); }
+.kpi-num { font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 500; color: var(--clr-primary); }
+.kpi-label { font-size: 0.78rem; color: var(--clr-text-muted); margin-top: 0.2rem; }
 
 /* Reference links */
 .ref-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem; }
-.ref-card { background: #fff; border-radius: 0.8rem; padding: 1.2rem; border: 1px solid #e8ddd0; text-decoration: none; color: inherit; transition: transform 0.2s, box-shadow 0.2s; display: block; }
+.ref-card { background: #fff; border-radius: 0.8rem; padding: 1.2rem; border: 1px solid var(--clr-border); text-decoration: none; color: inherit; transition: transform 0.2s, box-shadow 0.2s; display: block; }
 .ref-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
 .ref-card .ref-icon { font-size: 1.4rem; }
 .ref-card h4 { font-size: 0.9rem; margin: 0.4rem 0 0.2rem; }
-.ref-card p { font-size: 0.75rem; color: #8b7355; }
+.ref-card p { font-size: 0.75rem; color: var(--clr-text-muted); }
 
 /* Supplier table */
 .supplier-table { font-size: 0.82rem; }
 .supplier-table td:first-child { font-weight: 500; white-space: nowrap; }
 
 /* Footer */
-footer { background: #1a0e04; color: rgba(255,255,255,0.6); text-align: center; padding: 2rem; font-size: 0.78rem; margin-top: 3rem; }
+footer { background: var(--clr-primary-dark); color: rgba(255,255,255,0.6); text-align: center; padding: 2rem; font-size: 0.78rem; margin-top: 3rem; }
 footer a { color: rgba(255,255,255,0.8); }
 
 /* Reveal animation */
@@ -98,7 +110,7 @@ footer a { color: rgba(255,255,255,0.8); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* Tag */
-.tag { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 0.3rem; font-size: 0.72rem; font-weight: 500; background: #f0e8d8; color: #6b3a1f; margin-right: 0.3rem; margin-bottom: 0.3rem; }
+.tag { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 0.3rem; font-size: 0.72rem; font-weight: 500; background: #f0e8d8; color: var(--clr-primary); margin-right: 0.3rem; margin-bottom: 0.3rem; }
 
 /* DivIcon custom labels */
 .leaflet-div-icon { background: transparent !important; border: none !important; }
@@ -257,7 +269,7 @@ footer a { color: rgba(255,255,255,0.8); }
       <rect width="1000" height="850" fill="#faf7f2"/>
 
       <!-- Park boundary -->
-      <rect x="30" y="25" width="940" height="810" rx="15" fill="#f5f0e5" stroke="#d4c4ab" stroke-width="2" stroke-dasharray="10,5"/>
+      <rect x="30" y="25" width="940" height="810" rx="15" fill="#f5f0e5" stroke="var(--clr-accent)" stroke-width="2" stroke-dasharray="10,5"/>
 
       <!-- Water features -->
       <ellipse cx="420" cy="430" rx="65" ry="45" fill="#c8dde8" stroke="#9ab8c8" stroke-width="1.5"/>
@@ -270,9 +282,9 @@ footer a { color: rgba(255,255,255,0.8); }
 
       <!-- Compass -->
       <g transform="translate(940,70)">
-        <polygon points="0,-24 6,9 0,2 -6,9" fill="#6b3a1f"/>
+        <polygon points="0,-24 6,9 0,2 -6,9" fill="var(--clr-primary)"/>
         <polygon points="0,-24 0,2" fill="#8b5b3f"/>
-        <text x="0" y="-29" text-anchor="middle" font-family="DM Mono,monospace" font-size="12" font-weight="700" fill="#6b3a1f">N</text>
+        <text x="0" y="-29" text-anchor="middle" font-family="DM Mono,monospace" font-size="12" font-weight="700" fill="var(--clr-primary)">N</text>
       </g>
 
       <!-- Title -->
@@ -392,7 +404,7 @@ footer a { color: rgba(255,255,255,0.8); }
       </g>
       <!-- 酒店区 -->
       <g filter="url(#shadow)">
-        <polygon points="240,740 600,720 650,750 650,800 580,820 280,820 220,800" fill="#d4c4ab" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+        <polygon points="240,740 600,720 650,750 650,800 580,820 280,820 220,800" fill="var(--clr-accent)" opacity="0.82" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
         <text x="435" y="781" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,sans-serif" font-size="14" font-weight="700" fill="#4a3a2a">酒店区</text>
       </g>
 
@@ -712,7 +724,7 @@ const areas = [
   { name: '列支敦士登', lat: 48.2660, lng: 7.7217, color: '#c4284a', textColor: '#fff' },
   { name: '童话森林', lat: 48.2635, lng: 7.7233, color: '#7a4a8a', textColor: '#fff' },
   { name: 'Balthasar 城堡', lat: 48.2685, lng: 7.7250, color: '#8b6b4a', textColor: '#fff', isCastle: true },
-  { name: '主入口', lat: 48.2688, lng: 7.7218, color: '#6b3a1f', textColor: '#fff', isEntrance: true }
+  { name: '主入口', lat: 48.2688, lng: 7.7218, color: 'var(--clr-primary)', textColor: '#fff', isEntrance: true }
 ];
 
 function addMarkers(map) {
@@ -741,7 +753,7 @@ function addMarkers(map) {
     [48.2590, 7.7150], [48.2590, 7.7265],
     [48.2705, 7.7265], [48.2705, 7.7150]
   ], {
-    color: '#6b3a1f',
+    color: 'var(--clr-primary)',
     weight: 1.5,
     fill: false,
     dashArray: '6,4',

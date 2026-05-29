@@ -7,89 +7,104 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
 <style>
+:root {
+  --clr-primary-dark: #0a1628;
+  --clr-primary: #0d2847;
+  --clr-primary-mid: #134b6b;
+  --clr-primary-light: #1a6d8a;
+  --clr-accent: #d4af37;
+  --clr-bg: #faf7f2;
+  --clr-bg-card: #fff;
+  --clr-bg-hover: #f8f6f0;
+  --clr-text: #2c2c2c;
+  --clr-text-secondary: #666;
+  --clr-text-muted: #888;
+  --clr-text-light: #999;
+  --clr-border: #eee;
+}
 html { font-size: 17px; scroll-behavior: smooth; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'DM Sans', sans-serif; background: #faf7f2; color: #2c2c2c; line-height: 1.6; }
+body { font-family: 'DM Sans', sans-serif; background: var(--clr-bg); color: var(--clr-text); line-height: 1.6; }
 
 /* Hero */
-.hero { background: linear-gradient(135deg, #0a1628 0%, #0d2847 30%, #134b6b 60%, #1a6d8a 100%); min-height: 85vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; position: relative; overflow: hidden; }
+.hero { background: linear-gradient(135deg, #0a1628 0%, var(--clr-primary) 30%, #134b6b 60%, #1a6d8a 100%); min-height: 85vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; position: relative; overflow: hidden; }
 .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at 30% 50%, rgba(212,175,55,0.15) 0%, transparent 60%), radial-gradient(ellipse at 70% 30%, rgba(100,180,220,0.12) 0%, transparent 50%); }
 .hero-content { position: relative; z-index: 1; max-width: 900px; padding: 2rem; }
-.hero-badge { display: inline-block; background: rgba(212,175,55,0.2); border: 1px solid rgba(212,175,55,0.4); color: #d4af37; padding: 0.35rem 1.2rem; border-radius: 2rem; font-size: 0.78rem; letter-spacing: 0.08em; margin-bottom: 1.8rem; }
+.hero-badge { display: inline-block; background: rgba(212,175,55,0.2); border: 1px solid rgba(212,175,55,0.4); color: var(--clr-accent); padding: 0.35rem 1.2rem; border-radius: 2rem; font-size: 0.78rem; letter-spacing: 0.08em; margin-bottom: 1.8rem; }
 .hero h1 { font-family: 'Playfair Display', serif; font-size: 4.2rem; font-weight: 800; line-height: 1.15; margin-bottom: 1rem; letter-spacing: 0.02em; }
-.hero h1 span { color: #d4af37; }
+.hero h1 span { color: var(--clr-accent); }
 .hero .subtitle { font-size: 1.2rem; opacity: 0.85; margin-bottom: 2.5rem; font-weight: 400; }
 .hero-stats { display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap; }
 .hero-stat { text-align: center; }
-.hero-stat .num { font-family: 'DM Mono', monospace; font-size: 2.4rem; font-weight: 500; color: #d4af37; }
+.hero-stat .num { font-family: 'DM Mono', monospace; font-size: 2.4rem; font-weight: 500; color: var(--clr-accent); }
 .hero-stat .label { font-size: 0.78rem; opacity: 0.7; margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.06em; }
 
 /* Sections */
 .section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
-.section-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; margin-bottom: 2rem; color: #0d2847; position: relative; }
-.section-title::after { content: ''; display: block; width: 50px; height: 3px; background: #d4af37; margin-top: 0.5rem; }
+.section-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; margin-bottom: 2rem; color: var(--clr-primary); position: relative; }
+.section-title::after { content: ''; display: block; width: 50px; height: 3px; background: var(--clr-accent); margin-top: 0.5rem; }
 
 /* Cards */
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-.card { background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid #eee; }
-.card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #0d2847; margin-bottom: 0.5rem; }
-.card p { font-size: 0.9rem; color: #666; }
-.card .value { font-family: 'DM Mono', monospace; font-size: 1.3rem; color: #1a6d8a; font-weight: 500; }
+.card { background: var(--clr-bg-card); border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--clr-border); }
+.card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--clr-primary); margin-bottom: 0.5rem; }
+.card p { font-size: 0.9rem; color: var(--clr-text-secondary); }
+.card .value { font-family: 'DM Mono', monospace; font-size: 1.3rem; color: var(--clr-primary-light); font-weight: 500; }
 
 /* Tables */
-.data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
-.data-table th { background: #0d2847; color: #fff; padding: 0.9rem 1.2rem; text-align: left; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
-.data-table td { padding: 0.8rem 1.2rem; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+.data-table { width: 100%; border-collapse: collapse; background: var(--clr-bg-card); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.data-table th { background: var(--clr-primary); color: #fff; padding: 0.9rem 1.2rem; text-align: left; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.data-table td { padding: 0.8rem 1.2rem; border-bottom: 1px solid var(--clr-border); font-size: 0.9rem; }
 .data-table tr:last-child td { border-bottom: none; }
-.data-table tr:hover td { background: #f8f6f0; }
+.data-table tr:hover td { background: var(--clr-bg-hover); }
 
 /* Timeline */
 .timeline { position: relative; padding-left: 2rem; }
 .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #d4af37, #1a6d8a); }
 .timeline-item { position: relative; padding: 0 0 2rem 1.8rem; }
-.timeline-item::before { content: ''; position: absolute; left: -2.35rem; top: 0.4rem; width: 12px; height: 12px; border-radius: 50%; background: #d4af37; border: 3px solid #fff; box-shadow: 0 0 0 2px #d4af37; }
-.timeline-year { font-family: 'DM Mono', monospace; font-size: 0.9rem; color: #1a6d8a; font-weight: 600; }
-.timeline-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: #0d2847; margin: 0.2rem 0 0.3rem; }
-.timeline-desc { font-size: 0.88rem; color: #666; }
+.timeline-item::before { content: ''; position: absolute; left: -2.35rem; top: 0.4rem; width: 12px; height: 12px; border-radius: 50%; background: var(--clr-accent); border: 3px solid #fff; box-shadow: 0 0 0 2px #d4af37; }
+.timeline-year { font-family: 'DM Mono', monospace; font-size: 0.9rem; color: var(--clr-primary-light); font-weight: 600; }
+.timeline-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--clr-primary); margin: 0.2rem 0 0.3rem; }
+.timeline-desc { font-size: 0.88rem; color: var(--clr-text-secondary); }
 
 /* Map */
 .map-container { height: 420px; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); position: relative; z-index: 1; }
 .map-controls { display: flex; gap: 0.5rem; margin-bottom: 0.8rem; }
-.map-btn { padding: 0.45rem 1rem; border: 1px solid #ccc; border-radius: 6px; background: #fff; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; transition: all 0.2s; }
-.map-btn.active { background: #0d2847; color: #fff; border-color: #0d2847; }
+.map-btn { padding: 0.45rem 1rem; border: 1px solid #ccc; border-radius: 6px; background: var(--clr-bg-card); cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; transition: all 0.2s; }
+.map-btn.active { background: var(--clr-primary); color: #fff; border-color: var(--clr-primary); }
 .map-tabs { display: flex; gap: 1rem; margin-bottom: 1rem; }
-.map-tab { padding: 0.6rem 1.4rem; border-radius: 8px; background: #fff; border: 1px solid #ddd; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; transition: all 0.2s; }
-.map-tab.active { background: #0d2847; color: #fff; border-color: #0d2847; }
+.map-tab { padding: 0.6rem 1.4rem; border-radius: 8px; background: var(--clr-bg-card); border: 1px solid #ddd; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; transition: all 0.2s; }
+.map-tab.active { background: var(--clr-primary); color: #fff; border-color: var(--clr-primary); }
 
 /* SVG */
 .svg-diagram { width: 100%; max-width: 100%; margin: 2rem auto; display: block; }
 
 /* KPI */
 .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; }
-.kpi-card { background: linear-gradient(135deg, #fff, #f8f6f0); border-radius: 12px; padding: 1.5rem; text-align: center; border: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-.kpi-card .kpi-num { font-family: 'DM Mono', monospace; font-size: 1.8rem; color: #0d2847; font-weight: 500; }
-.kpi-card .kpi-label { font-size: 0.78rem; color: #888; margin-top: 0.3rem; text-transform: uppercase; letter-spacing: 0.05em; }
-.kpi-card .kpi-sub { font-size: 0.78rem; color: #1a6d8a; margin-top: 0.2rem; }
+.kpi-card { background: linear-gradient(135deg, #fff, #f8f6f0); border-radius: 12px; padding: 1.5rem; text-align: center; border: 1px solid var(--clr-border); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.kpi-card .kpi-num { font-family: 'DM Mono', monospace; font-size: 1.8rem; color: var(--clr-primary); font-weight: 500; }
+.kpi-card .kpi-label { font-size: 0.78rem; color: var(--clr-text-muted); margin-top: 0.3rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.kpi-card .kpi-sub { font-size: 0.78rem; color: var(--clr-primary-light); margin-top: 0.2rem; }
 
 /* Gallery */
 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-.gallery-card { background: #fff; border-radius: 12px; padding: 1.2rem; text-align: center; border: 1px solid #eee; transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: block; }
+.gallery-card { background: var(--clr-bg-card); border-radius: 12px; padding: 1.2rem; text-align: center; border: 1px solid var(--clr-border); transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: block; }
 .gallery-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
 .gallery-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
-.gallery-name { font-weight: 600; font-size: 0.9rem; color: #0d2847; }
-.gallery-src { font-size: 0.75rem; color: #999; margin-top: 0.3rem; }
+.gallery-name { font-weight: 600; font-size: 0.9rem; color: var(--clr-primary); }
+.gallery-src { font-size: 0.75rem; color: var(--clr-text-light); margin-top: 0.3rem; }
 
 /* Links */
 .resource-list { display: grid; gap: 0.8rem; }
-.resource-card { background: #fff; border-radius: 10px; padding: 1.2rem; border: 1px solid #eee; display: flex; align-items: center; gap: 1rem; text-decoration: none; color: inherit; transition: box-shadow 0.2s; }
+.resource-card { background: var(--clr-bg-card); border-radius: 10px; padding: 1.2rem; border: 1px solid var(--clr-border); display: flex; align-items: center; gap: 1rem; text-decoration: none; color: inherit; transition: box-shadow 0.2s; }
 .resource-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
 .resource-icon { font-size: 1.5rem; flex-shrink: 0; }
-.resource-info h4 { font-size: 0.95rem; color: #0d2847; }
-.resource-info p { font-size: 0.78rem; color: #999; }
+.resource-info h4 { font-size: 0.95rem; color: var(--clr-primary); }
+.resource-info p { font-size: 0.78rem; color: var(--clr-text-light); }
 
 /* Footer */
 .footer { background: #0a1628; color: #8899aa; text-align: center; padding: 2.5rem; font-size: 0.8rem; }
-.footer a { color: #d4af37; text-decoration: none; }
+.footer a { color: var(--clr-accent); text-decoration: none; }
 
 /* Animations */
 .reveal { opacity: 0; transform: translateY(25px); transition: opacity 0.6s ease, transform 0.6s ease; }
@@ -99,7 +114,7 @@ body { font-family: 'DM Sans', sans-serif; background: #faf7f2; color: #2c2c2c; 
 
 /* Floating nav */
 .floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
-.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: #1565C0; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--clr-bg-card); box-shadow: 0 2px 12px rgba(0,0,0,0.12); text-decoration: none; font-size: 1.1rem; transition: all 0.25s; color: #1565C0; }
 .floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.18); background: #1565C0; color: #fff; }
 #back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
 #back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
@@ -217,7 +232,7 @@ body { font-family: 'DM Sans', sans-serif; background: #faf7f2; color: #2c2c2c; 
   <svg viewBox="0 0 1000 850" class="svg-diagram reveal" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#00000022"/></filter>
-      <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0d2847"/></marker>
+      <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="var(--clr-primary)"/></marker>
     </defs>
     <!-- 背景水体 -->
     <rect x="50" y="50" width="900" height="750" rx="12" fill="#f5f1e8" stroke="#ddd" stroke-width="1.5"/>
@@ -259,26 +274,26 @@ body { font-family: 'DM Sans', sans-serif; background: #faf7f2; color: #2c2c2c; 
     <text x="200" y="155" text-anchor="middle" fill="#7a3a80" font-size="12" font-family="DM Sans" font-weight="600">梦幻泉</text>
 
     <!-- 入口箭头 -->
-    <line x1="500" y1="55" x2="500" y2="30" stroke="#0d2847" stroke-width="2.5" marker-end="url(#arrowhead)"/>
-    <text x="500" y="25" text-anchor="middle" fill="#0d2847" font-size="12" font-family="DM Sans" font-weight="600">入口 ↑</text>
+    <line x1="500" y1="55" x2="500" y2="30" stroke="var(--clr-primary)" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+    <text x="500" y="25" text-anchor="middle" fill="var(--clr-primary)" font-size="12" font-family="DM Sans" font-weight="600">入口 ↑</text>
 
     <!-- 指北针 -->
     <g transform="translate(910,80)">
-      <polygon points="0,18 6,0 12,18 6,13" fill="#0d2847"/>
-      <text x="6" y="30" text-anchor="middle" fill="#0d2847" font-size="12" font-family="DM Sans" font-weight="700">N</text>
+      <polygon points="0,18 6,0 12,18 6,13" fill="var(--clr-primary)"/>
+      <text x="6" y="30" text-anchor="middle" fill="var(--clr-primary)" font-size="12" font-family="DM Sans" font-weight="700">N</text>
     </g>
 
     <!-- 比例尺 -->
-    <line x1="100" y1="810" x2="300" y2="810" stroke="#0d2847" stroke-width="2"/>
-    <line x1="100" y1="805" x2="100" y2="815" stroke="#0d2847" stroke-width="2"/>
-    <line x1="300" y1="805" x2="300" y2="815" stroke="#0d2847" stroke-width="2"/>
-    <text x="200" y="825" text-anchor="middle" fill="#0d2847" font-size="12" font-family="DM Sans">约 200m</text>
+    <line x1="100" y1="810" x2="300" y2="810" stroke="var(--clr-primary)" stroke-width="2"/>
+    <line x1="100" y1="805" x2="100" y2="815" stroke="var(--clr-primary)" stroke-width="2"/>
+    <line x1="300" y1="805" x2="300" y2="815" stroke="var(--clr-primary)" stroke-width="2"/>
+    <text x="200" y="825" text-anchor="middle" fill="var(--clr-primary)" font-size="12" font-family="DM Sans">约 200m</text>
 
     <text x="500" y="845" text-anchor="middle" fill="#999" font-size="12" font-family="DM Sans">示意图 · 基于 OSM 坐标投影与官方地图 · 北向上</text>
   </svg>
 
   <!-- 园区实景图集 -->
-  <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:#0d2847;margin-top:2.5rem;margin-bottom:1.2rem;" class="reveal">园区实景图集</h3>
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--clr-primary);margin-top:2.5rem;margin-bottom:1.2rem;" class="reveal">园区实景图集</h3>
   <div class="gallery-grid reveal">
     <a href="https://commons.wikimedia.org/wiki/Category:Tokyo_DisneySea" target="_blank" class="gallery-card">
       <div class="gallery-emoji">🏰</div><div class="gallery-name">地中海港湾</div><div class="gallery-src">Wikimedia Commons</div>

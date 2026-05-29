@@ -9,6 +9,18 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
 <style>
+:root {
+  --clr-primary: #6B3FA0;
+  --clr-accent: #D4A853;
+  --clr-accent-dark: #C8A050;
+  --clr-bg: #FEFCF8;
+  --clr-bg-alt: #F0EDF2;
+  --clr-border: #E8DCCF;
+  --clr-text: #1C1C1C;
+  --clr-text-secondary: #5C5C5C;
+  --clr-text-muted: #8C8C8C;
+}
+
 /* ===== RESET & BASE ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -16,8 +28,8 @@ html { scroll-behavior: smooth; font-size: 17px; }
 
 body {
   font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #FEFCF8;
-  color: #1C1C1C;
+  background: var(--clr-bg);
+  color: var(--clr-text);
   line-height: 1.7;
   overflow-x: hidden;
 }
@@ -103,7 +115,7 @@ h1, h2, h3, h4 {
   display: inline-block;
   background: rgba(107,63,160,0.25);
   border: 1px solid rgba(212,168,83,0.35);
-  color: #D4A853;
+  color: var(--clr-accent);
   font-family: 'DM Mono', monospace;
   font-size: 0.8rem;
   padding: 0.4rem 1.2rem;
@@ -115,7 +127,7 @@ h1, h2, h3, h4 {
 .hero h1 {
   font-size: clamp(2.8rem, 7vw, 5.5rem);
   font-weight: 900;
-  background: linear-gradient(180deg, #F0EDF2 0%, #D4A853 50%, #6B3FA0 100%);
+  background: linear-gradient(180deg, var(--clr-bg-alt) 0%, var(--clr-accent) 50%, var(--clr-primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -140,7 +152,7 @@ h1, h2, h3, h4 {
   color: rgba(240,237,242,0.55);
 }
 
-.hero-meta span { color: #D4A853; }
+.hero-meta span { color: var(--clr-accent); }
 
 /* ===== SECTION ===== */
 .section {
@@ -157,7 +169,7 @@ h1, h2, h3, h4 {
 .section-number {
   font-family: 'DM Mono', monospace;
   font-size: 0.75rem;
-  color: #6B3FA0;
+  color: var(--clr-primary);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   margin-bottom: 0.5rem;
@@ -172,7 +184,7 @@ h1, h2, h3, h4 {
 .section-header .divider {
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg, #6B3FA0, #D4A853);
+  background: linear-gradient(90deg, var(--clr-primary), var(--clr-accent));
   margin: 1rem auto 0;
 }
 
@@ -185,7 +197,7 @@ h1, h2, h3, h4 {
 
 .card {
   background: #FFFFFF;
-  border: 1px solid #E8DCCF;
+  border: 1px solid var(--clr-border);
   border-radius: 12px;
   padding: 1.75rem;
   box-shadow: 0 2px 12px rgba(0,0,0,0.05);
@@ -193,7 +205,7 @@ h1, h2, h3, h4 {
 }
 
 .card:hover {
-  border-color: #D4A853;
+  border-color: var(--clr-accent);
   transform: translateY(-3px);
   box-shadow: 0 8px 24px rgba(0,0,0,0.1);
 }
@@ -202,7 +214,7 @@ h1, h2, h3, h4 {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #6B3FA0;
+  color: var(--clr-primary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: 0.5rem;
@@ -212,14 +224,14 @@ h1, h2, h3, h4 {
   font-family: 'Playfair Display', serif;
   font-size: 1.8rem;
   font-weight: 800;
-  color: #1C1C1C;
+  color: var(--clr-text);
   line-height: 1.1;
 }
 
 .card .card-note {
   font-family: 'DM Mono', monospace;
   font-size: 0.78rem;
-  color: #8C8C8C;
+  color: var(--clr-text-muted);
   margin-top: 0.4rem;
 }
 
@@ -227,7 +239,7 @@ h1, h2, h3, h4 {
 .table-wrap {
   overflow-x: auto;
   border-radius: 12px;
-  border: 1px solid #E8DCCF;
+  border: 1px solid var(--clr-border);
 }
 
 table {
@@ -239,20 +251,20 @@ table {
 
 thead th {
   background: rgba(107,63,160,0.08);
-  color: #6B3FA0;
+  color: var(--clr-primary);
   font-family: 'DM Mono', monospace;
   font-weight: 500;
   font-size: 0.75rem;
   text-align: left;
   padding: 0.85rem 1rem;
-  border-bottom: 2px solid #6B3FA0;
+  border-bottom: 2px solid var(--clr-primary);
   letter-spacing: 0.04em;
 }
 
 tbody td {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #E8DCCF;
-  color: #1C1C1C;
+  border-bottom: 1px solid var(--clr-border);
+  color: var(--clr-text);
 }
 
 tbody tr:hover { background: rgba(107,63,160,0.04); }
@@ -270,7 +282,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
 .map-panel h4 {
   font-family: 'DM Mono', monospace;
   font-size: 0.78rem;
-  color: #D4A853;
+  color: var(--clr-accent);
   margin-bottom: 0.6rem;
   letter-spacing: 0.05em;
 }
@@ -279,7 +291,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   width: 100%;
   height: 420px;
   border-radius: 12px;
-  border: 2px solid #E8DCCF;
+  border: 2px solid var(--clr-border);
   overflow: hidden;
   background: #F5F0E8;
 }
@@ -322,7 +334,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   top: 0;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(180deg, #D4A853, #6B3FA0, #D4A853);
+  background: linear-gradient(180deg, var(--clr-accent), var(--clr-primary), var(--clr-accent));
 }
 
 .timeline-item {
@@ -339,7 +351,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #D4A853;
+  background: var(--clr-accent);
   border: 2px solid #FEFCF8;
   box-shadow: 0 0 0 2px rgba(212,168,83,0.4);
 }
@@ -347,13 +359,13 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
 .timeline-date {
   font-family: 'DM Mono', monospace;
   font-size: 0.78rem;
-  color: #6B3FA0;
+  color: var(--clr-primary);
   margin-bottom: 0.2rem;
 }
 
 .timeline-desc {
   font-size: 1rem;
-  color: #1C1C1C;
+  color: var(--clr-text);
 }
 
 /* ===== KPI GRID ===== */
@@ -365,7 +377,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
 
 .kpi-card {
   background: #FFFFFF;
-  border: 1px solid #E8DCCF;
+  border: 1px solid var(--clr-border);
   border-radius: 10px;
   padding: 1.5rem;
   text-align: center;
@@ -375,7 +387,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
 .kpi-card .kpi-label {
   font-family: 'DM Mono', monospace;
   font-size: 0.7rem;
-  color: #6B3FA0;
+  color: var(--clr-primary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: 0.5rem;
@@ -385,41 +397,41 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   font-family: 'Playfair Display', serif;
   font-size: 2rem;
   font-weight: 800;
-  color: #D4A853;
+  color: var(--clr-accent);
 }
 
 .kpi-card .kpi-sub {
   font-size: 0.78rem;
-  color: #8C8C8C;
+  color: var(--clr-text-muted);
   margin-top: 0.3rem;
 }
 
 /* ===== LAND CARDS ===== */
 .land-card {
   background: #FFFFFF;
-  border: 1px solid #E8DCCF;
+  border: 1px solid var(--clr-border);
   border-radius: 12px;
   padding: 2rem;
   margin-bottom: 1.5rem;
-  border-left: 4px solid #D4A853;
+  border-left: 4px solid var(--clr-accent);
   box-shadow: 0 2px 12px rgba(0,0,0,0.05);
 }
 
 .land-card h3 {
   font-size: 1.5rem;
-  color: #1C1C1C;
+  color: var(--clr-text);
   margin-bottom: 0.3rem;
 }
 
 .land-card .land-subtitle {
   font-family: 'DM Mono', monospace;
   font-size: 0.78rem;
-  color: #6B3FA0;
+  color: var(--clr-primary);
   margin-bottom: 1rem;
 }
 
 .land-card p {
-  color: #5C5C5C;
+  color: var(--clr-text-secondary);
   font-size: 0.95rem;
   line-height: 1.7;
 }
@@ -435,7 +447,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   font-family: 'DM Mono', monospace;
   font-size: 0.7rem;
   background: rgba(107,63,160,0.08);
-  color: #6B3FA0;
+  color: var(--clr-primary);
   padding: 0.3rem 0.7rem;
   border-radius: 4px;
   border: 1px solid rgba(107,63,160,0.2);
@@ -450,7 +462,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
 
 .amenity-card {
   background: #FFFFFF;
-  border: 1px solid #E8DCCF;
+  border: 1px solid var(--clr-border);
   box-shadow: 0 2px 12px rgba(0,0,0,0.05);
   border-radius: 10px;
   padding: 1.5rem;
@@ -466,7 +478,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
 
 .amenity-card p {
   font-size: 0.88rem;
-  color: #5C5C5C;
+  color: var(--clr-text-secondary);
 }
 
 /* ===== REFERENCE ===== */
@@ -484,7 +496,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
 }
 
 .ref-list li a {
-  color: #D4A853;
+  color: var(--clr-accent);
   text-decoration: none;
   font-family: 'DM Mono', monospace;
   font-size: 0.82rem;
@@ -492,13 +504,13 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   transition: color 0.2s;
 }
 
-.ref-list li a:hover { color: #F0EDF2; }
+.ref-list li a:hover { color: var(--clr-bg-alt); }
 
 .ref-list li .ref-label {
   display: block;
   font-family: 'DM Sans', sans-serif;
   font-size: 0.9rem;
-  color: #F0EDF2;
+  color: var(--clr-bg-alt);
   margin-bottom: 0.25rem;
 }
 
@@ -620,7 +632,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
           <tr><th>角色 Role</th><th>公司/团队</th><th>说明</th></tr>
         </thead>
         <tbody>
-          <tr><td style="color:#D4A853;">总体规划 Master Plan</td><td>Universal Creative</td><td>环球内部创意设计团队，总控全局</td></tr>
+          <tr><td style="color:var(--clr-accent);">总体规划 Master Plan</td><td>Universal Creative</td><td>环球内部创意设计团队，总控全局</td></tr>
           <tr><td>博克岛设计 Lead</td><td>Forrec (加拿大)</td><td>Isle of Berk 主题区主创设计</td></tr>
           <tr><td>天穹乐园总包</td><td>WG Yates &amp; Sons</td><td>Celestial Park 施工总承包</td></tr>
           <tr><td>博克岛总包</td><td>Hensel Phelps</td><td>承包面积单价约 ¥52,000/m²</td></tr>
@@ -636,14 +648,14 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   </div>
 
   <div class="reveal" style="margin-bottom:2.5rem;">
-    <h3 style="color:#D4A853;font-size:1.3rem;margin-bottom:1rem;">骑乘设备制造商 Ride Manufacturers</h3>
+    <h3 style="color:var(--clr-accent);font-size:1.3rem;margin-bottom:1rem;">骑乘设备制造商 Ride Manufacturers</h3>
     <div class="table-wrap">
       <table>
         <thead>
           <tr><th>制造商</th><th>骑乘项目</th><th>类型 &amp; 技术指标</th></tr>
         </thead>
         <tbody>
-          <tr><td style="color:#D4A853;">Mack Rides (德)</td><td>Stardust Racers 星尘竞速</td><td>双轨发射竞速过山车，高 40.5 m，极速 100 km/h</td></tr>
+          <tr><td style="color:var(--clr-accent);">Mack Rides (德)</td><td>Stardust Racers 星尘竞速</td><td>双轨发射竞速过山车，高 40.5 m，极速 100 km/h</td></tr>
           <tr><td>Mack Rides (德)</td><td>Curse of the Werewolf 狼人诅咒</td><td>旋转式过山车 (spinning coaster)</td></tr>
           <tr><td>Mack Rides (德)</td><td>Fyre Drill 烈焰水战</td><td>交互式水上游乐设施</td></tr>
           <tr><td>Intamin (瑞士)</td><td>Hiccup's Wing Gliders</td><td>家庭发射过山车 (family launch coaster)</td></tr>
@@ -716,8 +728,8 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
       <svg viewBox="0 0 800 700" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:750px;">
         <defs>
           <radialGradient id="celestialGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#D4A853" stop-opacity="0.25"/>
-            <stop offset="100%" stop-color="#D4A853" stop-opacity="0"/>
+            <stop offset="0%" stop-color="var(--clr-accent)" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="var(--clr-accent)" stop-opacity="0"/>
           </radialGradient>
           <filter id="shadow"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity="0.4"/></filter>
         </defs>
@@ -727,42 +739,42 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
         <circle cx="400" cy="330" r="260" fill="none" stroke="rgba(107,63,160,0.1)" stroke-width="1" stroke-dasharray="4,6"/>
 
         <!-- Hub: Celestial Park -->
-        <circle cx="400" cy="330" r="85" fill="url(#celestialGlow)" stroke="#D4A853" stroke-width="2.5"/>
-        <circle cx="400" cy="330" r="65" fill="rgba(10,14,39,0.85)" stroke="#D4A853" stroke-width="1.5"/>
-        <text x="400" y="320" text-anchor="middle" fill="#D4A853" font-family="Playfair Display,serif" font-size="17" font-weight="700">Celestial Park</text>
-        <text x="400" y="340" text-anchor="middle" fill="#F0EDF2" font-family="DM Sans,sans-serif" font-size="12">天穹乐园 · 中心枢纽</text>
+        <circle cx="400" cy="330" r="85" fill="url(#celestialGlow)" stroke="var(--clr-accent)" stroke-width="2.5"/>
+        <circle cx="400" cy="330" r="65" fill="rgba(10,14,39,0.85)" stroke="var(--clr-accent)" stroke-width="1.5"/>
+        <text x="400" y="320" text-anchor="middle" fill="var(--clr-accent)" font-family="Playfair Display,serif" font-size="17" font-weight="700">Celestial Park</text>
+        <text x="400" y="340" text-anchor="middle" fill="var(--clr-bg-alt)" font-family="DM Sans,sans-serif" font-size="12">天穹乐园 · 中心枢纽</text>
 
         <!-- Spoke lines from center to each land -->
-        <line x1="400" y1="330" x2="400" y2="85" stroke="#C8A050" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+        <line x1="400" y1="330" x2="400" y2="85" stroke="var(--clr-accent-dark)" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
         <line x1="400" y1="330" x2="590" y2="180" stroke="#E52521" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
-        <line x1="400" y1="330" x2="610" y2="400" stroke="#6B3FA0" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+        <line x1="400" y1="330" x2="610" y2="400" stroke="var(--clr-primary)" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
         <line x1="400" y1="330" x2="570" y2="560" stroke="#2B5C3B" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
         <line x1="400" y1="330" x2="220" y2="530" stroke="#3B7DD8" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
         <line x1="400" y1="330" x2="160" y2="380" stroke="#3B7DD8" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
 
         <!-- Helios Grand Hotel (top) -->
-        <rect x="345" y="60" width="110" height="38" rx="6" fill="rgba(200,160,80,0.12)" stroke="#C8A050" stroke-width="1.8"/>
-        <text x="400" y="84" text-anchor="middle" fill="#C8A050" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">Helios Grand</text>
+        <rect x="345" y="60" width="110" height="38" rx="6" fill="rgba(200,160,80,0.12)" stroke="var(--clr-accent-dark)" stroke-width="1.8"/>
+        <text x="400" y="84" text-anchor="middle" fill="var(--clr-accent-dark)" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">Helios Grand</text>
 
         <!-- Super Nintendo World (upper right) -->
         <rect x="530" y="155" width="125" height="50" rx="6" fill="rgba(229,37,33,0.1)" stroke="#E52521" stroke-width="2"/>
         <text x="592" y="175" text-anchor="middle" fill="#E52521" font-family="Playfair Display,serif" font-size="14" font-weight="700">Nintendo</text>
-        <text x="592" y="193" text-anchor="middle" fill="#F0EDF2" font-family="DM Sans,sans-serif" font-size="10">超级任天堂世界</text>
+        <text x="592" y="193" text-anchor="middle" fill="var(--clr-bg-alt)" font-family="DM Sans,sans-serif" font-size="10">超级任天堂世界</text>
 
         <!-- Dark Universe (right) -->
-        <rect x="555" y="375" width="115" height="50" rx="6" fill="rgba(107,63,160,0.12)" stroke="#6B3FA0" stroke-width="2"/>
-        <text x="612" y="395" text-anchor="middle" fill="#6B3FA0" font-family="Playfair Display,serif" font-size="14" font-weight="700">Dark Universe</text>
-        <text x="612" y="413" text-anchor="middle" fill="#F0EDF2" font-family="DM Sans,sans-serif" font-size="10">暗黑宇宙</text>
+        <rect x="555" y="375" width="115" height="50" rx="6" fill="rgba(107,63,160,0.12)" stroke="var(--clr-primary)" stroke-width="2"/>
+        <text x="612" y="395" text-anchor="middle" fill="var(--clr-primary)" font-family="Playfair Display,serif" font-size="14" font-weight="700">Dark Universe</text>
+        <text x="612" y="413" text-anchor="middle" fill="var(--clr-bg-alt)" font-family="DM Sans,sans-serif" font-size="10">暗黑宇宙</text>
 
         <!-- Wizarding World (lower right) -->
         <rect x="510" y="535" width="125" height="50" rx="6" fill="rgba(43,92,59,0.12)" stroke="#2B5C3B" stroke-width="2"/>
         <text x="572" y="555" text-anchor="middle" fill="#2B5C3B" font-family="Playfair Display,serif" font-size="14" font-weight="700">Wizarding World</text>
-        <text x="572" y="573" text-anchor="middle" fill="#F0EDF2" font-family="DM Sans,sans-serif" font-size="10">魔法部</text>
+        <text x="572" y="573" text-anchor="middle" fill="var(--clr-bg-alt)" font-family="DM Sans,sans-serif" font-size="10">魔法部</text>
 
         <!-- Isle of Berk (lower left) -->
         <rect x="140" y="500" width="130" height="50" rx="6" fill="rgba(59,125,216,0.1)" stroke="#3B7DD8" stroke-width="2"/>
         <text x="205" y="520" text-anchor="middle" fill="#3B7DD8" font-family="Playfair Display,serif" font-size="14" font-weight="700">Isle of Berk</text>
-        <text x="205" y="538" text-anchor="middle" fill="#F0EDF2" font-family="DM Sans,sans-serif" font-size="10">博克岛</text>
+        <text x="205" y="538" text-anchor="middle" fill="var(--clr-bg-alt)" font-family="DM Sans,sans-serif" font-size="10">博克岛</text>
 
         <!-- Entrance (bottom) -->
         <polygon points="370,620 430,620 415,650 385,650" fill="rgba(74,144,217,0.15)" stroke="#4A90D9" stroke-width="1.8"/>
@@ -770,19 +782,19 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
 
         <!-- Portal gateways -->
         <circle cx="482" cy="290" r="8" fill="none" stroke="#E52521" stroke-width="1.5"/>
-        <circle cx="530" cy="360" r="8" fill="none" stroke="#6B3FA0" stroke-width="1.5"/>
+        <circle cx="530" cy="360" r="8" fill="none" stroke="var(--clr-primary)" stroke-width="1.5"/>
         <circle cx="490" cy="490" r="8" fill="none" stroke="#2B5C3B" stroke-width="1.5"/>
         <circle cx="310" cy="460" r="8" fill="none" stroke="#3B7DD8" stroke-width="1.5"/>
 
         <!-- Compass Rose (top right corner) -->
         <g transform="translate(720,70)">
-          <circle cx="0" cy="0" r="24" fill="none" stroke="#D4A853" stroke-width="1" opacity="0.5"/>
-          <polygon points="0,-20 4,-5 20,0 4,5 0,20 -4,5 -20,0 -4,-5" fill="#D4A853" opacity="0.8"/>
-          <polygon points="0,-20 0,0 -4,-5" fill="#6B3FA0" opacity="0.6"/>
-          <polygon points="0,0 4,5 20,0" fill="#D4A853" opacity="0.5"/>
-          <polygon points="0,0 4,-5 0,-20" fill="#D4A853" opacity="0.9"/>
-          <polygon points="0,0 -4,5 0,20" fill="#D4A853" opacity="0.9"/>
-          <text x="0" y="-28" text-anchor="middle" fill="#D4A853" font-family="DM Sans,sans-serif" font-size="10" font-weight="700">N</text>
+          <circle cx="0" cy="0" r="24" fill="none" stroke="var(--clr-accent)" stroke-width="1" opacity="0.5"/>
+          <polygon points="0,-20 4,-5 20,0 4,5 0,20 -4,5 -20,0 -4,-5" fill="var(--clr-accent)" opacity="0.8"/>
+          <polygon points="0,-20 0,0 -4,-5" fill="var(--clr-primary)" opacity="0.6"/>
+          <polygon points="0,0 4,5 20,0" fill="var(--clr-accent)" opacity="0.5"/>
+          <polygon points="0,0 4,-5 0,-20" fill="var(--clr-accent)" opacity="0.9"/>
+          <polygon points="0,0 -4,5 0,20" fill="var(--clr-accent)" opacity="0.9"/>
+          <text x="0" y="-28" text-anchor="middle" fill="var(--clr-accent)" font-family="DM Sans,sans-serif" font-size="10" font-weight="700">N</text>
         </g>
       </svg>
     </div>
@@ -929,7 +941,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
         </thead>
         <tbody>
           <tr class="highlight-row">
-            <td style="color:#D4A853;">Stardust Racers 星尘竞速</td>
+            <td style="color:var(--clr-accent);">Stardust Racers 星尘竞速</td>
             <td>天穹乐园</td>
             <td>Mack Rides</td>
             <td>双轨发射竞速过山车</td>
@@ -1026,7 +1038,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
   </div>
 
   <div class="reveal">
-    <div class="land-card" style="border-left-color:#D4A853;">
+    <div class="land-card" style="border-left-color:var(--clr-accent);">
       <h3>1. Celestial Park 天穹乐园</h3>
       <div class="land-subtitle">中央枢纽 · Hub Land</div>
       <p>园区的地理与叙事中心，以天文学和星象为主题。游客经南侧主入口进入后首先抵达此区，由此通过四座主题"门户"进入其他四个世界。</p>
@@ -1039,7 +1051,7 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
       </div>
     </div>
 
-    <div class="land-card" style="border-left-color:#6B3FA0;">
+    <div class="land-card" style="border-left-color:var(--clr-primary);">
       <h3>2. Dark Universe 暗黑宇宙</h3>
       <div class="land-subtitle">环球经典怪物 · Classic Monsters</div>
       <p>以环球经典怪物宇宙为主题，包含狼人、吸血鬼、弗兰肯斯坦等经典 IP。Darkmoor 村落营造哥特式沉浸氛围，是整个园区最具沉浸感的黑暗主题区。</p>
@@ -1271,19 +1283,19 @@ tbody tr:hover { background: rgba(107,63,160,0.04); }
 
   // Zone markers data
   var zones = [
-    { name: 'Celestial Park 天穹乐园', lat: 28.4422, lng: -81.4490, color: '#D4A853' },
+    { name: 'Celestial Park 天穹乐园', lat: 28.4422, lng: -81.4490, color: 'var(--clr-accent)' },
     { name: 'Super Nintendo World 任天堂', lat: 28.4425, lng: -81.4480, color: '#E52521' },
-    { name: 'Dark Universe 暗黑宇宙', lat: 28.4430, lng: -81.4482, color: '#6B3FA0' },
+    { name: 'Dark Universe 暗黑宇宙', lat: 28.4430, lng: -81.4482, color: 'var(--clr-primary)' },
     { name: 'Wizarding World 魔法部', lat: 28.4418, lng: -81.4500, color: '#2B5C3B' },
     { name: 'Isle of Berk 博克岛', lat: 28.4415, lng: -81.4495, color: '#3B7DD8' },
-    { name: 'Helios Grand Hotel', lat: 28.4432, lng: -81.4490, color: '#C8A050' },
+    { name: 'Helios Grand Hotel', lat: 28.4432, lng: -81.4490, color: 'var(--clr-accent-dark)' },
     { name: '入口 · Entrance', lat: 28.4412, lng: -81.4490, color: '#4A90D9' }
   ];
 
   function makeDivIcon(color) {
     return L.divIcon({
       className: 'zone-marker',
-      html: '<div style="width:14px;height:14px;background:' + color + ';border:2.5px solid #F0EDF2;border-radius:50%;box-shadow:0 0 8px ' + color + ';"></div>',
+      html: '<div style="width:14px;height:14px;background:' + color + ';border:2.5px solid var(--clr-bg-alt);border-radius:50%;box-shadow:0 0 8px ' + color + ';"></div>',
       iconSize: [14, 14],
       iconAnchor: [7, 7],
       popupAnchor: [0, -10]

@@ -9,14 +9,26 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
 <style>
+:root {
+  --clr-primary-dark: #0a2540;
+  --clr-primary: #1a6da8;
+  --clr-accent: #4dc9f6;
+  --clr-accent-alt: #127968;
+  --clr-bg: #fbf8f4;
+  --clr-border: #e8e3db;
+  --clr-text: #2c2c2c;
+  --clr-text-secondary: #6b7280;
+  --clr-text-muted: #9ca3af;
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { font-size: 17px; scroll-behavior: smooth; }
 
 body {
   font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #fbf8f4;
-  color: #2c2c2c;
+  background: var(--clr-bg);
+  color: var(--clr-text);
   line-height: 1.7;
   overflow-x: hidden;
 }
@@ -34,7 +46,7 @@ nav a {
   font-size: 0.68rem; font-weight: 500; letter-spacing: 0.04em;
   padding: 6px 12px; border-radius: 18px; transition: all 0.25s;
 }
-nav a:hover, nav a.active { color: #4dc9f6; background: rgba(77,201,246,0.1); }
+nav a:hover, nav a.active { color: var(--clr-accent); background: rgba(77,201,246,0.1); }
 
 /* ===== Hero ===== */
 .hero {
@@ -59,7 +71,7 @@ nav a:hover, nav a.active { color: #4dc9f6; background: rgba(77,201,246,0.1); }
   font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 6vw, 4.8rem);
   font-weight: 700; line-height: 1.13; margin-bottom: 1.2rem; letter-spacing: -0.01em;
 }
-.hero h1 span { color: #4dc9f6; }
+.hero h1 span { color: var(--clr-accent); }
 .hero h2 {
   font-size: clamp(0.9rem, 2vw, 1.1rem); font-weight: 400;
   color: rgba(255,255,255,0.58); max-width: 36rem; margin: 0 auto 2.5rem; line-height: 1.65;
@@ -68,7 +80,7 @@ nav a:hover, nav a.active { color: #4dc9f6; background: rgba(77,201,246,0.1); }
 .hero-stat { text-align: center; min-width: 5.5rem; }
 .hero-stat-num {
   font-family: 'DM Mono', monospace; font-size: 2.2rem; font-weight: 500;
-  color: #4dc9f6; line-height: 1.2;
+  color: var(--clr-accent); line-height: 1.2;
 }
 .hero-stat-label { font-size: 0.72rem; color: rgba(255,255,255,0.48); letter-spacing: 0.04em; margin-top: 0.25rem; }
 .hero-date {
@@ -83,13 +95,13 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
 
 .section-tag {
   font-family: 'DM Mono', monospace; font-size: 0.66rem; font-weight: 500;
-  letter-spacing: 0.12em; text-transform: uppercase; color: #1a6da8; margin-bottom: 0.6rem;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--clr-primary); margin-bottom: 0.6rem;
 }
 .section-title {
   font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700;
-  color: #0a2540; margin-bottom: 0.5rem; letter-spacing: -0.01em;
+  color: var(--clr-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.01em;
 }
-.section-subtitle { font-size: 0.92rem; color: #6b7280; margin-bottom: 2.5rem; max-width: 34rem; line-height: 1.6; }
+.section-subtitle { font-size: 0.92rem; color: var(--clr-text-secondary); margin-bottom: 2.5rem; max-width: 34rem; line-height: 1.6; }
 
 /* ===== Cards ===== */
 .cards-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
@@ -99,53 +111,53 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
 
 .info-card {
   background: #fff; border-radius: 0.85rem; padding: 1.4rem 1.2rem;
-  border: 1px solid #e8e3db; transition: transform 0.25s, box-shadow 0.25s;
+  border: 1px solid var(--clr-border); transition: transform 0.25s, box-shadow 0.25s;
 }
 .info-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.07); }
 .info-card-icon { font-size: 1.5rem; margin-bottom: 0.6rem; opacity: 0.8; }
 .info-card-label {
-  font-size: 0.66rem; color: #9ca3af; letter-spacing: 0.06em;
+  font-size: 0.66rem; color: var(--clr-text-muted); letter-spacing: 0.06em;
   text-transform: uppercase; margin-bottom: 0.3rem;
 }
-.info-card-value { font-size: 0.88rem; font-weight: 600; color: #0a2540; line-height: 1.4; }
+.info-card-value { font-size: 0.88rem; font-weight: 600; color: var(--clr-primary-dark); line-height: 1.4; }
 
 /* ===== Timeline ===== */
 .timeline { position: relative; padding-left: 2.2rem; }
 .timeline::before {
   content: ''; position: absolute; left: 0.48rem; top: 0.4rem; bottom: 0.4rem;
-  width: 2px; background: linear-gradient(to bottom, #1a6da8, #4dc9f6);
+  width: 2px; background: linear-gradient(to bottom, var(--clr-primary), var(--clr-accent));
 }
 .tl-item { position: relative; margin-bottom: 1.6rem; }
 .tl-item::before {
   content: ''; position: absolute; left: -1.86rem; top: 0.3rem;
   width: 0.52rem; height: 0.52rem; border-radius: 50%;
-  background: #1a6da8; border: 2px solid #fbf8f4; box-shadow: 0 0 0 2px #1a6da8;
+  background: var(--clr-primary); border: 2px solid #fbf8f4; box-shadow: 0 0 0 2px var(--clr-primary);
 }
 .tl-year {
   font-family: 'DM Mono', monospace; font-size: 0.7rem; font-weight: 500;
-  color: #1a6da8; letter-spacing: 0.06em; margin-bottom: 0.1rem;
+  color: var(--clr-primary); letter-spacing: 0.06em; margin-bottom: 0.1rem;
 }
 .tl-title { font-weight: 600; font-size: 0.9rem; color: #1a1a1a; }
-.tl-desc { font-size: 0.78rem; color: #6b7280; line-height: 1.5; margin-top: 0.15rem; }
+.tl-desc { font-size: 0.78rem; color: var(--clr-text-secondary); line-height: 1.5; margin-top: 0.15rem; }
 
 /* ===== KPI cards ===== */
 .kpi-card {
   background: #fff; border-radius: 0.85rem; padding: 1.8rem 1.2rem;
-  border: 1px solid #e8e3db; text-align: center; transition: transform 0.25s;
+  border: 1px solid var(--clr-border); text-align: center; transition: transform 0.25s;
 }
 .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
 .kpi-num {
   font-family: 'DM Mono', monospace; font-size: 2rem; font-weight: 500;
-  color: #1a6da8; line-height: 1.2;
+  color: var(--clr-primary); line-height: 1.2;
 }
-.kpi-label { font-size: 0.76rem; color: #6b7280; margin-top: 0.3rem; }
-.kpi-sub { font-size: 0.68rem; color: #9ca3af; margin-top: 0.15rem; }
+.kpi-label { font-size: 0.76rem; color: var(--clr-text-secondary); margin-top: 0.3rem; }
+.kpi-sub { font-size: 0.68rem; color: var(--clr-text-muted); margin-top: 0.15rem; }
 
 /* ===== Resort Cards ===== */
 .resort-card {
   background: #fff; border-radius: 0.85rem; padding: 1.4rem 1.5rem;
-  border-left: 4px solid #1a6da8; border-top: 1px solid #e8e3db;
-  border-right: 1px solid #e8e3db; border-bottom: 1px solid #e8e3db;
+  border-left: 4px solid var(--clr-primary); border-top: 1px solid var(--clr-border);
+  border-right: 1px solid var(--clr-border); border-bottom: 1px solid var(--clr-border);
   transition: transform 0.25s, box-shadow 0.25s;
 }
 .resort-card:nth-child(3n+2) { border-left-color: #e8a817; }
@@ -155,23 +167,23 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
 .resort-card:nth-child(3n+6) { border-left-color: #00838f; }
 .resort-card:nth-child(3n+7) { border-left-color: #e64a19; }
 .resort-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
-.resort-card h4 { font-size: 1rem; font-weight: 600; color: #0a2540; margin-bottom: 0.3rem; }
-.resort-card .resort-loc { font-size: 0.7rem; color: #9ca3af; margin-bottom: 0.5rem; }
-.resort-card p { font-size: 0.78rem; color: #6b7280; line-height: 1.52; }
+.resort-card h4 { font-size: 1rem; font-weight: 600; color: var(--clr-primary-dark); margin-bottom: 0.3rem; }
+.resort-card .resort-loc { font-size: 0.7rem; color: var(--clr-text-muted); margin-bottom: 0.5rem; }
+.resort-card p { font-size: 0.78rem; color: var(--clr-text-secondary); line-height: 1.52; }
 .resort-tags { margin-top: 0.6rem; display: flex; gap: 0.35rem; flex-wrap: wrap; }
 .resort-tag {
   display: inline-block; padding: 0.12rem 0.55rem; border-radius: 0.7rem;
-  background: #f0f4f8; font-size: 0.62rem; color: #1a6da8; border: 1px solid #dce5ef;
+  background: #f0f4f8; font-size: 0.62rem; color: var(--clr-primary); border: 1px solid #dce5ef;
   font-family: 'DM Mono', monospace;
 }
 
 /* ===== Data Tables ===== */
 .data-table {
   width: 100%; border-collapse: collapse; background: #fff;
-  border-radius: 0.85rem; overflow: hidden; border: 1px solid #e8e3db;
+  border-radius: 0.85rem; overflow: hidden; border: 1px solid var(--clr-border);
   font-size: 0.82rem; margin-bottom: 1rem;
 }
-.data-table thead { background: #0a2540; color: #fff; }
+.data-table thead { background: var(--clr-primary-dark); color: #fff; }
 .data-table th {
   padding: 0.7rem 1rem; text-align: left; font-weight: 500;
   font-family: 'DM Mono', monospace; font-size: 0.66rem;
@@ -179,28 +191,28 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
 }
 .data-table td { padding: 0.6rem 1rem; border-top: 1px solid #f0ece6; color: #3c3c3c; }
 .data-table tbody tr:hover { background: #f8f9fb; }
-.data-table .num { font-family: 'DM Mono', monospace; color: #1a6da8; }
-.data-table .cat { font-weight: 600; color: #0a2540; background: #f8f9fb; }
+.data-table .num { font-family: 'DM Mono', monospace; color: var(--clr-primary); }
+.data-table .cat { font-weight: 600; color: var(--clr-primary-dark); background: #f8f9fb; }
 
 /* ===== Model Cards ===== */
 .model-card {
   background: #fff; border-radius: 0.85rem; padding: 1.5rem;
-  border: 1px solid #e8e3db; text-align: center; transition: transform 0.25s;
+  border: 1px solid var(--clr-border); text-align: center; transition: transform 0.25s;
 }
 .model-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
 .model-card-icon { font-size: 2rem; margin-bottom: 0.6rem; }
-.model-card h4 { font-size: 0.9rem; font-weight: 600; color: #0a2540; margin-bottom: 0.35rem; }
-.model-card p { font-size: 0.76rem; color: #6b7280; line-height: 1.5; }
+.model-card h4 { font-size: 0.9rem; font-weight: 600; color: var(--clr-primary-dark); margin-bottom: 0.35rem; }
+.model-card p { font-size: 0.76rem; color: var(--clr-text-secondary); line-height: 1.5; }
 
 /* ===== Feature Card ===== */
 .feat-card {
   background: #fff; border-radius: 0.85rem; padding: 1.4rem; text-align: center;
-  border: 1px solid #e8e3db; transition: transform 0.25s;
+  border: 1px solid var(--clr-border); transition: transform 0.25s;
 }
 .feat-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
 .feat-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-.feat-name { font-weight: 600; font-size: 0.88rem; color: #0a2540; }
-.feat-detail { font-size: 0.74rem; color: #6b7280; margin-top: 0.3rem; line-height: 1.45; }
+.feat-name { font-weight: 600; font-size: 0.88rem; color: var(--clr-primary-dark); }
+.feat-detail { font-size: 0.74rem; color: var(--clr-text-secondary); margin-top: 0.3rem; line-height: 1.45; }
 
 /* ===== Gallery ===== */
 .gallery-grid {
@@ -209,7 +221,7 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
 }
 .gallery-card {
   background: #fff; border-radius: 0.85rem; overflow: hidden;
-  border: 1px solid #e8e3db; text-align: center; transition: transform 0.25s, box-shadow 0.25s;
+  border: 1px solid var(--clr-border); text-align: center; transition: transform 0.25s, box-shadow 0.25s;
 }
 .gallery-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.07); }
 .gallery-img {
@@ -217,11 +229,11 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
   align-items: center; justify-content: center; font-size: 2.5rem;
 }
 .gallery-body { padding: 0.9rem 1rem 1.2rem; }
-.gallery-body h4 { font-size: 0.82rem; font-weight: 600; color: #0a2540; margin-bottom: 0.2rem; }
-.gallery-body p { font-size: 0.7rem; color: #6b7280; margin-bottom: 0.7rem; }
+.gallery-body h4 { font-size: 0.82rem; font-weight: 600; color: var(--clr-primary-dark); margin-bottom: 0.2rem; }
+.gallery-body p { font-size: 0.7rem; color: var(--clr-text-secondary); margin-bottom: 0.7rem; }
 .gallery-btn {
   display: inline-block; padding: 0.3rem 1.1rem;
-  background: #1a6da8; color: #fff; border-radius: 1.5rem;
+  background: var(--clr-primary); color: #fff; border-radius: 1.5rem;
   text-decoration: none; font-size: 0.68rem; font-weight: 500; transition: background 0.2s;
 }
 .gallery-btn:hover { background: #14507a; }
@@ -233,26 +245,26 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
 }
 .ref-card {
   background: #fff; border-radius: 0.75rem; padding: 1rem;
-  border: 1px solid #e8e3db; text-decoration: none; color: inherit;
+  border: 1px solid var(--clr-border); text-decoration: none; color: inherit;
   display: block; transition: transform 0.2s, box-shadow 0.2s;
 }
 .ref-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.05); }
 .ref-type {
   font-family: 'DM Mono', monospace; font-size: 0.56rem;
-  letter-spacing: 0.1em; color: #1a6da8; text-transform: uppercase; margin-bottom: 0.25rem;
+  letter-spacing: 0.1em; color: var(--clr-primary); text-transform: uppercase; margin-bottom: 0.25rem;
 }
-.ref-title { font-weight: 600; font-size: 0.78rem; color: #0a2540; }
-.ref-desc { font-size: 0.68rem; color: #6b7280; margin-top: 0.15rem; }
+.ref-title { font-weight: 600; font-size: 0.78rem; color: var(--clr-primary-dark); }
+.ref-desc { font-size: 0.68rem; color: var(--clr-text-secondary); margin-top: 0.15rem; }
 
 /* ===== Map ===== */
 .site-plan-wrap {
   background: #fff; border-radius: 0.85rem; padding: 1.5rem;
-  border: 1px solid #e8e3db; margin-bottom: 1rem;
+  border: 1px solid var(--clr-border); margin-bottom: 1rem;
 }
 #parkmap { width: 100%; height: 500px; border-radius: 0.6rem; z-index: 1; }
 .map-legend {
   display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.6rem;
-  font-size: 0.72rem; color: #6b7280;
+  font-size: 0.72rem; color: var(--clr-text-secondary);
 }
 .map-legend span { display: flex; align-items: center; gap: 0.3rem; }
 .map-dot {
@@ -261,11 +273,11 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
 
 /* ===== Footer ===== */
 .site-footer {
-  background: #0a2540; color: rgba(255,255,255,0.55);
+  background: var(--clr-primary-dark); color: rgba(255,255,255,0.55);
   padding: 2.5rem 1.5rem; text-align: center; font-size: 0.76rem; line-height: 1.8;
 }
 .site-footer a { color: rgba(255,255,255,0.75); text-decoration: none; }
-.site-footer a:hover { color: #4dc9f6; }
+.site-footer a:hover { color: var(--clr-accent); }
 
 /* ===== Floating Nav ===== */
 .float-nav {
@@ -275,24 +287,24 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
 .float-nav a {
   display: flex; align-items: center; justify-content: center;
   width: 2.4rem; height: 2.4rem; border-radius: 50%;
-  background: #fff; color: #1a6da8; text-decoration: none;
-  border: 1px solid #e8e3db; font-size: 1rem;
+  background: #fff; color: var(--clr-primary); text-decoration: none;
+  border: 1px solid var(--clr-border); font-size: 1rem;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
 }
-.float-nav a:hover { transform: translateY(-2px); background: #1a6da8; color: #fff; box-shadow: 0 4px 16px rgba(26,109,168,0.3); }
+.float-nav a:hover { transform: translateY(-2px); background: var(--clr-primary); color: #fff; box-shadow: 0 4px 16px rgba(26,109,168,0.3); }
 #backToTop { opacity: 0; pointer-events: none; transition: opacity 0.3s; }
 #backToTop.show { opacity: 1; pointer-events: auto; }
 
 /* ===== Competitive Cards ===== */
 .comp-card {
   background: #fff; border-radius: 0.75rem; padding: 1.2rem 1.4rem;
-  border: 1px solid #e8e3db; text-align: center; transition: transform 0.25s;
+  border: 1px solid var(--clr-border); text-align: center; transition: transform 0.25s;
 }
 .comp-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.05); }
-.comp-card.highlight { border: 2px solid #1a6da8; background: #f0f7fc; }
-.comp-name { font-weight: 600; font-size: 0.86rem; color: #0a2540; }
-.comp-detail { font-size: 0.7rem; color: #6b7280; margin-top: 0.2rem; line-height: 1.45; }
+.comp-card.highlight { border: 2px solid var(--clr-primary); background: #f0f7fc; }
+.comp-name { font-weight: 600; font-size: 0.86rem; color: var(--clr-primary-dark); }
+.comp-detail { font-size: 0.7rem; color: var(--clr-text-secondary); margin-top: 0.2rem; line-height: 1.45; }
 
 /* ===== Reveal ===== */
 .reveal {
@@ -503,7 +515,7 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
   </div>
 
   <div class="reveal">
-    <h3 style="font-size:1.1rem;color:#0a2540;margin-bottom:0.8rem;">产品线矩阵详情</h3>
+    <h3 style="font-size:1.1rem;color:var(--clr-primary-dark);margin-bottom:0.8rem;">产品线矩阵详情</h3>
     <table class="data-table">
       <thead>
         <tr><th>产品线</th><th>定位</th><th>目标客群</th><th>客单价</th><th>代表项目</th></tr>
@@ -564,6 +576,26 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
     <span><span class="map-dot" style="background:#6c5ce7;"></span> 中国度假村（含Joyview/白日方舟）</span>
     <span><span class="map-dot" style="background:#27ae60;"></span> 生态/文化度假村 + 即将开业</span>
   </div>
+<div class="svg-container" style="margin-top:32px;">
+<svg viewBox="0 0 900 440" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="440" fill="#1a1a2e" rx="12"/>
+  <text x="450" y="32" text-anchor="middle" fill="#4dc9f6" font-family="Playfair Display,serif" font-size="16" font-weight="700">Club Med 地中海俱乐部 — 全球品牌版图</text>
+  <!-- Categories -->
+  <rect x="30" y="60" width="260" height="150" rx="8" fill="#0a2540" opacity="0.7"/><text x="160" y="90" text-anchor="middle" fill="#ff6b6b" font-size="14" font-weight="700">阳光海滩</text><text x="160" y="115" text-anchor="middle" fill="#AAA" font-size="11">马尔代夫 · 毛里求斯 · 坎昆</text><text x="160" y="135" text-anchor="middle" fill="#AAA" font-size="11">三亚 · 普吉岛 · 巴厘岛</text><text x="160" y="155" text-anchor="middle" fill="#AAA" font-size="11">塞舌尔 · 多米尼加 · 塞内加尔</text><text x="160" y="180" text-anchor="middle" fill="#1a6da8" font-size="10">Exclusive Collection 奢华系列</text>
+  <rect x="320" y="60" width="260" height="150" rx="8" fill="#0a2540" opacity="0.7"/><text x="450" y="90" text-anchor="middle" fill="#4ecdc4" font-size="14" font-weight="700">滑雪山地</text><text x="450" y="115" text-anchor="middle" fill="#AAA" font-size="11">Val Thorens · Val d'Isère</text><text x="450" y="135" text-anchor="middle" fill="#AAA" font-size="11">Tomamu 北海道 · 北大壶</text><text x="450" y="155" text-anchor="middle" fill="#AAA" font-size="11">亚布力 · 长白山</text><text x="450" y="180" text-anchor="middle" fill="#1a6da8" font-size="10">Mont-Tremblant 2028</text>
+  <rect x="610" y="60" width="260" height="150" rx="8" fill="#0a2540" opacity="0.7"/><text x="740" y="90" text-anchor="middle" fill="#6c5ce7" font-size="14" font-weight="700">中国市场</text><text x="740" y="115" text-anchor="middle" fill="#AAA" font-size="11">安吉 · 延庆 · 千岛湖 (Joyview)</text><text x="740" y="135" text-anchor="middle" fill="#AAA" font-size="11">南京 · 太仓 (白日方舟)</text><text x="740" y="155" text-anchor="middle" fill="#AAA" font-size="11">桂林 · 丽江 · 杭州龙坞</text><text x="740" y="180" text-anchor="middle" fill="#1a6da8" font-size="10">珠海东澳岛 · 2026+</text>
+  <!-- Stats row -->
+  <rect x="30" y="240" width="200" height="60" rx="6" fill="#1a6da8" opacity="0.5"/><text x="130" y="275" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">70+</text><text x="130" y="293" text-anchor="middle" fill="#e8e3db" font-size="11">全球度假村</text>
+  <rect x="250" y="240" width="200" height="60" rx="6" fill="#1a6da8" opacity="0.5"/><text x="350" y="275" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">40+</text><text x="350" y="293" text-anchor="middle" fill="#e8e3db" font-size="11">覆盖国家/地区</text>
+  <rect x="470" y="240" width="200" height="60" rx="6" fill="#1a6da8" opacity="0.5"/><text x="570" y="275" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">€15.6亿</text><text x="570" y="293" text-anchor="middle" fill="#e8e3db" font-size="11">2024年营收</text>
+  <rect x="690" y="240" width="180" height="60" rx="6" fill="#1a6da8" opacity="0.5"/><text x="780" y="275" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">1950</text><text x="780" y="293" text-anchor="middle" fill="#e8e3db" font-size="11">创始年份</text>
+  <!-- Timeline bar -->
+  <rect x="30" y="330" width="840" height="4" rx="2" fill="#1a6da8" opacity="0.3"/>
+  <circle cx="100" cy="332" r="5" fill="#4dc9f6"/><text x="100" y="355" text-anchor="middle" fill="#888" font-size="9">1950</text>
+  <circle cx="300" cy="332" r="5" fill="#4dc9f6"/><text x="300" y="355" text-anchor="middle" fill="#888" font-size="9">2004 复星入股</text>
+  <circle cx="600" cy="332" r="5" fill="#4dc9f6"/><text x="600" y="355" text-anchor="middle" fill="#888" font-size="9">2026+ 扩张期</text>
+</svg>
+</div>
 
   <div class="cards-3 reveal" style="margin-top:2rem;">
     <div class="info-card">
@@ -674,7 +706,7 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
   </div>
 
   <div class="reveal">
-    <h3 style="font-size:1.1rem;color:#0a2540;margin-bottom:0.8rem;">中国12座度假村全览</h3>
+    <h3 style="font-size:1.1rem;color:var(--clr-primary-dark);margin-bottom:0.8rem;">中国12座度假村全览</h3>
     <table class="data-table">
       <thead>
         <tr><th>度假村</th><th>产品线</th><th>类型</th><th>开业</th><th>所在地</th></tr>
@@ -764,7 +796,7 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
     </div>
 
     <div class="reveal" style="margin-top:2rem;">
-      <h3 style="font-size:1.1rem;color:#0a2540;margin-bottom:0.8rem;">复星入主前后对比（2015 vs 2024）</h3>
+      <h3 style="font-size:1.1rem;color:var(--clr-primary-dark);margin-bottom:0.8rem;">复星入主前后对比（2015 vs 2024）</h3>
       <table class="data-table">
         <thead>
           <tr><th>指标</th><th>2015年（收购年）</th><th>2024年</th><th>变化幅度</th></tr>
@@ -782,7 +814,7 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
     </div>
 
     <div class="reveal" style="margin-top:2rem;">
-      <h3 style="font-size:1.1rem;color:#0a2540;margin-bottom:0.8rem;">复星旅文集团财务关联（2025年上半年）</h3>
+      <h3 style="font-size:1.1rem;color:var(--clr-primary-dark);margin-bottom:0.8rem;">复星旅文集团财务关联（2025年上半年）</h3>
       <table class="data-table">
         <thead>
           <tr><th>指标</th><th>数据</th><th>备注</th></tr>
@@ -809,7 +841,7 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
   <div class="reveal" style="overflow-x:auto;">
     <table class="data-table" style="min-width:850px;">
       <thead>
-        <tr><th>维度</th><th style="background:#1a6da8;">Club Med</th><th>Sandals</th><th>Banyan Tree 悦榕庄</th><th>Meli&aacute;</th><th>Robinson Club</th></tr>
+        <tr><th>维度</th><th style="background:var(--clr-primary);">Club Med</th><th>Sandals</th><th>Banyan Tree 悦榕庄</th><th>Meli&aacute;</th><th>Robinson Club</th></tr>
       </thead>
       <tbody>
         <tr><td class="cat">总部</td><td>法国巴黎（复星控股）</td><td>牙买加</td><td>新加坡</td><td>西班牙</td><td>德国（途易集团）</td></tr>
@@ -836,7 +868,7 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
   </div>
 
   <div class="reveal" style="margin-top:1rem;">
-    <h3 style="font-size:1rem;color:#0a2540;margin-bottom:0.6rem;">建筑与设计哲学</h3>
+    <h3 style="font-size:1rem;color:var(--clr-primary-dark);margin-bottom:0.6rem;">建筑与设计哲学</h3>
     <div class="cards-4">
       <div class="info-card">
         <div class="info-card-icon">&#127963;</div>
@@ -851,7 +883,7 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
         <div class="info-card-value"><strong>生态设计</strong> &mdash; Finolhu 6,000m&sup2;太阳能板；桂林1,800m&sup2;天然过滤泳池（无化学消毒专利）；南非目标Green Globe认证；全品牌&ldquo;零一次性塑料&rdquo;。</div>
       </div>
       <div class="info-card">
-        <div class="info-card-icon">&#127968;</div>
+        <div class="info-card-icon">&var(--clr-accent-alt);</div>
         <div class="info-card-value"><strong>空间组织逻辑</strong> &mdash; 主建筑（大堂+餐厅+酒吧）为中心，客房环绕分布，运动设施散布，儿童俱乐部独立。&ldquo;主广场&rdquo;为晚间社交核心。</div>
       </div>
     </div>
@@ -1021,12 +1053,12 @@ section.section-alt .section-inner { max-width: 1160px; margin: 0 auto; }
   <p><strong>Club Med 地中海俱乐部</strong> &middot; 品牌深度案例研究</p>
   <p style="margin-top:0.3rem;">数据截至 2026年5月 &middot; 来源：Club Med企业官网、复星旅文公告、百度百科、维基百科、公开新闻报道</p>
   <p style="margin-top:0.3rem;font-size:0.66rem;">本报告仅供研究参考，数据可能存在滞后。金额单位：EUR（欧元）、RMB（人民币），汇率按约1:7.8（2026年5月参考值）。</p>
-  <p style="margin-top:1rem;"><a href="/">&#127968; 返回首页</a></p>
+  <p style="margin-top:1rem;"><a href="/">&var(--clr-accent-alt); 返回首页</a></p>
 </footer>
 
 <!-- ==================== Floating Nav ==================== -->
 <div class="float-nav">
-  <a href="/" title="返回首页">&#127968;</a>
+  <a href="/" title="返回首页">&var(--clr-accent-alt);</a>
   <a href="#" id="backToTop" title="回到顶部">&uarr;</a>
 </div>
 

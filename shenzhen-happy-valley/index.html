@@ -7,9 +7,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
 <style>
+:root {
+  --clr-primary-dark: #1a0e08;
+  --clr-primary: #3d1f0f;
+  --clr-primary-mid: var(--clr-primary-mid);
+  --clr-accent: var(--clr-accent);
+  --clr-bg: #fbf8f0;
+  --clr-bg-card: #fff;
+  --clr-text: #2d2420;
+  --clr-text-secondary: #6b5b4f;
+  --clr-text-muted: #8b7355;
+  --clr-border: rgba(0,0,0,0.05);
+}
 html { font-size: 17px; scroll-behavior: smooth; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'DM Sans', -apple-system, sans-serif; background: #fbf8f0; color: #2d2420; line-height: 1.6; }
+body { font-family: 'DM Sans', -apple-system, sans-serif; background: var(--clr-bg); color: var(--clr-text); line-height: 1.6; }
 
 /* === 字体层级: 5级 === */
 h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; }
@@ -25,7 +37,7 @@ h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* === Hero === */
-.hero { min-height: 100vh; background: linear-gradient(160deg, #1a0e08 0%, #3d1f0f 30%, #8b4513 60%, #d4763a 100%); color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden; }
+.hero { min-height: 100vh; background: linear-gradient(160deg, #1a0e08 0%, var(--clr-primary) 30%, var(--clr-primary-mid) 60%, var(--clr-accent) 100%); color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden; }
 .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 60%, rgba(255,180,80,0.2) 0%, transparent 60%); }
 .hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 160px; background: linear-gradient(to top, rgba(251,248,240,1), transparent); }
 .hero-badge { font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.4); padding: 0.4rem 1.2rem; border-radius: 99px; margin-bottom: 2rem; z-index: 1; }
@@ -38,43 +50,43 @@ h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; }
 
 /* === Sections === */
 section { max-width: 1040px; margin: 0 auto; padding: 2.5rem 1.5rem; }
-.section-title { text-align: center; margin-bottom: 0.4rem; color: #3d1f0f; }
-.section-sub { text-align: center; color: #8b7355; margin-bottom: 2rem; font-size: 0.9rem; }
+.section-title { text-align: center; margin-bottom: 0.4rem; color: var(--clr-primary); }
+.section-sub { text-align: center; color: var(--clr-text-muted); margin-bottom: 2rem; font-size: 0.9rem; }
 
 /* === Cards === */
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
 .card { background: #fff; border-radius: 8px; padding: 1.2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s; }
 .card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
-.card-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: #8b7355; margin-bottom: 0.3rem; }
-.card-value { font-weight: 700; color: #3d1f0f; }
+.card-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--clr-text-muted); margin-bottom: 0.3rem; }
+.card-value { font-weight: 700; color: var(--clr-primary); }
 
 /* === Tables === */
 .data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-.data-table th { background: #3d1f0f; color: #fff; padding: 0.7rem 1rem; text-align: left; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+.data-table th { background: var(--clr-primary); color: #fff; padding: 0.7rem 1rem; text-align: left; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
 .data-table td { padding: 0.65rem 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.9rem; }
 .data-table tr:last-child td { border-bottom: none; }
 .data-table .num { font-family: 'DM Mono', monospace; }
 
 /* === Timeline === */
 .timeline { position: relative; padding-left: 2.5rem; }
-.timeline::before { content: ''; position: absolute; left: 0.8rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #d4763a, #8b4513); }
+.timeline::before { content: ''; position: absolute; left: 0.8rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--clr-accent), var(--clr-primary-mid)); }
 .tl-item { position: relative; margin-bottom: 1.8rem; }
-.tl-item::before { content: ''; position: absolute; left: -2.1rem; top: 0.3rem; width: 12px; height: 12px; border-radius: 50%; background: #d4763a; border: 3px solid #fbf8f0; box-shadow: 0 0 0 2px #d4763a; }
-.tl-year { font-family: 'DM Mono', monospace; font-size: 0.82rem; color: #d4763a; font-weight: 700; }
-.tl-title { font-weight: 700; color: #3d1f0f; }
-.tl-desc { font-size: 0.88rem; color: #6b5b4f; margin-top: 0.15rem; }
-.tl-cost { font-family: 'DM Mono', monospace; font-size: 0.82rem; color: #8b4513; font-weight: 600; }
+.tl-item::before { content: ''; position: absolute; left: -2.1rem; top: 0.3rem; width: 12px; height: 12px; border-radius: 50%; background: var(--clr-accent); border: 3px solid #fbf8f0; box-shadow: 0 0 0 2px var(--clr-accent); }
+.tl-year { font-family: 'DM Mono', monospace; font-size: 0.82rem; color: var(--clr-accent); font-weight: 700; }
+.tl-title { font-weight: 700; color: var(--clr-primary); }
+.tl-desc { font-size: 0.88rem; color: var(--clr-text-secondary); margin-top: 0.15rem; }
+.tl-cost { font-family: 'DM Mono', monospace; font-size: 0.82rem; color: var(--clr-primary-mid); font-weight: 600; }
 
 /* === Map === */
 .map-container { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 1.5rem; }
 .map-tabs { display: flex; border-bottom: 1px solid rgba(0,0,0,0.08); }
-.map-tab { flex: 1; padding: 0.6rem; text-align: center; cursor: pointer; font-size: 0.88rem; font-weight: 600; border: none; background: none; color: #8b7355; transition: color 0.2s; }
-.map-tab.active { color: #3d1f0f; border-bottom: 2px solid #d4763a; }
+.map-tab { flex: 1; padding: 0.6rem; text-align: center; cursor: pointer; font-size: 0.88rem; font-weight: 600; border: none; background: none; color: var(--clr-text-muted); transition: color 0.2s; }
+.map-tab.active { color: var(--clr-primary); border-bottom: 2px solid var(--clr-accent); }
 .map-wrap { height: 420px; width: 100%; position: relative; }
 .map-wrap .leaflet-container { height: 100%; width: 100%; }
 .map-fallback { display: none; position: absolute; inset: 0; align-items: center; justify-content: center; flex-direction: column; gap: 0.6rem; background: #f5f0e5; border-radius: 8px; text-align: center; z-index: 1000; }
-.map-fallback strong { color: #3d1f0f; }
-.map-fallback span { font-size: 0.82rem; color: #8b7355; }
+.map-fallback strong { color: var(--clr-primary); }
+.map-fallback span { font-size: 0.82rem; color: var(--clr-text-muted); }
 .leaflet-div-icon { background: none; border: none; }
 .zone-marker { padding: 3px 9px; border-radius: 4px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.5); border: 2px solid #fff; font-family: 'DM Sans', sans-serif; }
 
@@ -83,7 +95,7 @@ section { max-width: 1040px; margin: 0 auto; padding: 2.5rem 1.5rem; }
 
 /* === KPI === */
 .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.8rem; }
-.kpi-card { background: linear-gradient(135deg, #3d1f0f, #5a2d16); color: #fff; border-radius: 8px; padding: 1.2rem; text-align: center; }
+.kpi-card { background: linear-gradient(135deg, var(--clr-primary), #5a2d16); color: #fff; border-radius: 8px; padding: 1.2rem; text-align: center; }
 .kpi-val { font-size: 2rem; font-family: 'DM Mono', monospace; font-weight: 800; }
 .kpi-label { font-size: 0.78rem; opacity: 0.75; margin-top: 0.2rem; }
 
@@ -92,19 +104,19 @@ section { max-width: 1040px; margin: 0 auto; padding: 2.5rem 1.5rem; }
 .gallery-card { background: #fff; border-radius: 8px; padding: 1.5rem 1.2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
 .gallery-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
 .gallery-card .g-icon { font-size: 2.2rem; margin-bottom: 0.5rem; line-height: 1; }
-.gallery-card h4 { font-weight: 700; color: #3d1f0f; margin-bottom: 0.2rem; }
-.gallery-card .g-desc { font-size: 0.82rem; color: #8b7355; margin-bottom: 0.8rem; line-height: 1.4; }
-.gallery-card .g-link { display: inline-block; padding: 0.4rem 1.2rem; background: #d4763a; color: #fff; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.82rem; transition: background 0.2s; }
+.gallery-card h4 { font-weight: 700; color: var(--clr-primary); margin-bottom: 0.2rem; }
+.gallery-card .g-desc { font-size: 0.82rem; color: var(--clr-text-muted); margin-bottom: 0.8rem; line-height: 1.4; }
+.gallery-card .g-link { display: inline-block; padding: 0.4rem 1.2rem; background: var(--clr-accent); color: #fff; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.82rem; transition: background 0.2s; }
 .gallery-card .g-link:hover { background: #b8551f; }
 
 /* === Footer === */
 footer { background: #1a0e08; color: #c4a882; text-align: center; padding: 2.5rem 1.5rem; font-size: 0.85rem; }
-footer a { color: #d4763a; }
+footer a { color: var(--clr-accent); }
 
 /* === Floating nav === */
 .floating-nav { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; }
-.floating-nav a { display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 50%; background: #fff; box-shadow: 0 1px 6px rgba(0,0,0,0.12); text-decoration: none; font-size: 1rem; transition: all 0.2s; color: #3d1f0f; }
-.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); background: #d4763a; color: #fff; }
+.floating-nav a { display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 50%; background: #fff; box-shadow: 0 1px 6px rgba(0,0,0,0.12); text-decoration: none; font-size: 1rem; transition: all 0.2s; color: var(--clr-primary); }
+.floating-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); background: var(--clr-accent); color: #fff; }
 #back-to-top { opacity: 0; visibility: hidden; pointer-events: none; }
 #back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
 
@@ -175,7 +187,7 @@ footer a { color: #d4763a; }
     <div class="kpi-card"><div class="kpi-val">14.3%</div><div class="kpi-label">2024 文旅板块毛利率</div></div>
   </div>
 
-  <h3 style="margin:2rem 0 0.8rem;color:#3d1f0f;" class="l3">母公司财务概要（华侨城 A · 000069 · 2024 年报）</h3>
+  <h3 style="margin:2rem 0 0.8rem;color:var(--clr-primary);" class="l3">母公司财务概要（华侨城 A · 000069 · 2024 年报）</h3>
   <table class="data-table">
     <thead><tr><th>指标</th><th>2024 年</th><th>同比</th></tr></thead>
     <tbody>
@@ -188,7 +200,7 @@ footer a { color: #d4763a; }
     </tbody>
   </table>
 
-  <h3 style="margin:2rem 0 0.8rem;color:#3d1f0f;" class="l3">同类项目对比</h3>
+  <h3 style="margin:2rem 0 0.8rem;color:var(--clr-primary);" class="l3">同类项目对比</h3>
   <table class="data-table">
     <thead><tr><th>项目</th><th>城市</th><th>开业</th><th>面积（公顷）</th><th>年游客（万）</th><th>票价（¥）</th></tr></thead>
     <tbody>
@@ -279,8 +291,8 @@ footer a { color: #d4763a; }
 
   <div class="svg-map-wrap">
     <svg viewBox="0 0 1000 850" xmlns="http://www.w3.org/2000/svg">
-      <rect x="50" y="50" width="900" height="750" rx="20" fill="#f5eed8" stroke="#3d1f0f" stroke-width="2.5"/>
-      <g transform="translate(920,80)"><polygon points="0,30 8,0 16,30 8,22" fill="#3d1f0f"/><text x="8" y="45" text-anchor="middle" font-size="10" font-family="DM Sans">N</text></g>
+      <rect x="50" y="50" width="900" height="750" rx="20" fill="#f5eed8" stroke="var(--clr-primary)" stroke-width="2.5"/>
+      <g transform="translate(920,80)"><polygon points="0,30 8,0 16,30 8,22" fill="var(--clr-primary)"/><text x="8" y="45" text-anchor="middle" font-size="10" font-family="DM Sans">N</text></g>
       <rect x="380" y="720" width="240" height="70" rx="10" fill="#c0392b" opacity="0.9" stroke="#fff" stroke-width="2"/>
       <text x="500" y="758" text-anchor="middle" fill="#fff" font-size="13" font-weight="700" font-family="DM Sans">西班牙广场（入口）</text>
       <rect x="380" y="590" width="240" height="125" rx="10" fill="#e67e22" opacity="0.85" stroke="#fff" stroke-width="2"/>

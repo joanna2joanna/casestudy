@@ -8,13 +8,25 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
 <style>
+:root {
+  --clr-primary-dark: #0D2818;
+  --clr-primary: #1B5E3A;
+  --clr-accent: #00C8A0;
+  --clr-bg: #F5F0E8;
+  --clr-bg-alt: #F2F5EE;
+  --clr-border: #E0D8C8;
+  --clr-text: #2D2418;
+  --clr-text-secondary: #6B5E40;
+  --clr-text-muted: #8B7B60;
+}
+
 html { font-size: 17px; }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #F5F0E8;
-  color: #2D2418;
+  background: var(--clr-bg);
+  color: var(--clr-text);
   line-height: 1.65;
   overflow-x: hidden;
 }
@@ -31,7 +43,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(165deg, #0D2818 0%, #1B5E3A 25%, #2D7A4F 40%, #0F3D22 70%, #051808 100%);
+  background: linear-gradient(165deg, var(--clr-primary-dark) 0%, var(--clr-primary) 25%, #2D7A4F 40%, #0F3D22 70%, #051808 100%);
   color: #FFF;
   text-align: center;
   overflow: hidden;
@@ -49,7 +61,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 .hero-badge {
   display: inline-block;
   border: 1px solid rgba(0,200,160,0.5);
-  color: #00C8A0;
+  color: var(--clr-accent);
   font-size: 0.78rem;
   letter-spacing: 0.12em;
   padding: 0.35rem 1.2rem;
@@ -81,7 +93,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   font-size: 2.4rem;
   font-weight: 700;
   font-family: 'Playfair Display', serif;
-  color: #00C8A0;
+  color: var(--clr-accent);
 }
 .hero-kpi-label { font-size: 0.78rem; color: rgba(255,255,255,0.55); margin-top: 0.25rem; letter-spacing: 0.06em; }
 
@@ -98,24 +110,24 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   background: #FFF;
   border-radius: 16px;
   padding: 1.8rem;
-  border: 1px solid #E0D8C8;
+  border: 1px solid var(--clr-border);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
 .card-icon { font-size: 2rem; margin-bottom: 0.8rem; }
-.card h4 { font-size: 0.85rem; color: #1B5E3A; letter-spacing: 0.06em; margin-bottom: 0.4rem; }
-.card .val { font-size: 1.15rem; font-weight: 600; color: #2D2418; }
+.card h4 { font-size: 0.85rem; color: var(--clr-primary); letter-spacing: 0.06em; margin-bottom: 0.4rem; }
+.card .val { font-size: 1.15rem; font-weight: 600; color: var(--clr-text); }
 
 .section-header { text-align: center; margin-bottom: 3.5rem; }
-.section-header h2 { color: #0D2818; }
-.section-header p { color: #6B5E40; max-width: 650px; margin: 0 auto; font-size: 1rem; }
+.section-header h2 { color: var(--clr-primary-dark); }
+.section-header p { color: var(--clr-text-secondary); max-width: 650px; margin: 0 auto; font-size: 1rem; }
 
 /* Park card */
 .park-card {
   background: #FFF;
   border-radius: 20px;
   overflow: hidden;
-  border: 1px solid #E0D8C8;
+  border: 1px solid var(--clr-border);
   display: flex;
   flex-direction: column;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -145,8 +157,8 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 }
 .park-card-header h3 { font-size: 1.2rem; }
 .park-card-body { padding: 1.4rem 1.8rem; flex: 1; }
-.park-card-body .theme-tag { display: inline-block; background: #E8F5E9; color: #1B5E3A; padding: 0.2rem 0.7rem; border-radius: 6px; font-size: 0.78rem; font-weight: 600; margin-bottom: 0.6rem; }
-.park-card-body .desc { font-size: 0.85rem; color: #6B5E40; line-height: 1.6; }
+.park-card-body .theme-tag { display: inline-block; background: #E8F5E9; color: var(--clr-primary); padding: 0.2rem 0.7rem; border-radius: 6px; font-size: 0.78rem; font-weight: 600; margin-bottom: 0.6rem; }
+.park-card-body .desc { font-size: 0.85rem; color: var(--clr-text-secondary); line-height: 1.6; }
 
 /* Two column comparison */
 .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0; }
@@ -161,24 +173,24 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   position: absolute;
   left: 0.6rem; top: 0; bottom: 0;
   width: 2px;
-  background: linear-gradient(to bottom, #00C8A0, #1B5E3A 60%, #00C8A0);
+  background: linear-gradient(to bottom, var(--clr-accent), var(--clr-primary) 60%, var(--clr-accent));
 }
 .timeline-item { position: relative; margin-bottom: 2rem; }
 .timeline-item::before {
   content: '';
   position: absolute; left: -2rem; top: 0.4rem;
   width: 12px; height: 12px; border-radius: 50%;
-  background: #00C8A0; border: 2px solid #FFF;
-  box-shadow: 0 0 0 2px #00C8A0;
+  background: var(--clr-accent); border: 2px solid #FFF;
+  box-shadow: 0 0 0 2px var(--clr-accent);
 }
-.timeline-year { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: #1B5E3A; font-weight: 600; }
+.timeline-year { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--clr-primary); font-weight: 600; }
 .timeline-title { font-weight: 600; margin: 0.2rem 0; }
-.timeline-desc { font-size: 0.88rem; color: #6B5E40; }
+.timeline-desc { font-size: 0.88rem; color: var(--clr-text-secondary); }
 
 /* Tables */
 .data-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-.data-table th { background: #0D2818; color: #FFF; padding: 0.8rem 1rem; text-align: left; font-weight: 500; font-size: 0.8rem; letter-spacing: 0.05em; }
-.data-table td { padding: 0.7rem 1rem; border-bottom: 1px solid #E0D8C8; }
+.data-table th { background: var(--clr-primary-dark); color: #FFF; padding: 0.8rem 1rem; text-align: left; font-weight: 500; font-size: 0.8rem; letter-spacing: 0.05em; }
+.data-table td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--clr-border); }
 .data-table tr:nth-child(even) { background: #F7F4EC; }
 .data-table tr:hover { background: #EDE8DC; }
 .data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
@@ -186,44 +198,44 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 /* Resource cards */
 .resource-card {
   background: #FFF; border-radius: 14px; padding: 1.5rem;
-  border: 1px solid #E0D8C8; display: flex; gap: 1.2rem; align-items: flex-start;
+  border: 1px solid var(--clr-border); display: flex; gap: 1.2rem; align-items: flex-start;
   transition: transform 0.2s;
 }
 .resource-card:hover { transform: translateY(-2px); }
 .resource-icon {
   width: 48px; height: 48px; border-radius: 12px;
-  background: linear-gradient(135deg, #1B5E3A, #0D2818);
+  background: linear-gradient(135deg, var(--clr-primary), var(--clr-primary-dark));
   color: #FFF; display: flex; align-items: center; justify-content: center;
   font-size: 1.3rem; flex-shrink: 0;
 }
 .resource-card h4 { font-size: 0.95rem; margin-bottom: 0.25rem; }
-.resource-card p { font-size: 0.82rem; color: #8B7B60; }
-.resource-card a { color: #1B5E3A; text-decoration: none; font-weight: 500; }
+.resource-card p { font-size: 0.82rem; color: var(--clr-text-muted); }
+.resource-card a { color: var(--clr-primary); text-decoration: none; font-weight: 500; }
 
 /* KPI row */
 .kpi-row { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; margin: 2rem 0; }
 .kpi-card {
   background: #FFF; border-radius: 16px; padding: 1.8rem 2rem;
-  text-align: center; border: 1px solid #E0D8C8; min-width: 160px; flex: 1;
+  text-align: center; border: 1px solid var(--clr-border); min-width: 160px; flex: 1;
 }
-.kpi-card .num { font-size: 2.4rem; font-weight: 700; color: #1B5E3A; font-family: 'Playfair Display', serif; }
-.kpi-card .label { font-size: 0.78rem; color: #8B7B60; margin-top: 0.3rem; }
+.kpi-card .num { font-size: 2.4rem; font-weight: 700; color: var(--clr-primary); font-family: 'Playfair Display', serif; }
+.kpi-card .label { font-size: 0.78rem; color: var(--clr-text-muted); margin-top: 0.3rem; }
 
 /* Philosophy cards */
 .phil-card {
-  background: #FFF; border-left: 4px solid #00C8A0;
+  background: #FFF; border-left: 4px solid var(--clr-accent);
   border-radius: 0 12px 12px 0; padding: 1.5rem 1.8rem; margin-bottom: 1.2rem;
 }
-.phil-card h4 { color: #0D2818; margin-bottom: 0.4rem; }
+.phil-card h4 { color: var(--clr-primary-dark); margin-bottom: 0.4rem; }
 
 /* Map */
-.map-section { background: #FFF; border-radius: 20px; padding: 2rem; border: 1px solid #E0D8C8; }
+.map-section { background: #FFF; border-radius: 20px; padding: 2rem; border: 1px solid var(--clr-border); }
 
 /* Accordion country section */
 .country-section { margin-bottom: 3rem; }
-.country-heading { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; padding-bottom: 0.8rem; border-bottom: 2px solid #E0D8C8; }
+.country-heading { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; padding-bottom: 0.8rem; border-bottom: 2px solid var(--clr-border); }
 .country-heading .flag { font-size: 2rem; }
-.country-heading h3 { color: #0D2818; }
+.country-heading h3 { color: var(--clr-primary-dark); }
 
 
 /* Floating nav */
@@ -246,11 +258,11 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 .footer {
-  background: linear-gradient(180deg, #0D2818, #051808);
+  background: linear-gradient(180deg, var(--clr-primary-dark), #051808);
   color: rgba(255,255,255,0.7); text-align: center;
   padding: 3rem 2rem; font-size: 0.85rem; line-height: 1.8;
 }
-.footer a { color: #00C8A0; text-decoration: none; }
+.footer a { color: var(--clr-accent); text-decoration: none; }
 </style>
 </head>
 <body>
@@ -285,9 +297,27 @@ h3 { font-size: 1.35rem; font-weight: 600; }
     <div class="card"><div class="card-icon">📊</div><h4>入住率</h4><div class="val">67%–84%</div><p style="font-size:0.82rem;color:#6B5E40;margin-top:0.3rem;">季节性波动，夏季高峰 83.7%（2025 Q4）</p></div>
   </div>
 </section>
+<div class="svg-container" style="margin-top:32px;">
+<svg viewBox="0 0 900 480" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="480" fill="#1a1a2e" rx="12"/>
+  <text x="450" y="32" text-anchor="middle" fill="#1B5E3A" font-family="Playfair Display,serif" font-size="16" font-weight="700">Center Parcs Europe — 26个村庄 · 5国分布</text>
+  <!-- Simplified Europe outline -->
+  <rect x="80" y="60" width="740" height="340" rx="16" fill="#0D2818" opacity="0.3" stroke="#1B5E3A" stroke-width="1"/>
+  <text x="450" y="270" text-anchor="middle" fill="#2D7A4F" font-size="14" opacity="0.3">EUROPE</text>
+  <!-- Country blocks -->
+  <rect x="120" y="100" width="120" height="80" rx="6" fill="#1B5E3A" opacity="0.7"/><text x="180" y="135" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">荷兰 NL</text><text x="180" y="155" text-anchor="middle" fill="#E0D8C8" font-size="11">9 个村庄</text>
+  <rect x="260" y="140" width="100" height="70" rx="6" fill="#2D7A4F" opacity="0.7"/><text x="310" y="170" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">比利时 BE</text><text x="310" y="188" text-anchor="middle" fill="#E0D8C8" font-size="11">5 个村庄</text>
+  <rect x="400" y="100" width="120" height="80" rx="6" fill="#1B5E3A" opacity="0.7"/><text x="460" y="135" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">德国 DE</text><text x="460" y="155" text-anchor="middle" fill="#E0D8C8" font-size="11">6 个村庄</text>
+  <rect x="280" y="240" width="140" height="90" rx="6" fill="#2D7A4F" opacity="0.7"/><text x="350" y="278" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">法国 FR</text><text x="350" y="298" text-anchor="middle" fill="#E0D8C8" font-size="11">7 个村庄</text>
+  <rect x="560" y="60" width="80" height="60" rx="6" fill="#1B5E3A" opacity="0.7"/><text x="600" y="85" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">丹麦 DK</text><text x="600" y="101" text-anchor="middle" fill="#E0D8C8" font-size="10">1个村庄</text>
+  <!-- Key features -->
+  <text x="450" y="390" text-anchor="middle" fill="#00C8A0" font-size="11">所有村庄标配：Aqua Mundo 室内水上乐园 · Market Dome 中央广场 · 无车化 · 森林别墅</text>
+  <text x="450" y="415" text-anchor="middle" fill="#888" font-size="10">1968-2026 · 57年品牌历史 · 母公司 Pierre &amp; Vacances (PVCP)</text>
+</svg>
+</div>
 
 <!-- ═══════ 3. 品牌哲学 ═══════ -->
-<section class="section" style="background:#F2F5EE;max-width:100%;padding:5rem 2rem;">
+<section class="section" style="background:var(--clr-bg-alt);max-width:100%;padding:5rem 2rem;">
   <div style="max-width:1100px;margin:0 auto;">
   <div class="section-header reveal">
     <h2>品牌哲学：回归自然</h2>
@@ -367,7 +397,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 </section>
 
 <!-- ═══════ 5. 各村特色与在地化详解 ═══════ -->
-<section class="section" style="background:#F2F5EE;max-width:100%;padding:5rem 2rem;">
+<section class="section" style="background:var(--clr-bg-alt);max-width:100%;padding:5rem 2rem;">
   <div style="max-width:1100px;margin:0 auto;">
   <div class="section-header reveal">
     <h2>各村特色与在地化详解</h2>
@@ -380,19 +410,19 @@ h3 { font-size: 1.35rem; font-weight: 600; }
     <div class="card-grid card-grid-3">
       <div class="park-card">
         <div class="park-card-header nl"><div class="park-card-badge">1971 · Limburg</div><h3>Het Meerdal</h3></div>
-        <div class="park-card-body"><div class="theme-tag">🌿 自然探索 · 经典家庭</div><p class="desc">最老的现存村庄之一。以茂密森林和大量自然探索活动著称——森林徒步、动物追踪、树冠探险。主打<span style="color:#1B5E3A;font-weight:600;">纯自然家庭度假</span>，是品牌"back to nature"基因的最纯粹体现。</p></div>
+        <div class="park-card-body"><div class="theme-tag">🌿 自然探索 · 经典家庭</div><p class="desc">最老的现存村庄之一。以茂密森林和大量自然探索活动著称——森林徒步、动物追踪、树冠探险。主打<span style="color:var(--clr-primary);font-weight:600;">纯自然家庭度假</span>，是品牌"back to nature"基因的最纯粹体现。</p></div>
       </div>
       <div class="park-card">
         <div class="park-card-header nl"><div class="park-card-badge">1972 · Drenthe</div><h3>De Huttenheugte</h3></div>
-        <div class="park-card-body"><div class="theme-tag">🎪 冒险农场 · 活力运动</div><p class="desc">以"冒险农场"概念闻名——<span style="color:#1B5E3A;font-weight:600;">Discovery Bay</span> 大型沙滩湖区提供水上充气乐园和划船活动。强调运动与冒险，是品牌最活跃的村庄之一。</p></div>
+        <div class="park-card-body"><div class="theme-tag">🎪 冒险农场 · 活力运动</div><p class="desc">以"冒险农场"概念闻名——<span style="color:var(--clr-primary);font-weight:600;">Discovery Bay</span> 大型沙滩湖区提供水上充气乐园和划船活动。强调运动与冒险，是品牌最活跃的村庄之一。</p></div>
       </div>
       <div class="park-card">
         <div class="park-card-header nl"><div class="park-card-badge">1980 · Flevoland</div><h3>De Eemhof</h3></div>
-        <div class="park-card-body"><div class="theme-tag">🏊 品牌革命 · Aqua Mundo 诞生地</div><p class="desc"><span style="color:#1B5E3A;font-weight:600;">历史上最重要的村庄</span>——1980年在这里诞生了世界第一座室内亚热带游泳穹顶（Aqua Mundo），含 FlowRider 冲浪模拟器。位于 Veluwemeer 湖畔，兼具水上运动。</p></div>
+        <div class="park-card-body"><div class="theme-tag">🏊 品牌革命 · Aqua Mundo 诞生地</div><p class="desc"><span style="color:var(--clr-primary);font-weight:600;">历史上最重要的村庄</span>——1980年在这里诞生了世界第一座室内亚热带游泳穹顶（Aqua Mundo），含 FlowRider 冲浪模拟器。位于 Veluwemeer 湖畔，兼具水上运动。</p></div>
       </div>
       <div class="park-card">
         <div class="park-card-header nl"><div class="park-card-badge">1983 · North Brabant</div><h3>De Kempervennen</h3></div>
-        <div class="park-card-body"><div class="theme-tag">⛷️ 四季全能 · 室内滑雪</div><p class="desc"><span style="color:#1B5E3A;font-weight:600;">唯一拥有室内滑雪场的 Center Parcs</span>——Montana Snowcenter 提供全年滑雪/单板体验。结合水上运动和大量室内活动，是品牌最具"全能运动"形象的村庄。</p></div>
+        <div class="park-card-body"><div class="theme-tag">⛷️ 四季全能 · 室内滑雪</div><p class="desc"><span style="color:var(--clr-primary);font-weight:600;">唯一拥有室内滑雪场的 Center Parcs</span>——Montana Snowcenter 提供全年滑雪/单板体验。结合水上运动和大量室内活动，是品牌最具"全能运动"形象的村庄。</p></div>
       </div>
       <div class="park-card">
         <div class="park-card-header nl"><div class="park-card-badge">1986 · Limburg</div><h3>Het Heijderbos</h3></div>
@@ -400,11 +430,11 @@ h3 { font-size: 1.35rem; font-weight: 600; }
       </div>
       <div class="park-card">
         <div class="park-card-header nl"><div class="park-card-badge">1990 · South Holland</div><h3>Port Zélande</h3></div>
-        <div class="park-card-body"><div class="theme-tag">🌊 海上度假 · 三角洲风情</div><p class="desc">坐落在<span style="color:#1B5E3A;font-weight:600;">Grevelingenmeer 湖边</span>，是品牌最"海洋风"的村庄之一。大量水上运动（帆船、风筝冲浪、潜水），建筑融入 Zeeland 三角洲地区的海岸美学。</p></div>
+        <div class="park-card-body"><div class="theme-tag">🌊 海上度假 · 三角洲风情</div><p class="desc">坐落在<span style="color:var(--clr-primary);font-weight:600;">Grevelingenmeer 湖边</span>，是品牌最"海洋风"的村庄之一。大量水上运动（帆船、风筝冲浪、潜水），建筑融入 Zeeland 三角洲地区的海岸美学。</p></div>
       </div>
       <div class="park-card">
         <div class="park-card-header nl"><div class="park-card-badge">1989 · North Holland</div><h3>Park Zandvoort</h3></div>
-        <div class="park-card-body"><div class="theme-tag">🏖️ 沙丘度假 · 北海之滨</div><p class="desc"><span style="color:#1B5E3A;font-weight:600;">唯一建在沙丘生态系统中的 Center Parcs</span>。度假屋嵌入海岸沙丘景观，步行可达北海海滩。整个村庄的景观设计与沙丘植被完全融合——是品牌最"海滨度假村"化的存在。</p></div>
+        <div class="park-card-body"><div class="theme-tag">🏖️ 沙丘度假 · 北海之滨</div><p class="desc"><span style="color:var(--clr-primary);font-weight:600;">唯一建在沙丘生态系统中的 Center Parcs</span>。度假屋嵌入海岸沙丘景观，步行可达北海海滩。整个村庄的景观设计与沙丘植被完全融合——是品牌最"海滨度假村"化的存在。</p></div>
       </div>
     </div>
   </div>
@@ -423,7 +453,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
       </div>
       <div class="park-card">
         <div class="park-card-header be"><div class="park-card-badge">2021 · Limburg</div><h3>Terhills Resort</h3></div>
-        <div class="park-card-body"><div class="theme-tag">♻️ 可持续奢华 · 后工业再生 · 旗舰</div><p class="desc"><span style="color:#1B5E3A;font-weight:600;">品牌新世代的宣言之作</span>——建在废弃煤矿的 63 公顷土地上，250 栋全独立设计度假屋（各不相同的朝向与造型），浮动太阳能电站供能 50%+，琥珀色蝙蝠友好照明。紧邻 Hoge Kempen 国家公园。代表了从"家庭度假"到<span style="color:#1B5E3A;font-weight:600;">"设计驱动型生态度假"</span>的战略转型。</p></div>
+        <div class="park-card-body"><div class="theme-tag">♻️ 可持续奢华 · 后工业再生 · 旗舰</div><p class="desc"><span style="color:var(--clr-primary);font-weight:600;">品牌新世代的宣言之作</span>——建在废弃煤矿的 63 公顷土地上，250 栋全独立设计度假屋（各不相同的朝向与造型），浮动太阳能电站供能 50%+，琥珀色蝙蝠友好照明。紧邻 Hoge Kempen 国家公园。代表了从"家庭度假"到<span style="color:var(--clr-primary);font-weight:600;">"设计驱动型生态度假"</span>的战略转型。</p></div>
       </div>
       <div class="park-card">
         <div class="park-card-header be"><div class="park-card-badge">1989 · West Flanders</div><h3>Park De Haan</h3></div>
@@ -446,11 +476,11 @@ h3 { font-size: 1.35rem; font-weight: 600; }
       </div>
       <div class="park-card">
         <div class="park-card-header de"><div class="park-card-badge">2013 · Saarland</div><h3>Park Bostalsee</h3></div>
-        <div class="park-card-body"><div class="theme-tag">🏖️ 地中海夏日 · 湖区开放模式</div><p class="desc">12,000m² 的 <strong>Market Dome</strong> 内栽种棕榈树，营造全年"地中海夏日"氛围。<span style="color:#1B5E3A;font-weight:600;">唯一对非住客开放的 Center Parcs</span>——日间访客可购买 Aqua Mundo 门票。紧邻 120 公顷的 Bostalsee 水库，提供帆船、帆板等运动。</p></div>
+        <div class="park-card-body"><div class="theme-tag">🏖️ 地中海夏日 · 湖区开放模式</div><p class="desc">12,000m² 的 <strong>Market Dome</strong> 内栽种棕榈树，营造全年"地中海夏日"氛围。<span style="color:var(--clr-primary);font-weight:600;">唯一对非住客开放的 Center Parcs</span>——日间访客可购买 Aqua Mundo 门票。紧邻 120 公顷的 Bostalsee 水库，提供帆船、帆板等运动。</p></div>
       </div>
       <div class="park-card">
         <div class="park-card-header de"><div class="park-card-badge">2018 · Baden-Württemberg</div><h3>Park Allgäu</h3></div>
-        <div class="park-card-body"><div class="theme-tag">🏔️ 阿尔卑斯山麓 · 巴伐利亚庄园</div><p class="desc"><span style="color:#1B5E3A;font-weight:600;">德国最新、最具在地特色的村庄</span>——选址 Allgäu 阿尔卑斯山麓，建筑风格融入巴伐利亚传统农庄美学（木构阳台、坡屋顶、花卉装饰）。邻近 Alpsee 湖，冬季可滑雪，夏季徒步+水上运动。实现了"南德乡村度假"的在地化表达。</p></div>
+        <div class="park-card-body"><div class="theme-tag">🏔️ 阿尔卑斯山麓 · 巴伐利亚庄园</div><p class="desc"><span style="color:var(--clr-primary);font-weight:600;">德国最新、最具在地特色的村庄</span>——选址 Allgäu 阿尔卑斯山麓，建筑风格融入巴伐利亚传统农庄美学（木构阳台、坡屋顶、花卉装饰）。邻近 Alpsee 湖，冬季可滑雪，夏季徒步+水上运动。实现了"南德乡村度假"的在地化表达。</p></div>
       </div>
       <div class="park-card">
         <div class="park-card-header de"><div class="park-card-badge">1979 · Rhineland-Palatinate</div><h3>Park Eifel</h3></div>
@@ -473,7 +503,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
     <div class="card-grid card-grid-3">
       <div class="park-card">
         <div class="park-card-header fr"><div class="park-card-badge">1988 · Normandy</div><h3>Les Bois-Francs</h3></div>
-        <div class="park-card-body"><div class="theme-tag">🏰 诺曼底森林 · 法式经典</div><p class="desc">法国第一家 Center Parcs。选址诺曼底茂密的<span style="color:#1B5E3A;font-weight:600;">国有森林</span>，建筑采用诺曼底半木构（colombage）风格的现代演绎。距巴黎仅 1.5 小时，是法国市场的经典入门。</p></div>
+        <div class="park-card-body"><div class="theme-tag">🏰 诺曼底森林 · 法式经典</div><p class="desc">法国第一家 Center Parcs。选址诺曼底茂密的<span style="color:var(--clr-primary);font-weight:600;">国有森林</span>，建筑采用诺曼底半木构（colombage）风格的现代演绎。距巴黎仅 1.5 小时，是法国市场的经典入门。</p></div>
       </div>
       <div class="park-card">
         <div class="park-card-header fr"><div class="park-card-badge">1993 · Sologne</div><h3>Les Hauts de Bruyères</h3></div>
@@ -481,7 +511,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
       </div>
       <div class="park-card">
         <div class="park-card-header fr"><div class="park-card-badge">2007 · Picardy</div><h3>Le Lac d'Ailette</h3></div>
-        <div class="park-card-body"><div class="theme-tag">🌊 湖畔度假 · 水上运动天堂</div><p class="desc">建在 Ailette 湖半岛上，<span style="color:#1B5E3A;font-weight:600;">湖景是所有法国村中最好的</span>。大量度假屋直接临水，水上运动（帆船、皮划艇、桨板）是核心体验。建筑采用现代湖畔度假村风格。</p></div>
+        <div class="park-card-body"><div class="theme-tag">🌊 湖畔度假 · 水上运动天堂</div><p class="desc">建在 Ailette 湖半岛上，<span style="color:var(--clr-primary);font-weight:600;">湖景是所有法国村中最好的</span>。大量度假屋直接临水，水上运动（帆船、皮划艇、桨板）是核心体验。建筑采用现代湖畔度假村风格。</p></div>
       </div>
       <div class="park-card">
         <div class="park-card-header fr"><div class="park-card-badge">2010 · Lorraine</div><h3>Les Trois Forêts</h3></div>
@@ -489,15 +519,15 @@ h3 { font-size: 1.35rem; font-weight: 600; }
       </div>
       <div class="park-card">
         <div class="park-card-header fr"><div class="park-card-badge">2015 · Vienne</div><h3>Le Bois aux Daims</h3></div>
-        <div class="park-card-body"><div class="theme-tag">🦌 鹿之林 · Futuroscope 联动</div><p class="desc">紧邻<span style="color:#1B5E3A;font-weight:600;">Futuroscope 未来影视主题公园</span>——是品牌唯一与大型主题公园形成协同的选址。"鹿之林"的名字来自当地常见的野生鹿群，度假屋设计融入 Poitou 地区石材元素。</p></div>
+        <div class="park-card-body"><div class="theme-tag">🦌 鹿之林 · Futuroscope 联动</div><p class="desc">紧邻<span style="color:var(--clr-primary);font-weight:600;">Futuroscope 未来影视主题公园</span>——是品牌唯一与大型主题公园形成协同的选址。"鹿之林"的名字来自当地常见的野生鹿群，度假屋设计融入 Poitou 地区石材元素。</p></div>
       </div>
       <div class="park-card">
         <div class="park-card-header fr"><div class="park-card-badge">2017 · Île-de-France</div><h3>Villages Nature Paris</h3></div>
-        <div class="park-card-body"><div class="theme-tag">🌱 生态城市度假 · Euro Disney 合资</div><p class="desc"><span style="color:#1B5E3A;font-weight:600;">品牌史上最特别的项目</span>——与 Euro Disney 合资，主打"可持续城市度假"。地热供暖、零碳目标、有机农场、湖畔空中花园（Aqualagon）。位于巴黎迪士尼乐园旁，吸引国际客群。</p></div>
+        <div class="park-card-body"><div class="theme-tag">🌱 生态城市度假 · Euro Disney 合资</div><p class="desc"><span style="color:var(--clr-primary);font-weight:600;">品牌史上最特别的项目</span>——与 Euro Disney 合资，主打"可持续城市度假"。地热供暖、零碳目标、有机农场、湖畔空中花园（Aqualagon）。位于巴黎迪士尼乐园旁，吸引国际客群。</p></div>
       </div>
       <div class="park-card">
         <div class="park-card-header fr"><div class="park-card-badge">2022 · Nouvelle-Aquitaine</div><h3>Les Landes de Gascogne</h3></div>
-        <div class="park-card-body"><div class="theme-tag">🌲 教育农场 · 树屋度假 · 在地化巅峰</div><p class="desc"><span style="color:#1B5E3A;font-weight:600;">法国最新村，在地化的极致</span>——17 栋树屋（Nests）、传统农舍改建、教育农场（濒危品种保育）、4 个永续菜园、烟草烘干棚风格 Aqua Mundo、巴斯克集市风格 Market Dome。全身心投入 Landes 地区的松林、农业和美食文化。首年吸引 187,300 名访客。</p></div>
+        <div class="park-card-body"><div class="theme-tag">🌲 教育农场 · 树屋度假 · 在地化巅峰</div><p class="desc"><span style="color:var(--clr-primary);font-weight:600;">法国最新村，在地化的极致</span>——17 栋树屋（Nests）、传统农舍改建、教育农场（濒危品种保育）、4 个永续菜园、烟草烘干棚风格 Aqua Mundo、巴斯克集市风格 Market Dome。全身心投入 Landes 地区的松林、农业和美食文化。首年吸引 187,300 名访客。</p></div>
       </div>
     </div>
   </div>
@@ -508,7 +538,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
     <div class="card-grid card-grid-2">
       <div class="park-card">
         <div class="park-card-header dk"><div class="park-card-badge">2025 · Als Island</div><h3>Nordborg Resort</h3></div>
-        <div class="park-card-body"><div class="theme-tag">🇩🇰 北欧首秀 · DGNB 金级 · 丹麦最长栈桥</div><p class="desc">2025 年 6 月 20 日开业，<strong>440 栋北欧设计度假屋</strong>散布于 190 公顷海岸森林。<span style="color:#1B5E3A;font-weight:600;">欧洲首个 DGNB 金级认证度假村</span>——从材料选择到能源循环全面可持续。140 米栈桥伸入波罗的海，Aqua Mundo 7,200m²，融合 friluftsliv（北欧户外生活哲学）。SPAR 超市携手 Lagkagehuset 烘焙。预计年接待 450,000 过夜+25,000 日间游客。</p></div>
+        <div class="park-card-body"><div class="theme-tag">🇩🇰 北欧首秀 · DGNB 金级 · 丹麦最长栈桥</div><p class="desc">2025 年 6 月 20 日开业，<strong>440 栋北欧设计度假屋</strong>散布于 190 公顷海岸森林。<span style="color:var(--clr-primary);font-weight:600;">欧洲首个 DGNB 金级认证度假村</span>——从材料选择到能源循环全面可持续。140 米栈桥伸入波罗的海，Aqua Mundo 7,200m²，融合 friluftsliv（北欧户外生活哲学）。SPAR 超市携手 Lagkagehuset 烘焙。预计年接待 450,000 过夜+25,000 日间游客。</p></div>
       </div>
     </div>
   </div>
@@ -550,7 +580,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 </section>
 
 <!-- ═══════ 7. 运营指标 ═══════ -->
-<section class="section" style="background:#F2F5EE;max-width:100%;padding:5rem 2rem;">
+<section class="section" style="background:var(--clr-bg-alt);max-width:100%;padding:5rem 2rem;">
   <div style="max-width:1100px;margin:0 auto;">
   <div class="section-header reveal">
     <h2>运营指标</h2>
@@ -586,34 +616,34 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   </div>
   <div class="card-grid card-grid-3 reveal">
     <div class="card" style="text-align:center;">
-      <div style="font-size:2.2rem;font-weight:700;color:#1B5E3A;font-family:'Playfair Display',serif;">€6,500万</div><div style="font-size:0.78rem;color:#6B5E40;">约 ¥5.1 亿</div>
+      <div style="font-size:2.2rem;font-weight:700;color:var(--clr-primary);font-family:'Playfair Display',serif;">€6,500万</div><div style="font-size:0.78rem;color:#6B5E40;">约 ¥5.1 亿</div>
       <div style="font-size:0.85rem;color:#6B5E40;">Hauts de Bruyères 翻新 (2024)</div>
     </div>
     <div class="card" style="text-align:center;">
-      <div style="font-size:2.2rem;font-weight:700;color:#1B5E3A;font-family:'Playfair Display',serif;">€1.3亿</div><div style="font-size:0.78rem;color:#6B5E40;">约 ¥10.2 亿</div>
+      <div style="font-size:2.2rem;font-weight:700;color:var(--clr-primary);font-family:'Playfair Display',serif;">€1.3亿</div><div style="font-size:0.78rem;color:#6B5E40;">约 ¥10.2 亿</div>
       <div style="font-size:0.85rem;color:#6B5E40;">Park Bostalsee 新建 (2013)</div>
     </div>
     <div class="card" style="text-align:center;">
-      <div style="font-size:2.2rem;font-weight:700;color:#1B5E3A;font-family:'Playfair Display',serif;">€5,000万+</div><div style="font-size:0.78rem;color:#6B5E40;">约 ¥3.9 亿+</div>
+      <div style="font-size:2.2rem;font-weight:700;color:var(--clr-primary);font-family:'Playfair Display',serif;">€5,000万+</div><div style="font-size:0.78rem;color:#6B5E40;">约 ¥3.9 亿+</div>
       <div style="font-size:0.85rem;color:#6B5E40;">Nordborg Resort 新建 (2025, 估算)</div>
     </div>
     <div class="card" style="text-align:center;">
-      <div style="font-size:2.2rem;font-weight:700;color:#1B5E3A;font-family:'Playfair Display',serif;">€1亿+</div><div style="font-size:0.78rem;color:#6B5E40;">约 ¥7.8 亿+</div>
+      <div style="font-size:2.2rem;font-weight:700;color:var(--clr-primary);font-family:'Playfair Display',serif;">€1亿+</div><div style="font-size:0.78rem;color:#6B5E40;">约 ¥7.8 亿+</div>
       <div style="font-size:0.85rem;color:#6B5E40;">年资本支出 Capex (FY2025)</div>
     </div>
     <div class="card" style="text-align:center;">
-      <div style="font-size:2.2rem;font-weight:700;color:#1B5E3A;font-family:'Playfair Display',serif;">3 个</div>
+      <div style="font-size:2.2rem;font-weight:700;color:var(--clr-primary);font-family:'Playfair Display',serif;">3 个</div>
       <div style="font-size:0.85rem;color:#6B5E40;">在建/规划新项目</div>
     </div>
     <div class="card" style="text-align:center;">
-      <div style="font-size:2.2rem;font-weight:700;color:#1B5E3A;font-family:'Playfair Display',serif;">+3.8%</div>
+      <div style="font-size:2.2rem;font-weight:700;color:var(--clr-primary);font-family:'Playfair Display',serif;">+3.8%</div>
       <div style="font-size:0.85rem;color:#6B5E40;">年旅游收入增长率</div>
     </div>
   </div>
 </section>
 
 <!-- ═══════ 9. 发展模式启示 ═══════ -->
-<section class="section" style="background:#F2F5EE;max-width:100%;padding:5rem 2rem;">
+<section class="section" style="background:var(--clr-bg-alt);max-width:100%;padding:5rem 2rem;">
   <div style="max-width:1100px;margin:0 auto;">
   <div class="section-header reveal">
     <h2>多项目品牌运营启示</h2>
@@ -664,31 +694,31 @@ h3 { font-size: 1.35rem; font-weight: 600; }
     <a href="https://www.centerparcs.eu" target="_blank" style="text-decoration:none;color:inherit;">
       <div class="resource-card">
         <div class="resource-icon">🏛️</div>
-        <div><h4>Center Parcs Europe 官网</h4><p>各村详细信息、360° 虚拟导览、最新价格与活动</p><span style="color:#1B5E3A;font-weight:500;font-size:0.82rem;">centerparcs.eu →</span></div>
+        <div><h4>Center Parcs Europe 官网</h4><p>各村详细信息、360° 虚拟导览、最新价格与活动</p><span style="color:var(--clr-primary);font-weight:500;font-size:0.82rem;">centerparcs.eu →</span></div>
       </div>
     </a>
     <a href="https://news.groupepvcp.com" target="_blank" style="text-decoration:none;color:inherit;">
       <div class="resource-card">
         <div class="resource-icon">📊</div>
-        <div><h4>PVCP 集团新闻中心</h4><p>财报、新项目发布、可持续报告——一手官方数据源</p><span style="color:#1B5E3A;font-weight:500;font-size:0.82rem;">news.groupepvcp.com →</span></div>
+        <div><h4>PVCP 集团新闻中心</h4><p>财报、新项目发布、可持续报告——一手官方数据源</p><span style="color:var(--clr-primary);font-weight:500;font-size:0.82rem;">news.groupepvcp.com →</span></div>
       </div>
     </a>
     <a href="https://www.eap-magazin.de" target="_blank" style="text-decoration:none;color:inherit;">
       <div class="resource-card">
         <div class="resource-icon">🎢</div>
-        <div><h4>EuroAmusement Professional</h4><p>休闲产业专业媒体，深度报道各村开业与扩建（如 Nordborg、Terhills）</p><span style="color:#1B5E3A;font-weight:500;font-size:0.82rem;">eap-magazin.de →</span></div>
+        <div><h4>EuroAmusement Professional</h4><p>休闲产业专业媒体，深度报道各村开业与扩建（如 Nordborg、Terhills）</p><span style="color:var(--clr-primary);font-weight:500;font-size:0.82rem;">eap-magazin.de →</span></div>
       </div>
     </a>
     <a href="https://www.youtube.com/results?search_query=Center+Parcs+Europe+review" target="_blank" style="text-decoration:none;color:inherit;">
       <div class="resource-card">
         <div class="resource-icon">🎥</div>
-        <div><h4>YouTube · Center Parcs 体验视频</h4><p>海量家庭 Vlog、各村 walkthrough、Aqua Mundo 实拍</p><span style="color:#1B5E3A;font-weight:500;font-size:0.82rem;">youtube.com →</span></div>
+        <div><h4>YouTube · Center Parcs 体验视频</h4><p>海量家庭 Vlog、各村 walkthrough、Aqua Mundo 实拍</p><span style="color:var(--clr-primary);font-weight:500;font-size:0.82rem;">youtube.com →</span></div>
       </div>
     </a>
     <a href="https://commons.wikimedia.org/w/index.php?search=Center+Parcs+Europe" target="_blank" style="text-decoration:none;color:inherit;">
       <div class="resource-card">
         <div class="resource-icon">🖼️</div>
-        <div><h4>Wikimedia Commons</h4><p>自由版权图片库，各村建筑与 Aqua Mundo 高清图片</p><span style="color:#1B5E3A;font-weight:500;font-size:0.82rem;">commons.wikimedia.org →</span></div>
+        <div><h4>Wikimedia Commons</h4><p>自由版权图片库，各村建筑与 Aqua Mundo 高清图片</p><span style="color:var(--clr-primary);font-weight:500;font-size:0.82rem;">commons.wikimedia.org →</span></div>
       </div>
     </a>
   </div>

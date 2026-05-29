@@ -9,13 +9,26 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
 <style>
+:root {
+  --clr-primary-dark: #3D1525;
+  --clr-primary: #8B3A4A;
+  --clr-primary-mid: #5C2D3E;
+  --clr-accent: #C8A45C;
+  --clr-bg: #F5F0E8;
+  --clr-bg-card: #FAF7F2;
+  --clr-border: #E8E0D5;
+  --clr-text: #2D2018;
+  --clr-text-secondary: #6B5E50;
+  --clr-text-muted: #8B7355;
+}
+
 html { font-size: 17px; }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #F5F0E8;
-  color: #2D2018;
+  background: var(--clr-bg);
+  color: var(--clr-text);
   line-height: 1.65;
   overflow-x: hidden;
 }
@@ -33,7 +46,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(165deg, #3D1525 0%, #5C2D3E 25%, #8B3A4A 50%, #4A1A2E 75%, #1A0A10 100%);
+  background: linear-gradient(165deg, var(--clr-primary-dark) 0%, var(--clr-primary-mid) 25%, var(--clr-primary) 50%, #4A1A2E 75%, #1A0A10 100%);
   color: #FFF;
   text-align: center;
   overflow: hidden;
@@ -51,7 +64,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 .hero-badge {
   display: inline-block;
   border: 1px solid rgba(200,164,92,0.5);
-  color: #C8A45C;
+  color: var(--clr-accent);
   font-size: 0.78rem;
   letter-spacing: 0.12em;
   padding: 0.35rem 1.2rem;
@@ -83,7 +96,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   font-size: 2.4rem;
   font-weight: 700;
   font-family: 'Playfair Display', serif;
-  color: #C8A45C;
+  color: var(--clr-accent);
 }
 .hero-kpi-label { font-size: 0.78rem; color: rgba(255,255,255,0.55); margin-top: 0.25rem; letter-spacing: 0.06em; }
 
@@ -100,18 +113,18 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   background: #FFF;
   border-radius: 16px;
   padding: 1.8rem;
-  border: 1px solid #E8E0D5;
+  border: 1px solid var(--clr-border);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
 .card-icon { font-size: 2rem; margin-bottom: 0.8rem; }
-.card h4 { font-size: 0.85rem; color: #8B3A4A; letter-spacing: 0.06em; margin-bottom: 0.4rem; }
-.card .val { font-size: 1.15rem; font-weight: 600; color: #2D2018; }
+.card h4 { font-size: 0.85rem; color: var(--clr-primary); letter-spacing: 0.06em; margin-bottom: 0.4rem; }
+.card .val { font-size: 1.15rem; font-weight: 600; color: var(--clr-text); }
 
 /* Section header */
 .section-header { text-align: center; margin-bottom: 3.5rem; }
-.section-header h2 { color: #3D1525; }
-.section-header p { color: #8B7355; max-width: 650px; margin: 0 auto; font-size: 1rem; }
+.section-header h2 { color: var(--clr-primary-dark); }
+.section-header p { color: var(--clr-text-muted); max-width: 650px; margin: 0 auto; font-size: 1rem; }
 
 /* Route Cards - featured */
 .route-card {
@@ -130,20 +143,20 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   width: 160px; height: 160px;
   background: radial-gradient(circle, rgba(139,58,74,0.04) 0%, transparent 70%);
 }
-.route-card h3 { color: #5C2D3E; font-size: 1.5rem; margin-bottom: 0.5rem; }
+.route-card h3 { color: var(--clr-primary-mid); font-size: 1.5rem; margin-bottom: 0.5rem; }
 .route-meta { display: flex; gap: 2rem; flex-wrap: wrap; margin: 1rem 0; }
-.route-meta-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.88rem; color: #8B7355; }
-.route-meta-item strong { color: #3D1525; }
-.route-days { display: inline-block; background: #8B3A4A; color: #FFF; padding: 0.2rem 0.9rem; border-radius: 100px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; }
+.route-meta-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.88rem; color: var(--clr-text-muted); }
+.route-meta-item strong { color: var(--clr-primary-dark); }
+.route-days { display: inline-block; background: var(--clr-primary); color: #FFF; padding: 0.2rem 0.9rem; border-radius: 100px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; }
 .route-stops { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1rem 0; }
-.route-stop { background: #F5F0E8; color: #5C2D3E; padding: 0.3rem 0.8rem; border-radius: 6px; font-size: 0.82rem; font-weight: 500; }
+.route-stop { background: var(--clr-bg); color: var(--clr-primary-mid); padding: 0.3rem 0.8rem; border-radius: 6px; font-size: 0.82rem; font-weight: 500; }
 
 /* Hotel profile card - featured large */
 .hotel-card {
   background: #FFF;
   border-radius: 20px;
   overflow: hidden;
-  border: 1px solid #E8E0D5;
+  border: 1px solid var(--clr-border);
   display: flex;
   flex-direction: column;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -156,7 +169,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   overflow: hidden;
 }
 .hotel-card-header.lodge { background: linear-gradient(135deg, #5C3A2E, #3D2018); }
-.hotel-card-header.linka { background: linear-gradient(135deg, #6B2D3E, #3D1525); }
+.hotel-card-header.linka { background: linear-gradient(135deg, #6B2D3E, var(--clr-primary-dark)); }
 .hotel-card-header.camp { background: linear-gradient(135deg, #4A6741, #2D4028); }
 .hotel-card-badge {
   display: inline-block;
@@ -170,8 +183,8 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 .hotel-card-header h3 { font-size: 1.3rem; margin-bottom: 0.25rem; }
 .hotel-card-header .altitude { font-size: 0.78rem; opacity: 0.75; font-family: 'DM Mono', monospace; }
 .hotel-card-body { padding: 1.5rem 1.8rem; flex: 1; }
-.hotel-card-body .tagline { font-size: 0.95rem; color: #8B3A4A; font-weight: 600; margin-bottom: 0.6rem; }
-.hotel-card-body .desc { font-size: 0.88rem; color: #6B5E50; line-height: 1.6; }
+.hotel-card-body .tagline { font-size: 0.95rem; color: var(--clr-primary); font-weight: 600; margin-bottom: 0.6rem; }
+.hotel-card-body .desc { font-size: 0.88rem; color: var(--clr-text-secondary); line-height: 1.6; }
 
 /* Timeline */
 .timeline { position: relative; padding-left: 2.5rem; }
@@ -181,7 +194,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   left: 0.6rem;
   top: 0; bottom: 0;
   width: 2px;
-  background: linear-gradient(to bottom, #C8A45C, #8B3A4A 50%, #C8A45C);
+  background: linear-gradient(to bottom, var(--clr-accent), var(--clr-primary) 50%, var(--clr-accent));
 }
 .timeline-item { position: relative; margin-bottom: 2rem; }
 .timeline-item::before {
@@ -190,19 +203,19 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   left: -2rem; top: 0.4rem;
   width: 12px; height: 12px;
   border-radius: 50%;
-  background: #C8A45C;
+  background: var(--clr-accent);
   border: 2px solid #FFF;
-  box-shadow: 0 0 0 2px #C8A45C;
+  box-shadow: 0 0 0 2px var(--clr-accent);
 }
-.timeline-year { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: #8B3A4A; font-weight: 600; }
+.timeline-year { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--clr-primary); font-weight: 600; }
 .timeline-title { font-weight: 600; margin: 0.2rem 0; }
-.timeline-desc { font-size: 0.88rem; color: #6B5E50; }
+.timeline-desc { font-size: 0.88rem; color: var(--clr-text-secondary); }
 
 /* Tables */
 .data-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-.data-table th { background: #3D1525; color: #FFF; padding: 0.8rem 1rem; text-align: left; font-weight: 500; font-size: 0.8rem; letter-spacing: 0.05em; }
-.data-table td { padding: 0.7rem 1rem; border-bottom: 1px solid #E8E0D5; }
-.data-table tr:nth-child(even) { background: #FAF7F2; }
+.data-table th { background: var(--clr-primary-dark); color: #FFF; padding: 0.8rem 1rem; text-align: left; font-weight: 500; font-size: 0.8rem; letter-spacing: 0.05em; }
+.data-table td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--clr-border); }
+.data-table tr:nth-child(even) { background: var(--clr-bg-card); }
 .data-table tr:hover { background: #F5EDE0; }
 .data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
 
@@ -216,11 +229,11 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 .compare-col li { padding: 0.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 0.9rem; }
 .compare-col li::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 0.6rem; vertical-align: middle; }
 .compare-col.lodge li::before { background: #5C3A2E; }
-.compare-col.linka li::before { background: #8B3A4A; }
+.compare-col.linka li::before { background: var(--clr-primary); }
 
 /* Map container */
-.map-section { background: #FFF; border-radius: 20px; padding: 2rem; border: 1px solid #E8E0D5; }
-.map-container { height: 520px; border-radius: 12px; overflow: hidden; border: 1px solid #E8E0D5; }
+.map-section { background: #FFF; border-radius: 20px; padding: 2rem; border: 1px solid var(--clr-border); }
+.map-container { height: 520px; border-radius: 12px; overflow: hidden; border: 1px solid var(--clr-border); }
 .map-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
 .map-tab {
   padding: 0.5rem 1.2rem;
@@ -233,24 +246,24 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   font-family: 'DM Sans', sans-serif;
   transition: all 0.2s;
 }
-.map-tab.active { background: #3D1525; color: #FFF; border-color: #3D1525; }
+.map-tab.active { background: var(--clr-primary-dark); color: #FFF; border-color: var(--clr-primary-dark); }
 
 /* Philosophy cards */
 .philosophy-card {
   background: #FFF;
-  border-left: 4px solid #C8A45C;
+  border-left: 4px solid var(--clr-accent);
   border-radius: 0 12px 12px 0;
   padding: 1.5rem 1.8rem;
   margin-bottom: 1.2rem;
 }
-.philosophy-card h4 { color: #3D1525; margin-bottom: 0.4rem; }
+.philosophy-card h4 { color: var(--clr-primary-dark); margin-bottom: 0.4rem; }
 
 /* Resource links */
 .resource-card {
   background: #FFF;
   border-radius: 14px;
   padding: 1.5rem;
-  border: 1px solid #E8E0D5;
+  border: 1px solid var(--clr-border);
   display: flex;
   gap: 1.2rem;
   align-items: flex-start;
@@ -260,15 +273,15 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 .resource-icon {
   width: 48px; height: 48px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #8B3A4A, #5C2D3E);
+  background: linear-gradient(135deg, var(--clr-primary), var(--clr-primary-mid));
   color: #FFF;
   display: flex; align-items: center; justify-content: center;
   font-size: 1.3rem;
   flex-shrink: 0;
 }
 .resource-card h4 { font-size: 0.95rem; margin-bottom: 0.25rem; }
-.resource-card p { font-size: 0.82rem; color: #8B7355; }
-.resource-card a { color: #8B3A4A; text-decoration: none; font-weight: 500; }
+.resource-card p { font-size: 0.82rem; color: var(--clr-text-muted); }
+.resource-card a { color: var(--clr-primary); text-decoration: none; font-weight: 500; }
 
 /* SVG Map */
 .svg-map-wrap { max-width: 100%; overflow-x: auto; margin: 2rem 0; }
@@ -281,12 +294,12 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   border-radius: 16px;
   padding: 1.8rem 2rem;
   text-align: center;
-  border: 1px solid #E8E0D5;
+  border: 1px solid var(--clr-border);
   min-width: 160px;
   flex: 1;
 }
-.kpi-card .num { font-size: 2.4rem; font-weight: 700; color: #8B3A4A; font-family: 'Playfair Display', serif; }
-.kpi-card .label { font-size: 0.78rem; color: #8B7355; margin-top: 0.3rem; }
+.kpi-card .num { font-size: 2.4rem; font-weight: 700; color: var(--clr-primary); font-family: 'Playfair Display', serif; }
+.kpi-card .label { font-size: 0.78rem; color: var(--clr-text-muted); margin-top: 0.3rem; }
 
 /* Responsive */
 
@@ -312,14 +325,14 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 
 /* Footer */
 .footer {
-  background: linear-gradient(180deg, #3D1525, #1A0A10);
+  background: linear-gradient(180deg, var(--clr-primary-dark), #1A0A10);
   color: rgba(255,255,255,0.7);
   text-align: center;
   padding: 3rem 2rem;
   font-size: 0.85rem;
   line-height: 1.8;
 }
-.footer a { color: #C8A45C; text-decoration: none; }
+.footer a { color: var(--clr-accent); text-decoration: none; }
 
 /* Photo gallery grid */
 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
@@ -328,14 +341,14 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   border-radius: 14px;
   padding: 1.5rem;
   text-align: center;
-  border: 1px solid #E8E0D5;
+  border: 1px solid var(--clr-border);
   transition: transform 0.2s;
 }
 .gallery-card:hover { transform: translateY(-3px); }
 .gallery-card .emoji { font-size: 2.5rem; margin-bottom: 0.5rem; }
-.gallery-card h4 { font-size: 0.9rem; color: #3D1525; margin-bottom: 0.3rem; }
-.gallery-card .src { font-size: 0.75rem; color: #8B7355; }
-.gallery-card a { color: #8B3A4A; text-decoration: none; font-weight: 500; font-size: 0.8rem; }
+.gallery-card h4 { font-size: 0.9rem; color: var(--clr-primary-dark); margin-bottom: 0.3rem; }
+.gallery-card .src { font-size: 0.75rem; color: var(--clr-text-muted); }
+.gallery-card a { color: var(--clr-primary); text-decoration: none; font-weight: 500; font-size: 0.8rem; }
 
 /* Leaflet overrides */
 .leaflet-container { font-family: 'DM Sans', sans-serif; }
@@ -375,7 +388,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 </section>
 
 <!-- ═══════════════ 3. 品牌理念：山居 vs 林卡 ═══════════════ -->
-<section class="section" style="background:#FAF7F2;max-width:100%;padding:5rem 2rem;">
+<section class="section" style="background:var(--clr-bg-card);max-width:100%;padding:5rem 2rem;">
   <div style="max-width:1100px;margin:0 auto;">
   <div class="section-header reveal">
     <h2>两大产品系列：山居 vs 林卡</h2>
@@ -447,7 +460,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 </section>
 
 <!-- ═══════════════ 5. 松赞环线 ═══════════════ -->
-<section class="section" style="background:#FAF7F2;max-width:100%;padding:5rem 2rem;">
+<section class="section" style="background:var(--clr-bg-card);max-width:100%;padding:5rem 2rem;">
   <div style="max-width:1100px;margin:0 auto;">
   <div class="section-header reveal">
     <h2>松赞环线 · 经典路线</h2>
@@ -459,7 +472,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
       <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:0.5rem;">
         <h3 style="margin:0;">🏔️ 滇藏线大穿越</h3>
         <span class="route-days">10晚11天</span>
-        <span style="font-size:0.88rem;color:#8B3A4A;font-weight:600;">¥49,999 / 2人</span>
+        <span style="font-size:0.88rem;color:var(--clr-primary);font-weight:600;">¥49,999 / 2人</span>
       </div>
       <p style="color:#6B5E50;margin-bottom:1rem;">松赞旗舰路线。穿行横断山脉至喜马拉雅，串联7家松赞酒店，体验从云南藏区到西藏圣城的壮阔景观与文化变迁。</p>
       <div class="route-meta">
@@ -468,12 +481,12 @@ h3 { font-size: 1.35rem; font-weight: 600; }
         <div class="route-meta-item">👥 <strong>规模：</strong>8-12人精品小团</div>
       </div>
       <div class="route-stops">
-        <span class="route-stop">香格里拉</span><span style="color:#C8A45C;">→</span>
-        <span class="route-stop">梅里</span><span style="color:#C8A45C;">→</span>
-        <span class="route-stop">如美</span><span style="color:#C8A45C;">→</span>
-        <span class="route-stop">来古</span><span style="color:#C8A45C;">→</span>
-        <span class="route-stop">波密</span><span style="color:#C8A45C;">→</span>
-        <span class="route-stop">南迦巴瓦</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">香格里拉</span><span style="color:var(--clr-accent);">→</span>
+        <span class="route-stop">梅里</span><span style="color:var(--clr-accent);">→</span>
+        <span class="route-stop">如美</span><span style="color:var(--clr-accent);">→</span>
+        <span class="route-stop">来古</span><span style="color:var(--clr-accent);">→</span>
+        <span class="route-stop">波密</span><span style="color:var(--clr-accent);">→</span>
+        <span class="route-stop">南迦巴瓦</span><span style="color:var(--clr-accent);">→</span>
         <span class="route-stop">拉萨</span>
       </div>
       <p style="font-size:0.82rem;color:#8B7355;margin-top:0.8rem;"><strong>亮点：</strong>松赞林寺 · 梅里日照金山 · 芒康千年盐田 · 怒江72拐 · 来古冰川 · 南迦巴瓦峰 · 布达拉宫</p>
@@ -490,9 +503,9 @@ h3 { font-size: 1.35rem; font-weight: 600; }
         <div class="route-meta-item">👥 <strong>规模：</strong>8-12人精品小团</div>
       </div>
       <div class="route-stops">
-        <span class="route-stop">香格里拉</span><span style="color:#C8A45C;">→</span>
-        <span class="route-stop">塔城</span><span style="color:#C8A45C;">→</span>
-        <span class="route-stop">梅里</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">香格里拉</span><span style="color:var(--clr-accent);">→</span>
+        <span class="route-stop">塔城</span><span style="color:var(--clr-accent);">→</span>
+        <span class="route-stop">梅里</span><span style="color:var(--clr-accent);">→</span>
         <span class="route-stop">香格里拉</span>
       </div>
       <p style="font-size:0.82rem;color:#8B7355;margin-top:0.8rem;"><strong>亮点：</strong>松赞林寺 · 达摩祖师洞转经 · 滇金丝猴追踪 · 飞来寺煨桑祈福 · 纳帕海观鸟 · 唐卡绘制体验</p>
@@ -508,9 +521,9 @@ h3 { font-size: 1.35rem; font-weight: 600; }
         <div class="route-meta-item">📍 <strong>方向：</strong>香格里拉 → 奔子栏 → 梅里 → 香格里拉</div>
       </div>
       <div class="route-stops">
-        <span class="route-stop">香格里拉</span><span style="color:#C8A45C;">→</span>
-        <span class="route-stop">奔子栏</span><span style="color:#C8A45C;">→</span>
-        <span class="route-stop">梅里</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">香格里拉</span><span style="color:var(--clr-accent);">→</span>
+        <span class="route-stop">奔子栏</span><span style="color:var(--clr-accent);">→</span>
+        <span class="route-stop">梅里</span><span style="color:var(--clr-accent);">→</span>
         <span class="route-stop">香格里拉</span>
       </div>
       <p style="font-size:0.82rem;color:#8B7355;margin-top:0.8rem;"><strong>亮点：</strong>尼丁原始森林徒步 · 东竹林寺 · 金沙江大拐弯 · 日照金山 · 印制经幡 · 尼西黑陶制作 · 尼西土锅鸡</p>
@@ -538,9 +551,9 @@ h3 { font-size: 1.35rem; font-weight: 600; }
         <div class="route-meta-item">📍 <strong>方向：</strong>丽江 → 塔城 → 奔子栏 → 香格里拉</div>
       </div>
       <div class="route-stops">
-        <span class="route-stop">丽江</span><span style="color:#C8A45C;">→</span>
-        <span class="route-stop">塔城</span><span style="color:#C8A45C;">→</span>
-        <span class="route-stop">奔子栏</span><span style="color:#C8A45C;">→</span>
+        <span class="route-stop">丽江</span><span style="color:var(--clr-accent);">→</span>
+        <span class="route-stop">塔城</span><span style="color:var(--clr-accent);">→</span>
+        <span class="route-stop">奔子栏</span><span style="color:var(--clr-accent);">→</span>
         <span class="route-stop">香格里拉</span>
       </div>
       <p style="font-size:0.82rem;color:#8B7355;margin-top:0.8rem;"><strong>亮点：</strong>长江第一湾 · 忠义市场 · 滇金丝猴 · 尼丁森林徒步 · 尼西黑陶 · 纳帕海 · 藏民家访</p>
@@ -549,7 +562,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 
   <div class="reveal" style="margin-top:2rem;">
     <div class="card" style="background:#FFFBF5;border:1px solid #E0D3C0;">
-      <h4 style="color:#8B3A4A;margin-bottom:0.8rem;">💡 一价全包包含内容</h4>
+      <h4 style="color:var(--clr-primary);margin-bottom:0.8rem;">💡 一价全包包含内容</h4>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.5rem;font-size:0.85rem;color:#5C3D3E;">
         <div>✅ 全程松赞酒店住宿（2人一房）</div>
         <div>✅ 每日早、午、晚餐 + 下午茶</div>
@@ -571,7 +584,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
     <p>每一家松赞都是独一无二的——不同的海拔、不同的景观、不同的文化主题，但共享同一套品牌基因</p>
   </div>
 
-  <h3 style="margin:2rem 0 1.2rem;color:#3D1525;">🏔️ 山居系列 —— 隐于山中，回归本质</h3>
+  <h3 style="margin:2rem 0 1.2rem;color:var(--clr-primary-dark);">🏔️ 山居系列 —— 隐于山中，回归本质</h3>
   <div class="card-grid card-grid-3 reveal">
     <div class="hotel-card">
       <div class="hotel-card-header lodge">
@@ -694,7 +707,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
     </div>
   </div>
 
-  <h3 style="margin:2.5rem 0 1.2rem;color:#3D1525;">🏛️ 林卡系列 —— 藏式园林中的奢华休憩</h3>
+  <h3 style="margin:2.5rem 0 1.2rem;color:var(--clr-primary-dark);">🏛️ 林卡系列 —— 藏式园林中的奢华休憩</h3>
   <div class="card-grid card-grid-3 reveal">
     <div class="hotel-card">
       <div class="hotel-card-header linka">
@@ -757,7 +770,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
     </div>
   </div>
 
-  <h3 style="margin:2.5rem 0 1.2rem;color:#3D1525;">⛺ 帐篷营地 —— 与荒野的零距离对话</h3>
+  <h3 style="margin:2.5rem 0 1.2rem;color:var(--clr-primary-dark);">⛺ 帐篷营地 —— 与荒野的零距离对话</h3>
   <div class="card-grid card-grid-2 reveal">
     <div class="hotel-card">
       <div class="hotel-card-header camp">
@@ -785,7 +798,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 </section>
 
 <!-- ═══════════════ 7. 交互地图 ═══════════════ -->
-<section class="section" style="background:#FAF7F2;max-width:100%;padding:5rem 2rem;">
+<section class="section" style="background:var(--clr-bg-card);max-width:100%;padding:5rem 2rem;">
   <div style="max-width:1100px;margin:0 auto;">
   <div class="section-header reveal">
     <h2>滇藏布局 · 酒店分布图</h2>
@@ -801,6 +814,34 @@ h3 { font-size: 1.35rem; font-weight: 600; }
       <div id="parkmap" style="height:100%;width:100%;"></div>
     </div>
     <p style="font-size:0.75rem;color:#8B7355;margin-top:0.8rem;text-align:center;">坐标基于已知地理参考点估算，使用 WGS-84 坐标系。ESRI ArcGIS 瓦片。🟤 山居 &nbsp; 🔴 林卡 &nbsp; 🟢 帐篷营地</p>
+<div class="svg-container" style="margin-top:32px;">
+<svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="400" fill="#1a1a2e" rx="12"/>
+  <text x="450" y="32" text-anchor="middle" fill="#C8A45C" font-family="Playfair Display,serif" font-size="16" font-weight="700">松赞酒店系列 — 滇藏线空间分布示意图</text>
+  <polygon points="850,50 845,70 855,70" fill="#E63946"/><text x="850" y="42" text-anchor="middle" fill="#AAA" font-size="10">N</text>
+  <!-- Route line -->
+  <path d="M50,320 L140,270 L200,220 L270,180 L350,140 L450,90 L550,70" stroke="#C8A45C" stroke-width="3" fill="none" stroke-dasharray="8,4" opacity="0.6"/>
+  <!-- City labels and markers -->
+  <circle cx="50" cy="320" r="6" fill="#C8A45C"/><text x="40" y="345" text-anchor="middle" fill="#AAA" font-size="10">昆明 1,890m</text><text x="40" y="358" text-anchor="middle" fill="#8B3A4A" font-size="9">林卡</text>
+  <circle cx="140" cy="270" r="5" fill="#C8A45C"/><text x="140" y="295" text-anchor="middle" fill="#AAA" font-size="10">大理</text>
+  <circle cx="200" cy="220" r="6" fill="#8B3A4A"/><text x="200" y="245" text-anchor="middle" fill="#AAA" font-size="10">丽江 2,400m</text><text x="200" y="258" text-anchor="middle" fill="#8B3A4A" font-size="9">林卡</text>
+  <circle cx="270" cy="180" r="5" fill="#C8A45C"/><text x="270" y="205" text-anchor="middle" fill="#AAA" font-size="10">塔城 2,000m</text><text x="270" y="218" text-anchor="middle" fill="#8B3A4A" font-size="9">山居</text>
+  <circle cx="350" cy="140" r="7" fill="#8B3A4A"/><text x="350" y="165" text-anchor="middle" fill="#AAA" font-size="10">香格里拉 3,300m</text><text x="350" y="178" text-anchor="middle" fill="#8B3A4A" font-size="9">绿谷山居+林卡</text>
+  <circle cx="450" cy="90" r="6" fill="#C8A45C"/><text x="450" y="115" text-anchor="middle" fill="#AAA" font-size="10">梅里 3,600m</text><text x="450" y="128" text-anchor="middle" fill="#8B3A4A" font-size="9">山居</text>
+  <circle cx="550" cy="70" r="6" fill="#C8A45C"/><text x="550" y="95" text-anchor="middle" fill="#AAA" font-size="10">拉萨 3,650m</text><text x="550" y="108" text-anchor="middle" fill="#8B3A4A" font-size="9">林卡</text>
+  <!-- Additional markers -->
+  <circle cx="480" cy="140" r="4" fill="#8B3A4A"/><text x="510" y="145" fill="#AAA" font-size="8">来古 4,200m</text>
+  <circle cx="400" cy="110" r="4" fill="#8B3A4A"/><text x="420" y="115" fill="#AAA" font-size="8">如美 2,600m</text>
+  <circle cx="520" cy="50" r="4" fill="#8B3A4A"/><text x="545" y="55" fill="#AAA" font-size="8">波密 2,700m</text>
+  <!-- Legend -->
+  <rect x="640" y="250" width="220" height="120" rx="6" fill="none" stroke="#555" stroke-width="1"/>
+  <text x="750" y="275" text-anchor="middle" fill="#AAA" font-size="11" font-weight="600">图例</text>
+  <circle cx="670" cy="295" r="5" fill="#C8A45C"/><text x="685" y="299" fill="#888" font-size="10">山居系列 11家</text>
+  <circle cx="670" cy="315" r="5" fill="#8B3A4A"/><text x="685" y="319" fill="#888" font-size="10">林卡系列 5家</text>
+  <rect x="665" y="330" width="10" height="10" fill="#5C3A2E" rx="2"/><text x="685" y="339" fill="#888" font-size="10">帐篷营地 2座</text>
+  <text x="450" y="385" text-anchor="middle" fill="#888" font-size="10">昆明→拉萨 约1,500km · 18处物业 · 海拔1,750m→4,200m</text>
+</svg>
+</div>
   </div>
   </div>
 </section>
@@ -812,7 +853,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   </div>
   <div class="card-grid card-grid-2 reveal">
     <div class="card">
-      <h4 style="color:#8B3A4A;">🏛️ 核心设计团队</h4>
+      <h4 style="color:var(--clr-primary);">🏛️ 核心设计团队</h4>
       <div style="font-size:0.88rem;color:#6B5E50;line-height:1.8;margin-top:0.8rem;">
         <p><strong>创始人 / 总规划师：</strong>白玛多吉——以纪录片导演的审美和藏族人的文化直觉，亲自参与每一家酒店的选址与概念设计</p>
         <p style="margin-top:0.6rem;"><strong>来古山居建筑师：</strong>戚山山 / STUDIO QI——将40个模块化房间"镶嵌"于海拔4,200米的山崖</p>
@@ -821,7 +862,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
       </div>
     </div>
     <div class="card">
-      <h4 style="color:#8B3A4A;">🔨 建设特色</h4>
+      <h4 style="color:var(--clr-primary);">🔨 建设特色</h4>
       <div style="font-size:0.88rem;color:#6B5E50;line-height:1.8;margin-top:0.8rem;">
         <p><strong>建筑材料：</strong>就地取材——黄色夯土墙面、页岩坡屋顶、本地石材与木材</p>
         <p style="margin-top:0.6rem;"><strong>高度控制：</strong>所有建筑不超过三层，谦逊融入周边村落肌理</p>
@@ -845,7 +886,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 </section>
 
 <!-- ═══════════════ 9. 技术指标总表 ═══════════════ -->
-<section class="section" style="background:#FAF7F2;max-width:100%;padding:5rem 2rem;">
+<section class="section" style="background:var(--clr-bg-card);max-width:100%;padding:5rem 2rem;">
   <div style="max-width:1100px;margin:0 auto;">
   <div class="section-header reveal">
     <h2>技术指标总表</h2>
@@ -931,22 +972,22 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 
   <div class="card-grid card-grid-3 reveal" style="margin-top:2rem;">
     <div class="card" style="text-align:center;">
-      <div style="font-size:2.2rem;font-weight:700;color:#8B3A4A;font-family:'Playfair Display',serif;">¥3亿</div>
+      <div style="font-size:2.2rem;font-weight:700;color:var(--clr-primary);font-family:'Playfair Display',serif;">¥3亿</div>
       <div style="font-size:0.85rem;color:#8B7355;">2022年A轮融资（招银国际）</div>
     </div>
     <div class="card" style="text-align:center;">
-      <div style="font-size:2.2rem;font-weight:700;color:#8B3A4A;font-family:'Playfair Display',serif;">~¥2亿</div>
+      <div style="font-size:2.2rem;font-weight:700;color:var(--clr-primary);font-family:'Playfair Display',serif;">~¥2亿</div>
       <div style="font-size:0.85rem;color:#8B7355;">2025年B轮融资（新东方）</div>
     </div>
     <div class="card" style="text-align:center;">
-      <div style="font-size:2.2rem;font-weight:700;color:#8B3A4A;font-family:'Playfair Display',serif;">>¥15亿</div>
+      <div style="font-size:2.2rem;font-weight:700;color:var(--clr-primary);font-family:'Playfair Display',serif;">>¥15亿</div>
       <div style="font-size:0.85rem;color:#8B7355;">2025年估值</div>
     </div>
   </div>
 </section>
 
 <!-- ═══════════════ 11. 运营指标 ═══════════════ -->
-<section class="section" style="background:#FAF7F2;max-width:100%;padding:5rem 2rem;">
+<section class="section" style="background:var(--clr-bg-card);max-width:100%;padding:5rem 2rem;">
   <div style="max-width:1100px;margin:0 auto;">
   <div class="section-header reveal">
     <h2>运营指标</h2>
@@ -960,7 +1001,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   </div>
   <div class="card-grid card-grid-2 reveal" style="margin-top:1.5rem;">
     <div class="card">
-      <h4 style="color:#8B3A4A;">👥 股权结构（2025）</h4>
+      <h4 style="color:var(--clr-primary);">👥 股权结构（2025）</h4>
       <div style="font-size:0.88rem;color:#6B5E50;line-height:2;">
         <div>白玛多吉（创始人）：<strong>21.3%</strong></div>
         <div>招银国际：<strong>17.9%</strong></div>
@@ -969,7 +1010,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
       </div>
     </div>
     <div class="card">
-      <h4 style="color:#8B3A4A;">🏆 行业荣誉</h4>
+      <h4 style="color:var(--clr-primary);">🏆 行业荣誉</h4>
       <div style="font-size:0.88rem;color:#6B5E50;line-height:1.8;">
         <div>TripAdvisor "中国最好的25家小酒店" —— <strong>连续9年</strong></div>
         <div>美国CNN "中国风景最好的9家酒店"</div>
@@ -1031,14 +1072,14 @@ h3 { font-size: 1.35rem; font-weight: 600; }
 </section>
 
 <!-- ═══════════════ 13. 最新动态与扩建 ═══════════════ -->
-<section class="section" style="background:#FAF7F2;max-width:100%;padding:5rem 2rem;">
+<section class="section" style="background:var(--clr-bg-card);max-width:100%;padding:5rem 2rem;">
   <div style="max-width:1100px;margin:0 auto;">
   <div class="section-header reveal">
     <h2>最新动态与扩建展望</h2>
   </div>
   <div class="card-grid card-grid-2 reveal">
     <div class="card">
-      <h4 style="color:#8B3A4A;">🔜 近期规划（2025-2027）</h4>
+      <h4 style="color:var(--clr-primary);">🔜 近期规划（2025-2027）</h4>
       <ul style="font-size:0.88rem;color:#6B5E50;line-height:2;list-style:none;margin-top:0.5rem;">
         <li>• 云南怒江区域持续深化布局</li>
         <li>• 普洱地区新项目探索</li>
@@ -1047,7 +1088,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
       </ul>
     </div>
     <div class="card">
-      <h4 style="color:#8B3A4A;">🗺️ 远期愿景</h4>
+      <h4 style="color:var(--clr-primary);">🗺️ 远期愿景</h4>
       <ul style="font-size:0.88rem;color:#6B5E50;line-height:2;list-style:none;margin-top:0.5rem;">
         <li>• <strong>川藏线拓展：</strong>阿里、山南地区</li>
         <li>• <strong>新疆选址：</strong>首次走出藏区至西北</li>
@@ -1072,7 +1113,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
         <div>
           <h4>松赞官网</h4>
           <p>官方酒店介绍、环线产品、最新动态与预订入口</p>
-          <span style="color:#8B3A4A;font-weight:500;font-size:0.82rem;">songtsam.com →</span>
+          <span style="color:var(--clr-primary);font-weight:500;font-size:0.82rem;">songtsam.com →</span>
         </div>
       </div>
     </a>
@@ -1082,7 +1123,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
         <div>
           <h4>Wikimedia Commons</h4>
           <p>自由版权图片库，搜索 Songtsam / 松赞获取高清酒店与周边景观图片</p>
-          <span style="color:#8B3A4A;font-weight:500;font-size:0.82rem;">commons.wikimedia.org →</span>
+          <span style="color:var(--clr-primary);font-weight:500;font-size:0.82rem;">commons.wikimedia.org →</span>
         </div>
       </div>
     </a>
@@ -1092,7 +1133,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
         <div>
           <h4>B站搜索「松赞酒店」</h4>
           <p>大量高清Vlog、航拍、深度体验视频，多位旅行博主实地拍摄</p>
-          <span style="color:#8B3A4A;font-weight:500;font-size:0.82rem;">bilibili.com →</span>
+          <span style="color:var(--clr-primary);font-weight:500;font-size:0.82rem;">bilibili.com →</span>
         </div>
       </div>
     </a>
@@ -1102,7 +1143,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
         <div>
           <h4>飞客茶馆 · 酒店Report</h4>
           <p>高端常旅客社区的松赞深度入住报告，含大量实拍照片与细节评价</p>
-          <span style="color:#8B3A4A;font-weight:500;font-size:0.82rem;">flyert.com →</span>
+          <span style="color:var(--clr-primary);font-weight:500;font-size:0.82rem;">flyert.com →</span>
         </div>
       </div>
     </a>
@@ -1112,7 +1153,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
         <div>
           <h4>YouTube · Songtsam Lodges</h4>
           <p>国际媒体报道、酒店官方视频，尤其推荐 CNBC、CNN Travel 的相关纪录片</p>
-          <span style="color:#8B3A4A;font-weight:500;font-size:0.82rem;">youtube.com →</span>
+          <span style="color:var(--clr-primary);font-weight:500;font-size:0.82rem;">youtube.com →</span>
         </div>
       </div>
     </a>
@@ -1133,7 +1174,7 @@ h3 { font-size: 1.35rem; font-weight: 600; }
   <p>松赞酒店系列 · 案例研究报告</p>
   <p style="margin-top:0.5rem;">数据来源：松赞官网、Wikipedia、36氪、界面新闻、创业邦、飞客茶馆 | 本报告仅供研究参考</p>
   <p style="margin-top:0.5rem;">© 2026 案例研究项目 · 数据截至 2025 年 5 月</p>
-  <p style="margin-top:1rem;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:#C8A45C;text-decoration:none;font-size:0.85rem;">← 返回案例研究首页</a></p>
+  <p style="margin-top:1rem;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:var(--clr-accent);text-decoration:none;font-size:0.85rem;">← 返回案例研究首页</a></p>
 </footer>
 
 <!-- Leaflet JS -->
@@ -1196,7 +1237,7 @@ const hotels = [
 
 const typeColors = {
   lodge: { bg:'#5C3A2E', border:'#FFF' },
-  linka: { bg:'#8B3A4A', border:'#FFF' },
+  linka: { bg:'var(--clr-primary)', border:'#FFF' },
   camp: { bg:'#4A6741', border:'#FFF' }
 };
 
@@ -1248,7 +1289,7 @@ function addRoutes(m) {
     [26.870,100.233],[27.868,99.700],[28.444,98.879],[29.680,98.590],
     [29.480,96.690],[29.860,95.770],[29.630,94.880],[29.658,91.117]
   ];
-  L.polyline(ytRoute, {color:'#8B3A4A',weight:4,opacity:0.6}).addTo(m);
+  L.polyline(ytRoute, {color:'var(--clr-primary)',weight:4,opacity:0.6}).addTo(m);
 
   // Nujiang extension
   const njRoute = [
@@ -1289,12 +1330,12 @@ function initMap(mode) {
   const legend = L.control({position:'bottomright'});
   legend.onAdd = function() {
     const div = L.DomUtil.create('div','info-legend');
-    div.style.cssText = 'background:#FFF;padding:10px 14px;border-radius:10px;font-size:13px;line-height:1.8;box-shadow:0 2px 12px rgba(0,0,0,0.1);border:1px solid #E8E0D5;';
+    div.style.cssText = 'background:#FFF;padding:10px 14px;border-radius:10px;font-size:13px;line-height:1.8;box-shadow:0 2px 12px rgba(0,0,0,0.1);border:1px solid var(--clr-border);';
     div.innerHTML = `
       <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#5C3A2E;margin-right:8px;"></span>山居 Lodge</div>
-      <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#8B3A4A;margin-right:8px;"></span>林卡 Linka</div>
+      <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--clr-primary);margin-right:8px;"></span>林卡 Linka</div>
       <div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#4A6741;margin-right:8px;"></span>帐篷营地 Camp</div>
-      ${mode==='route'?`<div style="margin-top:6px;border-top:1px solid #E8E0D5;padding-top:6px;"><span style="display:inline-block;width:20px;height:3px;background:#8B3A4A;margin-right:6px;vertical-align:middle;"></span>滇藏线</div>
+      ${mode==='route'?`<div style="margin-top:6px;border-top:1px solid var(--clr-border);padding-top:6px;"><span style="display:inline-block;width:20px;height:3px;background:var(--clr-primary);margin-right:6px;vertical-align:middle;"></span>滇藏线</div>
       <div><span style="display:inline-block;width:20px;height:3px;border-top:3px dashed #5C3A2E;margin-right:6px;vertical-align:middle;"></span>香格里拉环线</div>
       <div><span style="display:inline-block;width:20px;height:3px;border-top:3px dashed #4A6741;margin-right:6px;vertical-align:middle;"></span>怒江延伸</div>`:''}
     `;
@@ -1306,7 +1347,7 @@ function initMap(mode) {
   const info = L.control({position:'topleft'});
   info.onAdd = function() {
     const div = L.DomUtil.create('div');
-    div.style.cssText = 'background:rgba(255,255,255,0.92);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;color:#3D1525;box-shadow:0 2px 8px rgba(0,0,0,0.08);border:1px solid #E8E0D5;';
+    div.style.cssText = 'background:rgba(255,255,255,0.92);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;color:var(--clr-primary-dark);box-shadow:0 2px 8px rgba(0,0,0,0.08);border:1px solid var(--clr-border);';
     div.innerHTML = mode==='route' ? '滇藏环线 · 松赞18家酒店分布' : '松赞酒店 · 滇藏布局';
     return div;
   };

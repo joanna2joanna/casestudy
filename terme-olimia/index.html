@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terme Olimia — Hotel Sotelia 案例研究 | 斯洛文尼亚奥林尼亚温泉</title>
+<meta name="description" content="斯洛文尼亚Terme Olimia温泉度假村深度案例分析，涵盖投资、运营、空间布局、建筑设计及技术指标。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+:root {
+  --green-900: #1B3A1A;
+  --green-800: #2D5A27;
+  --green-700: #3E7A36;
+  --green-600: #4A8C3F;
+  --green-500: #5BA04F;
+  --green-400: #7DBF70;
+  --green-300: #A5D99B;
+  --green-200: #CBECC5;
+  --green-100: #E5F6E2;
+  --green-50: #F2FAF0;
+  --gold: #C8A84E;
+  --gold-light: #E8D59C;
+  --slate-900: #1A1A2E;
+  --slate-800: #2A2A42;
+  --slate-700: #3D3D56;
+  --slate-600: #555571;
+  --slate-500: #777790;
+  --slate-400: #9E9EB3;
+  --slate-300: #C5C5D4;
+  --slate-200: #E0E0EA;
+  --slate-100: #EEEEF5;
+  --slate-50: #F7F7FA;
+  --white: #FFFFFF;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --shadow-xl: 0 16px 48px rgba(0,0,0,0.15);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--slate-800);
+  background: var(--white);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== TYPOGRAPHY ===== */
+.display-xl {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--green-900);
+}
+.display-lg {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--green-800);
+}
+.heading-md {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--green-700);
+}
+.heading-sm {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--green-600);
+}
+.body-lg {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.75;
+  color: var(--slate-700);
+}
+.body-base {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--slate-600);
+}
+.data-mono {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--slate-700);
+}
+.data-mono-sm {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--slate-500);
+}
+
+/* ===== LAYOUT ===== */
+.container { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+.container-narrow { max-width: 840px; }
+.section { padding: 80px 0; }
+.section-alt { background: var(--green-50); }
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(170deg, var(--green-800) 0%, var(--green-700) 30%, var(--green-900) 100%);
+  overflow: hidden;
+  padding: 100px 24px;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(200,168,78,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 20%, rgba(75,140,63,0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 40% 50%, rgba(165,217,155,0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(to top, var(--white), transparent);
+  pointer-events: none;
+}
+.hero-content { position: relative; z-index: 2; max-width: 800px; }
+.hero-badge {
+  display: inline-block;
+  padding: 6px 18px;
+  border-radius: 100px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--green-200);
+  margin-bottom: 28px;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 5.5vw, 5rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--white);
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+.hero-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  color: var(--green-200);
+  font-weight: 400;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.hero-location {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--gold-light);
+  letter-spacing: 0.04em;
+  margin-top: 20px;
+}
+
+/* ===== KPI ROW ===== */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  margin-top: -60px;
+  position: relative;
+  z-index: 10;
+  padding: 0 24px;
+}
+.kpi-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  border: 1px solid var(--slate-100);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.kpi-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
+.kpi-value {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--green-700);
+  line-height: 1.2;
+}
+.kpi-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  color: var(--slate-500);
+  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ===== SECTION HEADERS ===== */
+.section-header { text-align: center; margin-bottom: 56px; }
+.section-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--green-600);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* ===== INFO GRID ===== */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+.info-card {
+  background: var(--white);
+  border: 1px solid var(--slate-100);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  transition: border-color 0.2s;
+}
+.info-card:hover { border-color: var(--green-300); }
+.info-card-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--slate-400);
+  margin-bottom: 8px;
+}
+.info-card-value {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--slate-800);
+}
+
+/* ===== TABLES ===== */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  margin: 24px 0;
+}
+.data-table thead th {
+  background: var(--green-50);
+  color: var(--green-800);
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--green-200);
+}
+.data-table tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--slate-100);
+  color: var(--slate-700);
+}
+.data-table tbody tr:hover { background: var(--green-50); }
+.data-table .num {
+  font-family: 'DM Mono', monospace;
+  text-align: right;
+  font-size: 0.85rem;
+}
+
+/* ===== MAP ===== */
+.map-section { background: var(--white); padding: 80px 0; }
+.map-container {
+  width: 100%;
+  height: 520px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--slate-100);
+  position: relative;
+}
+#map { width: 100%; height: 100%; }
+.map-fallback-msg {
+  display: none;
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.95);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  color: var(--slate-500);
+  box-shadow: var(--shadow-sm);
+  z-index: 1000;
+}
+
+/* ===== SVG SPATIAL DIAGRAM ===== */
+.svg-container {
+  display: block;
+  width: 100%;
+  margin-top: 32px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--green-50);
+  padding: 48px 24px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--slate-100);
+}
+.svg-diagram { width: 100%; height: auto; display: block; }
+
+/* ===== TIMELINE ===== */
+.timeline { position: relative; padding-left: 40px; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 16px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--green-200);
+}
+.timeline-item { position: relative; margin-bottom: 32px; }
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -30px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--green-600);
+  border: 3px solid var(--white);
+  box-shadow: 0 0 0 2px var(--green-300);
+}
+.timeline-year {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--green-600);
+  margin-bottom: 4px;
+}
+.timeline-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--slate-800);
+  margin-bottom: 4px;
+}
+.timeline-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  color: var(--slate-500);
+  line-height: 1.5;
+}
+
+/* ===== RESOURCE CARDS ===== */
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+.resource-card {
+  background: var(--white);
+  border: 1px solid var(--slate-100);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: block;
+}
+.resource-card:hover {
+  border-color: var(--green-400);
+  box-shadow: var(--shadow-md);
+}
+.resource-type {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--green-600);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.resource-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--slate-800);
+  margin-bottom: 4px;
+}
+.resource-url {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--slate-400);
+  word-break: break-all;
+}
+
+/* ===== FLOATING NAV ===== */
+.floating-nav {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.floating-nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--green-700);
+  color: var(--white);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s;
+  text-decoration: none;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+.floating-nav-btn:hover {
+  background: var(--green-800);
+  transform: scale(1.1);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ===== AWARDS ===== */
+.awards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+.award-card {
+  background: var(--white);
+  border: 1px solid var(--gold-light);
+  border-left: 4px solid var(--gold);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+}
+.award-year {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--gold);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.award-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--slate-800);
+  margin-top: 4px;
+}
+.award-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  color: var(--slate-500);
+  margin-top: 4px;
+}
+
+/* ===== FACILITY CARDS ===== */
+.facility-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+.facility-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--slate-100);
+  transition: transform 0.2s;
+}
+.facility-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.facility-header {
+  padding: 20px 24px;
+  background: var(--green-700);
+  color: var(--white);
+}
+.facility-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.facility-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--green-200);
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+.facility-body { padding: 20px 24px; }
+.facility-stat {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px dotted var(--slate-100);
+  font-size: 0.85rem;
+}
+.facility-stat-label { color: var(--slate-500); }
+.facility-stat-value { font-family: 'DM Mono', monospace; color: var(--slate-700); font-weight: 600; }
+
+/* ===== FOOTER ===== */
+.site-footer {
+  background: var(--green-900);
+  color: var(--green-300);
+  padding: 48px 24px;
+  text-align: center;
+  font-size: 0.82rem;
+}
+.site-footer a { color: var(--green-300); text-decoration: none; }
+.site-footer a:hover { color: var(--white); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .section { padding: 48px 0; }
+  .kpi-row { margin-top: -30px; padding: 0 16px; gap: 12px; }
+  .kpi-card { padding: 20px 16px; }
+  .kpi-value { font-size: 1.3rem; }
+  .map-container { height: 360px; }
+  .facility-grid { grid-template-columns: 1fr; }
+  .floating-nav { bottom: 20px; right: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">SLOVENIA · THERMAL WELLNESS RESORT</div>
+    <h1 class="hero-title">Terme Olimia</h1>
+    <div class="hero-subtitle">Hotel Sotelia &mdash; 从木池到斯洛文尼亚顶级康养目的地</div>
+    <div class="hero-subtitle" style="font-size:0.95rem;color:var(--green-300);">奥林尼亚温泉度假村深度案例研究</div>
+    <div class="hero-location">Zdraviliška cesta 24, 3254 Podčetrtek, Slovenia<br>46.15867°N, 15.60696°E</div>
+  </div>
+</header>
+
+<!-- ===== KPI ROW ===== -->
+<section class="container kpi-row">
+  <div class="kpi-card">
+    <div class="kpi-value">58年</div>
+    <div class="kpi-label">运营历史（1966-2024）</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value">400,000+</div>
+    <div class="kpi-label">年过夜数（单独，2024）</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value">€50M+</div>
+    <div class="kpi-label">集团营收（2024）</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value">€70M</div>
+    <div class="kpi-label">近15年总投资（集团）</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value">289间</div>
+    <div class="kpi-label">总客房数（全度假村）</div>
+  </div>
+</section>
+
+<!-- ===== 1. 项目概况 ===== -->
+<section class="section">
+  <div class="container container-narrow">
+    <div class="section-header">
+      <div class="section-tag">01 · 项目概况</div>
+      <h2 class="display-lg">奥林尼亚温泉度假村</h2>
+      <p class="body-lg" style="margin-top:16px;">斯洛文尼亚规模最大、获奖最多的温泉康养度假村</p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card"><div class="info-card-label">项目名称</div><div class="info-card-value">Terme Olimia（奥林尼亚温泉）</div></div>
+      <div class="info-card"><div class="info-card-label">核心酒店</div><div class="info-card-value">Hotel Sotelia（4星优等级）</div></div>
+      <div class="info-card"><div class="info-card-label">地理位置</div><div class="info-card-value">斯洛文尼亚东部Podčetrtek，Sotla河谷</div></div>
+      <div class="info-card"><div class="info-card-label">距卢布尔雅那</div><div class="info-card-value">约115 km</div></div>
+      <div class="info-card"><div class="info-card-label">距萨格勒布</div><div class="info-card-value">约70 km</div></div>
+      <div class="info-card"><div class="info-card-label">开业时间</div><div class="info-card-value">1966年9月6日（木池）；2000年更名Terme Olimia</div></div>
+      <div class="info-card"><div class="info-card-label">海拔</div><div class="info-card-value">约220 m</div></div>
+      <div class="info-card"><div class="info-card-label">温泉类型</div><div class="info-card-value">镁-钙-碳酸氢盐热矿水</div></div>
+      <div class="info-card"><div class="info-card-label">水温</div><div class="info-card-value">30°C – 37°C（出水24°C – 44°C）</div></div>
+      <div class="info-card"><div class="info-card-label">水源深度</div><div class="info-card-value">地下约520米</div></div>
+      <div class="info-card"><div class="info-card-label">关键矿物</div><div class="info-card-value">镁、钙、硅（高含量）、碳酸氢盐</div></div>
+      <div class="info-card"><div class="info-card-label">医疗方向</div><div class="info-card-value">骨科康复、风湿病、皮肤病、循环系统</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2. 投资与建设 ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">02 · 投资与建设</div>
+      <h2 class="display-lg">投资历程与资金结构</h2>
+      <p class="body-lg" style="margin-top:16px;">从欧盟结构基金到自有资金，Terme Olimia集团的累计投资已超过€1.5亿</p>
+    </div>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>阶段</th>
+          <th>项目</th>
+          <th>年份</th>
+          <th>投资额（€）</th>
+          <th>约合人民币（万元）</th>
+          <th>资金来源</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Phase 1</td>
+          <td>Hotel Sotelia 新建</td>
+          <td>2005 – 2006</td>
+          <td class="num">12,000,000</td>
+          <td class="num">9,420</td>
+          <td>EU结构基金€258.5万 + 银行贷款</td>
+        </tr>
+        <tr>
+          <td>Phase 2</td>
+          <td>Wellness Orhidelia 新建</td>
+          <td>2008 – 2009</td>
+          <td class="num">7,800,000</td>
+          <td class="num">6,123</td>
+          <td>EU结构基金€167万</td>
+        </tr>
+        <tr>
+          <td>Phase 2</td>
+          <td>Hotel Breza 翻新</td>
+          <td>2009</td>
+          <td class="num">6,000,000</td>
+          <td class="num">4,710</td>
+          <td>EU结构基金€148万</td>
+        </tr>
+        <tr>
+          <td>Phase 3</td>
+          <td>Hotel Sotelia 更新</td>
+          <td>2016</td>
+          <td class="num">1,000,000</td>
+          <td class="num">785</td>
+          <td>自有资金</td>
+        </tr>
+        <tr>
+          <td>Phase 3</td>
+          <td>Termalija Family Wellness 翻新</td>
+          <td>2018</td>
+          <td class="num">10,000,000</td>
+          <td class="num">7,850</td>
+          <td>自有资金</td>
+        </tr>
+        <tr>
+          <td>Phase 4</td>
+          <td>Wellness Vodian 新建</td>
+          <td>2024 – 2025</td>
+          <td class="num">5,000,000</td>
+          <td class="num">3,925</td>
+          <td>自有资金</td>
+        </tr>
+        <tr>
+          <td>Phase 4</td>
+          <td>Family Hotel 新建（在建）</td>
+          <td>2025 – 2026</td>
+          <td class="num">23,700,000</td>
+          <td class="num">18,605</td>
+          <td>自有资金</td>
+        </tr>
+        <tr>
+          <td>Phase 4</td>
+          <td>太阳能电站（2.2 MW）</td>
+          <td>2024</td>
+          <td class="num">—</td>
+          <td class="num">—</td>
+          <td>自有资金</td>
+        </tr>
+        <tr style="background:var(--green-50);font-weight:700;">
+          <td>合计</td>
+          <td>Terme Olimia（斯洛文尼亚本部）</td>
+          <td>2005 – 2026</td>
+          <td class="num">≈65,500,000</td>
+          <td class="num">≈51,418</td>
+          <td>含EU资金约€574万</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="body-base" style="margin-top:20px;color:var(--slate-500);font-size:0.8rem;">
+      * 汇率：1 EUR ≈ 7.85 CNY（2026年5月参考汇率）<br>
+      * Terme Olimia集团另在克罗地亚投资Terme Tuhelj €27,000,000（2024-2025），集团总投资规模约€70,000,000，为斯洛文尼亚旅游业近15年最大投资周期。<br>
+      * 截至2022年末，Hotel Sotelia长期贷款余额已降至€783,530（2018年为€2,756,909）。
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. 空间布局 ===== -->
+<section class="map-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">03 · 空间布局</div>
+      <h2 class="display-lg">度假村空间结构</h2>
+      <p class="body-lg" style="margin-top:16px;">总占地约10公顷，6大功能区沿Sotla河谷展开，地下通道互联</p>
+    </div>
+
+    <div class="map-container" id="map-container">
+      <div id="map"></div>
+      <div class="map-fallback-msg" id="map-fallback">地图加载中，如长时间未显示请刷新页面</div>
+    </div>
+
+    <!-- SVG 空间结构示意图 -->
+    <div class="svg-container">
+      <h3 class="heading-sm" style="text-align:center;margin-bottom:24px;">度假村空间结构示意图</h3>
+      <svg class="svg-diagram" viewBox="0 0 960 520" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#E5F6E2"/>
+            <stop offset="100%" stop-color="#F2FAF0"/>
+          </linearGradient>
+          <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#7EC8E3"/>
+            <stop offset="100%" stop-color="#3B8ED4"/>
+          </linearGradient>
+          <linearGradient id="saunaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#E8A87C"/>
+            <stop offset="100%" stop-color="#D4956B"/>
+          </linearGradient>
+          <linearGradient id="hotelGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#95B890"/>
+            <stop offset="100%" stop-color="#4A8C3F"/>
+          </linearGradient>
+          <linearGradient id="wellnessGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#A5D99B"/>
+            <stop offset="100%" stop-color="#5BA04F"/>
+          </linearGradient>
+          <filter id="cardShadow">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.12"/>
+          </filter>
+          <marker id="arrowGreen" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6 Z" fill="#4A8C3F"/>
+          </marker>
+        </defs>
+
+        <!-- 背景 -->
+        <rect width="960" height="520" rx="16" fill="url(#bgGrad)"/>
+
+        <!-- 河流 -->
+        <path d="M0,420 Q200,400 400,440 Q600,480 960,430" fill="none" stroke="#7EC8E3" stroke-width="12" stroke-linecap="round" opacity="0.5"/>
+        <text x="480" y="418" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="#7EC8E3" opacity="0.7">SOTLA RIVER 索特拉河</text>
+
+        <!-- 区域方块 -->
+        <!-- Wellness Orhidelia (左上) -->
+        <rect x="40" y="40" width="260" height="130" rx="12" fill="url(#saunaGrad)" filter="url(#cardShadow)"/>
+        <text x="170" y="75" text-anchor="middle" font-family="Playfair Display, serif" font-size="16" font-weight="700" fill="white">Wellness Orhidelia</text>
+        <text x="170" y="98" text-anchor="middle" font-family="DM Mono, monospace" font-size="10" fill="rgba(255,255,255,0.85)">奥希德利亚康体中心（15+仅限）</text>
+        <text x="170" y="118" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="rgba(255,255,255,0.7)">1700 m²桑拿世界 · 1000 m²水池</text>
+        <text x="170" y="138" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="rgba(255,255,255,0.7)">€780万投资 · 2009年开业</text>
+
+        <!-- Termalija Family Wellness (右上) -->
+        <rect x="340" y="40" width="260" height="130" rx="12" fill="url(#waterGrad)" filter="url(#cardShadow)"/>
+        <text x="470" y="75" text-anchor="middle" font-family="Playfair Display, serif" font-size="16" font-weight="700" fill="white">Wellness Termalija</text>
+        <text x="470" y="98" text-anchor="middle" font-family="DM Mono, monospace" font-size="10" fill="rgba(255,255,255,0.85)">特尔马利亚家庭康体（全年龄）</text>
+        <text x="470" y="118" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="rgba(255,255,255,0.7)">折叠屋顶·7D影院·水滑梯·攀岩墙</text>
+        <text x="470" y="138" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="rgba(255,255,255,0.7)">€1000万翻新 · 2018年</text>
+
+        <!-- Aqualuna (最右) -->
+        <rect x="640" y="40" width="280" height="130" rx="12" fill="#3B8ED4" filter="url(#cardShadow)"/>
+        <text x="780" y="75" text-anchor="middle" font-family="Playfair Display, serif" font-size="16" font-weight="700" fill="white">Aqualuna Thermal Park</text>
+        <text x="780" y="98" text-anchor="middle" font-family="DM Mono, monospace" font-size="10" fill="rgba(255,255,255,0.85)">阿夸鲁纳水上乐园（夏季户外）</text>
+        <text x="780" y="118" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="rgba(255,255,255,0.7)">3000 m²水面 · 8条大型滑梯</text>
+        <text x="780" y="138" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="rgba(255,255,255,0.7)">波浪池 · King Cobra滑道 · 2001年开业</text>
+
+        <!-- Wellness Vodian (右上第二行) -->
+        <rect x="40" y="200" width="260" height="120" rx="12" fill="url(#wellnessGrad)" filter="url(#cardShadow)"/>
+        <text x="170" y="235" text-anchor="middle" font-family="Playfair Display, serif" font-size="15" font-weight="700" fill="white">Wellness Vodian</text>
+        <text x="170" y="258" text-anchor="middle" font-family="DM Mono, monospace" font-size="10" fill="rgba(255,255,255,0.85)">沃迪安康体中心（2025年新开业）</text>
+        <text x="170" y="278" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="rgba(255,255,255,0.7)">2000 m² · 25m泳池 · 桑拿画廊</text>
+        <text x="170" y="298" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="rgba(255,255,255,0.7)">€500万投资 · 屋顶草药园</text>
+
+        <!-- Hotel Sotelia (中间主酒店) -->
+        <rect x="340" y="195" width="260" height="125" rx="12" fill="url(#hotelGrad)" filter="url(#cardShadow)"/>
+        <text x="470" y="230" text-anchor="middle" font-family="Playfair Display, serif" font-size="16" font-weight="700" fill="white">Hotel Sotelia ★★★★</text>
+        <text x="470" y="253" text-anchor="middle" font-family="DM Mono, monospace" font-size="10" fill="rgba(255,255,255,0.85)">索特利亚酒店（正转为仅限成人）</text>
+        <text x="470" y="273" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="rgba(255,255,255,0.7)">135-150间房 · 13300 m² · €1200万</text>
+        <text x="470" y="293" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="rgba(255,255,255,0.7)">ENOTA设计 · Plečnik奖 · 2006年</text>
+
+        <!-- Hotel Breza (右下第二行) -->
+        <rect x="640" y="195" width="280" height="120" rx="12" fill="url(#hotelGrad)" filter="url(#cardShadow)"/>
+        <text x="780" y="230" text-anchor="middle" font-family="Playfair Display, serif" font-size="15" font-weight="700" fill="white">Hotel Breza ★★★★</text>
+        <text x="780" y="253" text-anchor="middle" font-family="DM Mono, monospace" font-size="10" fill="rgba(255,255,255,0.85)">布雷扎酒店（连接Vodian）</text>
+        <text x="780" y="273" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="rgba(255,255,255,0.7)">1978年开业 · €600万翻新 · 2009年</text>
+        <text x="780" y="293" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="rgba(255,255,255,0.7)">连接地下通道至Termalija</text>
+
+        <!-- Aparthotel Rosa + Glamping + Health Centre + Congress (最下面一行) -->
+        <rect x="40" y="355" width="200" height="100" rx="10" fill="white" stroke="#4A8C3F" stroke-width="1.5" filter="url(#cardShadow)"/>
+        <text x="140" y="385" text-anchor="middle" font-family="Playfair Display, serif" font-size="13" font-weight="600" fill="#3E7A36">Aparthotel Rosa</text>
+        <text x="140" y="405" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="#555571">36-42间公寓 · 带厨房</text>
+        <text x="140" y="422" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="#555571">地下通道连接Termalija</text>
+
+        <rect x="265" y="355" width="200" height="100" rx="10" fill="white" stroke="#4A8C3F" stroke-width="1.5" filter="url(#cardShadow)"/>
+        <text x="365" y="385" text-anchor="middle" font-family="Playfair Display, serif" font-size="13" font-weight="600" fill="#3E7A36">Adria Village</text>
+        <text x="365" y="405" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="#555571">斯洛文尼亚首个温泉Glamping</text>
+        <text x="365" y="422" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="#555571">建在温泉水上</text>
+
+        <rect x="490" y="355" width="200" height="100" rx="10" fill="white" stroke="#4A8C3F" stroke-width="1.5" filter="url(#cardShadow)"/>
+        <text x="590" y="382" text-anchor="middle" font-family="Playfair Display, serif" font-size="13" font-weight="600" fill="#3E7A36">Health Centre</text>
+        <text x="590" y="402" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="#555571">骨科 · 风湿 · 脊柱康复</text>
+        <text x="590" y="422" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="#555571">Olimia Approach体系</text>
+
+        <rect x="715" y="355" width="205" height="100" rx="10" fill="white" stroke="#4A8C3F" stroke-width="1.5" filter="url(#cardShadow)"/>
+        <text x="817" y="385" text-anchor="middle" font-family="Playfair Display, serif" font-size="13" font-weight="600" fill="#3E7A36">Congress Centre</text>
+        <text x="817" y="405" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="#555571">804 m² · 7-9间会议室</text>
+        <text x="817" y="422" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="#555571">最大容量350人</text>
+
+        <!-- 连接线（地下通道） -->
+        <line x1="300" y1="105" x2="340" y2="105" stroke="#4A8C3F" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrowGreen)"/>
+        <line x1="600" y1="105" x2="640" y2="105" stroke="#4A8C3F" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrowGreen)"/>
+        <line x1="300" y1="260" x2="340" y2="260" stroke="#4A8C3F" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrowGreen)"/>
+        <line x1="600" y1="260" x2="640" y2="260" stroke="#4A8C3F" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrowGreen)"/>
+
+        <!-- 图例 -->
+        <rect x="40" y="470" width="14" height="14" rx="3" fill="url(#saunaGrad)"/>
+        <text x="60" y="482" font-family="DM Sans, sans-serif" font-size="10" fill="#555571">桑拿及康体</text>
+        <rect x="155" y="470" width="14" height="14" rx="3" fill="url(#waterGrad)"/>
+        <text x="175" y="482" font-family="DM Sans, sans-serif" font-size="10" fill="#555571">水上乐园及泳池</text>
+        <rect x="285" y="470" width="14" height="14" rx="3" fill="url(#hotelGrad)"/>
+        <text x="305" y="482" font-family="DM Sans, sans-serif" font-size="10" fill="#555571">酒店住宿</text>
+        <rect x="375" y="470" width="14" height="14" rx="3" fill="url(#wellnessGrad)"/>
+        <text x="395" y="482" font-family="DM Sans, sans-serif" font-size="10" fill="#555571">康体中心</text>
+        <text x="500" y="482" font-family="DM Sans, sans-serif" font-size="9" fill="#9E9EB3">--- 地下通道连接</text>
+      </svg>
+      <p class="body-base" style="text-align:center;margin-top:16px;font-size:0.8rem;color:var(--slate-500);">
+        Terme Olimia度假村整体沿Sotla河谷展开，各功能区通过地下暖廊连接，客人可身着浴袍从住宿区直达各温泉设施。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. 温泉与水质 ===== -->
+<section class="section section-alt">
+  <div class="container container-narrow">
+    <div class="section-header">
+      <div class="section-tag">04 · 温泉与水质</div>
+      <h2 class="display-lg">Olimia热矿水</h2>
+      <p class="body-lg" style="margin-top:16px;">源自地下520米的镁-钙-碳酸氢盐热矿水，以高硅含量著称</p>
+    </div>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>指标</th><th>数据</th><th>备注</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>水源深度</td><td class="num">约520 m</td><td>源自Obsotelje与Kozjansko地区地下</td></tr>
+        <tr><td>出水温度</td><td class="num">24°C – 44°C</td><td>恒温热矿水</td></tr>
+        <tr><td>池内水温</td><td class="num">30°C – 37°C</td><td>所有度假村水池均注满热矿水</td></tr>
+        <tr><td>水质分类</td><td>镁-钙-碳酸氢盐型</td><td>Mg-Ca-HCO₃ 热矿水</td></tr>
+        <tr><td>镁 (Mg)</td><td>理想钙镁比</td><td>适用于骨质疏松预防与治疗</td></tr>
+        <tr><td>钙 (Ca)</td><td>与镁呈理想比例</td><td>骨骼健康</td></tr>
+        <tr><td>硅 (Si)</td><td>高含量</td><td>促进软组织（肌肉、韧带、皮肤）更新，抗自由基，延缓衰老</td></tr>
+        <tr><td>碳酸氢盐 (HCO₃)</td><td>中等含量</td><td>饮用可平衡体内酸碱度</td></tr>
+        <tr><td>医疗适用范围</td><td>6类</td><td>风湿病、术后康复、慢性皮肤病、循环障碍、外周神经、脊柱疼痛</td></tr>
+        <tr><td>特色疗法</td><td>Olimia Approach</td><td>脊柱及颈腰疼痛康复专长</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== 5. 核心设施 ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">05 · 核心设施</div>
+      <h2 class="display-lg">六大康体娱乐设施</h2>
+    </div>
+
+    <div class="facility-grid">
+      <!-- Orhidelia -->
+      <div class="facility-card">
+        <div class="facility-header" style="background:#D4956B;">
+          <div class="facility-name">Wellness Orhidelia</div>
+          <div class="facility-tag">15+仅限 · 2009年开业 · €780万</div>
+        </div>
+        <div class="facility-body">
+          <div class="facility-stat"><span class="facility-stat-label">桑拿区面积</span><span class="facility-stat-value">1,700 m²</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">水池面积</span><span class="facility-stat-value">1,000 m²</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">设施</span><span class="facility-stat-value">按摩躺椅·间歇泉·慢河·音乐池·照明洞穴·水下酒吧</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">桑拿种类</span><span class="facility-stat-value">芬兰桑拿·红外桑拿·蒸汽浴·盐水桑拿·草药桑拿</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">开放时间</span><span class="facility-stat-value">至凌晨1:00</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">门票（周一–周四）</span><span class="facility-stat-value">€21.50（约￥169）</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">门票（周五–周日/节假日）</span><span class="facility-stat-value">€33.00（约￥259）</span></div>
+        </div>
+      </div>
+
+      <!-- Termalija -->
+      <div class="facility-card">
+        <div class="facility-header" style="background:#3B8ED4;">
+          <div class="facility-name">Termalija Family Wellness</div>
+          <div class="facility-tag">全年龄 · 2018年翻新 · €1000万</div>
+        </div>
+        <div class="facility-body">
+          <div class="facility-stat"><span class="facility-stat-label">特征结构</span><span class="facility-stat-value">四面体折叠屋顶·几乎无内部立柱</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">室内外水池</span><span class="facility-stat-value">恒温32°C热矿水</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">水滑梯</span><span class="facility-stat-value">2条·FUN & SPLASH滑道</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">特色设施</span><span class="facility-stat-value">攀岩墙（池上）·7D影院·互动游戏区</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">儿童区</span><span class="facility-stat-value">OLILAND·BABY FUN·沙池</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">桑拿世界门票（周一–周四）</span><span class="facility-stat-value">€13.00（约￥102）</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">桑拿世界门票（周末）</span><span class="facility-stat-value">€19.00（约￥149）</span></div>
+        </div>
+      </div>
+
+      <!-- Aqualuna -->
+      <div class="facility-card">
+        <div class="facility-header" style="background:#1B6BA0;">
+          <div class="facility-name">Aqualuna Thermal Park</div>
+          <div class="facility-tag">夏季户外 · 2001年开业</div>
+        </div>
+        <div class="facility-body">
+          <div class="facility-stat"><span class="facility-stat-label">总水面</span><span class="facility-stat-value">3,000 m²</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">大型滑梯</span><span class="facility-stat-value">8条（含King Cobra）</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">波浪池</span><span class="facility-stat-value">模拟海浪</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">儿童区Aquajungle 2</span><span class="facility-stat-value">550 m²·70+互动效果·4塔楼</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">额外设施</span><span class="facility-stat-value">巨型水桶（每2分钟倾倒）·Aqua Safari动物雕塑·BistrOli小酒馆</span></div>
+        </div>
+      </div>
+
+      <!-- Vodian -->
+      <div class="facility-card">
+        <div class="facility-header" style="background:#5BA04F;">
+          <div class="facility-name">Wellness Vodian</div>
+          <div class="facility-tag">2025年2月14日开业 · €500万</div>
+        </div>
+        <div class="facility-body">
+          <div class="facility-stat"><span class="facility-stat-label">总面积</span><span class="facility-stat-value">2,000 m²</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">主泳池</span><span class="facility-stat-value">25米标准泳池</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">辅助池</span><span class="facility-stat-value">恒温理疗池·放松池·儿童池</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">芬兰桑拿</span><span class="facility-stat-value">50人容量</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">红外桑拿</span><span class="facility-stat-value">20人容量</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">蒸汽桑拿</span><span class="facility-stat-value">16人容量</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">特色</span><span class="facility-stat-value">每日桑拿仪式·Aufguss·屋顶草药园·绿色屋顶</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">设计奖项</span><span class="facility-stat-value">The Plan Award 2025入围</span></div>
+        </div>
+      </div>
+
+      <!-- Spa Armonia -->
+      <div class="facility-card">
+        <div class="facility-header" style="background:#7DBF70;">
+          <div class="facility-name">Spa Armonia & 健身中心</div>
+          <div class="facility-tag">位于Hotel Sotelia内</div>
+        </div>
+        <div class="facility-body">
+          <div class="facility-stat"><span class="facility-stat-label">美容护理</span><span class="facility-stat-value">面部·身体·抗衰</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">按摩</span><span class="facility-stat-value">Armonia·Olimia·Vitae·阿育吠陀</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">健身</span><span class="facility-stat-value">有氧·力量·自由重量</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">特色</span><span class="facility-stat-value">双人护理间·私人SPA套房</span></div>
+        </div>
+      </div>
+
+      <!-- Health Centre -->
+      <div class="facility-card">
+        <div class="facility-header" style="background:#2D5A27;">
+          <div class="facility-name">Olimia 医疗中心</div>
+          <div class="facility-tag">专业康复·2024年翻新接待大厅</div>
+        </div>
+        <div class="facility-body">
+          <div class="facility-stat"><span class="facility-stat-label">骨科康复</span><span class="facility-stat-value">术后·创伤后·退行性</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">风湿病康复</span><span class="facility-stat-value">关节炎·纤维肌痛</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">脊柱康复</span><span class="facility-stat-value">Olimia Approach专长</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">皮肤治疗</span><span class="facility-stat-value">银屑病·皮炎</span></div>
+          <div class="facility-stat"><span class="facility-stat-label">其他</span><span class="facility-stat-value">循环系统·外周神经</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. 住宿产品 ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">06 · 住宿产品</div>
+      <h2 class="display-lg">四大住宿品牌</h2>
+    </div>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>酒店</th><th>星级</th><th>房型/数量</th><th>面积</th><th>开业/翻新</th><th>定位</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Hotel Sotelia</strong></td>
+          <td>★★★★S</td>
+          <td>135-150间（双人房·豪华套房·Elegance套房·连通房）</td>
+          <td class="num">13,300 m²</td>
+          <td>2006（2016翻新）</td>
+          <td>正转型为仅限成人</td>
+        </tr>
+        <tr>
+          <td><strong>Hotel Breza</strong></td>
+          <td>★★★★</td>
+          <td>多间双人房及套房</td>
+          <td class="num">—</td>
+          <td>1978（2009翻新）</td>
+          <td>中老年客群·连接Vodian</td>
+        </tr>
+        <tr>
+          <td><strong>Aparthotel Rosa</strong></td>
+          <td>★★★★</td>
+          <td>36-42间公寓（1-3卧室·33.5-78 m²）</td>
+          <td class="num">—</td>
+          <td>—</td>
+          <td>家庭自助·带厨房·地下通道</td>
+        </tr>
+        <tr>
+          <td><strong>Adria Village Glamping</strong></td>
+          <td>豪华露营</td>
+          <td>多顶奢华帐篷</td>
+          <td class="num">—</td>
+          <td>—</td>
+          <td>Slovenia首个温泉Glamping</td>
+        </tr>
+        <tr style="background:var(--gold-light);">
+          <td><strong>Family Hotel（在建）</strong></td>
+          <td>—</td>
+          <td>146间家庭房</td>
+          <td class="num">—</td>
+          <td>预计2026年5月</td>
+          <td>Slovenia首个纯家庭酒店·€2370万</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="body-base" style="margin-top:16px;">
+      <strong>Hotel Sotelia客房配置：</strong>标准双人房（1 Queen + 1 Twin）、豪华公寓4间、Elegance套房6间、Junior套房若干、连通房24间（12对）。所有客房配备空调·迷你吧·保险箱·浴袍·拖鞋·LCD电视·免费WiFi·阳台，入住赠送热矿水。
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. 餐饮与会议 ===== -->
+<section class="section">
+  <div class="container container-narrow">
+    <div class="section-header">
+      <div class="section-tag">07 · 餐饮与会议</div>
+      <h2 class="display-lg">餐饮选择 & 会务设施</h2>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card"><div class="info-card-label">酒店餐厅</div><div class="info-card-value">Basilicum（自助餐）· Gratiola（零点·浪漫晚餐）</div></div>
+      <div class="info-card"><div class="info-card-label">酒吧</div><div class="info-card-value">大堂酒吧·Orhidelia水下酒吧·BistrOli夏季小酒馆</div></div>
+      <div class="info-card"><div class="info-card-label">会议总面积</div><div class="info-card-value">804 m²</div></div>
+      <div class="info-card"><div class="info-card-label">会议室数量</div><div class="info-card-value">7 – 9间</div></div>
+      <div class="info-card"><div class="info-card-label">最大会议室 (Primula 1+2)</div><div class="info-card-value">296 m² · 容纳350人</div></div>
+      <div class="info-card"><div class="info-card-label">次大会议室 (Green Hall)</div><div class="info-card-value">193 m² · 容纳160人</div></div>
+      <div class="info-card"><div class="info-card-label">中型会议室</div><div class="info-card-value">Angelica+Erica 95 m² (90人) · Beresta 127 m² (80人)</div></div>
+      <div class="info-card"><div class="info-card-label">小型会议室</div><div class="info-card-value">Veronica (30人) · White Conference Room (30人) · Conference Room (20人)</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 8. 设计团队与供应商 ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">08 · 设计团队与供应商</div>
+      <h2 class="display-lg">建筑设计 & 工程团队</h2>
+      <p class="body-lg" style="margin-top:16px;">ENOTA建筑事务所主导Terme Olimia近20年所有重大设计项目</p>
+    </div>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>角色</th><th>公司/个人</th><th>参与项目</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>建筑设计</strong></td><td>ENOTA (Dean Lah, Milan Tomac)</td><td>Hotel Sotelia (2006) · Termalija (2018) · Wellness Vodian (2025) · Orhidelia</td></tr>
+        <tr><td><strong>景观设计</strong></td><td>Bruto</td><td>Hotel Sotelia</td></tr>
+        <tr><td><strong>结构工程</strong></td><td>Elea iC / Ivan Ramšak s.p.</td><td>Hotel Sotelia · Termalija · Vodian</td></tr>
+        <tr><td><strong>暖通空调</strong></td><td>Proinstal / Nom biro / GE Projekt</td><td>Hotel Sotelia (Proinstal) · Termalija (Nom) · Vodian (GE)</td></tr>
+        <tr><td><strong>电气工程</strong></td><td>Elita IB / Nom biro / GE Projekt</td><td>Hotel Sotelia · Termalija · Vodian</td></tr>
+        <tr><td><strong>总承包商</strong></td><td>MDK Građevinar d.o.o.</td><td>Wellness Vodian (2025)</td></tr>
+        <tr><td><strong>总承包商</strong></td><td>Adriaing d.o.o. + Lesnina MG + TIPO</td><td>Termalija Family Wellness (2018)</td></tr>
+        <tr><td><strong>泳池技术</strong></td><td>Darrtech d.o.o. / Zvonko Rajterič</td><td>Termalija · Wellness Vodian</td></tr>
+        <tr><td><strong>幕墙/门窗</strong></td><td>Alu projekt d.o.o.</td><td>Termalija</td></tr>
+        <tr><td><strong>照明</strong></td><td>Intra Lighting d.o.o. / BG Elektronika</td><td>Termalija</td></tr>
+        <tr><td><strong>声学</strong></td><td>MK3</td><td>Wellness Vodian</td></tr>
+        <tr><td><strong>消防</strong></td><td>Radivoj Ostrouška</td><td>Wellness Vodian</td></tr>
+        <tr><td><strong>建筑摄影</strong></td><td>Miran Kambič</td><td>Hotel Sotelia · Termalija · 全部主要项目</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== 9. 运营数据 ===== -->
+<section class="section">
+  <div class="container container-narrow">
+    <div class="section-header">
+      <div class="section-tag">09 · 运营数据</div>
+      <h2 class="display-lg">2024财年核心指标</h2>
+      <p class="body-lg" style="margin-top:16px;">创纪录年份 — 集团营收突破€5000万，过夜数突破56.5万</p>
+    </div>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>指标</th><th>数值</th><th>同比变化</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>集团过夜数</td><td class="num">565,000+</td><td>首次突破（里程碑）</td></tr>
+        <tr><td>Terme Olimia（斯洛文尼亚）过夜数</td><td class="num">400,000+</td><td>首次突破</td></tr>
+        <tr><td>集团营收</td><td class="num">€50,000,000+（约￥3.93亿）</td><td>+5.4%</td></tr>
+        <tr><td>Terme Olimia d.d. 营收</td><td class="num">€37,665,902（约￥2.96亿）</td><td>+10.76%</td></tr>
+        <tr><td>EBIT（单公司）</td><td class="num">€6,869,449（约￥5,392万）</td><td>+29%</td></tr>
+        <tr><td>税前利润（集团）</td><td class="num">€7,500,000（约￥5,888万）</td><td>—</td></tr>
+        <tr><td>净利润（集团）</td><td class="num">€6,100,000（约￥4,789万）</td><td>—</td></tr>
+        <tr><td>员工人数</td><td class="num">320</td><td>—</td></tr>
+        <tr><td>总资产</td><td class="num">€89,152,893（约￥7.0亿）</td><td>—</td></tr>
+        <tr><td>酒店入住率</td><td>高（旺季接近满房）</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div class="body-base" style="margin-top:12px;color:var(--slate-500);font-size:0.8rem;">* 汇率：1 EUR ≈ 7.85 CNY（2026年5月参考汇率）<br>* 门票价格：Wellness Orhidelia €21.50-33.00/人/天 · Sauna World Termalija €13.00-19.00/人/天 · 住宿€130-210/晚起</div>
+  </div>
+</section>
+
+<!-- ===== 10. 历史里程碑 ===== -->
+<section class="section section-alt">
+  <div class="container container-narrow">
+    <div class="section-header">
+      <div class="section-tag">10 · 历史里程碑</div>
+      <h2 class="display-lg">从木池到康养帝国</h2>
+      <p class="body-lg" style="margin-top:16px;">58年持续投资，从1个木池发展为斯洛文尼亚最大温泉度假村</p>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">1966</div>
+        <div class="timeline-title">木池开业 — Atomske Toplice诞生</div>
+        <div class="timeline-desc">9月6日，铁路控股与地方旅游组织开设首个木制温泉池，门票1第纳尔（南斯拉夫货币）。名称为"原子温泉"（Atomske Toplice）。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1977 – 1978</div>
+        <div class="timeline-title">首栋酒店建成</div>
+        <div class="timeline-desc">Hotel Atomske Toplice开业（后更名为Hotel Breza）。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1988 – 1989</div>
+        <div class="timeline-title">原子村（Vas Lipa）公寓群落</div>
+        <div class="timeline-desc">田园风格的公寓综合体建成。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1990</div>
+        <div class="timeline-title">Termalija泳池综合体开业</div>
+        <div class="timeline-desc">室内外泳池集群投入使用。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1995</div>
+        <div class="timeline-title">Aqua户外泳池</div>
+        <div class="timeline-desc">户外游泳区扩展。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2000</div>
+        <div class="timeline-title">更名Terme Olimia</div>
+        <div class="timeline-desc">放弃"原子温泉"名称（对外国市场存在负面营销联想），正式启用Terme Olimia品牌。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2001</div>
+        <div class="timeline-title">Aqualuna Thermal Park</div>
+        <div class="timeline-desc">水上乐园建成，包含水滑梯、波浪池。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2003</div>
+        <div class="timeline-title">最大波浪泳池建成</div>
+        <div class="timeline-desc">SPA Olimia游客量突破10万人次。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2004</div>
+        <div class="timeline-title">Termalija翻新 · 最大桑拿中心</div>
+        <div class="timeline-desc">斯洛文尼亚最大桑拿中心建成。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2006</div>
+        <div class="timeline-title">Hotel Sotelia开业</div>
+        <div class="timeline-desc">ENOTA设计·€1200万投资·获Plečnik奖、Piranesi奖、Golden Pencil奖。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2009</div>
+        <div class="timeline-title">Wellness Orhidelia开业</div>
+        <div class="timeline-desc">€780万投资·斯洛文尼亚最佳康体中心。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2016</div>
+        <div class="timeline-title">Hotel Sotelia更新</div>
+        <div class="timeline-desc">€100万翻新·升级客房及Olimia会议中心。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2018</div>
+        <div class="timeline-title">Termalija Family Wellness翻新</div>
+        <div class="timeline-desc">€1000万·ENOTA设计·折叠屋顶结构。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2024</div>
+        <div class="timeline-title">创纪录年份</div>
+        <div class="timeline-desc">集团过夜数突破56.5万·营收突破€5000万·太阳能电站2.2 MW投产。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2025.02</div>
+        <div class="timeline-title">Wellness Vodian开业</div>
+        <div class="timeline-desc">€500万·2000 m²·ENOTA设计·The Plan Award 2025入围。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2026 (计划)</div>
+        <div class="timeline-title">Slovenia首个家庭酒店开业</div>
+        <div class="timeline-desc">€2370万·146间房·2026年5月21-22日。Hotel Sotelia同时转型为仅限成人。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 11. 奖项荣誉 ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">11 · 奖项与荣誉</div>
+      <h2 class="display-lg">国际认可</h2>
+    </div>
+
+    <div class="awards-grid">
+      <div class="award-card">
+        <div class="award-year">2006</div>
+        <div class="award-name">Plečnik Award</div>
+        <div class="award-desc">Plečnik建筑奖 — 斯洛文尼亚最高建筑荣誉，表彰Hotel Sotelia的建筑设计。</div>
+      </div>
+      <div class="award-card">
+        <div class="award-year">2006</div>
+        <div class="award-name">Piranesi Award</div>
+        <div class="award-desc">Piranesi建筑奖 — 中欧地区重要建筑奖项。</div>
+      </div>
+      <div class="award-card">
+        <div class="award-year">2006</div>
+        <div class="award-name">Golden Pencil (Zlati svinčnik)</div>
+        <div class="award-desc">金铅笔奖 — ZAPS（斯洛文尼亚建筑与空间规划协会）颁发。</div>
+      </div>
+      <div class="award-card">
+        <div class="award-year">2007</div>
+        <div class="award-name">Mies van der Rohe Award</div>
+        <div class="award-desc">密斯·凡·德·罗奖 — 欧盟当代建筑奖，Hotel Sotelia入围。</div>
+      </div>
+      <div class="award-card">
+        <div class="award-year">2010</div>
+        <div class="award-name">ArchDaily Building of the Year</div>
+        <div class="award-desc">年度建筑奖 — 决赛入围。</div>
+      </div>
+      <div class="award-card">
+        <div class="award-year">多次</div>
+        <div class="award-name">Slovenia's Best Wellness Resort</div>
+        <div class="award-desc">Slovenia最佳康体度假村 — 近十年屡获此殊荣。</div>
+      </div>
+      <div class="award-card">
+        <div class="award-year">—</div>
+        <div class="award-name">EDEN (European Destination of Excellence)</div>
+        <div class="award-desc">欧洲卓越目的地 — Podčetrtek获评。</div>
+      </div>
+      <div class="award-card">
+        <div class="award-year">—</div>
+        <div class="award-name">Slovenia Green Gold</div>
+        <div class="award-desc">Slovenia绿色金奖 — Podčetrtek获评可持续旅游目的地。</div>
+      </div>
+      <div class="award-card">
+        <div class="award-year">2025</div>
+        <div class="award-name">The Plan Award</div>
+        <div class="award-desc">意大利The Plan杂志设计奖 — Wellness Vodian入围Hospitality类别。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 12. 技术指标总表 ===== -->
+<section class="section section-alt">
+  <div class="container container-narrow">
+    <div class="section-header">
+      <div class="section-tag">12 · 技术指标总表</div>
+      <h2 class="display-lg">关键参数一览</h2>
+    </div>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>类别</th><th>参数</th><th>数值</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>温泉</td><td>水源深度</td><td class="num">约520 m</td></tr>
+        <tr><td>温泉</td><td>出水温度范围</td><td class="num">24°C – 44°C</td></tr>
+        <tr><td>温泉</td><td>池内恒温</td><td class="num">30°C – 37°C</td></tr>
+        <tr><td>温泉</td><td>水质类型</td><td>Mg-Ca-HCO₃ 热矿水</td></tr>
+        <tr><td>温泉</td><td>关键矿物</td><td>镁·钙·硅（高含量）·碳酸氢盐</td></tr>
+        <tr><td>室内池</td><td>Orhidelia水池面积</td><td class="num">1,000 m²</td></tr>
+        <tr><td>桑拿</td><td>Orhidelia桑拿世界</td><td class="num">1,700 m²</td></tr>
+        <tr><td>桑拿</td><td>Vodian桑拿容量</td><td>芬兰50人·红外20人·蒸汽16人</td></tr>
+        <tr><td>桑拿</td><td>桑拿种类</td><td>芬兰·红外·蒸汽·盐水·草药·生物桑拿</td></tr>
+        <tr><td>户外</td><td>Aqualuna总水面</td><td class="num">3,000 m²</td></tr>
+        <tr><td>户外</td><td>大型滑梯</td><td class="num">8条</td></tr>
+        <tr><td>户外</td><td>儿童水上游乐</td><td class="num">550 m² · 70+互动效果</td></tr>
+        <tr><td>建筑</td><td>Hotel Sotelia建筑面积</td><td class="num">13,300 m²</td></tr>
+        <tr><td>建筑</td><td>Hotel Sotelia层数</td><td class="num">4层（顺应地形层叠）</td></tr>
+        <tr><td>建筑</td><td>Wellness Vodian面积</td><td class="num">2,000 m²</td></tr>
+        <tr><td>住宿</td><td>总客房数（全度假村）</td><td class="num">289间（含在建Family Hotel 146间）</td></tr>
+        <tr><td>会议</td><td>会议总面积</td><td class="num">804 m²</td></tr>
+        <tr><td>会议</td><td>最大会议室容量</td><td class="num">350人</td></tr>
+        <tr><td>能源</td><td>太阳能装机</td><td class="num">2.2 MW</td></tr>
+        <tr><td>运营</td><td>员工</td><td class="num">320人</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== 13. 延伸资料库 ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">13 · 延伸资料库</div>
+      <h2 class="display-lg">研究资源与延伸阅读</h2>
+    </div>
+
+    <div class="resource-grid">
+      <!-- 类型1: 官方来源 -->
+      <a href="https://www.terme-olimia.com" target="_blank" rel="noopener" class="resource-card">
+        <div class="resource-type">官方来源 Official</div>
+        <div class="resource-title">Terme Olimia 官方网站</div>
+        <div class="resource-url">terme-olimia.com</div>
+      </a>
+      <a href="https://www.terme-olimia.com/en/adventures/all-adventures/blog/2019/11/08/thermal-water-in-terme-olimia" target="_blank" rel="noopener" class="resource-card">
+        <div class="resource-type">官方来源 Official</div>
+        <div class="resource-title">Olimia热矿水官方说明</div>
+        <div class="resource-url">terme-olimia.com · 水质分析</div>
+      </a>
+
+      <!-- 类型2: 建筑设计 -->
+      <a href="https://urbannext.net/hotel-sotelia/" target="_blank" rel="noopener" class="resource-card">
+        <div class="resource-type">建筑设计 Architecture</div>
+        <div class="resource-title">Hotel Sotelia — urbanNext深度分析</div>
+        <div class="resource-url">urbannext.net · ENOTA作品</div>
+      </a>
+      <a href="https://www.nextroom.at/building.php?id=28969" target="_blank" rel="noopener" class="resource-card">
+        <div class="resource-type">建筑设计 Architecture</div>
+        <div class="resource-title">Hotel Sotelia 建筑评论 — nextroom</div>
+        <div class="resource-url">nextroom.at · Maja Vardjan评论</div>
+      </a>
+      <a href="https://www.archdaily.com/904609/termalija-family-wellness-enota" target="_blank" rel="noopener" class="resource-card">
+        <div class="resource-type">建筑设计 Architecture</div>
+        <div class="resource-title">Termalija Family Wellness — ArchDaily</div>
+        <div class="resource-url">archdaily.com · ENOTA作品</div>
+      </a>
+      <a href="https://www.theplan.it/eng/award-2025-Hospitality/wellness-vodian-a-thermal-oasis-surrounded-by-green-enota" target="_blank" rel="noopener" class="resource-card">
+        <div class="resource-type">建筑设计 Architecture</div>
+        <div class="resource-title">Wellness Vodian — The Plan Award 2025</div>
+        <div class="resource-url">theplan.it · ENOTA入围</div>
+      </a>
+
+      <!-- 类型3: 投资财经 -->
+      <a href="https://connectingregion.com/news/terme-olimia-soars-with-record-revenue/" target="_blank" rel="noopener" class="resource-card">
+        <div class="resource-type">投资财经 Finance</div>
+        <div class="resource-title">Terme Olimia创纪录营收报道 — The Region</div>
+        <div class="resource-url">connectingregion.com</div>
+      </a>
+      <a href="https://www.ebonitete.si/en/terme-olimia-dd/" target="_blank" rel="noopener" class="resource-card">
+        <div class="resource-type">投资财经 Finance</div>
+        <div class="resource-title">Terme Olimia d.d. 财务数据 — AJPES</div>
+        <div class="resource-url">ebonitete.si</div>
+      </a>
+
+      <!-- 类型4: 旅游媒体 -->
+      <a href="https://www.slovenia.info/en/press-centre/news-of-the-tourism-press-agency/5450-50th-anniversary-of-terme-olimia" target="_blank" rel="noopener" class="resource-card">
+        <div class="resource-type">旅游媒体 Tourism Media</div>
+        <div class="resource-title">Terme Olimia 50周年 — Slovenia官方旅游局</div>
+        <div class="resource-url">slovenia.info · 50周年</div>
+      </a>
+      <a href="https://www.rtvslo.si/news-in-english/50th-anniversary-of-terme-olimia-from-a-wooden-pool-to-a-wellness-destination/402163" target="_blank" rel="noopener" class="resource-card">
+        <div class="resource-type">旅游媒体 Tourism Media</div>
+        <div class="resource-title">从木池到康养目的地 — RTV Slovenija</div>
+        <div class="resource-url">rtvslo.si · 深度报道</div>
+      </a>
+      <a href="https://www.slovenia.info/en/business/trade-news/32027-redefining-wellness-terme-olimia-s-latest-thermal-innovations-and-family-retreat" target="_blank" rel="noopener" class="resource-card">
+        <div class="resource-type">旅游媒体 Tourism Media</div>
+        <div class="resource-title">最新温泉创新与家庭度假 — Slovenia旅游局</div>
+        <div class="resource-url">slovenia.info · 2025</div>
+      </a>
+
+      <!-- 类型5: 学术/建筑研究 -->
+      <a href="https://odprtehiseslovenije.org/en/objekt/wellness-vodian/" target="_blank" rel="noopener" class="resource-card">
+        <div class="resource-type">建筑开放日 Open Houses</div>
+        <div class="resource-title">Wellness Vodian — Odprte Hiše Slovenije</div>
+        <div class="resource-url">odprtehiseslovenije.org</div>
+      </a>
+      <a href="https://odprtehiseslovenije.org/en/objekt/hotel-sotelia-revitalisation/" target="_blank" rel="noopener" class="resource-card">
+        <div class="resource-type">建筑开放日 Open Houses</div>
+        <div class="resource-title">Hotel Sotelia Revitalisation 2016</div>
+        <div class="resource-url">odprtehiseslovenije.org</div>
+      </a>
+      <a href="https://mint.gov.hr/UserDocsImages/arhiva/dht12-eu-slovenija.pdf" target="_blank" rel="noopener" class="resource-card">
+        <div class="resource-type">EU政策 EU Policy</div>
+        <div class="resource-title">EU结构基金资助详情 — 克罗地亚旅游部</div>
+        <div class="resource-url">mint.gov.hr · PDF文件</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="container">
+    <p style="font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:8px;">Terme Olimia &mdash; Hotel Sotelia Case Study</p>
+    <p>案例研究 · 2026年5月 · 数据来源：Terme Olimia官方年报、ENOTA建筑事务所、Slovenia旅游局、AJPES、The Region</p>
+    <p style="margin-top:8px;font-size:0.75rem;color:var(--green-400);">货币换算：1 EUR ≈ 7.85 CNY（2026年5月参考） · 所有计量使用中国大陆公制单位</p>
+    <p style="margin-top:4px;font-size:0.7rem;color:var(--green-500);"><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span></p>
+  </div>
+</footer>
+
+<!-- ===== FLOATING NAV ===== -->
+<div class="floating-nav">
+  <a href="/Projects/casestudy/index.html" class="floating-nav-btn" title="返回首页" aria-label="返回首页">&#8962;</a>
+  <button class="floating-nav-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部" aria-label="回到顶部">&uarr;</button>
+</div>
+
+<!-- ===== SCRIPTS ===== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // ===== LEAFLET MAP =====
+  var mapContainer = document.getElementById('map-container');
+  var mapEl = document.getElementById('map');
+  var fallbackMsg = document.getElementById('map-fallback');
+  var tileLoadTimeout;
+  var tilesLoaded = false;
+
+  try {
+    var map = L.map('map', {
+      center: [46.1587, 15.6070],
+      zoom: 16,
+      zoomControl: true,
+      scrollWheelZoom: true
+    });
+
+    // ESRI ArcGIS WGS-84 tile layer
+    var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a> &mdash; Source: Esri, Maxar, Earthstar Geographics',
+      maxZoom: 19
+    }).addTo(map);
+
+    tileLayer.on('load', function() {
+      tilesLoaded = true;
+      clearTimeout(tileLoadTimeout);
+      fallbackMsg.style.display = 'none';
+    });
+
+    tileLayer.on('tileerror', function() {
+      if (!tilesLoaded) {
+        fallbackMsg.style.display = 'block';
+        fallbackMsg.textContent = '部分地图瓦片加载失败，请检查网络连接后刷新页面';
+      }
+    });
+
+    // 8秒超时降级
+    tileLoadTimeout = setTimeout(function() {
+      if (!tilesLoaded) {
+        fallbackMsg.style.display = 'block';
+        fallbackMsg.textContent = '地图瓦片加载超时，请刷新页面重试';
+      }
+    }, 8000);
+
+    // ===== MARKERS =====
+    var iconResort = L.divIcon({className: 'custom-marker', html: '<div style="background:#4A8C3F;color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,0.3);border:2px solid white;">&#9733;</div>', iconSize: [28,28], iconAnchor: [14,14], popupAnchor: [0,-14]});
+
+    var iconHotel = L.divIcon({className: 'custom-marker', html: '<div style="background:#C8A84E;color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid white;">&#9733;</div>', iconSize: [22,22], iconAnchor: [11,11], popupAnchor: [0,-11]});
+
+    var iconWater = L.divIcon({className: 'custom-marker', html: '<div style="background:#3B8ED4;color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid white;">&#9679;</div>', iconSize: [22,22], iconAnchor: [11,11], popupAnchor: [0,-11]});
+
+    var iconSauna = L.divIcon({className: 'custom-marker', html: '<div style="background:#D4956B;color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid white;">&#9679;</div>', iconSize: [22,22], iconAnchor: [11,11], popupAnchor: [0,-11]});
+
+    var iconOther = L.divIcon({className: 'custom-marker', html: '<div style="background:#777790;color:white;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid white;">&#9679;</div>', iconSize: [18,18], iconAnchor: [9,9], popupAnchor: [0,-9]});
+
+    L.marker([46.1587, 15.6070], {icon: iconResort}).addTo(map).bindPopup('<b>Terme Olimia</b><br>Zdraviliška cesta 24, Podčetrtek<br>奥林尼亚温泉主入口');
+    L.marker([46.1592, 15.6065], {icon: iconHotel}).addTo(map).bindPopup('<b>Hotel Sotelia ★★★★S</b><br>ENOTA设计·Plečnik奖·2006<br>135-150间房·13300 m²');
+    L.marker([46.1594, 15.6060], {icon: iconSauna}).addTo(map).bindPopup('<b>Wellness Orhidelia</b><br>15+仅限·1700 m²桑拿世界<br>1000 m²水池·2009开业');
+    L.marker([46.1595, 15.6075], {icon: iconWater}).addTo(map).bindPopup('<b>Wellness Termalija Family Fun</b><br>折叠屋顶·7D影院·水滑梯<br>全年龄·2018年€1000万翻新');
+    L.marker([46.1598, 15.6082], {icon: iconWater}).addTo(map).bindPopup('<b>Aqualuna Thermal Park</b><br>3000 m²水面·8条大型滑梯<br>King Cobra·波浪池·Aquajungle 2');
+    L.marker([46.1600, 15.6078], {icon: iconOther}).addTo(map).bindPopup('<b>Hotel Breza ★★★★</b><br>1978开业·连接Wellness Vodian');
+    L.marker([46.1602, 15.6070], {icon: iconOther}).addTo(map).bindPopup('<b>Wellness Vodian</b><br>2025年新开业·2000 m²<br>25m泳池·桑拿画廊·屋顶草药园');
+    L.marker([46.1583, 15.6065], {icon: iconOther}).addTo(map).bindPopup('<b>Aparthotel Rosa</b><br>36-42间公寓·地下暖廊<br>连接Termalija');
+    L.marker([46.1588, 15.6063], {icon: iconOther}).addTo(map).bindPopup('<b>Congress Centre Olimia</b><br>804 m²·7-9间会议室<br>最大容纳350人');
+    L.marker([46.1585, 15.6075], {icon: iconOther}).addTo(map).bindPopup('<b>Olimia Health Centre</b><br>骨科·风湿·脊柱康复<br>Olimia Approach');
+
+  } catch(e) {
+    fallbackMsg.style.display = 'block';
+    fallbackMsg.textContent = '地图初始化失败，请刷新页面重试';
+    console.error('Map init error:', e);
+  }
+});
+
+// ===== busuanzi 访客计数 =====
+(function() {
+  var script = document.createElement('script');
+  script.async = true;
+  script.src = 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
+  document.head.appendChild(script);
+})();
+</script>
+</body>
+</html>

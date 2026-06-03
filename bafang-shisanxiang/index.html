@@ -220,21 +220,6 @@ section { padding: 88px 24px; }
   font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; line-height: 1.5;
 }
 
-/* ── Gallery ── */
-.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
-.gallery-item {
-  background: var(--white); border-radius: var(--radius);
-  overflow: hidden; box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.3s, transform 0.25s;
-}
-.gallery-item:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
-.gallery-item img {
-  width: 100%; height: 180px; object-fit: cover; display: block;
-}
-.gallery-item .gallery-cap {
-  padding: 10px 14px; font-size: 0.8rem; color: var(--text-muted);
-}
-
 /* ── Floating Nav ── */
 .floating-nav { position: fixed; right: 1.5rem; bottom: 2rem; display: flex; flex-direction: column; gap: 0.6rem; z-index: 999; }
 .floating-nav a {
@@ -281,7 +266,6 @@ section { padding: 88px 24px; }
   .cards-6 { grid-template-columns: repeat(2, 1fr); }
   .cards-3, .cards-4, .cards-2 { grid-template-columns: 1fr; }
   #parkmap, #satmap { height: 320px; }
-  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
 </head>
@@ -773,50 +757,7 @@ section { padding: 88px 24px; }
   </div>
 </section>
 
-<!-- ═══════════ 11. GALLERY ═══════════ -->
-<section id="gallery" style="background:var(--cream);">
-  <div class="section-inner">
-    <div class="section-tag reveal">Gallery</div>
-    <h2 class="section-title reveal">实景图集</h2>
-    <p class="f-caption reveal" style="margin-bottom:1.2rem;">以下图片来源于Unsplash、Google Images公开图库及官方媒体资料，供案例研究参考使用。</p>
-    <div class="gallery-grid reveal">
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1547981609-4b899bf98e7e?w=600&h=400&fit=crop" alt="八坊十三巷街景">
-        <div class="gallery-cap">八坊十三巷砖雕门楼与巷道景观</div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=600&h=400&fit=crop" alt="回族砖雕艺术">
-        <div class="gallery-cap">河州砖雕——回族建筑艺术的瑰宝</div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop" alt="传统四合院">
-        <div class="gallery-cap">八坊民俗馆（80号院）四合院内景</div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=400&fit=crop" alt="盖碗茶文化">
-        <div class="gallery-cap">盖碗茶广场——河州茶文化的核心舞台</div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69c077?w=600&h=400&fit=crop" alt="红水河夜景">
-        <div class="gallery-cap">红水河夜色——国家级夜间文旅消费集聚区</div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1480796927426-f609979314bd?w=600&h=400&fit=crop" alt="河州美食街">
-        <div class="gallery-cap">北巷·八坊味道——河州特色美食街区</div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&h=400&fit=crop" alt="丝绸之路文化">
-        <div class="gallery-cap">大南巷·丝路回商主题文化街</div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&h=400&fit=crop" alt="清真寺建筑">
-        <div class="gallery-cap">清真寺建筑——八坊的精神与文化地标</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════ 12. RESOURCES ═══════════ -->
+<!-- ═══════════ 11. RESOURCES ═══════════ -->
 <section id="resources">
   <div class="section-inner">
     <div class="section-tag reveal">Resources</div>

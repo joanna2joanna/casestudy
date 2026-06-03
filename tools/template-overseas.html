@@ -144,13 +144,6 @@ body {
 .timeline-content h4 { font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 600; }
 .timeline-content p { font-size: 0.9rem; color: var(--clr-text-secondary); margin-top: 0.15rem; }
 
-/* ---------- Gallery ---------- */
-.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; }
-.gallery-item { background: var(--clr-card-bg); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow 0.3s; }
-.gallery-item:hover { box-shadow: var(--shadow-lg); }
-.gallery-item img { width: 100%; height: 180px; object-fit: cover; display: block; }
-.gallery-item .gallery-caption { padding: 0.7rem 1rem; font-size: 0.85rem; color: var(--clr-text-secondary); }
-
 /* ---------- Resource Links ---------- */
 .resource-group { margin-bottom: 1.5rem; }
 .resource-group h4 { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--clr-primary-dark); margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--clr-border); }
@@ -295,16 +288,7 @@ body {
   </div>
 </section>
 
-<!-- ====== 11. PHOTO GALLERY ====== -->
-<section class="section section-alt" id="gallery">
-  <div class="container">
-    <div class="section-header reveal"><h2>实景图集</h2><div class="section-line"></div></div>
-    <p class="f-caption reveal" style="margin-bottom:1.2rem;">以下图片来源于Unsplash、Google Images公开图库及官方媒体资料，供案例研究参考使用。</p>
-    <div class="gallery-grid reveal">{{GALLERY_ITEMS}}</div>
-  </div>
-</section>
-
-<!-- ====== 12. EXTENDED RESOURCE LIBRARY ====== -->
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
 <section class="section" id="resources">
   <div class="container">
     <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
@@ -312,7 +296,7 @@ body {
   </div>
 </section>
 
-<!-- ====== 13. FLOATING NAVIGATION ====== -->
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
 <div class="floating-nav">
   <a href="#overview" title="项目概览" aria-label="项目概览">&#9733;</a>
   <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>

@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>八坊十三巷 — 丝绸之路上的河州古城，千年回族文化街区</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="../shared.css">
+<style>
+:root {
+  --terracotta: #C1663B;
+  --terracotta-light: #D9906A;
+  --terracotta-deep: #8B3A1F;
+  --gold: #C8953E;
+  --gold-light: #E0C070;
+  --lantern-red: #B53434;
+  --ink: #1C1816;
+  --warm-white: #FAF8F4;
+  --cream: #F2EDE4;
+  --white: #FFFFFF;
+  --text: #1C1816;
+  --text-muted: #5C5048;
+  --text-light: #8C8078;
+  --border: #E0D8CD;
+  --shadow-sm: 0 1px 3px rgba(28,24,22,0.05);
+  --shadow-md: 0 4px 20px rgba(28,24,22,0.08);
+  --shadow-lg: 0 12px 40px rgba(28,24,22,0.10);
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+  --font-mono: 'DM Mono', 'SF Mono', monospace;
+
+  /* shared.css mappings */
+  --clr-primary: var(--terracotta);
+  --clr-primary-light: var(--terracotta-light);
+  --clr-primary-dark: var(--terracotta-deep);
+  --clr-accent: var(--gold);
+  --clr-bg: var(--warm-white);
+  --clr-bg-alt: var(--cream);
+  --clr-text: var(--text);
+  --clr-text-secondary: var(--text-muted);
+  --clr-text-muted: var(--text-light);
+  --clr-border: var(--border);
+  --clr-card-bg: var(--white);
+  --radius-md: var(--radius);
+}
+
+html { font-size: 17px; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--warm-white);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Hero ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(165deg, #2B1810 0%, #4A2A1A 25%, #6B3A28 55%, #8B4A32 80%, #C8953E 100%);
+  overflow: hidden;
+  text-align: center; padding: 120px 24px 80px;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 25% 80%, rgba(200,149,62,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 75% 25%, rgba(193,102,59,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 55% at 50% 50%, rgba(224,192,112,0.08) 0%, transparent 70%);
+}
+.hero-bg-pattern {
+  position: absolute; inset: 0; opacity: 0.04;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.5) 3px, rgba(255,255,255,0.5) 6px),
+    repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(255,255,255,0.5) 3px, rgba(255,255,255,0.5) 6px);
+}
+.hero-content { position: relative; z-index: 2; max-width: 780px; }
+.hero-badge {
+  display: inline-block;
+  font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gold-light); border: 1px solid rgba(224,192,112,0.35);
+  padding: 6px 18px; border-radius: 20px; margin-bottom: 32px;
+}
+.hero h1 {
+  font-family: var(--font-display); font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 900; color: var(--white); line-height: 1.15;
+  letter-spacing: 0.04em; margin-bottom: 16px;
+}
+.hero h1 span { color: var(--gold-light); }
+.hero-sub {
+  font-size: 1rem; color: rgba(255,255,255,0.55); line-height: 1.6;
+  max-width: 540px; margin: 0 auto 48px;
+}
+.hero-kpis {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+  max-width: 720px; margin: 0 auto;
+  background: rgba(255,255,255,0.06); border-radius: 16px; overflow: hidden;
+}
+.hero-kpi {
+  background: rgba(43,24,16,0.55); padding: 28px 20px;
+  backdrop-filter: blur(8px);
+}
+.hero-kpi-num {
+  font-family: var(--font-display); font-size: 1.8rem; font-weight: 900;
+  color: var(--gold-light); line-height: 1.1;
+}
+.hero-kpi-label {
+  font-size: 0.78rem; color: rgba(255,255,255,0.48); margin-top: 6px;
+  letter-spacing: 0.03em;
+}
+
+/* ── Sections ── */
+section { padding: 88px 24px; }
+.section-inner { max-width: 1120px; margin: 0 auto; }
+.section-tag {
+  font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--terracotta); margin-bottom: 12px;
+}
+.section-title {
+  font-family: var(--font-display); font-size: 2rem; font-weight: 700;
+  color: var(--ink); margin-bottom: 8px; letter-spacing: 0.02em;
+}
+.section-desc {
+  font-size: 0.95rem; color: var(--text-muted); max-width: 560px;
+  margin-bottom: 48px; line-height: 1.7;
+}
+.sub-heading {
+  font-family: var(--font-display); font-size: 1.05rem; color: var(--ink);
+  margin: 32px 0 12px;
+}
+
+/* ── Cards (6-col overview grid) ── */
+.cards-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
+.cards-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.cards-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+.info-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 26px 22px; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border); transition: box-shadow 0.3s;
+}
+.info-card:hover { box-shadow: var(--shadow-md); }
+.info-card-icon { font-size: 1.3rem; margin-bottom: 10px; }
+.info-card-label {
+  font-size: 0.78rem; color: var(--text-light);
+  letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 4px;
+}
+.info-card-value {
+  font-size: 0.9rem; font-weight: 600; color: var(--ink); line-height: 1.4;
+}
+
+/* ── KPI Card ── */
+.kpi-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 28px 24px; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border); text-align: center;
+  transition: box-shadow 0.3s;
+}
+.kpi-card:hover { box-shadow: var(--shadow-md); }
+.kpi-card-num {
+  font-family: var(--font-display); font-size: 2rem; font-weight: 900;
+  color: var(--terracotta); line-height: 1.2;
+}
+.kpi-card-label {
+  font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;
+}
+.kpi-card-sub {
+  font-size: 0.78rem; color: var(--text-light); margin-top: 2px;
+}
+
+/* ── Zone Card ── */
+.zone-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 24px; box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--terracotta); transition: box-shadow 0.3s;
+}
+.zone-card:hover { box-shadow: var(--shadow-md); }
+.zone-card h4 {
+  font-family: var(--font-display); font-size: 1.05rem; font-weight: 600;
+  color: var(--ink); margin-bottom: 6px;
+}
+.zone-card p {
+  font-size: 0.85rem; color: var(--text-muted); line-height: 1.55;
+}
+
+/* ── Timeline ── */
+.timeline { position: relative; padding-left: 32px; }
+.timeline::before {
+  content: ''; position: absolute; left: 10px; top: 8px; bottom: 8px;
+  width: 2px; background: linear-gradient(to bottom, var(--terracotta), var(--gold));
+}
+.timeline-item { position: relative; margin-bottom: 28px; }
+.timeline-item::before {
+  content: ''; position: absolute; left: -26px; top: 6px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--terracotta); border: 2px solid var(--warm-white);
+  box-shadow: 0 0 0 2px var(--terracotta);
+}
+.timeline-year {
+  font-family: var(--font-mono); font-size: 0.9rem; font-weight: 700;
+  color: var(--terracotta);
+}
+.timeline-content { margin-top: 4px; }
+.timeline-content h5 {
+  font-family: var(--font-body); font-size: 0.95rem; font-weight: 600;
+}
+.timeline-content p {
+  font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; line-height: 1.5;
+}
+
+/* ── Gallery ── */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.gallery-item {
+  background: var(--white); border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.3s, transform 0.25s;
+}
+.gallery-item:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+.gallery-item img {
+  width: 100%; height: 180px; object-fit: cover; display: block;
+}
+.gallery-item .gallery-cap {
+  padding: 10px 14px; font-size: 0.8rem; color: var(--text-muted);
+}
+
+/* ── Floating Nav ── */
+.floating-nav { position: fixed; right: 1.5rem; bottom: 2rem; display: flex; flex-direction: column; gap: 0.6rem; z-index: 999; }
+.floating-nav a {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--terracotta-deep); color: white;
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none; font-size: 1.1rem;
+  box-shadow: var(--shadow-md); transition: background 0.25s, transform 0.2s;
+}
+.floating-nav a:hover { background: var(--gold); transform: scale(1.08); }
+.floating-nav #back-to-top { opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.floating-nav #back-to-top.show { opacity: 1; pointer-events: auto; }
+
+/* ── Reveal ── */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── Data note ── */
+.data-note {
+  font-size: 0.78rem; color: var(--text-light); margin-top: 0.5rem;
+}
+
+/* ── Map ── */
+#parkmap { width: 100%; height: 480px; border-radius: 12px; z-index: 0; }
+#satmap { width: 100%; height: 400px; border-radius: 12px; z-index: 0; margin-top: 1rem; }
+.map-fallback { display: none; text-align: center; padding: 0.9rem 1rem; margin-top: 0.5rem; background: #FFF3CD; color: #856404; border-radius: var(--radius-sm); font-size: 0.85rem; }
+.map-legend { padding: 0.8rem 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+.map-legend span { display: flex; align-items: center; gap: 0.4rem; }
+.map-legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .cards-6 { grid-template-columns: repeat(3, 1fr); }
+  .cards-4 { grid-template-columns: repeat(2, 1fr); }
+  .hero-kpis { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .hero { padding: 80px 20px 60px; min-height: auto; }
+  .hero h1 { font-size: 2rem; }
+  .hero-kpis { grid-template-columns: repeat(2, 1fr); }
+  .hero-kpi { padding: 20px 14px; }
+  .hero-kpi-num { font-size: 1.4rem; }
+  section { padding: 56px 16px; }
+  .cards-6 { grid-template-columns: repeat(2, 1fr); }
+  .cards-3, .cards-4, .cards-2 { grid-template-columns: 1fr; }
+  #parkmap, #satmap { height: 320px; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ 1. HERO ═══════════ -->
+<header class="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Gansu · Linxia · China</div>
+    <h1>八坊<span>十三巷</span></h1>
+    <p class="hero-sub">丝绸之路上的河州古城，千年回族文化街区——从唐代蕃坊到国家级旅游休闲街区，围寺而居、围坊而商的活态文化遗产</p>
+    <div class="hero-kpis">
+      <div class="hero-kpi">
+        <div class="hero-kpi-num">41万m²</div>
+        <div class="hero-kpi-label">街区总面积</div>
+      </div>
+      <div class="hero-kpi">
+        <div class="hero-kpi-num">3.4亿元</div>
+        <div class="hero-kpi-label">保护改造总投资</div>
+      </div>
+      <div class="hero-kpi">
+        <div class="hero-kpi-num">452万</div>
+        <div class="hero-kpi-label">2025年前十月游客量</div>
+      </div>
+      <div class="hero-kpi">
+        <div class="hero-kpi-num">1,300m+</div>
+        <div class="hero-kpi-label">主街总长度</div>
+      </div>
+    </div>
+    <p class="data-note" style="color:rgba(255,255,255,0.35);margin-top:20px;">数据截至 2026 年 6 月</p>
+  </div>
+</header>
+
+<!-- ═══════════ 2. PROJECT OVERVIEW ═══════════ -->
+<section id="overview">
+  <div class="section-inner">
+    <div class="section-tag reveal">Overview</div>
+    <h2 class="section-title reveal">项目概览</h2>
+    <p class="section-desc reveal">八坊十三巷位于甘肃省临夏回族自治州临夏市主城区，是古河州城最具代表性的历史文化街区，居民约 8,200 人、回族占 98% 以上。</p>
+
+    <div class="cards-6 reveal">
+      <div class="info-card">
+        <div class="info-card-icon">&#128205;</div>
+        <div class="info-card-label">位置</div>
+        <div class="info-card-value">甘肃省临夏回族自治州临夏市主城区</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#127963;</div>
+        <div class="info-card-label">景区等级</div>
+        <div class="info-card-value">国家AAAA级旅游景区（2018年评定）</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#128338;</div>
+        <div class="info-card-label">开放时间</div>
+        <div class="info-card-value">2016年10月，全天开放、免门票</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#128101;</div>
+        <div class="info-card-label">常住人口</div>
+        <div class="info-card-value">约 2,000 户 / 8,200 人，回族占 98%+</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#127983;</div>
+        <div class="info-card-label">建筑遗产</div>
+        <div class="info-card-value">41 座四合院 · 109 座传统民宅</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#127942;</div>
+        <div class="info-card-label">核心荣誉</div>
+        <div class="info-card-value">国家级旅游休闲街区（2022）· 国家级夜间文旅消费集聚区</div>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:1.5rem;">
+      <h3>项目简介</h3>
+      <p class="f-body">八坊十三巷是八座"坊"和十三条"巷"的统称，历史可追溯至唐代。唐代大食（阿拉伯）、波斯等国商人和宗教人士沿丝绸之路来到河州经商传教，形成了最早的穆斯林聚居区。元朝至元十年（1273 年），第一座清真寺——南关清真大寺建成，标志着街区正式形成。明清时期达于兴盛，形成"围寺而居、围坊而商"的独特格局。随着城市化进程，八坊十三巷一度沦为"城中村"。2015 年临夏市政府启动综合保护开发工程，按照"文化为先、利民为本、一巷一特色"和"景观进巷、商业进院"的原则，在不搬迁原住居民、不改变原有结构的前提下，"修旧如旧"完成改造。2016 年 10 月正式对外开放。2018 年获评国家 AAAA 级旅游景区，同年因"城中村"变身文旅新地标的创新做法获国务院通报表扬。2022 年先后入选全国首批国家级旅游休闲街区（甘肃省唯一）和国家级夜间文化和旅游消费集聚区。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 3. DESIGN & CONSTRUCTION ═══════════ -->
+<section id="design" style="background:var(--cream);">
+  <div class="section-inner">
+    <div class="section-tag reveal">Design</div>
+    <h2 class="section-title reveal">设计与建设</h2>
+    <p class="section-desc reveal">政府主导、居民参与、修旧如旧——八坊十三巷的改造模式被国务院作为典型经验全国推广。</p>
+
+    <div class="cards-3 reveal">
+      <div class="info-card">
+        <div class="info-card-icon">&#127970;</div>
+        <div class="info-card-label">建设方</div>
+        <div class="info-card-value">临夏市住房和城乡建设局<br>临夏市八坊街道办事处</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#128736;</div>
+        <div class="info-card-label">总承包单位</div>
+        <div class="info-card-value">永靖县嘉庆古典建筑工程有限公司（主标段）<br>甘肃恒业建筑工程有限公司</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#128221;</div>
+        <div class="info-card-label">规划设计</div>
+        <div class="info-card-value">临夏市规划局统筹，省级规划设计院协作<br>遵循"一巷一特色"主题定位</div>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:1.5rem;">
+      <h3>设计理念</h3>
+      <p class="f-body">改造以"文化为先、利民为本"为核心，保持"围寺而居、围坊而商"的传统肌理。每条巷子赋予不同文化主题——大旮巷为人文生态巷、拥政路为书巷、大南巷为丝路回商巷、小南巷为童趣巷、专员巷为回族婚俗文化巷、北巷为八坊味道巷等。建筑融合<b>回族砖雕、汉族木刻、藏族彩绘</b>三大民族建筑艺术，形成"一巷一景、移步换景"的视觉体验。砖雕是最大特色——全景图砖雕长宽各 9 米，由 916 块青砖拼接，耗时 9 个月纯手工雕刻。清真北寺影壁建于清乾隆辛酉年（1741 年），是现存最古老的大型地面砖雕影壁，已被列为省级文物保护单位。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 4. TECHNICAL INDICATORS SUMMARY TABLE ═══════════ -->
+<section id="tech-summary">
+  <div class="section-inner">
+    <div class="section-tag reveal">Technical Data</div>
+    <h2 class="section-title reveal">技术指标总表</h2>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>街区总面积</td><td class="num">41 万 m²</td><td>约 0.41 km²，全域步行街</td></tr>
+          <tr><td>规模</td><td>主街长度</td><td class="num">1,300 m+</td><td>核心游览轴线</td></tr>
+          <tr><td>规模</td><td>街巷总开发长度</td><td class="num">约 3.3 km</td><td>13 条主要巷子</td></tr>
+          <tr><td>规模</td><td>教坊数量</td><td class="num">8 座</td><td>围绕八座清真寺形成</td></tr>
+          <tr><td>规模</td><td>巷子数量</td><td class="num">13 条</td><td>大旮巷、小南巷、坝口巷等</td></tr>
+          <tr><td>建筑</td><td>四合院保存量</td><td class="num">41 座</td><td>含 80 号院（大公馆）等历史院落</td></tr>
+          <tr><td>建筑</td><td>传统民宅</td><td class="num">109 座</td><td>回族传统民居建筑群</td></tr>
+          <tr><td>投资</td><td>保护改造总投资</td><td class="num">¥3.4 亿</td><td>2015—2019 年分期投入</td></tr>
+          <tr><td>投资</td><td>一期工程投资</td><td class="num">¥1.87 亿</td><td>2015 年启动</td></tr>
+          <tr><td>投资</td><td>新西路改造配套</td><td class="num">¥1.93 亿</td><td>道路及管网综合改造</td></tr>
+          <tr><td>运营</td><td>年游客量（2025 前 10 月）</td><td class="num">452 万 人次</td><td>同比增长显著</td></tr>
+          <tr><td>运营</td><td>旅游收入（2025 前 10 月）</td><td class="num">¥5.08 亿</td><td>同比增长 18.1%</td></tr>
+          <tr><td>运营</td><td>累计接待（2016 至今）</td><td class="num">超 1,000 万 人次</td><td>带动万人增收致富</td></tr>
+          <tr><td>荣誉</td><td>国家 AAAA 级景区</td><td class="num">2018 年</td><td>甘肃省文化和旅游厅评定</td></tr>
+          <tr><td>荣誉</td><td>国家级旅游休闲街区</td><td class="num">2022 年 1 月</td><td>首批，甘肃省唯一</td></tr>
+          <tr><td>荣誉</td><td>国家级夜间文旅消费集聚区</td><td class="num">2022 年 7 月</td><td>第二批</td></tr>
+        </tbody>
+      </table>
+      <p class="data-note">数据来源：临夏市人民政府官网、甘肃省文旅厅公告、新华社报道。数据截至 2025 年底。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 5. SPATIAL LAYOUT ═══════════ -->
+<section id="spatial-layout" style="background:var(--cream);">
+  <div class="section-inner">
+    <div class="section-tag reveal">Spatial Layout</div>
+    <h2 class="section-title reveal">空间布局</h2>
+    <p class="section-desc reveal">八坊十三巷位于临夏市北大街以南、前河沿路以北、解放路以西、新西路以东，呈不规则矩形街区形态。</p>
+
+    <!-- Map (NO reveal class) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:var(--terracotta);"></span> 核心景点</span>
+        <span><span class="dot" style="background:var(--gold);"></span> 清真寺/教坊</span>
+        <span><span class="dot" style="background:#5B9BD5;"></span> 水域</span>
+        <span style="margin-left:auto;font-size:0.78rem;">底图：高德地图 · GCJ-02 坐标系</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Spatial Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="shadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter>
+          </defs>
+          <rect width="1000" height="700" fill="#1C1816" rx="16"/>
+          <!-- Title -->
+          <text x="500" y="36" text-anchor="middle" fill="#E0C070" font-family="serif" font-size="18" font-weight="700">八坊十三巷 — 空间结构示意图</text>
+
+          <!-- Boundary -->
+          <rect x="80" y="60" width="840" height="560" fill="none" stroke="#C8953E" stroke-width="1.5" stroke-dasharray="8,4" rx="4"/>
+          <text x="500" y="54" text-anchor="middle" fill="#C8953E" font-size="11">街区边界（北大街—前河沿—解放路—新西路）</text>
+
+          <!-- River -->
+          <path d="M 160 300 Q 400 260 680 320 Q 800 340 880 380" fill="none" stroke="#5B9BD5" stroke-width="3" opacity="0.7"/>
+          <text x="520" y="310" fill="#5B9BD5" font-size="11" text-anchor="middle" font-weight="600">红 水 河</text>
+
+          <!-- 8 District Rectangles -->
+          <rect x="200" y="70" width="100" height="80" fill="#8B3A1F" fill-opacity="0.5" stroke="#C1663B" stroke-width="1.5" rx="6" filter="url(#shadow)"/>
+          <text x="250" y="115" text-anchor="middle" fill="white" font-size="12">大寺坊</text>
+          <text x="250" y="132" text-anchor="middle" fill="#E0C070" font-size="9">(南关大寺)</text>
+
+          <rect x="350" y="70" width="100" height="80" fill="#8B3A1F" fill-opacity="0.5" stroke="#C1663B" stroke-width="1.5" rx="6" filter="url(#shadow)"/>
+          <text x="400" y="115" text-anchor="middle" fill="white" font-size="12">祁寺坊</text>
+
+          <rect x="500" y="70" width="100" height="80" fill="#8B3A1F" fill-opacity="0.5" stroke="#C1663B" stroke-width="1.5" rx="6" filter="url(#shadow)"/>
+          <text x="550" y="115" text-anchor="middle" fill="white" font-size="12">西寺坊</text>
+
+          <rect x="650" y="70" width="100" height="80" fill="#8B3A1F" fill-opacity="0.5" stroke="#C1663B" stroke-width="1.5" rx="6" filter="url(#shadow)"/>
+          <text x="700" y="115" text-anchor="middle" fill="white" font-size="12">北寺坊</text>
+          <text x="700" y="132" text-anchor="middle" fill="#E0C070" font-size="9">(砖雕影壁)</text>
+
+          <rect x="200" y="200" width="100" height="80" fill="#8B3A1F" fill-opacity="0.5" stroke="#C1663B" stroke-width="1.5" rx="6" filter="url(#shadow)"/>
+          <text x="250" y="245" text-anchor="middle" fill="white" font-size="12">铁家寺坊</text>
+
+          <rect x="350" y="200" width="100" height="80" fill="#8B3A1F" fill-opacity="0.5" stroke="#C1663B" stroke-width="1.5" rx="6" filter="url(#shadow)"/>
+          <text x="400" y="245" text-anchor="middle" fill="white" font-size="12">前河沿寺坊</text>
+
+          <rect x="500" y="200" width="100" height="80" fill="#8B3A1F" fill-opacity="0.5" stroke="#C1663B" stroke-width="1.5" rx="6" filter="url(#shadow)"/>
+          <text x="550" y="245" text-anchor="middle" fill="white" font-size="12">老王寺坊</text>
+
+          <rect x="650" y="200" width="100" height="80" fill="#8B3A1F" fill-opacity="0.5" stroke="#C1663B" stroke-width="1.5" rx="6" filter="url(#shadow)"/>
+          <text x="700" y="245" text-anchor="middle" fill="white" font-size="12">新王寺坊</text>
+
+          <!-- Key Landmarks -->
+          <rect x="650" y="400" width="80" height="50" fill="#C8953E" fill-opacity="0.6" stroke="#E0C070" stroke-width="1.5" rx="4"/>
+          <text x="690" y="430" text-anchor="middle" fill="white" font-size="10">盖碗茶广场</text>
+
+          <rect x="200" y="400" width="90" height="50" fill="#C8953E" fill-opacity="0.6" stroke="#E0C070" stroke-width="1.5" rx="4"/>
+          <text x="245" y="422" text-anchor="middle" fill="white" font-size="10">八坊民俗馆</text>
+          <text x="245" y="438" text-anchor="middle" fill="#E0C070" font-size="8">(80号院)</text>
+
+          <rect x="380" y="400" width="90" height="50" fill="#C8953E" fill-opacity="0.6" stroke="#E0C070" stroke-width="1.5" rx="4"/>
+          <text x="425" y="422" text-anchor="middle" fill="white" font-size="10">手工艺馆</text>
+          <text x="425" y="438" text-anchor="middle" fill="#E0C070" font-size="8">(64号院)</text>
+
+          <rect x="550" y="420" width="80" height="40" fill="#C8953E" fill-opacity="0.4" stroke="#E0C070" stroke-width="1" rx="4"/>
+          <text x="590" y="445" text-anchor="middle" fill="white" font-size="10">河州茶马司</text>
+
+          <!-- Alley Connectors -->
+          <line x1="300" y1="150" x2="300" y2="200" stroke="#D9906A" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="450" y1="150" x2="450" y2="200" stroke="#D9906A" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="600" y1="150" x2="600" y2="200" stroke="#D9906A" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="750" y1="150" x2="750" y2="200" stroke="#D9906A" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="250" y1="280" x2="250" y2="400" stroke="#D9906A" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="400" y1="280" x2="400" y2="400" stroke="#D9906A" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="550" y1="280" x2="550" y2="420" stroke="#D9906A" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="700" y1="280" x2="700" y2="400" stroke="#D9906A" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+          <!-- Alley labels -->
+          <text x="310" y="178" fill="#D9906A" font-size="9">大旮巷</text>
+          <text x="460" y="178" fill="#D9906A" font-size="9">小南巷</text>
+          <text x="610" y="178" fill="#D9906A" font-size="9">坝口巷</text>
+          <text x="760" y="178" fill="#D9906A" font-size="9">北巷</text>
+
+          <!-- North Arrow -->
+          <g transform="translate(900,100)">
+            <polygon points="0,30 8,0 16,30 8,24" fill="#C8953E"/>
+            <text x="8" y="42" text-anchor="middle" fill="#C8953E" font-size="12" font-weight="700">N</text>
+          </g>
+
+          <!-- Legend -->
+          <rect x="80" y="640" width="10" height="10" fill="#8B3A1F" fill-opacity="0.5" stroke="#C1663B" stroke-width="0.5" rx="2"/>
+          <text x="96" y="650" fill="#C1663B" font-size="10">教坊（八坊）</text>
+          <rect x="200" y="640" width="10" height="10" fill="#C8953E" fill-opacity="0.6" stroke="#E0C070" stroke-width="0.5" rx="2"/>
+          <text x="216" y="650" fill="#C8953E" font-size="10">核心景点</text>
+          <line x1="330" y1="645" x2="370" y2="645" stroke="#5B9BD5" stroke-width="3"/>
+          <text x="376" y="650" fill="#5B9BD5" font-size="10">水系</text>
+          <line x1="430" y1="645" x2="470" y2="645" stroke="#D9906A" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="476" y="650" fill="#D9906A" font-size="10">十三巷</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Cards -->
+    <div class="cards-2 reveal" style="margin-top:1.5rem;">
+      <div class="zone-card"><h4>大旮巷 · 人文生态巷</h4><p>主入口所在，八坊十三巷的门面担当。巷内有八坊民俗馆（80 号院/大公馆），原为民国将领马廷勷私邸，仿北京四合院形制，三进/四进式院落，是河州民居建筑的集大成者。</p></div>
+      <div class="zone-card"><h4>拥政路 · 书巷</h4><p>以书院文化为主题，设有河州书院。巷道两侧青砖黛瓦，砖雕门楼错落，是品味河州书香文化的最佳去处。</p></div>
+      <div class="zone-card"><h4>大南巷 · 丝路回商巷</h4><p>以丝绸之路回商文化为主题，两边商铺展示河州茶马互市历史。巷内有手工艺馆（64 号院），集中展示砖雕、木雕、蛋雕、泥塑、铜壶等 60 余项非物质文化遗产。</p></div>
+      <div class="zone-card"><h4>清真北寺 · 砖雕影壁</h4><p>清真北寺影壁建于清乾隆六年（1741 年），是现存最古老的大型地面砖雕影壁，省级文物保护单位。影壁上"龙凤呈祥"雕刻精湛，代表河州砖雕最高水准。</p></div>
+      <div class="zone-card"><h4>盖碗茶广场</h4><p>街区中心公共空间，以河州盖碗茶文化为主题。广场周边汇集特色餐饮，是游客休憩、体验回族茶文化的核心区域。夜间变身文化演艺场所。</p></div>
+      <div class="zone-card"><h4>红水河风情线</h4><p>红水河穿街而过，沿河两岸设亲水平台和景观步道。夜晚灯光映照水面，形成"水岸灯影"的独特景观，是八坊十三巷夜间经济的核心轴线。</p></div>
+      <div class="zone-card"><h4>小南巷 · 童趣巷</h4><p>以儿童友好为主题，巷道装饰有彩绘壁画和互动装置，讲述河州民间故事和传统游戏，适合亲子游览。</p></div>
+      <div class="zone-card"><h4>专员巷 · 回族婚俗文化巷</h4><p>展示回族传统婚俗文化，巷内布置婚俗场景复原和民俗器物展览，游客可沉浸式体验河州回族婚嫁礼仪。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 6. INVESTMENT TIMELINE ═══════════ -->
+<section id="investment">
+  <div class="section-inner">
+    <div class="section-tag reveal">Investment</div>
+    <h2 class="section-title reveal">投资与建设时序</h2>
+    <div class="card reveal">
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">唐代（7—10 世纪）</div>
+          <div class="timeline-content"><h5>起源 · 蕃坊形成</h5><p>大食、波斯等国商人和宗教人士沿丝绸之路来到河州经商传教，在八坊一带定居，形成最早的穆斯林聚居区——"蕃坊"。</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">1273 年（元至元十年）</div>
+          <div class="timeline-content"><h5>第一座清真寺建成</h5><p>南关清真大寺（连根柱古寺）在八坊建成，标志着"围寺而居"的街区格局正式形成。八坊由此成为河州伊斯兰文化中心。</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">明清时期</div>
+          <div class="timeline-content"><h5>鼎盛 · 八坊格局定型</h5><p>伴随河州商贸繁荣，八坊十三巷"围寺而居、围坊而商"格局完全定型。清真北寺影壁（1741 年）等大量砖雕建筑精品涌现。</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2015 年</div>
+          <div class="timeline-content"><h5>启动综合保护开发工程 · 一期投资 ¥1.87 亿</h5><p>临夏市政府启动八坊十三巷综合保护开发项目，按"修旧如旧、一巷一特色"原则，不搬迁原住居民，不改变原有结构，对古街民居进行系统保护改造。</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2016 年 10 月</div>
+          <div class="timeline-content"><h5>改造完成 · 正式对外开放</h5><p>一期工程竣工，八坊十三巷以全新面貌对外开放试运行。昔日"城中村"蝶变为文化旅游新地标。</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2017—2019 年</div>
+          <div class="timeline-content"><h5>二期、三期工程推进 · 累计投资 ¥3.4 亿</h5><p>陆续完成综合保护开发项目施工（中标价 ¥6,680 万）、64/65 号院附属工程、红水河沿线仿古建筑、三期工程（概算 ¥1,268 万）等。新西路配套改造同步完成（¥1.93 亿）。</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2018 年 1 月</div>
+          <div class="timeline-content"><h5>获评国家 AAAA 级旅游景区</h5><p>甘肃省文化和旅游厅正式评定八坊十三巷为国家 4A 级景区。同年 11 月，国务院对八坊十三巷"城中村"变身文旅新地标的做法予以通报表扬。</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2022 年</div>
+          <div class="timeline-content"><h5>双国家级荣誉加冕</h5><p>1 月入选全国首批"国家级旅游休闲街区"（甘肃省唯一）。7 月入选第二批"国家级夜间文化和旅游消费集聚区"。</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 7. OPERATIONS ═══════════ -->
+<section id="operations" style="background:var(--cream);">
+  <div class="section-inner">
+    <div class="section-tag reveal">Operations</div>
+    <h2 class="section-title reveal">运营指标</h2>
+    <p class="section-desc reveal">从"城中村"到文旅新地标，八坊十三巷运营数据持续增长，已成为临夏市文游产业核心引擎。</p>
+
+    <div class="cards-4 reveal">
+      <div class="kpi-card">
+        <div class="kpi-card-num">452 万</div>
+        <div class="kpi-card-label">2025 前十月游客量</div>
+        <div class="kpi-card-sub">人次</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-num">¥5.08 亿</div>
+        <div class="kpi-card-label">2025 前十月旅游收入</div>
+        <div class="kpi-card-sub">同比增长 18.1%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-num">1,000 万+</div>
+        <div class="kpi-card-label">累计接待游客（2016 至今）</div>
+        <div class="kpi-card-sub">人次</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-num">10,000+</div>
+        <div class="kpi-card-label">旅游带动就业增收</div>
+        <div class="kpi-card-sub">各族群众人数</div>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:1.5rem;">
+      <h3>运营模式</h3>
+      <p class="f-body">八坊十三巷实行"政府引导 + 居民参与 + 市场运营"的复合模式。景区<b>全天开放、免收门票</b>，收入来源主要为商业租赁、文旅消费和服务配套。核心特色包括：60 余项非物质文化遗产的活态展示、盖碗茶广场夜间演艺、红水河夜游灯光秀、一巷一主题的文化巡游。2022 年获评国家级夜间文旅消费集聚区后，夜经济成为增长新引擎。街区常住居民 2,000 余户中，超过 1 万人通过参与旅游经营（民宿、餐饮、手工艺品、导游服务等）实现增收致富，形成了"景在城中、人在景中、居游共享"的可持续发展模式。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 8. CORE TECH & SCALE METRICS ═══════════ -->
+<section id="tech-scale">
+  <div class="section-inner">
+    <div class="section-tag reveal">Key Metrics</div>
+    <h2 class="section-title reveal">核心技术与规模指标</h2>
+    <div class="cards-3 reveal">
+      <div class="kpi-card">
+        <div class="kpi-card-num">8</div>
+        <div class="kpi-card-label">教坊数量</div>
+        <div class="kpi-card-sub">围绕八座清真寺形成</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-num">13</div>
+        <div class="kpi-card-label">巷子数量</div>
+        <div class="kpi-card-sub">各具文化主题</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-num">41 座</div>
+        <div class="kpi-card-label">四合院</div>
+        <div class="kpi-card-sub">含大公馆等历史院落</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-num">109</div>
+        <div class="kpi-card-label">传统民宅</div>
+        <div class="kpi-card-sub">回族传统民居</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-num">60+</div>
+        <div class="kpi-card-label">非遗项目</div>
+        <div class="kpi-card-sub">砖雕·木雕·蛋雕·泥塑等</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-num">916 块</div>
+        <div class="kpi-card-label">全景图砖雕青砖数</div>
+        <div class="kpi-card-sub">9×9m 巨型砖雕</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-num">8 个民族</div>
+        <div class="kpi-card-label">聚居民族数量</div>
+        <div class="kpi-card-sub">回·汉·东乡·撒拉等</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-num">1741 年</div>
+        <div class="kpi-card-label">最古老砖雕年代</div>
+        <div class="kpi-card-sub">清真北寺影壁·清乾隆六年</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-num">3.4 亿</div>
+        <div class="kpi-card-label">总投资（人民币）</div>
+        <div class="kpi-card-sub">2015—2019 年分期</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 9. FACILITIES ═══════════ -->
+<section id="facilities" style="background:var(--cream);">
+  <div class="section-inner">
+    <div class="section-tag reveal">Facilities</div>
+    <h2 class="section-title reveal">配套设施体系</h2>
+    <div class="cards-3 reveal">
+      <div class="info-card">
+        <div class="info-card-icon">&#127968;</div>
+        <div class="info-card-label">住宿设施</div>
+        <div class="info-card-value">街区及周边拥有精品民宿 30 余家，以四合院改造为主，提供沉浸式回族居住体验。临夏市区另有星级酒店 10 余家。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#127860;</div>
+        <div class="info-card-label">餐饮配套</div>
+        <div class="info-card-value">街区内有河州特色餐饮店铺 80 余家，主打手抓羊肉、河州包子、发子面肠、酿皮、盖碗茶等传统美食。北巷为"八坊味道"主题美食巷。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#128722;</div>
+        <div class="info-card-label">商业业态</div>
+        <div class="info-card-value">手工艺品商铺、砖雕工作室、非遗体验馆、文创商店、民族服饰租赁、特产店等 200 余家，大南巷为丝路回商主题商业街。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#128652;</div>
+        <div class="info-card-label">交通设施</div>
+        <div class="info-card-value">临夏市区公交直达、旅游专线、街区外围停车场。距兰州中川机场约 140 km（2 小时车程），距临夏火车站约 5 km。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#127909;</div>
+        <div class="info-card-label">文化设施</div>
+        <div class="info-card-value">盖碗茶广场（露天演艺）、河州书院、河州茶马司展示馆、非遗工坊体验区，可同时容纳 2,000+ 人参与文化活动。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#128161;</div>
+        <div class="info-card-label">夜间经济</div>
+        <div class="info-card-value">红水河沿岸灯光秀、盖碗茶广场夜间演艺、特色夜市、灯笼巷。2022 年入选国家级夜间文化和旅游消费集聚区。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 10. NEWS & PROSPECTS ═══════════ -->
+<section id="news">
+  <div class="section-inner">
+    <div class="section-tag reveal">News & Outlook</div>
+    <h2 class="section-title reveal">最新动态与展望</h2>
+    <div class="cards-2 reveal">
+      <div class="info-card">
+        <div class="info-card-icon">&#128200;</div>
+        <div class="info-card-label">2025 年数据</div>
+        <div class="info-card-value">2025 年前十个月接待游客 452 万人次，旅游收入突破 5.08 亿元，同比增长 18.1%。暑期及国庆黄金周单日客流多次突破 5 万人次。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#127965;</div>
+        <div class="info-card-label">红水河生态水街项目</div>
+        <div class="info-card-value">规划沿红水河打造集生态景观、亲水休闲、夜间消费于一体的生态水街，进一步延伸街区空间轴线，提升水岸文旅体验。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#127794;</div>
+        <div class="info-card-label">非遗活化传承</div>
+        <div class="info-card-value">持续引入砖雕、蛋雕、泥塑等非遗工坊，开设游客体验课程。规划建设非遗传承人驻留计划，打造西北非遗活化利用示范街区。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#127760;</div>
+        <div class="info-card-label">数字化升级</div>
+        <div class="info-card-value">规划智慧景区系统，包括线上导览、AR 历史场景复原、智能停车引导、客流实时监测等功能，提升游客体验和运营管理效率。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#127744;</div>
+        <div class="info-card-label">5A 景区创建</div>
+        <div class="info-card-value">临夏市已将八坊十三巷 5A 级景区创建纳入文旅发展规划，持续推进基础设施升级和服务标准化建设。</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-icon">&#129309;</div>
+        <div class="info-card-label">区域联动</div>
+        <div class="info-card-value">与炳灵寺石窟、刘家峡水库、和政古动物化石博物馆等周边景区联动，构建"临夏文旅黄金走廊"，延长游客停留时间和消费链。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 11. GALLERY ═══════════ -->
+<section id="gallery" style="background:var(--cream);">
+  <div class="section-inner">
+    <div class="section-tag reveal">Gallery</div>
+    <h2 class="section-title reveal">实景图集</h2>
+    <p class="f-caption reveal" style="margin-bottom:1.2rem;">以下图片来源于Unsplash、Google Images公开图库及官方媒体资料，供案例研究参考使用。</p>
+    <div class="gallery-grid reveal">
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1547981609-4b899bf98e7e?w=600&h=400&fit=crop" alt="八坊十三巷街景">
+        <div class="gallery-cap">八坊十三巷砖雕门楼与巷道景观</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=600&h=400&fit=crop" alt="回族砖雕艺术">
+        <div class="gallery-cap">河州砖雕——回族建筑艺术的瑰宝</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop" alt="传统四合院">
+        <div class="gallery-cap">八坊民俗馆（80号院）四合院内景</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=400&fit=crop" alt="盖碗茶文化">
+        <div class="gallery-cap">盖碗茶广场——河州茶文化的核心舞台</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69c077?w=600&h=400&fit=crop" alt="红水河夜景">
+        <div class="gallery-cap">红水河夜色——国家级夜间文旅消费集聚区</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1480796927426-f609979314bd?w=600&h=400&fit=crop" alt="河州美食街">
+        <div class="gallery-cap">北巷·八坊味道——河州特色美食街区</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&h=400&fit=crop" alt="丝绸之路文化">
+        <div class="gallery-cap">大南巷·丝路回商主题文化街</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&h=400&fit=crop" alt="清真寺建筑">
+        <div class="gallery-cap">清真寺建筑——八坊的精神与文化地标</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 12. RESOURCES ═══════════ -->
+<section id="resources">
+  <div class="section-inner">
+    <div class="section-tag reveal">Resources</div>
+    <h2 class="section-title reveal">延伸资料库</h2>
+    <div class="cards-2 reveal">
+      <div class="card">
+        <div class="resource-group">
+          <h4>官方来源</h4>
+          <ul>
+            <li><a href="https://www.lxs.gov.cn/lxs/mllx/lyjd/bfssx/" target="_blank" rel="noopener">临夏市人民政府 · 八坊十三巷专区</a><span class="tag">官方</span></li>
+            <li><a href="https://wglj.linxia.gov.cn/" target="_blank" rel="noopener">临夏州文化广电和旅游局</a><span class="tag">官方</span></li>
+            <li><a href="https://baike.baidu.com/item/%E5%85%AB%E5%9D%8A%E5%8D%81%E4%B8%89%E5%B7%B7/19954715" target="_blank" rel="noopener">八坊十三巷 · 百度百科</a><span class="tag">百科</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="resource-group">
+          <h4>媒体报道</h4>
+          <ul>
+            <li><a href="https://gs.ifeng.com/c/8sYMyN0yODO" target="_blank" rel="noopener">凤凰网 · 古河州千年回响深度报道</a><span class="tag">深度</span></li>
+            <li><a href="http://www.ctnews.com.cn/paper/content/202203/22/content_69850.html" target="_blank" rel="noopener">中国旅游报 · 城中村变身文旅新地标</a><span class="tag">专题</span></li>
+            <li><a href="http://slzg.china.com.cn/2026-04/24/content_43411892.htm" target="_blank" rel="noopener">中国网 · 八坊十三巷蝶变之路</a><span class="tag">报道</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="cards-2 reveal" style="margin-top:1rem;">
+      <div class="card">
+        <div class="resource-group">
+          <h4>学术研究</h4>
+          <ul>
+            <li><a href="https://kns.cnki.net/" target="_blank" rel="noopener">中国知网 · 搜索"八坊十三巷 历史文化街区"</a><span class="tag">学术</span></li>
+            <li><a href="https://www.weplanning.cn/" target="_blank" rel="noopener">城乡规划微课堂 · 历史城市与街区保护</a><span class="tag">课程</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="resource-group">
+          <h4>视频与图片</h4>
+          <ul>
+            <li><a href="https://www.douyin.com/search/%E5%85%AB%E5%9D%8A%E5%8D%81%E4%B8%89%E5%B7%B7" target="_blank" rel="noopener">抖音 · 八坊十三巷短视频合集</a><span class="tag">视频</span></li>
+            <li><a href="https://unsplash.com/s/photos/linxia" target="_blank" rel="noopener">Unsplash · 临夏 / 河州主题图片</a><span class="tag">图库</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 13. FLOATING NAVIGATION ═══════════ -->
+<div class="floating-nav">
+  <a href="../index.html" title="回首页" aria-label="回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ═══════════ SCRIPTS ═══════════ -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// ── WGS-84 → GCJ-02 converter ──
+function wgs84ToGcj02(wgsLng, wgsLat) {
+  var a = 6378245.0, ee = 0.00669342162296594323;
+  function _transformLat(x, y) {
+    var r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(y*Math.PI) + 40*Math.sin(y/3*Math.PI))*2/3;
+    r += (160*Math.sin(y/12*Math.PI) + 320*Math.sin(y*Math.PI/30))*2/3;
+    return r;
+  }
+  function _transformLng(x, y) {
+    var r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(x*Math.PI) + 40*Math.sin(x/3*Math.PI))*2/3;
+    r += (150*Math.sin(x/12*Math.PI) + 300*Math.sin(x/30*Math.PI))*2/3;
+    return r;
+  }
+  var dLat = _transformLat(wgsLng - 105, wgsLat - 35);
+  var dLng = _transformLng(wgsLng - 105, wgsLat - 35);
+  var radLat = wgsLat/180*Math.PI;
+  var magic = 1 - ee*Math.sin(radLat)*Math.sin(radLat);
+  return {
+    lng: wgsLng + (180*dLng)/((a/Math.sqrt(magic))*Math.cos(radLat)*Math.PI),
+    lat: wgsLat + (180*dLat)/((a*(1-ee))/(magic*Math.sqrt(magic))*Math.PI)
+  };
+}
+
+// Zone marker data (WGS-84, will be converted to GCJ-02 for display on Gaode tiles)
+var zonesWgs = [
+  { name: '大旮巷·主入口', lng: 103.2010, lat: 35.5976, color: '#C1663B' },
+  { name: '八坊民俗馆<br><small>80号院·大公馆</small>', lng: 103.2013, lat: 35.5974, color: '#C1663B' },
+  { name: '手工艺馆<br><small>64号院·非遗展示</small>', lng: 103.2005, lat: 35.5978, color: '#C1663B' },
+  { name: '盖碗茶广场', lng: 103.2012, lat: 35.5980, color: '#C8953E' },
+  { name: '南关清真大寺', lng: 103.2005, lat: 35.5965, color: '#D4A843' },
+  { name: '清真北寺·砖雕影壁', lng: 103.2003, lat: 35.5985, color: '#D4A843' },
+  { name: '红水河风情线', lng: 103.2018, lat: 35.5978, color: '#5B9BD5' },
+  { name: '河州茶马司', lng: 103.2010, lat: 35.5972, color: '#C8953E' },
+  { name: '拥政路·书巷', lng: 103.2008, lat: 35.5970, color: '#C1663B' },
+  { name: '大南巷·丝路回商', lng: 103.1998, lat: 35.5975, color: '#C1663B' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var gcj = wgs84ToGcj02(z.lng, z.lat);
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([gcj.lat, gcj.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var mapCenterGcj = wgs84ToGcj02(103.2008, 35.5973);
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([mapCenterGcj.lat, mapCenterGcj.lng], 16);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesWgs);
+
+  if (withBoundary) {
+    var parkCenter = wgs84ToGcj02(103.2008, 35.5973);
+    L.circle([parkCenter.lat, parkCenter.lng], { radius: 400, color: '#C8953E', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  // Tile load timeout
+  var tilesLoaded = false;
+  roadLayer.on('load', function() { tilesLoaded = true; });
+  satLayer.on('load', function() { tilesLoaded = true; });
+  setTimeout(function() {
+    if (!tilesLoaded) {
+      var fb = document.getElementById('map-fallback');
+      if (fb) fb.style.display = 'block';
+    }
+  }, 8000);
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+
+  // ── Scroll reveal ──
+  var revealElements = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    revealElements.forEach(function(el) { el.classList.add('visible'); });
+  } else {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+    revealElements.forEach(function(el) { observer.observe(el); });
+  }
+
+  // ── Back to top ──
+  var backBtn = document.getElementById('back-to-top');
+  backBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 600) {
+      backBtn.classList.add('show');
+    } else {
+      backBtn.classList.remove('show');
+    }
+  });
+});
+</script>
+</body>
+</html>

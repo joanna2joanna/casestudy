@@ -1,6 +1,7 @@
 {
   "permissions": {
     "allow": [
+      "Agent",
       "WebSearch",
       "WebFetch",
       "Write(/Users/joanna/Projects/casestudy/**)",

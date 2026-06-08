@@ -539,27 +539,15 @@ function addZoneMarkers(targetMap, zones) {
   });
 }
 
-function initMap(mapId, defaultLayer, withBoundary) {
+function initMap(mapId, withBoundary) {
   var el = document.getElementById(mapId);
   if (!el) return null;
   var map = L.map(mapId, { scrollWheelZoom: false }).setView([39.6479, 119.3088], 15);
 
-  var roadLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 19
-  });
-  var satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
     maxZoom: 19
-  });
-
-  if (defaultLayer === 'sat') {
-    satLayer.addTo(map);
-    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
-  } else {
-    roadLayer.addTo(map);
-    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
-  }
+  }).addTo(map);
 
   addZoneMarkers(map, zonesWgs);
 
@@ -572,8 +560,8 @@ function initMap(mapId, defaultLayer, withBoundary) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  initMap('parkmap', 'road', true);
-  initMap('satmap', 'sat', false);
+  initMap('parkmap', true);
+  initMap('satmap', false);
 });
 
 (function() {

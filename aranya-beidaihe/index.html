@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>阿那亚·北戴河 — 从孤独图书馆到海边文化艺术社区</title>
+<title>阿那亚·北戴河 — 从孤独图书馆到中国最具影响力的海边文化艺术社区</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,7 +38,6 @@ html { scroll-behavior: smooth; font-size: 17px; }
 body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--clr-bg); color: var(--clr-text); line-height: 1.7; -webkit-font-smoothing: antialiased; }
 .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
 
-/* Typography */
 .f-headline { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; }
 .f-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3.5vw, 2.4rem); font-weight: 700; line-height: 1.25; }
 .f-subtitle { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 2.5vw, 1.6rem); font-weight: 600; line-height: 1.35; }
@@ -47,25 +46,22 @@ body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; ba
 .f-mono { font-family: 'DM Mono', monospace; }
 .f-data { font-family: 'DM Mono', monospace; font-size: 0.95rem; }
 
-/* Hero */
 .hero { background: linear-gradient(160deg, #364A5A 0%, #6D7F8F 40%, #9BAEBE 70%, #C8BFA8 100%); color: white; padding: 5rem 0 4rem; text-align: center; position: relative; overflow: hidden; }
 .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 80%, rgba(200,162,122,0.18) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%); pointer-events: none; }
 .hero .container { position: relative; z-index: 1; }
 .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 6vw, 4.2rem); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 0.8rem; }
-.hero .hero-subtitle { font-family: 'DM Sans', sans-serif; font-size: clamp(1rem, 2vw, 1.25rem); font-weight: 400; opacity: 0.88; max-width: 650px; margin: 0 auto 2.5rem; }
+.hero .hero-subtitle { font-family: 'DM Sans', sans-serif; font-size: clamp(1rem, 2vw, 1.25rem); font-weight: 400; opacity: 0.88; max-width: 700px; margin: 0 auto 2.5rem; }
 .hero .kpi-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; }
 .hero .kpi-card { background: rgba(255,255,255,0.12); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.18); border-radius: var(--radius-md); padding: 1.2rem 1.8rem; min-width: 150px; text-align: center; }
 .hero .kpi-number { font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 500; }
 .hero .kpi-label { font-family: 'DM Sans', sans-serif; font-size: 0.85rem; opacity: 0.75; margin-top: 0.25rem; }
 
-/* Sections */
 .section { padding: var(--gap-section) 0; }
 .section-alt { background: var(--clr-bg-alt); }
 .section-header { margin-bottom: 2rem; }
 .section-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: var(--clr-primary-dark); }
 .section-header .section-line { width: 60px; height: 3px; background: var(--clr-accent); margin-top: 0.6rem; border-radius: 2px; }
 
-/* Cards */
 .card { background: var(--clr-card-bg); border-radius: var(--radius-md); padding: 1.8rem; box-shadow: var(--shadow-sm); border: 1px solid var(--clr-border); transition: box-shadow 0.3s, transform 0.25s; }
 .card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
 .card h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 600; color: var(--clr-primary-dark); margin-bottom: 0.5rem; }
@@ -73,16 +69,14 @@ body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; ba
 .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; }
 .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
 
-/* Tables */
 .data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
 .data-table thead { background: var(--clr-primary-dark); color: white; }
-.data-table thead th { padding: 0.75rem 1rem; text-align: left; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.9rem; }
-.data-table tbody td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--clr-border); }
+.data-table thead th { padding: 0.75rem 1rem; text-align: left; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.85rem; }
+.data-table tbody td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--clr-border); font-size: 0.9rem; }
 .data-table tbody tr:nth-child(even) { background: var(--clr-bg-alt); }
 .data-table tbody tr:hover { background: rgba(109,127,143,0.05); }
 .data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
 
-/* Map */
 #parkmap { width: 100%; height: 520px; border-radius: 12px; z-index: 0; }
 #satmap { width: 100%; height: 420px; border-radius: 12px; z-index: 0; }
 .map-fallback { display: none; text-align: center; padding: 0.9rem 1rem; margin-top: 0.5rem; background: #FFF3CD; color: #856404; border-radius: var(--radius-sm); font-size: 0.85rem; }
@@ -90,11 +84,9 @@ body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; ba
 .map-legend span { display: flex; align-items: center; gap: 0.4rem; }
 .map-legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 
-/* SVG */
 .svg-container { display: block; width: 100%; margin-top: 1.5rem; background: var(--clr-card-bg); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); }
 .svg-container svg { width: 100%; height: auto; display: block; }
 
-/* Timeline */
 .timeline { position: relative; padding-left: 2.5rem; }
 .timeline::before { content: ''; position: absolute; left: 0.6rem; top: 0; bottom: 0; width: 2px; background: var(--clr-primary-light); }
 .timeline-item { position: relative; margin-bottom: 1.8rem; }
@@ -104,7 +96,6 @@ body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; ba
 .timeline-content h4 { font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 600; }
 .timeline-content p { font-size: 0.9rem; color: var(--clr-text-secondary); margin-top: 0.15rem; }
 
-/* Resources */
 .resource-group { margin-bottom: 1.5rem; }
 .resource-group h4 { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--clr-primary-dark); margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--clr-border); }
 .resource-group ul { list-style: none; }
@@ -113,29 +104,26 @@ body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; ba
 .resource-group a:hover { color: var(--clr-primary-dark); text-decoration: underline; }
 .resource-group .tag { display: inline-block; background: var(--clr-bg-alt); padding: 0.1rem 0.5rem; border-radius: 4px; font-size: 0.78rem; margin-left: 0.4rem; color: var(--clr-text-muted); }
 
-/* Floating Nav */
 .floating-nav { position: fixed; right: 1.5rem; bottom: 2rem; display: flex; flex-direction: column; gap: 0.6rem; z-index: 999; }
 .floating-nav a { width: 46px; height: 46px; border-radius: 50%; background: var(--clr-primary-dark); color: white; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.2rem; box-shadow: var(--shadow-md); transition: background 0.25s, transform 0.2s; }
 .floating-nav a:hover { background: var(--clr-accent); transform: scale(1.08); }
 
-/* Reveal */
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
-
-/* Visitor Counter */
 .visitor-counter { text-align: center; padding: 0.5rem; font-size: 0.8rem; color: var(--clr-text-muted); }
 .visitor-counter span { font-family: 'DM Mono', monospace; }
 
-/* Zone Cards */
 .zone-card { border-left: 4px solid var(--clr-accent); padding: 1rem 1.2rem; background: var(--clr-card-bg); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
 .zone-card h4 { font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 600; color: var(--clr-primary-dark); }
 .zone-card p { font-size: 0.85rem; color: var(--clr-text-secondary); margin-top: 0.25rem; }
 
-/* KPI cards in operations section */
 .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
 .kpi-box { background: var(--clr-card-bg); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; box-shadow: var(--shadow-sm); border: 1px solid var(--clr-border); }
 .kpi-box .kpi-val { font-family: 'DM Mono', monospace; font-size: 1.6rem; font-weight: 600; color: var(--clr-primary); }
 .kpi-box .kpi-lbl { font-size: 0.82rem; color: var(--clr-text-muted); margin-top: 0.3rem; }
+
+.festival-table td:first-child { font-weight: 600; white-space: nowrap; color: var(--clr-primary-dark); }
+.camp-card { border-left: 4px solid #8BAF7E; }
 
 @media (max-width: 768px) {
   .hero { padding: 3rem 0 2.5rem; }
@@ -153,12 +141,12 @@ body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; ba
 <header class="hero">
   <div class="container">
     <h1>阿那亚·北戴河</h1>
-    <p class="hero-subtitle">从烂尾楼盘到中国最具影响力的海边文化艺术社区</p>
+    <p class="hero-subtitle">从烂尾楼盘到中国最具影响力的海边文化艺术社区——2025年雀跃镇全面启幕，北岸版图完整呈现</p>
     <div class="kpi-row">
       <div class="kpi-card"><div class="kpi-number">433公顷</div><div class="kpi-label">总占地面积（6500亩）</div></div>
       <div class="kpi-card"><div class="kpi-number">350万</div><div class="kpi-label">年游客量（2024）</div></div>
       <div class="kpi-card"><div class="kpi-number">22亿元</div><div class="kpi-label">运营服务产值（2024）</div></div>
-      <div class="kpi-card"><div class="kpi-number">10,000套</div><div class="kpi-label">累计交付住宅</div></div>
+      <div class="kpi-card"><div class="kpi-number">~50家</div><div class="kpi-label">雀跃镇新商业（2025）</div></div>
     </div>
   </div>
 </header>
@@ -168,40 +156,42 @@ body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; ba
   <div class="container">
     <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
     <div class="grid-2 reveal">
-      <div class="card"><h3>项目名称</h3><p class="f-body">阿那亚·北戴河（Aranya Beidaihe）</p><p class="f-caption">梵语 Aranya 意为"人间寂静处"</p></div>
-      <div class="card"><h3>地理位置</h3><p class="f-body">河北省秦皇岛市北戴河新区（昌黎县黄金海岸中区）</p><p class="f-caption">距北京约250km，距秦皇岛市区约50km</p></div>
-      <div class="card"><h3>开发主体</h3><p class="f-body">天行九州集团（创始人：马寅）</p><p class="f-caption">2013年从亿城股份收购烂尾项目</p></div>
-      <div class="card"><h3>项目定位</h3><p class="f-body">海边文化艺术社区</p><p class="f-caption">"人生可以更美"——从传统地产转型为生活方式品牌</p></div>
-      <div class="card"><h3>占地面积</h3><p class="f-body">约433公顷（6500亩）</p><p class="f-caption">首期900亩，逐步扩展至当前规模</p></div>
-      <div class="card"><h3>入选荣誉</h3><p class="f-body">《时代》周刊2024全球100最佳旅行目的地</p><p class="f-caption">中国仅两处入选</p></div>
+      <div class="card"><h3>项目名称</h3><p class="f-body">阿那亚·北戴河（Aranya Beidaihe）</p><p class="f-caption">梵语 Aranya 意为"人间寂静处"，品牌主张"人生可以更美"</p></div>
+      <div class="card"><h3>地理位置</h3><p class="f-body">河北省秦皇岛市北戴河新区（昌黎县黄金海岸中区）</p><p class="f-caption">距北京约250km，高铁约2h（北戴河站）+ 社区接驳车</p></div>
+      <div class="card"><h3>开发主体</h3><p class="f-body">天行九州集团（创始人：马寅）</p><p class="f-caption">2013年从亿城股份收购烂尾项目，重新定位"海边文化艺术社区"</p></div>
+      <div class="card"><h3>项目分期</h3><p class="f-body">南岸（一期至八期）+ 北岸（九期，含雀跃镇与友谊湾）</p><p class="f-caption">北岸2025年大规模启幕，雀跃镇为中国首个运动×青年文化社区</p></div>
+      <div class="card"><h3>占地面积</h3><p class="f-body">约433公顷（6500亩）</p><p class="f-caption">南岸为核心建成区，北岸约9万m²雀跃镇商业+友谊湾知识型社区</p></div>
+      <div class="card"><h3>品牌荣誉</h3><p class="f-body">《时代》周刊2024全球100最佳旅行目的地</p><p class="f-caption">中国仅两处入选；2024年运营收入首次超过地产销售</p></div>
     </div>
-    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p class="f-body">阿那亚·北戴河前身为亿城股份2007年启动的"天籁湾"度假地产项目，2012年开盘后销售惨淡，年销售额仅4000余万元。2013年，马寅团队以约2.6亿元收购该项目，重新定位为面向北京80后中产人群的"海边的自留地"。2015年，董功（直向建筑）设计的"孤独图书馆"通过一条视频全网播放6亿次，阿那亚一炮而红。此后持续引入如恩设计、MAD、OPEN、徐甜甜等顶尖建筑师，以建筑艺术为支点，配合戏剧节、文学节、音乐节等内容运营，将一片烂尾楼盘打造为中国最具文化影响力的海边社区。2024年，社区运营营收首次超过地产销售收入，标志着从开发商到运营商的成功转型。</p></div>
   </div>
 </section>
 
-<!-- ====== 3. DESIGN &amp; CONSTRUCTION ====== -->
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
 <section class="section section-alt" id="design">
   <div class="container">
     <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
     <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
-      <div class="card"><h3>总体规划</h3><p class="f-body">建言设计 / 金达利筑地</p><p class="f-caption">整体规划与定位调整</p></div>
-      <div class="card"><h3>视觉设计</h3><p class="f-body">原研哉（Kenya Hara）</p><p class="f-caption">无印良品艺术总监，品牌VI系统</p></div>
+      <div class="card"><h3>总体规划</h3><p class="f-body">建言设计 / 金达利筑地</p><p class="f-caption">整体规划与定位调整（南岸+北岸）</p></div>
+      <div class="card"><h3>视觉设计</h3><p class="f-body">原研哉（Kenya Hara）</p><p class="f-caption">MUJI艺术总监，品牌VI系统</p></div>
       <div class="card"><h3>设计总投入</h3><p class="f-body">累计超7亿元</p><p class="f-caption">远超传统地产项目设计费用</p></div>
     </div>
     <div class="card reveal">
       <table class="data-table">
-        <thead><tr><th>建筑 / 空间</th><th>设计方</th><th>建成年份</th><th>备注</th></tr></thead>
+        <thead><tr><th>建筑 / 空间</th><th>设计方</th><th>落成年份</th><th>所属区域</th></tr></thead>
         <tbody>
-          <tr><td>孤独图书馆（三联海边公益图书馆）</td><td>董功 / 直向建筑</td><td class="num">2015</td><td>全网播放6亿次，项目转折点</td></tr>
-          <tr><td>海边礼堂（阿那亚礼堂）</td><td>董功 / 直向建筑</td><td class="num">2015</td><td>海边精神地标</td></tr>
-          <tr><td>沙丘美术馆（UCCA沙丘）</td><td>李虎 / OPEN建筑事务所</td><td class="num">2018</td><td>埋于沙丘之下的洞穴美术馆</td></tr>
-          <tr><td>阿那亚艺术中心</td><td>如恩设计（Neri&amp;Hu）</td><td class="num">2019</td><td>倒锥形中央庭院，混凝土质感</td></tr>
-          <tr><td>阿那亚剧场（蜂巢剧场+大剧场）</td><td>华黎 / TAO迹·建筑</td><td class="num">2020</td><td>含两个剧场+一个排练厅</td></tr>
-          <tr><td>犬舍酒店</td><td>高目建筑（Atelier GOM）</td><td class="num">2021</td><td>宠物友好主题酒店</td></tr>
-          <tr><td>音乐礼堂（Chapel of Music）</td><td>董功 / 直向建筑</td><td class="num">2022</td><td>海边第三座精神建筑</td></tr>
-          <tr><td>酒神剧场</td><td>华黎 / TAO</td><td class="num">2023</td><td>露天圆形剧场</td></tr>
-          <tr><td>云中心</td><td>马岩松 / MAD</td><td class="num">2024</td><td>悬浮感白色云朵造型</td></tr>
-          <tr><td>录音工作室</td><td>徐甜甜 / DnA</td><td class="num">2024</td><td>音乐创作空间</td></tr>
+          <tr><td>孤独图书馆（三联海边公益图书馆）</td><td>董功 / 直向建筑</td><td class="num">2015</td><td>南岸·海边核心区</td></tr>
+          <tr><td>海边礼堂（阿那亚礼堂）</td><td>董功 / 直向建筑</td><td class="num">2015</td><td>南岸·海边核心区</td></tr>
+          <tr><td>沙丘美术馆（UCCA沙丘）</td><td>李虎 / OPEN建筑事务所</td><td class="num">2018</td><td>南岸·北端沙丘</td></tr>
+          <tr><td>阿那亚艺术中心（南岸）</td><td>如恩设计（Neri&Hu）</td><td class="num">2019</td><td>南岸·小镇中心</td></tr>
+          <tr><td>阿那亚剧场（蜂巢+大剧场）</td><td>华黎 / TAO迹·建筑</td><td class="num">2020</td><td>南岸·中心区</td></tr>
+          <tr><td>犬舍酒店</td><td>高目建筑（Atelier GOM）</td><td class="num">2021</td><td>南岸·海边</td></tr>
+          <tr><td>音乐礼堂（Chapel of Music）</td><td>董功 / 直向建筑</td><td class="num">2022</td><td>南岸·海边核心区</td></tr>
+          <tr><td>酒神剧场</td><td>华黎 / TAO</td><td class="num">2023</td><td>南岸·剧场群落</td></tr>
+          <tr><td>云中心</td><td>马岩松 / MAD</td><td class="num">2024</td><td>南岸</td></tr>
+          <tr><td>录音工作室</td><td>徐甜甜 / DnA</td><td class="num">2024</td><td>南岸</td></tr>
+          <tr><td><strong>阿那亚艺术中心北岸馆</strong></td><td>坂本一成 + 柳亦春</td><td class="num">2025</td><td>北岸·雀跃镇</td></tr>
+          <tr><td><strong>北岸体育中心</strong></td><td>—</td><td class="num">2025</td><td>北岸·雀跃镇</td></tr>
+          <tr><td><strong>风仓·海洋文化体验中心</strong></td><td>—</td><td class="num">2025</td><td>北岸·雀跃镇</td></tr>
         </tbody>
       </table>
     </div>
@@ -216,86 +206,103 @@ body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; ba
       <table class="data-table">
         <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
         <tbody>
-          <tr><td>土地规模</td><td>总占地面积</td><td class="num">433公顷（6500亩）</td><td>含已开发与储备用地</td></tr>
+          <tr><td>土地规模</td><td>总占地面积</td><td class="num">433公顷（6500亩）</td><td>含南岸已建+北岸新开发+储备用地</td></tr>
           <tr><td>土地规模</td><td>海岸线长度</td><td class="num">约2.5km</td><td>黄金海岸中段，一线临海</td></tr>
           <tr><td>建设规模</td><td>总建筑面积</td><td class="num">约70万m²</td><td>含住宅、商业、文化设施</td></tr>
+          <tr><td>北岸</td><td>雀跃镇商业面积</td><td class="num">约9万m²（商业1.1万m²）</td><td>2025年大规模启幕</td></tr>
+          <tr><td>北岸</td><td>雀跃镇入驻品牌</td><td class="num">30–50家</td><td>运动+潮流+餐饮+文化复合业态</td></tr>
           <tr><td>住宅</td><td>累计交付住宅</td><td class="num">约10,000套</td><td>含别墅、洋房、公寓</td></tr>
           <tr><td>住宅</td><td>当前均价</td><td class="num">3–4万元/m²</td><td>远高于秦皇岛平均房价</td></tr>
-          <tr><td>住宿</td><td>民宿房源</td><td class="num">超5,300间</td><td>含Club Med、犬舍等品牌酒店</td></tr>
+          <tr><td>住宿</td><td>民宿+酒店房源</td><td class="num">超5,300间</td><td>含Club Med、犬舍、NOA远近、璞澜等</td></tr>
           <tr><td>住宿</td><td>旺季入住率</td><td class="num">接近90%</td><td>暑期及节假日</td></tr>
-          <tr><td>商业</td><td>餐饮商户</td><td class="num">超80家</td><td>含食堂、餐厅、咖啡馆、酒吧</td></tr>
-          <tr><td>商业</td><td>商业品牌</td><td>单向空间、naive理想国、海风酒吧等</td><td>文化类商业占比高</td></tr>
-          <tr><td>文化</td><td>文化设施</td><td class="num">12+处</td><td>图书馆、礼堂、美术馆、剧场等</td></tr>
+          <tr><td>商业</td><td>餐饮商户</td><td class="num">超100家</td><td>含6处业主食堂+雀跃镇餐饮矩阵</td></tr>
+          <tr><td>文化</td><td>文化设施</td><td class="num">15+处</td><td>图书馆·礼堂·美术馆×2·剧场群落·影院等</td></tr>
+          <tr><td>运动</td><td>运动设施</td><td class="num">20+项</td><td>滑板公园·足球场·网球场·航海中心·卡丁车等</td></tr>
           <tr><td>客群</td><td>北京客源占比</td><td class="num">约80%</td><td>其余来自上海、天津、广东</td></tr>
           <tr><td>客群</td><td>老带新购房比例</td><td class="num">超80%</td><td>营销费用极低</td></tr>
           <tr><td>运营</td><td>物业费收缴率</td><td class="num">接近100%</td><td>2024年数据</td></tr>
-          <tr><td>运营</td><td>年活动场次</td><td class="num">超1,500场</td><td>戏剧、音乐、文学、艺术展览</td></tr>
+          <tr><td>运营</td><td>年活动场次</td><td class="num">超1,500场</td><td>含8大年度节庆+日常艺文活动</td></tr>
+          <tr><td>教育</td><td>启行营地</td><td class="num">占地30亩</td><td>教育部认证全国中小学研学基地</td></tr>
         </tbody>
       </table>
-      <p class="f-caption" style="margin-top:0.8rem;">数据截至2025年6月，综合多来源公开信息整理，部分为估算值。</p>
+      <p class="f-caption" style="margin-top:0.8rem;">数据截至2025年6月。综合多来源公开信息整理，部分为估算值。</p>
     </div>
   </div>
 </section>
 
-<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<!-- ====== 5. SPATIAL LAYOUT ====== -->
 <section class="section section-alt" id="spatial-layout">
   <div class="container">
-    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+    <div class="section-header reveal"><h2>空间布局：南岸与北岸双城格局</h2><div class="section-line"></div></div>
     <div>
       <div class="map-legend">
         <span><span class="dot" style="background:#364A5A;"></span> 文化地标</span>
         <span><span class="dot" style="background:#C8A27A;"></span> 酒店住宿</span>
         <span><span class="dot" style="background:#9BAEBE;"></span> 商业配套</span>
+        <span><span class="dot" style="background:#8BAF7E;"></span> 运动设施</span>
       </div>
       <div id="parkmap"></div>
       <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
       <div id="satmap" style="margin-top:1rem;"></div>
     </div>
-    <div class="reveal" style="margin-top:1.5rem;"><div class="svg-container"><svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+    <div class="reveal" style="margin-top:1.5rem;"><div class="svg-container"><svg viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7BA5BE"/><stop offset="100%" stop-color="#B8D4E8"/></linearGradient>
-    <linearGradient id="sand" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8DCC8"/><stop offset="100%" stop-color="#F0EFEA"/></linearGradient>
-    <linearGradient id="green" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8BAF7E"/><stop offset="100%" stop-color="#A8C89E"/></linearGradient>
+    <linearGradient id="sea2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7BA5BE"/><stop offset="100%" stop-color="#B8D4E8"/></linearGradient>
+    <linearGradient id="sand2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8DCC8"/><stop offset="100%" stop-color="#F0EFEA"/></linearGradient>
   </defs>
-  <rect width="800" height="400" fill="#2C3E4E"/>
-  <!-- 海岸线 -->
-  <rect x="0" y="0" width="800" height="120" fill="url(#sea)"/>
-  <rect x="0" y="115" width="800" height="20" fill="url(#sand)"/>
-  <!-- 社区主路 -->
-  <rect x="0" y="180" width="800" height="4" fill="#C8A27A" opacity="0.6" rx="2"/>
-  <!-- 功能区 -->
-  <rect x="30" y="145" width="150" height="55" rx="6" fill="#364A5A" opacity="0.85"/><text x="105" y="168" fill="white" font-size="11" font-family="DM Sans" text-anchor="middle" font-weight="600">海边核心区</text><text x="105" y="184" fill="#C8A27A" font-size="9" font-family="DM Sans" text-anchor="middle">图书馆·礼堂</text>
-  <rect x="210" y="140" width="140" height="50" rx="6" fill="#6D7F8F" opacity="0.8"/><text x="280" y="161" fill="white" font-size="11" font-family="DM Sans" text-anchor="middle" font-weight="600">文化艺术区</text><text x="280" y="177" fill="#D4B896" font-size="9" font-family="DM Sans" text-anchor="middle">艺术中心·剧场</text>
-  <rect x="380" y="135" width="130" height="50" rx="6" fill="#7B8E9E" opacity="0.75"/><text x="445" y="156" fill="white" font-size="11" font-family="DM Sans" text-anchor="middle" font-weight="600">沙丘美术馆</text><text x="445" y="172" fill="#D4B896" font-size="9" font-family="DM Sans" text-anchor="middle">UCCA·洞穴画廊</text>
-  <rect x="540" y="145" width="130" height="55" rx="6" fill="#364A5A" opacity="0.85"/><text x="605" y="168" fill="white" font-size="11" font-family="DM Sans" text-anchor="middle" font-weight="600">酒店度假区</text><text x="605" y="184" fill="#C8A27A" font-size="9" font-family="DM Sans" text-anchor="middle">Club Med·犬舍</text>
-  <!-- 住宅区 -->
-  <rect x="30" y="220" width="640" height="50" rx="4" fill="#5A6A7A" opacity="0.4" stroke="#9BAEBE" stroke-width="1" stroke-dasharray="4,3"/>
-  <text x="350" y="249" fill="#9BAEBE" font-size="10" font-family="DM Sans" text-anchor="middle">住宅群落（一期至九期，约10,000套）</text>
-  <!-- 商业配套 -->
-  <rect x="30" y="290" width="280" height="40" rx="4" fill="#6D7F8F" opacity="0.5"/>
-  <text x="170" y="314" fill="white" font-size="10" font-family="DM Sans" text-anchor="middle">商业配套区（食堂·市集·影院·单向空间）</text>
-  <rect x="340" y="290" width="330" height="40" rx="4" fill="#7B8E9E" opacity="0.4"/>
-  <text x="505" y="314" fill="white" font-size="10" font-family="DM Sans" text-anchor="middle">社区农场·马场·营地·运动公园</text>
+  <rect width="800" height="480" fill="#2C3E4E"/>
+  <!-- 渤海 -->
+  <rect x="0" y="0" width="800" height="80" fill="url(#sea2)"/>
+  <text x="400" y="40" fill="white" font-size="14" font-family="Playfair Display" text-anchor="middle" opacity="0.7">渤 海 · 黄 金 海 岸</text>
+  <!-- 沙滩带 -->
+  <rect x="0" y="78" width="800" height="16" fill="url(#sand2)"/>
+  <!-- 分隔：南岸/北岸 -->
+  <line x1="0" y1="200" x2="800" y2="200" stroke="#C8A27A" stroke-width="1" stroke-dasharray="6,4" opacity="0.4"/>
+  <text x="10" y="195" fill="#C8A27A" font-size="10" font-family="DM Mono" opacity="0.7">▼ 南岸（一期至八期）— 文化艺术社区核心</text>
+  <!-- 南岸功能区 -->
+  <rect x="20" y="110" width="180" height="50" rx="6" fill="#364A5A" opacity="0.85"/><text x="110" y="130" fill="white" font-size="11" font-family="DM Sans" text-anchor="middle" font-weight="600">海边核心区</text><text x="110" y="147" fill="#C8A27A" font-size="9" font-family="DM Sans" text-anchor="middle">图书馆·礼堂·音乐礼堂</text>
+  <rect x="220" y="108" width="160" height="45" rx="6" fill="#6D7F8F" opacity="0.8"/><text x="300" y="127" fill="white" font-size="11" font-family="DM Sans" text-anchor="middle" font-weight="600">文化艺术区</text><text x="300" y="143" fill="#D4B896" font-size="9" font-family="DM Sans" text-anchor="middle">艺术中心·剧场群落</text>
+  <rect x="400" y="115" width="140" height="40" rx="6" fill="#5A7A8A" opacity="0.7"/><text x="470" y="132" fill="white" font-size="10" font-family="DM Sans" text-anchor="middle">沙丘美术馆</text><text x="470" y="147" fill="#D4B896" font-size="8" font-family="DM Sans" text-anchor="middle">UCCA·洞穴画廊</text>
+  <rect x="560" y="110" width="220" height="55" rx="6" fill="#364A5A" opacity="0.75"/><text x="670" y="131" fill="white" font-size="11" font-family="DM Sans" text-anchor="middle" font-weight="600">酒店度假集群</text><text x="670" y="148" fill="#C8A27A" font-size="9" font-family="DM Sans" text-anchor="middle">Club Med·犬舍·NOA远近·璞澜·安澜</text>
+  <!-- 南岸住宅 -->
+  <rect x="20" y="168" width="760" height="25" rx="4" fill="#5A6A7A" opacity="0.35" stroke="#9BAEBE" stroke-width="0.5" stroke-dasharray="3,2"/>
+  <text x="400" y="186" fill="#9BAEBE" font-size="9" font-family="DM Sans" text-anchor="middle">南岸住宅群落（一期至八期，约8,000套）·业主食堂·海边市集·单向空间·社区影院</text>
+  <text x="10" y="275" fill="#C8A27A" font-size="10" font-family="DM Mono" opacity="0.7">▼ 北岸（九期）— 雀跃镇 + 友谊湾，2025年全面启幕</text>
+  <!-- 北岸·雀跃镇 -->
+  <rect x="20" y="290" width="360" height="100" rx="8" fill="#6D7F8F" opacity="0.6" stroke="#C8A27A" stroke-width="1.5"/>
+  <text x="200" y="315" fill="white" font-size="14" font-family="Playfair Display" text-anchor="middle" font-weight="700">雀跃镇 Queyue Town</text>
+  <text x="200" y="335" fill="#D4B896" font-size="10" font-family="DM Sans" text-anchor="middle">中国首个运动×青年文化社区｜9万m²｜30-50家品牌</text>
+  <!-- 雀跃镇内分区 -->
+  <rect x="30" y="345" width="80" height="20" rx="3" fill="#8BAF7E" opacity="0.7"/><text x="70" y="359" fill="white" font-size="8" font-family="DM Sans" text-anchor="middle">滑板公园</text>
+  <rect x="118" y="345" width="70" height="20" rx="3" fill="#8BAF7E" opacity="0.7"/><text x="153" y="359" fill="white" font-size="8" font-family="DM Sans" text-anchor="middle">足球场</text>
+  <rect x="196" y="345" width="50" height="20" rx="3" fill="#8BAF7E" opacity="0.7"/><text x="221" y="359" fill="white" font-size="8" font-family="DM Sans" text-anchor="middle">网球场</text>
+  <rect x="254" y="345" width="55" height="20" rx="3" fill="#8BAF7E" opacity="0.7"/><text x="281" y="359" fill="white" font-size="8" font-family="DM Sans" text-anchor="middle">泳池</text>
+  <rect x="317" y="345" width="55" height="20" rx="3" fill="#8BAF7E" opacity="0.7"/><text x="344" y="359" fill="white" font-size="8" font-family="DM Sans" text-anchor="middle">卡丁车</text>
+  <rect x="30" y="368" width="80" height="18" rx="3" fill="#C8A27A" opacity="0.7"/><text x="70" y="381" fill="white" font-size="8" font-family="DM Sans" text-anchor="middle">UNDEFEATED</text>
+  <rect x="118" y="368" width="65" height="18" rx="3" fill="#C8A27A" opacity="0.7"/><text x="150" y="381" fill="white" font-size="8" font-family="DM Sans" text-anchor="middle">SOULGOODS</text>
+  <rect x="191" y="368" width="70" height="18" rx="3" fill="#C8A27A" opacity="0.7"/><text x="226" y="381" fill="white" font-size="8" font-family="DM Sans" text-anchor="middle">VILLA B1OCK</text>
+  <rect x="269" y="368" width="105" height="18" rx="3" fill="#C8A27A" opacity="0.7"/><text x="321" y="381" fill="white" font-size="8" font-family="DM Sans" text-anchor="middle">HARMAY话梅</text>
+  <!-- 北岸·友谊湾 -->
+  <rect x="410" y="290" width="370" height="70" rx="8" fill="#7B8E9E" opacity="0.5" stroke="#9BAEBE" stroke-width="1"/>
+  <text x="595" y="314" fill="white" font-size="13" font-family="Playfair Display" text-anchor="middle" font-weight="700">友谊湾 Youyi Bay</text>
+  <text x="595" y="333" fill="#D4B896" font-size="9" font-family="DM Sans" text-anchor="middle">知识型社区｜春台·杏花堂·桃仙饭店·HAY·BASAO</text>
+  <text x="595" y="350" fill="#9BAEBE" font-size="8" font-family="DM Sans" text-anchor="middle">卷宗书店·缇干画廊·一善儿童书店·诺乐NORLHA</text>
+  <!-- 北岸运动锚点 -->
+  <rect x="20" y="400" width="180" height="30" rx="4" fill="#8BAF7E" opacity="0.5"/>
+  <text x="110" y="419" fill="white" font-size="9" font-family="DM Sans" text-anchor="middle">风仓·海洋文化中心（帆船·尾波·桨板·滑水）</text>
+  <rect x="210" y="400" width="170" height="30" rx="4" fill="#8BAF7E" opacity="0.5"/>
+  <text x="295" y="419" fill="white" font-size="9" font-family="DM Sans" text-anchor="middle">西港国际航海中心 + 索道滑水</text>
   <!-- 指北针 -->
-  <g transform="translate(750,50)">
-    <polygon points="0,-18 -6,6 0,-2 6,6" fill="#C8A27A"/>
-    <text x="0" y="-22" fill="#C8A27A" font-size="10" font-family="DM Sans" text-anchor="middle">N</text>
-  </g>
-  <!-- 海岸标注 -->
-  <text x="400" y="50" fill="white" font-size="14" font-family="Playfair Display" text-anchor="middle" opacity="0.7">渤 海 · 黄 金 海 岸</text>
-  <!-- 图例 -->
-  <rect x="30" y="350" width="10" height="10" rx="2" fill="#364A5A" opacity="0.85"/><text x="46" y="360" fill="#9BAEBE" font-size="9" font-family="DM Sans">文化地标</text>
-  <rect x="110" y="350" width="10" height="10" rx="2" fill="#C8A27A" opacity="0.7"/><text x="126" y="360" fill="#9BAEBE" font-size="9" font-family="DM Sans">酒店</text>
-  <rect x="170" y="350" width="10" height="10" rx="2" fill="#5A6A7A" opacity="0.4"/><text x="186" y="360" fill="#9BAEBE" font-size="9" font-family="DM Sans">住宅</text>
-  <text x="400" y="380" fill="#6D7F8F" font-size="9" font-family="DM Sans" text-anchor="middle">阿那亚·北戴河 空间结构示意图</text>
+  <g transform="translate(770,20)"><polygon points="0,-16 -5,5 0,-1 5,5" fill="#C8A27A"/><text x="0" y="-20" fill="#C8A27A" font-size="9" font-family="DM Sans" text-anchor="middle">N</text></g>
+  <text x="400" y="465" fill="#5A7A8A" font-size="9" font-family="DM Sans" text-anchor="middle">阿那亚·北戴河 南岸&北岸空间结构示意图</text>
 </svg></div></div>
     <div class="grid-3 reveal" style="margin-top:1.5rem;">
-      <div class="zone-card"><h4>海边核心区</h4><p>孤独图书馆、海边礼堂、音乐礼堂——三座董功设计的海边精神地标，构成阿那亚文化IP的原点。</p></div>
-      <div class="zone-card"><h4>文化艺术区</h4><p>阿那亚艺术中心（如恩设计）、蜂巢剧场+大剧场（TAO华黎）+酒神剧场，集中布局于社区中心。</p></div>
-      <div class="zone-card"><h4>沙丘美术馆区</h4><p>UCCA沙丘美术馆（OPEN李虎）埋于沙丘之下，洞穴状展陈空间，面向渤海，为社区最北端的文化锚点。</p></div>
-      <div class="zone-card"><h4>酒店度假集群</h4><p>Club Med Joyview（308间）、犬舍酒店（宠物友好）、璞澜酒店、安澜酒店等，沿一线海景分布。</p></div>
-      <div class="zone-card"><h4>商业配套带</h4><p>海边市集、业主食堂（6处）、单向空间书店、naive理想国酒吧、海风酒吧、社区影院沿主路带状分布。</p></div>
-      <div class="zone-card"><h4>居住组团</h4><p>一期至九期住宅由南向北延伸，含别墅、洋房、海景公寓等多种形态，建筑密度低，绿化率超40%。</p></div>
+      <div class="zone-card"><h4>南岸·海边核心区</h4><p>孤独图书馆、海边礼堂、音乐礼堂三座精神地标构成阿那亚文化IP原点。沿千米沙滩分布，日出至日落持续吸引打卡人流。</p></div>
+      <div class="zone-card"><h4>南岸·文化艺术区</h4><p>阿那亚艺术中心（如恩）、蜂巢剧场+大剧场（TAO华黎）、酒神剧场、云中心（MAD）、录音工作室（DnA），密集布局于小镇中心。</p></div>
+      <div class="zone-card"><h4>南岸·沙丘美术馆区</h4><p>UCCA沙丘美术馆（OPEN李虎）埋于沙丘之下，洞穴状展陈空间面向渤海，为社区最北端文化锚点，2025年持续运营。</p></div>
+      <div class="zone-card"><h4>北岸·雀跃镇</h4><p>2025年全面落成的中国首个运动×青年文化社区。AVENUE & SON 1.2万m²滑板公园、ANAR足球场、SOULGOODS夜光球场、滨河泳池、北岸卡丁车场、北岸马会，30-50家潮流品牌+餐饮入驻。</p></div>
+      <div class="zone-card"><h4>北岸·友谊湾</h4><p>知识型社区板块，卷宗书店、缇干画廊、一善儿童书店、诺乐NORLHA、春台云南菜酒馆、杏花堂晋商私房菜、HAY快闪等。与雀跃镇互为补充，形成北岸完整生活圈。</p></div>
+      <div class="zone-card"><h4>风仓·海洋文化体验</h4><p>西港国际航海中心（帆船出海/尾波冲浪/培训）、And More水岸生活（皮艇/桨板/鸡尾酒吧）、索道滑水设施、金湾游艇俱乐部、庞巴迪探索家营地，打造北方最丰富的海岸运动矩阵。</p></div>
     </div>
   </div>
 </section>
@@ -306,131 +313,165 @@ body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; ba
     <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
     <div class="card reveal"><div class="timeline">
       <div class="timeline-item"><div class="timeline-year">2007</div><div class="timeline-content"><h4>亿城股份拿地</h4><p>以4.3亿元获得首期900亩土地及后续超2000亩土地获取权益，启动"天籁湾"度假地产项目。</p></div></div>
-      <div class="timeline-item"><div class="timeline-year">2012</div><div class="timeline-content"><h4>一期开盘，销售惨淡</h4><p>高尔夫球场、会所、售楼处建成。一期1.5万m²别墅洋房获预售证，年销售额仅4000余万元，被业内视为不良资产。</p></div></div>
-      <div class="timeline-item"><div class="timeline-year">2013</div><div class="timeline-content"><h4>马寅团队约2.6亿元收购，全面转型</h4><p>重新定位为"北京80后中产的海边自留地"，引入金达利筑地及建言设计调整规划，成立九州会与DO团队（借鉴Club Med的GO模式）。</p></div></div>
-      <div class="timeline-item"><div class="timeline-year">2014</div><div class="timeline-content"><h4>二期海景公寓面市，配套完善</h4><p>推出85-113m² LOFT海景公寓。一期售罄。签约齐秦为代言人——"北京男人的自留地"。规划图书馆与礼堂，增设业主食堂、海风酒吧、水上俱乐部等。</p></div></div>
-      <div class="timeline-item"><div class="timeline-year">2015</div><div class="timeline-content"><h4>孤独图书馆引爆全网，一炮而红</h4><p>三联海边公益图书馆建成开放。与"一条"合作视频《全中国最孤独的图书馆》全网播放6亿次，阿那亚正式爆红。首届业主戏剧节启动。</p></div></div>
-      <div class="timeline-item"><div class="timeline-year">2016</div><div class="timeline-content"><h4>"人生可以更美"品牌升级</h4><p>正式从"海边人文社区"升级为"海边文化艺术社区"。首届阿那亚生活节举办，社群精神确立为"所有人为所有人服务"。</p></div></div>
-      <div class="timeline-item"><div class="timeline-year">2017</div><div class="timeline-content"><h4>首届阿那亚建筑论坛，地产销售巅峰</h4><p>与《世界建筑》共办首届阿那亚论坛，邀请中日挪法等国建筑师。年销售额飙升至30亿元。社区家史博物馆成立。</p></div></div>
-      <div class="timeline-item"><div class="timeline-year">2018–2019</div><div class="timeline-content"><h4>文化设施集中落成</h4><p>UCCA沙丘美术馆、阿那亚艺术中心相继开放。首届海边文学节。社区院线影院建成。</p></div></div>
-      <div class="timeline-item"><div class="timeline-year">2020–2023</div><div class="timeline-content"><h4>剧场群落与音乐地标</h4><p>阿那亚剧场（TAO）开放，含蜂巢剧场、大剧场。酒神剧场、音乐礼堂（Chapel of Music）落成。戏剧节成为国内最具影响力的户外戏剧节之一。</p></div></div>
-      <div class="timeline-item"><div class="timeline-year">2024</div><div class="timeline-content"><h4>运营收入首次超过地产销售</h4><p>入选《时代》周刊全球100最佳旅行目的地。运营服务产值达22亿元。云中心（MAD）与录音工作室（DnA徐甜甜）落成。社区运营收入首次超越房地产销售收入，标志转型成功。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2012</div><div class="timeline-content"><h4>一期开盘，销售惨淡</h4><p>高尔夫球场、会所建成。一期1.5万m²别墅洋房获预售证，年销售额仅4000余万元，被视为不良资产。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2013</div><div class="timeline-content"><h4>马寅团队约2.6亿元收购，全面转型</h4><p>重新定位"北京80后中产的海边自留地"，引入金达利筑地与建言设计，成立九州会与DO团队。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2014</div><div class="timeline-content"><h4>二期海景公寓面市</h4><p>推出85-113m² LOFT海景公寓，业主食堂、海风酒吧等配套开业。签约齐秦为代言人。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2015</div><div class="timeline-content"><h4>孤独图书馆引爆全网</h4><p>三联海边公益图书馆建成。"一条"视频全网播放6亿次，阿那亚正式爆红。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2016–2017</div><div class="timeline-content"><h4>品牌升级 + 地产销售巅峰</h4><p>"人生可以更美"品牌升级。首届阿那亚建筑论坛举办，年销售额飙升至30亿元。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2018–2020</div><div class="timeline-content"><h4>文化设施集中落成</h4><p>UCCA沙丘美术馆（2018）、阿那亚艺术中心南岸馆（2019）、阿那亚剧场群落（2020）相继开放。首届海边文学节。首届阿那亚戏剧节启动。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021–2023</div><div class="timeline-content"><h4>业态深化期</h4><p>犬舍酒店（2021）开业。音乐礼堂（2022）、酒神剧场（2023）落成。戏剧节成为国内最具影响力的户外戏剧节之一。虾米音乐节、海浪电影周等新IP启动。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024</div><div class="timeline-content"><h4>运营收入首次超过地产销售 — 转型里程碑</h4><p>入选《时代》周刊全球100最佳旅行目的地。运营服务产值达22亿元。云中心（MAD）与录音工作室（DnA）落成。运营收入首次超越房地产销售收入。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025</div><div class="timeline-content"><h4>北岸全面启幕 — 雀跃镇元年</h4><p>雀跃镇30-50家品牌大规模开业（6月起），阿那亚艺术中心北岸馆（坂本一成+柳亦春）开放。戏剧节6月19-29日（29部剧目94场演出）。虾米音乐节8月27-31日（40+组艺人）。西港国际游艇展首次登陆亚洲。北岸体育中心、风仓海洋中心、滨河泳池、卡丁车场、北岸马会全面运营。单立人喜剧节、招待会电子音乐节、海浪电影周、香港国际诗歌之夜、雀跃镇大师赛、正在国际舞蹈节、声量播客节等全年8大节庆矩阵成型。</p></div></div>
     </div></div>
   </div>
 </section>
 
-<!-- ====== 7. OPERATIONS ====== -->
+<!-- ====== 7. OPERATIONS & ANNUAL FESTIVALS ====== -->
 <section class="section section-alt" id="operations">
   <div class="container">
-    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="section-header reveal"><h2>运营指标与年度节庆矩阵</h2><div class="section-line"></div></div>
     <div class="kpi-grid reveal">
-      <div class="kpi-box"><div class="kpi-val">22亿元</div><div class="kpi-lbl">2024年运营服务产值</div></div>
+      <div class="kpi-box"><div class="kpi-val">22亿元</div><div class="kpi-lbl">2024运营服务产值</div></div>
       <div class="kpi-box"><div class="kpi-val">350万人次</div><div class="kpi-lbl">2024年游客量</div></div>
       <div class="kpi-box"><div class="kpi-val">接近100%</div><div class="kpi-lbl">物业费收缴率</div></div>
       <div class="kpi-box"><div class="kpi-val">~90%</div><div class="kpi-lbl">民宿旺季入住率</div></div>
       <div class="kpi-box"><div class="kpi-val">1.57亿元</div><div class="kpi-lbl">2025戏剧节11天营收</div></div>
       <div class="kpi-box"><div class="kpi-val">超80%</div><div class="kpi-lbl">老带新购房比例</div></div>
     </div>
-    <div class="grid-2 reveal">
-      <div class="card"><h3>收入结构转型</h3><p class="f-body">2024年是阿那亚的关键拐点：<strong>社区运营营收首次超过房地产销售收入</strong>，标志从"地产开发商"成功转型为"开发运营总包商"。运营收入涵盖酒店、餐饮、活动票务、商业租金、物业管理等多元业态。</p></div>
-      <div class="card"><h3>戏剧节经济引擎</h3><p class="f-body">2025年阿那亚戏剧节11天接待21.8万人次，营收1.57亿元。戏剧节已成为国内最具影响力的户外戏剧节之一，带动周边民宿、餐饮、交通等综合消费。</p></div>
-      <div class="card"><h3>房价增值曲线</h3><p class="f-body">从2012年开盘约1万元/m²，涨至目前3–4万元/m²，涨幅约<strong>300%</strong>，远超秦皇岛市区均价。二期LOFT海景公寓是当年的爆款产品，为项目提供现金流支撑。</p></div>
-      <div class="card"><h3>同类项目对比</h3><table class="data-table" style="margin-top:0.5rem;">
-        <thead><tr><th>项目</th><th>年客流</th><th>面积</th><th>核心模式</th></tr></thead>
+    <div class="card reveal" style="margin-bottom:1.5rem;">
+      <h3>2025年度节庆活动日历</h3>
+      <div style="overflow-x:auto;">
+      <table class="data-table festival-table">
+        <thead><tr><th>月份</th><th>活动名称</th><th>时间</th><th>规模/亮点</th></tr></thead>
         <tbody>
-          <tr><td>阿那亚·北戴河</td><td class="num">350万</td><td class="num">433ha</td><td>建筑+社群+内容</td></tr>
-          <tr><td>麓湖生态城（成都）</td><td class="num">300万</td><td class="num">560ha</td><td>湖区+建筑+社群</td></tr>
-          <tr><td>良渚文化村（杭州）</td><td class="num">200万</td><td class="num">400ha</td><td>遗址+文化+居住</td></tr>
+          <tr><td>3月</td><td>单立人喜剧节</td><td>3.21–3.30</td><td>脱口秀+即兴喜剧，青年文化IP</td></tr>
+          <tr><td>5月</td><td>阿那亚魔法假期（魔术盛会）</td><td>5.1–5.4</td><td>全社区魔术嘉年华</td></tr>
+          <tr><td>5月</td><td>理想国读者日</td><td>5.17–5.18</td><td>政治·法律·文学·影视·诗歌·建筑跨界沙龙</td></tr>
+          <tr><td>5月</td><td>招待会电子音乐节</td><td>5.23–5.25</td><td>国内顶级电子音乐节IP</td></tr>
+          <tr><td>5月</td><td>槐花季</td><td>5月</td><td>社区自然节庆</td></tr>
+          <tr><td><strong>6月</strong></td><td><strong>阿那亚戏剧节</strong></td><td><strong>6.19–6.29</strong></td><td><strong>40位导演·15个剧场·29部剧目·94场演出</strong>；开幕大戏《唐璜》，新增日出剧场</td></tr>
+          <tr><td>6–8月</td><td>暑期夏令营</td><td>6.29–8.21</td><td>启行营地教育·AI科技·设计思维·马术·航海（详见教育板块）</td></tr>
+          <tr><td>7月</td><td>西港国际游艇展</td><td>7月</td><td>法国拉罗谢尔大弦墙游艇展（Grand Pavois）首次登陆亚洲</td></tr>
+          <tr><td><strong>8月</strong></td><td><strong>虾米音乐节</strong></td><td><strong>8.27–8.31</strong></td><td><strong>3个舞台·5天·40+组海内外音乐人</strong></td></tr>
+          <tr><td>9月</td><td>海浪电影周</td><td>9月</td><td>户外放映+产业对话+青年创作扶持</td></tr>
+          <tr><td>9–10月</td><td>雀跃镇大师赛</td><td>9.26–10.2</td><td>滑板+潮流运动国际赛事</td></tr>
+          <tr><td>10月</td><td>正在国际舞蹈节</td><td>10.3–10.6</td><td>当代舞蹈+身体剧场</td></tr>
+          <tr><td>10月</td><td>香港国际诗歌之夜</td><td>10.8–10.12</td><td>北岛发起，15位国际诗人，主题"浮标"</td></tr>
+          <tr><td>10月</td><td>声量播客节</td><td>10月</td><td>中文播客创作者年度聚会</td></tr>
+          <tr><td>10–11月</td><td>阿那亚魔法节（万圣狂欢）</td><td>10.31–11.2</td><td>全社区变装+派对+市集</td></tr>
+          <tr><td>12月</td><td>阿那亚童话月（圣诞/跨年）</td><td>12月</td><td>圣诞市集+业主大戏+跨年仪式</td></tr>
         </tbody>
-      </table></div>
+      </table>
+      </div>
+    </div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>戏剧节经济引擎</h3><p class="f-body">2025年戏剧节11天接待21.8万人次，营收1.57亿元。40位中外导演、15个剧场（含新增日出剧场）、29部剧目、94场演出。主题"情感和理智"，开幕大戏《唐璜》。戏剧节带动周边民宿、餐饮、交通等综合消费，已成为中国最具影响力的户外戏剧节。</p></div>
+      <div class="card"><h3>虾米音乐节</h3><p class="f-body">2025年主题"生命就是一次奇遇"，3个舞台、5天演出、40+组海内外音乐人。逆势增长，在红海音乐节市场中以差异化定位破局。</p></div>
+      <div class="card"><h3>收入结构转型</h3><p class="f-body">2024年运营收入首次超过地产销售。运营收入涵盖酒店、餐饮、活动票务、商业租金、物业管理。品牌从开发商成功转型生活方式运营商。</p></div>
+      <div class="card"><h3>日常艺文生态</h3><p class="f-body">全年周末及假日：海边礼堂清晨&月升音乐会、DDC黄昏黎明俱乐部演出（4月起每周末）、阿那亚剧场常态演出（《9号秘事》《狐狸天使》《恋爱的犀牛》等）、UCCA沙丘+艺术中心双馆展览轮换。全年累计超1,500场活动。</p></div>
     </div>
   </div>
 </section>
 
-<!-- ====== 8. CORE TECH &amp; SCALE METRICS ====== -->
+<!-- ====== 8. CORE TECH & SCALE ====== -->
 <section class="section" id="tech-scale">
   <div class="container">
     <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
     <div class="grid-3 reveal">
-      <div class="card"><h3>土地规模</h3><p><span class="f-data">433</span> 公顷（6500亩）</p><p class="f-caption">一线海景岸线2.5km</p></div>
-      <div class="card"><h3>建筑面积</h3><p><span class="f-data">70万</span> m²</p><p class="f-caption">含住宅+商业+文化设施</p></div>
+      <div class="card"><h3>土地规模</h3><p><span class="f-data">433</span> 公顷（6500亩）</p><p class="f-caption">南岸建成区+北岸新开发+储备用地</p></div>
+      <div class="card"><h3>建筑面积</h3><p><span class="f-data">70万+</span> m²</p><p class="f-caption">含南岸住宅+北岸商业+文化设施</p></div>
       <div class="card"><h3>住宅总量</h3><p><span class="f-data">~10,000</span> 套</p><p class="f-caption">一期至九期滚动开发</p></div>
-      <div class="card"><h3>住宿容量</h3><p><span class="f-data">5,300+</span> 间民宿</p><p class="f-caption">旺季单日可接待超万人</p></div>
-      <div class="card"><h3>文化设施</h3><p><span class="f-data">12+</span> 处</p><p class="f-caption">图书馆·礼堂·美术馆·剧场</p></div>
-      <div class="card"><h3>建筑设计师</h3><p><span class="f-data">10+</span> 位国际顶尖</p><p class="f-caption">董功·如恩·OPEN·MAD·TAO·DnA等</p></div>
-      <div class="card"><h3>年活动场次</h3><p><span class="f-data">1,500+</span> 场</p><p class="f-caption">戏剧·音乐·文学·艺术展览</p></div>
-      <div class="card"><h3>餐饮商户</h3><p><span class="f-data">80+</span> 家</p><p class="f-caption">6处业主食堂为社区基础</p></div>
-      <div class="card"><h3>社区绿化率</h3><p><span class="f-data">&gt;40%</span></p><p class="f-caption">低密度滨海社区</p></div>
+      <div class="card"><h3>住宿容量</h3><p><span class="f-data">5,300+</span> 间</p><p class="f-caption">旺季单日可接待超万人</p></div>
+      <div class="card"><h3>文化设施</h3><p><span class="f-data">15+</span> 处</p><p class="f-caption">图书馆·礼堂·美术馆×2·剧场×4·影院等</p></div>
+      <div class="card"><h3>运动设施</h3><p><span class="f-data">20+</span> 项</p><p class="f-caption">滑板公园·足球场·球场·航海·卡丁车等</p></div>
+      <div class="card"><h3>设计团队</h3><p><span class="f-data">10+</span> 位国际顶尖</p><p class="f-caption">董功·如恩·OPEN·MAD·TAO·DnA·坂本一成+柳亦春</p></div>
+      <div class="card"><h3>雀跃镇品牌</h3><p><span class="f-data">30-50</span> 家（2025）</p><p class="f-caption">AVENUE&SON·UNDEFEATED·SOULGOODS·HARMAY等</p></div>
+      <div class="card"><h3>年活动场次</h3><p><span class="f-data">1,500+</span> 场</p><p class="f-caption">8大年度节庆+常态艺文+社群活动</p></div>
     </div>
   </div>
 </section>
 
-<!-- ====== 9. FACILITIES ====== -->
-<section class="section section-alt" id="facilities">
+<!-- ====== 9. SUMMER CAMPS & EDUCATION ====== -->
+<section class="section section-alt" id="camps">
   <div class="container">
-    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
-    <div class="grid-4 reveal" style="margin-bottom:1.5rem;">
-      <div class="card"><h3>餐饮</h3><p class="f-body">6处业主食堂</p><p class="f-caption">海风酒吧·法式铁板烧·海鲜火锅·深夜食堂·精品咖啡馆·烘焙坊</p></div>
-      <div class="card"><h3>住宿</h3><p class="f-body">Club Med Joyview</p><p class="f-caption">308间全海景房+犬舍酒店+璞澜+安澜+唐舍+naive理想国青年旅舍</p></div>
-      <div class="card"><h3>文化艺术</h3><p class="f-body">孤独图书馆</p><p class="f-caption">礼堂·沙丘美术馆·艺术中心·剧场群落·社区影院·录音工作室</p></div>
-      <div class="card"><h3>书店</h3><p class="f-body">单向空间</p><p class="f-caption">naive理想国·DDC Livehouse·卷宗书店</p></div>
+    <div class="section-header reveal"><h2>夏令营与研学教育</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="margin-bottom:1.2rem;"><p class="f-body">阿那亚与<strong>启行营地教育</strong>（2008年创办，累计服务15万+海内外青少年，50所学校合作）深度绑定。营地位于阿那亚社区内，由清华大学建筑学院张利院长设计，占地<strong>30亩</strong>，独立运营、封闭管理，获<strong>教育部认证全国中小学研学实践教育基地</strong>。含7大教学空间及6大功能区。</p></div>
+    <div class="grid-3 reveal">
+      <div class="card camp-card"><h3>Pre U-Motion 国际少年营</h3><p><span class="f-data">12-15岁</span> · 6天 · ¥17,800起</p><p class="f-caption">地点：雀跃镇。设计思维×商业挑战，斯坦福Design Thinking赋能PBL。与雀跃镇品牌主理人对谈（Melting Sadness、壹集、山池咖啡等），打造个人品牌项目。<br><strong>营期：</strong>7.27-8.01 / 8.10-8.15</p></div>
+      <div class="card camp-card"><h3>AI科技营</h3><p><span class="f-data">7-12岁（分龄）</span> · 6天 · ¥16,800起</p><p class="f-caption">7-9岁：科学PBL（制造浮力船）；9-12岁：AI智慧城市建造（Minecraft/3D建模、AR/VR展示）。10+户外运动（桨板、帆板、攀岩、皮划艇等）。<br><strong>营期：</strong>8.10-8.15 / 8.16-8.21</p></div>
+      <div class="card camp-card"><h3>经典住宿营</h3><p><span class="f-data">7-12岁（分龄）</span> · 12天 · ¥25,800起</p><p class="f-caption">AI+科学+艺术+户外运动+积极社交综合体验。PBL项目式学习，20+户外运动，独立学院培养自理能力。全营活动：分院仪式、科技音乐节、勇士挑战赛、夏日水世界。可选马术/海钓/尾波冲浪。<br><strong>营期：</strong>6.29-7.10 / 7.13-7.24 / 7.27-8.07 / 8.10-8.21</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.2rem;"><h3>雀跃镇青少年运动教育</h3><p class="f-body">北岸卡丁车场（半室内，专注儿童/青少年）、北岸马会（1700m²，特兰矮马+pony马）、AVENUE & SON PRETTY SOLID 室内滑板学校、西港国际航海中心帆船培训、ANAR足球场免费使用。雀跃镇以运动为锚点，为青少年提供全年常态化运动教育场景，与启行夏令营形成"暑期集中+日常持续"的完整教育矩阵。</p></div>
+  </div>
+</section>
+
+<!-- ====== 10. FACILITIES ====== -->
+<section class="section" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系（南岸+北岸全景）</h2><div class="section-line"></div></div>
+    <div class="grid-4 reveal" style="margin-bottom:1.2rem;">
+      <div class="card"><h3>餐饮</h3><p class="f-body">6处业主食堂 + 雀跃镇餐饮矩阵</p><p class="f-caption">南岸：海风酒吧·法式铁板烧·海鲜火锅·深夜食堂·精品咖啡馆<br>北岸：阿嬷手作·南门涮肉·跳海hood·星巴克·第九食堂·俏东北·码头鱼市·常季小海鲜·柴米多·山池咖啡等</p></div>
+      <div class="card"><h3>住宿</h3><p class="f-body">Club Med Joyview（308间）</p><p class="f-caption">犬舍酒店·璞澜·安澜·唐舍·naive理想国青旅·<strong>NOA远近酒店（2025新）</strong>·5,300+间民宿</p></div>
+      <div class="card"><h3>文化艺术</h3><p class="f-body">南岸+北岸双艺术中心</p><p class="f-caption">南岸：孤独图书馆·礼堂·音乐礼堂·UCCA沙丘·艺术中心·剧场群落·影院<br>北岸：艺术中心北岸馆（坂本一成+柳亦春）·缇干画廊</p></div>
+      <div class="card"><h3>运动</h3><p class="f-body">ASC阿那亚运动俱乐部</p><p class="f-caption">滑板公园1.2万m²·足球场·夜光球场·网球场·滨河泳池·卡丁车·马会·航海中心·桨板·尾波·索道滑水·游艇</p></div>
     </div>
     <div class="grid-4 reveal">
-      <div class="card"><h3>运动休闲</h3><p class="f-body">高尔夫球场</p><p class="f-caption">水上运动中心·沙滩运动基地·马场·社区农场·健身房·瑜伽馆</p></div>
-      <div class="card"><h3>亲子教育</h3><p class="f-body">国际青少年营地</p><p class="f-caption">儿童托管中心·儿童农庄·启行营地·道禾教育</p></div>
-      <div class="card"><h3>生活服务</h3><p class="f-body">海边市集</p><p class="f-caption">精品超市·医疗诊所·红酒雪茄吧·生活美学馆</p></div>
-      <div class="card"><h3>交通</h3><p class="f-body">北京—北戴河</p><p class="f-caption">高铁约2h（北戴河站）+社区接驳车·京秦高速自驾约3h</p></div>
+      <div class="card"><h3>潮流零售</h3><p class="f-body">雀跃镇非标商业集群</p><p class="f-caption">VILLA B1OCK买手百货·HARMAY话梅·AVENUE&SON·SOULGOODS·UNDEFEATED·Randomevent·nicerice·Melting Sadness·壹集家居·fRUITYSHOP黑胶</p></div>
+      <div class="card"><h3>亲子教育</h3><p class="f-body">启行国际青少年营地</p><p class="f-caption">30亩教育部认证研学基地·儿童托管中心·儿童农庄·道禾教育·一善儿童书店·北岸卡丁车·北岸马会</p></div>
+      <div class="card"><h3>书店与生活方式</h3><p class="f-body">单向空间·naive理想国·卷宗书店</p><p class="f-caption">DDC Livehouse·RE而意骑行·SUPAW HUB人宠社区·荒野植物园·TWOFACE双面理发馆·庞巴迪探索家营地</p></div>
+      <div class="card"><h3>交通</h3><p class="f-body">北京—北戴河 高铁约2h</p><p class="f-caption">北戴河站+社区接驳车·京秦高速自驾约3h·北京798接待中心·社区内电瓶车穿梭</p></div>
     </div>
   </div>
 </section>
 
-<!-- ====== 10. LATEST NEWS ====== -->
-<section class="section" id="news">
+<!-- ====== 11. LATEST NEWS & OUTLOOK ====== -->
+<section class="section section-alt" id="news">
   <div class="container">
     <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
     <div class="grid-2 reveal">
-      <div class="card"><h3>全国化扩张</h3><p class="f-body">阿那亚品牌已走出北戴河，启动三个新项目：<strong>阿那亚·金山岭</strong>（北京密云古北水镇附近，山谷社区）、<strong>阿那亚·三亚</strong>（热带度假）、<strong>阿那亚·广州</strong>（九龙湖），品牌从"海边"走向"山间"和"湖畔"。</p></div>
-      <div class="card"><h3>2025戏剧节再创新高</h3><p class="f-body">2025年阿那亚戏剧节11天吸引21.8万人次，营收1.57亿元。剧目涵盖国内外顶级剧团，户外环境戏剧成为最大亮点。</p></div>
-      <div class="card"><h3>从地产商到运营商的范式转型</h3><p class="f-body">2024年运营收入首次超过地产销售，被行业视为中国文旅地产的里程碑事件。马寅提出"阿那亚不是房地产公司，是生活方式品牌"，未来将输出运营管理能力。</p></div>
-      <div class="card"><h3>《时代》周刊全球认可</h3><p class="f-body">2024年入选《时代》周刊"全球100个最佳旅行目的地"，评语称赞阿那亚为"中国最令人惊喜的海岸线上的文化飞地"，国际知名度大增。</p></div>
+      <div class="card"><h3>全国化扩张：从"海边"到"山河湖海"</h3><p class="f-body">阿那亚品牌已走出北戴河：<strong>阿那亚·金山岭</strong>（北京密云山谷社区）、<strong>阿那亚·三亚</strong>（热带度假）、<strong>阿那亚·九龙湖</strong>（广州）、<strong>阿那亚·雾灵山</strong>（河北兴隆）、<strong>阿那亚·北岸</strong>（北戴河雀跃镇）。从单一海边IP向多元地貌的生活方式品牌矩阵进化。</p></div>
+      <div class="card"><h3>2025雀跃镇：青年文化新引擎</h3><p class="f-body">2025年是雀跃镇元年。以ASC（Aranya Sports Club）为组织核心，将运动设施、品牌、社群、赛事聚合。AVENUE & SON滑板公园吸引全国滑手，雀跃镇大师赛（9月）将成为国际级潮流运动赛事。主理人商业而非传统招商——每个品牌是"有角色和性格的街坊邻居"。</p></div>
+      <div class="card"><h3>从地产商到运营商的范式转型</h3><p class="f-body">2024年运营收入首次超过地产销售，被行业视为中国文旅地产里程碑。马寅提出"阿那亚不是房地产公司，是生活方式品牌"。2025年雀跃镇开幕进一步验证运营输出能力，未来可能向第三方项目输出"阿那亚模式"。</p></div>
+      <div class="card"><h3>国际认可与全球视野</h3><p class="f-body">2024年入选《时代》周刊"全球100个最佳旅行目的地"。2025年西港国际游艇展（法国Grand Pavois）首次登陆亚洲选址阿那亚。香港国际诗歌之夜（北岛发起）落地。品牌国际能见度持续提升。</p></div>
     </div>
   </div>
 </section>
 
-<!-- ====== 11. RESOURCES ====== -->
+<!-- ====== 12. RESOURCES ====== -->
 <section class="section" id="resources">
   <div class="container">
     <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
     <div class="reveal">
       <div class="resource-group"><h4>维基百科</h4><ul>
-        <li><a href="https://zh.wikipedia.org/zh-cn/阿那亚" target="_blank" rel="noopener">阿那亚 — 维基百科</a></li>
+        <li><a href="https://zh.wikipedia.org/zh-cn/阿那亚" target="_blank" rel="noopener">阿那亚 — 维基百科（中文）</a></li>
         <li><a href="https://en.wikipedia.org/wiki/Aranya_(community)" target="_blank" rel="noopener">Aranya — Wikipedia (EN)</a></li>
       </ul></div>
-      <div class="resource-group"><h4>建筑设计与学术</h4><ul>
-        <li><a href="https://www.vectorarchitects.com/" target="_blank" rel="noopener">直向建筑（Vector Architects） — 董功官网</a><span class="tag">孤独图书馆·礼堂·音乐礼堂</span></li>
+      <div class="resource-group"><h4>建筑设计</h4><ul>
+        <li><a href="https://www.vectorarchitects.com/" target="_blank" rel="noopener">直向建筑（Vector Architects）— 董功</a><span class="tag">孤独图书馆·礼堂·音乐礼堂</span></li>
         <li><a href="https://www.openarch.com/" target="_blank" rel="noopener">OPEN建筑事务所 — 李虎/黄文菁</a><span class="tag">UCCA沙丘美术馆</span></li>
-        <li><a href="https://www.neriandhu.com/" target="_blank" rel="noopener">如恩设计研究室（Neri&Hu）</a><span class="tag">阿那亚艺术中心</span></li>
+        <li><a href="https://www.neriandhu.com/" target="_blank" rel="noopener">如恩设计（Neri&Hu）</a><span class="tag">阿那亚艺术中心南岸馆</span></li>
         <li><a href="https://www.i-mad.com/" target="_blank" rel="noopener">MAD建筑事务所 — 马岩松</a><span class="tag">云中心</span></li>
         <li><a href="https://arquitecturaviva.com/articles/bienvenido-a-aranya" target="_blank" rel="noopener">Arquitectura Viva — Welcome to Aranya (Oliver Wainwright)</a></li>
       </ul></div>
-      <div class="resource-group"><h4>深度报道与分析</h4><ul>
+      <div class="resource-group"><h4>深度报道</h4><ul>
         <li><a href="https://www.theguardian.com/artanddesign/article/2024/may/24/aranya-chinas-seaside-haven-lying-flat-generation" target="_blank" rel="noopener">The Guardian — China's seaside haven for the 'lying flat' generation (2024.05)</a></li>
         <li><a href="https://time.com/collection/worlds-greatest-places-2024/" target="_blank" rel="noopener">TIME — World's Greatest Places 2024: Aranya</a></li>
-        <li><a href="https://www.youtube.com/results?search_query=阿那亚+孤独图书馆" target="_blank" rel="noopener">YouTube — 阿那亚+孤独图书馆 视频</a></li>
-        <li><a href="https://search.bilibili.com/all?keyword=阿那亚" target="_blank" rel="noopener">B站 — 阿那亚相关视频</a></li>
+        <li><a href="https://www.aranyatheaterfestival.com/" target="_blank" rel="noopener">阿那亚戏剧节官网 — 历史剧目与活动档案</a></li>
       </ul></div>
-      <div class="resource-group"><h4>官方平台</h4><ul>
-        <li><a href="https://www.aranya.cc/" target="_blank" rel="noopener">阿那亚官方网站</a></li>
+      <div class="resource-group"><h4>视频与社交媒体</h4><ul>
+        <li><a href="https://www.youtube.com/results?search_query=阿那亚+雀跃镇" target="_blank" rel="noopener">YouTube — 阿那亚·雀跃镇</a></li>
+        <li><a href="https://search.bilibili.com/all?keyword=阿那亚" target="_blank" rel="noopener">B站 — 阿那亚相关视频</a></li>
         <li><a href="https://www.xiaohongshu.com/search_result?keyword=阿那亚" target="_blank" rel="noopener">小红书 — 阿那亚攻略与体验</a></li>
       </ul></div>
-      <div class="resource-group"><h4>自由版权图库</h4><ul>
+      <div class="resource-group"><h4>官方平台与图库</h4><ul>
+        <li><a href="https://www.aranya.cc/" target="_blank" rel="noopener">阿那亚官方网站 + APP</a></li>
         <li><a href="https://commons.wikimedia.org/w/index.php?search=阿那亚+Aranya" target="_blank" rel="noopener">Wikimedia Commons — Aranya / 阿那亚</a></li>
       </ul></div>
     </div>
   </div>
 </section>
 
-<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<!-- ====== FLOATING NAVIGATION ====== -->
 <div class="floating-nav">
   <a href="../../index.html" title="回首页" aria-label="回首页">&#127968;</a>
   <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
@@ -475,13 +516,15 @@ var zonesWgs = [
   { name: '孤独图书馆<br><small>董功/直向建筑 2015</small>', lat: 39.6485, lng: 119.3090, color: '#364A5A' },
   { name: '海边礼堂<br><small>董功/直向建筑 2015</small>', lat: 39.6479, lng: 119.3095, color: '#364A5A' },
   { name: '沙丘美术馆<br><small>OPEN/李虎 2018</small>', lat: 39.6515, lng: 119.3120, color: '#364A5A' },
-  { name: '阿那亚艺术中心<br><small>如恩设计 2019</small>', lat: 39.6465, lng: 119.3060, color: '#364A5A' },
+  { name: '艺术中心南岸<br><small>如恩设计 2019</small>', lat: 39.6465, lng: 119.3060, color: '#364A5A' },
   { name: '阿那亚剧场<br><small>TAO/华黎 2020</small>', lat: 39.6470, lng: 119.3065, color: '#364A5A' },
-  { name: '音乐礼堂<br><small>董功/直向建筑 2022</small>', lat: 39.6482, lng: 119.3100, color: '#364A5A' },
   { name: 'Club Med酒店<br><small>308间全海景房</small>', lat: 39.6490, lng: 119.3070, color: '#C8A27A' },
   { name: '犬舍酒店<br><small>高目建筑 宠物友好</small>', lat: 39.6500, lng: 119.3110, color: '#C8A27A' },
-  { name: '海边市集<br><small>商业配套核心</small>', lat: 39.6460, lng: 119.3050, color: '#9BAEBE' },
-  { name: '单向空间<br><small>书店+文创</small>', lat: 39.6462, lng: 119.3055, color: '#9BAEBE' }
+  { name: '海边市集<br><small>南岸商业核心</small>', lat: 39.6460, lng: 119.3050, color: '#9BAEBE' },
+  { name: '单向空间<br><small>书店+文创</small>', lat: 39.6462, lng: 119.3055, color: '#9BAEBE' },
+  { name: '雀跃镇<br><small>北岸运动×青年文化</small>', lat: 39.6540, lng: 119.3180, color: '#8BAF7E' },
+  { name: '友谊湾<br><small>北岸知识型社区</small>', lat: 39.6550, lng: 119.3150, color: '#8BAF7E' },
+  { name: '艺术中心北岸馆<br><small>坂本一成+柳亦春 2025</small>', lat: 39.6535, lng: 119.3175, color: '#364A5A' }
 ];
 
 function addZoneMarkers(targetMap, zones) {
@@ -500,7 +543,7 @@ function addZoneMarkers(targetMap, zones) {
 function initMap(mapId, defaultLayer, withBoundary) {
   var el = document.getElementById(mapId);
   if (!el) return null;
-  var map = L.map(mapId, { scrollWheelZoom: false }).setView([39.6492, 119.3150], 15);
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([39.6505, 119.3150], 14);
 
   var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
     subdomains: ['1','2','3','4'],
@@ -525,7 +568,7 @@ function initMap(mapId, defaultLayer, withBoundary) {
 
   if (withBoundary) {
     var parkCenter = wgs84ToGcj02(119.3088, 39.6479);
-    L.circle([parkCenter.lat, parkCenter.lng], { radius: 2500, color: '#C8A27A', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+    L.circle([parkCenter.lat, parkCenter.lng], { radius: 2800, color: '#C8A27A', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
   }
 
   setTimeout(function() { map.invalidateSize(); }, 800);
@@ -537,7 +580,6 @@ document.addEventListener('DOMContentLoaded', function() {
   initMap('satmap', 'sat', false);
 });
 
-// ── Scroll reveal ──
 (function() {
   var revealElements = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window)) {
@@ -555,7 +597,6 @@ document.addEventListener('DOMContentLoaded', function() {
   revealElements.forEach(function(el) { observer.observe(el); });
 })();
 
-// ── Back to top ──
 document.getElementById('back-to-top').addEventListener('click', function(e) {
   e.preventDefault();
   window.scrollTo({ top: 0, behavior: 'smooth' });

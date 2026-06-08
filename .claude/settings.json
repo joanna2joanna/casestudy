@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch",
+      "Write(/Users/joanna/Projects/casestudy/**)",
+      "Edit(/Users/joanna/Projects/casestudy/**)",
+      "Read(/Users/joanna/Projects/casestudy/**)",
+      "Bash(git *)",
+      "Bash(mkdir *)",
+      "Bash(curl *)",
+      "Bash(grep *)",
+      "Bash(python3 *)",
+      "Bash(open /Users/joanna/Projects/casestudy/**)",
+      "Bash(screencapture *)",
+      "Bash(sips *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(find *)",
+      "Bash(wc *)",
+      "Bash(diff *)",
+      "Bash(echo *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(sort *)",
+      "Bash(uniq *)",
+      "Bash(xxd *)",
+      "Bash(osascript *)",
+      "Bash(node *)"
+    ]
+  }
+}

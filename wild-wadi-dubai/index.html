@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>迪拜疯狂维迪水上乐园 — 帆船酒店旁的阿拉伯航海主题水上乐园</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+:root {
+  --blue-600: #0077B6;
+  --blue-400: #00B4D8;
+  --blue-900: #023E8A;
+  --gold: #C8A45C;
+  --white: #FFFFFF;
+
+  --clr-primary: var(--blue-600);
+  --clr-primary-light: var(--blue-400);
+  --clr-primary-dark: var(--blue-900);
+  --clr-accent: var(--gold);
+  --clr-bg: #F2F8FB;
+  --clr-bg-alt: #E0F0F7;
+  --clr-text: #1A1A1A;
+  --clr-text-secondary: #3A5A6A;
+  --clr-text-muted: #5A7A8A;
+  --clr-border: #C8DEE8;
+  --clr-card-bg: var(--white);
+}
+
+.hero {
+  background: linear-gradient(160deg, #023E8A 0%, #0077B6 40%, #00B4D8 70%, #48CAE4 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(200,164,92,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>迪拜疯狂维迪水上乐园</h1>
+    <p class="hero-subtitle">帆船酒店旁的阿拉伯航海传奇 · 中东最早大型主题水上乐园 · 8条水力推进上坡过山车</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">~4 公顷</div><div class="kpi-label">水上乐园面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">30+</div><div class="kpi-label">游乐设施与滑道</div></div>
+      <div class="kpi-card"><div class="kpi-number">675 万升</div><div class="kpi-label">淡水循环系统</div></div>
+      <div class="kpi-card"><div class="kpi-number">AED 270</div><div class="kpi-label">成人门票起（非居民）</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目名称</h3><p>Wild Wadi Waterpark<br>疯狂维迪水上乐园 / 疯狂河道水上乐园<br><span class="f-caption">阿拉伯语： حديقة وايلد وادي المائية</span></p></div>
+      <div class="card"><h3>地理位置</h3><p>阿联酋迪拜朱美拉海滩路<br>紧邻 Burj Al Arab（帆船酒店）<br>坐标：25°08′22″N, 55°11′21″E</p></div>
+      <div class="card"><h3>开业时间</h3><p>1998 年 2 月 12 日<br>中东最早的大型主题水上乐园之一<br>当前状态：无限期关闭（搬迁至 Marsa Al Arab 新址）</p></div>
+      <div class="card"><h3>投资规模</h3><p>单独投资额未公开披露<br>Marsa Al Arab 搬迁扩建总投资 AED 63 亿<br>（约合 USD 17 亿，1 USD = 3.6725 AED，固定汇率）</p></div>
+      <div class="card"><h3>乐园类型</h3><p>阿拉伯航海主题户外水上乐园<br>全球首批大规模应用水力推进上坡技术<br>以 Juha（朱哈）民间传说为叙事主线</p></div>
+      <div class="card"><h3>业主 / 运营商</h3><p>Jumeirah Group<br>（隶属于 Dubai Holding）</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>疯狂维迪水上乐园（Wild Wadi Waterpark）位于阿联酋迪拜朱美拉海滩区，紧邻全球知名的七星帆船酒店 Burj Al Arab，以阿拉伯民间传说人物 Juha（朱哈）的航海冒险为主题，于 1998 年 2 月开业，是中东地区最早的大型主题水上乐园。乐园占地约 4 公顷，拥有 30 余项游乐设施，包括 17 条水滑道、8 条 Master Blaster 水力上坡过山车、中东最大造浪池（浪高 1.5 m）以及全长 360 m 的中东最长懒人河。园区采用全淡水循环系统（总水量 675 万升），由 Atkins 设计团队从阿联酋哈贾尔山脉采集岩层样本、打造超过 11,000 m² 人工岩石地貌。标志性滑道 Jumeirah Sceirah 高 32 m、最高时速 80 km/h。截至 2026 年，乐园处于无限期关闭状态，旗舰设施 Jumeirah Sceirah 正在拆除，整体将搬迁至 Marsa Al Arab 人工岛上、面积翻倍的新址，标志着运营近 28 年的经典乐园进入历史性转型期。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>公司 / 机构</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>主题与建筑设计</td><td>Atkins（现 SNC-Lavalin 旗下）</td><td>1997–1999 年整体设计，获 1999 年 WWA 设计与主题奖</td></tr>
+          <tr><td>整体开发商</td><td>Jumeirah Group / Dubai Holding</td><td>作为 Jumeirah Beach Resort 三阶段开发的组成部分</td></tr>
+          <tr><td>冲浪模拟器设计</td><td>Thomas Lochtefeld</td><td>Wipeout / Riptide FlowRider，每秒 7 吨水流</td></tr>
+          <tr><td>水力上坡技术</td><td>Master Blaster（NBGS International）</td><td>8 条高压水射流上坡过山车，可将橡皮圈推至 15 m 高</td></tr>
+          <tr><td>人工岩石地貌</td><td>Atkins 设计团队</td><td>从哈贾尔山脉采集岩层样本，打造 >11,000 m² 人造岩石</td></tr>
+          <tr><td>景观与材料</td><td>—</td><td>800 m³ 非洲柚木、逾 40,000 株植物、大量绳索网与木结构</td></tr>
+          <tr><td>年度维护与运营</td><td>Jumeirah Group</td><td>每年 1–2 月例行闭园 5–6 周维护</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>总占地面积</td><td class="num">~4 公顷</td><td>水上乐园约 3.1 ha + 小屋区约 0.9 ha</td></tr>
+          <tr><td>规模</td><td>游乐设施总数</td><td class="num">30+ 项</td><td>含 17 条水滑道、3 泳池</td></tr>
+          <tr><td>规模</td><td>日最大容量</td><td class="num">2,500 人</td><td>精品化定位，不同于大型水上乐园</td></tr>
+          <tr><td>规模</td><td>淡水循环总量</td><td class="num">675 万升</td><td>全淡水系统，不靠海水</td></tr>
+          <tr><td>规模</td><td>人工岩石面积</td><td class="num">>11,000 m²</td><td>模拟哈贾尔山脉地貌</td></tr>
+          <tr><td>滑道</td><td>Jumeirah Sceirah 高度</td><td class="num">32 m</td><td>自由落体，最高时速 80 km/h</td></tr>
+          <tr><td>滑道</td><td>Master Blaster 上坡过山车</td><td class="num">8 条</td><td>水力推进，最高可推至 15 m</td></tr>
+          <tr><td>造浪池</td><td>Breakers Bay 浪高</td><td class="num">1.5 m</td><td>中东最大造浪池，5 种浪型</td></tr>
+          <tr><td>懒人河</td><td>Juha's Journey 长度</td><td class="num">360 m</td><td>中东最长的懒人河</td></tr>
+          <tr><td>瀑布</td><td>Wadi Wash 高度</td><td class="num">18 m</td><td>每 10 分钟倾泻一次</td></tr>
+          <tr><td>冲浪</td><td>FlowRider 流量</td><td class="num">7 吨/秒</td><td>Wipeout + Riptide 两台</td></tr>
+          <tr><td>投资</td><td>Marsa Al Arab 整体投资</td><td class="num">AED 63 亿</td><td>约 USD 17 亿（迁扩建含海洋公园等）</td></tr>
+          <tr><td>认证</td><td>世界水上乐园协会</td><td>1 项</td><td>1999 年 WWA 设计与主题奖</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源：Jumeirah Group 官方、Atkins 项目档案、维基百科，门票价格截至 2025 年。Wild Wadi 单独建造投资额未在公开资料中披露。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map -->
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="map-legend">
+          <span><span class="dot" style="background:#0077B6;"></span> Wild Wadi 水上乐园</span>
+          <span><span class="dot" style="background:#C8A45C;"></span> Burj Al Arab 帆船酒店</span>
+          <span><span class="dot" style="background:#E8485A;"></span> Jumeirah Beach Hotel</span>
+        </div>
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0077B6"/></marker>
+            <linearGradient id="water" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0077B6"/><stop offset="100%" stop-color="#00B4D8"/></linearGradient>
+          </defs>
+          <rect width="800" height="480" fill="#0A1628" rx="12"/>
+          <text x="400" y="30" fill="#C8A45C" font-family="Playfair Display,serif" font-size="16" text-anchor="middle" font-weight="600">疯狂维迪水上乐园 · 主题分区与主要设施分布</text>
+          <line x1="60" y1="78" x2="740" y2="78" stroke="#C8A45C" stroke-width="0.5" opacity="0.3"/>
+
+          <!-- Lazy River loop -->
+          <ellipse cx="350" cy="220" rx="200" ry="120" fill="none" stroke="rgba(0,180,216,0.4)" stroke-width="1.5" stroke-dasharray="8,4"/>
+          <text x="570" y="200" fill="rgba(0,180,216,0.5)" font-size="9" font-family="DM Sans,sans-serif">Juha's Journey 懒人河 · 360m</text>
+
+          <!-- Breakers Bay wave pool -->
+          <ellipse cx="250" cy="140" rx="70" ry="30" fill="#0077B6" opacity="0.35" stroke="#00B4D8" stroke-width="0.8"/>
+          <text x="250" y="143" fill="#fff" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">Breakers Bay 造浪池</text>
+
+          <!-- Jumeirah Sceirah -->
+          <rect x="420" y="100" width="130" height="22" fill="#E8485A" opacity="0.5" rx="3"/>
+          <text x="485" y="115" fill="#fff" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif" font-weight="600">Jumeirah Sceirah 32m</text>
+
+          <!-- Master Blaster area -->
+          <rect x="400" y="150" width="180" height="55" fill="#0077B6" opacity="0.3" rx="4" stroke="#00B4D8" stroke-width="0.6"/>
+          <text x="490" y="168" fill="rgba(255,255,255,0.7)" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">Master Blaster 上坡过山车 ×8</text>
+          <text x="490" y="185" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">水力推进 · 最高推至 15m</text>
+
+          <!-- Tantrum Alley -->
+          <rect x="400" y="225" width="100" height="20" fill="#C8A45C" opacity="0.3" rx="3"/>
+          <text x="450" y="239" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Tantrum Alley 漏斗 ×3</text>
+
+          <!-- Burj Surj -->
+          <rect x="520" y="225" width="80" height="20" fill="#C8A45C" opacity="0.3" rx="3"/>
+          <text x="560" y="239" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Burj Surj 双碗</text>
+
+          <!-- FlowRider -->
+          <rect x="140" y="260" width="90" height="20" fill="rgba(0,180,216,0.3)" rx="3" stroke="#00B4D8" stroke-width="0.5"/>
+          <text x="185" y="274" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">FlowRider ×2</text>
+
+          <!-- Kids area -->
+          <rect x="200" y="280" width="120" height="30" fill="rgba(200,164,92,0.2)" rx="4" stroke="rgba(200,164,92,0.3)"/>
+          <text x="260" y="299" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif">Juha's Dhow 儿童区 100+</text>
+
+          <!-- Wadi Wash -->
+          <rect x="540" y="270" width="80" height="20" fill="rgba(255,255,255,0.1)" rx="3"/>
+          <text x="580" y="284" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">Wadi Wash 18m瀑布</text>
+
+          <!-- Adjacent landmarks -->
+          <rect x="640" y="140" width="90" height="40" fill="rgba(200,164,92,0.12)" rx="4" stroke="rgba(200,164,92,0.25)"/>
+          <text x="685" y="158" fill="#C8A45C" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif" font-weight="600">Burj Al Arab</text>
+          <text x="685" y="172" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">帆船酒店</text>
+
+          <rect x="640" y="195" width="90" height="30" fill="rgba(255,255,255,0.06)" rx="3"/>
+          <text x="685" y="214" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Jumeirah Beach Hotel</text>
+
+          <!-- North arrow -->
+          <line x1="720" y1="380" x2="720" y2="413" stroke="#C8A45C" stroke-width="1.5"/>
+          <polygon points="720,377 715,387 725,387" fill="#C8A45C"/>
+          <text x="720" y="428" fill="#C8A45C" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif">N</text>
+
+          <!-- Legend -->
+          <rect x="140" y="420" width="460" height="35" fill="none" stroke="rgba(255,255,255,0.08)" rx="4"/>
+          <rect x="150" y="432" width="10" height="10" fill="#0077B6" opacity="0.35" rx="1"/>
+          <text x="168" y="442" fill="rgba(255,255,255,0.45)" font-size="9" font-family="DM Sans,sans-serif">造浪池/泳池</text>
+          <rect x="250" y="432" width="10" height="10" fill="#E8485A" opacity="0.5" rx="1"/>
+          <text x="268" y="442" fill="rgba(255,255,255,0.45)" font-size="9" font-family="DM Sans,sans-serif">标志性滑道</text>
+          <rect x="350" y="432" width="10" height="10" fill="#0077B6" opacity="0.3" rx="1"/>
+          <text x="368" y="442" fill="rgba(255,255,255,0.45)" font-size="9" font-family="DM Sans,sans-serif">滑道区</text>
+          <rect x="430" y="432" width="10" height="10" fill="rgba(200,164,92,0.2)" rx="1"/>
+          <text x="448" y="442" fill="rgba(255,255,255,0.45)" font-size="9" font-family="DM Sans,sans-serif">儿童区</text>
+          <text x="530" y="442" fill="rgba(255,255,255,0.2)" font-size="9" font-family="DM Sans,sans-serif">—— 总面积 ~4 公顷 · 全日淡水系统 ——</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>惊险滑道区</h3><p>标志性设施 <strong>Jumeirah Sceirah</strong>（32 m 自由落体，最高时速 80 km/h，活动陷阱门启动）、<strong>Tantrum Alley</strong>（3 个相连龙卷风漏斗，4 人筏）及全球唯一双碗设计滑道 <strong>Burj Surj</strong>。另有 8 条 Master Blaster 水力上坡过山车，高压水射流将橡皮圈推上最高 15 m。</p></div>
+      <div class="card"><h3>造浪池与漂流</h3><p><strong>Breakers Bay</strong>：中东最大造浪池，浪高 1.5 m、5 种浪型，使用海水。<strong>Juha's Journey</strong>：全长 360 m 中东最长懒人河，环绕全园。<strong>Flood River</strong>：长 150 m，脉冲式峡谷急流，含突然爆发的涌浪和驻波。<strong>Wadi Wash</strong>：高 18 m 舞台式瀑布，每 10 分钟倾泻一次。</p></div>
+      <div class="card"><h3>家庭与冲浪</h3><p><strong>Juha's Dhow and Lagoon</strong>：100 余项儿童水上游戏、迷你滑道、水炮、巨型倾覆水桶。<strong>Wipeout / Riptide FlowRiders</strong>：两台冲浪模拟器，每秒 7 吨水流，可进行趴板和立式冲浪，由 Thomas Lochtefeld 设计。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT & CONSTRUCTION TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1997–1998</div><div class="timeline-content"><h4>设计与建设</h4><p>Atkins 设计团队从阿联酋哈贾尔山脉采集岩层样本，打造超过 11,000 m² 的人工岩石地貌。作为 Jumeirah Beach Resort（含帆船酒店）第三阶段开发项目，乐园于 1998 年初竣工。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1998 年 2 月 12 日</div><div class="timeline-content"><h4>正式开业</h4><p>中东最早的大型主题水上乐园之一正式对外开放，以阿拉伯民间传说人物 Juha（朱哈）航海冒险为主题。1999 年获世界水上乐园协会（WWA）设计与主题奖。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1998–2010</div><div class="timeline-content"><h4>品牌建立期</h4><p>凭借紧邻帆船酒店的独特背景和 8 条 Master Blaster 水力上坡过山车技术，迅速成为迪拜旅游标志性景点。出现在《极速前进》多季节目中，建立全球知名度。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2017 年 5–6 月</div><div class="timeline-content"><h4>Marsa Al Arab 宣布与动工</h4><p>迪拜统治者宣布 AED 63 亿（约 USD 17 亿）Marsa Al Arab 超级项目，Wild Wadi 将搬迁至帆船酒店两侧人工岛上的家庭娱乐岛，面积翻倍至约 23.2 公顷（含海洋公园）。6 月正式动工。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2018</div><div class="timeline-content"><h4>Sceirah 升级</h4><p>Jumeirah Sceirah 标志性滑道从单人升级为双人串联滑道，运力翻倍，以应对日益增长的客流需求。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019–2024</div><div class="timeline-content"><h4>疫情与运营调整</h4><p>COVID-19 期间暂时关闭；恢复后维持每年 1–2 月例行维护闭园（5–6 周）。Marsa Al Arab 建设持续推进，别墅住宅部分已投放租赁市场。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026</div><div class="timeline-content"><h4>无限期关闭与搬迁</h4><p>2026 年初常规维护闭园后未按计划重开（原定 2 月 14 日），Jumeirah 官方声明"无限期关闭直至另行通知"。标志性设施 Jumeirah Sceirah 正在拆除，为搬迁至 Marsa Al Arab 新址做准备。运营近 28 年的经典乐园进入历史性转型期。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONAL INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+
+    <div class="grid-2 reveal">
+      <div class="card"><h3>门票价格（2025 年）</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>票种</th><th>价格（AED）</th><th>约合 RMB</th></tr></thead>
+          <tbody>
+            <tr><td>成人（非居民，>1.1 m）</td><td class="num">270–295</td><td class="num">530–580 元</td></tr>
+            <tr><td>儿童（非居民，<1.1 m）</td><td class="num">235–245</td><td class="num">460–480 元</td></tr>
+            <tr><td>成人（阿联酋居民）</td><td class="num">195–215</td><td class="num">380–420 元</td></tr>
+            <tr><td>儿童（阿联酋居民）</td><td class="num">175</td><td class="num">345 元</td></tr>
+            <tr><td>2 岁以下</td><td class="num" colspan="2">免费</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">附加费用：毛巾租赁 AED 40，储物柜 AED 45–85。汇率：1 AED ≈ 1.965 CNY（2026-06-09）。</p>
+      </div>
+      <div class="card"><h3>运营信息</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <tbody>
+            <tr><td>常规营业时间</td><td class="num">10:00–18:00</td></tr>
+            <tr><td>常规闭园日</td><td class="num">周二（非高峰期）</td></tr>
+            <tr><td>年度维护闭园</td><td class="num">1–2 月（5–6 周）</td></tr>
+            <tr><td>日最大容量</td><td class="num">2,500 人</td></tr>
+            <tr><td>年客流（2019 估）</td><td class="num">~70–90 万</td></tr>
+            <tr><td>当前状态（2026）</td><td class="num" style="color:#C41E3A;">无限期关闭</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>对比：Wild Wadi vs 迪拜 Atlantis Aquaventure</h3>
+      <table class="data-table">
+        <thead><tr><th>对比维度</th><th>Wild Wadi</th><th>Atlantis Aquaventure</th></tr></thead>
+        <tbody>
+          <tr><td>开业年份</td><td class="num">1998</td><td class="num">2008</td></tr>
+          <tr><td>面积</td><td class="num">~4 公顷</td><td class="num">~22.5 公顷</td></tr>
+          <tr><td>游乐设施</td><td class="num">30+ 项</td><td class="num">105+ 项</td></tr>
+          <tr><td>门票（成人）</td><td class="num">AED 270–295</td><td class="num">AED 345–389</td></tr>
+          <tr><td>年客流</td><td class="num">~70–90 万（估）</td><td class="num">TEA 全球前 20</td></tr>
+          <tr><td>定位差异</td><td>精品化阿拉伯主题</td><td>超大规模·海豚湾独有</td></tr>
+          <tr><td>当前状态</td><td style="color:#C41E3A;">无限期关闭·搬迁中</td><td style="color:#0077B6;">正常运营·持续扩建</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>Master Blaster 水力上坡</h3><p>全球首批大规模应用高压水射流推进技术的水上乐园，8 条上坡过山车。高压水柱可将双人/单人橡皮圈沿轨道推上最高 15 m，无需重力落差即可实现连续上坡冲刺体验。</p></div>
+      <div class="card"><h3>Jumeirah Sceirah</h3><p>高 32 m · 长 120 m · 最高时速 80 km/h，以活动陷阱门（trap door）方式启动，曾为北美以外最高最快的自由落体水上滑道。2018 年从单人升级为双人串联，运力翻倍。2026 年正在拆除。</p></div>
+      <div class="card"><h3>全淡水循环系统</h3><p>总水量 675 万升，不依赖海水。水温根据气候条件进行季节性调节（冬季加热、夏季冷却）。配合迪拜沙漠气候的高蒸发率，配备了先进的水处理与循环过滤系统。</p></div>
+      <div class="card"><h3>人工岩石地貌</h3><p>设计团队从阿联酋哈贾尔山脉采集真实岩层样本，制作超过 11,000 m² 人造岩石。800 m³ 非洲柚木、逾 40,000 株热带植物，营造出仿佛天然河谷绿洲的沉浸式环境。</p></div>
+      <div class="card"><h3>双 FlowRider 冲浪</h3><p>Wipeout + Riptide 两台 FlowRider 冲浪模拟器，每秒 7 吨高压水流形成驻波。支持趴板冲浪（Boogie Board）与立式冲浪（Flowboard），由冲浪技术先驱 Thomas Lochtefeld 设计。</p></div>
+      <div class="card"><h3>Marsa Al Arab 新园规划</h3><p>新址面积翻倍至约 23.2 公顷（含海洋公园），位于帆船酒店两侧人工岛。配套 1,700 座 Cirque du Soleil 剧院、1,000 座海洋生物剧场、140 栋豪华别墅。总投资 AED 63 亿。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>餐饮体系</h3><p>园区内多家主题餐厅与小吃亭，提供中东及国际美食。支持成人+餐饮套餐（AED 370），可在 Juha's Family Kitchen 等餐厅兑换。另有池畔酒吧提供饮品服务。</p></div>
+      <div class="card"><h3>零售与储物</h3><p>入园纪念品商店出售 Wild Wadi 品牌泳装、毛巾、玩具等周边。小/中/大储物柜租金分别为 AED 45 / 65 / 85，毛巾租赁 AED 40。450 车位隐蔽式停车场。</p></div>
+      <div class="card"><h3>VIP 与私享</h3><p>提供 VIP 小屋（Cabanas）租赁服务，含私人休息区、专属服务员、冰箱饮品等。部分高端套餐含帆船酒店住客专属通道与折扣。小屋区独立于主乐园，占地约 0.9 公顷。</p></div>
+      <div class="card"><h3>帆船酒店联动</h3><p>Jumeirah Beach Hotel 与 Burj Al Arab 住客可享免费或折扣入园、专用接驳车往返。三者为 Jumeirah Beach Resort 统一规划的三个阶段，形成"酒店+水上乐园"综合体。</p></div>
+      <div class="card"><h3>季节性活动</h3><p>定期举办 Ladies Nights（女士之夜）、私人包场活动、生日派对及企业团队建设包场。夜间活动时段提供灯光照明下的独特水上乐园体验。</p></div>
+      <div class="card"><h3>安全与水温控制</h3><p>全园配备国际水上乐园安全标准救生员体系。淡水温度根据季节调节，冬季加温至舒适温度、夏季冷却，确保全年运营的舒适性（虽然每年 1–2 月例行闭园维护）。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>无限期关闭（2026）</h3><p>2026 年 1 月 5 日起例行维护闭园，原定 2 月 14 日重开，但 Jumeirah Group 官方声明"作为持续提升宾客体验承诺的一部分，Wild Wadi 目前关闭直至另行通知"。标志着运营 28 年的乐园进入全面转型期。</p></div>
+      <div class="card"><h3>Jumeirah Sceirah 拆除</h3><p>据 Hotelier Middle East 报道，乐园标志性 32 m 自由落体滑道正在被拆除，为"新的和令人兴奋的开发项目"腾出空间。这可能是原址改造或新园设备迁移的前奏。</p></div>
+      <div class="card"><h3>Marsa Al Arab 搬迁扩建</h3><p>AED 63 亿（USD 17 亿）超级项目持续推进。Wild Wadi 将迁至 Burj Al Arab 两侧人工岛、面积翻倍至约 23.2 公顷，配套海洋公园、剧院、别墅与零售。住宅别墅已投放市场（6 卧年租金 AED 2,000–4,000 万）。</p></div>
+      <div class="card"><h3>原址改建商业</h3><p>Wild Wadi 现址约 4 公顷土地将改建为 20,000 m² 零售商业空间，纳入 Marsa Al Arab 整体规划，延续朱美拉海滩区的高端商业与休闲定位。</p></div>
+      <div class="card"><h3>28 年文化遗产</h3><p>作为中东最早的大型主题水上乐园，Wild Wadi 定义了迪拜水上娱乐的标准。其 Juha 阿拉伯民俗主题、帆船酒店背景和 Master Blaster 技术影响了此后二十余年该地区水上乐园的发展方向。搬迁至新址后，品牌遗产将继续以更大规模存在。</p></div>
+      <div class="card"><h3>新园开业时间待定</h3><p>Marsa Al Arab 娱乐岛部分仍在分阶段建设中，新 Wild Wadi（含海洋公园）的具体开业时间尚未由 Jumeirah Group 正式公布。原定 2020 年底完工的时间表已多次推迟。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+
+    <div class="resource-group reveal">
+      <h4>官方来源</h4>
+      <ul>
+        <li><a href="https://www.jumeirah.com/en/stay/dubai/jumeirah-beach-hotel/experiences/wild-wadi-waterpark" target="_blank" rel="noopener">Jumeirah Group — Wild Wadi 官方页面</a> <span class="tag">官网</span></li>
+        <li><a href="https://www.wildwadi.com/en/before-you-visit" target="_blank" rel="noopener">Wild Wadi — 游园须知</a> <span class="tag">官网</span></li>
+        <li><a href="https://www.jumeirah.com/zh/article/experiences/dubai/wild-wadi-waterpark" target="_blank" rel="noopener">Jumeirah 中文官网 — 疯狂维迪水上乐园</a> <span class="tag">官网</span></li>
+      </ul>
+    </div>
+
+    <div class="resource-group reveal">
+      <h4>专业设计档案</h4>
+      <ul>
+        <li><a href="https://www.e-architect.com/dubai/wild-wadi-water-park" target="_blank" rel="noopener">e-architect — Wild Wadi 设计档案（Atkins 项目）</a> <span class="tag">建筑</span></li>
+      </ul>
+    </div>
+
+    <div class="resource-group reveal">
+      <h4>深度行业报道</h4>
+      <ul>
+        <li><a href="https://blooloop.com/theme-park/news/wild-wadi-marsa-al-arab/" target="_blank" rel="noopener">Blooloop — Wild Wadi 搬迁至 Marsa Al Arab 报道</a> <span class="tag">行业</span></li>
+        <li><a href="https://www.hoteliermiddleeast.com/tags/wild-wadi" target="_blank" rel="noopener">Hotelier Middle East — Wild Wadi 标签页</a> <span class="tag">酒店</span></li>
+        <li><a href="https://www.ttnworldwide.com/Article/13262/Popular-Wild-Wadi-ride-is-enhanced" target="_blank" rel="noopener">TTN — Jumeirah Sceirah 升级报道（2018）</a> <span class="tag">行业</span></li>
+      </ul>
+    </div>
+
+    <div class="resource-group reveal">
+      <h4>财经与项目报道</h4>
+      <ul>
+        <li><a href="https://gulfbusiness.com/en/2017/tourism/dubais-ruler-launches-new-tourism-project-featuring-two-islands-next-to-burj-al-arab/" target="_blank" rel="noopener">Gulf Business — Marsa Al Arab AED 63 亿项目宣布</a> <span class="tag">财经</span></li>
+        <li><a href="https://meconstructionnews.com/22837/dubai-holding-unveils-1-7bn-marsa-al-arab-megaproject" target="_blank" rel="noopener">ME Construction News — Marsa Al Arab 开工</a> <span class="tag">建设</span></li>
+      </ul>
+    </div>
+
+    <div class="resource-group reveal">
+      <h4>百科与旅游平台</h4>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Wild_Wadi" target="_blank" rel="noopener">Wikipedia — Wild Wadi Water Park</a> <span class="tag">百科</span></li>
+        <li><a href="https://baike.baidu.com/item/%E7%96%AF%E7%8B%82%E6%B2%B3%E9%81%93%E6%B0%B4%E4%B8%8A%E4%B9%90%E5%9B%AD/6072630" target="_blank" rel="noopener">百度百科 — 疯狂河道水上乐园</a> <span class="tag">百科</span></li>
+        <li><a href="https://www.cobone.com/en/deals/yas-island-for-abudhabi/3-general-admission-ticket-wild-wadi/212556" target="_blank" rel="noopener">Cobone — Wild Wadi 门票优惠</a> <span class="tag">旅游</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (Overseas: ESRI ArcGIS + WGS-84) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+  var tilesLoaded = false;
+
+  var map = L.map('parkmap', {
+    center: [25.13944, 55.18917],
+    zoom: 16,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+
+  tileLayer.on('load', function() {
+    tilesLoaded = true;
+    clearTimeout(tileTimer);
+    fallback.style.display = 'none';
+  });
+
+  tileLayer.addTo(map);
+
+  var tileTimer = setTimeout(function() {
+    if (!tilesLoaded) fallback.style.display = 'block';
+  }, 8000);
+
+  // Markers
+  var blueIcon = L.divIcon({className: 'custom-marker', html: '<div style="background:#0077B6;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>', iconSize: [14,14], iconAnchor: [7,7]});
+  var goldIcon = L.divIcon({className: 'custom-marker', html: '<div style="background:#C8A45C;width:10px;height:10px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,0.3);"></div>', iconSize: [10,10], iconAnchor: [5,5]});
+
+  L.marker([25.13944, 55.18917], {icon: blueIcon}).addTo(map)
+    .bindPopup('<b>Wild Wadi Waterpark</b><br>疯狂维迪水上乐园');
+
+  L.marker([25.1412, 55.1853], {icon: goldIcon}).addTo(map)
+    .bindPopup('<b>Burj Al Arab</b><br>帆船酒店');
+  L.marker([25.1428, 55.1908], {icon: goldIcon}).addTo(map)
+    .bindPopup('Jumeirah Beach Hotel');
+
+  // Fit bounds
+  var bounds = L.latLngBounds([
+    [25.1350, 55.1810],
+    [25.1470, 55.1960]
+  ]);
+  map.fitBounds(bounds, {padding: [20, 20]});
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

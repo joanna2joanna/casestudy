@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>吉隆坡成功时代广场主题乐园 — 马来西亚最大室内主题乐园</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+:root {
+  --teal-600: #0D7377;
+  --teal-400: #2DB5B9;
+  --teal-900: #074B4F;
+  --gold: #C8A45C;
+  --white: #FFFFFF;
+
+  --clr-primary: var(--teal-600);
+  --clr-primary-light: var(--teal-400);
+  --clr-primary-dark: var(--teal-900);
+  --clr-accent: var(--gold);
+  --clr-bg: #F4FAFB;
+  --clr-bg-alt: #E8F4F5;
+  --clr-text: #1A1A1A;
+  --clr-text-secondary: #4A6A6C;
+  --clr-text-muted: #6B8A8C;
+  --clr-border: #D0E4E6;
+  --clr-card-bg: var(--white);
+}
+
+.hero {
+  background: linear-gradient(160deg, #074B4F 0%, #0D7377 40%, #2DB5B9 70%, #5DD0D4 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(200,164,92,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>吉隆坡成功时代广场主题乐园</h1>
+    <p class="hero-subtitle">马来西亚最大室内主题乐园 · 曾获吉尼斯世界纪录最大混合用途建筑 · 位于吉隆坡武吉免登核心商圈</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">12,356 m²</div><div class="kpi-label">室内乐园面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">14+</div><div class="kpi-label">核心游乐设施</div></div>
+      <div class="kpi-card"><div class="kpi-number">800 m</div><div class="kpi-label">室内过山车轨道</div></div>
+      <div class="kpi-card"><div class="kpi-number">MYR 18亿</div><div class="kpi-label">项目总投资（约合 RMB 36亿）</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目名称</h3><p>Berjaya Times Square Theme Park<br>成功时代广场主题乐园<br><span class="f-caption">原名 Cosmo's World（已停用）</span></p></div>
+      <div class="card"><h3>地理位置</h3><p>马来西亚吉隆坡武吉免登路1号<br>成功时代广场购物中心 5-8 层<br>坐标：3°08′32″N, 101°42′38″E</p></div>
+      <div class="card"><h3>开业时间</h3><p>2003 年 10 月<br>由马来西亚时任首相敦马哈蒂尔揭幕</p></div>
+      <div class="card"><h3>投资规模</h3><p>综合体总投资 MYR 18 亿<br>（约合 RMB 36 亿，按 2003 年汇率）<br>开发商：成功集团（Berjaya Group）</p></div>
+      <div class="card"><h3>乐园类型</h3><p>大型室内主题乐园<br>占建筑 4 个楼层（5-8 层）</p></div>
+      <div class="card"><h3>营运主体</h3><p>Berjaya Assets Berhad<br>（KLSE: BJASSET）</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>吉隆坡成功时代广场主题乐园位于马来西亚首都吉隆坡最繁华的武吉免登商圈，是马来西亚最大的室内主题乐园。乐园坐落于曾获吉尼斯世界纪录"世界最大混合用途建筑"的成功时代广场综合体内（总建筑面积约 70 万 m²、双塔高度 203 m），占据购物中心 5 至 8 层，室内面积约 12,356 m²。乐园原名"Cosmo&#39;s World"，分设两大主题区——惊险刺激的 Galaxy Station（5 楼，面向 13 岁以上青少年及成人）和家庭亲子导向的 Fantasy Garden（7 楼，面向 13 岁以下儿童）。标志性骑乘是由瑞士 Intamin AG 制造的 Supersonic Odyssey 室内钢制翻滚过山车，轨道全长 800 m、最高点 37.8 m、最高速度约 70 km/h，曾为亚太地区最长室内过山车之一。此外还配备旋转塔 Spinning Orbit、碰碰车、旋转木马等总计 14 项以上核心设施，以及 VR、激光枪战、卡丁车等付费附加项目。2003 年开业至今，已成为吉隆坡室内休闲娱乐的代表性地标。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>公司 / 机构</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>建筑设计</td><td>DP Architects（新加坡）</td><td>整体建筑方案设计</td></tr>
+          <tr><td>结构工程</td><td>T.Y. Lin International（林同棪国际）</td><td>结构设计与工程顾问</td></tr>
+          <tr><td>开发商</td><td>Berjaya Group（成功集团）</td><td>丹斯里陈志远（Vincent Tan）控制</td></tr>
+          <tr><td>过山车制造</td><td>Intamin AG（瑞士）</td><td>Supersonic Odyssey 及多款核心骑乘</td></tr>
+          <tr><td>过山车轨道设计</td><td>Werner Stengel（德国）</td><td>轨道动力与几何设计</td></tr>
+          <tr><td>融资财团</td><td>AmBank 牵头（原 Arab-Malaysian Bank）</td><td>银团贷款，开业时债务约 MYR 7 亿</td></tr>
+          <tr><td>暖通设备</td><td>Dunham-Bush</td><td>大型商业综合体空调系统</td></tr>
+          <tr><td>运营管理</td><td>Berjaya Assets Berhad（KLSE: BJASSET）</td><td>持续运营与更新维护</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>室内主题乐园面积</td><td class="num">12,356 m²</td><td>约 1.24 公顷</td></tr>
+          <tr><td>规模</td><td>综合体总建筑面积</td><td class="num">700,000 m²</td><td>约 70 公顷，世界纪录</td></tr>
+          <tr><td>规模</td><td>双塔高度</td><td class="num">203 m</td><td>A 座 49 层 / B 座 48 层</td></tr>
+          <tr><td>骑乘</td><td>核心游乐设施数量</td><td class="num">14+ 项</td><td>不含付费附加项目</td></tr>
+          <tr><td>骑乘</td><td>过山车轨道全长</td><td class="num">800 m</td><td>Supersonic Odyssey</td></tr>
+          <tr><td>骑乘</td><td>过山车最高点</td><td class="num">37.8 m</td><td>贯穿 5-8 层</td></tr>
+          <tr><td>骑乘</td><td>过山车最高速度</td><td class="num">~70 km/h</td><td>3 次翻转</td></tr>
+          <tr><td>骑乘</td><td>旋转塔高度</td><td class="num">30 m</td><td>Spinning Orbit</td></tr>
+          <tr><td>投资</td><td>综合体总投资</td><td class="num">MYR 18 亿</td><td>约合 RMB 36 亿（2003 年）</td></tr>
+          <tr><td>投资</td><td>开业时银行债务</td><td class="num">~MYR 7 亿</td><td>AmBank 牵头融资</td></tr>
+          <tr><td>客流</td><td>商场整体年客流</td><td class="num">1,000-1,200 万</td><td>约 40% 为游客</td></tr>
+          <tr><td>认证</td><td>吉尼斯世界纪录</td><td>1 项</td><td>最大混合用途建筑（2003）</td></tr>
+          <tr><td>认证</td><td>马来西亚纪录大全</td><td>13+ 项</td><td>含"最大室内主题乐园"</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源：Berjaya Assets Berhad 年报、马来西亚旅游局、T.Y. Lin International，数据截至 2025 财年。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map -->
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="map-legend">
+          <span><span class="dot" style="background:#0D7377;"></span> 成功时代广场</span>
+          <span><span class="dot" style="background:#C8A45C;"></span> 武吉免登商圈</span>
+          <span><span class="dot" style="background:#E8485A;"></span> 邻近地标</span>
+        </div>
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0D7377"/></marker>
+          </defs>
+          <rect width="800" height="500" fill="#0A1A1C" rx="12"/>
+          <text x="400" y="30" fill="#C8A45C" font-family="Playfair Display,serif" font-size="16" text-anchor="middle" font-weight="600">成功时代广场 · 主题乐园竖向布局</text>
+          <line x1="60" y1="78" x2="740" y2="78" stroke="#C8A45C" stroke-width="0.5" opacity="0.3"/>
+
+          <!-- Floor labels -->
+          <text x="70" y="320" fill="#0D7377" font-family="DM Mono,monospace" font-size="14" font-weight="600">48F-49F</text>
+          <text x="130" y="320" fill="rgba(255,255,255,0.6)" font-size="11" font-family="DM Sans,sans-serif">酒店客房层</text>
+
+          <text x="70" y="270" fill="#2DB5B9" font-family="DM Mono,monospace" font-size="14" font-weight="600">13F-47F</text>
+          <text x="148" y="270" fill="rgba(255,255,255,0.6)" font-size="11" font-family="DM Sans,sans-serif">办公/公寓</text>
+
+          <text x="70" y="210" fill="#C8A45C" font-family="DM Mono,monospace" font-size="14" font-weight="600">5F-8F</text>
+          <text x="130" y="210" fill="#F0D078" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">★ 室内主题乐园</text>
+
+          <text x="70" y="155" fill="rgba(255,255,255,0.5)" font-family="DM Mono,monospace" font-size="13">B3-4F</text>
+          <text x="148" y="155" fill="rgba(255,255,255,0.4)" font-size="11" font-family="DM Sans,sans-serif">零售/餐饮/停车场</text>
+
+          <!-- Building outline -->
+          <rect x="230" y="60" width="300" height="300" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1" rx="6" stroke-dasharray="6,3"/>
+
+          <!-- Zone blocks -->
+          <rect x="250" y="175" width="260" height="40" fill="#0D7377" opacity="0.6" rx="4" stroke="#2DB5B9" stroke-width="1"/>
+          <text x="380" y="200" fill="#fff" text-anchor="middle" font-size="13" font-family="DM Sans,sans-serif" font-weight="600">Galaxy Station（5F · 惊险区 · 13岁+）</text>
+
+          <rect x="250" y="225" width="260" height="40" fill="#C8A45C" opacity="0.35" rx="4" stroke="#C8A45C" stroke-width="0.8"/>
+          <text x="380" y="250" fill="#F0D078" text-anchor="middle" font-size="13" font-family="DM Sans,sans-serif" font-weight="600">Fantasy Garden（7F · 家庭亲子区 · 13岁以下）</text>
+
+          <!-- Rides in Galaxy -->
+          <text x="250" y="290" fill="rgba(255,255,255,0.45)" font-size="9" font-family="DM Sans,sans-serif">Supersonic Odyssey · Spinning Orbit · DNA Mixer · Space Attack · Dizzy Izzy · Oort's Express</text>
+
+          <!-- Rides in Fantasy -->
+          <text x="250" y="310" fill="rgba(255,255,255,0.4)" font-size="9" font-family="DM Sans,sans-serif">Buddy Go Round · Molly-Cool's Swing · Crazy Bus · Botanic Drive · Flying Bumble Bee · Honey Bump</text>
+
+          <!-- Go-Kart basement -->
+          <rect x="530" y="115" width="170" height="22" fill="rgba(200,164,92,0.1)" rx="3" stroke="rgba(200,164,92,0.2)" stroke-width="0.5"/>
+          <text x="615" y="130" fill="rgba(255,255,255,0.35)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">B3 卡丁车·激光枪战·VR</text>
+
+          <!-- North arrow -->
+          <line x1="700" y1="415" x2="700" y2="445" stroke="#C8A45C" stroke-width="1.5"/>
+          <polygon points="700,412 695,422 705,422" fill="#C8A45C"/>
+          <text x="700" y="460" fill="#C8A45C" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif">N</text>
+
+          <!-- Legend -->
+          <rect x="245" y="420" width="310" height="45" fill="none" stroke="rgba(255,255,255,0.1)" rx="4"/>
+          <rect x="255" y="432" width="10" height="10" fill="#0D7377" opacity="0.6" rx="1"/>
+          <text x="272" y="442" fill="rgba(255,255,255,0.5)" font-size="10" font-family="DM Sans,sans-serif">惊险区</text>
+          <rect x="340" y="432" width="10" height="10" fill="#C8A45C" opacity="0.35" rx="1"/>
+          <text x="357" y="442" fill="rgba(255,255,255,0.5)" font-size="10" font-family="DM Sans,sans-serif">家庭区</text>
+          <text x="430" y="442" fill="rgba(255,255,255,0.3)" font-size="10" font-family="DM Sans,sans-serif">—— 室内乐园总面 12,356 m² ——</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>Galaxy Station（银河站）</h3><p>位于 5 楼，面向 13 岁以上青少年及成人。核心骑乘包括 Supersonic Odyssey 室内翻滚过山车（800 m，3 次翻转）、Spinning Orbit 旋转塔（30 m 高）、DNA Mixer 旋转游乐设施、Space Attack 碰碰车等。所有设备均由瑞士 Intamin AG 制造。</p></div>
+      <div class="card"><h3>Fantasy Garden（梦幻花园）</h3><p>位于 7 楼，面向 13 岁以下儿童及家庭。设有旋转木马 Buddy Go Round、摇摆海盗船 Molly-Cool's Swing、弹跳巴士 Crazy Bus、儿童碰碰车 Honey Bump 等温和骑乘，营造安全友好的亲子娱乐空间。</p></div>
+      <div class="card"><h3>付费附加项目</h3><p>分布在 B3 及其他楼层，包括 Go-Kart 卡丁车（B3）、Haunted House 鬼屋、Winter Wonderland 冰雪世界、VR Hologate、Laser Battle 激光枪战（号称亚洲最大）、7D Xperia 动感影院及 Carnival Games 摊位游戏等，需额外购票或代币。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT & CONSTRUCTION TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1997</div><div class="timeline-content"><h4>项目动工</h4><p>成功集团在吉隆坡武吉免登启动成功时代广场综合体建设，原计划建设集购物、酒店、办公、娱乐于一体的超大型综合体。同年亚洲金融风暴爆发，项目进度与融资均受影响。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2003 年 10 月</div><div class="timeline-content"><h4>正式开业</h4><p>历经约 6 年建设，成功时代广场由马来西亚时任首相敦马哈蒂尔揭幕。主题乐园以"Cosmo's World"品牌正式对外开放，同期获得吉尼斯世界纪录——"世界最大混合用途建筑"。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2003-2010</div><div class="timeline-content"><h4>运营成熟期</h4><p>Cosmo's World 成为吉隆坡室内家庭娱乐地标，以 Supersonic Odyssey 过山车为最大卖点。乐园逐步增加 VR、卡丁车等付费附加项目以丰富体验。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2020-2021</div><div class="timeline-content"><h4>疫情冲击</h4><p>COVID-19 疫情导致马来西亚多次实施行动管制令（MCO），主题乐园与商场长时间停业，客流与收入大幅下滑。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022-2024</div><div class="timeline-content"><h4>品牌重塑与复苏</h4><p>"Cosmo's World"品牌正式停用，统一更名为"Berjaya Times Square Theme Park"，与商场品牌对齐。FY2024 酒店娱乐板块收入同比增长 22.1%，乐园门票销售强劲回升。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025</div><div class="timeline-content"><h4>运营调整</h4><p>3 月起取消 RM 10 优惠券派发，优化收入结构。同时持续引入 Jungle Gym、Padelku 板式网球场等新业态以丰富商场整体吸引力。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONAL INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+
+    <div class="grid-2 reveal">
+      <div class="card"><h3>门票价格（马来西亚公民）</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <tbody>
+            <tr><td>成人</td><td class="num">MYR 75</td></tr>
+            <tr><td>儿童</td><td class="num">MYR 65</td></tr>
+            <tr><td>长者（55+）/ OKU / 孕妇</td><td class="num">MYR 22</td></tr>
+            <tr><td>家庭套票（2大2小）</td><td class="num">MYR 235</td></tr>
+            <tr><td>幼儿（&lt;3岁或&lt;90cm）</td><td class="num">免费</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">非公民票价：成人 MYR 95 / 儿童 MYR 85 / 长者 MYR 32 / 家庭 MYR 295</p>
+      </div>
+      <div class="card"><h3>运营信息</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <tbody>
+            <tr><td>营业时间（周一至五）</td><td class="num">12:00–21:00</td></tr>
+            <tr><td>营业时间（周末/假期）</td><td class="num">11:00–21:00</td></tr>
+            <tr><td>单次进出</td><td class="num">不支持重复入园</td></tr>
+            <tr><td>交通</td><td class="num">单轨列车 Imbi 站直连</td></tr>
+            <tr><td>商场年客流</td><td class="num">1,000-1,200 万</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>母公司财务摘要（Berjaya Assets Berhad）</h3>
+      <table class="data-table">
+        <thead><tr><th>财务指标</th><th>FY2024</th><th>同比变化</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>酒店娱乐板块收入</td><td class="num">MYR 4,579 万</td><td class="num" style="color:#0D7377;">+22.1%</td><td>含酒店+主题乐园+娱乐</td></tr>
+          <tr><td>主题乐园门票收入</td><td class="num">—</td><td>增长</td><td>未单独拆分，财报提及为主要增长驱动力</td></tr>
+          <tr><td>上市代码</td><td colspan="3">KLSE: BJASSET（马来西亚交易所主板）</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">FY2024 截至 2024 年 6 月 30 日。数据来源：BJASSET 年报。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>室内过山车</h3><p><span class="f-mono">Supersonic Odyssey</span><br>Intamin AG 定制钢制过山车<br>轨道全长 800 m · 最高 37.8 m<br>最高速度 ~70 km/h · 3 次翻转<br>Heartline Roll + Vertical Loop + Corkscrew<br>2 列车 × 24 人 · 过肩式安全带</p></div>
+      <div class="card"><h3>旋转塔</h3><p><span class="f-mono">Spinning Orbit</span><br>Intamin AG 制造<br>高度 30 m · 贯穿 5-8 层<br>旋转上升式惊险体验</p></div>
+      <div class="card"><h3>建筑体量</h3><p>总建筑面积 ~700,000 m²<br>双塔 203 m（A 座 49 层 / B 座 48 层）<br>吉尼斯世界纪录：世界最大混合用途建筑（2003 年）<br>马来西亚纪录大全：13+ 项认证</p></div>
+      <div class="card"><h3>旋转游乐</h3><p><span class="f-mono">DNA Mixer</span><br>21 座大型旋转游乐设施<br>Intamin AG 制造<br>多层旋转·高强度体验</p></div>
+      <div class="card"><h3>碰碰车</h3><p><span class="f-mono">Space Attack</span><br>Intamin 制造（基于 Zamperla "Hawk"）<br>悬挂式旋转·完整倒转<br>成人版设于 Galaxy Station</p></div>
+      <div class="card"><h3>室内环境</h3><p>全空调覆盖 · 不受天气影响<br>Dunham-Bush 暖通系统<br>全年运营 · 适合热带城市<br>吉隆坡年均气温 27°C</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>购物中心</h3><p>13 层零售空间，1,000+ 商铺<br>含百盛百货、影院、美食广场<br>东南亚大型城市综合体之一</p></div>
+      <div class="card"><h3>酒店</h3><p>Berjaya Times Square Hotel<br>5 星级 · 位于 A 座高区<br>商务+旅游双重定位</p></div>
+      <div class="card"><h3>交通接驳</h3><p>吉隆坡单轨列车 Imbi 站直连<br>步行可达 Bukit Bintang MRT<br>武吉免登商圈核心 · 步行即达</p></div>
+      <div class="card"><h3>Lasr Battle</h3><p>位于商场 B3 层<br>号称亚洲最大室内激光枪战<br>需额外购票</p></div>
+      <div class="card"><h3>VR / 沉浸娱乐</h3><p>Hologate VR · Bomb Battle<br>7D Xperia 动感影院<br>不断更新数字娱乐业态</p></div>
+      <div class="card"><h3>运动设施</h3><p>Go-Kart 卡丁车（B3）<br>Padelku 板式网球场<br>Jungle Gym 攀爬设施</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>品牌重塑完成</h3><p>"Cosmo's World"品牌正式退出历史舞台，统一使用"Berjaya Times Square Theme Park"名称，与商场品牌形成合力，提升市场识别度。</p></div>
+      <div class="card"><h3>疫情后强劲复苏</h3><p>FY2024 酒店娱乐板块收入同比增长 22.1%，主题乐园门票销售为主要增长引擎，显示马来西亚国内及国际旅游市场持续回暖。</p></div>
+      <div class="card"><h3>收入结构优化</h3><p>2025 年 3 月起取消 RM 10 优惠券派发（含 RM5 Bubbles Cafe + RM5 Go-Kart），简化定价体系，聚焦核心门票收入。</p></div>
+      <div class="card"><h3>业态持续更新</h3><p>商场不断引入 Jungle Gym、Padelku 板式网球、Bomb Battle 等新业态，与主题乐园形成"室内娱乐矩阵"，增强整体竞争力。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+
+    <div class="resource-group reveal">
+      <h4>官方来源</h4>
+      <ul>
+        <li><a href="https://www.berjaya.com/berjaya-assets/our-businesses/" target="_blank" rel="noopener">Berjaya Assets Berhad — 官方业务介绍</a> <span class="tag">官网</span></li>
+        <li><a href="https://berjayatimessquarethemeparkkl.com/" target="_blank" rel="noopener">Berjaya Times Square Theme Park — 官方网站</a> <span class="tag">官网</span></li>
+        <li><a href="https://ebrochures.malaysia.travel/en/fun-and-fantasy/berjaya-times-square/" target="_blank" rel="noopener">马来西亚旅游局 — 英文版介绍</a> <span class="tag">官方</span></li>
+        <li><a href="https://ebrochures.malaysia.travel/cn/fun-and-fantasy/berjaya-times-square/" target="_blank" rel="noopener">马来西亚旅游局 — 中文版介绍</a> <span class="tag">官方</span></li>
+      </ul>
+    </div>
+
+    <div class="resource-group reveal">
+      <h4>深度游记与评测</h4>
+      <ul>
+        <li><a href="https://www.pelago.com/en/activity/p0a7ubh9n-berjaya-times-square-theme-park-kuala-lumpur/" target="_blank" rel="noopener">Pelago — 主题乐园门票与攻略</a> <span class="tag">旅游平台</span></li>
+        <li><a href="https://www.expedia-aarp.com/things-to-do/berjaya-times-square-theme-park.a47002604.activity-details" target="_blank" rel="noopener">Expedia — 乐园门票预订与评价</a> <span class="tag">旅游平台</span></li>
+      </ul>
+    </div>
+
+    <div class="resource-group reveal">
+      <h4>行业数据库</h4>
+      <ul>
+        <li><a href="https://rollercoaster.fandom.com/wiki/Supersonic_Odyssey" target="_blank" rel="noopener">Roller Coaster Wiki — Supersonic Odyssey 技术参数</a> <span class="tag">数据库</span></li>
+        <li><a href="https://stockanalysis.com/quote/klse/BJASSET/financials/metrics/" target="_blank" rel="noopener">Stock Analysis — BJASSET 财务数据</a> <span class="tag">财经</span></li>
+        <li><a href="https://theedgemalaysia.com/node/679090" target="_blank" rel="noopener">The Edge Malaysia — 成功资产2023财年报道</a> <span class="tag">财经</span></li>
+      </ul>
+    </div>
+
+    <div class="resource-group reveal">
+      <h4>建筑与工程</h4>
+      <ul>
+        <li><a href="https://zh-tw.tylin.com/tl/node/542" target="_blank" rel="noopener">T.Y. Lin International — 成功时代广场工程案例</a> <span class="tag">工程</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (Overseas: ESRI ArcGIS + WGS-84) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+  var tilesLoaded = false;
+
+  var map = L.map('parkmap', {
+    center: [3.14219, 101.71061],
+    zoom: 16,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+
+  tileLayer.on('load', function() {
+    tilesLoaded = true;
+    clearTimeout(tileTimer);
+    fallback.style.display = 'none';
+  });
+
+  tileLayer.addTo(map);
+
+  var tileTimer = setTimeout(function() {
+    if (!tilesLoaded) fallback.style.display = 'block';
+  }, 8000);
+
+  // Markers
+  var tealIcon = L.divIcon({className: 'custom-marker', html: '<div style="background:#0D7377;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>', iconSize: [14,14], iconAnchor: [7,7]});
+  var goldIcon = L.divIcon({className: 'custom-marker', html: '<div style="background:#C8A45C;width:10px;height:10px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,0.3);"></div>', iconSize: [10,10], iconAnchor: [5,5]});
+
+  L.marker([3.14219, 101.71061], {icon: tealIcon}).addTo(map)
+    .bindPopup('<b>成功时代广场</b><br>Berjaya Times Square');
+
+  L.marker([3.1460, 101.7118], {icon: goldIcon}).addTo(map)
+    .bindPopup('Bukit Bintang 武吉免登商圈');
+  L.marker([3.1478, 101.7130], {icon: goldIcon}).addTo(map)
+    .bindPopup('Pavilion KL');
+  L.marker([3.1390, 101.7070], {icon: goldIcon}).addTo(map)
+    .bindPopup('Imbi 单轨站');
+
+  // Fit bounds
+  var bounds = L.latLngBounds([
+    [3.1350, 101.7040],
+    [3.1520, 101.7160]
+  ]);
+  map.fitBounds(bounds, {padding: [20, 20]});
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Universal Kids Resort — 环球首个专为低龄儿童打造的主题度假村</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+:root {
+  --clr-primary: #2E8B57;
+  --clr-primary-light: #5DAE7A;
+  --clr-primary-dark: #1A5C35;
+  --clr-accent: #F5A623;
+}
+
+.hero {
+  background: linear-gradient(160deg, #1A5C35 0%, #2E8B57 40%, #5DAE7A 70%, #A8D5A2 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(245,166,35,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>Universal Kids Resort</h1>
+    <p class="hero-subtitle">环球影城首个专为3–9岁低龄儿童家庭打造的主题度假村，德克萨斯州Frisco盛大启幕</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">13公顷</div><div class="kpi-label">总占地面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">约¥39.6亿</div><div class="kpi-label">总投资（$550M USD）</div></div>
+      <div class="kpi-card"><div class="kpi-number">2026.7.1</div><div class="kpi-label">正式开园</div></div>
+      <div class="kpi-card"><div class="kpi-number">7个</div><div class="kpi-label">主题区域</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>开发商</h3><p>Universal Creative / NBCUniversal（Comcast 旗下）</p></div>
+      <div class="card"><h3>运营商</h3><p>Universal Destinations & Experiences</p></div>
+      <div class="card"><h3>地理位置</h3><p>1 Universal Parkway, Frisco, TX 75034, USA<br>达拉斯以北约40km，DFW机场东北35km</p></div>
+      <div class="card"><h3>占地面积</h3><p>约13公顷（32英亩），公园核心区约8公顷</p></div>
+      <div class="card"><h3>目标客群</h3><p>3–9岁低龄儿童家庭，填补环球品牌在儿童细分市场空白</p></div>
+      <div class="card"><h3>配套酒店</h3><p>1家300间客房园内酒店，2026年6月30日起接受入住</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>Universal Kids Resort 是环球影城母公司 Comcast NBCUniversal 旗下首个专为低龄儿童（3–9岁）及其家庭打造的主题度假村。项目选址德克萨斯州 Frisco 市，位于达拉斯-沃斯堡都会区北部核心增长走廊。度假村包含7个以环球旗下经典IP为主题的沉浸式区域、300间客房的园内酒店及配套餐饮零售设施。作为环球品牌矩阵中定位最年幼客群的独立产品，该项目与奥兰多 Epic Universe、好莱坞及日本园区形成差异化互补，标志着环球从全年龄段向精细化家庭市场的战略拓展。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>公司/团队</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>总体规划</td><td>Universal Creative</td><td>环球内部创意设计团队，全面把控设计方向</td></tr>
+          <tr><td>建筑设计</td><td>Gensler / Universal Creative</td><td>度假村整体建筑方案设计</td></tr>
+          <tr><td>总承包商</td><td>McCarthy Building Companies</td><td>园区核心区施工总承包</td></tr>
+          <tr><td>景观设计</td><td>Universal Creative 景观团队</td><td>全园景观体系设计</td></tr>
+          <tr><td>IP 授权方</td><td>DreamWorks Animation / Nickelodeon</td><td>Shrek/侏罗纪世界/海绵宝宝/Minions/Trolls/Puss in Boots/Gabby's Dollhouse</td></tr>
+          <tr><td>游乐设备</td><td>Zamperla / S&S Worldwide / WhiteWater</td><td>儿童友好型骑乘设备与水上游乐设施</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>总占地面积</td><td>13公顷（32英亩）</td><td>含酒店、停车场及后勤区</td></tr>
+          <tr><td>规模</td><td>公园核心区</td><td>约8公顷（20英亩）</td><td>7大主题区域</td></tr>
+          <tr><td>规模</td><td>主题区域数量</td><td>7个</td><td>含中央入口广场</td></tr>
+          <tr><td>规模</td><td>游乐设施/景点</td><td>15+</td><td>儿童友好型骑乘、戏水区、互动体验</td></tr>
+          <tr><td>规模</td><td>园内酒店</td><td>1家 / 300间客房</td><td>含家庭套房</td></tr>
+          <tr><td>投资</td><td>总投资额</td><td>约¥39.6亿（$550M USD）</td><td>含土地、建筑、IP 授权及设备</td></tr>
+          <tr><td>运营</td><td>开园日期</td><td>2026年7月1日</td><td>酒店6月30日起入住</td></tr>
+          <tr><td>运营</td><td>目标客群</td><td>3–9岁儿童家庭</td><td>环球首个专注低龄段的独立园区</td></tr>
+          <tr><td>运营</td><td>运营方</td><td>Universal Destinations & Experiences</td><td>Comcast NBCUniversal 旗下</td></tr>
+          <tr><td>运营</td><td>单日门票</td><td>约¥600–850（$85–120）</td><td>淡旺季浮动，两日票及年票可选</td></tr>
+          <tr><td>运营</td><td>估日容量</td><td>6,000–8,000人</td><td>以家庭体验为主的适容设计</td></tr>
+          <tr><td>运营</td><td>年客流预测</td><td>150–250万（成熟期）</td><td>基于达拉斯都会区人口及旅游辐射</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">以上数据基于公开资料及行业分析整理，部分为预测值，实际运营数据可能有所差异。数据截至 2026 年 6 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class) -->
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 550" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="hubGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#F5A623" stop-opacity="0.2"/><stop offset="100%" stop-color="#F5A623" stop-opacity="0"/></radialGradient>
+            <filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity="0.3"/></filter>
+          </defs>
+
+          <rect width="800" height="550" fill="#1A1A1A" rx="12"/>
+
+          <!-- Background ring -->
+          <circle cx="400" cy="280" r="180" fill="none" stroke="rgba(245,166,35,0.15)" stroke-width="1" stroke-dasharray="6,4"/>
+
+          <!-- Hub: Entry Plaza -->
+          <circle cx="400" cy="280" r="70" fill="url(#hubGlow)" stroke="#F5A623" stroke-width="2"/>
+          <text x="400" y="275" text-anchor="middle" fill="#F5A623" font-family="Playfair Display,serif" font-size="15" font-weight="700">入口广场</text>
+          <text x="400" y="295" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">Entry Plaza</text>
+
+          <!-- 7 Lands around the hub -->
+          <!-- Shrek (top) -->
+          <rect x="340" y="50" width="120" height="45" rx="8" fill="rgba(46,139,87,0.15)" stroke="#2E8B57" stroke-width="2"/>
+          <text x="400" y="70" text-anchor="middle" fill="#5DAE7A" font-family="Playfair Display,serif" font-size="13" font-weight="700">Shrek 史瑞克</text>
+          <text x="400" y="85" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">沼泽探险</text>
+
+          <!-- Minions (top right) -->
+          <rect x="560" y="110" width="110" height="45" rx="8" fill="rgba(245,166,35,0.12)" stroke="#F5A623" stroke-width="2"/>
+          <text x="615" y="130" text-anchor="middle" fill="#F5A623" font-family="Playfair Display,serif" font-size="13" font-weight="700">Minions 小黄人</text>
+          <text x="615" y="145" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">格鲁实验室</text>
+
+          <!-- Jurassic World (right) -->
+          <rect x="590" y="250" width="120" height="45" rx="8" fill="rgba(46,139,87,0.15)" stroke="#2E8B57" stroke-width="2"/>
+          <text x="650" y="270" text-anchor="middle" fill="#5DAE7A" font-family="Playfair Display,serif" font-size="13" font-weight="700">Jurassic World</text>
+          <text x="650" y="285" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">恐龙幼崽区</text>
+
+          <!-- SpongeBob (lower right) -->
+          <rect x="560" y="380" width="120" height="45" rx="8" fill="rgba(255,198,57,0.15)" stroke="#FFC639" stroke-width="2"/>
+          <text x="620" y="400" text-anchor="middle" fill="#FFC639" font-family="Playfair Display,serif" font-size="13" font-weight="700">SpongeBob</text>
+          <text x="620" y="415" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">比基尼海滩</text>
+
+          <!-- Trolls (lower) -->
+          <rect x="340" y="430" width="120" height="45" rx="8" fill="rgba(233,30,99,0.15)" stroke="#E91E63" stroke-width="2"/>
+          <text x="400" y="450" text-anchor="middle" fill="#E91E63" font-family="Playfair Display,serif" font-size="13" font-weight="700">Trolls 魔发精灵</text>
+          <text x="400" y="465" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">音乐森林</text>
+
+          <!-- Puss in Boots (left bottom) -->
+          <rect x="110" y="380" width="130" height="45" rx="8" fill="rgba(255,87,34,0.12)" stroke="#FF5722" stroke-width="2"/>
+          <text x="175" y="400" text-anchor="middle" fill="#FF5722" font-family="Playfair Display,serif" font-size="13" font-weight="700">Puss in Boots</text>
+          <text x="175" y="415" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">穿靴子的猫</text>
+
+          <!-- Gabby's Dollhouse (top left) -->
+          <rect x="120" y="110" width="140" height="45" rx="8" fill="rgba(156,39,176,0.12)" stroke="#9C27B0" stroke-width="2"/>
+          <text x="190" y="130" text-anchor="middle" fill="#CE93D8" font-family="Playfair Display,serif" font-size="13" font-weight="700">Gabby's Dollhouse</text>
+          <text x="190" y="145" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">梦幻娃娃屋</text>
+
+          <!-- Hotel (above) -->
+          <rect x="330" y="5" width="140" height="35" rx="6" fill="rgba(245,166,35,0.15)" stroke="#F5A623" stroke-width="1.5"/>
+          <text x="400" y="27" text-anchor="middle" fill="#F5A623" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">300间客房酒店</text>
+
+          <!-- Entrance (bottom) -->
+          <polygon points="370,500 430,500 415,530 385,530" fill="rgba(93,174,122,0.15)" stroke="#5DAE7A" stroke-width="1.8"/>
+          <text x="400" y="542" text-anchor="middle" fill="#5DAE7A" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">主入口</text>
+
+          <!-- Compass -->
+          <g transform="translate(740,50)">
+            <circle cx="0" cy="0" r="20" fill="none" stroke="#F5A623" stroke-width="1" opacity="0.5"/>
+            <polygon points="0,-18 3,-4 18,0 3,4 0,18 -3,4 -18,0 -3,-4" fill="#F5A623" opacity="0.8"/>
+            <text x="0" y="-24" text-anchor="middle" fill="#F5A623" font-size="9" font-weight="700">N</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>入口广场 · Entry Plaza</h3><p>中央集散空间，设家庭服务中心、婴儿车租赁、商店及餐饮。从这里辐射至7大主题区。</p></div>
+      <div class="card"><h3>Shrek 史瑞克沼泽</h3><p>梦工厂经典IP打造，沼泽主题戏水区、小型过山车及角色见面会。</p></div>
+      <div class="card"><h3>Minions 小黄人实验室</h3><p>格鲁实验室主题区，互动游戏、旋转设施及小黄人主题餐饮。</p></div>
+      <div class="card"><h3>Jurassic World 恐龙幼崽区</h3><p>以温和的食草恐龙为主题，化石挖掘体验、小型轨道车及科普互动。</p></div>
+      <div class="card"><h3>SpongeBob 比基尼海滩</h3><p>尼克国际儿童频道经典IP，泡泡主题戏水区及沉浸式海底场景。</p></div>
+      <div class="card"><h3>其他主题区</h3><p>Trolls 音乐森林、Puss in Boots 冒险区、Gabby's Dollhouse 梦幻娃娃屋，均为业界首创独立主题区。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2023年1月</div><div class="timeline-content"><h4>项目正式公布</h4><p>Universal Destinations & Experiences 在新闻发布会上宣布全新概念——专为低龄家庭打造的"Universal Kids Resort"，选址德克萨斯州 Frisco。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023年11月</div><div class="timeline-content"><h4>破土动工</h4><p>在 Frisco 市举行奠基仪式，项目正式进入建设阶段。当地政府将此视为达拉斯北部走廊的标志性文旅投资。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年</div><div class="timeline-content"><h4>主体结构施工</h4><p>园区核心建筑封顶，酒店结构完成，7大主题区景观骨架成型。游乐设备陆续到场安装。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年</div><div class="timeline-content"><h4>主题装修与设备调试</h4><p>IP主题化装修全面展开，骑乘设备完成安装进入调试阶段。酒店内装同步推进。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年2月</div><div class="timeline-content"><h4>公布开业日期</h4><p>官方正式宣布 2026 年 7 月 1 日开园。门票同步上线预售。首批员工招聘与培训启动。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年5月</div><div class="timeline-content"><h4>TDLR 施工完工</h4><p>根据德州许可与监管局备案，施工目标于 5 月 15 日前完成，进入运营准备阶段。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年7月1日</div><div class="timeline-content"><h4>盛大开幕</h4><p>Universal Kids Resort 正式对公众开放。酒店自 6 月 30 日起接受入住。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>预开园年票销售</h4><p style="font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:500;color:var(--clr-primary);">Silver Pass</p><p class="f-caption">Silver Annual Pass 先行发售，含全年不限次入园+停车</p></div>
+      <div class="card" style="text-align:center;"><h4>单日票价区间</h4><p style="font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:500;color:var(--clr-primary);">$85–120</p><p class="f-caption">约¥600–850，两日票提供优惠</p></div>
+      <div class="card" style="text-align:center;"><h4>目标客群半径</h4><p style="font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:500;color:var(--clr-primary);">DFW都会区</p><p class="f-caption">达拉斯-沃斯堡800万人口+周边州自驾客流</p></div>
+    </div>
+    <div class="card reveal">
+      <h3>母公司财报关联</h3>
+      <p>母公司 Comcast 旗下 NBCUniversal 主题公园板块 2024 年全年收入约 ¥559 亿（$7.7B），同比增长 2.3%。2025 年 Epic Universe 开业驱动板块收入显著增长。Universal Kids Resort 作为环球"轻量级"家庭产品线的首发项目，若运营成功将为品牌开辟全新的二线市场拓展路径——不依赖超大规模投资，以 IP 渗透 + 酒店住宿为核心商业模式。业界普遍关注其投资回报周期，对比 Epic Universe 的约 ¥500 亿级别投资，Kids Resort 的 ¥39.6 亿投入规模更轻、回收期更短，或将成为环球在中型城市复制推广的模板。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>骑乘设备策略</h3><p>全部设备按 3–9 岁儿童身高及安全标准设计，以 Zamperla 等儿童友好型制造商为主。不设大型惊险过山车，重点打造亲子同乘体验。</p></div>
+      <div class="card"><h3>IP 矩阵覆盖</h3><p>集结环球旗下三大内容源：梦工厂（Shrek/Trolls/Puss in Boots）、照明娱乐（Minions）、尼克儿童频道（SpongeBob），以及环球自有 IP（侏罗纪世界）和梦工厂电视（Gabby's Dollhouse）。</p></div>
+      <div class="card"><h3>酒店一体化</h3><p>300 间客房园内酒店是核心竞争力。家庭套房、儿童主题房、直达园区通道，构建"酒店+乐园"一站式度假体验。</p></div>
+      <div class="card"><h3>气候适应设计</h3><p>德州夏季高温炎热，园区大量配置遮阳结构、戏水区、室内空调休息区及喷雾降温系统，确保高温日可舒适游玩。</p></div>
+      <div class="card"><h3>交通可达性</h3><p>紧邻 Dallas North Tollway 及 Panther Creek Parkway，距 DFW 国际机场 35 km、达拉斯市中心 42 km。周边酒店集群及零售配套日臻成熟。</p></div>
+      <div class="card"><h3>家长友好设计</h3><p>全园视线通透，父母可在休息区目视子女游玩。Wi-Fi 全覆盖、家庭卫生间、婴儿护理站遍布各主题区。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>园内酒店</h3><p>300 间客房含家庭套房及主题房型，住客享有提前入园及专属通道。2026年6月30日起接受入住，与乐园同步运营。</p></div>
+      <div class="card"><h3>停车体系</h3><p>大型地面停车场，分区标识清晰。Silver 年票含全年免费停车。设有电动车充电桩及房车专用车位。</p></div>
+      <div class="card"><h3>餐饮零售</h3><p>各主题区配主题餐厅和 snack cart，主打儿童友好菜单。中央广场设主零售店，售卖各 IP 独家商品。</p></div>
+      <div class="card"><h3>家庭服务</h3><p>婴儿车轮椅租赁、家庭卫生间、母婴室、失散儿童服务站、急救中心等全链条家庭服务设施。</p></div>
+      <div class="card"><h3>周边配套</h3><p>Frisco 市拥有 Stonebriar Centre 购物中心、Dr Pepper Arena、多家知名酒店，形成成熟的旅游接待生态。</p></div>
+      <div class="card"><h3>员工配套</h3><p>后台设员工培训中心、班车接驳及食堂，预估直接就业约 500–800 人，带动周边就业逾 1,500 人。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>2026年7月1日开园</h3><p>Universal Destinations & Experiences 官方确认开园日期。首批宣传物料"Save the Playdate!"已上线各大平台。</p></div>
+      <div class="card"><h3>可复制模板</h3><p>Universal Kids Resort 被定位为可复制的中型城市产品线。若 Frisco 项目成功，环球可能在北美及全球其他中型城市推广。</p></div>
+      <div class="card"><h3>二期预留地</h3><p>总体规划预留了扩建用地，视一期运营表现可能在开园后3–5年内启动二期工程，新增主题区或酒店翼楼。</p></div>
+      <div class="card"><h3>品牌矩阵协同</h3><p>Kids Resort 与 Orlando Epic Universe、Hollywood、Japan、Beijing 及英国规划中的环球乐园共同构成环球全球品牌矩阵。</p></div>
+      <div class="card"><h3>达拉斯北部增长</h3><p>Frisco 是德州增长最快的城市之一，PGA 总部、达拉斯牛仔队训练基地等已落户。Kids Resort 将进一步巩固其家庭目的地地位。</p></div>
+      <div class="card"><h3>行业关注</h3><p>全球主题公园行业密切关注此项目：若"轻量级 IP 乐园+酒店"模式跑通，将影响迪士尼、乐高乐园等的二线市场战略。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>官方来源</h4><ul>
+      <li><a href="https://corporate.universaldestinationsandexperiences.com/" target="_blank" rel="noopener">Universal Destinations & Experiences 官方新闻</a><span class="tag">官方</span></li>
+      <li><a href="https://www.universalkidsresort.com/" target="_blank" rel="noopener">Universal Kids Resort 官方网站</a><span class="tag">官网</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>深度报道</h4><ul>
+      <li><a href="https://touringplans.com/blog/universal-kids-resort-construction-update/" target="_blank" rel="noopener">TouringPlans — 施工进度更新系列</a><span class="tag">博客</span></li>
+      <li><a href="https://amusementtoday.com/2026/05/universal-kids-resort-universal-destinations-experiences-first-ever-theme-park-designed-for-families-with-young-children-officially-opens-on-july-1-2026/" target="_blank" rel="noopener">Amusement Today — 开园报道</a><span class="tag">行业媒体</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>地图与实景</h4><ul>
+      <li><a href="https://www.google.com/maps/place/Frisco,+TX" target="_blank" rel="noopener">Google Maps — Frisco 区域俯瞰</a><span class="tag">地图</span></li>
+      <li><a href="https://commons.wikimedia.org/w/index.php?search=Universal+Kids+Resort" target="_blank" rel="noopener">Wikimedia Commons — 自由版权图片</a><span class="tag">图库</span></li>
+    </ul></div>
+    <p class="f-caption" style="text-align:center;margin-top:2rem;">本报告所有数据来源于公开资料，仅供参考研究使用。数据截至 2026 年 6 月。</p>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (Overseas: ESRI ArcGIS + WGS-84) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+  var tilesLoaded = false;
+
+  var map = L.map('parkmap', {
+    center: [33.1925, -96.8331],
+    zoom: 16,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+
+  tileLayer.on('load', function() {
+    tilesLoaded = true;
+    clearTimeout(tileTimer);
+    fallback.style.display = 'none';
+  });
+
+  tileLayer.addTo(map);
+
+  var tileTimer = setTimeout(function() {
+    if (!tilesLoaded) fallback.style.display = 'block';
+  }, 8000);
+
+  var zones = [
+    { name: '入口广场', lat: 33.1918, lng: -96.8331, color: '#5DAE7A' },
+    { name: 'Shrek 史瑞克沼泽', lat: 33.1932, lng: -96.8331, color: '#2E8B57' },
+    { name: 'Minions 小黄人', lat: 33.1930, lng: -96.8320, color: '#F5A623' },
+    { name: 'Jurassic World', lat: 33.1925, lng: -96.8315, color: '#2E8B57' },
+    { name: 'SpongeBob 比基尼海滩', lat: 33.1920, lng: -96.8320, color: '#FFC639' },
+    { name: 'Trolls 魔发精灵', lat: 33.1915, lng: -96.8331, color: '#E91E63' },
+    { name: 'Gabby\'s Dollhouse', lat: 33.1930, lng: -96.8340, color: '#9C27B0' },
+    { name: 'Puss in Boots', lat: 33.1918, lng: -96.8342, color: '#FF5722' },
+    { name: '酒店', lat: 33.1938, lng: -96.8331, color: '#F5A623' }
+  ];
+
+  zones.forEach(function(z) {
+    var marker = L.marker([z.lat, z.lng], {
+      icon: L.divIcon({
+        className: '',
+        html: '<div style="width:12px;height:12px;background:' + z.color + ';border:2px solid white;border-radius:50%;box-shadow:0 0 6px ' + z.color + ';"></div>',
+        iconSize: [12, 12],
+        iconAnchor: [6, 6],
+        popupAnchor: [0, -6]
+      })
+    }).addTo(map);
+    marker.bindPopup('<div style="font-family:\'DM Sans\',sans-serif;font-size:13px;text-align:center;"><strong style="color:' + z.color + ';">' + z.name + '</strong></div>');
+  });
+
+  var bounds = L.latLngBounds([
+    [33.1910, -96.8350],
+    [33.1945, -96.8310]
+  ]);
+  map.fitBounds(bounds, {padding: [20, 20]});
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

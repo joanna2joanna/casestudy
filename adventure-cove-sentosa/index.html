@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adventure Cove Waterpark — 东南亚首座水磁过山车，圣淘沙热带雨林中的水上奇境</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+:root {
+  --clr-primary: #0088B0;
+  --clr-primary-light: #33B4D8;
+  --clr-primary-dark: #005A78;
+  --clr-accent: #F5A623;
+}
+
+.hero {
+  background: linear-gradient(160deg, #005A78 0%, #0088B0 40%, #33B4D8 70%, #80DEEA 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(245,166,35,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>Adventure Cove Waterpark</h1>
+    <p class="hero-subtitle">圣淘沙名胜世界内东南亚最先进水上乐园——水磁过山车·珊瑚礁浮潜·620m漂流河</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">8公顷</div><div class="kpi-label">海洋生物公园总面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">约¥24亿</div><div class="kpi-label">海洋生物公园投资（S$4.5亿）</div></div>
+      <div class="kpi-card"><div class="kpi-number">2012.11.22</div><div class="kpi-label">正式开园</div></div>
+      <div class="kpi-card"><div class="kpi-number">14</div><div class="kpi-label">核心景点/设施</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>运营商</h3><p>Resorts World Sentosa（RWS），云顶新加坡（Genting Singapore PLC）旗下</p></div>
+      <div class="card"><h3>地理位置</h3><p>8 Sentosa Gateway, 新加坡圣淘沙岛，西区海洋生物公园内</p></div>
+      <div class="card"><h3>总投资</h3><p>海洋生物公园（含 S.E.A. 海洋馆）总投资约 S$4.5亿（约¥24亿）；RWS 整体约 S$65.9亿</p></div>
+      <div class="card"><h3>占地面积</h3><p>海洋生物公园共 8 公顷，冒险湾水上乐园约占其中一半（约 4 公顷）</p></div>
+      <div class="card"><h3>客群定位</h3><p>家庭及青少年，日均容量 3,000–5,000 人，年客流估计 80–150 万</p></div>
+      <div class="card"><h3>门票</h3><p>S$38–42（成人，约¥210–230），S$30–34（儿童，约¥165–185）</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>Adventure Cove Waterpark（冒险湾水上乐园）是新加坡圣淘沙名胜世界（Resorts World Sentosa）海洋生物公园（Marine Life Park）的两大核心组成部分之一，与 S.E.A. 海洋馆（现升级为新加坡海洋馆）共同构成东南亚最大的海洋主题景点集群。乐园于2012年11月22日软开业，同年12月7日由李显龙总理主持盛大开幕。园区拥有14个核心景点，包括东南亚首座水磁动力过山车 Riptide Rocket、长达620米的探险河流、可浮潜接触20,000尾热带鱼的彩虹礁等标志性设施。母公司云顶新加坡为新加坡交易所上市公司（SGX: G13），2024财年 RWS 总收入约 S$25.3亿。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>公司/团队</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>总体规划 & 建筑设计</td><td>Michael Graves & Associates（MGA，美国）</td><td>Michael Graves 主持设计，Patrick Burke 主要负责人</td></tr>
+          <tr><td>执行建筑师</td><td>DP Architects（DPA，新加坡）</td><td>Angelene Chan 总监，Francis Lee CEO</td></tr>
+          <tr><td>业主/运营商</td><td>Genting Singapore / RWS</td><td>云顶新加坡旗下圣淘沙名胜世界</td></tr>
+          <tr><td>水滑道供应商</td><td>WhiteWater West / ProSlide（推测）</td><td>Riptide Rocket 水磁技术通常由这两家主导</td></tr>
+          <tr><td>RWS 2.0 扩建</td><td>Benoy（建筑）+ Heatherwick Studio（地标雕塑）</td><td>2024年启动，不影响 Adventure Cove 本体</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>海洋生物公园面积</td><td>8公顷</td><td>Adventure Cove + S.E.A. 海洋馆共享</td></tr>
+          <tr><td>规模</td><td>水滑道数量</td><td>7条</td><td>含 Riptide Rocket 水磁过山车</td></tr>
+          <tr><td>规模</td><td>核心景点总数</td><td>14个</td><td>含7滑道+2浮潜+3泳池/河+2儿童区</td></tr>
+          <tr><td>规模</td><td>探险河流长度</td><td>620 m</td><td>全球最长之一，穿越14个主题场景</td></tr>
+          <tr><td>规模</td><td>彩虹礁热带鱼数量</td><td>约20,000尾</td><td>4种以上热带鱼，浮潜体验</td></tr>
+          <tr><td>投资</td><td>海洋生物公园总投资</td><td>约¥24亿（S$4.5亿）</td><td>Adventure Cove + S.E.A. 海洋馆</td></tr>
+          <tr><td>运营</td><td>开园日期</td><td>2012年11月22日</td><td>软开业；12月7日盛大开幕</td></tr>
+          <tr><td>运营</td><td>母公司 FY2024 收入</td><td>RWS S$25.3亿（约¥136亿）</td><td>70%来自外国游客</td></tr>
+          <tr><td>运营</td><td>门票（成人）</td><td>S$38–42（约¥210–230）</td><td>淡旺季浮动</td></tr>
+          <tr><td>运营</td><td>营业时间</td><td>10:00–17:00</td><td>周一至周日</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">以上数据基于公开资料整理。汇率：1 SGD = ¥5.4。数据截至 2026 年 6 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="500" fill="#0D1B2A" rx="12"/>
+
+          <!-- Adventure River (winding) -->
+          <path d="M 60 200 C 150 150, 200 300, 300 250 C 400 200, 380 350, 480 280 C 550 230, 600 300, 700 250" fill="none" stroke="#33B4D8" stroke-width="3" stroke-dasharray="8,4" opacity="0.6"/>
+          <text x="200" y="170" fill="#33B4D8" font-family="DM Sans,sans-serif" font-size="10">620m 探险河流 Adventure River</text>
+
+          <!-- Central area: Bluwater Bay -->
+          <ellipse cx="400" cy="280" rx="120" ry="50" fill="rgba(0,136,176,0.15)" stroke="#33B4D8" stroke-width="2"/>
+          <text x="400" y="275" text-anchor="middle" fill="#33B4D8" font-family="Playfair Display,serif" font-size="14" font-weight="700">Bluwater Bay 造浪池</text>
+          <text x="400" y="295" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">大型波浪池·园区中心</text>
+
+          <!-- Riptide Rocket (right) -->
+          <rect x="550" y="100" width="150" height="55" rx="8" fill="rgba(245,166,35,0.12)" stroke="#F5A623" stroke-width="2"/>
+          <text x="625" y="122" text-anchor="middle" fill="#F5A623" font-family="Playfair Display,serif" font-size="13" font-weight="700">Riptide Rocket</text>
+          <text x="625" y="140" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">东南亚首座水磁过山车</text>
+
+          <!-- Rainbow Reef (top) -->
+          <rect x="130" y="60" width="150" height="55" rx="8" fill="rgba(0,200,100,0.12)" stroke="#00C864" stroke-width="2"/>
+          <text x="205" y="82" text-anchor="middle" fill="#00C864" font-family="Playfair Display,serif" font-size="13" font-weight="700">Rainbow Reef</text>
+          <text x="205" y="100" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">彩虹礁浮潜·20,000尾鱼</text>
+
+          <!-- Big Bucket Treehouse (left) -->
+          <rect x="50" y="280" width="140" height="55" rx="8" fill="rgba(255,138,0,0.12)" stroke="#FF8A00" stroke-width="2"/>
+          <text x="120" y="302" text-anchor="middle" fill="#FF8A00" font-family="Playfair Display,serif" font-size="13" font-weight="700">Big Bucket</text>
+          <text x="120" y="320" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">倾倒水桶·儿童滑道</text>
+
+          <!-- Splashworks (lower left) -->
+          <rect x="60" y="400" width="140" height="45" rx="8" fill="rgba(255,60,60,0.12)" stroke="#FF3C3C" stroke-width="1.5"/>
+          <text x="130" y="420" text-anchor="middle" fill="#FF3C3C" font-family="Playfair Display,serif" font-size="12" font-weight="700">Splashworks</text>
+          <text x="130" y="435" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">水上障碍挑战</text>
+
+          <!-- Ray Bay -->
+          <rect x="550" y="380" width="140" height="45" rx="8" fill="rgba(0,136,176,0.12)" stroke="#0088B0" stroke-width="1.5"/>
+          <text x="620" y="400" text-anchor="middle" fill="#33B4D8" font-family="Playfair Display,serif" font-size="12" font-weight="700">Ray Bay</text>
+          <text x="620" y="415" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">鳐鱼亲密接触</text>
+
+          <!-- Dueling Racer area -->
+          <rect x="300" y="80" width="130" height="45" rx="8" fill="rgba(0,136,176,0.12)" stroke="#0088B0" stroke-width="1.5"/>
+          <text x="365" y="100" text-anchor="middle" fill="#33B4D8" font-family="Playfair Display,serif" font-size="12" font-weight="700">Dueling Racer</text>
+          <text x="365" y="115" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">竞速滑道集群</text>
+
+          <!-- Seahorse Hideaway -->
+          <rect x="300" y="420" width="130" height="40" rx="8" fill="rgba(255,138,180,0.12)" stroke="#FF8AB4" stroke-width="1.5"/>
+          <text x="365" y="438" text-anchor="middle" fill="#FF8AB4" font-family="Playfair Display,serif" font-size="11" font-weight="700">Seahorse Hideaway</text>
+          <text x="365" y="452" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">幼儿浅水区</text>
+
+          <!-- Entrance (bottom center) -->
+          <polygon points="360,480 440,480 430,500 370,500" fill="rgba(51,180,216,0.15)" stroke="#33B4D8" stroke-width="1.5"/>
+          <text x="400" y="510" text-anchor="middle" fill="#33B4D8" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">入口·售票处</text>
+
+          <!-- Compass -->
+          <g transform="translate(760,30)">
+            <circle cx="0" cy="0" r="16" fill="none" stroke="#F5A623" stroke-width="1" opacity="0.5"/>
+            <polygon points="0,-14 2,-3 14,0 2,3 0,14 -2,3 -14,0 -2,-3" fill="#F5A623" opacity="0.8"/>
+            <text x="0" y="-19" text-anchor="middle" fill="#F5A623" font-size="8" font-weight="700">N</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>Riptide Rocket</h3><p>东南亚首座水磁动力过山车。利用磁力推动双人橡皮艇上坡/下坡/旋转，是乐园旗舰项目。</p></div>
+      <div class="card"><h3>探险河流 Adventure River</h3><p>620m漂流河穿越14个主题场景——热带丛林、地下洞穴、海豚泻湖和鳐鱼湾。</p></div>
+      <div class="card"><h3>彩虹礁 Rainbow Reef</h3><p>浮潜体验区，约20,000尾4种以上热带鱼在珊瑚礁间穿梭。无需潜水证书。</p></div>
+      <div class="card"><h3>Bluwater Bay 造浪池</h3><p>大型波浪池，模拟多种海浪模式，适合全龄。</p></div>
+      <div class="card"><h3>竞速滑道群</h3><p>Dueling Racer（双人竞速）、Pipeline Plunge（管道滑道）、Spiral Washout（漏斗滑道）等。</p></div>
+      <div class="card"><h3>儿童专区</h3><p>Big Bucket Treehouse（倾倒水桶）、Seahorse Hideaway（幼儿水池）、Splashworks（水上障碍挑战）。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2006年</div><div class="timeline-content"><h4>云顶集团中标</h4><p>云顶集团获得新加坡第二座综合度假村开发权，承诺投资 S$50 亿+。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2010年1月</div><div class="timeline-content"><h4>RWS 整体开业</h4><p>圣淘沙名胜世界首批设施（酒店、赌场、环球影城等）开业。RWS 总投资达 S$65.9亿。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2012年11月22日</div><div class="timeline-content"><h4>软开业</h4><p>海洋生物公园最后一批景点——Adventure Cove Waterpark 与 S.E.A. 海洋馆对公众开放。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2012年12月7日</div><div class="timeline-content"><h4>李显龙总理主持盛大开幕</h4><p>海洋生物公园正式开幕，成为东南亚最大的海洋主题景点集群。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2020–2021年</div><div class="timeline-content"><h4>COVID-19 暂停</h4><p>乐园约14个月闭园，2021年4月30日以安全管理措施重新开放。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024–2025年</div><div class="timeline-content"><h4>RWS 2.0 逐项落地</h4><p>Minion Land（USS）、新加坡海洋馆（升级自 S.E.A.）、WEAVE 商场、The Laurus 酒店陆续开业。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2030年前</div><div class="timeline-content"><h4>RWS 2.0 全面完成</h4><p>超级任天堂世界（USS）、滨海生活区（Benoy+Heatherwick）全面开放。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>RWS FY2024 收入</h4><p style="font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:500;color:var(--clr-primary);">S$25.3亿</p><p class="f-caption">约¥136亿，70%来自外国游客</p></div>
+      <div class="card" style="text-align:center;"><h4>估年客流</h4><p style="font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:500;color:var(--clr-primary);">80–150万</p><p class="f-caption">基于同规模水上乐园推算</p></div>
+      <div class="card" style="text-align:center;"><h4>成人门票</h4><p style="font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:500;color:var(--clr-primary);">S$38–42</p><p class="f-caption">约¥210–230（淡旺季浮动）</p></div>
+    </div>
+    <div class="card reveal">
+      <h3>母公司财报</h3>
+      <p>云顶新加坡（Genting Singapore PLC，SGX: G13）是东南亚最大的综合度假村运营商之一。2024财年集团收入 S$25.3亿（约¥136亿），净利润约 S$4.33亿。RWS 2.0 扩建计划总投资 S$45亿，其中滨海生活区（2家酒店+零售+88m地标雕塑）正在施工中。Adventure Cove 作为成熟运营资产，在 RWS 2.0 框架内无重大翻新计划，持续通过季节性活动（如 Dopamine Land 沉浸式体验、Pop Mart 联名）保持活力。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>水磁推进技术</h3><p>Riptide Rocket 利用线性感应电机（LIM）在水环境中驱动橡皮艇上坡。与传统重力滑道不同，磁力可实现爬升/加速/减速的精确控制。</p></div>
+      <div class="card"><h3>人工珊瑚礁系统</h3><p>Rainbow Reef 模拟热带珊瑚礁生态，维持约20,000尾热带鱼。闭式循环过滤系统确保水质适合人鱼共存。</p></div>
+      <div class="card"><h3>620m漂流河工程</h3><p>全球最长的水上漂流河之一，14个主题场景沿河道分布。微水流循环系统保持全河段恒定流速。</p></div>
+      <div class="card"><h3>波浪生成技术</h3><p>Bluwater Bay 采用气动式波浪发生系统，可切换多种波浪模式。最大浪高约1.5m。</p></div>
+      <div class="card"><h3>热带环境适应</h3><p>全园遮阳结构+植被覆盖，应对新加坡全年高温高湿。水处理厂实时监控水质。</p></div>
+      <div class="card"><h3>安全系统</h3><p>全面 RFID 腕带系统跟踪票务/储物柜/消费。7条滑道独立安全监控。全园闭路电视+救生员岗覆盖。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>餐饮配套</h3><p>The Bay Restaurant（主餐厅）+ 各主题区小食亭。提供亚洲及西式餐点，适合家庭。</p></div>
+      <div class="card"><h3>零售商店</h3><p>园区入口及出口处设纪念品商店，售卖泳装、防晒用品、毛巾及 RWS 专属商品。</p></div>
+      <div class="card"><h3>储物与更衣</h3><p>多个储物柜区域（小/中/大尺寸），RFID 腕带操作。宽敞更衣室+淋浴间+家庭卫生间。</p></div>
+      <div class="card"><h3>RWS 联动配套</h3><p>圣淘沙岛轻轨接驳、RWS 酒店群（6家酒店共1,500+客房）、环球影城、S.E.A. 海洋馆、水上探险等联动体验。</p></div>
+      <div class="card"><h3>家庭服务</h3><p>救生衣免费提供（各尺寸）、婴儿车停放区、急救站、失散儿童服务台。</p></div>
+      <div class="card"><h3>季节性活动</h3><p>Dopamine Land（2026年沉浸式体验）、Pop Mart 联名活动、节假日特别节目。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>RWS 2.0 推进中</h3><p>2024–2030年 S$45 亿扩建。Adventure Cove 本身无翻新计划，但受益于 RWS 整体升级带来的客流增长。</p></div>
+      <div class="card"><h3>新加坡海洋馆升级</h3><p>S.E.A. 海洋馆于2025年4月关闭，7月升级为"新加坡海洋馆"重开，规模扩大3倍，与 Adventure Cove 形成更紧密的海洋主题联动。</p></div>
+      <div class="card"><h3>The Laurus 酒店开业</h3><p>2025年10月，万豪 Luxury Collection 旗下 The Laurus 酒店开业，为新加坡首家该品牌酒店，毗邻海洋生物公园。</p></div>
+      <div class="card"><h3>旅游复苏强劲</h3><p>新加坡2024年国际游客约1,660万人次。RWS 作为核心旅游目的地持续受益于亚太旅游市场复苏。</p></div>
+      <div class="card"><h3>联名活动丰富</h3><p>2026年持续推出 Dopamine Land、Pop Mart 等年轻化 IP 合作，增强对 Z世代的吸引力。</p></div>
+      <div class="card"><h3>无独立扩建计划</h3><p>在 RWS 2.0 框架下，Adventure Cove 定位为成熟现金流资产，无公布独立的扩建或翻新计划。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>官方来源</h4><ul>
+      <li><a href="https://www.rwsentosa.com/en/attractions/adventure-cove-waterpark" target="_blank" rel="noopener">RWS — Adventure Cove 官方页面</a><span class="tag">官网</span></li>
+      <li><a href="https://www.genting.com/" target="_blank" rel="noopener">Genting Singapore 投资者关系</a><span class="tag">上市企业</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>百科与报道</h4><ul>
+      <li><a href="https://en.wikipedia.org/wiki/Adventure_Cove_Waterpark" target="_blank" rel="noopener">Wikipedia — Adventure Cove Waterpark</a><span class="tag">百科</span></li>
+      <li><a href="https://en.wikipedia.org/wiki/Marine_Life_Park" target="_blank" rel="noopener">Wikipedia — Marine Life Park</a><span class="tag">百科</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>设计与影像</h4><ul>
+      <li><a href="https://www.dpa.com.sg/projects/resorts-world-sentosa/" target="_blank" rel="noopener">DP Architects — RWS 项目页</a><span class="tag">设计</span></li>
+      <li><a href="https://michaelgraves.com/project/equarius-hotel-and-water-park/" target="_blank" rel="noopener">Michael Graves — Equarius 水公园</a><span class="tag">设计</span></li>
+      <li><a href="https://commons.wikimedia.org/wiki/Category:Adventure_Cove_Waterpark" target="_blank" rel="noopener">Wikimedia Commons — 自由版权图片</a><span class="tag">图库</span></li>
+    </ul></div>
+    <p class="f-caption" style="text-align:center;margin-top:2rem;">本报告所有数据来源于公开资料，仅供参考研究使用。数据截至 2026 年 6 月。</p>
+  </div>
+</section>
+
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+  var tilesLoaded = false;
+
+  var map = L.map('parkmap', {
+    center: [1.2577, 103.8178],
+    zoom: 17,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+
+  tileLayer.on('load', function() { tilesLoaded = true; clearTimeout(tileTimer); fallback.style.display = 'none'; });
+  tileLayer.addTo(map);
+  var tileTimer = setTimeout(function() { if (!tilesLoaded) fallback.style.display = 'block'; }, 8000);
+
+  var zones = [
+    { name: 'Bluwater Bay 造浪池', lat: 1.2577, lng: 103.8178, color: '#33B4D8' },
+    { name: 'Riptide Rocket', lat: 1.2580, lng: 103.8185, color: '#F5A623' },
+    { name: 'Rainbow Reef 彩虹礁', lat: 1.2582, lng: 103.8172, color: '#00C864' },
+    { name: 'Big Bucket Treehouse', lat: 1.2572, lng: 103.8170, color: '#FF8A00' },
+    { name: 'Adventure River', lat: 1.2575, lng: 103.8175, color: '#33B4D8' },
+    { name: 'Dueling Racer', lat: 1.2580, lng: 103.8174, color: '#0088B0' },
+    { name: 'Ray Bay', lat: 1.2573, lng: 103.8182, color: '#0088B0' }
+  ];
+
+  zones.forEach(function(z) {
+    var marker = L.marker([z.lat, z.lng], {
+      icon: L.divIcon({
+        className: '',
+        html: '<div style="width:12px;height:12px;background:' + z.color + ';border:2px solid white;border-radius:50%;box-shadow:0 0 6px ' + z.color + ';"></div>',
+        iconSize: [12, 12], iconAnchor: [6, 6], popupAnchor: [0, -6]
+      })
+    }).addTo(map);
+    marker.bindPopup('<div style="font-family:\'DM Sans\',sans-serif;font-size:13px;text-align:center;"><strong style="color:' + z.color + ';">' + z.name + '</strong></div>');
+  });
+
+  var bounds = L.latLngBounds([[1.2565, 103.8165], [1.2590, 103.8190]]);
+  map.fitBounds(bounds, {padding: [20, 20]});
+  setTimeout(function() { map.invalidateSize(); }, 300);
+});
+
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) { els.forEach(function(el) { el.classList.add('visible'); }); return; }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+document.getElementById('back-to-top').addEventListener('click', function(e) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+</script>
+</body>
+</html>

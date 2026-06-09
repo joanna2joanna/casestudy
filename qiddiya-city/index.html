@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qiddiya City — 全球首个"为玩乐而建的城市"，沙特Vision 2030超级工程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+:root {
+  --clr-primary: #C77D17;
+  --clr-primary-light: #E5A44A;
+  --clr-primary-dark: #8B5010;
+  --clr-accent: #D4AF37;
+}
+
+.hero {
+  background: linear-gradient(160deg, #5C3810 0%, #8B5010 40%, #C77D17 70%, #E5A44A 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(212,175,55,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>Qiddiya City · 奇迪亚城</h1>
+    <p class="hero-subtitle">全球首个"为玩乐而建的城市"——360平方公里沙漠巨构，沙特Vision 2030核心超级工程</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">360 km²</div><div class="kpi-label">总规划面积（巴黎的3倍）</div></div>
+      <div class="kpi-card"><div class="kpi-number">约¥2,750亿</div><div class="kpi-label">总投资（$380亿 USD）</div></div>
+      <div class="kpi-card"><div class="kpi-number">4,000万+</div><div class="kpi-label">全面运营后年客流预测</div></div>
+      <div class="kpi-card"><div class="kpi-number">70+</div><div class="kpi-label">规划核心资产/景点</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>开发商</h3><p>Qiddiya 投资公司（QIC），沙特公共投资基金（PIF）全资持有，主席为王储穆罕默德·本·萨勒曼</p></div>
+      <div class="card"><h3>地理位置</h3><p>沙特阿拉伯利雅得省，利雅得市中心西南约45 km，图瓦伊克悬崖之上</p></div>
+      <div class="card"><h3>占地面积</h3><p>总规划360 km²（36,000公顷），开发区域约223 km²，保留自然区约137 km²</p></div>
+      <div class="card"><h3>总体规划师</h3><p>Bjarke Ingels Group（BIG，丹麦），以"悬崖城市"为核心理念</p></div>
+      <div class="card"><h3>规划人口</h3><p>50–60万常住居民，20+个社区，约6万栋建筑</p></div>
+      <div class="card"><h3>预计就业</h3><p>2030年前创造20万+就业岗位</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>Qiddiya City（奇迪亚城）是沙特阿拉伯 Vision 2030 三大"超级项目"之一（与 NEOM 和红海项目并列），定位为全球首个以娱乐、游戏与休闲为核心的城市。项目于2017年由王储宣布，2019年公布 BIG 总体规划，核心娱乐区已部分开业。Six Flags Qiddiya City（32公顷）于2025年12月31日正式开园，包含全球最高/最快/最长过山车 Falcons Flight（195m高、250km/h、4.25km长）。Aquarabia 水上乐园（25.2公顷）2026年开业，全球首个龙珠主题公园（50+公顷）和 Speed Park F1 赛道（2028年举办首场F1大奖赛）正在建设中。穆罕默德·本·萨勒曼王子体育场（45,000座悬崖体育场）将成为2034年FIFA世界杯比赛场馆。全面落成预计2035年。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>公司/团队</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>总体规划</td><td>Bjarke Ingels Group（BIG，丹麦）</td><td>"悬崖城市"核心理念，三分之二土地保留自然</td></tr>
+          <tr><td>Six Flags 设计</td><td>AtkinsRéalis</td><td>6大主题区、28项设施、8座过山车综合设计</td></tr>
+          <tr><td>Six Flags 建设</td><td>Bouygues Bâtiment + Almabani 合资</td><td>SAR 37.5亿（约$10亿）建设合同</td></tr>
+          <tr><td>Falcons Flight 过山车</td><td>Intamin（列支敦士登）</td><td>全球首座Exa级过山车，3段LSM弹射</td></tr>
+          <tr><td>体育场设计</td><td>Populous（美国）</td><td>45,000座悬崖体育场，FIFA 2034场馆</td></tr>
+          <tr><td>Speed Park F1赛道</td><td>Hermann Tilke + Alex Wurz</td><td>21个弯道，108m高差，"The Blade"70m悬臂弯</td></tr>
+          <tr><td>表演艺术中心</td><td>Tom Wiscombe Architecture + BSBG</td><td>2026年2月奠基</td></tr>
+          <tr><td>电竞场馆</td><td>Populous + Experience Studios</td><td>50+公顷游戏电竞区，4场馆73,000座</td></tr>
+          <tr><td>高尔夫球场</td><td>Jack Nicklaus Design</td><td>18洞锦标赛级</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>总规划面积</td><td>360 km²（36,000公顷）</td><td>巴黎面积的3倍，迪士尼世界的3倍+</td></tr>
+          <tr><td>规模</td><td>开发区域</td><td>223 km²</td><td>约占总面积三分之一</td></tr>
+          <tr><td>规模</td><td>Six Flags 园区</td><td>32公顷</td><td>6大主题区，28项设施，8座过山车</td></tr>
+          <tr><td>规模</td><td>Aquarabia 水上乐园</td><td>25.2公顷</td><td>9大主题区，22项景点</td></tr>
+          <tr><td>规模</td><td>龙珠主题公园</td><td>50+公顷</td><td>全球首个，7大主题区，30+设施</td></tr>
+          <tr><td>规模</td><td>游戏电竞区</td><td>50+公顷</td><td>4场馆73,000座，25+电竞俱乐部</td></tr>
+          <tr><td>投资</td><td>Qiddiya 城总投资</td><td>约¥2,750亿（$380亿）</td><td>Vision 2030 三大超级工程之一</td></tr>
+          <tr><td>投资</td><td>Six Flags 建设合同</td><td>约¥72.5亿（$10亿）</td><td>SAR 37.5亿</td></tr>
+          <tr><td>运营</td><td>Six Flags 开园</td><td>2025年12月31日</td><td>Six Flags 北美外首园</td></tr>
+          <tr><td>运营</td><td>全面落成预计</td><td>2035年</td><td>含FIFA世界杯后</td></tr>
+          <tr><td>运营</td><td>年客流预测</td><td>4,000万+（全面运营后）</td><td>Six Flags 单日门票SAR 325（约¥625）</td></tr>
+          <tr><td>纪录</td><td>Falcons Flight</td><td>195m高 / 250km/h / 4,250m长</td><td>全球最高+最快+最长过山车</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">项目仍在建设中，部分数据为规划值。汇率：1 USD = ¥7.25，1 SAR = ¥1.93。数据截至 2026 年 6 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="qidGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#D4AF37" stop-opacity="0.2"/><stop offset="100%" stop-color="#D4AF37" stop-opacity="0"/></radialGradient>
+          </defs>
+          <rect width="800" height="520" fill="#1A1520" rx="12"/>
+
+          <!-- Tuwaiq Escarpment line -->
+          <line x1="100" y1="200" x2="700" y2="220" stroke="#C77D17" stroke-width="2" stroke-dasharray="8,4" opacity="0.5"/>
+          <text x="200" y="195" fill="#C77D17" font-family="DM Sans,sans-serif" font-size="10">图瓦伊克悬崖 Tuwaiq Escarpment</text>
+
+          <!-- Central City Centre -->
+          <rect x="280" y="100" width="240" height="150" rx="10" fill="url(#qidGlow)" stroke="#D4AF37" stroke-width="2"/>
+          <text x="400" y="135" text-anchor="middle" fill="#D4AF37" font-family="Playfair Display,serif" font-size="16" font-weight="700">City Centre</text>
+          <text x="400" y="155" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">城市中心·步行区·24小时活力</text>
+          <text x="400" y="175" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">酒店·零售·餐饮·办公</text>
+          <text x="400" y="195" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">20个社区·60,000栋建筑</text>
+
+          <!-- Six Flags (left area) -->
+          <rect x="50" y="260" width="160" height="60" rx="8" fill="rgba(199,125,23,0.15)" stroke="#C77D17" stroke-width="2"/>
+          <text x="130" y="285" text-anchor="middle" fill="#E5A44A" font-family="Playfair Display,serif" font-size="14" font-weight="700">Six Flags</text>
+          <text x="130" y="302" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">32公顷·8座过山车·已开业</text>
+          <text x="130" y="315" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">Falcons Flight·5项世界纪录</text>
+
+          <!-- Aquarabia (below Six Flags) -->
+          <rect x="60" y="350" width="140" height="50" rx="8" fill="rgba(0,150,200,0.12)" stroke="#0096C8" stroke-width="2"/>
+          <text x="130" y="372" text-anchor="middle" fill="#4DC8F0" font-family="Playfair Display,serif" font-size="13" font-weight="700">Aquarabia</text>
+          <text x="130" y="388" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">25.2公顷·2026年开业</text>
+
+          <!-- Speed Park (bottom center) -->
+          <rect x="280" y="380" width="200" height="55" rx="8" fill="rgba(229,57,53,0.12)" stroke="#E53935" stroke-width="2"/>
+          <text x="380" y="402" text-anchor="middle" fill="#EF5350" font-family="Playfair Display,serif" font-size="14" font-weight="700">Speed Park Track</text>
+          <text x="380" y="420" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">F1赛道·21弯·108m高差·2028首场</text>
+
+          <!-- Dragon Ball (right area) -->
+          <rect x="580" y="260" width="160" height="60" rx="8" fill="rgba(255,140,0,0.12)" stroke="#FF8C00" stroke-width="2"/>
+          <text x="660" y="285" text-anchor="middle" fill="#FFA726" font-family="Playfair Display,serif" font-size="14" font-weight="700">Dragon Ball Park</text>
+          <text x="660" y="302" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">50+公顷·7主题区·70m神龙雕像</text>
+          <text x="660" y="315" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">全球首个·2030年开幕</text>
+
+          <!-- Stadium (top right on cliff edge) -->
+          <rect x="580" y="60" width="170" height="60" rx="8" fill="rgba(212,175,55,0.12)" stroke="#D4AF37" stroke-width="2"/>
+          <text x="665" y="82" text-anchor="middle" fill="#D4AF37" font-family="Playfair Display,serif" font-size="13" font-weight="700">MBS Stadium</text>
+          <text x="665" y="98" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">悬崖体育场·45,000座·FIFA 2034</text>
+          <text x="665" y="112" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">可伸缩LED幕墙+屋顶</text>
+
+          <!-- Gaming/Esports (top left) -->
+          <rect x="50" y="60" width="170" height="55" rx="8" fill="rgba(156,39,176,0.12)" stroke="#9C27B0" stroke-width="2"/>
+          <text x="135" y="80" text-anchor="middle" fill="#CE93D8" font-family="Playfair Display,serif" font-size="13" font-weight="700">Gaming & Esports</text>
+          <text x="135" y="96" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">50+公顷·4场馆·73,000座</text>
+          <text x="135" y="110" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">全球最大电竞室内LED屏</text>
+
+          <!-- Performing Arts Centre -->
+          <rect x="280" y="280" width="150" height="45" rx="8" fill="rgba(212,175,55,0.1)" stroke="#D4AF37" stroke-width="1.5"/>
+          <text x="355" y="300" text-anchor="middle" fill="#D4AF37" font-family="Playfair Display,serif" font-size="12" font-weight="700">表演艺术中心</text>
+          <text x="355" y="315" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">2026年2月奠基</text>
+
+          <!-- Compass -->
+          <g transform="translate(760,40)">
+            <circle cx="0" cy="0" r="18" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.5"/>
+            <polygon points="0,-16 3,-4 16,0 3,4 0,16 -3,4 -16,0 -3,-4" fill="#D4AF37" opacity="0.8"/>
+            <text x="0" y="-22" text-anchor="middle" fill="#D4AF37" font-size="9" font-weight="700">N</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>Six Flags Qiddiya City</h3><p>已开业（2025.12.31）。6大主题区、28项设施、8座过山车、5项世界纪录。核心：Falcons Flight（Intamin Exa级）。</p></div>
+      <div class="card"><h3>Aquarabia 水上乐园</h3><p>2026年开业。全球最高水上过山车、双环水滑道、沙特首个冲浪池。</p></div>
+      <div class="card"><h3>Speed Park F1赛道</h3><p>预计2027-2028年完工。Hermann Tilke设计，21弯108m高差。"The Blade"70m悬臂弯道为全球首创。</p></div>
+      <div class="card"><h3>龙珠主题公园</h3><p>预计2030年。全球首个。50+公顷，7大主题区对应7颗龙珠。70m高神龙雕像，过山车从中穿过。</p></div>
+      <div class="card"><h3>悬崖体育场</h3><p>Populous设计。45,000座，三面看台+悬崖开放面。全球最大可伸缩LED幕墙。FIFA 2034世界杯场馆。</p></div>
+      <div class="card"><h3>游戏电竞区</h3><p>50+公顷。4场馆73,000座。25+职业电竞俱乐部驻扎。30+游戏开发公司总部。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2017年4月</div><div class="timeline-content"><h4>王储宣布项目</h4><p>穆罕默德·本·萨勒曼正式公布 Qiddiya 为 Vision 2030 三大超级工程之一。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2018年4月</div><div class="timeline-content"><h4>萨勒曼国王主持奠基</h4><p>项目正式破土动工，第一阶段建设启动。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019年</div><div class="timeline-content"><h4>BIG 公布总体规划</h4><p>Bjarke Ingels Group 公布"悬崖城市"总体规划：360 km²，三分之一开发、三分之二保留自然。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年1月</div><div class="timeline-content"><h4>悬崖体育场设计公布</h4><p>Populous 设计的穆罕默德·本·萨勒曼王子体育场方案亮相，三面看台+悬崖开放面。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年3月</div><div class="timeline-content"><h4>龙珠主题公园宣布</h4><p>与东映动画达成战略合作，全球首个龙珠主题公园落地 Qiddiya。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年12月31日</div><div class="timeline-content"><h4>Six Flags Qiddiya City 盛大开业</h4><p>Alicia Keys 开幕庆典。Six Flags 品牌北美之外首个项目，Falcons Flight 创3项世界纪录。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年3月</div><div class="timeline-content"><h4>Aquarabia 开业</h4><p>第二个重大景点，斋月期间开门迎客。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年2月</div><div class="timeline-content"><h4>表演艺术中心奠基</h4><p>Tom Wiscombe Architecture 设计，标志性"刀刃"元素建筑。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2028年</div><div class="timeline-content"><h4>首届F1沙特大奖赛（计划）</h4><p>从吉达迁至 Qiddiya Speed Park。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2030年</div><div class="timeline-content"><h4>Vision 2030 里程碑</h4><p>龙珠公园、主要电竞场馆完工。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2034年</div><div class="timeline-content"><h4>FIFA 世界杯</h4><p>穆罕默德·本·萨勒曼王子体育场承办世界杯比赛。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2035年</div><div class="timeline-content"><h4>全面落成</h4><p>70+资产全部完工，20个社区全面运营。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>Six Flags 门票</h4><p style="font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:500;color:var(--clr-primary);">SAR 325</p><p class="f-caption">成人单日（约¥625），儿童SAR 275（约¥528）</p></div>
+      <div class="card" style="text-align:center;"><h4>Falcons Flight 纪录</h4><p style="font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:500;color:var(--clr-accent);">3项世界纪录</p><p class="f-caption">195m高 / 250km/h / 4,250m长，首座Exa级过山车</p></div>
+      <div class="card" style="text-align:center;"><h4>Six Flags 纪录</h4><p style="font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:500;color:var(--clr-primary);">5项世界纪录</p><p class="f-caption">Sirocco Tower、Gyrospin、Spitfire等</p></div>
+    </div>
+    <div class="card reveal">
+      <h3>母公司与治理</h3>
+      <p>Qiddiya 投资公司（QIC）为 PIF（沙特公共投资基金，资产约$7,000亿）全资子公司，主席穆罕默德·本·萨勒曼王储。PIF 是 Vision 2030 的核心执行工具。Qiddiya 与 NEOM（线性城市）、红海项目（奢华旅游）并列三大超级工程，共同承担沙特经济从石油向旅游+娱乐多元化转型的战略使命。Six Flags 通过管理协议运营主题公园，酒店运营由 PIF 旗下 Adeera 负责（品牌：Alia, Sama, Noor）。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>Falcons Flight 技术</h3><p>Intamin 制造。3段LSM弹射（700+模块），6辆14人列车，双月台。163m结构高度，195m总高程变化，158m最大单次落差，运行约3分35秒。</p></div>
+      <div class="card"><h3>The Blade 悬臂弯</h3><p>全球首个悬臂式F1弯道。距地面70m，下方设音乐演出场地。赛道逆时针，全圈108m高差，最高时速325+km/h。</p></div>
+      <div class="card"><h3>可伸缩LED幕墙</h3><p>体育场全球最大可伸缩LED幕墙，配合可伸缩屋顶+可转换球场，实现足球/电竞/演唱会三合一。</p></div>
+      <div class="card"><h3>沙漠被动冷却</h3><p>遮阳结构+水景系统设计应对极端高温。水上乐园较传统设计节水75%。雨水收集→处理→灌溉闭环。</p></div>
+      <div class="card"><h3>交通体系</h3><p>利雅得地铁7号线（规划中）、Qiddiya高铁（连接机场）、4条市区公交线路。40分钟可达利雅得市中心。</p></div>
+      <div class="card"><h3>全球定位</h3><p>沙特2030年前旅游目标1亿人次/年。Qiddiya 是核心承载区，与 Expo 2030 利雅得和 FIFA 2034 形成战略协同。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>酒店集群</h3><p>Adeera 旗下 Alia / Sama / Noor 三大品牌。赛车主题酒店（257间+65套公寓，136m高塔楼）。全面运营后酒店供给达数千间。</p></div>
+      <div class="card"><h3>交通设施</h3><p>地铁7号线穿行 Qiddiya、高铁接驳利雅得机场、4条公交线路。园区内部"无车"步行设计。</p></div>
+      <div class="card"><h3>体育设施</h3><p>悬崖体育场（45,000座）、全国网球中心、18洞Jack Nicklaus锦标赛高尔夫球场、奥林匹克博物馆。</p></div>
+      <div class="card"><h3>文娱设施</h3><p>表演艺术中心（2026年奠基）、电竞综合区（全球最大LED屏）、70+景点/资产全覆盖。</p></div>
+      <div class="card"><h3>社区配套</h3><p>20个规划社区、60,000栋建筑、50-60万常住人口。学校、医院、商业中心全配套。</p></div>
+      <div class="card"><h3>自然保育</h3><p>137 km²保留自然区域。雨水收集→灌溉闭环。三分之一土地永久不开发，图瓦伊克悬崖生态保护区。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>Six Flags 已开业</h3><p>2025年12月31日开园，Alicia Keys 庆典。Falcons Flight 成为全球关注焦点，创3项过山车世界纪录。</p></div>
+      <div class="card"><h3>交通网络加速</h3><p>2025-2026年利雅得至 Qiddiya 主干道扩建、地铁7号线评估中、高铁意向征集启动。</p></div>
+      <div class="card"><h3>电竞世界杯</h3><p>2025年电竞世界杯 Qiddiya 互动展区接待41,250人。游戏电竞区建设持续推进。</p></div>
+      <div class="card"><h3>Aquarabia 即将开业</h3><p>2026年3月斋月期间开业。22项景点、全球最高水上过山车、沙特首个冲浪池。</p></div>
+      <div class="card"><h3>F1迁址计划</h3><p>沙特官方有意2028年将大奖赛从吉达迁至 Qiddiya Speed Park。可能同时保留两站赛事。</p></div>
+      <div class="card"><h3>2030愿景加速</h3><p>龙珠公园、FIFA 2034 体育场、全面交通体系等关键里程碑按 Vision 2030 时间表快速推进。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>官方来源</h4><ul>
+      <li><a href="https://qiddiya.com/" target="_blank" rel="noopener">Qiddiya 官方网站</a><span class="tag">官网</span></li>
+      <li><a href="https://www.pif.gov.sa/en/our-investments/giga-projects/qiddiya/" target="_blank" rel="noopener">PIF — Qiddiya 项目页</a><span class="tag">官方</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>深度报道</h4><ul>
+      <li><a href="https://en.wikipedia.org/wiki/Qiddiya_City" target="_blank" rel="noopener">Wikipedia — Qiddiya City</a><span class="tag">百科</span></li>
+      <li><a href="https://en.wikipedia.org/wiki/Six_Flags_Qiddiya_City" target="_blank" rel="noopener">Wikipedia — Six Flags Qiddiya</a><span class="tag">百科</span></li>
+      <li><a href="https://saudipedia.com/" target="_blank" rel="noopener">Saudipedia — 奇迪亚项目（中文）</a><span class="tag">中东研究</span></li>
+      <li><a href="https://www.cbnme.com/news/six-flags-qiddiya-city-opens-marking-a-new-era-for-saudi-mega-builds/" target="_blank" rel="noopener">Construction Business News — 开业报道</a><span class="tag">行业媒体</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>视频与媒体</h4><ul>
+      <li><a href="https://www.youtube.com/results?search_query=Qiddiya+City+Six+Flags" target="_blank" rel="noopener">YouTube — Qiddiya City 视频</a><span class="tag">视频</span></li>
+      <li><a href="https://www.independent.co.uk/travel/news-and-advice/six-flags-qiddiya-city-saudi-arabia-opens-falcon-flight-rollercoaster-b2899355.html" target="_blank" rel="noopener">The Independent — Falcons Flight 报道</a><span class="tag">媒体</span></li>
+    </ul></div>
+    <p class="f-caption" style="text-align:center;margin-top:2rem;">本报告所有数据来源于公开资料，仅供参考研究使用。数据截至 2026 年 6 月。</p>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+  var tilesLoaded = false;
+
+  var map = L.map('parkmap', {
+    center: [24.588, 46.339],
+    zoom: 14,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+
+  tileLayer.on('load', function() { tilesLoaded = true; clearTimeout(tileTimer); fallback.style.display = 'none'; });
+  tileLayer.addTo(map);
+  var tileTimer = setTimeout(function() { if (!tilesLoaded) fallback.style.display = 'block'; }, 8000);
+
+  var zones = [
+    { name: 'Six Flags Qiddiya City', lat: 24.5888, lng: 46.3327, color: '#C77D17' },
+    { name: 'City Centre 城市中心', lat: 24.5881, lng: 46.3386, color: '#D4AF37' },
+    { name: 'Speed Park Track', lat: 24.5860, lng: 46.3400, color: '#E53935' },
+    { name: 'Dragon Ball Park', lat: 24.5900, lng: 46.3450, color: '#FF8C00' },
+    { name: 'MBS Stadium 悬崖体育场', lat: 24.5910, lng: 46.3440, color: '#D4AF37' },
+    { name: 'Gaming & Esports', lat: 24.5890, lng: 46.3330, color: '#9C27B0' },
+    { name: 'Aquarabia', lat: 24.5870, lng: 46.3340, color: '#0096C8' }
+  ];
+
+  zones.forEach(function(z) {
+    var marker = L.marker([z.lat, z.lng], {
+      icon: L.divIcon({
+        className: '',
+        html: '<div style="width:12px;height:12px;background:' + z.color + ';border:2px solid white;border-radius:50%;box-shadow:0 0 6px ' + z.color + ';"></div>',
+        iconSize: [12, 12], iconAnchor: [6, 6], popupAnchor: [0, -6]
+      })
+    }).addTo(map);
+    marker.bindPopup('<div style="font-family:\'DM Sans\',sans-serif;font-size:13px;text-align:center;"><strong style="color:' + z.color + ';">' + z.name + '</strong></div>');
+  });
+
+  var bounds = L.latLngBounds([[24.584, 46.330], [24.593, 46.348]]);
+  map.fitBounds(bounds, {padding: [20, 20]});
+  setTimeout(function() { map.invalidateSize(); }, 300);
+});
+
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) { els.forEach(function(el) { el.classList.add('visible'); }); return; }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+document.getElementById('back-to-top').addEventListener('click', function(e) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+</script>
+</body>
+</html>

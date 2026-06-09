@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>长鹿旅游休博园 — 从农庄到5A级的超级乐园，粤港澳大湾区最大综合休闲度假区</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+:root {
+  --clr-primary: #2E7D32;
+  --clr-primary-light: #4CAF50;
+  --clr-primary-dark: #1B5E20;
+  --clr-accent: #FF8F00;
+}
+
+.hero {
+  background: linear-gradient(160deg, #1B5E20 0%, #2E7D32 40%, #4CAF50 70%, #A5D6A7 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(255,143,0,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>长鹿旅游休博园</h1>
+    <p class="hero-subtitle">顺德唯一国家5A级景区——从农庄起家、18年打磨的粤港澳大湾区超级综合度假区</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">40公顷</div><div class="kpi-label">核心园区面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">约¥35.8亿</div><div class="kpi-label">累计投资总额</div></div>
+      <div class="kpi-card"><div class="kpi-number">400万+</div><div class="kpi-label">年接待游客</div></div>
+      <div class="kpi-card"><div class="kpi-number">10大</div><div class="kpi-label">主题园区</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>运营主体</h3><p>广东长鹿环保度假农庄有限公司 / 广东长鹿旅游休博园有限公司</p></div>
+      <div class="card"><h3>母公司</h3><p>长鹿集团有限公司（1999年成立，法定代表人邹颂炫）</p></div>
+      <div class="card"><h3>地理位置</h3><p>广东省佛山市顺德区伦教三洲建设东路8号，顺德与广州番禺交界处</p></div>
+      <div class="card"><h3>占地面积</h3><p>核心园区40公顷（40万m²），总规划约530公顷</p></div>
+      <div class="card"><h3>景区等级</h3><p>国家AAAAA级旅游景区（2014年11月获评），顺德区唯一5A景区</p></div>
+      <div class="card"><h3>门票</h3><p>基础票¥120起（含游乐金¥120-250），畅玩套票¥370起</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>佛山长鹿旅游休博园（原名长鹿农庄）是粤港澳大湾区最具规模的本土综合休闲度假区。项目于2001年由长鹿集团投资兴建，2003年开始试营业，经过长达18年的持续扩建与打磨，于2014年获评国家5A级旅游景区，2018年正式开业。园区拥有十大主题区——尖叫岛（100+种机动游乐设施）、童话动物王国（上万只动物）、长鹿度假村（11大主题酒店）、矿洞海洋馆、湿地公园、农家乐、军事主题公园、冰雪世界、柯伊伯科技世界、温泉水世界——以"农庄起源+极致品类+一站式度假"模式在广东旅游市场占据独特地位。2024年启动新文旅项目（追加投资¥28亿），新增1,750间主题客房及海洋馆扩建，预计2026年全面落成。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>公司/团队</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>核心规划设计</td><td>广东长鹿旅游规划设计有限公司</td><td>长鹿集团全资子公司，20余年"自主设计+自主运营"经验</td></tr>
+          <tr><td>运营主体</td><td>广东长鹿环保度假农庄有限公司</td><td>2003年成立，注册资本¥1,000万</td></tr>
+          <tr><td>上级管理</td><td>广东长鹿旅游休博园有限公司</td><td>2013年成立，注册资本¥1亿</td></tr>
+          <tr><td>新文旅项目建设</td><td>广东皓泰</td><td>2025年中标长鹿休博园建设项目</td></tr>
+          <tr><td>参与设计方</td><td>深圳市天人创境文旅规划设计有限公司</td><td>曾参与长鹿休博园设计服务</td></tr>
+          <tr><td>输出项目</td><td>山东章丘长鹿白云湖休博园（合作开发）</td><td>三方合资，总投资超¥30亿，"长鹿模式"对外输出</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>核心园区面积</td><td>40公顷（40万m²）</td><td>十大主题园区</td></tr>
+          <tr><td>规模</td><td>总规划面积</td><td>约530公顷</td><td>含周边规划及生态缓冲区</td></tr>
+          <tr><td>规模</td><td>主题园区数量</td><td>10大园区</td><td>尖叫岛/动物王国/度假村/海洋馆等</td></tr>
+          <tr><td>规模</td><td>机动游乐设施</td><td>100+种</td><td>含魔环垂直过山车（50m/100km/h）</td></tr>
+          <tr><td>规模</td><td>动物种类/数量</td><td>上百种/上万只</td><td>含亚洲象/长颈鹿/白犀牛等</td></tr>
+          <tr><td>规模</td><td>主题客房</td><td>现有特色房+新增1,750间（2026年）</td><td>火车/船屋/树屋/海底/洞穴等11大主题</td></tr>
+          <tr><td>投资</td><td>历史累计投资</td><td>约¥7.8亿（截至2018年）</td><td></td></tr>
+          <tr><td>投资</td><td>新文旅追加投资</td><td>¥28亿（2024年启动）</td><td>建筑面积约15万m²</td></tr>
+          <tr><td>投资</td><td>合计投资规模</td><td>约¥35.8亿</td><td></td></tr>
+          <tr><td>运营</td><td>开业时间</td><td>2003年试营业 / 2018年8月正式开业</td><td>5A级景区认定：2014年11月</td></tr>
+          <tr><td>运营</td><td>年接待游客</td><td>400万+</td><td>日最高峰6.5万人次</td></tr>
+          <tr><td>运营</td><td>2024年春节/2026五一</td><td>超25万 / 近20万</td><td>节假日客流</td></tr>
+          <tr><td>运营</td><td>新文旅预期客流</td><td>联合现有园区年接待可超1,000万</td><td>预计2026年全面落成后</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">以上数据基于公开资料及官方披露。数据截至 2026 年 6 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="480" fill="#1A1E12" rx="12"/>
+
+          <!-- River/Pearl River -->
+          <path d="M 0 300 C 200 280, 400 320, 800 280" fill="none" stroke="#4FC3F7" stroke-width="2" opacity="0.3" stroke-dasharray="8,4"/>
+          <text x="100" y="295" fill="#4FC3F7" font-family="DM Sans,sans-serif" font-size="9">毗邻珠江干流</text>
+
+          <!-- 尖叫岛 (top center) -->
+          <rect x="280" y="40" width="200" height="80" rx="10" fill="rgba(229,57,53,0.12)" stroke="#E53935" stroke-width="2"/>
+          <text x="380" y="68" text-anchor="middle" fill="#EF5350" font-family="Playfair Display,serif" font-size="16" font-weight="700">尖叫岛</text>
+          <text x="380" y="88" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">100+种机动游乐·魔环垂直过山车</text>
+          <text x="380" y="106" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">弹射飞人·龙风过山车·蹦极·飞翔影院</text>
+
+          <!-- 童话动物王国 (right) -->
+          <rect x="540" y="140" width="180" height="80" rx="10" fill="rgba(255,143,0,0.12)" stroke="#FF8F00" stroke-width="2"/>
+          <text x="630" y="168" text-anchor="middle" fill="#FFA726" font-family="Playfair Display,serif" font-size="16" font-weight="700">童话动物王国</text>
+          <text x="630" y="188" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">狮虎山·长颈鹿·亚洲象·白犀牛</text>
+          <text x="630" y="206" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">百鸟天堂·非洲草原·动物剧场</text>
+
+          <!-- 长鹿度假村 (top left) -->
+          <rect x="50" y="80" width="170" height="65" rx="10" fill="rgba(156,39,176,0.12)" stroke="#9C27B0" stroke-width="2"/>
+          <text x="135" y="105" text-anchor="middle" fill="#CE93D8" font-family="Playfair Display,serif" font-size="15" font-weight="700">长鹿度假村</text>
+          <text x="135" y="123" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">火车/船屋/树屋/洞穴/海底</text>
+          <text x="135" y="139" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">11大主题酒店·1,750间新客房</text>
+
+          <!-- 矿洞海洋馆 (lower right) -->
+          <rect x="550" y="280" width="160" height="65" rx="10" fill="rgba(0,136,176,0.12)" stroke="#0088B0" stroke-width="2"/>
+          <text x="630" y="305" text-anchor="middle" fill="#4FC3F7" font-family="Playfair Display,serif" font-size="15" font-weight="700">矿洞海洋馆</text>
+          <text x="630" y="325" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">矿洞主题·深海浮潜·海洋生物</text>
+
+          <!-- 湿地公园 (left bottom) -->
+          <rect x="50" y="320" width="160" height="60" rx="10" fill="rgba(76,175,80,0.12)" stroke="#4CAF50" stroke-width="2"/>
+          <text x="130" y="345" text-anchor="middle" fill="#81C784" font-family="Playfair Display,serif" font-size="15" font-weight="700">湿地主题公园</text>
+          <text x="130" y="363" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">乘船观鸟·水上浮桥·生态保育</text>
+
+          <!-- 农家乐 (bottom center) -->
+          <rect x="260" y="360" width="160" height="60" rx="10" fill="rgba(139,195,74,0.12)" stroke="#8BC34A" stroke-width="2"/>
+          <text x="340" y="385" text-anchor="middle" fill="#AED581" font-family="Playfair Display,serif" font-size="15" font-weight="700">农家乐主题公园</text>
+          <text x="340" y="403" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">岭南水乡·桑基鱼塘·酿酒坊</text>
+
+          <!-- 冰雪世界 (center left) -->
+          <rect x="250" y="180" width="130" height="55" rx="8" fill="rgba(3,169,244,0.12)" stroke="#03A9F4" stroke-width="2"/>
+          <text x="315" y="203" text-anchor="middle" fill="#4FC3F7" font-family="Playfair Display,serif" font-size="13" font-weight="700">冰雪世界</text>
+          <text x="315" y="222" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">360度百米冰滑道</text>
+
+          <!-- 军事/科技/温泉 (right column small) -->
+          <rect x="540" y="380" width="78" height="45" rx="6" fill="rgba(255,255,255,0.05)" stroke="#666" stroke-width="1"/>
+          <text x="579" y="400" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="10">军事</text>
+
+          <rect x="626" y="380" width="84" height="45" rx="6" fill="rgba(255,255,255,0.05)" stroke="#666" stroke-width="1"/>
+          <text x="668" y="400" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="10">科技世界</text>
+
+          <!-- Earth Village (马戏, top right small) -->
+          <rect x="560" y="40" width="120" height="45" rx="8" fill="rgba(255,193,7,0.12)" stroke="#FFC107" stroke-width="2"/>
+          <text x="620" y="58" text-anchor="middle" fill="#FFD54F" font-family="Playfair Display,serif" font-size="12" font-weight="700">地球村·马戏</text>
+          <text x="620" y="74" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">国际杂技·幻秀大马戏</text>
+
+          <!-- Entrance (bottom) -->
+          <polygon points="360,450 440,450 430,435 370,435" fill="rgba(76,175,80,0.2)" stroke="#4CAF50" stroke-width="1.5"/>
+          <text x="400" y="470" text-anchor="middle" fill="#4CAF50" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">建设东路8号·主入口</text>
+
+          <!-- Compass -->
+          <g transform="translate(760,30)">
+            <circle cx="0" cy="0" r="16" fill="none" stroke="#FF8F00" stroke-width="1" opacity="0.5"/>
+            <polygon points="0,-14 2,-3 14,0 2,3 0,14 -2,3 -14,0 -2,-3" fill="#FF8F00" opacity="0.8"/>
+            <text x="0" y="-19" text-anchor="middle" fill="#FF8F00" font-size="8" font-weight="700">N</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>尖叫岛（机动游乐园）</h3><p>100+种机动项目。魔环垂直过山车（50m/100km/h）、弹射飞人（55m/2秒）、龙风过山车、45m蹦极、飞翔影院（180度环幕）。</p></div>
+      <div class="card"><h3>童话动物王国</h3><p>狮虎山、长颈鹿国王之家、亚洲象区、白犀牛区、百鸟天堂、非洲草原。童话动物剧场每日两场（11:00/15:00）。</p></div>
+      <div class="card"><h3>长鹿度假村</h3><p>火车/船屋/树屋/洞穴/海底/马车/长颈鹿等11大主题酒店客房。长颈鹿主题房可"与长颈鹿同吃同住"。2026年新增1,750间。</p></div>
+      <div class="card"><h3>矿洞海洋馆+冰雪世界</h3><p>矿洞主题海洋馆，深海浮潜区，零距离接触海洋生物。冰雪世界为华南区空间最高冰雕馆，360度百米冰滑道。</p></div>
+      <div class="card"><h3>岭南农耕+湿地+军事</h3><p>顺德桑基鱼塘循环农业展示、湿地乘船观鸟、军事主题坦克/真人CS/国防科普，多维体验全覆盖。</p></div>
+      <div class="card"><h3>柯伊伯科技+温泉+马戏</h3><p>VR/AR/AI/机器人互动、矿洞汤池+SPA、地球村·幻秀大马戏（3,800座），国际杂技+高空大飞轮+飞车表演。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1997–1999年</div><div class="timeline-content"><h4>集团前身创立</h4><p>顺德长鹿实业有限公司成立（1997年），长鹿集团有限公司注册（1999年，邹颂炫为法定代表人）。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2001年</div><div class="timeline-content"><h4>长鹿农庄投资兴建</h4><p>广东长鹿集团投资"长鹿农庄"，预计总投资¥7.8亿。以"农家乐+环保度假"为核心理念起步。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2003年</div><div class="timeline-content"><h4>试营业开始</h4><p>以"长鹿农庄"品牌开始试营业。广东长鹿环保度假农庄有限公司注册成立。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2014年11月</div><div class="timeline-content"><h4>获评国家5A级景区</h4><p>国家旅游局公示第九批5A级景区名单。顺德区唯一5A。同期由"长鹿农庄"正式更名为"长鹿旅游休博园"。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2018年8月18日</div><div class="timeline-content"><h4>18年打造后正式开业</h4><p>结束长达18年的建设与试运营期。特色主题酒店群上线，十大主题区完整呈现。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023年</div><div class="timeline-content"><h4>营收与客流双创历史新高</h4><p>营收对比最高年份增长20%以上，入园人数增长50%以上。运营指标达到开园以来最佳。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年2月25日</div><div class="timeline-content"><h4>新文旅项目启动</h4><p>追加投资¥28亿，建筑面积约15万m²，含1,750间主题客房、海洋馆扩建、佛山老街等。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年11月11日</div><div class="timeline-content"><h4>新文旅一期封顶</h4><p>28亿新文旅项目一期正式封顶，进入全面装修及设备安装阶段。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">预计2026年</div><div class="timeline-content"><h4>新文旅全面落成</h4><p>联合现有园区年接待能力可达上千万人次，粤港澳大湾区文旅新地标。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>年接待游客</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">400万+</p><p class="f-caption">日最高峰6.5万人次</p></div>
+      <div class="card" style="text-align:center;"><h4>机动游乐设施</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">100+</p><p class="f-caption">种游乐项目</p></div>
+      <div class="card" style="text-align:center;"><h4>国家5A级</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">2014年</p><p class="f-caption">顺德区唯一国家5A级景区</p></div>
+    </div>
+    <div class="card reveal" style="margin-bottom:1.5rem;">
+      <h3>节庆客流表现</h3>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>节庆</th><th>客流数据</th><th>特色活动</th></tr></thead>
+          <tbody>
+            <tr><td>2026年五一假期</td><td>近20万人次</td><td>"花young五一"·水上飞人·飞天凤凰灯光秀</td></tr>
+            <tr><td>2024年春节假期</td><td>超25万人次</td><td>岭南非遗醒狮·新春大巡游·长鹿九大簋盛宴</td></tr>
+            <tr><td>2026年春节</td><td>—</td><td>"长鹿陪你，粤玩粤好"·万人《万福图》</td></tr>
+            <tr><td>2023年全年</td><td>营收与客流均创历史新高</td><td>营收对比最高年份+20%，入园+50%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card reveal">
+      <h3>长鹿集团发展模式</h3>
+      <p>长鹿集团以"自主设计+自主运营"为核心能力，旗下长鹿旅游规划设计公司具备从规划设计到运营管理全链条输出能力。山东章丘长鹿白云湖休博园（三方合资，总投资超¥30亿）是"长鹿模式"对外输出的首个项目。集团多元化业务涵盖旅游度假、精细化工（硅酮密封胶）、影视文化、新材料等版块。2023年创收创新高后，2024年启动¥28亿新文旅追加投资，完成从"农庄→5A级景区→文旅母舰"的三级跳。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>魔环垂直过山车</h3><p>园区标志性设施，高度50m，最高速度100km/h。由国际过山车制造商提供，是华南地区少有的垂直提升式过山车。</p></div>
+      <div class="card"><h3>冰雪世界冷能循环</h3><p>地源热泵制冷系统，冷凝水回收形成"冷能→冷凝水→湿地补水"闭环。华南区空间最高的冰雕艺术馆。</p></div>
+      <div class="card"><h3>动物王国规模</h3><p>上百种动物、上万只个体。亚洲象"玉腊"展区2026年3月启动整改：增加丰容设施+沙浴场地+扩建200m²室外活动场。</p></div>
+      <div class="card"><h3>桑基鱼塘循环农业</h3><p>完整复刻岭南传统桑基鱼塘循环系统：塘基种桑→桑叶养蚕→蚕沙喂鱼→塘泥肥桑，展示珠三角千年农耕智慧。</p></div>
+      <div class="card"><h3>11大主题住宿</h3><p>火车/船屋/树屋/海底/洞穴/马车/长颈鹿/马车等。长颈鹿主题房首创"与长颈鹿同吃同住"体验。2026年增1,750间。</p></div>
+      <div class="card"><h3>区位交通优势</h3><p>广佛交界核心腹地，距广州南站约20分钟车程。粤港澳大湾区1.5小时交通圈覆盖超7,000万人口。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>主题酒店集群</h3><p>火车/船屋/树屋/海底/洞穴/马车/长颈鹿等11大主题客房。2026年新文旅新增1,750间五星至八星级标准客房，可同时接待超5,000名游客入住。</p></div>
+      <div class="card"><h3>餐饮体系</h3><p>各主题区配特色餐厅及小食亭。农家乐主题区主打顺德地方菜及桑基鱼塘食材。长鹿九大簋盛宴（南宋经典筵席）为节庆特色。</p></div>
+      <div class="card"><h3>演艺场馆</h3><p>地球村·幻秀大马戏（3,800座）、童话动物剧场（每日两场）、飞翔影院（180度环幕）、5D影院（升级改造中）等数十个演艺空间。</p></div>
+      <div class="card"><h3>停车与交通</h3><p>大型停车场，公交314路/349路/910路/908路直达"长鹿度假农庄"站。广佛交界区位，自驾+公交双便利。</p></div>
+      <div class="card"><h3>新文旅设施（2026年）</h3><p>佛山老街（岭南文化步行街）、中大型海洋馆、演艺中心、冰雪世界扩建。建筑面积约15万m²。</p></div>
+      <div class="card"><h3>家庭服务</h3><p>全园婴儿车租赁、家庭卫生间、急救站、储物柜、失散儿童服务。年卡及一票通畅玩套餐可选。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>¥28亿新文旅推进中</h3><p>2024年2月启动，11月一期封顶，预计2026年全面落成。新增1,750间客房+海洋馆+佛山老街+演艺中心。</p></div>
+      <div class="card"><h3>亚洲象展区整改</h3><p>2026年3月回应游客反馈，制定10日内/9月30日前两阶段整改方案：丰容设施+沙浴+200m²扩建。</p></div>
+      <div class="card"><h3>2026五一近20万人次</h3><p>"花young五一"活动吸引近20万游客。水上飞人、飞天凤凰灯光秀、水上火舞等新项目广受好评。</p></div>
+      <div class="card"><h3>"长鹿模式"输出</h3><p>山东章丘长鹿白云湖休博园（三方合资，投资超¥30亿）标志着"长鹿模式"从顺德单点向全国复制。</p></div>
+      <div class="card"><h3>年客流过千万展望</h3><p>新文旅落成后联合现有园区，年接待能力可达上千万人次。有望成为粤港澳大湾区文旅新地标。</p></div>
+      <div class="card"><h3>持续迭代基因</h3><p>从农庄→5A级景区→超级综合体，长鹿已形成"持续扩建+滚动投资+品类扩张"的独特发展路径。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>百科与官方</h4><ul>
+      <li><a href="https://baike.baidu.com/item/%E4%BD%9B%E5%B1%B1%E5%B8%82%E9%95%BF%E9%B9%BF%E6%97%85%E6%B8%B8%E4%BC%91%E5%8D%9A%E5%9B%AD/64844562" target="_blank" rel="noopener">百度百科 — 长鹿旅游休博园</a><span class="tag">百科</span></li>
+      <li><a href="https://www.sohu.com/a/250037406_161795" target="_blank" rel="noopener">搜狐 — 试营业18年后正式开业</a><span class="tag">媒体报道</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>最新动态</h4><ul>
+      <li><a href="http://www.gd.chinanews.com.cn/2024/2024-11-14/438182.shtml" target="_blank" rel="noopener">中国新闻网 — 新文旅项目一期封顶</a><span class="tag">媒体</span></li>
+      <li><a href="https://m.jiemian.com/article/14183659.html" target="_blank" rel="noopener">界面新闻 — 大象展区整改方案</a><span class="tag">媒体</span></li>
+      <li><a href="https://fs.leju.com/news/2024-11-12/15167261926027637869863.shtml" target="_blank" rel="noopener">佛山乐居 — 1750间新客房</a><span class="tag">媒体</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>地图与影像</h4><ul>
+      <li><a href="http://www.bigemap.net/city-101165.html" target="_blank" rel="noopener">BIGEMAP — 长鹿度假村卫星地图</a><span class="tag">地图</span></li>
+      <li><a href="https://commons.wikimedia.org/w/index.php?search=Chuanlord" target="_blank" rel="noopener">Wikimedia Commons — 自由版权图片</a><span class="tag">图库</span></li>
+    </ul></div>
+    <p class="f-caption" style="text-align:center;margin-top:2rem;">本报告所有数据来源于公开资料，仅供参考研究使用。数据截至 2026 年 6 月。</p>
+  </div>
+</section>
+
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+function wgs84ToGcj02(wgsLng, wgsLat) {
+  var a = 6378245.0, ee = 0.00669342162296594323;
+  function _transformLat(x, y) {
+    var r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(y*Math.PI) + 40*Math.sin(y/3*Math.PI))*2/3;
+    r += (160*Math.sin(y/12*Math.PI) + 320*Math.sin(y*Math.PI/30))*2/3;
+    return r;
+  }
+  function _transformLng(x, y) {
+    var r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(x*Math.PI) + 40*Math.sin(x/3*Math.PI))*2/3;
+    r += (150*Math.sin(x/12*Math.PI) + 300*Math.sin(x/30*Math.PI))*2/3;
+    return r;
+  }
+  var dLat = _transformLat(wgsLng - 105, wgsLat - 35);
+  var dLng = _transformLng(wgsLng - 105, wgsLat - 35);
+  var radLat = wgsLat/180*Math.PI;
+  var magic = 1 - ee*Math.sin(radLat)*Math.sin(radLat);
+  return {
+    lng: wgsLng + (180*dLng)/((a/Math.sqrt(magic))*Math.cos(radLat)*Math.PI),
+    lat: wgsLat + (180*dLat)/((a*(1-ee))/(magic*Math.sqrt(magic))*Math.PI)
+  };
+}
+
+var zonesWgs = [
+  { name: '尖叫岛·机动游乐', lng: 113.2864, lat: 22.8781, color: '#E53935' },
+  { name: '童话动物王国', lng: 113.2875, lat: 22.8785, color: '#FF8F00' },
+  { name: '长鹿度假村', lng: 113.2855, lat: 22.8788, color: '#9C27B0' },
+  { name: '矿洞海洋馆', lng: 113.2878, lat: 22.8775, color: '#0088B0' },
+  { name: '湿地公园', lng: 113.2850, lat: 22.8770, color: '#4CAF50' },
+  { name: '农家乐主题公园', lng: 113.2865, lat: 22.8765, color: '#8BC34A' },
+  { name: '地球村·大马戏', lng: 113.2870, lat: 22.8792, color: '#FFC107' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var gcj = wgs84ToGcj02(z.lng, z.lat);
+    var label = z.name;
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:4px 10px;border-radius:14px;font-size:11px;font-weight:600;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.3);border:2px solid rgba(255,255,255,0.8);font-family:\'DM Sans\',sans-serif;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([gcj.lat, gcj.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([22.8781, 113.2864], 16);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'], attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>', maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'], attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星', maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesWgs);
+
+  if (withBoundary) {
+    var parkCenter = wgs84ToGcj02(113.2864, 22.8781);
+    L.circle([parkCenter.lat, parkCenter.lng], { radius: 350, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) { els.forEach(function(el) { el.classList.add('visible'); }); return; }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+document.getElementById('back-to-top').addEventListener('click', function(e) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+</script>
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>泡泡玛特城市乐园 — 轻量级IP朝圣地，中国首个潮玩主题乐园的轻资产创新路径</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+:root {
+  --clr-primary: #E91E63;
+  --clr-primary-light: #F06292;
+  --clr-primary-dark: #AD1457;
+  --clr-accent: #FFC107;
+}
+
+.hero {
+  background: linear-gradient(160deg, #AD1457 0%, #E91E63 40%, #F06292 70%, #F8BBD0 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(255,193,7,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>泡泡玛特城市乐园 · POP LAND</h1>
+    <p class="hero-subtitle">全球首个潮玩IP主题乐园——4公顷轻量级朝圣地，二消占比72%的独特盈利模型</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">4公顷</div><div class="kpi-label">占地（北京环球影城的1/100）</div></div>
+      <div class="kpi-card"><div class="kpi-number">约¥3亿</div><div class="kpi-label">投资总额</div></div>
+      <div class="kpi-card"><div class="kpi-number">2023.9.26</div><div class="kpi-label">正式开园</div></div>
+      <div class="kpi-card"><div class="kpi-number">¥371.2亿</div><div class="kpi-label">母公司2025年营收（+184.7%）</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>开发商/运营商</h3><p>泡泡玛特国际集团（09992.HK）/ 北京泡泡玛特乐园管理有限公司</p></div>
+      <div class="card"><h3>地理位置</h3><p>北京市朝阳区朝阳公园南路1号40幢，朝阳公园南侧，紧邻东三环</p></div>
+      <div class="card"><h3>占地面积</h3><p>约4万平方米（4公顷），轻资产城市更新项目</p></div>
+      <div class="card"><h3>操盘人物</h3><p>胡健——泡泡玛特国际集团副总裁兼城市乐园总经理</p></div>
+      <div class="card"><h3>承建方</h3><p>中国京冶（曾参与上海迪士尼、北京环球影城建设）</p></div>
+      <div class="card"><h3>盈利状态</h3><p>2024年（开园后首个完整经营年）已实现盈利</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>泡泡玛特城市乐园（POP LAND）是中国潮玩行业首个从"IP零售"到"IP场景化"的突破性产品。乐园选址北京朝阳公园内，利用20余年历史既有建筑改造加固（如MOLLY城堡由原"欧陆风韵"建筑改造），以约3亿元轻量级投资、4公顷城市中心存量空间，打造了全球首个潮玩IP主题乐园。开园首月接待超10万人次，2024年即实现盈利。2025年客流同比增长超70%，二次消费占比达72%（行业极高水平），18-34岁核心客群占47%，非亲子家庭游客占59%。2026年完成1.5期升级（LABUBU精灵部落+5项游乐设施），门票提价至¥148-238。二期（SKULLPANDA+星星人主题场景）计划2027年启动。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>公司/团队</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>总承包/承建方</td><td>中国京冶</td><td>曾参与上海迪士尼、北京环球影城、新加坡环球影城建设</td></tr>
+          <tr><td>总操盘手</td><td>胡健（泡泡玛特副总裁）</td><td>原线下零售业务负责人，主导乐园设计与运营</td></tr>
+          <tr><td>核心IP设计</td><td>泡泡玛特内部设计团队</td><td>MOLLY/LABUBU/DIMOO/SKULLPANDA等IP形象原创</td></tr>
+          <tr><td>建筑设计</td><td>MOLLY城堡利用既有建筑改造加固</td><td>原"欧陆风韵"20余年历史单体建筑</td></tr>
+          <tr><td>模式特点</td><td>轻资产租赁+城市更新</td><td>与朝阳文旅集团合作，对朝阳公园存量空间改造</td></tr>
+          <tr><td>设计定理</td><td>树木保护+空间限制</td><td>最终落地效果仅约为原始设计的50%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>占地面积</td><td>4公顷（40,000 m²）</td><td>约等于北京环球影城1/100</td></tr>
+          <tr><td>规模</td><td>主题分区</td><td>4大区域+2026年新增LABUBU精灵部落</td><td>泡泡街/奇遇森林/城堡区/湖滨区</td></tr>
+          <tr><td>投资</td><td>总投资</td><td>约¥3亿</td><td>轻资产城市更新模式，规避土地成本</td></tr>
+          <tr><td>运营</td><td>开园日期</td><td>2023年9月26日</td><td>首月接待超10万人次</td></tr>
+          <tr><td>运营</td><td>2024年状态</td><td>已实现盈利</td><td>首个完整经营年即盈利</td></tr>
+          <tr><td>运营</td><td>2025年客流量</td><td>同比增长超70%</td><td>仅开放约三分之一区域情况下</td></tr>
+          <tr><td>运营</td><td>二消占比</td><td>72%</td><td>行业极高水平（衍生品+餐饮）</td></tr>
+          <tr><td>运营</td><td>人均在园时长</td><td>4.32小时</td><td>18-34岁客群占47%</td></tr>
+          <tr><td>运营</td><td>非本地游客占比</td><td>58%</td><td>非亲子家庭占59%</td></tr>
+          <tr><td>运营</td><td>门票（2026年4月起）</td><td>¥148–178（高峰日）</td><td>全面开放后最高¥238</td></tr>
+          <tr><td>运营</td><td>母公司2025年营收</td><td>¥371.2亿（+184.7%）</td><td>净利润¥127.76亿（+308%）</td></tr>
+          <tr><td>IP</td><td>核心IP角色</td><td>MOLLY/LABUBU/DIMOO/SKULLPANDA等</td><td>SKULLPANDA年营收¥35.4亿</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">以上数据来源于公开报道及泡泡玛特年报。数据截至 2026 年 6 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="450" fill="#1A1020" rx="12"/>
+
+          <!-- 泡泡街 (entry strip) -->
+          <rect x="200" y="350" width="400" height="70" rx="8" fill="rgba(233,30,99,0.15)" stroke="#E91E63" stroke-width="2"/>
+          <text x="400" y="382" text-anchor="middle" fill="#F06292" font-family="Playfair Display,serif" font-size="16" font-weight="700">泡泡街 · POP Street</text>
+          <text x="400" y="402" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">入口街区·IP雕塑·互动装置·特色店铺</text>
+
+          <!-- MOLLY Castle (right) -->
+          <rect x="520" y="100" width="180" height="90" rx="10" fill="rgba(255,193,7,0.12)" stroke="#FFC107" stroke-width="2"/>
+          <text x="610" y="130" text-anchor="middle" fill="#FFC107" font-family="Playfair Display,serif" font-size="16" font-weight="700">MOLLY城堡</text>
+          <text x="610" y="150" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">B1：心愿之旅沉浸体验</text>
+          <text x="610" y="168" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">1F：潮玩收藏馆+玩具屋</text>
+          <text x="610" y="184" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">2F：主题餐厅 3F：观景露台</text>
+
+          <!-- LABUBU Forest (left) -->
+          <rect x="80" y="100" width="220" height="100" rx="10" fill="rgba(0,200,83,0.12)" stroke="#00C853" stroke-width="2"/>
+          <text x="190" y="130" text-anchor="middle" fill="#69F0AE" font-family="Playfair Display,serif" font-size="16" font-weight="700">LABUBU奇遇森林</text>
+          <text x="190" y="150" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">THE MONSTERS主题·原生树木保护</text>
+          <text x="190" y="168" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">精灵树屋·勇士部落·渔村</text>
+          <text x="190" y="184" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">沙地·蹦蹦云·滑梯·迷宫</text>
+
+          <!-- LABUBU Tribe (2026 new, bottom left) -->
+          <rect x="80" y="240" width="220" height="65" rx="8" fill="rgba(156,39,176,0.12)" stroke="#CE93D8" stroke-width="2"/>
+          <text x="190" y="265" text-anchor="middle" fill="#CE93D8" font-family="Playfair Display,serif" font-size="14" font-weight="700">LABUBU精灵部落</text>
+          <text x="190" y="285" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">跳楼机·海盗船·旋转木马·飞翔LABUBU（2026.4.30开放）</text>
+
+          <!-- DIMOO Boat (bottom center) -->
+          <rect x="320" y="240" width="160" height="65" rx="8" fill="rgba(3,169,244,0.12)" stroke="#03A9F4" stroke-width="2"/>
+          <text x="400" y="265" text-anchor="middle" fill="#4FC3F7" font-family="Playfair Display,serif" font-size="14" font-weight="700">湖滨区</text>
+          <text x="400" y="285" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">DIMOO美味探索号·甜品+简餐</text>
+
+          <!-- Phase 2 Future (top right, dashed) -->
+          <rect x="520" y="220" width="180" height="80" rx="8" fill="rgba(255,255,255,0.03)" stroke="#FFF" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.5"/>
+          <text x="610" y="250" text-anchor="middle" fill="#999" font-family="Playfair Display,serif" font-size="13" font-weight="700">二期（2027-）</text>
+          <text x="610" y="270" text-anchor="middle" fill="#666" font-family="DM Sans,sans-serif" font-size="10">SKULLPANDA + 星星人</text>
+          <text x="610" y="288" text-anchor="middle" fill="#666" font-family="DM Sans,sans-serif" font-size="10">设计深化中</text>
+
+          <!-- Entrance (bottom) -->
+          <polygon points="370,440 430,440 415,430 385,430" fill="rgba(240,98,146,0.2)" stroke="#F06292" stroke-width="1.5"/>
+          <text x="400" y="425" text-anchor="middle" fill="#F06292" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">南门入口（朝阳公园内）</text>
+
+          <!-- Compass -->
+          <g transform="translate(760,30)">
+            <circle cx="0" cy="0" r="16" fill="none" stroke="#FFC107" stroke-width="1" opacity="0.5"/>
+            <polygon points="0,-14 2,-3 14,0 2,3 0,14 -2,3 -14,0 -2,-3" fill="#FFC107" opacity="0.8"/>
+            <text x="0" y="-19" text-anchor="middle" fill="#FFC107" font-size="8" font-weight="700">N</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>泡泡街</h3><p>入口主街区，LABUBU/MOLLY/DIMOO/SKULLPANDA等IP雕塑林立，互动装置及特色IP店铺构成游客第一印象。</p></div>
+      <div class="card"><h3>MOLLY城堡</h3><p>三层城堡园区地标。B1《心愿之旅》沉浸体验，1F潮玩收藏馆+玩具屋，2F主题餐厅，3F观景露台俯瞰朝阳公园湖景。</p></div>
+      <div class="card"><h3>LABUBU奇遇森林+精灵部落</h3><p>THE MONSTERS主题最大区。精灵树屋、勇士部落、渔村，最大程度保留原生树木。2026年新增海盗船、跳楼机、旋转木马。</p></div>
+      <div class="card"><h3>湖滨区 DIMOO美味探索号</h3><p>游艇造型餐饮区，临湖而设。引入喜茶、皮爷咖啡（Peet's Coffee），甜品+简餐。</p></div>
+      <div class="card"><h3>奇遇森林漫游（2026.7.30）</h3><p>高空轨道车穿梭于森林树冠层，俯瞰全园。</p></div>
+      <div class="card"><h3>二期展望（2027-）</h3><p>SKULLPANDA暗黑酷潮世界+星星人梦幻场景，设计深化中。胡健："乐园是永远不会完工的乐园"。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2020年8月</div><div class="timeline-content"><h4>公司注册</h4><p>北京泡泡玛特乐园管理有限公司成立，胡健任法定代表人，注册资本¥1,000万。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021年1月</div><div class="timeline-content"><h4>与朝阳公园达成合作</h4><p>泡泡玛特与北京朝阳公园合作，启动城市更新型乐园项目。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022年</div><div class="timeline-content"><h4>建设期</h4><p>前后完成20+方案迭代。因树木保护与空间限制，最终落地效果仅约为原设计的50%。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023年9月26日</div><div class="timeline-content"><h4>正式开园</h4><p>泡泡玛特城市乐园开门迎客。首月接待超10万人次，二消占比72%。中国京冶承建。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年</div><div class="timeline-content"><h4>首个完整经营年即盈利</h4><p>5月19日与朝阳文旅签订"泡泡玛特城市乐园二期"文旅开发合作项目。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年4月</div><div class="timeline-content"><h4>大规模升级改造启动</h4><p>约三分之二区域封闭改造，门票下调至¥88（平日）。客流仍同比增长超70%。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年4月30日</div><div class="timeline-content"><h4>1.5期第一阶段</h4><p>LABUBU精灵部落+5项设施开放。引入喜茶+皮爷咖啡。门票上调至¥148-178。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年7月30日</div><div class="timeline-content"><h4>1.5期全面开放</h4><p>"奇遇森林漫游"高空轨道车上线。最高票价可达¥238。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2027年</div><div class="timeline-content"><h4>二期启动</h4><p>新增 SKULLPANDA 及星星人主题场景。设计深化中，胡健："永不完工的乐园"。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>二消占比</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">72%</p><p class="f-caption">行业极高水平，门票仅约30%</p></div>
+      <div class="card" style="text-align:center;"><h4>人均在园时长</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">4.32h</p><p class="f-caption">18-34岁核心客群占47%</p></div>
+      <div class="card" style="text-align:center;"><h4>非本地游客</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">58%</p><p class="f-caption">非亲子家庭占59%</p></div>
+    </div>
+    <div class="card reveal" style="margin-bottom:1.5rem;">
+      <h3>与迪士尼/环球影城的差异化对比</h3>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>维度</th><th>迪士尼/环球影城</th><th>泡泡玛特城市乐园</th></tr></thead>
+          <tbody>
+            <tr><td>IP生成逻辑</td><td>内容驱动：先有故事再有形象</td><td>形象驱动：先有形象再填充故事（"留白"）</td></tr>
+            <tr><td>投资量级</td><td>¥300-500亿</td><td>约¥3亿（1/100级别）</td></tr>
+            <tr><td>规模</td><td>100-400公顷</td><td>4公顷</td></tr>
+            <tr><td>收入结构</td><td>门票为主</td><td>二消占比72%，门票仅约30%</td></tr>
+            <tr><td>选址逻辑</td><td>郊区独立拿地，重资产自建</td><td>城市中心存量空间改造，轻资产租赁</td></tr>
+            <tr><td>回本周期</td><td>以十年计</td><td>约1年即实现盈利</td></tr>
+            <tr><td>对标参考</td><td>—</td><td>白色恋人巧克力工厂、吉卜力三鹰之森</td></tr>
+            <tr><td>核心定位</td><td>大型目的地型度假区</td><td>"IP出没的博物馆"式品牌朝圣地</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card reveal">
+      <h3>母公司泡泡玛特国际集团2025年核心数据</h3>
+      <p>营收¥371.2亿（同比+184.7%），净利润¥127.76亿（同比+308%），毛利率72.1%，净利率35.1%，海外营收占比43.8%。全球18个国家571家门店。LABUBU 为营收最高IP，SKULLPANDA单IP年收¥35.4亿（+1602%），星星人¥20.6亿（增速最快）。乐园收入在集团整体中占比虽小，但作为"IP立体化"战略的核心载体，承担品牌体验与IP价值深化的关键角色。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>轻资产模型</h3><p>城市更新+租赁模式。规避土地成本和土建投入。中国京冶承建，利用朝阳公园既有建筑改造加固。总投资¥3亿，对标迪士尼/环球1%量级。</p></div>
+      <div class="card"><h3>"二消驱动"盈利模型</h3><p>72%收入来自衍生品+餐饮。门票仅30%，颠覆传统主题公园的"门票经济"。衍生品与零售门店同价策略消除"景区溢价"痛感。</p></div>
+      <div class="card"><h3>IP"留白"策略</h3><p>不依赖影视内容支撑。IP形象自带"情绪投射"空间，用户自行解读。偶装表演+音乐+短视频为载体，而非故事情节。</p></div>
+      <div class="card"><h3>"永不完工"迭代模型</h3><p>从2023年一期→2026年1.5期→2027年二期。胡健："乐园是永远不会完工的乐园"。每阶段新增IP主题区+新设施。</p></div>
+      <div class="card"><h3>游客画像</h3><p>18-34岁核心客群47%，非亲子家庭59%，非本地游客58%。精准锁定Z世代潮玩消费者。</p></div>
+      <div class="card"><h3>设施为IP服务</h3><p>游乐设备不是核心体验，是IP的载体。跳楼机为看湖景而非失重，旋转木马营造梦幻氛围而非速度刺激。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>潮玩零售</h3><p>MOLLY城堡1F潮玩收藏馆+泡泡街沿街店铺，售卖全系列盲盒及乐园限定商品。与全国门店同价。</p></div>
+      <div class="card"><h3>IP主题餐饮</h3><p>MOLLY城堡2F主题餐厅、DIMOO美味探索号、喜茶、皮爷咖啡。甜品+简餐为主。</p></div>
+      <div class="card"><h3>互动体验</h3><p>《心愿之旅》B1沉浸体验（另购）、偶装表演、舞蹈派对、LABUBU互动合影。无大型骑乘设备。</p></div>
+      <div class="card"><h3>儿童游乐</h3><p>沙地、蹦蹦云、滑梯、迷宫（无动力）、旋转木马（2026年新增）。设施"为IP服务"而非为核心体验。</p></div>
+      <div class="card"><h3>交通</h3><p>地铁14号线朝阳公园站B口出步行至南门。朝阳公园南门入口，毗邻东三环。</p></div>
+      <div class="card"><h3>周边配套</h3><p>朝阳公园内天然湖景、绿地、跑道。蓝色港湾、三里屯等商圈近距离可达。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>2026年全面开放</h3><p>4月30日LABUBU精灵部落开放，7月30日奇遇森林漫游高空轨道车上线。最高票价达¥238。</p></div>
+      <div class="card"><h3>LABUBU全球热潮</h3><p>LABUBU热潮带动6月订票量激增6倍。乐园已成为LABUBU粉丝"朝圣"目的地，黄牛/代购现象显现。</p></div>
+      <div class="card"><h3>北京入境游第6位</h3><p>2025年北京入境游排名第6位。外国游客专门到POP LAND"代购"LABUBU。</p></div>
+      <div class="card"><h3>二期2027年启动</h3><p>SKULLPANDA（暗黑酷潮）+星星人主题场景。设计深化中。胡健透露"乐园是永远不会完工的乐园"。</p></div>
+      <div class="card"><h3>行业关注</h3><p>泡泡玛特城市乐园跑通了"轻资产城市更新+IP朝圣+二消驱动"的商业模式，或将成为潮流IP+文旅地产的新标准路径。</p></div>
+      <div class="card"><h3>可持续商业</h3><p>与日本白色恋人巧克力工厂、吉卜力三鹰之森美术馆对标，而非迪士尼。定位"IP出没的博物馆"而非游乐场。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>官方来源与百科</h4><ul>
+      <li><a href="https://baike.baidu.com/item/%E6%B3%A1%E6%B3%A1%E7%8E%9B%E7%89%B9%E5%9F%8E%E5%B8%82%E4%B9%90%E5%9B%AD/63419439" target="_blank" rel="noopener">百度百科 — 泡泡玛特城市乐园</a><span class="tag">百科</span></li>
+      <li><a href="https://www.hkexnews.hk/listedco/listconews/sehk/2025/0422/2025042200954_c.pdf" target="_blank" rel="noopener">泡泡玛特2025年年度报告</a><span class="tag">官方</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>深度报道</h4><ul>
+      <li><a href="https://www.36kr.com/p/3787685713959937" target="_blank" rel="noopener">36氪 — 拆解泡泡玛特的乐园账本</a><span class="tag">行业</span></li>
+      <li><a href="https://www.mrjjxw.com/articles/2026-04-26/4360634.html" target="_blank" rel="noopener">经理人 — 胡健专访（2026年4月）</a><span class="tag">人物</span></li>
+      <li><a href="https://news.dayoo.com/finance/202604/24/171077_54952174.htm" target="_blank" rel="noopener">香港文汇网 — 二期建设即将启动</a><span class="tag">媒体</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>地图与影像</h4><ul>
+      <li><a href="https://commons.wikimedia.org/w/index.php?search=POPLAND+Beijing" target="_blank" rel="noopener">Wikimedia Commons — 自由版权图片</a><span class="tag">图库</span></li>
+      <li><a href="https://www.google.com/maps/place/Chaoyang+Park+Beijing" target="_blank" rel="noopener">Google Maps — 朝阳公园</a><span class="tag">地图</span></li>
+    </ul></div>
+    <p class="f-caption" style="text-align:center;margin-top:2rem;">本报告所有数据来源于公开资料，仅供参考研究使用。数据截至 2026 年 6 月。</p>
+  </div>
+</section>
+
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+function wgs84ToGcj02(wgsLng, wgsLat) {
+  var a = 6378245.0, ee = 0.00669342162296594323;
+  function _transformLat(x, y) {
+    var r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(y*Math.PI) + 40*Math.sin(y/3*Math.PI))*2/3;
+    r += (160*Math.sin(y/12*Math.PI) + 320*Math.sin(y*Math.PI/30))*2/3;
+    return r;
+  }
+  function _transformLng(x, y) {
+    var r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(x*Math.PI) + 40*Math.sin(x/3*Math.PI))*2/3;
+    r += (150*Math.sin(x/12*Math.PI) + 300*Math.sin(x/30*Math.PI))*2/3;
+    return r;
+  }
+  var dLat = _transformLat(wgsLng - 105, wgsLat - 35);
+  var dLng = _transformLng(wgsLng - 105, wgsLat - 35);
+  var radLat = wgsLat/180*Math.PI;
+  var magic = 1 - ee*Math.sin(radLat)*Math.sin(radLat);
+  return {
+    lng: wgsLng + (180*dLng)/((a/Math.sqrt(magic))*Math.cos(radLat)*Math.PI),
+    lat: wgsLat + (180*dLat)/((a*(1-ee))/(magic*Math.sqrt(magic))*Math.PI)
+  };
+}
+
+var zonesWgs = [
+  { name: '入口·泡泡街', lng: 116.4750, lat: 39.9315, color: '#E91E63' },
+  { name: 'MOLLY城堡', lng: 116.4760, lat: 39.9320, color: '#FFC107' },
+  { name: 'LABUBU奇遇森林', lng: 116.4740, lat: 39.9320, color: '#00C853' },
+  { name: 'LABUBU精灵部落', lng: 116.4738, lat: 39.9315, color: '#CE93D8' },
+  { name: '湖滨区', lng: 116.4755, lat: 39.9310, color: '#03A9F4' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var gcj = wgs84ToGcj02(z.lng, z.lat);
+    var label = z.name;
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([gcj.lat, gcj.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([39.9315, 116.4750], 16);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'], attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>', maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'], attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星', maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesWgs);
+
+  if (withBoundary) {
+    var parkCenter = wgs84ToGcj02(116.4750, 39.9315);
+    L.circle([parkCenter.lat, parkCenter.lng], { radius: 200, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) { els.forEach(function(el) { el.classList.add('visible'); }); return; }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+document.getElementById('back-to-top').addEventListener('click', function(e) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+</script>
+</body>
+</html>

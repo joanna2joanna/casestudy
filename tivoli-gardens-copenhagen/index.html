@@ -6,8 +6,8 @@
 <title>蒂沃利公园 — 世界最古老游乐园之一 · 迪士尼灵感源泉</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
 <style>
 :root {
   --green: #1B5E3A;
@@ -78,7 +78,7 @@ nav {
 }
 nav a {
   color: rgba(255,255,255,0.68); text-decoration: none;
-  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.03em;
+  font-size: 0.78rem; font-weight: 500; letter-spacing: 0.03em;
   padding: 6px 12px; border-radius: 20px; white-space: nowrap;
   transition: all 0.25s ease;
 }
@@ -109,7 +109,7 @@ nav a:hover, nav a.active { color: var(--gold-light); background: rgba(200,164,9
 .hero-content { position: relative; z-index: 2; max-width: 800px; }
 .hero-badge {
   display: inline-block;
-  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+  font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
   letter-spacing: 0.15em; text-transform: uppercase;
   color: var(--gold-light); border: 1px solid rgba(200,164,92,0.35);
   padding: 6px 18px; border-radius: 20px; margin-bottom: 32px;
@@ -138,14 +138,14 @@ nav a:hover, nav a.active { color: var(--gold-light); background: rgba(200,164,9
   color: var(--gold-light); line-height: 1.1;
 }
 .hero-kpi-label {
-  font-size: 0.72rem; color: rgba(255,255,255,0.5); margin-top: 6px;
+  font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 6px;
   letter-spacing: 0.03em;
 }
 
 section { padding: 88px 24px; }
 .section-inner { max-width: var(--max-width); margin: 0 auto; }
 .section-tag {
-  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+  font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
   letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--green); margin-bottom: 12px;
 }
@@ -170,7 +170,7 @@ section { padding: 88px 24px; }
 }
 .info-card:hover { box-shadow: var(--shadow-md); }
 .info-card-icon { font-size: 1.5rem; margin-bottom: 12px; }
-.info-card-label { font-size: 0.72rem; color: var(--text-light); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
+.info-card-label { font-size: 0.78rem; color: var(--text-light); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
 .info-card-value { font-size: 0.95rem; font-weight: 600; color: var(--green-deep); line-height: 1.4; }
 
 .site-plan-wrap {
@@ -193,7 +193,7 @@ section { padding: 88px 24px; }
 }
 .timeline-item:nth-child(even)::before { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
 .timeline-year {
-  font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
+  font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
   color: var(--green); letter-spacing: 0.06em;
 }
 .timeline-item:nth-child(even) .timeline-year { color: #B8972E; }
@@ -211,7 +211,7 @@ section { padding: 88px 24px; }
 }
 .kpi-num.gold { color: #B8972E; }
 .kpi-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; }
-.kpi-sub { font-size: 0.72rem; color: var(--text-light); margin-top: 4px; }
+.kpi-sub { font-size: 0.78rem; color: var(--text-light); margin-top: 4px; }
 
 .data-table .cat-cell { font-weight: 600; color: var(--green-deep); background: var(--cream); }
 
@@ -229,7 +229,7 @@ section { padding: 88px 24px; }
 .zone-card h4 { font-size: 0.95rem; color: var(--green-deep); margin-bottom: 6px; }
 .zone-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
 .zone-tag {
-  display: inline-block; font-family: var(--font-mono); font-size: 0.6rem;
+  display: inline-block; font-family: var(--font-mono); font-size: 0.78rem;
   letter-spacing: 0.08em; text-transform: uppercase;
   padding: 3px 10px; border-radius: 10px; margin-bottom: 8px;
   background: rgba(27,94,58,0.08); color: var(--green);
@@ -243,7 +243,7 @@ section { padding: 88px 24px; }
 .amenity-card:hover { box-shadow: var(--shadow-md); }
 .amenity-icon { font-size: 2rem; margin-bottom: 10px; }
 .amenity-name { font-weight: 600; font-size: 0.9rem; color: var(--green-deep); }
-.amenity-detail { font-size: 0.76rem; color: var(--text-muted); margin-top: 4px; }
+.amenity-detail { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
 
 footer {
   background: var(--green-deep); text-align: center; padding: 48px 24px;
@@ -277,7 +277,7 @@ footer strong { color: var(--gold-light); }
   .cards-6, .cards-4, .cards-3, .cards-2 { grid-template-columns: 1fr; }
   .hero-kpis { grid-template-columns: 1fr 1fr; }
   nav { gap: 0; }
-  nav a { padding: 6px 10px; font-size: 0.68rem; }
+  nav a { padding: 6px 10px; font-size: 0.78rem; }
   .section-title { font-size: 1.5rem; }
   .hero h1 { font-size: 2rem; }
 }
@@ -341,10 +341,10 @@ footer strong { color: var(--gold-light); }
 
     <h3 class="sub-heading" style="margin-top:0;">历史建筑遗产</h3>
     <div class="cards-4 reveal">
-      <div class="info-card"><div class="info-card-icon">🎭</div><div class="info-card-label">孔雀剧院</div><div class="info-card-value">Pantomime Theatre · 1874年建<br><span style="font-size:0.75rem;color:var(--text-light)">中国风格露天剧场，欧洲最古老运营中剧院之一，机械孔雀尾幕帘需5人操作</span></div></div>
-      <div class="info-card"><div class="info-card-icon">🏨</div><div class="info-card-label">Nimb 酒店</div><div class="info-card-value">摩尔风格建筑 · 1909年建<br><span style="font-size:0.75rem;color:var(--text-light)">五星级精品酒店，内含米其林推荐餐厅</span></div></div>
-      <div class="info-card"><div class="info-card-icon">🎵</div><div class="info-card-label">蒂沃利音乐厅</div><div class="info-card-value">Tivoli Concert Hall · 1956年重建<br><span style="font-size:0.75rem;color:var(--text-light)">当时北欧最大音乐厅，古典与流行演出</span></div></div>
-      <div class="info-card"><div class="info-card-icon">🏯</div><div class="info-card-label">玻璃厅剧院</div><div class="info-card-value">Glass Hall Theatre · 1946年重建<br><span style="font-size:0.75rem;color:var(--text-light)">1944年被纳粹纵火，两年后重建</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🎭</div><div class="info-card-label">孔雀剧院</div><div class="info-card-value">Pantomime Theatre · 1874年建<br><span style="font-size:0.78rem;color:var(--text-light)">中国风格露天剧场，欧洲最古老运营中剧院之一，机械孔雀尾幕帘需5人操作</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🏨</div><div class="info-card-label">Nimb 酒店</div><div class="info-card-value">摩尔风格建筑 · 1909年建<br><span style="font-size:0.78rem;color:var(--text-light)">五星级精品酒店，内含米其林推荐餐厅</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🎵</div><div class="info-card-label">蒂沃利音乐厅</div><div class="info-card-value">Tivoli Concert Hall · 1956年重建<br><span style="font-size:0.78rem;color:var(--text-light)">当时北欧最大音乐厅，古典与流行演出</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🏯</div><div class="info-card-label">玻璃厅剧院</div><div class="info-card-value">Glass Hall Theatre · 1946年重建<br><span style="font-size:0.78rem;color:var(--text-light)">1944年被纳粹纵火，两年后重建</span></div></div>
     </div>
 
     <h3 class="sub-heading">核心游乐设施</h3>
@@ -403,9 +403,9 @@ footer strong { color: var(--gold-light); }
     <h2 class="section-title">空间布局与功能分区</h2>
     <p class="section-desc">公园以中央湖泊为核心，花园小径呈放射状分布。游乐设施分布在历史建筑之间，低密度、高绿化率，夜间禁止霓虹灯，使用暖色白炽灯光——正是这种氛围启发了迪士尼乐园的"Main Street, U.S.A."。</p>
 
-    <div class="site-plan-wrap reveal">
+    <div class="site-plan-wrap">
       <div id="parkmap" style="width:100%;height:520px;border-radius:12px;z-index:0;"></div>
-      <p style="text-align:center;font-size:0.72rem;color:var(--text-light);margin-top:8px;">▲ 交互地图：ESRI卫星底图 · WGS-84坐标 · 可缩放平移</p>
+      <p style="text-align:center;font-size:0.78rem;color:var(--text-light);margin-top:8px;">▲ 交互地图：ESRI卫星底图 · WGS-84坐标 · 可缩放平移</p>
 <div class="svg-container" style="margin-top:32px;">
 <svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg">
   <rect width="900" height="500" fill="#1a1a2e" rx="12"/>
@@ -646,11 +646,11 @@ footer strong { color: var(--gold-light); }
 <footer>
   <p><strong>蒂沃利公园</strong> — 世界最古老游乐园之一 · 迪士尼灵感源泉</p>
   <p style="margin-top:6px;">数据来源：Tivoli A/S 公开财报 · Wikipedia · 澎湃新闻 · Euronews · Wikimedia Commons &nbsp;|&nbsp; 编制时间：2026年5月</p>
-  <p style="margin-top:4px;font-size:0.72rem;color:rgba(255,255,255,0.3);">本报告仅供案例研究参考，不构成投资建议。汇率：1 DKK ≈ 1.03 CNY（2025年5月）</p>
-  <p style="margin-top:1rem;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例研究首页</a></p>
+  <p style="margin-top:4px;font-size:0.78rem;color:rgba(255,255,255,0.3);">本报告仅供行业研究参考，不构成投资建议。汇率：1 DKK ≈ 1.03 CNY（2025年5月）</p>
+  <p style="margin-top:1rem;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例速览首页</a></p>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 <script>
 // ── Zone markers (WGS-84, ESRI tiles for overseas project) ──
 var tivoliZones = [

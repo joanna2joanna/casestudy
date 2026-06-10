@@ -4,10 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>阿那亚·北戴河 — 从孤独图书馆到中国最具影响力的海边文化艺术社区</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700" rel="stylesheet">
+<link rel="stylesheet" href="../shared.css">
 <style>
 :root {
   --clr-primary: #6D7F8F;
@@ -33,106 +34,41 @@
   --gap-section: 2.5rem;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 17px; }
-body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--clr-bg); color: var(--clr-text); line-height: 1.7; -webkit-font-smoothing: antialiased; }
-.container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
-
-.f-headline { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; }
-.f-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3.5vw, 2.4rem); font-weight: 700; line-height: 1.25; }
-.f-subtitle { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 2.5vw, 1.6rem); font-weight: 600; line-height: 1.35; }
-.f-body { font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 400; line-height: 1.75; }
-.f-caption { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 400; line-height: 1.6; color: var(--clr-text-secondary); }
-.f-mono { font-family: 'DM Mono', monospace; }
-.f-data { font-family: 'DM Mono', monospace; font-size: 0.95rem; }
-
 .hero { background: linear-gradient(160deg, #364A5A 0%, #6D7F8F 40%, #9BAEBE 70%, #C8BFA8 100%); color: white; padding: 5rem 0 4rem; text-align: center; position: relative; overflow: hidden; }
+
 .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 80%, rgba(200,162,122,0.18) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%); pointer-events: none; }
-.hero .container { position: relative; z-index: 1; }
-.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 6vw, 4.2rem); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 0.8rem; }
+
 .hero .hero-subtitle { font-family: 'DM Sans', sans-serif; font-size: clamp(1rem, 2vw, 1.25rem); font-weight: 400; opacity: 0.88; max-width: 700px; margin: 0 auto 2.5rem; }
-.hero .kpi-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; }
-.hero .kpi-card { background: rgba(255,255,255,0.12); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.18); border-radius: var(--radius-md); padding: 1.2rem 1.8rem; min-width: 150px; text-align: center; }
-.hero .kpi-number { font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 500; }
-.hero .kpi-label { font-family: 'DM Sans', sans-serif; font-size: 0.85rem; opacity: 0.75; margin-top: 0.25rem; }
 
-.section { padding: var(--gap-section) 0; }
-.section-alt { background: var(--clr-bg-alt); }
-.section-header { margin-bottom: 2rem; }
-.section-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: var(--clr-primary-dark); }
-.section-header .section-line { width: 60px; height: 3px; background: var(--clr-accent); margin-top: 0.6rem; border-radius: 2px; }
-
-.card { background: var(--clr-card-bg); border-radius: var(--radius-md); padding: 1.8rem; box-shadow: var(--shadow-sm); border: 1px solid var(--clr-border); transition: box-shadow 0.3s, transform 0.25s; }
-.card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.card h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 600; color: var(--clr-primary-dark); margin-bottom: 0.5rem; }
-.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; }
-.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
-
-.data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
-.data-table thead { background: var(--clr-primary-dark); color: white; }
 .data-table thead th { padding: 0.75rem 1rem; text-align: left; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.85rem; }
+
 .data-table tbody td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--clr-border); font-size: 0.9rem; }
-.data-table tbody tr:nth-child(even) { background: var(--clr-bg-alt); }
+
 .data-table tbody tr:hover { background: rgba(109,127,143,0.05); }
-.data-table .num { font-family: 'DM Mono', monospace; text-align: right; }
 
 #parkmap { width: 100%; height: 520px; border-radius: 12px; z-index: 0; }
+
 #satmap { width: 100%; height: 420px; border-radius: 12px; z-index: 0; }
-.map-fallback { display: none; text-align: center; padding: 0.9rem 1rem; margin-top: 0.5rem; background: #FFF3CD; color: #856404; border-radius: var(--radius-sm); font-size: 0.85rem; }
-.map-legend { padding: 1rem 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; font-size: 0.85rem; color: var(--clr-text-secondary); }
-.map-legend span { display: flex; align-items: center; gap: 0.4rem; }
-.map-legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-
-.svg-container { display: block; width: 100%; margin-top: 1.5rem; background: var(--clr-card-bg); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); }
-.svg-container svg { width: 100%; height: auto; display: block; }
-
-.timeline { position: relative; padding-left: 2.5rem; }
-.timeline::before { content: ''; position: absolute; left: 0.6rem; top: 0; bottom: 0; width: 2px; background: var(--clr-primary-light); }
-.timeline-item { position: relative; margin-bottom: 1.8rem; }
-.timeline-item::before { content: ''; position: absolute; left: -2.05rem; top: 0.5rem; width: 12px; height: 12px; border-radius: 50%; background: var(--clr-accent); border: 2px solid var(--clr-primary); }
-.timeline-year { font-family: 'DM Mono', monospace; font-weight: 700; font-size: 1rem; color: var(--clr-primary); }
-.timeline-content { margin-top: 0.25rem; }
-.timeline-content h4 { font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 600; }
-.timeline-content p { font-size: 0.9rem; color: var(--clr-text-secondary); margin-top: 0.15rem; }
-
-.resource-group { margin-bottom: 1.5rem; }
-.resource-group h4 { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--clr-primary-dark); margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--clr-border); }
-.resource-group ul { list-style: none; }
-.resource-group li { margin-bottom: 0.4rem; font-size: 0.9rem; }
-.resource-group a { color: var(--clr-primary); text-decoration: none; transition: color 0.2s; }
-.resource-group a:hover { color: var(--clr-primary-dark); text-decoration: underline; }
-.resource-group .tag { display: inline-block; background: var(--clr-bg-alt); padding: 0.1rem 0.5rem; border-radius: 4px; font-size: 0.78rem; margin-left: 0.4rem; color: var(--clr-text-muted); }
-
-.floating-nav { position: fixed; right: 1.5rem; bottom: 2rem; display: flex; flex-direction: column; gap: 0.6rem; z-index: 999; }
-.floating-nav a { width: 46px; height: 46px; border-radius: 50%; background: var(--clr-primary-dark); color: white; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.2rem; box-shadow: var(--shadow-md); transition: background 0.25s, transform 0.2s; }
-.floating-nav a:hover { background: var(--clr-accent); transform: scale(1.08); }
-
-.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
-.visitor-counter { text-align: center; padding: 0.5rem; font-size: 0.8rem; color: var(--clr-text-muted); }
-.visitor-counter span { font-family: 'DM Mono', monospace; }
 
 .zone-card { border-left: 4px solid var(--clr-accent); padding: 1rem 1.2rem; background: var(--clr-card-bg); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+
 .zone-card h4 { font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 600; color: var(--clr-primary-dark); }
+
 .zone-card p { font-size: 0.85rem; color: var(--clr-text-secondary); margin-top: 0.25rem; }
 
 .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+
 .kpi-box { background: var(--clr-card-bg); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; box-shadow: var(--shadow-sm); border: 1px solid var(--clr-border); }
+
 .kpi-box .kpi-val { font-family: 'DM Mono', monospace; font-size: 1.6rem; font-weight: 600; color: var(--clr-primary); }
+
 .kpi-box .kpi-lbl { font-size: 0.82rem; color: var(--clr-text-muted); margin-top: 0.3rem; }
 
 .festival-table td:first-child { font-weight: 600; white-space: nowrap; color: var(--clr-primary-dark); }
+
 .camp-card { border-left: 4px solid #8BAF7E; }
 
-@media (max-width: 768px) {
-  .hero { padding: 3rem 0 2.5rem; }
-  .hero .kpi-row { gap: 0.8rem; }
-  .hero .kpi-card { padding: 0.8rem 1rem; min-width: 120px; }
-  .hero .kpi-number { font-size: 1.3rem; }
-  #parkmap, #satmap { height: 300px; }
-  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-}
+#parkmap, #satmap { height: 300px; }
 </style>
 </head>
 <body>
@@ -483,7 +419,7 @@ body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; ba
   <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script>
 function wgs84ToGcj02(wgsLng, wgsLat) {

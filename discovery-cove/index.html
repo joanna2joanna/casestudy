@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discovery Cove — 奥兰多文旅项目深度分析</title>
+<title>Discovery Cove — 每日限流1,300人的全包式热带海洋度假天堂</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
 <style>
 :root {
@@ -85,7 +85,7 @@ nav {
 }
 nav a {
   color: rgba(255,255,255,0.72); text-decoration: none;
-  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.02em;
+  font-size: 0.78rem; font-weight: 500; letter-spacing: 0.02em;
   padding: 6px 12px; border-radius: 20px; white-space: nowrap;
   transition: all 0.25s ease;
 }
@@ -115,7 +115,7 @@ nav a:hover, nav a.active { color: #fff; background: rgba(255,255,255,0.1); }
 .hero-content { position: relative; z-index: 2; max-width: 800px; }
 .hero-badge {
   display: inline-block;
-  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+  font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
   letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--teal-light); border: 1px solid rgba(59,169,156,0.35);
   padding: 6px 18px; border-radius: 20px; margin-bottom: 32px;
@@ -139,7 +139,7 @@ nav a:hover, nav a.active { color: #fff; background: rgba(255,255,255,0.1); }
   color: #fff; line-height: 1;
 }
 .hero-stat-label {
-  font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 6px;
+  font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 6px;
   letter-spacing: 0.05em;
 }
 
@@ -147,7 +147,7 @@ nav a:hover, nav a.active { color: #fff; background: rgba(255,255,255,0.1); }
 section { padding: 100px 24px; }
 .section-inner { max-width: var(--max-width); margin: 0 auto; }
 .section-label {
-  font-family: var(--font-mono); font-size: 0.675rem; font-weight: 500;
+  font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
   letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--teal); margin-bottom: 12px;
 }
@@ -179,7 +179,7 @@ section { padding: 100px 24px; }
 }
 .ov-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
 .ov-card-icon { font-size: 1.8rem; margin-bottom: 14px; }
-.ov-card-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); margin-bottom: 8px; }
+.ov-card-label { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); margin-bottom: 8px; }
 .ov-card-value { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--ocean-deep); line-height: 1.2; }
 .ov-card-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
 
@@ -191,7 +191,7 @@ section { padding: 100px 24px; }
 }
 .info-card:hover { box-shadow: var(--shadow-md); }
 .info-card-icon { font-size: 1.5rem; margin-bottom: 12px; }
-.info-card-label { font-size: 0.7rem; color: var(--text-light); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
+.info-card-label { font-size: 0.78rem; color: var(--text-light); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
 .info-card-value { font-size: 1rem; font-weight: 600; color: var(--ocean-deep); line-height: 1.4; }
 
 /* ── Maps ── */
@@ -236,7 +236,7 @@ section { padding: 100px 24px; }
 .zone-card.middle { background: #F2FAF9; border-color: var(--teal); }
 .zone-card.back { background: #F4F8FA; border-color: #6BB5D0; }
 .zone-card h3 { font-family: var(--font-display); font-size: 1.3rem; color: var(--ocean-deep); margin-bottom: 4px; }
-.zone-card .zone-en { font-size: 0.75rem; color: var(--text-light); margin-bottom: 14px; }
+.zone-card .zone-en { font-size: 0.78rem; color: var(--text-light); margin-bottom: 14px; }
 .zone-card ul { list-style: none; }
 .zone-card li {
   font-size: 0.9rem; color: var(--text); padding: 5px 0;
@@ -245,7 +245,7 @@ section { padding: 100px 24px; }
 }
 .zone-card li::before { content: '•'; color: var(--teal); font-weight: 700; flex-shrink: 0; }
 .zone-card .tag {
-  display: inline-block; font-size: 0.65rem; font-weight: 600;
+  display: inline-block; font-size: 0.78rem; font-weight: 600;
   padding: 2px 8px; border-radius: 10px; margin-left: 4px;
   letter-spacing: 0.04em;
 }
@@ -269,7 +269,7 @@ section { padding: 100px 24px; }
 }
 .tl-item.future .tl-dot { background: var(--gold); }
 .tl-year {
-  font-family: var(--font-mono); font-size: 0.75rem; font-weight: 500;
+  font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
   color: var(--teal); letter-spacing: 0.04em;
 }
 .tl-item.future .tl-year { color: var(--gold); }
@@ -295,7 +295,7 @@ section { padding: 100px 24px; }
   transition: box-shadow 0.3s ease;
 }
 .kpi-card:hover { box-shadow: var(--shadow-md); }
-.kpi-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-light); margin-bottom: 10px; }
+.kpi-label { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-light); margin-bottom: 10px; }
 .kpi-value { font-family: var(--font-display); font-size: 2.8rem; font-weight: 700; color: var(--ocean-deep); line-height: 1.1; }
 .kpi-sub { font-size: 0.82rem; color: var(--text-muted); margin-top: 6px; }
 
@@ -312,7 +312,7 @@ section { padding: 100px 24px; }
   gap: 24px; margin-top: 24px; text-align: center;
 }
 .parent-stat-num { font-family: var(--font-display); font-size: 2rem; font-weight: 700; }
-.parent-stat-label { font-size: 0.72rem; color: rgba(255,255,255,0.55); margin-top: 4px; letter-spacing: 0.04em; }
+.parent-stat-label { font-size: 0.78rem; color: rgba(255,255,255,0.55); margin-top: 4px; letter-spacing: 0.04em; }
 
 /* ── Tables ── */
 .tech-table-wrap {
@@ -326,7 +326,7 @@ section { padding: 100px 24px; }
 .tech-table-wrap .table-header h3 { color: #fff; font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; }
 table { width: 100%; border-collapse: collapse; }
 thead th {
-  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em;
+  font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em;
   text-transform: uppercase; color: var(--text-light);
   text-align: left; padding: 16px 28px;
   border-bottom: 2px solid var(--border);
@@ -348,7 +348,7 @@ td.highlight { font-family: var(--font-display); font-size: 1.1rem; font-weight:
 }
 .data-table th {
   background: var(--ocean-deep); color: var(--white);
-  font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em;
+  font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em;
   text-transform: uppercase; padding: 14px 20px; text-align: left;
 }
 .data-table td {
@@ -387,7 +387,7 @@ td.highlight { font-family: var(--font-display); font-size: 1.1rem; font-weight:
 }
 .amenity-icon { font-size: 2rem; margin-bottom: 8px; }
 .amenity-name { font-weight: 600; font-size: 0.9rem; color: var(--ocean-deep); }
-.amenity-note { font-size: 0.75rem; color: var(--text-light); margin-top: 2px; }
+.amenity-note { font-size: 0.78rem; color: var(--text-light); margin-top: 2px; }
 
 /* ─── Grids ── */
 .cards-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
@@ -403,7 +403,7 @@ td.highlight { font-family: var(--font-display); font-size: 1.1rem; font-weight:
 }
 .summary-table thead th {
   background: var(--ocean-deep); color: #fff;
-  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em;
+  font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em;
   text-transform: uppercase; padding: 18px 28px; text-align: left;
 }
 .summary-table thead th:first-child { border-radius: var(--radius-xl) 0 0 0; }
@@ -445,7 +445,7 @@ footer strong { color: rgba(255,255,255,0.8); }
 }
 @media (max-width: 768px) {
   nav { gap: 0; overflow-x: auto; justify-content: flex-start; padding: 0 12px; }
-  nav a { font-size: 0.68rem; padding: 6px 10px; white-space: nowrap; }
+  nav a { font-size: 0.78rem; padding: 6px 10px; white-space: nowrap; }
   .hero-stats { gap: 24px; }
   .hero-stat-num { font-size: 2rem; }
   section { padding: 64px 18px; }
@@ -461,7 +461,7 @@ footer strong { color: rgba(255,255,255,0.8); }
 @media (max-width: 480px) {
   .kpi-grid { grid-template-columns: 1fr; }
   .overview-grid { grid-template-columns: 1fr; }
-  .summary-table { font-size: 0.75rem; }
+  .summary-table { font-size: 0.78rem; }
 }
 </style>
 </head>
@@ -570,10 +570,10 @@ footer strong { color: rgba(255,255,255,0.8); }
 
     <h3 class="sub-heading" style="margin-top:0;">设计方</h3>
     <div class="cards-4 reveal">
-      <div class="info-card"><div class="info-card-icon">🏛️</div><div class="info-card-label">建筑设计</div><div class="info-card-value">Cooper Carry (Atlanta)<br><span style="font-size:0.75rem;color:var(--text-light)">Project Canopy 酒店主创设计</span></div></div>
-      <div class="info-card"><div class="info-card-icon">🌿</div><div class="info-card-label">景观设计</div><div class="info-card-value">EDSA (Fort Lauderdale)<br><span style="font-size:0.75rem;color:var(--text-light)">热带景观与水体环境营造</span></div></div>
-      <div class="info-card"><div class="info-card-icon">📐</div><div class="info-card-label">土木工程</div><div class="info-card-value">AtkinsRéalis<br><span style="font-size:0.75rem;color:var(--text-light)">基础设施与结构工程设计</span></div></div>
-      <div class="info-card"><div class="info-card-icon">🎨</div><div class="info-card-label">概念创意</div><div class="info-card-value">Busch Entertainment 内部团队<br><span style="font-size:0.75rem;color:var(--text-light)">"反主题公园"全包度假村概念原创</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🏛️</div><div class="info-card-label">建筑设计</div><div class="info-card-value">Cooper Carry (Atlanta)<br><span style="font-size:0.78rem;color:var(--text-light)">Project Canopy 酒店主创设计</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🌿</div><div class="info-card-label">景观设计</div><div class="info-card-value">EDSA (Fort Lauderdale)<br><span style="font-size:0.78rem;color:var(--text-light)">热带景观与水体环境营造</span></div></div>
+      <div class="info-card"><div class="info-card-icon">📐</div><div class="info-card-label">土木工程</div><div class="info-card-value">AtkinsRéalis<br><span style="font-size:0.78rem;color:var(--text-light)">基础设施与结构工程设计</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🎨</div><div class="info-card-label">概念创意</div><div class="info-card-value">Busch Entertainment 内部团队<br><span style="font-size:0.78rem;color:var(--text-light)">"反主题公园"全包度假村概念原创</span></div></div>
     </div>
 
     <h3 class="sub-heading">主要承包商与供应商</h3>
@@ -658,13 +658,13 @@ footer strong { color: rgba(255,255,255,0.8); }
     <!-- Interactive Map: Leaflet + OpenStreetMap -->
     <div class="site-plan-wrap">
       <div id="parkmap" style="width:100%;height:480px;border-radius:12px;z-index:0;"></div>
-      <p style="text-align:center;font-size:0.72rem;color:var(--text-light);margin-top:8px;">▲ 交互地图：ESRI 全球街道图 + 卫星图，可缩放平移。标注基于卫星影像综合研判。</p>
+      <p style="text-align:center;font-size:0.78rem;color:var(--text-light);margin-top:8px;">▲ 交互地图：ESRI 全球街道图 + 卫星图，可缩放平移。标注基于卫星影像综合研判。</p>
     </div>
 
     <!-- Satellite view -->
     <div class="site-plan-wrap" style="margin-top:24px;">
       <h4 style="font-family:var(--font-display);font-size:1rem;color:var(--ocean-deep);margin-bottom:4px;text-align:center;">卫星影像 · 功能区参考</h4>
-      <p style="text-align:center;font-size:0.72rem;color:var(--text-light);margin-bottom:12px;">ESRI 卫星底图 × 园区标注（可缩放平移）</p>
+      <p style="text-align:center;font-size:0.78rem;color:var(--text-light);margin-bottom:12px;">ESRI 卫星底图 × 园区标注（可缩放平移）</p>
       <div id="satmap" style="width:100%;height:420px;border-radius:12px;z-index:0;"></div>
     </div>
 
@@ -1036,9 +1036,9 @@ footer strong { color: rgba(255,255,255,0.8); }
 <footer>
   <p><strong>Discovery Cove</strong> — 奥兰多文旅项目深度分析</p>
   <p style="margin-top:6px;">数据来源：United Parks & Resorts 公开文件 · 行业报道 · 官方资料 &nbsp;|&nbsp; 编制时间：2026年5月</p>
-  <p style="margin-top:4px;font-size:0.72rem;color:rgba(255,255,255,0.3);">本工具仅供案例研究参考，不构成投资建议。</p>
+  <p style="margin-top:4px;font-size:0.78rem;color:rgba(255,255,255,0.3);">本工具仅供行业研究参考，不构成投资建议。</p>
 
-  <p style="margin-top:1rem;text-align:center;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例研究首页</a></p>
+  <p style="margin-top:1rem;text-align:center;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例速览首页</a></p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>

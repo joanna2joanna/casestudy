@@ -6,8 +6,8 @@
 <title>格罗纳隆德 — 瑞典最古老游乐园 · 极致紧凑的海滨Tivoli</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
 <style>
 :root {
   --blue: #0277BD;
@@ -74,7 +74,7 @@ nav {
 }
 nav a {
   color: rgba(255,255,255,0.68); text-decoration: none;
-  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.03em;
+  font-size: 0.78rem; font-weight: 500; letter-spacing: 0.03em;
   padding: 6px 12px; border-radius: 20px; white-space: nowrap;
   transition: all 0.25s ease;
 }
@@ -99,7 +99,7 @@ nav a:hover, nav a.active { color: var(--gold-light); background: rgba(245,166,3
 }
 .hero-content { position: relative; z-index: 2; max-width: 800px; }
 .hero-badge {
-  display: inline-block; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+  display: inline-block; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
   letter-spacing: 0.15em; text-transform: uppercase;
   color: var(--gold-light); border: 1px solid rgba(245,166,35,0.35);
   padding: 6px 18px; border-radius: 20px; margin-bottom: 32px;
@@ -127,13 +127,13 @@ nav a:hover, nav a.active { color: var(--gold-light); background: rgba(245,166,3
   color: var(--gold-light); line-height: 1.1;
 }
 .hero-kpi-label {
-  font-size: 0.72rem; color: rgba(255,255,255,0.5); margin-top: 6px; letter-spacing: 0.03em;
+  font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 6px; letter-spacing: 0.03em;
 }
 
 section { padding: 88px 24px; }
 .section-inner { max-width: var(--max-width); margin: 0 auto; }
 .section-tag {
-  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+  font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
   letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); margin-bottom: 12px;
 }
 .section-title {
@@ -158,7 +158,7 @@ section { padding: 88px 24px; }
 }
 .info-card:hover { box-shadow: var(--shadow-md); }
 .info-card-icon { font-size: 1.5rem; margin-bottom: 12px; }
-.info-card-label { font-size: 0.72rem; color: var(--text-light); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
+.info-card-label { font-size: 0.78rem; color: var(--text-light); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
 .info-card-value { font-size: 0.95rem; font-weight: 600; color: var(--blue-deep); line-height: 1.4; }
 
 .site-plan-wrap {
@@ -172,7 +172,7 @@ section { padding: 88px 24px; }
 .timeline-item { position: relative; margin-bottom: 32px; }
 .timeline-item::before { content: ''; position: absolute; left: -26px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--blue); border: 2px solid var(--warm-white); box-shadow: 0 0 0 2px var(--blue); }
 .timeline-item:nth-child(even)::before { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
-.timeline-year { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500; color: var(--blue); letter-spacing: 0.06em; }
+.timeline-year { font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500; color: var(--blue); letter-spacing: 0.06em; }
 .timeline-item:nth-child(even) .timeline-year { color: #B88A1E; }
 .timeline-title { font-weight: 600; font-size: 0.95rem; color: var(--blue-deep); margin-top: 2px; }
 .timeline-desc { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; }
@@ -181,7 +181,7 @@ section { padding: 88px 24px; }
 .kpi-num { font-family: var(--font-display); font-size: 2.4rem; font-weight: 900; color: var(--blue-deep); line-height: 1.1; }
 .kpi-num.gold { color: #B88A1E; }
 .kpi-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; }
-.kpi-sub { font-size: 0.72rem; color: var(--text-light); margin-top: 4px; }
+.kpi-sub { font-size: 0.78rem; color: var(--text-light); margin-top: 4px; }
 
 .data-table .cat-cell { font-weight: 600; color: var(--blue-deep); background: var(--cream); }
 
@@ -194,13 +194,13 @@ section { padding: 88px 24px; }
 .zone-card:hover { box-shadow: var(--shadow-md); }
 .zone-card h4 { font-size: 0.95rem; color: var(--blue-deep); margin-bottom: 6px; }
 .zone-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
-.zone-tag { display: inline-block; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 10px; margin-bottom: 8px; background: rgba(2,119,189,0.08); color: var(--blue); }
+.zone-tag { display: inline-block; font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 10px; margin-bottom: 8px; background: rgba(2,119,189,0.08); color: var(--blue); }
 
 .amenity-card { background: var(--white); border-radius: var(--radius); padding: 28px 24px; text-align: center; box-shadow: var(--shadow-sm); border: 1px solid var(--border); transition: box-shadow 0.3s; }
 .amenity-card:hover { box-shadow: var(--shadow-md); }
 .amenity-icon { font-size: 2rem; margin-bottom: 10px; }
 .amenity-name { font-weight: 600; font-size: 0.9rem; color: var(--blue-deep); }
-.amenity-detail { font-size: 0.76rem; color: var(--text-muted); margin-top: 4px; }
+.amenity-detail { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
 
 footer { background: var(--blue-deep); text-align: center; padding: 48px 24px; color: rgba(255,255,255,0.5); font-size: 0.8rem; line-height: 1.8; }
 footer strong { color: var(--gold-light); }
@@ -215,7 +215,7 @@ footer strong { color: var(--gold-light); }
 #back-to-top.show { opacity: 1; visibility: visible; pointer-events: auto; }
 
 @media (max-width: 1024px) { .cards-6 { grid-template-columns: repeat(3, 1fr); } .cards-4 { grid-template-columns: repeat(2, 1fr); } .hero-kpis { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 640px) { .cards-6, .cards-4, .cards-3, .cards-2 { grid-template-columns: 1fr; } .hero-kpis { grid-template-columns: 1fr 1fr; } nav { gap: 0; } nav a { padding: 6px 10px; font-size: 0.68rem; } .section-title { font-size: 1.5rem; } .hero h1 { font-size: 2rem; } }
+@media (max-width: 640px) { .cards-6, .cards-4, .cards-3, .cards-2 { grid-template-columns: 1fr; } .hero-kpis { grid-template-columns: 1fr 1fr; } nav { gap: 0; } nav a { padding: 6px 10px; font-size: 0.78rem; } .section-title { font-size: 1.5rem; } .hero h1 { font-size: 2rem; } }
 </style>
 </head>
 <body>
@@ -311,9 +311,9 @@ footer strong { color: var(--gold-light); }
     <h2 class="section-title">空间布局与功能分区</h2>
     <p class="section-desc">世界罕见的"城市游乐园"——3.8公顷滨水地块，过山车轨道穿越历史建筑群，高空设施俯瞰群岛风光。ESRI卫星底图，WGS-84坐标。</p>
 
-    <div class="site-plan-wrap reveal">
+    <div class="site-plan-wrap">
       <div id="parkmap" style="width:100%;height:520px;border-radius:12px;z-index:0;"></div>
-      <p style="text-align:center;font-size:0.72rem;color:var(--text-light);margin-top:8px;">▲ 交互地图：ESRI卫星底图 · WGS-84坐标 · 可缩放平移</p>
+      <p style="text-align:center;font-size:0.78rem;color:var(--text-light);margin-top:8px;">▲ 交互地图：ESRI卫星底图 · WGS-84坐标 · 可缩放平移</p>
 <div class="svg-container" style="margin-top:32px;">
 <svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg">
   <rect width="900" height="500" fill="#1a1a2e" rx="12"/>
@@ -485,11 +485,11 @@ footer strong { color: var(--gold-light); }
 <footer>
   <p><strong>格罗纳隆德</strong> — 瑞典最古老游乐园 · 极致紧凑的海滨Tivoli</p>
   <p style="margin-top:6px;">数据来源：Parks & Resorts公开资料 · Wikipedia · Blooloop · Wikimedia Commons &nbsp;|&nbsp; 编制时间：2026年5月</p>
-  <p style="margin-top:4px;font-size:0.72rem;color:rgba(255,255,255,0.3);">本报告仅供案例研究参考。汇率：1 SEK ≈ 0.70 CNY（2025年5月）</p>
-  <p style="margin-top:1rem;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例研究首页</a></p>
+  <p style="margin-top:4px;font-size:0.78rem;color:rgba(255,255,255,0.3);">本报告仅供行业研究参考。汇率：1 SEK ≈ 0.70 CNY（2025年5月）</p>
+  <p style="margin-top:1rem;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例速览首页</a></p>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 <script>
 var gronaLundZones = [
   { name: '主入口<br><small>Main Entrance</small>', lat: 59.3230, lng: 18.0960, color: '#0277BD' },

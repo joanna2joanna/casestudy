@@ -1,3 +1,25 @@
+/* ========== DEFAULT VARIABLES (cases override project colors) ========== */
+:root {
+  --clr-primary: #555;
+  --clr-primary-light: #888;
+  --clr-primary-dark: #222;
+  --clr-accent: #C8A45C;
+  --clr-bg: #FAF9F6;
+  --clr-bg-alt: #F0EFEC;
+  --clr-text: #1A1A1A;
+  --clr-text-secondary: #555;
+  --clr-text-muted: #777;
+  --clr-border: #E0DED8;
+  --clr-card-bg: #FFFFFF;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --gap-section: 2.5rem;
+}
+
 /* ========== RESET & BASE ========== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 

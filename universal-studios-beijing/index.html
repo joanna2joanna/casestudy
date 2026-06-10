@@ -6,8 +6,8 @@
 <title>北京环球影城 — 全球最大环球影城深度分析</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
 <link rel="stylesheet" href="../shared.css">
 <style>
 :root {
@@ -77,7 +77,7 @@ nav {
 }
 nav a {
   color: rgba(255,255,255,0.68); text-decoration: none;
-  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.03em;
+  font-size: 0.78rem; font-weight: 500; letter-spacing: 0.03em;
   padding: 6px 12px; border-radius: 20px; white-space: nowrap;
   transition: all 0.25s ease;
 }
@@ -109,7 +109,7 @@ nav a:hover, nav a.active { color: var(--gold-light); background: rgba(212,168,6
 .hero-content { position: relative; z-index: 2; max-width: 800px; }
 .hero-badge {
   display: inline-block;
-  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+  font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
   letter-spacing: 0.15em; text-transform: uppercase;
   color: var(--gold); border: 1px solid rgba(212,168,67,0.35);
   padding: 6px 18px; border-radius: 20px; margin-bottom: 32px;
@@ -138,7 +138,7 @@ nav a:hover, nav a.active { color: var(--gold-light); background: rgba(212,168,6
   color: var(--gold); line-height: 1.1;
 }
 .hero-kpi-label {
-  font-size: 0.72rem; color: rgba(255,255,255,0.5); margin-top: 6px;
+  font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 6px;
   letter-spacing: 0.03em;
 }
 
@@ -146,7 +146,7 @@ nav a:hover, nav a.active { color: var(--gold-light); background: rgba(212,168,6
 section { padding: 88px 24px; }
 .section-inner { max-width: var(--max-width); margin: 0 auto; }
 .section-tag {
-  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+  font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
   letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--red); margin-bottom: 12px;
 }
@@ -176,7 +176,7 @@ section { padding: 88px 24px; }
 }
 .info-card:hover { box-shadow: var(--shadow-md); }
 .info-card-icon { font-size: 1.5rem; margin-bottom: 12px; }
-.info-card-label { font-size: 0.72rem; color: var(--text-light); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
+.info-card-label { font-size: 0.78rem; color: var(--text-light); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
 .info-card-value { font-size: 0.95rem; font-weight: 600; color: var(--navy); line-height: 1.4; }
 
 /* ── SVG site plan container ── */
@@ -202,7 +202,7 @@ section { padding: 88px 24px; }
 }
 .timeline-item:nth-child(even)::before { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
 .timeline-year {
-  font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
+  font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
   color: var(--red); letter-spacing: 0.06em;
 }
 .timeline-item:nth-child(even) .timeline-year { color: var(--gold); }
@@ -222,7 +222,7 @@ section { padding: 88px 24px; }
 .kpi-num.red { color: var(--red); }
 .kpi-num.gold { color: #B8972E; }
 .kpi-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; }
-.kpi-sub { font-size: 0.72rem; color: var(--text-light); margin-top: 4px; }
+.kpi-sub { font-size: 0.78rem; color: var(--text-light); margin-top: 4px; }
 
 .data-table .cat-cell { font-weight: 600; color: var(--navy); background: var(--cream); }
 
@@ -242,7 +242,7 @@ section { padding: 88px 24px; }
 .zone-card h4 { font-size: 0.95rem; color: var(--navy); margin-bottom: 6px; }
 .zone-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
 .zone-tag {
-  display: inline-block; font-family: var(--font-mono); font-size: 0.6rem;
+  display: inline-block; font-family: var(--font-mono); font-size: 0.78rem;
   letter-spacing: 0.08em; text-transform: uppercase;
   padding: 3px 10px; border-radius: 10px; margin-bottom: 8px;
   background: rgba(196,30,58,0.08); color: var(--red);
@@ -257,7 +257,7 @@ section { padding: 88px 24px; }
 .amenity-card:hover { box-shadow: var(--shadow-md); }
 .amenity-icon { font-size: 2rem; margin-bottom: 10px; }
 .amenity-name { font-weight: 600; font-size: 0.9rem; color: var(--navy); }
-.amenity-detail { font-size: 0.76rem; color: var(--text-muted); margin-top: 4px; }
+.amenity-detail { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
 
 /* ── Footer ── */
 footer {
@@ -277,7 +277,7 @@ footer strong { color: var(--gold); }
   .cards-6, .cards-4, .cards-3, .cards-2 { grid-template-columns: 1fr; }
   .hero-kpis { grid-template-columns: 1fr 1fr; }
   nav { gap: 0; }
-  nav a { padding: 6px 10px; font-size: 0.68rem; }
+  nav a { padding: 6px 10px; font-size: 0.78rem; }
   .section-title { font-size: 1.5rem; }
   .hero h1 { font-size: 2rem; }
 }
@@ -328,7 +328,7 @@ footer strong { color: var(--gold); }
       <div class="info-card"><div class="info-card-icon">📍</div><div class="info-card-label">位置</div><div class="info-card-value">北京市通州区文景街道<br>东六环与京哈高速交汇处</div></div>
       <div class="info-card"><div class="info-card-icon">📐</div><div class="info-card-label">面积</div><div class="info-card-value">总体规划 4 km²（400公顷）<br>一期 1.69 km²（169公顷）</div></div>
       <div class="info-card"><div class="info-card-icon">👥</div><div class="info-card-label">日容量峰值</div><div class="info-card-value">超 50,000 人次</div></div>
-      <div class="info-card"><div class="info-card-icon">🎫</div><div class="info-card-label">门票价格区间</div><div class="info-card-value">¥418–748<br><span style="font-size:0.75rem;color:var(--text-light)">淡季/平季/旺季/特定日</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🎫</div><div class="info-card-label">门票价格区间</div><div class="info-card-value">¥418–748<br><span style="font-size:0.78rem;color:var(--text-light)">淡季/平季/旺季/特定日</span></div></div>
     </div>
   </div>
 </section>
@@ -342,10 +342,10 @@ footer strong { color: var(--gold); }
 
     <h3 class="sub-heading" style="margin-top:0;">设计方</h3>
     <div class="cards-4 reveal">
-      <div class="info-card"><div class="info-card-icon">🏛️</div><div class="info-card-label">总体设计 & 两大园区</div><div class="info-card-value">北京市建筑设计研究院（北京建院/BIAD）<br><span style="font-size:0.75rem;color:var(--text-light)">总体规划控制 + 功夫熊猫盖世之地 + 未来水世界 + 环球大酒店</span></div></div>
-      <div class="info-card"><div class="info-card-icon">🏢</div><div class="info-card-label">CityWalk & 专项咨询</div><div class="info-card-value">中国建筑科学研究院（中国建研院/CABR）<br><span style="font-size:0.75rem;color:var(--text-light)">城市大道设计总包 + 绿色建筑 + 消防评估</span></div></div>
-      <div class="info-card"><div class="info-card-icon">🦖</div><div class="info-card-label">两大园区深化设计</div><div class="info-card-value">中冶建筑研究总院（中国京冶）<br><span style="font-size:0.75rem;color:var(--text-light)">侏罗纪世界努布拉岛 + 小黄人乐园 BIM正向设计</span></div></div>
-      <div class="info-card"><div class="info-card-icon">🌍</div><div class="info-card-label">概念设计</div><div class="info-card-value">Universal Creative + 全球38家设计公司<br><span style="font-size:0.75rem;color:var(--text-light)">BIM360云平台跨国协同，500余名设计师与艺术家</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🏛️</div><div class="info-card-label">总体设计 & 两大园区</div><div class="info-card-value">北京市建筑设计研究院（北京建院/BIAD）<br><span style="font-size:0.78rem;color:var(--text-light)">总体规划控制 + 功夫熊猫盖世之地 + 未来水世界 + 环球大酒店</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🏢</div><div class="info-card-label">CityWalk & 专项咨询</div><div class="info-card-value">中国建筑科学研究院（中国建研院/CABR）<br><span style="font-size:0.78rem;color:var(--text-light)">城市大道设计总包 + 绿色建筑 + 消防评估</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🦖</div><div class="info-card-label">两大园区深化设计</div><div class="info-card-value">中冶建筑研究总院（中国京冶）<br><span style="font-size:0.78rem;color:var(--text-light)">侏罗纪世界努布拉岛 + 小黄人乐园 BIM正向设计</span></div></div>
+      <div class="info-card"><div class="info-card-icon">🌍</div><div class="info-card-label">概念设计</div><div class="info-card-value">Universal Creative + 全球38家设计公司<br><span style="font-size:0.78rem;color:var(--text-light)">BIM360云平台跨国协同，500余名设计师与艺术家</span></div></div>
     </div>
 
     <h3 class="sub-heading">施工方（六大标段，总投资约¥87亿）</h3>
@@ -419,21 +419,21 @@ footer strong { color: var(--gold); }
     <h2 class="section-title">空间布局与功能分区</h2>
     <p class="section-desc">一轴两区依水，七景核心环湖。一期设7大主题景区，含3个为北京市场量身打造的专属定制园区，中国元素占比约35%。</p>
 
-    <div class="site-plan-wrap reveal">
+    <div class="site-plan-wrap">
       <div id="parkmap" style="width:100%;height:520px;border-radius:12px;z-index:0;"></div>
-      <p style="text-align:center;font-size:0.72rem;color:var(--text-light);margin-top:8px;">▲ 交互地图：可缩放、平移，街道图/卫星图切换。标注位置基于官方地图与卫星影像综合研判。</p>
+      <p style="text-align:center;font-size:0.78rem;color:var(--text-light);margin-top:8px;">▲ 交互地图：可缩放、平移，街道图/卫星图切换。标注位置基于官方地图与卫星影像综合研判。</p>
     </div>
 
-    <div class="site-plan-wrap reveal" style="margin-top:24px;">
+    <div class="site-plan-wrap" style="margin-top:24px;">
       <h4 style="font-family:var(--font-display);font-size:1rem;color:var(--navy);margin-bottom:4px;text-align:center;">卫星影像 · 功能区参考</h4>
-      <p style="text-align:center;font-size:0.72rem;color:var(--text-light);margin-bottom:12px;">高德卫星底图 × 园区标注（可缩放平移）</p>
+      <p style="text-align:center;font-size:0.78rem;color:var(--text-light);margin-bottom:12px;">高德卫星底图 × 园区标注（可缩放平移）</p>
       <div id="satmap" style="width:100%;height:420px;border-radius:12px;z-index:0;"></div>
     </div>
 
     <!-- SVG Site Plan -->
     <div class="site-plan-wrap" style="margin-top:32px;">
       <h4 style="font-family:var(--font-display);font-size:1rem;color:var(--navy);margin-bottom:4px;text-align:center;">空间结构示意图</h4>
-      <p style="text-align:center;font-size:0.72rem;color:var(--text-light);margin-bottom:12px;">七景核心环湖 · 一轴两区依水</p>
+      <p style="text-align:center;font-size:0.78rem;color:var(--text-light);margin-bottom:12px;">七景核心环湖 · 一轴两区依水</p>
       <div style="width:100%;background:var(--navy);border-radius:12px;padding:12px;">
         <svg viewBox="0 0 1000 750" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto;">
           <defs>
@@ -726,12 +726,12 @@ footer strong { color: var(--gold); }
 <footer>
   <p><strong>北京环球影城</strong> — 全球最大环球影城深度分析</p>
   <p style="margin-top:6px;">数据来源：United Parks & Resorts 公开文件 · 行业报道 · 官方资料 · 康卡斯特财报 &nbsp;|&nbsp; 编制时间：2026年5月</p>
-  <p style="margin-top:4px;font-size:0.72rem;color:rgba(255,255,255,0.3);">本工具仅供案例研究参考，不构成投资建议。</p>
+  <p style="margin-top:4px;font-size:0.78rem;color:rgba(255,255,255,0.3);">本工具仅供行业研究参考，不构成投资建议。</p>
 
-  <p style="margin-top:1rem;text-align:center;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例研究首页</a></p>
+  <p style="margin-top:1rem;text-align:center;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例速览首页</a></p>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 <script>
 // ── WGS-84 → GCJ-02 (Mars coordinate) converter ──
 function wgs84ToGcj02(wgsLng, wgsLat) {

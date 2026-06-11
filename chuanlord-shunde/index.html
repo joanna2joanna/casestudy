@@ -371,14 +371,13 @@ var zonesWgs = [
 
 function addZoneMarkers(targetMap, zones) {
   zones.forEach(function(z) {
-    var gcj = wgs84ToGcj02(z.lng, z.lat);
     var label = z.name;
     var icon = L.divIcon({
       className: 'zone-marker',
       html: '<div style="background:' + z.color + ';color:#fff;padding:4px 10px;border-radius:14px;font-size:11px;font-weight:600;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.3);border:2px solid rgba(255,255,255,0.8);font-family:\'DM Sans\',sans-serif;">' + label + '</div>',
       iconSize: [0, 0], iconAnchor: [0, 0]
     });
-    L.marker([gcj.lat, gcj.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
   });
 }
 
@@ -405,8 +404,7 @@ function initMap(mapId, defaultLayer, withBoundary) {
   addZoneMarkers(map, zonesWgs);
 
   if (withBoundary) {
-    var parkCenter = wgs84ToGcj02(113.2864, 22.8781);
-    L.circle([parkCenter.lat, parkCenter.lng], { radius: 350, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+    L.circle([22.8781, 113.2864], { radius: 350, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
   }
 
   setTimeout(function() { map.invalidateSize(); }, 800);

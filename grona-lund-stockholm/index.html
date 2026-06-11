@@ -531,7 +531,7 @@ document.addEventListener('DOMContentLoaded', function() {
   L.control.layers({ '卫星图': satLayer, '地形图': topoLayer }, null, { position: 'topright' }).addTo(map);
   addZoneMarkers(map, gronaLundZones);
 
-  var parkCenter = { lat: 59.3236, lng: 18.0965 };
+  var parkCenter = { lat: 59.323306, lng: 18.095834 };
   L.circle([parkCenter.lat, parkCenter.lng], { radius: 110, color: '#0277BD', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
 
   setTimeout(function() { map.invalidateSize(); }, 800);

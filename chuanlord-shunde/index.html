@@ -360,13 +360,13 @@ function wgs84ToGcj02(wgsLng, wgsLat) {
 }
 
 var zonesWgs = [
-  { name: '尖叫岛·机动游乐', lng: 113.2864, lat: 22.8781, color: '#E53935' },
-  { name: '童话动物王国', lng: 113.2875, lat: 22.8785, color: '#FF8F00' },
-  { name: '长鹿度假村', lng: 113.2855, lat: 22.8788, color: '#9C27B0' },
-  { name: '矿洞海洋馆', lng: 113.2878, lat: 22.8775, color: '#0088B0' },
-  { name: '湿地公园', lng: 113.2850, lat: 22.8770, color: '#4CAF50' },
-  { name: '农家乐主题公园', lng: 113.2865, lat: 22.8765, color: '#8BC34A' },
-  { name: '地球村·大马戏', lng: 113.2870, lat: 22.8792, color: '#FFC107' }
+  { name: '尖叫岛·机动游乐', lng: 113.2873, lat: 22.8786, color: '#E53935' },
+  { name: '童话动物王国', lng: 113.2884, lat: 22.8790, color: '#FF8F00' },
+  { name: '长鹿度假村', lng: 113.2864, lat: 22.8793, color: '#9C27B0' },
+  { name: '矿洞海洋馆', lng: 113.2887, lat: 22.8780, color: '#0088B0' },
+  { name: '湿地公园', lng: 113.2859, lat: 22.8775, color: '#4CAF50' },
+  { name: '农家乐主题公园', lng: 113.2874, lat: 22.8770, color: '#8BC34A' },
+  { name: '地球村·大马戏', lng: 113.2879, lat: 22.8797, color: '#FFC107' }
 ];
 
 function addZoneMarkers(targetMap, zones) {
@@ -384,7 +384,7 @@ function addZoneMarkers(targetMap, zones) {
 function initMap(mapId, defaultLayer, withBoundary) {
   var el = document.getElementById(mapId);
   if (!el) return null;
-  var map = L.map(mapId, { scrollWheelZoom: false }).setView([22.8781, 113.2864], 16);
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([22.8786, 113.2873], 16);
 
   var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
     subdomains: ['1','2','3','4'], attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>', maxZoom: 18
@@ -404,7 +404,7 @@ function initMap(mapId, defaultLayer, withBoundary) {
   addZoneMarkers(map, zonesWgs);
 
   if (withBoundary) {
-    L.circle([22.8781, 113.2864], { radius: 350, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+    L.circle([22.8786, 113.2873], { radius: 350, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
   }
 
   setTimeout(function() { map.invalidateSize(); }, 800);

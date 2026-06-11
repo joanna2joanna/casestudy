@@ -222,7 +222,7 @@ html { scroll-behavior: smooth; font-size: 17px; }
       <div class="card"><h3>潭江游览带</h3><p>潭江贯穿赤坎全境，构成"一江两埠"空间骨架。四大码头体系：司徒氏码头（游船下午茶）、关氏码头（连接老市场）、南洋桥码头（游船早茶/宵夜）、古渡码头（铛铛车乘车点）。水剧场《水之舞》为潭江水面核心演出，夜间游船串联两岸夜景。</p></div>
       <div class="card"><h3>赤坎新区</h3><p>位于古镇西北侧，规划面积1.72 km²，定位智慧小镇·绿色小镇·人文小镇。规划扩容室内剧场至6-8个，建设中国首个华侨数字博物馆、江门华侨艺术馆、大型会务度假中心、水上乐园、萌宠乐园等。与古镇形成"保老城再现古镇辉煌，建新区融合产业发展"互补格局。</p></div>
       <div class="card"><h3>骑楼建筑群</h3><p>600余座中西合璧百年骑楼绵延约3公里，涵盖堤东路、中华西路、欧陆风情街及六条规划主题街（文化街、作坊街、传统手信街、时尚购物街、欧美风情街、南洋风情街）。建筑融合岭南传统与西洋柱式、拱券、浮雕，堪称"万国建筑博览会"。</p></div>
-      <div class="card"><h3>入口服务区</h3><p>一期新建游客中心、骑楼商业街、岭南文化广场、北门停车场（含充电桩）。设铛铛车总站连通古镇内部，电瓶接驳车往返酒店与景区。开放时间9:00-22:00（夏令周五六至22:30），景区咨询电话400-001-1922。</p></div>
+      <div class="card"><h3>入口服务区</h3><p>一期新建游客中心、骑楼商业街、岭南文化广场、北门停车场（1,250个车位，含充电桩）。设铛铛车总站连通古镇内部，电瓶接驳车往返酒店与景区。开放时间10:00-22:00（21:30停售/停止入园），景区咨询电话400-001-1922。</p></div>
     </div>
   </div>
 </section>
@@ -453,12 +453,12 @@ function wgs84ToGcj02(wgsLng, wgsLat) {
 }
 
 var zonesWgs = [
-  { name: '上埠·关氏区<br><small>关族图书馆·骑楼街·迎龙楼</small>', lng: 112.5978, lat: 22.2998, color: '#B56345' },
-  { name: '下埠·司徒氏区<br><small>司徒氏图书馆·中华西路·景辉楼</small>', lng: 112.6012, lat: 22.2967, color: '#D4A853' },
-  { name: '潭江游览带<br><small>水剧场·码头群·一河两岸</small>', lng: 112.5995, lat: 22.2975, color: '#4A90D9' },
-  { name: '赤坎新区<br><small>智慧小镇·未来扩容区</small>', lng: 112.5950, lat: 22.3025, color: '#6B8E5A' },
-  { name: '骑楼建筑群<br><small>600+座骑楼·堤东路·欧陆风情街</small>', lng: 112.5990, lat: 22.2978, color: '#E08060' },
-  { name: '入口服务区<br><small>游客中心·停车场·铛铛车总站</small>', lng: 112.6005, lat: 22.2955, color: '#9B7EB8' }
+  { name: '上埠·关氏区<br><small>关族图书馆·骑楼街·迎龙楼</small>', lng: 112.5835, lat: 22.3255, color: '#B56345' },
+  { name: '下埠·司徒氏区<br><small>司徒氏图书馆·中华西路·景辉楼</small>', lng: 112.5850, lat: 22.3235, color: '#D4A853' },
+  { name: '潭江游览带<br><small>水剧场·码头群·一河两岸</small>', lng: 112.5840, lat: 22.3245, color: '#4A90D9' },
+  { name: '赤坎新区<br><small>智慧小镇·未来扩容区</small>', lng: 112.5790, lat: 22.3295, color: '#6B8E5A' },
+  { name: '骑楼建筑群<br><small>600+座骑楼·堤东路·欧陆风情街</small>', lng: 112.5835, lat: 22.3240, color: '#E08060' },
+  { name: '入口服务区<br><small>游客中心·停车场·铛铛车总站</small>', lng: 112.5825, lat: 22.3270, color: '#9B7EB8' }
 ];
 
 function addZoneMarkers(targetMap, zones) {
@@ -477,7 +477,7 @@ function addZoneMarkers(targetMap, zones) {
 function initMap(mapId, defaultLayer, withBoundary) {
   var el = document.getElementById(mapId);
   if (!el) return null;
-  var map = L.map(mapId, { scrollWheelZoom: false }).setView([22.3009, 112.6045], 16);
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([22.3266, 112.5880], 16);
 
   var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
     subdomains: ['1','2','3','4'],
@@ -501,7 +501,7 @@ function initMap(mapId, defaultLayer, withBoundary) {
   addZoneMarkers(map, zonesWgs);
 
   if (withBoundary) {
-    var parkCenter = wgs84ToGcj02(112.5995, 22.2978);
+    var parkCenter = wgs84ToGcj02(112.5830, 22.3245);
     L.circle([parkCenter.lat, parkCenter.lng], { radius: 700, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
   }
 

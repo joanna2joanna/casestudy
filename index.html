@@ -122,6 +122,22 @@ body {
   margin: 0 auto;
 }
 
+/* Back to top */
+#back-to-top {
+  position: fixed; right: 1.5rem; bottom: 2rem; z-index: 999;
+  width: 46px; height: 46px; border-radius: 50%;
+  background: #1A1520; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none; font-size: 1.3rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.3s, visibility 0.3s, background 0.25s, transform 0.2s;
+}
+#back-to-top.show {
+  opacity: 1; visibility: visible; pointer-events: auto;
+}
+#back-to-top:hover { background: #8B3A4A; transform: scale(1.08); }
+
 @media (max-width: 768px) {
   html { font-size: 15px; }
   .header h1 { font-size: 2rem; }
@@ -508,6 +524,8 @@ body {
   </div>
 </div>
 
+<a href="#" id="back-to-top" title="回到顶部" aria-label="回到顶部">↑</a>
+
 <div class="footer">
   <p>张走走的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy" style="color:#8B3A4A;">GitHub</a> 托管</p>
   <p style="font-family:'DM Mono',monospace;font-size:0.85rem;margin-top:0.4rem;color:#8B3A4A;">
@@ -517,5 +535,18 @@ body {
 
 
 <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+(function() {
+  var btn = document.getElementById('back-to-top');
+  if (!btn) return;
+  window.addEventListener('scroll', function() {
+    btn.classList.toggle('show', window.scrollY > 300);
+  });
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+</script>
 </body>
 </html>

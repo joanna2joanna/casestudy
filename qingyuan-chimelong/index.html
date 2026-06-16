@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>清远长隆 — 8.6万亩世界级森林旅游综合体，中国第三座长隆的野性版图</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #2E7D32;
+  --clr-primary-light: #5CBF60;
+  --clr-primary-dark: #1B5E1F;
+  --clr-accent: #FF8F00;
+}
+
+.hero {
+  background: linear-gradient(160deg, #1B5E1F 0%, #2E7D32 40%, #5CBF60 70%, #7CB342 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(255,143,0,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+
+/* China: dual-map layout */
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>清远长隆</h1>
+    <p class="hero-subtitle">8.6万亩世界级森林旅游综合体——中国第三座长隆，全球主题乐园集团第五极的野性版图</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">¥300亿+</div><div class="kpi-label">总投资</div></div>
+      <div class="kpi-card"><div class="kpi-number">59 km²</div><div class="kpi-label">规划面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">1,000万</div><div class="kpi-label">首期年客流</div></div>
+      <div class="kpi-card"><div class="kpi-number">88米</div><div class="kpi-label">全球最高主题城堡</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目定位</h3><p>世界级森林旅游综合体</p></div>
+      <div class="card"><h3>所在地</h3><p>广东·清远·银盏</p></div>
+      <div class="card"><h3>开业时间</h3><p>2025年1月25日（试营业）</p></div>
+      <div class="card"><h3>开发运营</h3><p>长隆集团</p></div>
+      <div class="card"><h3>首期项目</h3><p>森林王国+温泉乐园+城堡酒店</p></div>
+      <div class="card"><h3>客房总数</h3><p>1,258间（长颈鹿城堡酒店）</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>清远长隆国际旅游度假区是长隆集团继广州、珠海之后的第三座超大型旅游综合体，规划面积8.6万亩（约59 km²），相当于9个番禺长隆、15个珠海长隆。项目以"大自然、大生态、大种群、大乐园"为核心理念，首期开放森林王国步行区（6大主题区域）、森林温泉乐园（40+汤池）、长颈鹿城堡酒店（1,258间客房），远期还将推出27公里森林大自驾环线。2025年1月25日试营业，远期目标年接待3,000万人次，有望推动长隆集团跻身全球主题乐园前三。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>单位</th><th>负责内容</th></tr></thead>
+        <tbody>
+          <tr><td>总体规划顾问</td><td>FORREC（加拿大）</td><td>可行性研究、总体规划顾问</td></tr>
+          <tr><td>总体规划顾问</td><td>Legacy（原GGE）</td><td>可行性研究、总体规划顾问</td></tr>
+          <tr><td>规划设计</td><td>中国京冶</td><td>森林王国步行区方案至施工图（规划/总图/建筑/景观/结构/暖通/电气/智能化/包装/内装/照明/标识/动物等全专业）</td></tr>
+          <tr><td>步行区建筑设计</td><td>广州华阳国际</td><td>步行区总图（含道路、管线）、建筑方案至施工图</td></tr>
+          <tr><td>景观设计</td><td>AUBE欧博设计</td><td>步行区景观设计</td></tr>
+          <tr><td>施工总包（酒店）</td><td>中建四局</td><td>长颈鹿城堡酒店施工总承包</td></tr>
+          <tr><td>游乐设备供应商</td><td>Alterface、Intamin、Mack Rides、ProSlide、WhiteWater、Zamperla、Zierer等</td><td>国际顶级游乐设备</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>设计理念</h3><p>清远长隆的景观设计贯彻"设计隐于无形"理念——通过生境模拟、视域隔离（利用地形高差和植被代替栏杆）、动态游览路径，让建筑谦逊融入山林，让游客忘记设计的存在，沉浸于"动物的家园"。</p></div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规划建设</td><td>总规划面积</td><td>8.6万亩（约59 km²）</td><td>相当于9个广州长隆</td></tr>
+          <tr><td>规划建设</td><td>首期建设用地</td><td>约3,300亩</td><td>—</td></tr>
+          <tr><td>规划建设</td><td>总投资</td><td>超¥300亿</td><td>首期已投入超¥70亿</td></tr>
+          <tr><td>规划建设</td><td>首期年接待量</td><td>800万–1,000万人次</td><td>远期3,000万人次</td></tr>
+          <tr><td>空间布局</td><td>规划结构</td><td>银盏·迎咀·华侨农场三大板块</td><td>"两板块多组团"</td></tr>
+          <tr><td>核心设施</td><td>长颈鹿城堡</td><td>高88米</td><td>全球主题乐园最高建筑</td></tr>
+          <tr><td>核心设施</td><td>蒸汽小火车</td><td>环线约2.5 km</td><td>穿越非洲草原，约20分钟</td></tr>
+          <tr><td>核心设施</td><td>森林大自驾</td><td>全长27 km</td><td>预计2025年中试营业</td></tr>
+          <tr><td>核心设施</td><td>大鸟笼</td><td>占地5公顷</td><td>全球最大</td></tr>
+          <tr><td>温泉设施</td><td>森林温泉乐园</td><td>占地2万m²</td><td>40+汤池，水源深2,300m</td></tr>
+          <tr><td>住宿配套</td><td>长颈鹿城堡酒店</td><td>1,258间客房</td><td>9种主题房型，5个主题餐厅</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源：长隆集团官方公告、清远市政府规划文件、TEA/AECOM全球主题公园报告；客流为规划数据。数据截至 2025 年。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#E53935;"></span> 森林王国</span>
+        <span><span class="dot" style="background:#FF8F00;"></span> 森林温泉乐园</span>
+        <span><span class="dot" style="background:#9C27B0;"></span> 长颈鹿城堡酒店</span>
+        <span><span class="dot" style="background:#0088B0;"></span> 森林大自驾入口</span>
+        <span><span class="dot" style="background:#4CAF50;"></span> 动物大迁徙区</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="520" fill="#1A1E12" rx="12"/>
+
+          <!-- Title -->
+          <text x="400" y="30" text-anchor="middle" fill="#CCC" font-family="Playfair Display,serif" font-size="16" font-weight="700">银盏板块空间结构示意</text>
+
+          <!-- 银盏水库 (northwest) -->
+          <ellipse cx="100" cy="120" rx="60" ry="35" fill="rgba(79,195,247,0.2)" stroke="#4FC3F7" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <text x="100" y="125" text-anchor="middle" fill="#4FC3F7" font-family="DM Sans,sans-serif" font-size="10">银盏水库</text>
+
+          <!-- 长颈鹿城堡 (north) -->
+          <rect x="320" y="60" width="160" height="55" rx="8" fill="rgba(156,39,176,0.15)" stroke="#9C27B0" stroke-width="2"/>
+          <text x="400" y="83" text-anchor="middle" fill="#CE93D8" font-family="Playfair Display,serif" font-size="15" font-weight="700">长颈鹿城堡</text>
+          <text x="400" y="101" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">88m · 1,258间</text>
+
+          <!-- 森林温泉乐园 (northeast) -->
+          <rect x="580" y="90" width="160" height="55" rx="8" fill="rgba(255,143,0,0.15)" stroke="#FF8F00" stroke-width="2"/>
+          <text x="660" y="113" text-anchor="middle" fill="#FFA726" font-family="Playfair Display,serif" font-size="15" font-weight="700">森林温泉乐园</text>
+          <text x="660" y="131" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">2万m² · 40+汤池</text>
+
+          <!-- 森林王国步行区 (center) - main area -->
+          <rect x="200" y="150" width="400" height="200" rx="12" fill="rgba(46,125,50,0.12)" stroke="#4CAF50" stroke-width="2.5"/>
+          <text x="400" y="175" text-anchor="middle" fill="#66BB6A" font-family="Playfair Display,serif" font-size="18" font-weight="700">森林王国步行区</text>
+          <text x="400" y="195" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="10">六大主题区域</text>
+
+          <!-- Sub-zones inside 森林王国 -->
+          <!-- 熊森林 (upper center inside) -->
+          <rect x="340" y="210" width="120" height="40" rx="6" fill="rgba(139,90,43,0.2)" stroke="#8D6E63" stroke-width="1.2"/>
+          <text x="400" y="235" text-anchor="middle" fill="#BCAAA4" font-family="DM Sans,sans-serif" font-size="11">🐻 熊森林</text>
+
+          <!-- 鹦鹉雨林 (upper right inside) -->
+          <rect x="480" y="210" width="100" height="40" rx="6" fill="rgba(233,30,99,0.15)" stroke="#E91E63" stroke-width="1.2"/>
+          <text x="530" y="235" text-anchor="middle" fill="#F48FB1" font-family="DM Sans,sans-serif" font-size="11">🦜 鹦鹉雨林</text>
+
+          <!-- 澳洲森林 (lower right inside) -->
+          <rect x="470" y="270" width="110" height="40" rx="6" fill="rgba(255,183,77,0.15)" stroke="#FFB74D" stroke-width="1.2"/>
+          <text x="525" y="295" text-anchor="middle" fill="#FFCC80" font-family="DM Sans,sans-serif" font-size="11">🦘 澳洲森林</text>
+
+          <!-- 昆虫森林 (left inside) -->
+          <rect x="220" y="240" width="100" height="40" rx="6" fill="rgba(156,204,101,0.15)" stroke="#9CCC65" stroke-width="1.2"/>
+          <text x="270" y="265" text-anchor="middle" fill="#C5E1A5" font-family="DM Sans,sans-serif" font-size="11">🐛 昆虫森林</text>
+
+          <!-- 湿地森林 (lower left inside) -->
+          <rect x="220" y="295" width="100" height="40" rx="6" fill="rgba(77,208,225,0.15)" stroke="#4DD0E1" stroke-width="1.2"/>
+          <text x="270" y="320" text-anchor="middle" fill="#80DEEA" font-family="DM Sans,sans-serif" font-size="11">💧 湿地森林</text>
+
+          <!-- 森林大街 (entrance, bottom) -->
+          <rect x="280" y="360" width="240" height="40" rx="6" fill="rgba(76,175,80,0.2)" stroke="#66BB6A" stroke-width="1.5"/>
+          <text x="400" y="385" text-anchor="middle" fill="#A5D6A7" font-family="DM Sans,sans-serif" font-size="12" font-weight="600">🌳 森林大街 · 入口长廊</text>
+
+          <!-- 动物大迁徙区 (south) -->
+          <rect x="300" y="420" width="200" height="40" rx="6" fill="rgba(255,193,7,0.15)" stroke="#4CAF50" stroke-width="1.2"/>
+          <text x="400" y="445" text-anchor="middle" fill="#FFF176" font-family="DM Sans,sans-serif" font-size="11">🦓 动物大迁徙区</text>
+
+          <!-- 森林大自驾环线 (dotted outer ring) -->
+          <rect x="40" y="40" width="730" height="440" rx="20" fill="none" stroke="#FF8F00" stroke-width="1.5" stroke-dasharray="8,6" opacity="0.5"/>
+          <text x="420" y="490" text-anchor="middle" fill="#FF8F00" font-family="DM Sans,sans-serif" font-size="10">森林大自驾环线（27 km，虚线示意）</text>
+
+          <!-- North arrow -->
+          <g transform="translate(760,30)">
+            <polygon points="0,25 8,0 16,25 8,18" fill="#CCC"/>
+            <text x="8" y="-4" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10" font-weight="700">北</text>
+          </g>
+
+          <!-- Legend -->
+          <rect x="570" y="460" width="200" height="50" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)"/>
+          <text x="580" y="478" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">━━ 实线框：已开放区域</text>
+          <text x="580" y="495" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">╌╌ 虚线：规划/建设中</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>🌳 森林大街</h3><p>入口生态长廊，"清森之门"迎宾，绿意夹道，千年古榕树作为核心记忆地标，"设计隐于无形"的示范区。</p></div>
+      <div class="card"><h3>🦜 鹦鹉雨林</h3><p>南美热带雨林主题，色彩盛宴，开放式鹦鹉互动体验，占地5公顷的全球最大鸟笼让人与鸟零距离。</p></div>
+      <div class="card"><h3>🐻 熊森林</h3><p>熊类生态秘境，多重生境（林区向湿地过渡），英熊谷剧场动物行为展示，视域隔离设计让游客沉浸于熊的家园。</p></div>
+      <div class="card"><h3>🦘 澳洲森林</h3><p>澳洲疏林草原主题，袋鼠、鸸鹋自由漫步，桉树林地貌还原南半球荒野，架空廊道俯瞰灵长类互动（猴森林）。</p></div>
+      <div class="card"><h3>💧 森林温泉乐园</h3><p>国内唯一"森林奇遇"主题温泉水乐园，占地2万m²，40+汤池（水源深2,300m），VP显示技术室内幻境汤池，泡温泉看鹦鹉/象龟。</p></div>
+      <div class="card"><h3>🦒 长颈鹿城堡</h3><p>88米全球最高主题城堡，1,258间亲子客房（9大主题+5大餐厅），亲鹿互动平台，神树亲子乐园，集温泉/宴会/商旅于一体。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">2013年12月31日</div>
+        <div class="timeline-content"><h4>项目签约</h4><p>长隆集团与清远市政府正式签约，宣布建设清远长隆。</p></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2015年</div>
+        <div class="timeline-content"><h4>正式动工</h4><p>项目开工建设，规划方案多轮打磨（环评→二稿→最终方案历时3年）。</p></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2018年2月</div>
+        <div class="timeline-content"><h4>方案定稿</h4><p>公布最终规划方案：一期约1,971亩，二期预留864亩。</p></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2023年</div>
+        <div class="timeline-content"><h4>建设加速</h4><p>与中建四局签约长颈鹿城堡酒店施工，誓师冲刺。</p></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2025年1月25日</div>
+        <div class="timeline-content"><h4>试营业</h4><p>森林王国+长颈鹿城堡酒店首批开放，广东首条磁浮旅游专线同步开通。</p></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2025年4月30日</div>
+        <div class="timeline-content"><h4>温泉开园</h4><p>森林温泉乐园正式对外开放，40+汤池迎客。</p></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2025年年中</div>
+        <div class="timeline-content"><h4>大自驾启幕</h4><p>森林大自驾（27 km环线）预计开启试营业。</p></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">远期</div>
+        <div class="timeline-content"><h4>全版图</h4><p>迎咀板块+华侨农场板块陆续开发，目标年接待3,000万人次。</p></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card"><h3>长隆集团全球排名</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">第5位</p><p class="f-caption">2023年TEA/AECOM</p></div>
+      <div class="card"><h3>集团年游客量</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">3,609万人次</p><p class="f-caption">2023年</p></div>
+      <div class="card"><h3>计划年接待（清远）</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">首期1,000万</p><p class="f-caption">远期3,000万</p></div>
+      <div class="card"><h3>就业带动</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">5万+30万</p><p class="f-caption">直接5万 / 间接30万</p></div>
+      <div class="card"><h3>试营业客流</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">突破23万人次</p><p class="f-caption">截至2025年3月</p></div>
+      <div class="card"><h3>带动过夜游客增长</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">137%</p><p class="f-caption">清远市过夜游客</p></div>
+    </div>
+    <div class="card reveal"><h3>母公司背景</h3><p>长隆集团（Chimelong Group）是中国最大的民营旅游投资集团，旗下拥有广州长隆旅游度假区（2006开业，年客流超2,000万）、珠海长隆国际海洋度假区（2014开业，年客流超1,000万）。根据TEA/AECOM《2023全球主题公园和博物馆报告》，长隆集团以年游客量3,609万人次位列全球主题公园集团第五位。清远长隆是长隆集团"广州—珠海—清远"三足鼎立战略的第三极。</p></div>
+    <div class="card reveal" style="margin-top:1.5rem;overflow-x:auto;">
+      <h3 style="margin-bottom:1rem;">长隆三极对比</h3>
+      <table class="data-table">
+        <thead><tr><th>项目</th><th>规模</th><th>年客流</th><th>定位</th><th>开业</th></tr></thead>
+        <tbody>
+          <tr><td>清远长隆</td><td>59 km²</td><td>目标3,000万</td><td>世界级森林旅游综合体</td><td>2025.1</td></tr>
+          <tr><td>广州长隆</td><td>约6.7 km²</td><td>2,000万+</td><td>城市欢乐度假区</td><td>2006</td></tr>
+          <tr><td>珠海长隆</td><td>约4 km²</td><td>1,000万+</td><td>海洋主题度假区</td><td>2014</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. TECH & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>超级规模</h3><p>8.6万亩（59km²）世界最大主题乐园群之一，银盏+迎咀+华侨农场三大板块，首期仅开发总量1/32。</p></div>
+      <div class="card"><h3>动物种群</h3><p>全球最大动物种群展示，南美→非洲→澳洲跨洲际生态模拟，数千只动物自由栖息，蒸汽火车35分钟穿越非洲草原。</p></div>
+      <div class="card"><h3>最高城堡</h3><p>长颈鹿城堡88米，全球主题乐园最高建筑，1,258间亲子主题客房，9种房型+5大餐厅+亲鹿互动平台。</p></div>
+      <div class="card"><h3>设计隐形</h3><p>生境模拟+视域隔离技术，堆坡代替围栏，植被代替墙壁，架空廊道+下沉路径，"让人忘记设计的存在"。</p></div>
+      <div class="card"><h3>交通体系</h3><p>广东首条磁浮旅游专线（银盏站↔景区），6条公交接驳，27km森林大自驾环线，2.5km蒸汽小火车。</p></div>
+      <div class="card"><h3>温泉技术</h3><p>地下2,300m天然岩层温泉，VP显示技术+泡浴设备的室内幻境汤池，国内唯一"森林+温泉+动物"复合模式。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>🏨 长颈鹿城堡酒店</h3><p>1,258间客房，9种主题房型，5大主题餐厅，亲鹿互动平台，集温泉/宴会/商旅/亲子于一体。</p></div>
+      <div class="card"><h3>♨️ 森林温泉乐园</h3><p>占地2万m²，40+汤池，室内VP幻境汤池，泡温泉赏鹦鹉/象龟/獴哥，国内唯一。</p></div>
+      <div class="card"><h3>🚝 磁浮旅游专线</h3><p>广东首条中低速磁浮，连接广清城际银盏站至景区，6条公交线路+北江旅游专线配套。</p></div>
+      <div class="card"><h3>🍽️ 餐饮矩阵</h3><p>长颈鹿城堡5大主题餐厅，森林王国主题餐饮点，森林大街小吃街，满足全客层。</p></div>
+      <div class="card"><h3>🚂 蒸汽小火车</h3><p>欧式复古蒸汽机车，环线约2.5km，穿越非洲草原看"动物大迁徙"，全程约20分钟。</p></div>
+      <div class="card"><h3>🎭 演艺体系</h3><p>英熊谷剧场+飞鸟剧场+森林大街巡游，动物行为展示+沉浸式演艺+节日特别活动。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>🎉 试营业启幕（2025.1.25）</h3><p>森林王国+长颈鹿城堡酒店首批开放，广东首条磁浮同步开通，长隆全球版图第三极正式亮相。</p></div>
+      <div class="card"><h3>♨️ 温泉乐园开业（2025.4.30）</h3><p>森林温泉乐园正式开园，40+汤池含室内VP幻境汤池，"森林奇遇"主题填补国内空白。</p></div>
+      <div class="card"><h3>🚙 大自驾倒计时（2025年中）</h3><p>27km森林大自驾环形线路预计年中试营业，国内最长、野生动物最多的自驾观光线路。</p></div>
+      <div class="card"><h3>🔮 远期展望</h3><p>迎咀板块（湖泽主题）+华侨农场板块（原野主题）+缆车小镇，目标全球前三主题乐园集团。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. RESOURCES ====== -->
+<section class="section section-alt" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <div class="resource-group">
+        <h4>官方信息</h4>
+        <ul>
+          <li><a href="https://www.chimelong.com/" target="_blank" rel="noopener">长隆集团官网</a></li>
+          <li><a href="https://www.chimelong.com/qingyuan" target="_blank" rel="noopener">清远长隆官方小程序</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>深度报道</h4>
+        <ul>
+          <li><a href="http://imtaweb.net/xwzx/xyxw/202502/20250207_71621067.shtml" target="_blank" rel="noopener">中国旅游协会·清远长隆开幕</a></li>
+          <li><a href="https://ttgchina.com/2025/02/06/" target="_blank" rel="noopener">TTG China·清远长隆开幕</a></li>
+          <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg5NTE1NTEzMw==&mid=2247508191" target="_blank" rel="noopener">AUBE欧博设计·步行区景观</a></li>
+          <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2MTYyNDQ0OQ==&mid=2247484911&idx=7" target="_blank" rel="noopener">中国京冶·设计框架协议</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>攻略游记</h4>
+        <ul>
+          <li><a href="https://www.thepaper.cn/newsDetail_forward_29995193" target="_blank" rel="noopener">澎湃新闻·清远长隆游玩攻略</a></li>
+          <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDU4MjUyMA==&mid=2653735631" target="_blank" rel="noopener">沉浸式漫游清远长隆</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>视频资料</h4>
+        <ul>
+          <li><a href="https://search.bilibili.com/all?keyword=清远长隆" target="_blank" rel="noopener">B站搜索"清远长隆"</a></li>
+          <li><a href="https://www.xiaohongshu.com/search_result?keyword=清远长隆" target="_blank" rel="noopener">小红书搜索"清远长隆"</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode + GCJ-02) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// WGS-84 → GCJ-02 converter
+function wgs84ToGcj02(wgsLng, wgsLat) {
+  var a = 6378245.0, ee = 0.00669342162296594323;
+  function _transformLat(x, y) {
+    var r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(y*Math.PI) + 40*Math.sin(y/3*Math.PI))*2/3;
+    r += (160*Math.sin(y/12*Math.PI) + 320*Math.sin(y*Math.PI/30))*2/3;
+    return r;
+  }
+  function _transformLng(x, y) {
+    var r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(x*Math.PI) + 40*Math.sin(x/3*Math.PI))*2/3;
+    r += (150*Math.sin(x/12*Math.PI) + 300*Math.sin(x/30*Math.PI))*2/3;
+    return r;
+  }
+  var dLat = _transformLat(wgsLng - 105, wgsLat - 35);
+  var dLng = _transformLng(wgsLng - 105, wgsLat - 35);
+  var radLat = wgsLat/180*Math.PI;
+  var magic = 1 - ee*Math.sin(radLat)*Math.sin(radLat);
+  return {
+    lng: wgsLng + (180*dLng)/((a/Math.sqrt(magic))*Math.cos(radLat)*Math.PI),
+    lat: wgsLat + (180*dLat)/((a*(1-ee))/(magic*Math.sqrt(magic))*Math.PI)
+  };
+}
+
+var zonesWgs = [
+  { name: '森林王国', lng: 113.162429, lat: 23.57769, color: '#E53935' },
+  { name: '森林温泉乐园', lng: 113.165077, lat: 23.579968, color: '#FF8F00' },
+  { name: '长颈鹿城堡酒店', lng: 113.164378, lat: 23.579891, color: '#9C27B0' },
+  { name: '森林大自驾入口', lng: 113.162496, lat: 23.573397, color: '#0088B0' },
+  { name: '动物大迁徙区', lng: 113.162496, lat: 23.573397, color: '#4CAF50' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var gcj = wgs84ToGcj02(z.lng, z.lat);
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([gcj.lat, gcj.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([23.5740, 113.1618], 15);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesWgs);
+
+  if (withBoundary) {
+    var parkCenter = wgs84ToGcj02(113.1618, 23.5740);
+    L.circle([parkCenter.lat, parkCenter.lng], { radius: 5000, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'sat', true);
+  initMap('satmap', 'sat', false);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

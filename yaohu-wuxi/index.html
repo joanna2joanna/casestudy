@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>窑湖小镇 — 千年窑火煅烧的江南山水度假小镇</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #B8603A;
+  --clr-primary-light: #D4946A;
+  --clr-primary-dark: #6E2E0A;
+  --clr-accent: #D4843A;
+}
+
+.hero {
+  background: linear-gradient(160deg, #6E2E0A 0%, #B8603A 40%, #D4946A 70%, #C8906A 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(212,132,58,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+
+/* China: dual-map layout */
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+
+/* KPI cards for operations */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.kpi-box { background: var(--clr-card-bg); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; box-shadow: var(--shadow-sm); border: 1px solid var(--clr-border); }
+.kpi-box .kpi-val { font-family: 'DM Mono', monospace; font-size: 1.6rem; font-weight: 600; color: var(--clr-primary); }
+.kpi-box .kpi-lbl { font-size: 0.82rem; color: var(--clr-text-muted); margin-top: 0.3rem; }
+
+.data-table thead th { padding: 0.75rem 1rem; text-align: left; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.85rem; }
+.data-table tbody td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--clr-border); font-size: 0.9rem; }
+.data-table tbody tr:hover { background: rgba(184,96,58,0.05); }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>窑湖小镇</h1>
+    <p class="hero-subtitle">千年窑火煅烧的江南山水度假小镇——乌镇创始人陈向宏与雅达蒋建宁的第三次握手</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">¥130亿</div><div class="kpi-label">总投资</div></div>
+      <div class="kpi-card"><div class="kpi-number">13.33 km²</div><div class="kpi-label">规划面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">51万+人次</div><div class="kpi-label">2025暑期客流</div></div>
+      <div class="kpi-card"><div class="kpi-number">90%</div><div class="kpi-label">过夜游客占比</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目定位</h3><p class="f-body">主题乐园式度假小镇</p><p class="f-caption">以窑文化为核心的复合型文旅目的地，被媒体誉为"江苏新封面"</p></div>
+      <div class="card"><h3>所在地</h3><p class="f-body">江苏·无锡·宜兴</p><p class="f-caption">江苏省无锡市宜兴市张渚镇，阳羡生态旅游度假区内</p></div>
+      <div class="card"><h3>开业时间</h3><p class="f-body">2024年12月28日</p><p class="f-caption">2024年7月试营业，12月28日正式开园</p></div>
+      <div class="card"><h3>开发主体</h3><p class="f-body">雅达资本 × 顶度集团</p><p class="f-caption">蒋建宁（雅达创始人）与陈向宏（乌镇/古北水镇总规划师）第三次携手</p></div>
+      <div class="card"><h3>核心IP</h3><p class="f-body">千年窑火 + 江南山水</p><p class="f-caption">融合山、水、陶、竹、茶五大文化元素，复刻龙窑遗址</p></div>
+      <div class="card"><h3>客房总数</h3><p class="f-body">超1,300间</p><p class="f-caption">含窑湖大酒店600余间+窑厂度假酒店+窑工民宿</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p class="f-body">窑湖小镇位于宜兴阳羡生态旅游度假区，由雅达创始人蒋建宁与乌镇景区创始人陈向宏第三次携手打造，历时六年精心打磨。项目以宜兴"山、水、陶、竹、茶"五大文化元素为核心，融合紫砂文化、东坡文化、民俗文化与梁祝文化，复刻龙窑遗址，打造集主题游乐、会议会展、休闲度假于一体的复合型文旅目的地。2024年12月28日正式开园，被媒体誉为"江苏新封面"。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="margin-bottom:1.5rem;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>单位</th><th>负责内容</th></tr></thead>
+        <tbody>
+          <tr><td>投资方</td><td>雅达资本</td><td>项目资本主导，蒋建宁领衔</td></tr>
+          <tr><td>投资方</td><td>和谐雅达</td><td>联合资本方</td></tr>
+          <tr><td>规划设计/运营</td><td>顶度集团（陈向宏团队）</td><td>总体规划、建筑设计、景区运营</td></tr>
+          <tr><td>会展中心施工</td><td>待核实</td><td>窑湖国际会展中心（约10万m²）</td></tr>
+          <tr><td>景观设计</td><td>待核实</td><td>湖滨景观与生态修复</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card reveal"><h3>设计理念</h3><p class="f-body">项目以"四维一体"定位体系构建：<strong>生活小镇</strong>——传承宜兴传统街巷肌理，打造可居可游的日常空间；<strong>艺术小镇</strong>——以紫砂文化为核心，串联东坡文化、梁祝文化等艺术脉络；<strong>主题小镇</strong>——以窑文化主题乐园为引擎，强化沉浸式体验；<strong>旅游小镇</strong>——会议会展+休闲度假双轮驱动。建筑设计以青瓦坡顶、夯土墙面、陶土砖为风貌母题，复刻宜兴千年龙窑遗址，将陶都文化基因深度植入建筑肌理。</p></div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规划建设</td><td>总规划面积</td><td class="num">约2万亩（13.33 km²）</td><td>含核心景区近7000亩</td></tr>
+          <tr><td>规划建设</td><td>总建筑面积</td><td class="num">约73万m²</td><td>—</td></tr>
+          <tr><td>规划建设</td><td>建设用地</td><td class="num">2,058亩</td><td>—</td></tr>
+          <tr><td>规划建设</td><td>总投资</td><td class="num">¥130亿</td><td>—</td></tr>
+          <tr><td>空间布局</td><td>规划结构</td><td>一湖·一轴·一带·七片区</td><td>窑湖核心+山谷景观轴+小火车风光带</td></tr>
+          <tr><td>空间布局</td><td>观光小火车</td><td class="num">轨道长约7 km</td><td>全程约50分钟</td></tr>
+          <tr><td>住宿配套</td><td>窑湖大酒店</td><td class="num">600余间客房</td><td>窑元素设计</td></tr>
+          <tr><td>住宿配套</td><td>总客房数</td><td class="num">超1,300间</td><td>含酒店+民宿</td></tr>
+          <tr><td>会展设施</td><td>窑湖国际会展中心</td><td class="num">约10万m²</td><td>国内景区内最大规模</td></tr>
+          <tr><td>文化设施</td><td>紫砂圣堂</td><td class="num">1,200 m²</td><td>紫砂主题多功能场地</td></tr>
+          <tr><td>生态设施</td><td>窑湖竹鼠水乐园</td><td>—</td><td>水寨、造浪池、彩虹滑道、漂流河</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据截至2025年12月。数据来源：宜兴市政府官网、窑湖小镇官方资料、媒体报道；部分数据为2025年暑期运营统计。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#E53935;"></span> 窑湖竹鼠水乐园</span>
+        <span><span class="dot" style="background:#FF8F00;"></span> 窑湖大酒店</span>
+        <span><span class="dot" style="background:#9C27B0;"></span> 窑湖国际会展中心</span>
+        <span><span class="dot" style="background:#0088B0;"></span> 宋窑展馆</span>
+        <span><span class="dot" style="background:#4CAF50;"></span> 窑厂度假酒店</span>
+        <span><span class="dot" style="background:#8BC34A;"></span> 龙形水秀</span>
+        <span><span class="dot" style="background:#FFC107;"></span> 鸟秀剧场</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container"><svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lakeGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5B9BD5"/><stop offset="100%" stop-color="#7FC4E8"/></linearGradient>
+    <linearGradient id="landGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5A7A3A"/><stop offset="100%" stop-color="#8BAA6A"/></linearGradient>
+    <linearGradient id="mtnGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6B8B5A"/><stop offset="100%" stop-color="#9BBA8A"/></linearGradient>
+  </defs>
+  <rect width="800" height="520" fill="#2C3E4E"/>
+
+  <!-- Background mountains/terrain -->
+  <ellipse cx="200" cy="520" rx="280" ry="140" fill="#3A4A3A" opacity="0.4"/>
+  <ellipse cx="600" cy="520" rx="320" ry="160" fill="#3A4A3A" opacity="0.35"/>
+
+  <!-- Train track (dotted ellipse circling) -->
+  <ellipse cx="400" cy="260" rx="280" ry="200" fill="none" stroke="#D4843A" stroke-width="1.5" stroke-dasharray="8,5" opacity="0.55"/>
+  <text x="680" y="280" fill="#D4843A" font-size="9" font-family="DM Sans" opacity="0.8">小火车环线 7km</text>
+
+  <!-- Central Lake -->
+  <ellipse cx="400" cy="260" rx="110" ry="75" fill="url(#lakeGrad)" opacity="0.85"/>
+  <text x="400" y="256" fill="white" font-size="13" font-family="Playfair Display" text-anchor="middle" font-weight="700">窑 湖</text>
+  <text x="400" y="273" fill="white" font-size="9" font-family="DM Sans" text-anchor="middle" opacity="0.8">核心景观湖</text>
+
+  <!-- Small islands/dots in lake -->
+  <circle cx="370" cy="245" r="4" fill="#8BAA6A" opacity="0.5"/>
+  <circle cx="425" cy="275" r="3" fill="#8BAA6A" opacity="0.5"/>
+
+  <!-- North: 小镇中心街区 -->
+  <rect x="310" y="40" width="180" height="65" rx="8" fill="#B8603A" opacity="0.85"/>
+  <text x="400" y="65" fill="white" font-size="12" font-family="DM Sans" text-anchor="middle" font-weight="600">小镇中心街区</text>
+  <text x="400" y="84" fill="#F0C8A0" font-size="9" font-family="DM Sans" text-anchor="middle">紫砂集市 · 江南非遗馆</text>
+  <text x="400" y="98" fill="#F0C8A0" font-size="9" font-family="DM Sans" text-anchor="middle">春溪绣纺 · 东坡草堂</text>
+
+  <!-- East: 宋窑遗址区 -->
+  <rect x="540" y="195" width="170" height="65" rx="8" fill="#6E2E0A" opacity="0.8"/>
+  <text x="625" y="220" fill="white" font-size="12" font-family="DM Sans" text-anchor="middle" font-weight="600">宋窑遗址区</text>
+  <text x="625" y="239" fill="#D4946A" font-size="9" font-family="DM Sans" text-anchor="middle">龙窑复建 · 宋窑展馆</text>
+  <text x="625" y="253" fill="#D4946A" font-size="9" font-family="DM Sans" text-anchor="middle">紫砂圣堂 1200m²</text>
+
+  <!-- South: 住宿度假集群 -->
+  <rect x="310" y="385" width="180" height="55" rx="8" fill="#B8603A" opacity="0.8"/>
+  <text x="400" y="408" fill="white" font-size="12" font-family="DM Sans" text-anchor="middle" font-weight="600">住宿度假集群</text>
+  <text x="400" y="426" fill="#F0C8A0" font-size="9" font-family="DM Sans" text-anchor="middle">窑湖大酒店 · 窑厂度假酒店 · 窑工民宿</text>
+
+  <!-- West: 生态休闲体验区 -->
+  <rect x="90" y="195" width="170" height="65" rx="8" fill="#5A7A3A" opacity="0.75"/>
+  <text x="175" y="220" fill="white" font-size="12" font-family="DM Sans" text-anchor="middle" font-weight="600">生态休闲体验区</text>
+  <text x="175" y="239" fill="#C8E0A0" font-size="9" font-family="DM Sans" text-anchor="middle">竹鼠水乐园 · 飞鸟之约</text>
+  <text x="175" y="253" fill="#C8E0A0" font-size="9" font-family="DM Sans" text-anchor="middle">鸟秀剧场（法国引进）</text>
+
+  <!-- Southwest: 会展中心 -->
+  <rect x="160" y="330" width="130" height="40" rx="6" fill="#9C27B0" opacity="0.6"/>
+  <text x="225" y="346" fill="white" font-size="10" font-family="DM Sans" text-anchor="middle" font-weight="600">会展中心</text>
+  <text x="225" y="361" fill="#E0C0F0" font-size="8" font-family="DM Sans" text-anchor="middle">约10万m²</text>
+
+  <!-- Connecting lines from center to zones -->
+  <line x1="400" y1="185" x2="400" y2="105" stroke="#D4843A" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+  <line x1="510" y1="260" x2="540" y2="228" stroke="#D4843A" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+  <line x1="400" y1="335" x2="400" y2="385" stroke="#D4843A" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+  <line x1="290" y1="260" x2="260" y2="228" stroke="#D4843A" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>
+
+  <!-- Small icons/landmarks on the lake shore -->
+  <rect x="385" y="295" width="30" height="14" rx="3" fill="#FFC107" opacity="0.7"/>
+  <text x="400" y="305" fill="#2C3E4E" font-size="7" font-family="DM Sans" text-anchor="middle" font-weight="600">水秀</text>
+
+  <!-- 一轴 label -->
+  <line x1="400" y1="20" x2="400" y2="500" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="3,6"/>
+  <text x="415" y="470" fill="rgba(255,255,255,0.3)" font-size="8" font-family="DM Sans">山谷景观轴</text>
+
+  <!-- Legend -->
+  <rect x="15" y="440" width="240" height="72" rx="6" fill="rgba(0,0,0,0.35)"/>
+  <text x="25" y="458" fill="white" font-size="10" font-family="DM Sans" font-weight="600">图例</text>
+  <rect x="25" y="466" width="14" height="8" rx="2" fill="#B8603A" opacity="0.85"/><text x="46" y="474" fill="#AAA" font-size="8" font-family="DM Sans">小镇中心 / 住宿集群</text>
+  <rect x="160" y="466" width="14" height="8" rx="2" fill="#6E2E0A" opacity="0.8"/><text x="181" y="474" fill="#AAA" font-size="8" font-family="DM Sans">文化遗址区</text>
+  <rect x="25" y="482" width="14" height="8" rx="2" fill="#5A7A3A" opacity="0.75"/><text x="46" y="490" fill="#AAA" font-size="8" font-family="DM Sans">生态休闲区</text>
+  <rect x="160" y="482" width="14" height="8" rx="2" fill="#D4843A" opacity="0.7"/><text x="181" y="490" fill="#AAA" font-size="8" font-family="DM Sans">小火车环线</text>
+  <rect x="25" y="498" width="14" height="8" rx="2" fill="url(#lakeGrad)" opacity="0.7"/><text x="46" y="506" fill="#AAA" font-size="8" font-family="DM Sans">窑湖水面</text>
+
+  <!-- North Arrow -->
+  <g transform="translate(770,25)">
+    <polygon points="0,-14 -5,5 0,-1 5,5" fill="#D4843A"/>
+    <text x="0" y="-18" fill="#D4843A" font-size="9" font-family="DM Sans" text-anchor="middle" font-weight="600">N</text>
+  </g>
+
+  <!-- Title -->
+  <text x="400" y="515" fill="#5A7A7A" font-size="9" font-family="DM Sans" text-anchor="middle">窑湖小镇 一湖·一轴·一带·七片区 空间结构示意图</text>
+</svg></div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>🏛️ 小镇中心街区</h3><p class="f-body">青瓦坡顶、夯土墙面、陶土砖建筑风貌，汇聚紫砂集市、江南非遗馆、春溪绣纺、东坡草堂等文化地标，再现宜兴传统街巷肌理。</p></div>
+      <div class="card"><h3>🏺 宋窑遗址区</h3><p class="f-body">复刻宜兴千年龙窑，设宋窑展馆展示宜兴7300余年制陶史，配套紫砂圣堂（1200m²）与紫砂讲堂，是窑文化的核心表达空间。</p></div>
+      <div class="card"><h3>🌊 窑湖核心景观湖</h3><p class="f-body">湖面为小镇灵魂所在，沿岸设水上市集、龙形水秀表演区，夜间水秀配合灯光音乐打造沉浸式视听盛宴。</p></div>
+      <div class="card"><h3>🌿 生态休闲体验区</h3><p class="f-body">窑湖竹鼠水乐园（水寨+造浪池+彩虹滑道+漂流河），《飞鸟之约》大型生态演艺（投资3亿元、历时6年打造），法国引进国内唯一鸟秀剧场。</p></div>
+      <div class="card"><h3>🏨 住宿度假集群</h3><p class="f-body">窑湖大酒店（600余间，窑元素设计）+ 窑厂度假酒店 + 窑工民宿，累计超1,300间客房，90%过夜游客占比。</p></div>
+      <div class="card"><h3>🚂 小火车风光带</h3><p class="f-body">7公里观光小火车环线，全程50分钟，穿越高架桥、隧道、山谷、竹林与茶田，串联小镇各大主题片区。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2018年初</div><div class="timeline-content"><h4>项目启动</h4><p>雅达资本与顶度集团签约，启动规划设计。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2018–2020</div><div class="timeline-content"><h4>建设期</h4><p>土地整理、基础施工、龙窑复建。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年7月</div><div class="timeline-content"><h4>试运营</h4><p>启动试营业，竹鼠水乐园预售5天线上销售近千万元。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年7月20日</div><div class="timeline-content"><h4>非遗年会</h4><p>承办第二届中国非物质文化遗产保护年会，吸引超16万人。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年12月28日</div><div class="timeline-content"><h4>正式开园</h4><p>举办「窑湖，很高兴认识你」开园主题周，万人入园。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年</div><div class="timeline-content"><h4>持续扩展</h4><p>陶瓷博物馆窑湖分馆开放；《飞鸟之约》大型生态项目落成。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年11月</div><div class="timeline-content"><h4>品牌认可</h4><p>入选"文旅好品牌"2025年度景区及博物馆品牌案例（无锡唯一）。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="kpi-grid reveal">
+      <div class="kpi-box"><div class="kpi-val">51万+人次</div><div class="kpi-lbl">暑期接待量（2025年）</div></div>
+      <div class="kpi-box"><div class="kpi-val">90%</div><div class="kpi-lbl">过夜游客占比</div></div>
+      <div class="kpi-box"><div class="kpi-val">2.3天</div><div class="kpi-lbl">人均停留</div></div>
+      <div class="kpi-box"><div class="kpi-val">突破¥1,000</div><div class="kpi-lbl">人均消费</div></div>
+      <div class="kpi-box"><div class="kpi-val">35%</div><div class="kpi-lbl">90后客群</div></div>
+      <div class="kpi-box"><div class="kpi-val">800+人</div><div class="kpi-lbl">在岗员工（远期3,000人）</div></div>
+    </div>
+    <div class="card reveal" style="margin-bottom:1.5rem;"><h3>开发背景</h3><p class="f-body">窑湖小镇由雅达资本（Yada Capital）主导投资，联合顶度集团（Topdom Group）负责规划设计及景区运营。顶度集团创始人陈向宏先生是乌镇景区、古北水镇的总规划师，被誉为"中国文旅教父"。项目是雅达与顶度的第三次合作，也是陈向宏在江南水乡小镇领域的又一力作。2024年阳羡生态旅游度假区配套投入约1.8亿元专项资金推进周边环境提升与交通优化。</p></div>
+    <div class="card reveal">
+      <h3>同类项目对比</h3>
+      <div style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>项目</th><th>规模</th><th>投资</th><th>客房</th><th>定位</th><th>开业</th></tr></thead>
+        <tbody>
+          <tr><td><strong>窑湖小镇</strong></td><td class="num">13.33 km²</td><td class="num">¥130亿</td><td class="num">1,300间+</td><td>窑文化度假小镇</td><td class="num">2024.12</td></tr>
+          <tr><td>乌镇西栅</td><td class="num">3.4 km²</td><td class="num">约¥50亿</td><td class="num">2,000间+</td><td>江南水乡古镇</td><td class="num">2007</td></tr>
+          <tr><td>古北水镇</td><td class="num">9 km²</td><td class="num">约¥45亿</td><td class="num">1,500间+</td><td>长城脚下水镇</td><td class="num">2014</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECH & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>总体规划</h3><p class="f-body">一湖·一轴·一带·七片区</p><p class="f-caption">"文旅+会展"复合模式，前端主题乐园、中端会议会展、末端旅居</p></div>
+      <div class="card"><h3>建筑面积</h3><p class="f-body">总建筑面积约73万m²</p><p class="f-caption">其中会展中心约10万m²（国内景区最大），酒店民宿超1,300间</p></div>
+      <div class="card"><h3>小火车系统</h3><p class="f-body">7 km观光环线</p><p class="f-caption">欧式复古蒸汽机车，穿越高架/隧道/竹林/茶田，全程约50分钟</p></div>
+      <div class="card"><h3>生态水系统</h3><p class="f-body">窑湖核心景观湖+溪流湿地</p><p class="f-caption">生态修复+活水循环系统，夜间龙形水秀（水火交融）</p></div>
+      <div class="card"><h3>窑文化技术</h3><p class="f-body">龙窑复建工艺</p><p class="f-caption">1:1复原宋代窑炉，陶土砖+夯土墙传统建造技艺，宋窑展馆恒温恒湿文物保护</p></div>
+      <div class="card"><h3>数字化运营</h3><p class="f-body">智慧景区票务系统</p><p class="f-caption">线上预售+分时预约，数字孪生管理平台，2025年线上销售占门票收入超60%</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>🏨 住宿集群</h3><p class="f-body">窑湖大酒店+窑厂度假酒店+窑工民宿</p><p class="f-caption">合计超1,300间客房，覆盖高端商务到民宿体验全谱系</p></div>
+      <div class="card"><h3>🎪 会展中心</h3><p class="f-body">约10万m²</p><p class="f-caption">国内景区规模最大，可承办国家级会议、行业峰会、高端婚宴</p></div>
+      <div class="card"><h3>🍜 餐饮体系</h3><p class="f-body">多元餐饮矩阵</p><p class="f-caption">西施全日制餐厅（窑湖大酒店内）、东坡草堂茶空间、紫砂集市小吃街、水上市集餐饮</p></div>
+      <div class="card"><h3>🚗 交通配套</h3><p class="f-body">长三角核心区位</p><p class="f-caption">紧邻宜长高速阳羡互通，宜马快速通道已通车，沪苏湖高铁开通后辐射长三角</p></div>
+      <div class="card"><h3>🎭 演艺矩阵</h3><p class="f-body">四大演艺IP</p><p class="f-caption">《飞鸟之约》大型生态秀+龙形水秀+鸟秀剧场（法国引进）+"千年窑火颂风华"实景剧</p></div>
+      <div class="card"><h3>🛍️ 商业配套</h3><p class="f-body">完整小镇生活配套</p><p class="f-caption">紫砂集市、江南非遗馆手工坊、文创商店、银行、超市、食堂</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>🏆 品牌殊荣（2025.11）</h3><p class="f-body">入选"文旅好品牌"2025年度景区及博物馆品牌案例，无锡唯一入选项目，区域文旅标杆地位确立。</p></div>
+      <div class="card"><h3>🦅 《飞鸟之约》落成（2025）</h3><p class="f-body">投资3亿元、历时6年打造的大型生态演艺项目正式开放，成为小镇核心引流引擎。</p></div>
+      <div class="card"><h3>🏛️ 陶瓷博物馆开馆（2025）</h3><p class="f-body">中国宜兴陶瓷博物馆窑湖小镇分馆正式开放，进一步夯实窑文化IP厚度。</p></div>
+      <div class="card"><h3>🔮 二期展望</h3><p class="f-body">远期规划窑湖溪山度假生活住区，员工规模将从800人扩展至3,000人，带动周边新增23家主题民宿、8家紫砂工作室。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. RESOURCES ====== -->
+<section class="section section-alt" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="reveal">
+      <div class="resource-group"><h4>官方信息</h4><ul>
+        <li><a href="https://www.yixing.gov.cn/" target="_blank" rel="noopener">宜兴市人民政府官网</a></li>
+        <li><a href="https://mp.weixin.qq.com/" target="_blank" rel="noopener">窑湖小镇官方公众号</a></li>
+      </ul></div>
+      <div class="resource-group"><h4>深度报道</h4><ul>
+        <li><a href="http://js.news.cn/20241230/9ffd76cb176d41328a61e515b24302da/c.html" target="_blank" rel="noopener">新华网·窑湖小镇正式开业</a></li>
+        <li><a href="https://wxrb.com/doc/2024/07/17/356939.shtml" target="_blank" rel="noopener">无锡日报·县域旅游融合出新</a></li>
+        <li><a href="https://wap.yzwb.net/wap/news/4234017.html" target="_blank" rel="noopener">扬子晚报·历时六年打造</a></li>
+      </ul></div>
+      <div class="resource-group"><h4>游记体验</h4><ul>
+        <li><a href="https://www.meipian.cn/5imwavjf" target="_blank" rel="noopener">美篇·窑湖小镇夜景</a></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzA4NjQwOTQyMw==&mid=2652485605&idx=1" target="_blank" rel="noopener">窑湖小镇考察分析</a></li>
+      </ul></div>
+      <div class="resource-group"><h4>视频资料</h4><ul>
+        <li><a href="https://search.bilibili.com/all?keyword=窑湖小镇" target="_blank" rel="noopener">B站搜索"窑湖小镇"</a></li>
+        <li><a href="https://www.xiaohongshu.com/search_result?keyword=窑湖小镇" target="_blank" rel="noopener">小红书搜索"窑湖小镇"</a></li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode + GCJ-02) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// WGS-84 → GCJ-02 converter
+function wgs84ToGcj02(wgsLng, wgsLat) {
+  var a = 6378245.0, ee = 0.00669342162296594323;
+  function _transformLat(x, y) {
+    var r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(y*Math.PI) + 40*Math.sin(y/3*Math.PI))*2/3;
+    r += (160*Math.sin(y/12*Math.PI) + 320*Math.sin(y*Math.PI/30))*2/3;
+    return r;
+  }
+  function _transformLng(x, y) {
+    var r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(x*Math.PI) + 40*Math.sin(x/3*Math.PI))*2/3;
+    r += (150*Math.sin(x/12*Math.PI) + 300*Math.sin(x/30*Math.PI))*2/3;
+    return r;
+  }
+  var dLat = _transformLat(wgsLng - 105, wgsLat - 35);
+  var dLng = _transformLng(wgsLng - 105, wgsLat - 35);
+  var radLat = wgsLat/180*Math.PI;
+  var magic = 1 - ee*Math.sin(radLat)*Math.sin(radLat);
+  return {
+    lng: wgsLng + (180*dLng)/((a/Math.sqrt(magic))*Math.cos(radLat)*Math.PI),
+    lat: wgsLat + (180*dLat)/((a*(1-ee))/(magic*Math.sqrt(magic))*Math.PI)
+  };
+}
+
+var zonesWgs = [
+  { name: '窑湖竹鼠水乐园', lng: 119.671125, lat: 31.215025, color: '#E53935' },
+  { name: '窑湖大酒店', lng: 119.673934, lat: 31.212731, color: '#FF8F00' },
+  { name: '窑湖国际会展中心', lng: 119.671318, lat: 31.213604, color: '#9C27B0' },
+  { name: '宋窑展馆', lng: 119.673628, lat: 31.216604, color: '#0088B0' },
+  { name: '窑厂度假酒店', lng: 119.666575, lat: 31.215875, color: '#4CAF50' },
+  { name: '龙形水秀', lng: 119.672158, lat: 31.216565, color: '#8BC34A' },
+  { name: '鸟秀剧场', lng: 119.672158, lat: 31.216507, color: '#FFC107' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var gcj = wgs84ToGcj02(z.lng, z.lat);
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([gcj.lat, gcj.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([31.2165, 119.6722], 16);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesWgs);
+
+  if (withBoundary) {
+    var parkCenter = wgs84ToGcj02(119.6722, 31.2165);
+    L.circle([parkCenter.lat, parkCenter.lng], { radius: 1200, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

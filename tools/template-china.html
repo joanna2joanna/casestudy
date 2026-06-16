@@ -159,49 +159,24 @@ html { font-size: 17px; }
   <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
 </div>
 
-<!-- ====== SCRIPTS (China: Gaode + GCJ-02) ====== -->
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script>
-// WGS-84 → GCJ-02 converter
-function wgs84ToGcj02(wgsLng, wgsLat) {
-  var a = 6378245.0, ee = 0.00669342162296594323;
-  function _transformLat(x, y) {
-    var r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
-    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
-    r += (20*Math.sin(y*Math.PI) + 40*Math.sin(y/3*Math.PI))*2/3;
-    r += (160*Math.sin(y/12*Math.PI) + 320*Math.sin(y*Math.PI/30))*2/3;
-    return r;
-  }
-  function _transformLng(x, y) {
-    var r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x));
-    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
-    r += (20*Math.sin(x*Math.PI) + 40*Math.sin(x/3*Math.PI))*2/3;
-    r += (150*Math.sin(x/12*Math.PI) + 300*Math.sin(x/30*Math.PI))*2/3;
-    return r;
-  }
-  var dLat = _transformLat(wgsLng - 105, wgsLat - 35);
-  var dLng = _transformLng(wgsLng - 105, wgsLat - 35);
-  var radLat = wgsLat/180*Math.PI;
-  var magic = 1 - ee*Math.sin(radLat)*Math.sin(radLat);
-  return {
-    lng: wgsLng + (180*dLng)/((a/Math.sqrt(magic))*Math.cos(radLat)*Math.PI),
-    lat: wgsLat + (180*dLat)/((a*(1-ee))/(magic*Math.sqrt(magic))*Math.PI)
-  };
-}
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+// 如坐标来自海外工具 (Nominatim/Photon)，则需 WGS-84 → GCJ-02 转换（见 template-overseas.html）
 
-var zonesWgs = {{ZONES_WGS_DATA}};
+var zonesGcj02 = {{ZONES_GCJ02_DATA}};
 
 function addZoneMarkers(targetMap, zones) {
   zones.forEach(function(z) {
-    var gcj = wgs84ToGcj02(z.lng, z.lat);
     var label = z.name.replace(/<br><small>.*<\/small>/, '');
     var icon = L.divIcon({
       className: 'zone-marker',
       html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
       iconSize: [0, 0], iconAnchor: [0, 0]
     });
-    L.marker([gcj.lat, gcj.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
   });
 }
 
@@ -229,11 +204,10 @@ function initMap(mapId, defaultLayer, withBoundary) {
     L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
   }
 
-  addZoneMarkers(map, zonesWgs);
+  addZoneMarkers(map, zonesGcj02);
 
   if (withBoundary) {
-    var parkCenter = wgs84ToGcj02({{BOUNDARY_LNG}}, {{BOUNDARY_LAT}});
-    L.circle([parkCenter.lat, parkCenter.lng], { radius: {{BOUNDARY_RADIUS}}, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+    L.circle([{{BOUNDARY_LAT}}, {{BOUNDARY_LNG}}], { radius: {{BOUNDARY_RADIUS}}, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
   }
 
   setTimeout(function() { map.invalidateSize(); }, 800);

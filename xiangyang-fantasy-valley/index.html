@@ -495,9 +495,34 @@ footer strong { color: var(--gold-light); }
 
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 <script>
-// ── WGS-84 → GCJ-02 converter ──
+// WGS-84 → GCJ-02 converter
 function wgs84ToGcj02(wgsLng, wgsLat) {
   var a = 6378245.0, ee = 0.00669342162296594323;
+  function _transformLat(x, y) {
+    var r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(y*Math.PI) + 40*Math.sin(y/3*Math.PI))*2/3;
+    r += (160*Math.sin(y/12*Math.PI) + 320*Math.sin(y*Math.PI/30))*2/3;
+    return r;
+  }
+  function _transformLng(x, y) {
+    var r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(x*Math.PI) + 40*Math.sin(x/3*Math.PI))*2/3;
+    r += (150*Math.sin(x/12*Math.PI) + 300*Math.sin(x/30*Math.PI))*2/3;
+    return r;
+  }
+  var dLat = _transformLat(wgsLng - 105, wgsLat - 35);
+  var dLng = _transformLng(wgsLng - 105, wgsLat - 35);
+  var radLat = wgsLat/180*Math.PI;
+  var magic = 1 - ee*Math.sin(radLat)*Math.sin(radLat);
+  return {
+    lng: wgsLng + (180*dLng)/((a/Math.sqrt(magic))*Math.cos(radLat)*Math.PI),
+    lat: wgsLat + (180*dLat)/((a*(1-ee))/(magic*Math.sqrt(magic))*Math.PI)
+  };
+}
+
+// ── WGS-84 → GCJ-02 converter ──
   function _transformLat(x, y) {
     var r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
     r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
@@ -550,7 +575,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Convert WGS-84 zones to GCJ-02 for 高德 tiles
   var xyZonesGcj = xyZonesWgs.map(function(z) {
-    var gcj = wgs84ToGcj02(z.lng, z.lat);
     return { name: z.name, lat: gcj.lat, lng: gcj.lng, color: z.color };
   });
 

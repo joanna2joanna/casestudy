@@ -136,8 +136,8 @@ def main():
         time.sleep(0.3)
 
     print(f"\n{'='*60}")
-    print("// zonesWgs 数组:")
-    print("var zonesWgs = [")
+    print("// 高德API返回 GCJ-02 坐标，直接用于高德瓦片，禁止再次转换")
+    print("var zonesGcj02 = [")
     for i, z in enumerate(results):
         comma = "," if i < len(results) - 1 else ""
         print(f"  {{ name: '{z['name']}', lng: {z['lng']}, lat: {z['lat']}, color: '{z['color']}' }}{comma}")

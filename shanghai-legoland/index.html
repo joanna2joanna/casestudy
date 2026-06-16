@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>上海乐高乐园 — 全球最大·中国首座乐高主题乐园</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #D0103A;
+  --clr-primary-light: #E8505A;
+  --clr-primary-dark: #8B0020;
+  --clr-accent: #FFD700;
+}
+
+.hero {
+  background: linear-gradient(160deg, #8B0020 0%, #D0103A 40%, #E8505A 70%, #F5A623 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(255,215,0,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+
+/* China: dual-map layout */
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>上海乐高乐园</h1>
+    <p class="hero-subtitle">全球最大、中国首座——8,500万块积木构筑的亲子奇幻王国，2025盛夏开园</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">¥100亿+</div><div class="kpi-label">总投资</div></div>
+      <div class="kpi-card"><div class="kpi-number">31.8万m²</div><div class="kpi-label">占地面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">8,500万块</div><div class="kpi-label">乐高积木</div></div>
+      <div class="kpi-card"><div class="kpi-number">75+项</div><div class="kpi-label">骑乘与玩乐</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目定位</h3><p>全球最大乐高乐园·中国首座</p></div>
+      <div class="card"><h3>所在地</h3><p>上海·金山区·枫泾镇，距市中心约70km</p></div>
+      <div class="card"><h3>开业时间</h3><p>2025年7月5日</p></div>
+      <div class="card"><h3>投资运营</h3><p>默林娱乐集团运营（国资控股）</p></div>
+      <div class="card"><h3>主题分区</h3><p>8大主题区</p></div>
+      <div class="card"><h3>主题酒店</h3><p>250间（5大主题风格）</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>上海乐高乐园度假区是全球第11座、中国首座乐高乐园，也是全球开园规模最大的乐高乐园。项目位于上海金山区枫泾镇，占地31.8万m²，由8,500万块乐高积木拼搭而成，设有8大主题区、超75项骑乘设施和表演。全球首发"乐高悟空小侠"和"乐高乐园创想世界"两大主题区，核心地标"迷你天地"使用超2,000万块积木还原中国地标。2025年7月5日正式开园，由默林娱乐集团运营，是迄今中国唯一国资控股的乐高主题乐园。数据截至 2025年11月。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>单位</th><th>负责内容</th></tr></thead>
+        <tbody>
+          <tr><td>首席体验设计师</td><td>FORREC（加拿大多伦多）</td><td>概念总体规划、方案设计、扩初设计、施工协调（25年+乐高乐园经验）</td></tr>
+          <tr><td>设计合作方</td><td>同济设计集团（TJAD）</td><td>与FORREC紧密合作完成设计落地</td></tr>
+          <tr><td>设计合作方</td><td>华建集团</td><td>与FORREC、默林团队协作设计</td></tr>
+          <tr><td>核心施工（75%工程）</td><td>上海宝冶集团（中国中冶）</td><td>六大主题片区施工总承包（积木街道、乐高中心、乐高城市、乐高好友、幻影忍者、乐高城堡），约3.9万m²</td></tr>
+          <tr><td>项目业主</td><td>上海国屹投资（国资）</td><td>项目公司控股方</td></tr>
+          <tr><td>投资方</td><td>科尔克比集团（乐高母公司）+ 默林娱乐 + 华人文化</td><td>联合投资</td></tr>
+          <tr><td>运营方</td><td>默林娱乐集团</td><td>全球第二大旅游景点运营商</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card reveal" style="margin-top:1.2rem;">
+      <h3>设计与建设创新</h3>
+      <p>上海宝冶团队（平均年龄25.3岁，曾建上海迪士尼+北京环球影城）实现三大技术创新——<strong>750倍标准积木块安装</strong>（6米构件接缝误差2-3mm）、<strong>跨材质56种乐高标准色匹配</strong>（金属铝板还原塑料质感，20年不褪色）、<strong>BIM+智能放样机器人</strong>（过山车轨道安装效率提升40%）。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规划建设</td><td>占地面积</td><td>31.8万m²（约477亩）</td><td>全球开园规模最大乐高乐园</td></tr>
+          <tr><td>规划建设</td><td>一期投资</td><td>约¥48.37亿</td><td>含主题乐园+酒店</td></tr>
+          <tr><td>规划建设</td><td>总投资（含配套）</td><td>超¥100亿</td><td>含周边商业</td></tr>
+          <tr><td>空间布局</td><td>主题区</td><td>8大主题区</td><td>全球首发2个</td></tr>
+          <tr><td>游乐设施</td><td>骑乘/玩乐项目</td><td>超75项</td><td>含过山车+水上游乐</td></tr>
+          <tr><td>积木用量</td><td>总积木数</td><td>超8,500万块</td><td>全球乐高乐园之最</td></tr>
+          <tr><td>积木用量</td><td>迷你天地积木</td><td>超2,000万块</td><td>还原中国地标</td></tr>
+          <tr><td>地标设施</td><td>巨型人仔"搭搭"</td><td>高26m</td><td>全球最大乐高人仔</td></tr>
+          <tr><td>地标设施</td><td>观光塔</td><td>高60m</td><td>俯瞰全园</td></tr>
+          <tr><td>住宿配套</td><td>乐高主题酒店</td><td>250间客房</td><td>5大主题风格</td></tr>
+          <tr><td>客流预测</td><td>年客流</td><td>约240万人次</td><td>工作日8千/日，周末2万/日</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源：默林娱乐集团官方公告、上海宝冶集团项目报道、上海市政府新闻；客流为官方预测数据。数据截至 2025年11月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#E53935;"></span> 积木街道（主入口）</span>
+        <span><span class="dot" style="background:#FF8F00;"></span> 乐高城堡</span>
+        <span><span class="dot" style="background:#9C27B0;"></span> 乐高城市</span>
+        <span><span class="dot" style="background:#0088B0;"></span> 幻影忍者世界</span>
+        <span><span class="dot" style="background:#4CAF50;"></span> 乐高好朋友·水上派对</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 900 680" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <radialGradient id="centerGlow"><stop offset="0%" stop-color="#D0103A" stop-opacity="0.2"/><stop offset="100%" stop-color="#D0103A" stop-opacity="0"/></radialGradient>
+          </defs>
+
+          <!-- Background -->
+          <rect width="900" height="680" fill="#0E0E1A" rx="14"/>
+          <rect x="1" y="1" width="898" height="678" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" rx="13"/>
+
+          <!-- Center glow -->
+          <circle cx="450" cy="320" r="220" fill="url(#centerGlow)"/>
+
+          <!-- Subtle ring -->
+          <circle cx="450" cy="320" r="185" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="4,6"/>
+
+          <!-- Connection spokes from center to each zone -->
+          <g opacity="0.12" stroke="#FFD700" stroke-width="1">
+            <line x1="450" y1="320" x2="450" y2="115"/>
+            <line x1="450" y1="320" x2="636" y2="175"/>
+            <line x1="450" y1="320" x2="685" y2="320"/>
+            <line x1="450" y1="320" x2="636" y2="465"/>
+            <line x1="450" y1="320" x2="450" y2="530"/>
+            <line x1="450" y1="320" x2="264" y2="465"/>
+            <line x1="450" y1="320" x2="215" y2="320"/>
+            <line x1="450" y1="320" x2="264" y2="175"/>
+          </g>
+
+          <!-- ====== Central Hub: 创想世界 ====== -->
+          <circle cx="450" cy="320" r="58" fill="rgba(208,16,58,0.18)" stroke="#D0103A" stroke-width="2.5" filter="url(#glow)"/>
+          <text x="450" y="308" text-anchor="middle" fill="#E8505A" font-family="Playfair Display,serif" font-size="15" font-weight="700">🎡 创想世界</text>
+          <text x="450" y="328" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">26m"搭搭"</text>
+          <text x="450" y="342" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">60m观光塔</text>
+          <!-- Tower spire -->
+          <rect x="447" y="244" width="6" height="16" fill="#FFD700" rx="1" opacity="0.8"/>
+          <rect x="446" y="190" width="8" height="56" fill="#D0103A" rx="2" opacity="0.7"/>
+          <circle cx="450" cy="186" r="5" fill="#FFD700" opacity="0.9"/>
+
+          <!-- ====== N: 幻影忍者 ====== -->
+          <rect x="380" y="80" width="140" height="70" rx="8" fill="rgba(0,136,176,0.13)" stroke="#0088B0" stroke-width="1.8"/>
+          <text x="450" y="108" text-anchor="middle" fill="#00BCD4" font-family="Playfair Display,serif" font-size="13" font-weight="700">🥷 乐高幻影忍者</text>
+          <text x="450" y="128" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">幻影忍者之旅·杰训练营</text>
+          <text x="450" y="142" text-anchor="middle" fill="#777" font-family="DM Sans,sans-serif" font-size="9">得宝大积木天地·亚洲美食街</text>
+
+          <!-- ====== NE: 乐高城堡 ====== -->
+          <rect x="565" y="140" width="140" height="70" rx="8" fill="rgba(255,143,0,0.13)" stroke="#FF8F00" stroke-width="1.8"/>
+          <text x="635" y="168" text-anchor="middle" fill="#FFB74D" font-family="Playfair Display,serif" font-size="13" font-weight="700">🏰 乐高城堡</text>
+          <text x="635" y="188" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">飞龙过山车·巫师飞行器</text>
+          <text x="635" y="202" text-anchor="middle" fill="#777" font-family="DM Sans,sans-serif" font-size="9">小龙飞车（儿童首座过山车）</text>
+
+          <!-- ====== E: 奇趣积木城 ====== -->
+          <rect x="615" y="285" width="140" height="70" rx="8" fill="rgba(255,215,0,0.11)" stroke="#FFD700" stroke-width="1.8"/>
+          <text x="685" y="313" text-anchor="middle" fill="#FFD700" font-family="Playfair Display,serif" font-size="13" font-weight="700">🎪 奇趣积木城</text>
+          <text x="685" y="333" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">旋转积木派对·得宝快车</text>
+          <text x="685" y="347" text-anchor="middle" fill="#777" font-family="DM Sans,sans-serif" font-size="9">¥99 DIY乐高人仔</text>
+
+          <!-- ====== SE: Hotel ====== -->
+          <rect x="565" y="430" width="140" height="70" rx="8" fill="rgba(255,215,0,0.08)" stroke="#FFD700" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <text x="635" y="458" text-anchor="middle" fill="#FFD700" opacity="0.7" font-family="Playfair Display,serif" font-size="13" font-weight="700">🏨 乐高主题酒店</text>
+          <text x="635" y="478" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">250间·5大主题风格</text>
+          <text x="635" y="492" text-anchor="middle" fill="#777" font-family="DM Sans,sans-serif" font-size="9">（乐园东南侧）</text>
+
+          <!-- ====== S: 积木街道 (Entry) ====== -->
+          <rect x="380" y="495" width="140" height="70" rx="8" fill="rgba(229,57,53,0.14)" stroke="#E53935" stroke-width="2"/>
+          <text x="450" y="523" text-anchor="middle" fill="#EF5350" font-family="Playfair Display,serif" font-size="13" font-weight="700">🧱 积木街道（主入口）</text>
+          <text x="450" y="543" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">入园首站·乐高商店+咖啡馆</text>
+          <text x="450" y="557" text-anchor="middle" fill="#777" font-family="DM Sans,sans-serif" font-size="9">乐高乐园乐队每日演出</text>
+          <!-- Entrance arrow -->
+          <polygon points="450,570 443,560 457,560" fill="#E53935"/>
+          <line x1="450" y1="570" x2="450" y2="585" stroke="#E53935" stroke-width="1.5"/>
+          <text x="450" y="600" text-anchor="middle" fill="#EF5350" font-family="DM Sans,sans-serif" font-size="9">▼ 主入口</text>
+
+          <!-- ====== SW: 乐高城市 ====== -->
+          <rect x="195" y="430" width="140" height="70" rx="8" fill="rgba(156,39,176,0.13)" stroke="#9C27B0" stroke-width="1.8"/>
+          <text x="265" y="458" text-anchor="middle" fill="#CE93D8" font-family="Playfair Display,serif" font-size="13" font-weight="700">🏙️ 乐高城市</text>
+          <text x="265" y="478" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">驾驶学校·海岸警卫·救援学院</text>
+          <text x="265" y="492" text-anchor="middle" fill="#777" font-family="DM Sans,sans-serif" font-size="9">小朋友的第一张"驾照"</text>
+
+          <!-- ====== W: 乐高好朋友 ====== -->
+          <rect x="145" y="285" width="140" height="70" rx="8" fill="rgba(76,175,80,0.13)" stroke="#4CAF50" stroke-width="1.8"/>
+          <text x="215" y="313" text-anchor="middle" fill="#81C784" font-family="Playfair Display,serif" font-size="13" font-weight="700">💦 乐高好朋友</text>
+          <text x="215" y="333" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">水上摩托艇·沙滩踏浪</text>
+          <text x="215" y="347" text-anchor="middle" fill="#777" font-family="DM Sans,sans-serif" font-size="9">创意设计工作坊</text>
+
+          <!-- ====== NW: 悟空小侠 ====== -->
+          <rect x="195" y="140" width="140" height="70" rx="8" fill="rgba(255,152,0,0.14)" stroke="#FF9800" stroke-width="2"/>
+          <text x="265" y="168" text-anchor="middle" fill="#FFB74D" font-family="Playfair Display,serif" font-size="13" font-weight="700">🐵 乐高悟空小侠</text>
+          <text x="265" y="186" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9">花果山船游·云霄历险</text>
+          <text x="265" y="200" text-anchor="middle" fill="#FFB74D" font-family="DM Sans,sans-serif" font-size="9">🌍 全球首发</text>
+
+          <!-- ====== North Arrow ====== -->
+          <g transform="translate(845,42)">
+            <circle cx="0" cy="0" r="18" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.4"/>
+            <polygon points="0,-16 3,-2 16,0 3,2 0,16 -3,2 -16,0 -3,-2" fill="#FFD700" opacity="0.7"/>
+            <text x="0" y="-21" text-anchor="middle" fill="#FFD700" font-family="DM Sans,sans-serif" font-size="9" font-weight="700">N</text>
+          </g>
+
+          <!-- ====== Bottom Legend ====== -->
+          <g transform="translate(40,620)">
+            <text x="0" y="0" fill="#888" font-family="DM Sans,sans-serif" font-size="9">乐园平面结构示意（顺时针方向）</text>
+            <rect x="0" y="10" width="10" height="10" rx="2" fill="#D0103A" opacity="0.6"/>
+            <text x="14" y="19" fill="#999" font-family="DM Sans,sans-serif" font-size="8">中心枢纽</text>
+            <rect x="75" y="10" width="10" height="10" rx="2" fill="#E53935" opacity="0.6"/>
+            <text x="89" y="19" fill="#999" font-family="DM Sans,sans-serif" font-size="8">入口</text>
+            <rect x="130" y="10" width="10" height="10" rx="2" fill="#FF9800" opacity="0.6"/>
+            <text x="144" y="19" fill="#999" font-family="DM Sans,sans-serif" font-size="8">全球首发</text>
+            <rect x="200" y="10" width="10" height="10" rx="2" fill="#FFD700" opacity="0.4"/>
+            <text x="214" y="19" fill="#999" font-family="DM Sans,sans-serif" font-size="8">酒店/配套</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards (8 cards: first 6 in grid-3, last 2 centered) -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>🧱 积木街道</h3><p>入园首站，乐高世界初印象。乐高乐园乐队每日开园闭园演出，乐高大商店+咖啡馆+冰淇淋店，街灯/长椅/花坛皆为巨型乐高模型。</p></div>
+      <div class="card"><h3>🏙️ 乐高城市</h3><p>经典亲子互动区。6大骑乘（驾驶学校/海岸警卫学院/救援学院/火车站/机场），小朋友可在驾驶学校获得人生第一张"驾照"，4D影院+人偶互动。</p></div>
+      <div class="card"><h3>💦 乐高好朋友</h3><p>水上派对主题。水上摩托艇+沙滩踏浪滑行+拼搭船竞赛+心湖城秋千，创意设计工作坊可定制乐高像素画。</p></div>
+      <div class="card"><h3>🐵 乐高悟空小侠 <span style="font-size:0.7rem;color:var(--clr-primary);">🌍全球首发</span></h3><p>灵感源自《西游记》。花果山神秘船游（激流勇进）+悟空小侠云霄历险+龙小骄之玉龙神力，朱大厨美食城中式菜肴。</p></div>
+      <div class="card"><h3>🎡 乐高乐园创想世界 <span style="font-size:0.7rem;color:var(--clr-primary);">🌍全球首发</span></h3><p>26m巨型人仔"搭搭"+60m观光塔，迷你天地（2,000万块积木还原故宫/外滩/洪崖洞），乐高大飞车（园区最长过山车530m）。</p></div>
+      <div class="card"><h3>🥷 乐高幻影忍者</h3><p>3大骑乘：幻影忍者之旅+杰的重力训练营+凯的空中竞技，得宝大积木天地（低龄儿童），亚洲美食街。</p></div>
+    </div>
+    <div class="reveal" style="display:flex;justify-content:center;gap:1.2rem;flex-wrap:wrap;margin-top:1.2rem;">
+      <div class="card" style="flex:0 1 350px;"><h3>🏰 乐高城堡</h3><p>中世纪骑士与巨龙世界。5大骑乘：飞龙过山车+巫师飞行器+小龙飞车（儿童首座过山车）+勇登高塔+皇家竞技场。</p></div>
+      <div class="card" style="flex:0 1 350px;"><h3>🎪 奇趣积木城</h3><p>低龄婴幼儿梦幻区。旋转积木派对+得宝快车+踏步音律+创意丛林，大型剧场（悟空小侠故事），小人仔创意集市（¥99 DIY乐高人仔）。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2021年</div><div class="timeline-content"><h4>项目签约</h4><p>默林娱乐与上海金山区政府签署合作协议。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023年9月</div><div class="timeline-content"><h4>全面开工</h4><p>主体工程全面启动，上海宝冶进场。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年初</div><div class="timeline-content"><h4>土建过半</h4><p>全场土建进度过半，游乐设备开始安装。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年3月</div><div class="timeline-content"><h4>八大片区揭晓</h4><p>官方公布8大主题区详情，票价体系发布（成人¥319起）。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年7月5日</div><div class="timeline-content"><h4>正式开园</h4><p>全球最大乐高乐园盛大启幕，首日客流火爆。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年9月</div><div class="timeline-content"><h4>破百万客流</h4><p>开园不足3个月即突破100万人次，刷新全球乐高乐园客流纪录。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年11月</div><div class="timeline-content"><h4>获Thea奖</h4><p>荣获TEA"Thea主题乐园杰出成就奖"，中国年度唯一。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>开园不足3月客流</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">100万+</p><p class="f-caption">刷新全球乐高乐园开园纪录</p></div>
+      <div class="card" style="text-align:center;"><h4>工作日客流</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">~8千人次</p><p class="f-caption">每日</p></div>
+      <div class="card" style="text-align:center;"><h4>周末/节假日客流</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">~2万人次</p><p class="f-caption">每日</p></div>
+      <div class="card" style="text-align:center;"><h4>成人票价</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">¥319起</p><p class="f-caption">标准一日票</p></div>
+      <div class="card" style="text-align:center;"><h4>儿童票价</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">¥255起</p><p class="f-caption">标准一日票</p></div>
+      <div class="card" style="text-align:center;"><h4>2025 Thea奖</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">中国唯一</p><p class="f-caption">主题乐园杰出成就奖</p></div>
+    </div>
+    <div class="card reveal" style="margin-bottom:1.5rem;">
+      <h3>母公司默林娱乐集团</h3>
+      <p>上海乐高乐园由默林娱乐集团（Merlin Entertainments）运营。默林娱乐是全球第二大旅游景点运营商（仅次于迪士尼），旗下拥有乐高乐园、杜莎夫人蜡像馆、SEA LIFE水族馆、伦敦眼等130+景点，年接待游客超6,700万人次。上海乐高乐园是默林在中国的第13个项目，也是迄今中国唯一国资控股的乐高主题乐园（由上海国屹投资控股）。</p>
+    </div>
+    <div class="card reveal">
+      <h3>全球乐高乐园对比</h3>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>项目</th><th>面积</th><th>开业</th><th>特色</th><th>票价</th></tr></thead>
+          <tbody>
+            <tr><td>上海乐高乐园</td><td>31.8万m²</td><td>2025.7</td><td>全球最大·悟空小侠首发</td><td>¥319起</td></tr>
+            <tr><td>名古屋乐高乐园</td><td>9.3万m²</td><td>2017.4</td><td>日本首座</td><td>JP¥4,500起</td></tr>
+            <tr><td>纽约乐高乐园</td><td>约20万m²</td><td>2021.7</td><td>北美最新</td><td>USD 59.99起</td></tr>
+            <tr><td>比隆乐高乐园（丹麦）</td><td>约14万m²</td><td>1968</td><td>全球首座·最经典</td><td>DKK 399起</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>全球最大</h3><p>31.8万m²，开园规模超越所有11座乐高乐园，8,500万块积木用量全球之最，2,000万块积木筑就迷你天地。</p></div>
+      <div class="card"><h3>中国IP全球首发</h3><p>悟空小侠主题区灵感源自《西游记》，花果山船游+云霄历险+玉龙神力，中国文化输出新范式。</p></div>
+      <div class="card"><h3>乐高精度放大</h3><p>750倍标准积木放大技术（全球首创），8mm积木→6m构件，接缝误差2-3mm，56种标准色跨材质匹配。</p></div>
+      <div class="card"><h3>最高人仔</h3><p>26m巨型乐高人仔"搭搭"（全球最大），60m观光塔360°俯瞰全园，530m园区最长过山车"乐高大飞车"。</p></div>
+      <div class="card"><h3>亲子设计</h3><p>专为2-12岁亲子家庭，所有骑乘"儿童友好"（无极端刺激），小龙飞车为儿童首座过山车体验设计，得宝大积木天地服务低龄。</p></div>
+      <div class="card"><h3>国资模式</h3><p>中国唯一国资控股乐高乐园（上海国屹），"国资+外资品牌+民企"三方协作，"中国模式"主题乐园开发新路径。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>🏨 乐高主题酒店</h3><p>250间客房，5大主题风格（乐高城堡/好朋友/忍者/悟空小侠/得宝），沉浸式乐高主题从大堂到客房。</p></div>
+      <div class="card"><h3>🍽️ 餐饮矩阵</h3><p>朱大厨美食城（中式/东南亚）、乐高城市披萨工厂、城堡骑士餐厅、幻影忍者亚洲美食街、积木大街咖啡馆+冰淇淋。</p></div>
+      <div class="card"><h3>🛍️ 乐高大商店</h3><p>园区最大零售旗舰店，限定款+独家款乐高套装，小人仔创意集市DIY定制（¥99/个），Pick-A-Brick散装墙。</p></div>
+      <div class="card"><h3>🎪 爱琴海·缤纷里</h3><p>乐园外围商业街（FORREC概念设计），餐饮+购物+亲子娱乐，连接酒店与乐园入口。</p></div>
+      <div class="card"><h3>🚗 交通配套</h3><p>金山北站（沪杭高铁）接驳巴士，上海市区自驾约1小时，浦东机场/虹桥枢纽直通大巴，园区停车场超3,000车位。</p></div>
+      <div class="card"><h3>♿ 无障碍设计</h3><p>全园无障碍通道覆盖，轮椅租赁+无障碍骑乘通道，FORREC专项无障碍策略设计，获业界高度评价。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>🎉 盛大开幕（2025.7.5）</h3><p>全球最大乐高乐园正式启幕，8大主题区+75项骑乘全部开放，8,500万块积木创世界纪录。</p></div>
+      <div class="card"><h3>🏆 Thea杰出成就奖（2025.11）</h3><p>获全球主题娱乐协会TEA"Thea主题乐园杰出成就奖"，中国年度唯一获此殊荣的主题乐园。</p></div>
+      <div class="card"><h3>📊 客流刷新（2025.9）</h3><p>开园不足3个月突破100万人次，刷新全球乐高乐园开园客流纪录，市场热度持续攀升。</p></div>
+      <div class="card"><h3>🔮 二期展望</h3><p>乐高水上乐园已在规划中，周边爱琴海·缤纷里商街持续招商，有望引入乐高探索中心等室内业态。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>官方信息</h4><ul>
+      <li><a href="https://www.legoland.com.cn/shanghai/" target="_blank" rel="noopener">上海乐高乐园官网</a><span class="tag">官方</span></li>
+      <li><a href="https://www.merlinentertainments.biz/" target="_blank" rel="noopener">默林娱乐集团</a><span class="tag">官方</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>深度报道</h4><ul>
+      <li><a href="https://forrec.com/cn/projects/%e4%b8%8a%e6%b5%b7%e4%b9%90%e9%ab%98%e4%b9%90%e5%9b%ad%e5%ba%a6%e5%81%87%e5%8c%ba/" target="_blank" rel="noopener">FORREC·上海乐高乐园项目</a><span class="tag">设计</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5NzY4MzI0OQ==&mid=2651794721" target="_blank" rel="noopener">同济设计·乐高乐园设计揭秘</a><span class="tag">设计</span></li>
+      <li><a href="https://www.thepaper.cn/newsDetail_forward_32540698" target="_blank" rel="noopener">上海宝冶·全球最大乐高乐园承建</a><span class="tag">施工</span></li>
+      <li><a href="http://dzb.jzsbs.com/epaper/jzsb/pc/content/202506/12/content_29142.html" target="_blank" rel="noopener">建筑时报·750倍放大精度</a><span class="tag">技术</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>全攻略</h4><ul>
+      <li><a href="https://export.shobserver.com/baijiahao/html/940549.html" target="_blank" rel="noopener">建议收藏！上海乐高乐园必打卡项目</a><span class="tag">攻略</span></li>
+      <li><a href="https://hk.trip.com/moments/detail/shanghai-2-136752211/" target="_blank" rel="noopener">携程·上海乐高乐园一站式攻略</a><span class="tag">攻略</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>视频资料</h4><ul>
+      <li><a href="https://search.bilibili.com/all?keyword=上海乐高乐园" target="_blank" rel="noopener">B站搜索"上海乐高乐园"</a><span class="tag">视频</span></li>
+      <li><a href="https://www.xiaohongshu.com/search_result?keyword=上海乐高乐园攻略" target="_blank" rel="noopener">小红书搜索"上海乐高乐园攻略"</a><span class="tag">攻略</span></li>
+    </ul></div>
+    <p class="f-caption" style="text-align:center;margin-top:2rem;">本报告所有数据来源于公开资料，仅供参考研究使用。数据截至 2025 年 11 月。</p>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode + GCJ-02) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// WGS-84 → GCJ-02 converter
+function wgs84ToGcj02(wgsLng, wgsLat) {
+  var a = 6378245.0, ee = 0.00669342162296594323;
+  function _transformLat(x, y) {
+    var r = -100 + 2*x + 3*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(y*Math.PI) + 40*Math.sin(y/3*Math.PI))*2/3;
+    r += (160*Math.sin(y/12*Math.PI) + 320*Math.sin(y*Math.PI/30))*2/3;
+    return r;
+  }
+  function _transformLng(x, y) {
+    var r = 300 + x + 2*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x));
+    r += (20*Math.sin(6*x*Math.PI) + 20*Math.sin(2*x*Math.PI))*2/3;
+    r += (20*Math.sin(x*Math.PI) + 40*Math.sin(x/3*Math.PI))*2/3;
+    r += (150*Math.sin(x/12*Math.PI) + 300*Math.sin(x/30*Math.PI))*2/3;
+    return r;
+  }
+  var dLat = _transformLat(wgsLng - 105, wgsLat - 35);
+  var dLng = _transformLng(wgsLng - 105, wgsLat - 35);
+  var radLat = wgsLat/180*Math.PI;
+  var magic = 1 - ee*Math.sin(radLat)*Math.sin(radLat);
+  return {
+    lng: wgsLng + (180*dLng)/((a/Math.sqrt(magic))*Math.cos(radLat)*Math.PI),
+    lat: wgsLat + (180*dLat)/((a*(1-ee))/(magic*Math.sqrt(magic))*Math.PI)
+  };
+}
+
+var zonesWgs = [
+  { name: '乐高乐园主入口', lng: 121.096443, lat: 30.884458, color: '#E53935' },
+  { name: '乐高城堡', lng: 121.096905, lat: 30.883889, color: '#FF8F00' },
+  { name: '乐高城市', lng: 121.098225, lat: 30.886825, color: '#9C27B0' },
+  { name: '乐高幻影忍者', lng: 121.099986, lat: 30.883563, color: '#0088B0' },
+  { name: '得宝水上乐园', lng: 121.098779, lat: 30.885044, color: '#4CAF50' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var gcj = wgs84ToGcj02(z.lng, z.lat);
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([gcj.lat, gcj.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([30.8848, 121.0961], 16);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesWgs);
+
+  if (withBoundary) {
+    var parkCenter = wgs84ToGcj02(121.0961, 30.8848);
+    L.circle([parkCenter.lat, parkCenter.lng], { radius: 600, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

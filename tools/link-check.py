@@ -23,6 +23,7 @@ from pathlib import Path
 # ── 配置 ──────────────────────────────────────────────
 
 TIMEOUT = 12
+LINKS_ONLY = False  # --links-only 快速模式：只查链接，跳过瓦片和图片
 TILE_ZOOMS = [12, 14]  # 抽查的 zoom 级别
 TILE_SAMPLE = 2        # 每个 zoom 取 N×N 瓦片（实际请求 tile_sample²）
 MIN_TILE_BYTES = 1024  # 小于此值视为空白瓦片
@@ -273,7 +274,7 @@ def report(results, json_mode=False):
 
 # ── 主流程 ──────────────────────────────────────────
 
-def check_html(filepath):
+def check_html(filepath, links_only=False):
     html = Path(filepath).read_text(encoding="utf-8")
 
     ref_links, infra_links = extract_links(html)
@@ -306,49 +307,51 @@ def check_html(filepath):
     results["links"]["total"] = len(seen)
 
     # ── 验证瓦片 ──
-    for tpl in tile_urls:
-        stype = detect_tile_source(tpl)
-        src_result = {"url": tpl, "type": stype, "samples": {"total": 0, "ok": 0, "thin": 0, "dead": 0, "details": []}}
+    if not links_only:
+        for tpl in tile_urls:
+            stype = detect_tile_source(tpl)
+            src_result = {"url": tpl, "type": stype, "samples": {"total": 0, "ok": 0, "thin": 0, "dead": 0, "details": []}}
 
-        # 区域匹配警告
-        if stype == "esri" and region == "china":
-            results["tiles"]["warnings"].append(f"国内项目使用 ESRI 瓦片，可能无覆盖或坐标系偏移")
-        if stype == "amap" and region == "overseas":
-            results["tiles"]["warnings"].append(f"海外项目使用高德瓦片，海外无覆盖")
+            # 区域匹配警告
+            if stype == "esri" and region == "china":
+                results["tiles"]["warnings"].append(f"国内项目使用 ESRI 瓦片，可能无覆盖或坐标系偏移")
+            if stype == "amap" and region == "overseas":
+                results["tiles"]["warnings"].append(f"海外项目使用高德瓦片，海外无覆盖")
 
-        # 抽查瓦片（仅当有中心坐标时）
-        if center != (0, 0):
-            sample_urls = sample_tile_urls(tpl, center, TILE_ZOOMS, TILE_SAMPLE)
-            for z, tx, ty, url in sample_urls:
-                status, _, error, size = check_url(url)
-                src_result["samples"]["total"] += 1
-                detail = {"z": z, "x": tx, "y": ty, "url": url, "status": status, "size": size}
-                if status and 200 <= status < 300:
-                    if size < MIN_TILE_BYTES:
-                        src_result["samples"]["thin"] += 1
-                        detail["note"] = "空白瓦片？"
-                        src_result["samples"]["details"].append(detail)
+            # 抽查瓦片（仅当有中心坐标时）
+            if center != (0, 0):
+                sample_urls = sample_tile_urls(tpl, center, TILE_ZOOMS, TILE_SAMPLE)
+                for z, tx, ty, url in sample_urls:
+                    status, _, error, size = check_url(url)
+                    src_result["samples"]["total"] += 1
+                    detail = {"z": z, "x": tx, "y": ty, "url": url, "status": status, "size": size}
+                    if status and 200 <= status < 300:
+                        if size < MIN_TILE_BYTES:
+                            src_result["samples"]["thin"] += 1
+                            detail["note"] = "空白瓦片？"
+                            src_result["samples"]["details"].append(detail)
+                        else:
+                            src_result["samples"]["ok"] += 1
                     else:
-                        src_result["samples"]["ok"] += 1
-                else:
-                    src_result["samples"]["dead"] += 1
-                    if error:
-                        detail["error"] = error
-                    src_result["samples"]["details"].append(detail)
-        results["tiles"]["sources"].append(src_result)
+                        src_result["samples"]["dead"] += 1
+                        if error:
+                            detail["error"] = error
+                        src_result["samples"]["details"].append(detail)
+            results["tiles"]["sources"].append(src_result)
 
     # ── 验证图片 ──
-    for url in img_urls:
-        results["images"]["total"] += 1
-        status, _, error, size = check_url(url)
-        entry = {"url": url, "status": status, "size": size}
-        if error:
-            entry["error"] = error
-        results["images"]["details"].append(entry)
-        if status and 200 <= status < 300:
-            results["images"]["ok"] += 1
-        else:
-            results["images"]["dead"] += 1
+    if not links_only:
+        for url in img_urls:
+            results["images"]["total"] += 1
+            status, _, error, size = check_url(url)
+            entry = {"url": url, "status": status, "size": size}
+            if error:
+                entry["error"] = error
+            results["images"]["details"].append(entry)
+            if status and 200 <= status < 400:
+                results["images"]["ok"] += 1
+            else:
+                results["images"]["dead"] += 1
 
     # ── 汇总 ──
     has_issues = bool(
@@ -365,6 +368,7 @@ def check_html(filepath):
 
 def main():
     json_mode = "--json" in sys.argv
+    links_only = "--links-only" in sys.argv
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
 
     if not args:
@@ -376,7 +380,7 @@ def main():
         print(f"错误: 文件不存在 — {filepath}", file=sys.stderr)
         sys.exit(1)
 
-    results = check_html(filepath)
+    results = check_html(filepath, links_only=links_only)
     has_issues = report(results, json_mode=json_mode)
     sys.exit(1 if has_issues else 0)
 

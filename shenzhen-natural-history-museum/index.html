@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>深圳自然博物馆 — 一句话描述</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #5D4037;
+  --clr-primary-light: #8D6E63;
+  --clr-primary-dark: #3E2723;
+  --clr-accent: #FFB300;
+}
+
+.hero {
+  background: linear-gradient(160deg, #3E2723 0%, #5D4037 40%, #8D6E63 70%, #A1887F 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(255,179,0,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+
+/* China: dual-map layout */
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>深圳自然博物馆</h1>
+    <p class="hero-subtitle">华南首座大型综合自然博物馆——"三角洲"造型从燕子湖畔生长而出，2026年7月28日正式开馆</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">10.53万m²</div><div class="kpi-label">总建筑面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">¥35亿</div><div class="kpi-label">总投资</div></div>
+      <div class="kpi-card"><div class="kpi-number">7,461件</div><div class="kpi-label">标本真品</div></div>
+      <div class="kpi-card"><div class="kpi-number">8大展厅</div><div class="kpi-label">从宇宙到家园</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal"><div class="card"><h3>位置</h3><p>广东省深圳市坪山区燕子湖片区，沙新路田园小区西北侧约180m</p></div>
+      <div class="card"><h3>项目定位</h3><p>华南首座大型综合性自然博物馆，深圳市"新时代十大文化设施"之一</p></div>
+      <div class="card"><h3>开馆时间</h3><p>2026年7月28日正式开馆（周二至周日 9:00–17:00，周一闭馆）</p></div>
+      <div class="card"><h3>运营主体</h3><p>深圳市建筑工务署工程设计管理中心建设；深圳博物馆运营管理</p></div>
+      <div class="card"><h3>用地面积</h3><p>约4.2万m²（4.2公顷）</p></div>
+      <div class="card"><h3>门票</h3><p>免费实名预约制</p></div></div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>深圳自然博物馆位于坪山区燕子湖畔，总建筑面积10.53万m²（其中陈列展览区约3.52万m²），总投资约¥35亿（不含标本征集费）。建筑由丹麦3XN、加拿大B+H Architects与筑博设计联合体共同设计，以"河流三角洲"为概念——五个锥形组团如水流般蜿蜒，外立面采用直纹斜面石材模拟海蚀崖肌理，屋顶植物园总长超600m步道联动燕子岭与赤坳水湿地。馆内设宇宙厅、地球厅、演化厅、恐龙厅、人类厅、生物厅、生态厅、家园厅八大常设展厅，7,461件标本真品构建从138亿年宇宙演化到深圳本土生态的完整叙事链。2026年7月28日正式开馆，填补了粤港澳大湾区大型综合自然博物馆的空白。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>单位</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>概念设计</td><td>3XN（丹麦哥本哈根）</td><td>主导建筑设计，"三角洲"方案从全球70+团队中获第一名</td></tr>
+          <tr><td>落地设计+景观+室内</td><td>B+H Architects / 贝加艾奇（加拿大多伦多）</td><td>项目落地、景观方案、室内设计统筹</td></tr>
+          <tr><td>本地设计院</td><td>筑博设计（中国深圳）</td><td>本地技术支持、施工图与规范协调</td></tr>
+          <tr><td>展陈设计施工</td><td>丝路视觉（Silkroad Visual）</td><td>从58家竞标单位中脱颖而出，全流程展陈落地</td></tr>
+          <tr><td>建设管理</td><td>深圳市建筑工务署工程设计管理中心</td><td>项目业主与建设方</td></tr>
+          <tr><td>运营方</td><td>深圳博物馆</td><td>建成后纳入深圳博物馆体系运营管理</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>设计理念</h3><p>建筑以"河流三角洲"为空间隐喻——五个锥形组团如同河流分支，从燕子湖畔隆起。外立面采用直纹斜面石材，建筑表面如同被水流冲刷千万年的海蚀崖。钢结构总量约2.4万吨（相当于3个埃菲尔铁塔），42m超大跨度与43°斜柱勾勒灵动轮廓。屋顶设计为公共植物园，游客可沿斜坡步道漫步至顶端俯瞰燕子湖全景。融入"海绵城市"理念，屋顶绿化与地面景观形成多层次生态廊道。馆内通过全息投影、AR/VR、沉浸式剧场等数字技术，将传统标本展陈升级为多感官叙事体验。</p></div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody><tr><td>选址规模</td><td>用地面积</td><td>约4.2万m²（4.2ha）</td><td>坪山区燕子湖片区核心地块</td></tr>
+          <tr><td>选址规模</td><td>总建筑面积</td><td>约10.53万m²</td><td>地上五层、地下两层</td></tr>
+          <tr><td>选址规模</td><td>陈列展览区面积</td><td>约3.52万m²</td><td>含8大常设展厅+临展厅+球幕影院</td></tr>
+          <tr><td>选址规模</td><td>建筑高度</td><td>约35.5–36m</td><td>5个锥形组团</td></tr>
+          <tr><td>投资</td><td>总投资</td><td>约¥35亿</td><td>不含标本征集费</td></tr>
+          <tr><td>投资</td><td>展陈工程投资</td><td>约¥12亿</td><td>展陈总面积约4.34万m²</td></tr>
+          <tr><td>建筑</td><td>钢结构总量</td><td>约2.4万吨</td><td>相当于3个埃菲尔铁塔</td></tr>
+          <tr><td>建筑</td><td>最大跨度/斜柱角度</td><td>42m / 43°</td><td>灵动轮廓的关键结构</td></tr>
+          <tr><td>展品</td><td>标本真品数量</td><td>7,461件</td><td>含中华古果/禽龙/近鸟龙/鱼龙等</td></tr>
+          <tr><td>展品</td><td>仿真模型+展项</td><td>338件 + 194件</td><td>—</td></tr>
+          <tr><td>体验</td><td>屋顶植物园步道</td><td>超600m</td><td>联动燕子岭公园+赤坳水湿地研习径</td></tr>
+          <tr><td>体验</td><td>球幕影院+临展厅</td><td>2,000m²+</td><td>临展厅用于特展轮换</td></tr></tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源：深圳市建筑工务署、深圳博物馆官方发布、展陈工程招标公告。部分数据为设计/规划值。数据截至 2026 年 8 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#5D4037;"></span> 博物馆主体</span>
+        <span><span class="dot" style="background:#FFB300;"></span> 燕子湖</span>
+        <span><span class="dot" style="background:#4CAF50;"></span> 燕子岭公园</span>
+        <span><span class="dot" style="background:#E53935;"></span> 沙壆站（16号线）</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container"><svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="520" fill="#1E1814" rx="12"/>
+
+          <!-- 燕子湖 (top) -->
+          <ellipse cx="400" cy="60" rx="200" ry="40" fill="rgba(79,195,247,0.15)" stroke="#4FC3F7" stroke-width="1.5" stroke-dasharray="6,3"/>
+          <text x="400" y="58" text-anchor="middle" fill="#4FC3F7" font-family="DM Sans,sans-serif" font-size="10">燕子湖</text>
+
+          <!-- 燕子岭 (top right) -->
+          <ellipse cx="700" cy="75" rx="70" ry="30" fill="rgba(76,175,80,0.1)" stroke="#66BB6A" stroke-width="1" stroke-dasharray="4,2"/>
+          <text x="700" y="80" text-anchor="middle" fill="#66BB6A" font-family="DM Sans,sans-serif" font-size="9">燕子岭公园</text>
+
+          <!-- Five conical volumes (delta shape) -->
+          <!-- Cone 1: 宇宙+地球 (top-left) -->
+          <rect x="180" y="130" width="130" height="90" rx="12" fill="rgba(93,64,55,0.15)" stroke="#5D4037" stroke-width="2"/>
+          <text x="245" y="158" text-anchor="middle" fill="#A1887F" font-family="Playfair Display,serif" font-size="14" font-weight="700">宇宙厅+地球厅</text>
+          <text x="245" y="180" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">星图·陨石·矿物·地层</text>
+          <text x="245" y="198" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">138亿年→46亿年</text>
+
+          <!-- Cone 2: 演化+恐龙 (center) -->
+          <rect x="335" y="120" width="130" height="110" rx="12" fill="rgba(93,64,55,0.20)" stroke="#8D6E63" stroke-width="2.5"/>
+          <text x="400" y="150" text-anchor="middle" fill="#BCAAA4" font-family="Playfair Display,serif" font-size="15" font-weight="700">演化厅+恐龙厅</text>
+          <text x="400" y="172" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">38亿年生命史诗</text>
+          <text x="400" y="190" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">🦕 26m马门溪龙骨架</text>
+          <text x="400" y="208" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">霸王龙·三角龙·禽龙</text>
+
+          <!-- Cone 3: 人类+生物 (top-right) -->
+          <rect x="490" y="130" width="130" height="90" rx="12" fill="rgba(93,64,55,0.15)" stroke="#5D4037" stroke-width="2"/>
+          <text x="555" y="158" text-anchor="middle" fill="#A1887F" font-family="Playfair Display,serif" font-size="14" font-weight="700">人类厅+生物厅</text>
+          <text x="555" y="180" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">灵长类演化·贝林标本</text>
+          <text x="555" y="198" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">马坝人·非洲象·北极熊</text>
+
+          <!-- Cone 4: 生态厅 (lower-left) -->
+          <rect x="240" y="260" width="120" height="80" rx="10" fill="rgba(76,175,80,0.12)" stroke="#4CAF50" stroke-width="1.5"/>
+          <text x="300" y="290" text-anchor="middle" fill="#81C784" font-family="Playfair Display,serif" font-size="14" font-weight="700">生态厅</text>
+          <text x="300" y="312" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">森林·草原·湿地</text>
+          <text x="300" y="328" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">荒漠·海洋</text>
+
+          <!-- Cone 5: 家园厅 (lower-right) -->
+          <rect x="440" y="260" width="120" height="80" rx="10" fill="rgba(255,179,0,0.12)" stroke="#FFB300" stroke-width="1.5"/>
+          <text x="500" y="290" text-anchor="middle" fill="#FFD54F" font-family="Playfair Display,serif" font-size="14" font-weight="700">家园厅</text>
+          <text x="500" y="312" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">1,600+件深圳标本</text>
+          <text x="500" y="328" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">深圳湾·梧桐山·大鹏湾</text>
+
+          <!-- Roof Garden (top overlay) -->
+          <path d="M 170 160 Q 400 100 630 160" fill="none" stroke="#FFB300" stroke-width="2" stroke-dasharray="5,3"/>
+          <text x="400" y="108" text-anchor="middle" fill="#FFB300" font-family="DM Sans,sans-serif" font-size="10">屋顶植物园步道（超600m）</text>
+
+          <!-- Entrance (bottom) -->
+          <rect x="320" y="390" width="160" height="35" rx="8" fill="rgba(255,179,0,0.15)" stroke="#FFB300" stroke-width="2"/>
+          <text x="400" y="413" text-anchor="middle" fill="#FFD54F" font-family="DM Sans,sans-serif" font-size="12" font-weight="600">入口大厅 · 自然剧场</text>
+
+          <!-- Service blocks -->
+          <rect x="180" y="380" width="100" height="45" rx="6" fill="rgba(255,255,255,0.03)" stroke="#555" stroke-width="1"/>
+          <text x="230" y="400" text-anchor="middle" fill="#777" font-family="DM Sans,sans-serif" font-size="9">球幕影院</text>
+          <text x="230" y="414" text-anchor="middle" fill="#777" font-family="DM Sans,sans-serif" font-size="9">2,000m²+临展厅</text>
+
+          <rect x="520" y="380" width="100" height="45" rx="6" fill="rgba(255,255,255,0.03)" stroke="#555" stroke-width="1"/>
+          <text x="570" y="400" text-anchor="middle" fill="#777" font-family="DM Sans,sans-serif" font-size="9">收藏库房</text>
+          <text x="570" y="414" text-anchor="middle" fill="#777" font-family="DM Sans,sans-serif" font-size="9">学术研究中心</text>
+
+          <!-- Transit connections (bottom) -->
+          <rect x="300" y="455" width="200" height="35" rx="6" fill="rgba(229,57,53,0.08)" stroke="#E53935" stroke-width="1" stroke-dasharray="3,2"/>
+          <text x="400" y="477" text-anchor="middle" fill="#EF5350" font-family="DM Sans,sans-serif" font-size="10">沙壆站 D口（16号线）→ 步行8分钟</text>
+
+          <!-- North arrow -->
+          <g transform="translate(760,30)">
+            <polygon points="0,25 8,0 16,25 8,18" fill="#CCC"/>
+            <text x="8" y="-4" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10" font-weight="700">北</text>
+          </g>
+
+          <!-- Legend -->
+          <rect x="580" y="460" width="200" height="45" rx="6" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)"/>
+          <text x="590" y="480" fill="#888" font-family="DM Sans,sans-serif" font-size="9">━━ 实线框：常设展厅 | ╌ 虚线：景观/配套</text>
+          <text x="590" y="496" fill="#888" font-family="DM Sans,sans-serif" font-size="9">⏺ 金色虚线：屋顶步道</text>
+        </svg></div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;"><div class="card"><h3>🌌 宇宙厅+地球厅</h3><p>国内最齐全古典星图（西方四大星图全国仅此集齐），深空陨石样本；巨型巴拉圭紫水晶晶洞"镇厅之宝"，46亿年岩石与矿物展陈如珠宝。</p></div>
+      <div class="card"><h3>🦕 演化厅+恐龙厅</h3><p>近2,000m²演化厅为全球少数敢把"演化"单独成厅的馆。恐龙厅展出国内唯一三角龙骨架化石+霸王龙"斯坦"同台，26m马门溪龙与粤赣白垩纪恐龙化石群为核心看点。</p></div>
+      <div class="card"><h3>🧬 人类厅+生物厅</h3><p>全国最齐全灵长类标本，环形步道以"火"展开人类文明。贝林珍稀野生动物标本整体迁入（㺢㹢狓、鸭嘴兽等罕见物种），整面墙标本矩阵极为震撼。</p></div>
+      <div class="card"><h3>🌿 生态厅</h3><p>森林、草原、湿地、荒漠、海洋五大生态系统沉浸式场景复原。数字光影互动体验+活体生态缸"微缩大自然"，适合各年龄段观众。</p></div>
+      <div class="card"><h3>🏠 家园厅</h3><p>1,600余件深圳本土标本聚焦岭南生态故事：深圳湾候鸟迁徙、梧桐山原生植物、大鹏湾海洋生物。以"家园"视角唤起对脚下土地的情感连接。</p></div>
+      <div class="card"><h3>🎬 特色体验</h3><p>自然剧场、球幕影院（宇宙主题沉浸影片）、屋顶植物园600m步道俯瞰燕子湖。2000m²+临展厅用于国内外特展轮换。馆内设母婴室、寄存处、餐厅。</p></div></div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline"><div class="timeline-item"><div class="timeline-year">2020年11月13日</div><div class="timeline-content"><h4>建筑方案国际竞赛结果揭晓</h4><p>3XN+B+H+筑博联合体"三角洲"方案从全球70+团队中获第一名。深圳"新时代十大文化设施"之一正式立项。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022年3月</div><div class="timeline-content"><h4>正式开工</h4><p>启动桩基工程与基础施工，项目进入全面建设阶段。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年7月</div><div class="timeline-content"><h4>主体钢结构封顶</h4><p>2.4万吨钢结构（相当于3个埃菲尔铁塔）完成吊装，五个锥形组团轮廓初现。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年3月–5月</div><div class="timeline-content"><h4>展陈工程招标</h4><p>I–IV标段公开招标（总估价约¥3.4亿）。58家竞标，丝路视觉中标展陈施工。同期开展全球标本征集。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年12月</div><div class="timeline-content"><h4>主体工程完工</h4><p>人类厅标本（佛山环球标本装备中标）完成交付。全馆进入展陈安装与调试阶段。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年6月30日</div><div class="timeline-content"><h4>试运行启动</h4><p>博物馆开启试运行。7月22日、25日两场"首批体验官"探馆活动，1.3万个免费预约名额秒空。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年7月28日</div><div class="timeline-content"><h4>正式开馆</h4><p>"推开自然之门"主题开馆活动。首日入馆超1.5万人次。华南首座大型综合性自然博物馆正式对外开放。</p></div></div></div></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>首日入馆人次</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">1.5万+</p><p class="f-caption">2026年7月28日开馆首日</p></div>
+      <div class="card" style="text-align:center;"><h4>标本真品总量</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">7,461件</p><p class="f-caption">+338件仿真模型+194件展项</p></div>
+      <div class="card" style="text-align:center;"><h4>建筑规模</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">10.53万m²</p><p class="f-caption">华南最大综合性自然博物馆</p></div>
+    </div>
+    <div class="card reveal" style="margin-bottom:1.5rem;">
+      <h3>参观信息</h3>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>项目</th><th>详情</th></tr></thead>
+          <tbody>
+            <tr><td>营业时间</td><td>周二至周日 9:00–17:00（16:00停止入场），周一闭馆</td></tr>
+            <tr><td>门票</td><td>免费，实名预约制（提前1–3天官方渠道预约）</td></tr>
+            <tr><td>建议游览时长</td><td>3–4小时（全程约2.5km）</td></tr>
+            <tr><td>交通</td><td>地铁16号线沙壆站D口步行8分钟；坪山云巴自然博物馆西站出站即达</td></tr>
+            <tr><td>社媒评分</td><td>Trip.com 5.0/5（试运营体验官评价"超出预期"）</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card reveal">
+      <h3>馆藏与学术</h3><p>馆藏精品含中华古果、禽龙、近鸟龙、鱼龙及粤赣白垩纪恐龙化石群等珍稀标本。此前在深圳博物馆圈粉无数的贝林珍稀野生动物标本（非洲象、长颈鹿、北极熊、㺢㹢狓等）整体迁入新馆。配备自然剧场、球幕影院、2,000m²+临展厅及学术研究中心，兼具科普教育、标本收藏与学术研究三重功能。作为深圳市"新时代十大文化设施"之一，填补了深圳东部大型综合性文化地标的空白。</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal"><div class="card"><h3>三角洲造型</h3><p>5个锥形组团如河流分支般从燕子湖畔隆起。42m超大跨度+43°斜柱的钢结构体系（2.4万吨）实现无柱大空间，海蚀崖纹理外立面以直纹斜面石材手工铺装。</p></div>
+      <div class="card"><h3>绿色生态设计</h3><p>海绵城市理念贯穿：屋顶绿化+地面景观形成多层级生态廊道，雨水回收系统供给景观灌溉。建筑自然通风+天窗采光降低能耗。</p></div>
+      <div class="card"><h3>数字展陈技术</h3><p>全息投影重现远古生物，AR互动让化石"复活"，VR沉浸剧场模拟宇宙大爆炸与恐龙时代。展柜采用低反射超白玻璃。</p></div>
+      <div class="card"><h3>屋顶植物园</h3><p>超600m屋顶步道，可沿斜坡从地面漫步至建筑顶端，俯瞰燕子湖全景。步道串联燕子岭公园+赤坳水湿地研习径，打破传统"围墙"式场馆边界。</p></div>
+      <div class="card"><h3>馆藏体系</h3><p>7,461件标本真品覆盖古生物、矿物、动植物、古人类四大门类。贝林野生动物标本+粤赣恐龙化石群+两广古人类化石三大馆藏支柱。</p></div>
+      <div class="card"><h3>坪山文化矩阵</h3><p>与坪山文化聚落（美术馆、大剧院、图书馆）、燕子湖国际会展中心形成深圳东部文化走廊。地铁16号线+云巴实现市中心1小时内可达。</p></div></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>🦕 八大常设展厅</h3><p>宇宙→地球→演化→恐龙→人类→生物→生态→家园，138亿年宇宙史诗到深圳本土家园的完整叙事链。展陈总面积约3.52万m²。</p></div>
+      <div class="card"><h3>🎬 自然剧场+球幕影院</h3><p>球幕影院播放宇宙主题沉浸影片。自然剧场用于科普讲座、纪录片放映与学术交流活动。2,000m²+临展厅支持国内外特展轮换。</p></div>
+      <div class="card"><h3>🌿 屋顶植物园</h3><p>公共屋顶绿化公园，超600m步道贯穿建筑顶部。联动燕子岭公园与赤坳水湿地研习径，形成"馆在园中、园在馆上"的开放生态体系。</p></div>
+      <div class="card"><h3>🚇 地铁+云巴双轨交通</h3><p>地铁16号线沙壆站D口步行8分钟。坪山云巴1号线自然博物馆西站出站即达（全程封顶¥3）。广深港高铁坪山站转云巴约15分钟。</p></div>
+      <div class="card"><h3>🍽️ 餐饮+亲子配套</h3><p>馆内设餐厅与咖啡吧。母婴室、寄存处、轮椅服务、婴儿车租赁一应俱全。展柜采用低反射玻璃，儿童视线高度设有互动科普装置。</p></div>
+      <div class="card"><h3>📚 学术研究+标本库房</h3><p>地下两层设专业标本收藏库房（恒温恒湿）与学术研究中心。承担华南地区生物多样性标本收藏、科学研究和人才培养功能。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card"><h3>🎉 正式开馆（2026.7.28）</h3><p>"推开自然之门"主题开馆。首日入馆超1.5万人次。此前试运行1.3万个体验名额秒空。华南首座大型综合自然博物馆正式亮相。</p></div>
+      <div class="card"><h3>⭐ 社媒口碑</h3><p>Trip.com 5.0/5。小红书评价"超出预期""遛娃天花板""随手拍都是杂志大片"，恐龙厅人气最高。主要槽点：部分区域仍在收尾施工、没有讲解容易走马观花、周一闭馆。</p></div>
+      <div class="card"><h3>🏗️ 建设历程</h3><p>2020年国际竞赛定标→2022年3月开工→2024年7月钢结构封顶→2025年展陈招标（58家竞标）→2026年6月试运行→7月28日开馆。历时约4年建成。</p></div>
+      <div class="card"><h3>🏛️ 文化地标效应</h3><p>与坪山美术馆/大剧院/图书馆形成深圳东部文化矩阵。填补大湾区自然博物馆空白。带动燕子湖片区成为深圳文旅新目的地。</p></div>
+      <div class="card"><h3>📸 出片打卡点</h3><p>东侧广场台阶（建筑全景+天际线）、光影走廊、屋顶植物园俯瞰燕子湖、恐龙厅巨型骨架、云巴视角（黄昏时分绝美）。建议穿浅色系衣服。</p></div>
+      <div class="card"><h3>🔮 后续展望</h3><p>持续全球标本征集与特展轮换。二期可能扩展科研与收藏功能。被定位为"中国领先、世界一流"的现代自然博物馆，有望成为深圳新的城市名片。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <div class="resource-group">
+        <h4>官方信息</h4>
+        <ul>
+          <li><a href="https://shenzhenmuseum.com/nature/index" target="_blank" rel="noopener">深圳博物馆·自然馆 官网</a></li>
+          <li><a href="https://baike.baidu.com/item/深圳自然博物馆/22596523" target="_blank" rel="noopener">百度百科 — 深圳自然博物馆</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>设计团队</h4>
+        <ul>
+          <li><a href="https://3xn.com/project/shenzhen-natural-history-museum" target="_blank" rel="noopener">3XN — Shenzhen Natural History Museum</a></li>
+          <li><a href="https://bharchitects.com/" target="_blank" rel="noopener">B+H Architects 官网</a></li>
+          <li><a href="https://www.gooood.cn/the-landscape-scheme-of-shenzhen-natural-history-museum-bh-architects-3xn-zhubo-consortium.htm" target="_blank" rel="noopener">谷德 — 景观设计方案 / 3XN+B+H+筑博</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>开馆报道</h4>
+        <ul>
+          <li><a href="https://m.chinanews.com/wap/detail/chs/zw/10666322.shtml" target="_blank" rel="noopener">中新社 — 华南最大自然博物馆7.28开馆</a></li>
+          <li><a href="https://news.mingpao.com/pns/港聞/article/20260723/s00002/1784737838345/" target="_blank" rel="noopener">明报 — 华南最大自然博物馆下周深圳开幕</a></li>
+          <li><a href="https://www.nfnews.com/content/Y3Mpknp0y1.html" target="_blank" rel="noopener">南方+ — 穿越138亿年宇宙山海</a></li>
+          <li><a href="https://www.silkroadcg.com/" target="_blank" rel="noopener">丝路视觉 — 展陈施工单位官网</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>社媒与攻略</h4>
+        <ul>
+          <li><a href="https://www.xiaohongshu.com/search_result?keyword=深圳自然博物馆" target="_blank" rel="noopener">小红书搜索"深圳自然博物馆"</a></li>
+          <li><a href="https://tw.trip.com/moments/detail/shenzhen-26-148830270/" target="_blank" rel="noopener">Trip.com — 坪山自然博物馆保姆级打卡攻略</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+// 如坐标来自海外工具 (Nominatim/Photon)，则需 WGS-84 → GCJ-02 转换（见 template-overseas.html）
+
+var zonesGcj02 = [
+  { name: '深圳自然博物馆', lng: 114.363711, lat: 22.692675, color: '#5D4037' },
+  { name: '燕子湖', lng: 114.362800, lat: 22.696500, color: '#FFB300' },
+  { name: '燕子岭公园', lng: 114.365100, lat: 22.696800, color: '#4CAF50' },
+  { name: '沙壆站<br><small>地铁16号线</small>', lng: 114.367200, lat: 22.690100, color: '#E53935' },
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([22.692675, 114.363711], 15);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesGcj02);
+
+  if (withBoundary) {
+    L.circle([22.692675, 114.363711], { radius: 250, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

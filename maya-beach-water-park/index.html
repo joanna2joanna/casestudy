@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>玛雅海滩水公园 — 华侨城旗下全国连锁水上乐园品牌，顺德旗舰领衔大湾区</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #00838F;
+  --clr-primary-light: #26C6DA;
+  --clr-primary-dark: #006064;
+  --clr-accent: #FFB300;
+}
+
+.hero {
+  background: linear-gradient(160deg, #003C4F 0%, #006064 40%, #00838F 70%, #4DD0E1 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(255,179,0,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%);
+}
+.data-table tbody tr:hover { background: rgba(0,131,143,0.05); }
+
+/* China: dual-map layout */
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: 12px; z-index: 0; margin-top: 1rem; }
+
+@media (max-width: 768px) {
+  .hero { padding: 3rem 0 2.5rem; }
+  .hero .kpi-row { gap: 0.8rem; }
+  .hero .kpi-card { padding: 0.8rem 1rem; min-width: 120px; }
+  .hero .kpi-number { font-size: 1.3rem; }
+  #parkmap, #satmap { height: 300px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>玛雅海滩水公园 · 华侨城</h1>
+    <p class="hero-subtitle">从1998年深圳首座到2024年北京第12座，全国最大的连锁水上乐园品牌——顺德旗舰7万㎡，粤港澳大湾区戏水新地标</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">1998</div><div class="kpi-label">品牌诞生 · 深圳首座</div></div>
+      <div class="kpi-card"><div class="kpi-number">12<span style="font-size:0.7em;opacity:0.7"> 座</span></div><div class="kpi-label">华侨城水公园</div></div>
+      <div class="kpi-card"><div class="kpi-number">150<span style="font-size:0.7em;opacity:0.7">万㎡</span></div><div class="kpi-label">合计占地</div></div>
+      <div class="kpi-card"><div class="kpi-number">300<span style="font-size:0.7em;opacity:0.7">+</span></div><div class="kpi-label">水游乐设备台套</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal"><div class="card"><h3>基本信息</h3><table class="data-table"><tbody>
+<tr><td><strong>品牌名称</strong></td><td>玛雅海滩水公园（Maya Beach Water Park）</td></tr>
+<tr><td><strong>运营主体</strong></td><td>欢乐谷文化旅游发展有限公司（华侨城股份 000069 全资）</td></tr>
+<tr><td><strong>品牌原点</strong></td><td>深圳欢乐谷玛雅水公园，1998年10月随深圳欢乐谷开园</td></tr>
+<tr><td><strong>品牌版图</strong></td><td>玛雅海滩水公园 11 座；华侨城口径水公园 12 座（含襄阳奇梦海滩）</td></tr>
+<tr><td><strong>合计规模</strong></td><td>占地超 150 万㎡，水游乐设备超 300 台套</td></tr>
+<tr><td><strong>主题定位</strong></td><td>玛雅文化主题，全国唯一连锁</td></tr>
+<tr><td><strong>顺德旗舰</strong></td><td>欢乐海岸PLUS内，占地 7 万㎡</td></tr>
+</tbody></table></div>
+<div class="card"><h3>顺德旗舰 · 坐标与交通</h3><table class="data-table"><tbody>
+<tr><td><strong>坐标</strong></td><td>GCJ-02 (113.304407, 22.815471)</td></tr>
+<tr><td><strong>地址</strong></td><td>佛山市顺德区大良街道欢乐大道1号</td></tr>
+<tr><td><strong>轨道交通</strong></td><td>佛山地铁3号线「顺德欢乐海岸」站，A口步行约600米</td></tr>
+<tr><td><strong>跨城可达</strong></td><td>广州地铁7号线北滘公园站换乘佛山3号线，广佛1.5小时生活圈</td></tr>
+<tr><td><strong>开业</strong></td><td>2019年9月13日随欢乐海岸PLUS试营业 / 2020年5月30日正式开园</td></tr>
+<tr><td><strong>票价参考（2026）</strong></td><td>门市 149–180 元，拼团 69 元起，年卡 249 元</td></tr>
+</tbody></table></div></div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3>
+<p>玛雅海滩水公园是华侨城集团旗下连锁水上乐园品牌，1998年随深圳欢乐谷诞生，是国内首个以玛雅文化为主题的水公园。品牌以「逝去文明」包装差异化定位，26年间复制到武汉、上海、重庆、天津、南昌、南京、顺德、西安、衡阳、北京 11 座城市，华侨城口径合计 12 座水公园（含襄阳奇梦海滩），占地超 150 万㎡。设备体系高度依赖国际供应商白水（WhiteWater），主题装置则按各园地标差异化落地。</p>
+<p>顺德玛雅海滩水公园是品牌的粤港澳大湾区旗舰，坐落华侨城走出深圳后的首个百亿级项目——欢乐海岸PLUS内，2020年5月30日正式开园。园区以加勒比海岛冒险为主题，69米海神山、1万㎡子母造浪池、超3500㎡咔吧超级大水寨领衔近20项全进口设备，开园即创人气纪录，是「商业+娱乐+文化+旅游+生态」文商旅复合体中主题公园板块的核心引擎。</p>
+</div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal"><h3>品牌演进：从深圳首座到全国连锁</h3>
+<p>1998年，深圳欢乐谷玛雅水公园开园，当年即获美国世界水公园协会（WWA）「行业创新奖」，是华侨城旗下首个、也是国内首个玛雅文化主题水公园。2011年，深圳玛雅水公园作为欢乐谷斥资3亿元五期工程焕新重开，由加拿大白水（WhiteWater）规划设计与供设备，引入亚洲首座水上跳楼机「羽蛇神环」等项目，成为品牌化复制的起点。此后武汉（2012）、上海（2013）、重庆（2017）、天津（2018）、南昌（2019）、南京与顺德（2020）、西安（2021）、衡阳（2022）、北京（2024）相继落地，华侨城官方口径的12座水公园合计占地超150万㎡。</p></div>
+    <div class="grid-2 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>主题逻辑：为什么选玛雅</h3>
+<p>华侨城做全国唯一以玛雅文化为主题的连锁水公园，主打差异化；玛雅作为「逝去文明」，自带神秘与想象空间，与现代水上娱乐的动感形成反差。欢乐谷公司董事长关山在2024年品牌焕新发布会上概括为：既富现代水上娱乐的动感欢乐，又含玛雅文明的神秘与科幻。品牌每年暑假固定推出「玛雅狂欢节」主题季，把文化包装转成可复制的活动IP。</p></div>
+      <div class="card"><h3>顺德旗舰：走出深圳的首个百亿项目</h3>
+<p>顺德欢乐海岸PLUS于2013年落子，是华侨城集团走出深圳的第一个百亿级重点项目，用时6年开发建设，2019年9月13日（中秋）试营业，3天迎客超16万人次。顺德玛雅海滩水公园作为其中主题公园板块的核心（与「欢乐时光」陆公园共同占地20万㎡，一期14万㎡），2020年5月30日正式开园，领衔华侨城在粤港澳大湾区的版图。</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>地标与设备体系</h3>
+<p>顺德旗舰以加勒比海岛冒险为主题：69米海神山集舞台演艺、高空索道、声光电特效于一体，自称全球最高海洋宫殿；1万㎡子母造浪池可同时容纳1万人；超3500㎡咔吧超级大水寨含400余项喷水设施。设备约20项全进口，含大喇叭2.0版「卷尾猴滑板」、400米海盗水上过山车、23米自由落体垂直滑道等。白水是华侨城玛雅海滩系列的长期设备合作伙伴，深圳、武汉、上海、重庆、天津、南昌各园均确认合作；顺德宣传口径为「全进口设备」，白水参与的具体比例未见官方点名。水系统由联盛水环境工程有限公司承建，造浪池、水寨、环流河采用真空（负压）过滤系统，其余采用压力石英砂过滤器，以「长效氯」消毒并在线自动监测余氯与pH值。</p></div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>品牌规模</td><td>玛雅海滩水公园</td><td>11 座</td><td>华侨城口径 12 座，含襄阳奇梦海滩（非玛雅品牌）</td></tr>
+          <tr><td>品牌规模</td><td>合计占地</td><td>超 150 万㎡</td><td>12 座水公园</td></tr>
+          <tr><td>品牌规模</td><td>水游乐设备</td><td>超 300 台套</td><td>全系列合计</td></tr>
+          <tr><td>顺德旗舰</td><td>占地面积</td><td>7 万㎡</td><td>欢乐海岸PLUS主题公园板块（20万㎡）之一</td></tr>
+          <tr><td>顺德旗舰</td><td>海神山</td><td>69 米</td><td>舞台演艺＋高空索道＋声光电特效</td></tr>
+          <tr><td>顺德旗舰</td><td>子母造浪池</td><td>1 万㎡</td><td>可同时容纳 1 万人</td></tr>
+          <tr><td>顺德旗舰</td><td>咔吧超级大水寨</td><td>超 3500㎡</td><td>400 余项喷水设施，100+ 玩法</td></tr>
+          <tr><td>顺德旗舰</td><td>海盗水上过山车</td><td>长 400 米 / 落差 20 米</td><td>全进口设备</td></tr>
+          <tr><td>顺德旗舰</td><td>垂直滑道</td><td>23 米自由落体</td><td>全程约 80 米滑行</td></tr>
+          <tr><td>顺德旗舰</td><td>水上高空索道</td><td>「飞跃加勒比」</td><td>大湾区唯一水上高空飞索</td></tr>
+          <tr><td>水质</td><td>水处理系统</td><td>真空负压＋压力石英砂过滤</td><td>联盛水环境承建</td></tr>
+          <tr><td>水质</td><td>消毒监测</td><td>长效氯＋在线自动监测</td><td>余氯与 pH 实时</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据截至 2026 年 8 月。顺德为玛雅海滩品牌 11 座水公园之一；华侨城官方口径 12 座水公园含襄阳奇梦海滩，后者为海洋探索主题、不属于玛雅海滩品牌。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#FFB300;"></span>主图：玛雅海滩水公园全国分布（11 座，含顺德旗舰）</span>
+        <span><span class="dot" style="background:#26C6DA;"></span>卫星图：顺德旗舰 · 欢乐海岸PLUS园区</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 520" role="img" aria-label="顺德玛雅海滩水公园空间结构示意图">
+          <rect width="800" height="520" fill="#0B1D2B" rx="12"/>
+
+          <!-- Title -->
+          <text x="400" y="30" text-anchor="middle" fill="#CCC" font-family="Playfair Display,serif" font-size="16" font-weight="700">顺德玛雅海滩水公园空间结构示意</text>
+
+          <!-- 环流河 (dotted outer ring) -->
+          <rect x="40" y="48" width="720" height="432" rx="24" fill="none" stroke="#26C6DA" stroke-width="1.5" stroke-dasharray="8,6" opacity="0.45"/>
+          <text x="400" y="492" text-anchor="middle" fill="#26C6DA" font-family="DM Sans,sans-serif" font-size="10">环流河 · 贯穿全园</text>
+
+          <!-- 海神山 (north center) -->
+          <rect x="320" y="62" width="160" height="78" rx="10" fill="rgba(255,179,0,0.15)" stroke="#FFB300" stroke-width="2"/>
+          <text x="400" y="88" text-anchor="middle" fill="#FFD54F" font-family="Playfair Display,serif" font-size="16" font-weight="700">🗿 海神山 · 69m</text>
+          <text x="400" y="110" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">舞台演艺 · 高空索道 · 激光水幕秀</text>
+
+          <!-- 童趣珊瑚岛 (northeast) -->
+          <rect x="540" y="100" width="120" height="55" rx="8" fill="rgba(255,138,101,0.15)" stroke="#FF8A65" stroke-width="1.5"/>
+          <text x="600" y="124" text-anchor="middle" fill="#FFAB91" font-family="DM Sans,sans-serif" font-size="12" font-weight="600">🐠 童趣珊瑚岛</text>
+          <text x="600" y="143" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">亲子小水寨 · 温和水流</text>
+
+          <!-- 加勒比海滩 子母造浪池 (center, main) -->
+          <rect x="170" y="165" width="460" height="140" rx="12" fill="rgba(38,198,218,0.12)" stroke="#26C6DA" stroke-width="2.5"/>
+          <text x="400" y="200" text-anchor="middle" fill="#4DD0E1" font-family="Playfair Display,serif" font-size="18" font-weight="700">加勒比海滩 · 子母造浪池</text>
+          <text x="400" y="224" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="10">1万㎡ · 可容1万人 · 鲨鱼舞台演艺</text>
+          <text x="400" y="248" text-anchor="middle" fill="#888" font-family="DM Sans,sans-serif" font-size="9">电音狂欢 · 比基尼走秀 · 玛雅狂欢巡游</text>
+
+          <!-- 咔吧超级大水寨 (west) -->
+          <rect x="58" y="175" width="92" height="120" rx="8" fill="rgba(255,87,34,0.15)" stroke="#FF5722" stroke-width="1.5"/>
+          <text x="104" y="208" text-anchor="middle" fill="#FF8A65" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">💦 咔吧</text>
+          <text x="104" y="228" text-anchor="middle" fill="#FF8A65" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">大水寨</text>
+          <text x="104" y="250" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="8.5">3500㎡</text>
+          <text x="104" y="268" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="8.5">50m水桶</text>
+
+          <!-- 刺激滑道群 (east) -->
+          <rect x="650" y="175" width="110" height="120" rx="8" fill="rgba(171,71,188,0.15)" stroke="#AB47BC" stroke-width="1.5"/>
+          <text x="705" y="205" text-anchor="middle" fill="#CE93D8" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">🎢 滑道群</text>
+          <text x="705" y="225" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="8.5">海盗过山车400m</text>
+          <text x="705" y="242" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="8.5">垂直滑道23m</text>
+          <text x="705" y="259" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="8.5">狂蟒滑道185m</text>
+          <text x="705" y="276" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="8.5">卷尾猴滑板</text>
+
+          <!-- 飞跃加勒比 高空索道 (dashed crossing line) -->
+          <path d="M400,62 L180,300 L400,500" fill="none" stroke="#FFB300" stroke-width="1.5" stroke-dasharray="5,5" opacity="0.7"/>
+          <text x="180" y="315" fill="#FFB300" font-family="DM Sans,sans-serif" font-size="9" transform="rotate(-18,180,315)">飞跃加勒比 · 水上高空索道</text>
+
+          <!-- 粉红沙滩 (southeast) -->
+          <rect x="540" y="330" width="130" height="55" rx="8" fill="rgba(233,30,99,0.15)" stroke="#E91E63" stroke-width="1.5"/>
+          <text x="605" y="354" text-anchor="middle" fill="#F48FB1" font-family="DM Sans,sans-serif" font-size="12" font-weight="600">🌸 粉红沙滩</text>
+          <text x="605" y="373" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">网红打卡 · 黄昏拍摄</text>
+
+          <!-- 入口更衣区 (south center) -->
+          <rect x="300" y="330" width="170" height="55" rx="8" fill="rgba(76,175,80,0.15)" stroke="#4CAF50" stroke-width="1.5"/>
+          <text x="385" y="354" text-anchor="middle" fill="#A5D6A7" font-family="DM Sans,sans-serif" font-size="12" font-weight="600">🏝 入口 · 更衣区</text>
+          <text x="385" y="373" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">一票制入园 · 储物柜</text>
+
+          <!-- North arrow -->
+          <g transform="translate(760,30)">
+            <polygon points="0,25 8,0 16,25 8,18" fill="#CCC"/>
+            <text x="8" y="-4" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10" font-weight="700">北</text>
+          </g>
+
+          <!-- Legend -->
+          <rect x="40" y="420" width="200" height="60" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)"/>
+          <text x="50" y="440" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">━━ 实线框：主题功能区</text>
+          <text x="50" y="456" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">╌╌ 虚线：环流河 / 高空索道</text>
+          <text x="50" y="472" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">● 金色：园区核心地标</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>🏝 加勒比海滩 · 子母造浪池</h3><p>1万㎡超大规模子母式造浪池，面积相当于1.4个标准足球场，可同时容纳1万人嬉水。白色沙滩配椰林树影，造浪池定时造浪，岸边的鲨鱼舞台轮番上演原创大秀、电音狂欢、比基尼走秀、玛雅狂欢巡游等沉浸式主题表演。</p></div>
+      <div class="card"><h3>🗿 海神山 · 69m海洋宫殿</h3><p>69米高的海神山是园区最高地标，集舞台演艺、高空索道、声光电特效于一体，自称全球最高海洋宫殿。山脚面朝造浪池设有海神餐厅，引入网红餐饮品牌「文和里」；高空滑稽跳水秀是招牌互动演出。</p></div>
+      <div class="card"><h3>💦 咔吧超级大水寨</h3><p>占地超3500㎡的华南最大玛雅风格亲水互动水寨，内含400余项喷水设施、超10条水滑道、100+玩法，50米高的大型水桶不定时垂直向下倾倒，是全园亲子互动的重头戏。</p></div>
+      <div class="card"><h3>🎢 刺激滑道群</h3><p>长400余米、落差20米的海盗水上过山车；23米自由落体的垂直滑道（全程约80米）；长185米、高17米的狂蟒滑道；大喇叭2.0升级版「卷尾猴滑板」；怪兽仓+巨兽碗+时光隧道组合；14米高台、3个坡度的飞鱼赛道竞速。刺激区集中在园区东侧。</p></div>
+      <div class="card"><h3>🌸 粉红沙滩</h3><p>网红打卡地标，粉色系沙滩场景配椰树与躺椅，黄昏时分出片率最高。周边衔接水上麻将、泼水大乱斗等新潮玩水玩法，是夏季晚间人气聚集地。</p></div>
+      <div class="card"><h3>🐠 童趣珊瑚岛</h3><p>专为低龄儿童设计的亲子戏水区，设施高度适合幼童，水流温和，配亲子小水寨、雨林漂流等温和项目，与刺激滑道群形成全年龄分层。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1998年10月</div><div class="timeline-content"><h4>品牌原点 · 深圳</h4><p>深圳欢乐谷开园，玛雅水公园随之诞生，当年获美国WWA「行业创新奖」，为国内首个玛雅文化主题水公园。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2011年7月</div><div class="timeline-content"><h4>焕新重开</h4><p>深圳玛雅水公园作为五期工程（3亿元）重开，白水规划设计与供设备，成为品牌化复制起点。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2012–2018年</div><div class="timeline-content"><h4>华东华中华北复制</h4><p>武汉（2012）、上海（2013）、重庆（2017）、天津（2018）玛雅海滩水公园相继开园，覆盖华中、华东、西南、华北市场。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2013年</div><div class="timeline-content"><h4>顺德落子</h4><p>华侨城在顺德落子欢乐海岸PLUS，为集团走出深圳的首个百亿级重点项目，历时6年开发。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019年9月13日</div><div class="timeline-content"><h4>顺德PLUS试营业</h4><p>欢乐海岸PLUS一期中秋试营业，玛雅海滩水公园随之开放，3天迎客超16万人次。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2020年5月30日</div><div class="timeline-content"><h4>顺德正式开园</h4><p>玛雅海滩水公园盛大开园，开园即创人气纪录；同年南京玛雅海滩（7月）、购物中心（12月）相继亮相。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021–2022年</div><div class="timeline-content"><h4>西部湘南扩展</h4><p>西安玛雅海滩（2021.6，西北首座）、衡阳玛雅海滩（2022.7，湘南首座）开园。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023年2月</div><div class="timeline-content"><h4>欢乐海岸PLUS二期奠基</h4><p>华侨城、顺控城投联合投资60亿元，占地366亩，配建13.5万㎡欢乐文化广场，预计2026年开业。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年6月15日</div><div class="timeline-content"><h4>北京开园 · 第12座</h4><p>北京玛雅海滩水公园开园，为华侨城第12座水公园，含全国首台激流过山车。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年</div><div class="timeline-content"><h4>暑期焕新进行时</h4><p>顺德5月29日开园，新增海狮之家、水上空中飞人；欢乐海岸PLUS二期按计划开业。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card"><h3>顺德开园试业（2019中秋）</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">16万+</p><p class="f-caption">欢乐海岸PLUS试营业3天迎客（含玛雅海滩）</p></div>
+      <div class="card"><h3>顺德人气纪录（2020）</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">9.3万</p><p class="f-caption">五一5天13项游乐项目购票人次</p></div>
+      <div class="card"><h3>顺德累计客流</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">2,000万+</p><p class="f-caption">PLUS开业两年（至2021年）接待人次</p></div>
+      <div class="card"><h3>上海单园累计</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">800万+</p><p class="f-caption">截至2023年底</p></div>
+      <div class="card"><h3>武汉单园累计</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">560万</p><p class="f-caption">截至2020年12月</p></div>
+      <div class="card"><h3>衡阳开园两年</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">50万+</p><p class="f-caption">2022–2024年累计接待</p></div>
+    </div>
+    <div class="card reveal"><h3>顺德旗舰运营要点</h3><p>玛雅海滩水公园采取一票制入园，欢乐时光陆公园免费开放，两者互补引流。2020年端午3天「13项游乐项目+水公园」购票逾8.9万人次；2021年国庆黄金周公园、商业、酒店三大板块总客流近60万人次，创收入历史新高。2026年暑期推出海狮之家（6只小海狮）、水上空中飞人、野人喷火、篝火晚会等夜场内容，并上线裸眼激光水幕大秀，把白天的戏水场景延伸成夜间经济。</p></div>
+    <div class="card reveal" style="margin-top:1.5rem;overflow-x:auto;">
+      <h3 style="margin-bottom:1rem;">全国玛雅海滩水公园分布与规模</h3>
+      <table class="data-table">
+        <thead><tr><th>城市</th><th>开业</th><th>占地</th><th>代表性设备</th></tr></thead>
+        <tbody>
+          <tr><td>深圳·玛雅水公园</td><td>1998（2011焕新）</td><td>约3万㎡</td><td>羽蛇神环、彩虹赛道</td></tr>
+          <tr><td>武汉·玛雅海滩</td><td>2012</td><td>约16万㎡</td><td>气压式双造浪海滩、磁悬浮水上过山车</td></tr>
+          <tr><td>上海·玛雅海滩</td><td>2013</td><td>12.8万–20万㎡</td><td>1.46万㎡造浪池（3.5米巨浪）</td></tr>
+          <tr><td>重庆·玛雅海滩</td><td>2017</td><td>约18万㎡</td><td>1万㎡风洞造浪池、双龙水上过山车</td></tr>
+          <tr><td>天津·玛雅海滩</td><td>2018</td><td>约15万㎡</td><td>1.3万㎡造浪池、卡巴水寨</td></tr>
+          <tr><td>南昌·玛雅乐园</td><td>2019（2025品牌升级）</td><td>17万–18.6万㎡</td><td>亚马逊蛇王竞速滑道、1万㎡双造浪池</td></tr>
+          <tr><td>南京·玛雅海滩</td><td>2020</td><td>约10万㎡</td><td>碟影重重（全国首条碟型滑道）</td></tr>
+          <tr><td>顺德·玛雅海滩</td><td>2020.5.30</td><td>7万㎡</td><td>69米海神山、咔吧超级大水寨</td></tr>
+          <tr><td>西安·玛雅海滩</td><td>2021</td><td>约20万㎡</td><td>1.6万㎡造浪池（西北最大）</td></tr>
+          <tr><td>衡阳·玛雅海滩</td><td>2022</td><td>约14万㎡</td><td>白水AC240互动水堡、15套大型设备</td></tr>
+          <tr><td>北京·玛雅海滩</td><td>2024</td><td>5.5万㎡</td><td>全国首台激流过山车</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>造浪池矩阵</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">上海 1.46万㎡ 领衔</p><p class="f-caption">上海宣称全球水域面积最大人工造浪池，可造3.5米巨浪；西安1.6万㎡为西北最大；顺德、重庆、南昌、南京约1万㎡。造浪池是各园人气与营销的核心符号。</p></div>
+      <div class="card"><h3>水质与水循环</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">长效氯 + 在线监测</p><p class="f-caption">顺德造浪池、水寨、环流河采用真空（负压）过滤系统，其余压力石英砂过滤；上海2026年全园上线迪芬特水处理、24小时循环；北京1.3万m³水体每0.5–2.5小时循环消毒一次。</p></div>
+      <div class="card"><h3>设备供应链</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">白水为主力</p><p class="f-caption">加拿大白水（WhiteWater）是华侨城玛雅海滩系列长期合作伙伴：深圳、武汉、上海、重庆、天津、南昌各园均确认合作（重庆约90%设备、上海一期约半数）；顺德、西安、北京宣传口径为「全进口」，白水署名待核实。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="card reveal"><h3>顺德 · 欢乐海岸PLUS文商旅复合体</h3><p>玛雅海滩水公园并非孤立的园区，而是欢乐海岸PLUS六大板块之一：欢乐时光主题公园（7万㎡，免费开放式运营）、曲水湾风情商业街、O'PLAZA欢乐海岸购物中心（8.8万㎡，华南首个生态艺术MALL，2020年12月启幕）、蓝汐假日酒店、华侨城湿地公园。99米摩天轮是园区天际线地标，地铁3号线「顺德欢乐海岸」站直达。</p></div>
+    <div class="grid-2 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>餐饮与商业配套</h3><p>海神餐厅引入网红餐饮品牌「文和里」；曲水湾风情商业街承载寻味顺德美食消费；购物中心引入永旺超市、中影国际影城、西西弗书店等主力品牌。水公园内提供储物柜、水圈租赁等二次消费，并推出水上麻将、泼水大战等新潮玩法拉动客单。</p></div>
+      <div class="card"><h3>二期展望 · 欢乐文化广场</h3><p>欢乐海岸PLUS二期投资60亿元，占地366亩，配建13.5万㎡欢乐文化广场，引入极限运动、现场音乐、美食集市、科普研学等业态，将与顺峰山公园、寻味顺德小镇整合，目标打造国家级旅游度假区与5A景区。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>2026 · 顺德暑期焕新</h3><p>5月29日开园，新增海狮之家（6只小海狮、喂食互动30元/份），水上空中飞人每晚回归；野人喷火、篝火晚会、竹竿舞、打水仗等夜场内容上线，并推出全城首个裸眼激光水幕大秀。票价：拼团69元起、早鸟69.9元、8人团人均39.9元，年卡249元。</p></div>
+      <div class="card"><h3>2025 · 超级飞侠IP联动</h3><p>顺德玛雅海滩升级为「超级飞侠·夏日水战总动员」基地，上线超级飞侠水枪大战、环球快递任务、明星见面会等IP活动；海神山全新上线千万级裸眼激光秀。全国层面，欢乐谷集团2025年联动13城25个文旅项目办「夏浪狂欢节」。</p></div>
+      <div class="card"><h3>全国各园焕新</h3><p>上海2026年7月以「海洋奇遇记」主题焕新；武汉2025年一、二、三期同步开园（三期杉林奇遇）；重庆2025年投入3000万元泰式主题焕新；天津2025年夏威夷主题季；南昌2025年6月品牌升级为「玛雅海滩水公园」；西安2026年6月开夜场、千架无人机编队秀。</p></div>
+      <div class="card"><h3>展望 · 二期开业与品牌扩张</h3><p>顺德欢乐海岸PLUS二期预计2026年开业（60亿元），将水公园流量进一步转化为度假区过夜消费；玛雅海滩品牌则继续以「主题地标+白水设备+夏季IP」的标准化模板向新城市复制。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <div class="resource-group">
+        <h4>官方信息</h4>
+        <ul>
+          <li><a href="http://www.octharbourplus.com/" target="_blank" rel="noopener">顺德欢乐海岸PLUS官网</a></li>
+          <li><a href="http://sz.happyvalley.cn/" target="_blank" rel="noopener">深圳欢乐谷官网</a></li>
+          <li><a href="https://www.happyvalley.cn/" target="_blank" rel="noopener">欢乐谷集团官网</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>顺德旗舰报道</h4>
+        <ul>
+          <li><a href="http://news.winshang.com/html/067/4245.html" target="_blank" rel="noopener">赢商网：水公园开园创人气记录（2020）</a></li>
+          <li><a href="http://news.winshang.com/html/069/2184.html" target="_blank" rel="noopener">赢商网：对话邵瑞，打造2000万+客流（2021）</a></li>
+          <li><a href="https://m.mp.oeeee.com/a/BAAFRD000020200710343470.html" target="_blank" rel="noopener">南方都市报：创湾区多项NO.1</a></li>
+          <li><a href="https://www.guandian.hk/article/20230206/329736.html" target="_blank" rel="noopener">观点网：欢乐海岸PLUS二期奠基，投资60亿</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>品牌与行业</h4>
+        <ul>
+          <li><a href="http://www.news.cn/travel/20240617/8925537cff314e11baee1f9407e64c52/c.html" target="_blank" rel="noopener">新华网：华侨城「玛雅海滩」品牌焕新</a></li>
+          <li><a href="http://epaper.cbt.com.cn/ep_m/cbtm/html/2024/06/18/04/04_44.htm" target="_blank" rel="noopener">中国旅游报：12座水公园合计150万㎡</a></li>
+          <li><a href="https://city.cri.cn/20211115/8b888987-253d-ef3e-a064-5d554097a1cf.html" target="_blank" rel="noopener">国际在线：白水40周年与华侨城合作</a></li>
+          <li><a href="https://xinwen.bjd.com.cn/content/s666d9a0de4b06541a2de56df.html" target="_blank" rel="noopener">北京日报：北京玛雅海滩开园（2024）</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+// 主图：全国分布（11座玛雅海滩水公园）；卫星图：顺德旗舰园区
+
+var zonesNational = [
+  { name: '深圳·玛雅水公园<br><small>1998年 · 约3万㎡</small>', lng: 113.978508, lat: 22.541327, color: '#E53935' },
+  { name: '武汉·玛雅海滩<br><small>2012年 · 约16万㎡</small>', lng: 114.397942, lat: 30.594956, color: '#8E24AA' },
+  { name: '上海·玛雅海滩<br><small>2013年 · 12.8–20万㎡</small>', lng: 121.210363, lat: 31.095419, color: '#1E88E5' },
+  { name: '重庆·玛雅海滩<br><small>2017年 · 约18万㎡</small>', lng: 106.513516, lat: 29.666821, color: '#43A047' },
+  { name: '天津·玛雅海滩<br><small>2018年 · 约15万㎡</small>', lng: 117.476933, lat: 39.188006, color: '#FB8C00' },
+  { name: '南昌·玛雅乐园<br><small>2019年 · 17–18.6万㎡</small>', lng: 115.890320, lat: 28.632064, color: '#D81B60' },
+  { name: '顺德·玛雅海滩<br><small>2020年 · 7万㎡（旗舰）</small>', lng: 113.304407, lat: 22.815471, color: '#FFB300' },
+  { name: '南京·玛雅海滩<br><small>2020年 · 约10万㎡</small>', lng: 118.998212, lat: 32.163964, color: '#3949AB' },
+  { name: '西安·玛雅海滩<br><small>2021年 · 约20万㎡</small>', lng: 108.739544, lat: 34.242747, color: '#00ACC1' },
+  { name: '衡阳·玛雅海滩<br><small>2022年 · 约14万㎡</small>', lng: 112.655530, lat: 26.950144, color: '#6D4C41' },
+  { name: '北京·玛雅海滩<br><small>2024年 · 5.5万㎡</small>', lng: 116.498551, lat: 39.866881, color: '#C62828' }
+];
+
+var zonesLocal = [
+  { name: '玛雅海滩水公园<br><small>主园区 · 7万㎡</small>', lng: 113.304407, lat: 22.815471, color: '#FFB300' },
+  { name: '粉红沙滩<br><small>网红打卡区</small>', lng: 113.302875, lat: 22.814896, color: '#E91E63' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, zones, center, zoom, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView(center, zoom);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zones);
+
+  if (withBoundary) {
+    L.circle(center, { radius: 260, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.6 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', zonesNational, [31.2, 113.8], 5, false);
+  initMap('satmap', 'sat', zonesLocal, [22.8155, 113.3044], 16, true);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

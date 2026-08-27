@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开元森泊度假乐园 — 开元旅业『酒店＋乐园』品牌，全国8家已开业度假乐园，室内水乐园全年30°C恒温</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #1B7A3D;
+  --clr-primary-light: #4CAF50;
+  --clr-primary-dark: #0F4D26;
+  --clr-accent: #00ACC1;
+}
+
+.hero {
+  background: linear-gradient(160deg, #0F4D26 0%, #1B7A3D 40%, #4CAF50 70%, #B2DFDB 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(0,172,193,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%);
+}
+.data-table tbody tr:hover { background: rgba(27,122,61,0.05); }
+
+/* China: dual-map layout */
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+
+@media (max-width: 768px) {
+  .hero { padding: 3rem 0 2.5rem; }
+  .hero .kpi-row { gap: 0.8rem; }
+  .hero .kpi-card { padding: 0.8rem 1rem; min-width: 120px; }
+  .hero .kpi-number { font-size: 1.3rem; }
+  #parkmap, #satmap { height: 300px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>开元森泊度假乐园 · 开元旅业</h1>
+    <p class="hero-subtitle">从2019年杭州湘湖首园到2026年桐庐3.0，全国8家已开业的『酒店＋乐园』一站式度假品牌——室内水乐园全年30°C恒温，汤泉人工加热，江浙沪亲子度假黑马</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">2019</div><div class="kpi-label">品牌元年 · 湘湖首园</div></div>
+      <div class="kpi-card"><div class="kpi-number">8<span style="font-size:0.7em;opacity:0.7"> 家</span></div><div class="kpi-label">已开业度假乐园</div></div>
+      <div class="kpi-card"><div class="kpi-number">30<span style="font-size:0.7em;opacity:0.7">°C</span></div><div class="kpi-label">室内水乐园全年恒温</div></div>
+      <div class="kpi-card"><div class="kpi-number">4,000<span style="font-size:0.7em;opacity:0.7">+ 间</span></div><div class="kpi-label">度假客房合计</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal"><div class="card"><h3>品牌档案</h3><table class="data-table"><tbody>
+<tr><td><strong>品牌名称</strong></td><td>开元森泊（Senbo Nature Park &amp; Resort）</td></tr>
+<tr><td><strong>运营主体</strong></td><td>开元旅业集团（创始人 陈妙林）</td></tr>
+<tr><td><strong>品牌含义</strong></td><td>「森泊」＝森林与湖泊</td></tr>
+<tr><td><strong>品牌理念</strong></td><td>自然、探索、爱；释放天性 乐享四季</td></tr>
+<tr><td><strong>业务模式</strong></td><td>酒店＋乐园＋木屋＋水乐园＋汤泉 一站式度假</td></tr>
+<tr><td><strong>模式参照</strong></td><td>荷兰 CP 中央公园集团（Centre Parcs）</td></tr>
+<tr><td><strong>战略股东</strong></td><td>中国旅游集团（中旅投资）2020年12月入股为第二大股东</td></tr>
+<tr><td><strong>版本演进</strong></td><td>2023年起分 1.0/2.0/3.0，桐庐为3.0首个完整呈现</td></tr>
+</tbody></table></div>
+<div class="card"><h3>湘湖旗舰 · 坐标与交通</h3><table class="data-table"><tbody>
+<tr><td><strong>坐标</strong></td><td>GCJ-02 (120.223444, 30.133917)</td></tr>
+<tr><td><strong>地址</strong></td><td>杭州市萧山区湘湖旅游度假区 湘湖路1515号</td></tr>
+<tr><td><strong>所在景区</strong></td><td>湘湖国家旅游度假区（4A级）</td></tr>
+<tr><td><strong>开业</strong></td><td>2019年1月全面试营业（2017年1月开工）</td></tr>
+<tr><td><strong>规模</strong></td><td>占地约300亩，总投资约11.7亿元，度假木屋249套</td></tr>
+<tr><td><strong>首年成绩</strong></td><td>2019年全年营收超2亿元，开业首年即盈利</td></tr>
+</tbody></table></div></div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3>
+<p>开元森泊是开元旅业集团旗下的一站式休闲度假品牌。创始人陈妙林2011年参加环法自行车赛时受欧洲山野度假项目启发，一度想引进外资品牌未果后自立门户，模式参照荷兰 CP 中央公园集团（Centre Parcs）。2019年1月，杭州湘湖首园开业，以「度假酒店＋特色木屋＋室内外水乐园＋幻想岛儿童乐园」的组合一炮而红，成为江浙沪亲子周边度假黑马。此后复制到莫干山、云南花腰傣、舟山、嘉兴南北湖、日照、武汉、桐庐，截至2026年8月共8家已开业度假乐园，覆盖浙江、云南、山东、湖北4省。</p>
+<p>森泊最大的产品差异点是「全季全时」：室内水乐园全年恒温30°C、室外水乐园夏季开放，配汤泉/温泉体系补足秋冬淡季。现有园区的汤泉均为人工加热的主题化水浴产品（嘉兴溪禾汤泉为森泊首个独立汤泉中心），在有真温泉资源的新项目（温州泰顺氡泉、安徽广德偏硅酸温泉）才做天然温泉。2026年6月桐庐度假乐园开业，是森泊3.0「情绪价值」定位的首个完整呈现。</p>
+</div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal"><h3>品牌缘起：环法赛道上的度假灵感</h3>
+<p>2011年，陈妙林参加环法自行车赛，沿途被欧洲山野间的家庭度假项目打动，尤其折服于荷兰 CP 中央公园集团（Centre Parcs）把自然、运动与度假结合的运营哲学。他一度想引进外资品牌，谈判未果后决定「自立门户」。2016年，开元从深耕30余年的商务酒店向休闲度假转型，森泊立项；2017年1月2日杭州湘湖项目开工，2019年1月全面试营业，品牌元年落地。开元森泊沿用开元酒店体系做住宿底盘，用「亲自然、轻度假」切家庭客群，被媒体称为「国民休闲度假头部品牌」。</p></div>
+    <div class="grid-2 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>为什么叫「森泊」</h3>
+<p>「森泊」取义「森林和湖泊」，强调把度假区建在自然里：湘湖在下渚湖畔（莫干山）、花腰傣在哀牢山下、舟山在海滨、桐庐在分水江畔。产品线由四块拼成——度假酒店与特色木屋（住宿）、室内外水乐园（四季玩水）、幻想岛儿童乐园（亲子）、汤泉/温泉与森活家活动（康养与全龄托管）。品牌理念「自然、探索、爱」，主张「释放天性，乐享四季」，核心客群从亲子家庭逐步扩展到情侣、朋友、团队全人群。</p></div>
+      <div class="card"><h3>1.0 → 3.0：从乐园到度假区</h3>
+<p>2023年起森泊把产品分代：1.0是湘湖、莫干山式的「乐园＋酒店」综合体；2.0在南北湖、日照加入汤泉、萌宠等全龄业态；3.0以「情绪价值」为核心，把度假区做成可在地的完整生活场景。桐庐森泊（2026.6）是3.0首个完整呈现：首创「100个主理人计划」，请冲浪冠军、亚运标准马术教练等带队体验，把「有人陪你玩」变成产品本身。在建的广德奇趣、深圳大鹏龙岐湾延续3.0思路。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>品牌规模</td><td>已开业度假乐园</td><td>8 家</td><td>另2家酒店先行（桐庐外婆家度假酒店等）</td></tr>
+          <tr><td>品牌规模</td><td>覆盖</td><td>4 省 8 城</td><td>浙江·云南·山东·湖北</td></tr>
+          <tr><td>品牌规模</td><td>度假客房合计</td><td>4,000+ 间</td><td>8园合计，含木屋/树屋/星空房等特色房型</td></tr>
+          <tr><td>品牌规模</td><td>单园投资</td><td>11.7亿–22亿 元</td><td>武汉最高22亿元</td></tr>
+          <tr><td>室内水乐园</td><td>温度与开放</td><td>全年恒温 30°C</td><td>空调＋地暖，四季开放</td></tr>
+          <tr><td>室内水乐园</td><td>面积区间</td><td>约4500㎡–2.08万㎡</td><td>花腰傣最小，日照最大（透明星空穹顶）</td></tr>
+          <tr><td>室外水乐园</td><td>开放季节</td><td>夏季开放</td><td>一般7–8月，可开夜场</td></tr>
+          <tr><td>室外水乐园</td><td>最大室外体量</td><td>约5.3万㎡</td><td>云南花腰傣（西南最大水上乐园一期）</td></tr>
+          <tr><td>汤泉/温浴</td><td>现有园区性质</td><td>人工加热，非天然地热</td><td>主题化人工水浴产品</td></tr>
+          <tr><td>汤泉/温浴</td><td>嘉兴溪禾汤泉</td><td>室内恒温 39°C</td><td>森泊首个独立汤泉中心，含原汤/药浴/花瓣池</td></tr>
+          <tr><td>水质</td><td>水处理系统</td><td>AOP高级氧化＋真空负压过滤</td><td>联盛水环境承建（南北湖）</td></tr>
+          <tr><td>设备</td><td>水游乐设备供应</td><td>海山游乐·旺明国际·加拿大宝澜</td><td>桐庐水激流过山车为浙江首条（宝澜）</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据截至2026年8月。室内水乐园全年恒温30°C为各园统一配置；现有园区汤泉为人工加热，温州泰顺、安徽广德等新项目规划天然温泉。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#FFB300;"></span>主图：开元森泊度假乐园全国分布（8家已开业）</span>
+        <span><span class="dot" style="background:#26C6DA;"></span>卫星图：杭州湘湖旗舰园区</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 520" role="img" aria-label="杭州湘湖开元森泊度假乐园空间结构示意图">
+          <rect width="800" height="520" fill="#0B1D2B" rx="12"/>
+
+          <!-- Title -->
+          <text x="400" y="30" text-anchor="middle" fill="#CCC" font-family="Playfair Display,serif" font-size="16" font-weight="700">杭州湘湖开元森泊度假乐园空间结构示意</text>
+
+          <!-- 中央湖 -->
+          <ellipse cx="390" cy="255" rx="205" ry="95" fill="rgba(38,198,218,0.07)" stroke="#26C6DA" stroke-width="1.5" stroke-dasharray="7,6" opacity="0.6"/>
+          <text x="390" y="260" text-anchor="middle" fill="#26C6DA" font-family="DM Sans,sans-serif" font-size="10" opacity="0.85">中央湖</text>
+
+          <!-- 室内水乐园 (top center) -->
+          <rect x="315" y="46" width="170" height="88" rx="10" fill="rgba(38,198,218,0.15)" stroke="#26C6DA" stroke-width="2"/>
+          <text x="400" y="72" text-anchor="middle" fill="#4DD0E1" font-family="Playfair Display,serif" font-size="15" font-weight="700">🏊 室内水乐园</text>
+          <text x="400" y="94" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">约8000㎡ · 全年恒温30°C</text>
+          <text x="400" y="112" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">透明穹顶 · 波利尼西亚风情</text>
+
+          <!-- 汤泉·温泉区 (top right) -->
+          <rect x="600" y="46" width="150" height="88" rx="10" fill="rgba(255,87,34,0.15)" stroke="#FF5722" stroke-width="1.5"/>
+          <text x="675" y="72" text-anchor="middle" fill="#FF8A65" font-family="DM Sans,sans-serif" font-size="13" font-weight="600">♨️ 汤泉·温泉区</text>
+          <text x="675" y="94" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">林间泡池 · 38–42°C</text>
+          <text x="675" y="112" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">艾草/玫瑰/牛奶池</text>
+
+          <!-- 室外水乐园 (left) -->
+          <rect x="55" y="150" width="150" height="105" rx="10" fill="rgba(30,136,229,0.12)" stroke="#1E88E5" stroke-width="2"/>
+          <text x="130" y="185" text-anchor="middle" fill="#64B5F6" font-family="Playfair Display,serif" font-size="14" font-weight="700">🌊 室外水乐园</text>
+          <text x="130" y="208" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">约1.5万㎡ · 夏季开放</text>
+          <text x="130" y="226" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">造浪池 · 夜场 · 水寨</text>
+
+          <!-- 幻想岛 (right) -->
+          <rect x="600" y="150" width="150" height="90" rx="10" fill="rgba(156,39,176,0.15)" stroke="#9C27B0" stroke-width="1.5"/>
+          <text x="675" y="182" text-anchor="middle" fill="#CE93D8" font-family="DM Sans,sans-serif" font-size="13" font-weight="600">🧸 幻想岛</text>
+          <text x="675" y="204" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">室内儿童乐园</text>
+          <text x="675" y="222" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">亲子托管 · 萌宠</text>
+
+          <!-- 度假屋区 木屋树屋 (bottom left) -->
+          <rect x="55" y="375" width="170" height="92" rx="10" fill="rgba(102,187,106,0.12)" stroke="#66BB6A" stroke-width="1.5"/>
+          <text x="140" y="408" text-anchor="middle" fill="#A5D6A7" font-family="DM Sans,sans-serif" font-size="13" font-weight="600">🌲 度假屋区</text>
+          <text x="140" y="430" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">木屋 · 树屋 · 雨林餐厅</text>
+          <text x="140" y="448" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">249套散落林间湖边</text>
+
+          <!-- 主楼 (bottom center) -->
+          <rect x="310" y="385" width="180" height="82" rx="10" fill="rgba(76,175,80,0.15)" stroke="#4CAF50" stroke-width="2"/>
+          <text x="400" y="418" text-anchor="middle" fill="#A5D6A7" font-family="DM Sans,sans-serif" font-size="13" font-weight="600">🏨 主楼</text>
+          <text x="400" y="440" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">大堂 · 嗨森餐厅</text>
+          <text x="400" y="458" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">与室内水乐园连廊直达</text>
+
+          <!-- 星空房·湖景房 (bottom right) -->
+          <rect x="565" y="375" width="185" height="92" rx="10" fill="rgba(255,179,0,0.12)" stroke="#FFB300" stroke-width="1.5"/>
+          <text x="657" y="408" text-anchor="middle" fill="#FFD54F" font-family="DM Sans,sans-serif" font-size="13" font-weight="600">⭐ 星空房·湖景房</text>
+          <text x="657" y="430" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">临湖散落 · 亲水栈道</text>
+          <text x="657" y="448" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">观星穹顶房型</text>
+
+          <!-- 激流河 (dashed, 室外→室内 through 湖) -->
+          <path d="M170,150 C250,120 320,110 380,134" fill="none" stroke="#FFB300" stroke-width="1.5" stroke-dasharray="5,5" opacity="0.8"/>
+          <path d="M475,134 C560,160 640,220 660,250" fill="none" stroke="#FFB300" stroke-width="1.5" stroke-dasharray="5,5" opacity="0.8"/>
+          <text x="540" y="180" fill="#FFB300" font-family="DM Sans,sans-serif" font-size="9">激流河 · 室内外连通（国内首条，约125米）</text>
+
+          <!-- 入口 -->
+          <text x="400" y="500" text-anchor="middle" fill="#888" font-family="DM Sans,sans-serif" font-size="10">▲ 主入口</text>
+
+          <!-- North arrow -->
+          <g transform="translate(760,30)">
+            <polygon points="0,25 8,0 16,25 8,18" fill="#CCC"/>
+            <text x="8" y="-4" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10" font-weight="700">北</text>
+          </g>
+
+          <!-- Legend -->
+          <rect x="40" y="480" width="190" height="28" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)"/>
+          <text x="50" y="498" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">━━ 实线框：功能板块　╌╌ 虚线：激流河/湖岸　● 金色：地标</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>🏊 室内水乐园 · 全年恒温30°C</h3><p>森泊核心产品。空调＋地暖维持全年30°C，四季可玩。湘湖首园约8000㎡，透明穹顶营造波利尼西亚海岛风情，含造浪池、冲浪池、SPA水疗池、欢乐水寨、龙卷风暴组合滑道；国内首条激流河约125米，室内外连通，由国际设计师 John Fähmel 设计。日照2.08万㎡为全系最大。</p></div>
+      <div class="card"><h3>🌊 室外水乐园 · 夏季畅玩</h3><p>夏季开放（一般7–8月，可开夜场），花腰傣室外约5.3万㎡为全系最大，含1万㎡海啸造浪池配真沙滩；武汉室外1.8万㎡呈大溪地热带风情，含1800㎡超级火山造浪池、华中首条207米人体直滑激流河；桐庐室外超2万㎡，含浙江首条宝澜水激流过山车。</p></div>
+      <div class="card"><h3>🧸 幻想岛 · 室内儿童乐园</h3><p>森泊亲子配套的固定板块。武汉幻想岛室内外合计1.2万㎡，以「星际穿越」为主题，含宇航市集、太空堡垒等场景；舟山以海底世界为主题，兼具海洋生态科普；日照3800㎡海底探险主题。均搭配「森活家＋」全龄托管课程（100+门互动课）。</p></div>
+      <div class="card"><h3>♨️ 汤泉 · 温浴体系</h3><p>现有园区汤泉为人工加热的主题化水浴产品。嘉兴溪禾汤泉是森泊首个独立汤泉中心（营业约5300㎡），室内大型汤池恒温39°C，室外分原汤池、药浴池、花瓣池，配汗蒸湿蒸、SPA足浴。莫干山户外「云顶温泉区」38–42°C，十多个主题池，部分木屋别墅带私汤；湘湖林间温泉区38–42°C。</p></div>
+      <div class="card"><h3>🌲 度假屋区 · 住进自然</h3><p>住宿是森泊的另一半。湘湖249套木屋散落林间湖边；莫干山1100+间客房；日照442间含悬空鸟巢「林间之巢」、积木客房等20余种网红房型；武汉585间含全国首棵人造榕树树屋与华中稀有船屋；桐庐私汤套房直接接温泉概念。全系合计4000+间。</p></div>
+      <div class="card"><h3>🐘 特色体验 · 森活家+</h3><p>「森活家＋」互动课程体系超过100门，覆盖消防科普、研学互动、水果采摘等，配一对一度假管家。桐庐首创「100个主理人计划」，冲浪冠军、亚运标准马术教练等带队体验；日照嗨森餐厅与海洋水族馆结合，吃饭即看海底世界。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2011年7月</div><div class="timeline-content"><h4>灵感诞生</h4><p>陈妙林参加环法自行车赛，受欧洲山野度假项目启发，萌生创办家庭度假品牌念头。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2016年</div><div class="timeline-content"><h4>品牌立项</h4><p>开元从商务酒店向休闲度假转型，森泊品牌启动，模式参照荷兰 CP 中央公园集团。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2017年1月2日</div><div class="timeline-content"><h4>湘湖开工</h4><p>杭州湘湖项目开工，为森泊首个项目。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019年1月</div><div class="timeline-content"><h4>湘湖试营业 · 品牌元年</h4><p>杭州湘湖森泊全面试营业，2019年全年营收超2亿元、开业首年即盈利。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019年8月</div><div class="timeline-content"><h4>莫干山试营业</h4><p>莫干山森泊在湖州德清下渚湖畔试营业，占地约1800亩、客房1100+间。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2020年12月</div><div class="timeline-content"><h4>中旅入股</h4><p>中国旅游集团（中旅投资）战略入股，成为开元森泊第二大股东。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021年</div><div class="timeline-content"><h4>营收近7亿</h4><p>杭州＋莫干山两园总营收近7亿元，验证复制模型。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022年3月</div><div class="timeline-content"><h4>南北湖开工</h4><p>嘉兴海盐南北湖项目开工，总用地约550亩，2023年起森泊分1.0/2.0/3.0代际。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023年10月1日</div><div class="timeline-content"><h4>西南首园</h4><p>云南花腰傣森泊开园（投资约11.8亿元，243.75亩），为西南地区最大水上乐园一期项目。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023年9月28日</div><div class="timeline-content"><h4>泰顺氡泉开工</h4><p>温州泰顺·华东大峡谷森泊氡泉度假乐园开工（投资超42亿元，全国首个氡泉森泊）。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年4月30日</div><div class="timeline-content"><h4>舟山开园</h4><p>舟山保利开元森泊开园（保利投资、开元运营），首家海滨度假乐园，占地超25万㎡。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年9月</div><div class="timeline-content"><h4>首家泡汤森泊</h4><p>嘉兴南北湖森泊正式开业，溪禾汤泉成为森泊首个独立汤泉中心。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年5月10日</div><div class="timeline-content"><h4>北方旗舰</h4><p>日照森泊开业（投资20.16亿元），首家北方旗舰，坐拥10公里海岸线。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年6月13日</div><div class="timeline-content"><h4>华中首园</h4><p>武汉城建森泊开业（投资22亿元，703亩），华中首个近郊一站式度假综合体、全国第7家。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年6月27日</div><div class="timeline-content"><h4>森泊3.0 · 桐庐</h4><p>桐庐森泊度假乐园开园（投资20亿元），3.0首个完整呈现，含浙江首条宝澜水激流过山车。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年底–2028年</div><div class="timeline-content"><h4>在建项目推进</h4><p>广德温泉湾奇趣（2027年6月预计开业）、深圳大鹏龙岐湾（2028年预计建成）、温州泰顺氡泉陆续推进。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card"><h3>2021年 · 双园营收</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">近 7亿 元</p><p class="f-caption">杭州＋莫干山两园总营收</p></div>
+      <div class="card"><h3>武汉开业一年（至2026.6）</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">50万 人次</p><p class="f-caption">累计接待，营收破亿元，省外游客占比70%</p></div>
+      <div class="card"><h3>日照开业预售</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">1.3亿+ 元</p><p class="f-caption">预售GMV，1分钟销售额破206万元</p></div>
+      <div class="card"><h3>嘉兴2026上半年</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">15万 人次</p><p class="f-caption">营收超6000万元</p></div>
+      <div class="card"><h3>2023年经营面</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">1,200 元+</p><p class="f-caption">平均房价，住宿率60%，平均投资回报率18%</p></div>
+      <div class="card"><h3>桐庐年客流预期</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">40–50万</p><p class="f-caption">全年客流量测算</p></div>
+    </div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <h3 style="margin-bottom:1rem;">全国8家已开业度假乐园分布与规模</h3>
+      <table class="data-table">
+        <thead><tr><th>园区</th><th>开业</th><th>投资/占地</th><th>室内水乐园</th><th>室外水乐园</th><th>特色</th></tr></thead>
+        <tbody>
+          <tr><td>杭州·湘湖（旗舰）</td><td>2019.1</td><td>约11.7亿 / 300亩</td><td>约8000㎡ 恒温30°C</td><td>约1.5万㎡</td><td>国内首条激流河、透明穹顶</td></tr>
+          <tr><td>湖州·莫干山</td><td>2019.8</td><td>约30亿 / 1800亩</td><td>约1万㎡ 恒温30°C</td><td>约1.8万㎡</td><td>云顶温泉区、30项水项目</td></tr>
+          <tr><td>云南·花腰傣</td><td>2023.10</td><td>约11.8亿 / 244亩</td><td>约4500㎡ 恒温30°C</td><td>约5.3万㎡</td><td>1万㎡海啸造浪池、西南首园</td></tr>
+          <tr><td>舟山·朱家尖</td><td>2024.4</td><td>保利投资 / 375亩</td><td>近1万㎡ 恒温30°C</td><td>海滨型</td><td>五组合穿墙滑道、首家海滨</td></tr>
+          <tr><td>嘉兴·南北湖</td><td>2024.9</td><td>建面10.2万㎡ / 550亩</td><td>室内外结合</td><td>水域约6500㎡</td><td>溪禾汤泉、首家泡汤</td></tr>
+          <tr><td>日照</td><td>2025.5</td><td>20.16亿 / 185亩</td><td>2.08万㎡ 恒温30°C</td><td>约2.9万㎡</td><td>首家北方旗舰、室内外5万㎡</td></tr>
+          <tr><td>武汉·蔡甸</td><td>2025.6</td><td>22亿 / 703亩</td><td>1万㎡ 恒温30°C</td><td>1.8万㎡</td><td>207米激流河、全国第7家</td></tr>
+          <tr><td>杭州·桐庐</td><td>2026.6</td><td>20亿 / 约3km²</td><td>恒温30°C</td><td>超2万㎡</td><td>森泊3.0、浙江首条宝澜水激流过山车</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">另：桐庐外婆家度假酒店（2025.7开业，215套客房）为桐庐度假区一期先行项目，走「野性度假」路线，不含大型水乐园。</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>室内水乐园体系</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">全年恒温 30°C</p><p class="f-caption">各园统一配置：空调＋地暖，四季开放。日照2.08万㎡配透明星空穹顶、波利尼西亚风情；花腰傣1万㎡海啸造浪池配真沙滩；武汉「水晶宫」引入国内最新「超级魔法时空」七组合滑道。全系室内最小约4500㎡。</p></div>
+      <div class="card"><h3>汤泉与温浴体系</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">人工加热 · 39°C</p><p class="f-caption">现有园区汤泉为人工加热的主题化水浴产品，非天然地热。嘉兴溪禾汤泉室内恒温39°C、含原汤/药浴/花瓣池＋汗蒸湿蒸；莫干山云顶温泉区38–42°C、部分木屋带私汤。有真温泉资源的新项目才做天然温泉：温州泰顺氡泉（5A级氡泉）、安徽广德偏硅酸温泉。</p></div>
+      <div class="card"><h3>设备与水处理供应链</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">海山·旺明·宝澜</p><p class="f-caption">海山游乐承接舟山五组合穿墙滑道、嘉兴南北湖（独家规划制造）、桐庐水设备；旺明国际供花腰傣（深渊滑梯、电磁弹射滑道等）；加拿大宝澜 ProSlide 供桐庐浙江首条水激流过山车；湘湖激流河由国际设计师 John Fähmel 设计。水处理采用联盛水环境 AOP 高级氧化消毒＋真空负压过滤＋自动化水质监控。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="card reveal"><h3>「酒店＋乐园」度假综合体的五块拼图</h3><p>开元森泊的配套不是零散堆料，而是围绕家庭住客的完整闭环：住宿（度假酒店＋特色木屋/树屋/星空房/船屋）→ 玩水（室内外水乐园）→ 亲子（幻想岛儿童乐园）→ 康养（汤泉/温泉＋SPA）→ 活动（森活家＋全龄托管＋一对一度假管家）。全系度假客房4000+间，覆盖从江景房、亲子主题房到私汤套房的全房型谱系。</p></div>
+    <div class="grid-2 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>餐饮与商务</h3><p>嗨森餐厅（海底寻宝主题自助，与海洋水族馆结合）、雁来轩中餐厅（本帮菜/鲁菜/湘菜）、朗慕法餐厅、谜域主题餐厅（NPC互动表演）。商务会奖：武汉6000㎡中法国际会议中心、舟山自在厅1200㎡可容纳1100人会议。日照5430㎡海岛集市广场承载夜经济。</p></div>
+      <div class="card"><h3>在建项目与未来</h3><p>广德温泉湾·森泊奇趣（674亩、投资约8.69亿元，天然偏硅酸温泉，预计2027年6月开业）；深圳大鹏中旅开元森泊龙岐湾（总建面15.76万㎡、投资约20亿元，毗邻深圳乐高乐园，预计2028年建成）；温州泰顺氡泉（用地950亩、投资超42亿元）。森泊3.0的桐庐还规划2026年10月加开「奥能空间」冰雪主题中心。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>2026 · 桐庐森泊3.0开业</h3><p>6月27日正式开园，总投资20亿元，为森泊3.0「情绪价值」定位的首个完整呈现。室外玩水空间超2万㎡（规划约2.5万㎡），含浙江首条宝澜水激流过山车；度假酒店由国际设计公司 HBA 设计、334间客房获2024年美国金砖奖；首创「100个主理人计划」，并接手原亚运马术场地（37.3公顷）运营。2026年10月拟加开「奥能空间」冰雪主题中心。</p></div>
+      <div class="card"><h3>2026 · 武汉一周年复盘</h3><p>6月13日开业满一年：累计接待突破50万人次、营收破亿元，端午单日营收107万元创新高，省外游客占比70%、全平台曝光4亿+；获2026携程「年度最佳创新特色酒店」（华中唯一），入选2026「亚洲亲子酒店百强」。</p></div>
+      <div class="card"><h3>2026 · 嘉兴与日照运营</h3><p>嘉兴南北湖2026年上半年接待超15万人次、营收超6000万元；溪禾汤泉冬季运营（约11月28日至次年3月22日），周中下午至晚间开放。日照作为北方旗舰填补北方高端滨海度假空白，2025年五一预售GMV超1.3亿元，预计年接待33万人次、带动消费5亿元。</p></div>
+      <div class="card"><h3>展望 · 从乐园到度假区</h3><p>森泊正从「乐园＋酒店」向「度假区」形态演进：桐庐3.0把马术、冰雪、潮流酒店纳入度假区；广德奇趣、深圳大鹏、泰顺氡泉三大在建项目均含天然温泉或滨海资源。中旅投资第二大股东身份与「推动杭州开元森泊旅游投资公司上市」的计划，为品牌扩张提供资本底座。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <div class="resource-group">
+        <h4>官方信息</h4>
+        <ul>
+          <li><a href="https://www.senboresorts.com/" target="_blank" rel="noopener">开元森泊度假乐园官网</a></li>
+          <li><a href="https://www.kaiyuangroup.com/" target="_blank" rel="noopener">开元旅业集团官网</a></li>
+          <li><a href="https://pitchhub.36kr.com/project/2181152162483332" target="_blank" rel="noopener">36氪：开元森泊项目信息</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>各园开业报道</h4>
+        <ul>
+          <li><a href="https://www.senboresorts.com/nd.jsp?id=22&fromMid=3&groupId=4" target="_blank" rel="noopener">开元森泊官网：疫后亲子酒店逆势破亿</a></li>
+          <li><a href="https://cn.chinadaily.com.cn/a/202404/30/WS6630dc4aa3109f7860ddbe8a.html" target="_blank" rel="noopener">中国日报：舟山保利开元森泊开业（2024）</a></li>
+          <li><a href="http://www.haiyan.gov.cn/art/2024/5/17/art_1229499149_59440884.html" target="_blank" rel="noopener">海盐县政府：南北湖森泊6月试营业（2024）</a></li>
+          <li><a href="https://www.xinping.gov.cn/xpxzfxxgk/gzdt9835/20231010/1478277.html" target="_blank" rel="noopener">新平县政府：花腰傣森泊宣传推介（2023）</a></li>
+          <li><a href="https://www.bjnews.com.cn/detail/1746863522129785.html" target="_blank" rel="noopener">新京报：日照开元森泊开业（2025）</a></li>
+          <li><a href="http://www.hb.chinanews.com.cn/news/2025/0613/417993.html" target="_blank" rel="noopener">中新网湖北：武汉城建开元森泊开业（2025）</a></li>
+          <li><a href="http://zj.xinhuanet.com/20260629/c45f9ae19f7344f693cdc91aba163f38/c.html" target="_blank" rel="noopener">新华网浙江：桐庐森泊开业（2026）</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>在建项目</h4>
+        <ul>
+          <li><a href="https://wl.wenzhou.gov.cn/art/2023/10/9/art_1651069_58905427.html" target="_blank" rel="noopener">温州市文旅局：泰顺氡泉度假乐园开工（2023）</a></li>
+          <li><a href="https://www.guangde.gov.cn/News/show/1726280.html" target="_blank" rel="noopener">广德市政府：温泉湾·森泊奇趣项目建设</a></li>
+          <li><a href="https://www.dpxq.gov.cn/ztzl/tzdp/cgal/content/post_12567961.html" target="_blank" rel="noopener">大鹏新区政府：中旅开元森泊龙岐湾项目</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+// 主图：全国分布（8家已开业度假乐园）；卫星图：杭州湘湖旗舰园区
+
+var zonesNational = [
+  { name: '杭州·湘湖<br><small>2019年 · 约300亩 · 品牌旗舰</small>', lng: 120.223790, lat: 30.132039, color: '#FFB300' },
+  { name: '湖州·莫干山<br><small>2019年 · 约1800亩</small>', lng: 120.004410, lat: 30.501849, color: '#1B7A3D' },
+  { name: '云南·花腰傣<br><small>2023年 · 243.75亩</small>', lng: 101.580117, lat: 24.051714, color: '#E53935' },
+  { name: '舟山·朱家尖<br><small>2024年 · 超25万㎡ · 保利投资</small>', lng: 122.384294, lat: 29.875761, color: '#00ACC1' },
+  { name: '嘉兴·南北湖<br><small>2024年 · 550亩 · 溪禾汤泉</small>', lng: 120.865943, lat: 30.388848, color: '#8E24AA' },
+  { name: '日照<br><small>2025年 · 185亩 · 北方旗舰</small>', lng: 119.570057, lat: 35.427009, color: '#FB8C00' },
+  { name: '武汉·蔡甸<br><small>2025年 · 703亩 · 全国第7家</small>', lng: 114.127589, lat: 30.537047, color: '#3949AB' },
+  { name: '杭州·桐庐<br><small>2026年 · 森泊3.0</small>', lng: 119.545950, lat: 29.904679, color: '#43A047' }
+];
+
+var zonesLocal = [
+  { name: '室内水乐园<br><small>约8000㎡ · 全年恒温30°C</small>', lng: 120.223790, lat: 30.132039, color: '#26C6DA' },
+  { name: '室外水乐园<br><small>约1.5万㎡ · 夏季开放</small>', lng: 120.221442, lat: 30.133198, color: '#1E88E5' },
+  { name: '幻想岛<br><small>室内儿童乐园</small>', lng: 120.224166, lat: 30.132490, color: '#9C27B0' },
+  { name: '汤泉·温泉区<br><small>林间泡池 · 38–42°C</small>', lng: 120.223444, lat: 30.133917, color: '#FF5722' },
+  { name: '度假屋区<br><small>木屋 · 树屋 · 星空房</small>', lng: 120.223126, lat: 30.133342, color: '#4CAF50' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, zones, center, zoom, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView(center, zoom);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zones);
+
+  if (withBoundary) {
+    L.circle(center, { radius: 300, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.6 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', zonesNational, [31.0, 114.0], 5, false);
+  initMap('satmap', 'sat', zonesLocal, [30.1330, 120.2236], 16, true);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

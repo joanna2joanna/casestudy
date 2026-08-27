@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>舟山保利开元森泊度假乐园 — 开元森泊首家海滨度假乐园，五组合穿墙滑道贯通室内外四季运营</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #1B7A3D;
+  --clr-primary-light: #4CAF50;
+  --clr-primary-dark: #0F4D26;
+  --clr-accent: #00ACC1;
+}
+
+.hero {
+  background: linear-gradient(160deg, #0F4D26 0%, #1B7A3D 40%, #4CAF50 70%, #B2DFDB 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(0,172,193,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%);
+}
+.data-table tbody tr:hover { background: rgba(27,122,61,0.05); }
+
+/* China: dual-map layout */
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+
+@media (max-width: 768px) {
+  .hero { padding: 3rem 0 2.5rem; }
+  .hero .kpi-row { gap: 0.8rem; }
+  .hero .kpi-card { padding: 0.8rem 1rem; min-width: 120px; }
+  .hero .kpi-number { font-size: 1.3rem; }
+  #parkmap, #satmap { height: 300px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>舟山保利开元森泊度假乐园</h1>
+    <p class="hero-subtitle">开元森泊首家海滨度假乐园，2024年4月30日在朱家尖开园——室内水乐园近1万㎡恒温30°C，五组合穿墙滑道贯通室内外四季运营</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">2024</div><div class="kpi-label">森泊第4园 · 首家海滨</div></div>
+      <div class="kpi-card"><div class="kpi-number">25<span style="font-size:0.7em;opacity:0.7">万㎡</span></div><div class="kpi-label">占地规模</div></div>
+      <div class="kpi-card"><div class="kpi-number">424<span style="font-size:0.7em;opacity:0.7"> 间</span></div><div class="kpi-label">度假客房（近300间海景）</div></div>
+      <div class="kpi-card"><div class="kpi-number">30<span style="font-size:0.7em;opacity:0.7">°C</span></div><div class="kpi-label">室内水乐园恒温</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal"><div class="card"><h3>基本信息</h3><table class="data-table"><tbody>
+<tr><td><strong>项目名称</strong></td><td>舟山保利开元森泊度假乐园</td></tr>
+<tr><td><strong>投资运营</strong></td><td>保利集团投资，开元森泊运营管理</td></tr>
+<tr><td><strong>品牌位次</strong></td><td>开元森泊第4园，首家海滨度假乐园</td></tr>
+<tr><td><strong>开业</strong></td><td>2024年4月30日</td></tr>
+<tr><td><strong>占地</strong></td><td>超25万㎡（375亩+）</td></tr>
+<tr><td><strong>客房</strong></td><td>424间，近300间海景房</td></tr>
+<tr><td><strong>所属项目</strong></td><td>保利「自在海」文旅项目核心</td></tr>
+</tbody></table></div>
+<div class="card"><h3>坐标与交通</h3><table class="data-table"><tbody>
+<tr><td><strong>坐标</strong></td><td>GCJ-02 (122.384294, 29.875761)</td></tr>
+<tr><td><strong>地址</strong></td><td>舟山市普陀区朱家尖街道青山路82号</td></tr>
+<tr><td><strong>区位</strong></td><td>面朝大海、背靠大青山，毗邻南沙景区</td></tr>
+<tr><td><strong>码头</strong></td><td>距蜈蚣峙码头约15分钟车程（去普陀山）</td></tr>
+<tr><td><strong>机场</strong></td><td>距普陀山机场约15分钟车程</td></tr>
+<tr><td><strong>周边景区</strong></td><td>南沙、乌石塘、普陀山、大青山</td></tr>
+</tbody></table></div></div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3>
+<p>舟山保利开元森泊度假乐园是开元森泊品牌第4座园区，也是首家海滨度假乐园。项目由央企保利集团投资、开元森泊运营，坐落朱家尖保利「自在海」文旅项目核心，面朝大海、背靠大青山，距普陀山蜈蚣峙码头仅15分钟车程，把「森泊=森林和湖泊」的意境升级为「山海」。2024年4月30日开园。</p>
+<p>园区以「酒店＋乐园」度假综合体呈现：424间客房近300间为海景房，摩洛哥、地中海、侘寂等多种风格；室内水乐园近1万㎡恒温30°C，是舟山首家室内恒温水乐园；「五组合穿墙滑道」贯通室内外、四季运营，是园区最大的设备亮点。另有海底世界主题「奇妙幻想岛」、AR/VR「头号玩家」、无边泳池与星空酒廊。</p>
+</div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>保利＋开元的央地合作</h3><p>舟山园是央企保利集团与开元森泊的首次合作：保利负责投资与地产大盘（保利「自在海」），开元森泊输出品牌与运营。这种「投资方＋品牌方」的分工成为森泊后续复制的一种范式（武汉城建＋开元亦同构）。项目依托朱家尖海岛资源，定位舟山旅游从观光向度假转型的支点。</p></div>
+      <div class="card"><h3>山、海、沙三重复合</h3><p>园区西侧背靠大青山，东面临海，与南沙景区同属朱家尖南部滨海带。设计把室内水乐园、海滨室外区、户外陆乐园、酒店四个板块叠在滨海地块上，海景房面朝海湾，无边泳池与星空酒廊延伸入海景，形成「下海游泳、回园泡池」的度假闭环。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>占地面积</td><td>超25万㎡</td><td>保利自在海核心</td></tr>
+          <tr><td>规模</td><td>度假客房</td><td>424 间</td><td>近300间海景房</td></tr>
+          <tr><td>水乐园</td><td>室内水乐园</td><td>近1万㎡ 恒温30°C</td><td>舟山首家室内恒温水乐园</td></tr>
+          <tr><td>水乐园</td><td>大型水上游乐设备</td><td>13 项</td><td>30余个项目</td></tr>
+          <tr><td>水乐园</td><td>五组合穿墙滑道</td><td>贯通室内外</td><td>游龙戏蟒/龙卷飞碟/星际穿梭/大回环/螺旋滑道</td></tr>
+          <tr><td>儿童</td><td>奇妙幻想岛</td><td>约1600㎡</td><td>海底世界主题，海洋生态科普</td></tr>
+          <tr><td>娱乐</td><td>头号玩家</td><td>约2000㎡</td><td>AR/VR、星际赛车、卡丁车</td></tr>
+          <tr><td>餐饮</td><td>餐位</td><td>1700 个</td><td>嗨森餐厅＋雁来轩中餐厅</td></tr>
+          <tr><td>商务</td><td>自在厅会议</td><td>1200㎡</td><td>可容纳1100人</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据截至2026年8月。水游乐设备由海山游乐提供。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#26C6DA;"></span>街道图：园区在朱家尖滨海带的位置</span>
+        <span><span class="dot" style="background:#4CAF50;"></span>卫星图：园区内部功能分区</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 520" role="img" aria-label="舟山保利开元森泊度假乐园空间结构示意图">
+          <rect width="800" height="520" fill="#0B1D2B" rx="12"/>
+
+          <text x="400" y="30" text-anchor="middle" fill="#CCC" font-family="Playfair Display,serif" font-size="16" font-weight="700">舟山保利开元森泊度假乐园空间结构示意</text>
+
+          <!-- 海 -->
+          <rect x="0" y="300" width="800" height="220" fill="rgba(38,198,218,0.10)"/>
+          <text x="60" y="330" fill="#4DD0E1" font-family="DM Sans,sans-serif" font-size="11">▲ 东海 · 海湾</text>
+          <text x="740" y="470" text-anchor="end" fill="#26C6DA" font-family="DM Sans,sans-serif" font-size="10" opacity="0.7">南沙景区方向</text>
+
+          <!-- 大青山 (top left) -->
+          <path d="M0,300 L0,120 L60,60 L120,150 L200,300 Z" fill="rgba(102,187,106,0.15)" stroke="#66BB6A" stroke-width="1.5"/>
+          <text x="80" y="120" fill="#A5D6A7" font-family="DM Sans,sans-serif" font-size="11" transform="rotate(-12,80,120)">大青山</text>
+
+          <!-- 室内水乐园 (top center) -->
+          <rect x="290" y="46" width="220" height="95" rx="10" fill="rgba(38,198,218,0.15)" stroke="#26C6DA" stroke-width="2"/>
+          <text x="400" y="72" text-anchor="middle" fill="#4DD0E1" font-family="Playfair Display,serif" font-size="15" font-weight="700">🏊 室内水乐园</text>
+          <text x="400" y="94" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">近1万㎡ · 恒温30°C · 舟山首家</text>
+          <text x="400" y="112" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">五组合穿墙滑道贯通室内外 · 造浪池 · 激流河</text>
+
+          <!-- 奇妙幻想岛 (top right) -->
+          <rect x="580" y="46" width="170" height="78" rx="10" fill="rgba(156,39,176,0.15)" stroke="#9C27B0" stroke-width="1.5"/>
+          <text x="665" y="72" text-anchor="middle" fill="#CE93D8" font-family="DM Sans,sans-serif" font-size="13" font-weight="600">🧸 奇妙幻想岛</text>
+          <text x="665" y="94" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">海底世界主题 · 海洋科普</text>
+
+          <!-- 海滨室外区 (bottom left) -->
+          <rect x="70" y="340" width="200" height="95" rx="10" fill="rgba(30,136,229,0.12)" stroke="#1E88E5" stroke-width="2"/>
+          <text x="170" y="372" text-anchor="middle" fill="#64B5F6" font-family="Playfair Display,serif" font-size="14" font-weight="700">🌊 海滨室外区</text>
+          <text x="170" y="394" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">无边泳池 · 星空酒廊</text>
+          <text x="170" y="412" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">下海游泳 · 回园泡池</text>
+
+          <!-- 户外陆乐园 (bottom center) -->
+          <rect x="330" y="340" width="180" height="95" rx="10" fill="rgba(255,179,0,0.12)" stroke="#FFB300" stroke-width="1.5"/>
+          <text x="420" y="372" text-anchor="middle" fill="#FFD54F" font-family="DM Sans,sans-serif" font-size="13" font-weight="600">🎢 户外陆乐园</text>
+          <text x="420" y="394" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">星际空间等潮玩项目</text>
+          <text x="420" y="412" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">头号玩家 AR/VR 2000㎡</text>
+
+          <!-- 度假酒店 (bottom right, 海景) -->
+          <rect x="570" y="340" width="180" height="95" rx="10" fill="rgba(76,175,80,0.15)" stroke="#4CAF50" stroke-width="2"/>
+          <text x="660" y="372" text-anchor="middle" fill="#A5D6A7" font-family="DM Sans,sans-serif" font-size="13" font-weight="600">🏨 度假酒店</text>
+          <text x="660" y="394" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">424间 · 近300间海景房</text>
+          <text x="660" y="412" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">摩洛哥/地中海/侘寂风格</text>
+
+          <!-- 穿墙滑道 -->
+          <path d="M290,110 C240,170 300,230 400,250" fill="none" stroke="#FFB300" stroke-width="1.5" stroke-dasharray="5,5" opacity="0.8"/>
+          <text x="200" y="210" fill="#FFB300" font-family="DM Sans,sans-serif" font-size="9">五组合穿墙滑道 · 室内外四季运营</text>
+
+          <!-- 入口 -->
+          <text x="400" y="500" text-anchor="middle" fill="#888" font-family="DM Sans,sans-serif" font-size="10">▲ 主入口（蜈蚣峙码头约15分钟车程）</text>
+
+          <!-- North arrow -->
+          <g transform="translate(760,30)">
+            <polygon points="0,25 8,0 16,25 8,18" fill="#CCC"/>
+            <text x="8" y="-4" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10" font-weight="700">北</text>
+          </g>
+
+          <!-- Legend -->
+          <rect x="40" y="470" width="210" height="28" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)"/>
+          <text x="50" y="488" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">━━ 实线框：功能板块　╌╌ 虚线：穿墙滑道　▧ 海面</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>🏊 室内水乐园 · 五组合穿墙滑道</h3><p>近1万㎡恒温30°C，舟山首家室内恒温水乐园。13项大型设备、30余个项目；「五组合穿墙滑道」（游龙戏蟒、龙卷飞碟、星际穿梭、大回环、螺旋滑道）从室内穿过墙体接到室外，四季都能玩，是全系独有的贯通式设计。室内含造浪池、激流河、攀岩池。</p></div>
+      <div class="card"><h3>🏨 海景度假酒店 · 424间</h3><p>424间客房近300间为海景房，摩洛哥、地中海、侘寂等多元风格，面朝海湾配全景窗；专设二胎亲子房（大床＋上下铺组合）。嗨森餐厅与雁来轩中餐厅共1700餐位，自在厅1200㎡可容纳1100人会议。</p></div>
+      <div class="card"><h3>🧸 奇妙幻想岛 · 海底世界</h3><p>约1600㎡室内儿童乐园，以海底世界为灵感，兼具海洋生态科普功能，是海滨主题下亲子教育的自然延伸。搭配「森活家＋」海洋主题寓教于乐活动。</p></div>
+      <div class="card"><h3>🎮 头号玩家 · AR/VR潮玩</h3><p>约2000㎡科技娱乐区，集合星际赛车、电子游艺、卡丁车、互动影院等AR/VR项目，是森泊体系里体量领先的室内潮玩空间，雨天全年龄都可消磨。</p></div>
+      <div class="card"><h3>🌊 海滨室外区</h3><p>无边泳池与星空酒廊延伸入海景，出酒店即达海湾；南沙景区、乌石塘、普陀山近在咫尺，「下海游泳、回园泡池」的度假闭环是海滨园区的核心体验。</p></div>
+      <div class="card"><h3>🎢 户外陆乐园</h3><p>「星际空间」等潮玩项目补充白天的陆上游乐，与室内水乐园、幻想岛、头号玩家构成全时段娱乐矩阵，把度假客留在园内过夜。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2022年</div><div class="timeline-content"><h4>签约落地</h4><p>保利「自在海」与开元森泊签约，朱家尖滨海地块启动。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年4月30日</div><div class="timeline-content"><h4>正式开园</h4><p>舟山保利开元森泊度假乐园开园，开元森泊首家海滨度假乐园。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年10月</div><div class="timeline-content"><h4>首个淡季</h4><p>依靠室内恒温水乐园、穿墙滑道与头号玩家撑起秋冬运营，验证海滨园区的全季逻辑。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card"><h3>客房结构</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">424 间</p><p class="f-caption">近300间海景房，多元风格</p></div>
+      <div class="card"><h3>餐饮接待</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">1,700 餐位</p><p class="f-caption">嗨森餐厅＋雁来轩中餐厅</p></div>
+      <div class="card"><h3>会议承接</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">1,100 人</p><p class="f-caption">自在厅1200㎡，可办婚礼团建</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>穿墙滑道</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">室内外贯通</p><p class="f-caption">五组合穿墙滑道从室内水乐园穿墙而出、接室外海滨区，四季运营不依赖天气，是全系独有的设备布局。</p></div>
+      <div class="card"><h3>恒温体系</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">30°C 全年</p><p class="f-caption">室内水乐园近1万㎡全年恒温30°C，配造浪池、激流河、攀岩池，秋冬照常玩水。</p></div>
+      <div class="card"><h3>设备供应商</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">海山游乐</p><p class="f-caption">五组合穿墙滑道等13项大型设备由广东海山游乐提供（A+B级特种设备许可）。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>住宿与餐饮</h3><p>424间客房覆盖海景、亲子、摩洛哥/地中海/侘寂风格；1700餐位，嗨森餐厅主打海鲜与本地风味；户外草坪、篮球足球场地可承接商务、团建、婚礼。</p></div>
+      <div class="card"><h3>区域联动</h3><p>距蜈蚣峙码头15分钟（普陀山），毗邻南沙、乌石塘、大青山。园区与普陀山旅游动线衔接，把「拜普陀＋住森泊」做成两天一晚的标准行程。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>海滨度假新名片</h3><p>作为舟山首个大型「酒店＋乐园」度假综合体，园区被定位为完善舟山旅游产业链的新名片，推动舟山从「过境看海」转向「住下来度假」。</p></div>
+      <div class="card"><h3>全季运营探索</h3><p>室内水乐园、穿墙滑道、头号玩家、幻想岛构成冬季产品组合，与海滨夏旺季互补，是森泊「全季全时」在海滨场景的落地样本。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <div class="resource-group">
+        <h4>官方信息</h4>
+        <ul>
+          <li><a href="https://www.senboresorts.com/" target="_blank" rel="noopener">开元森泊度假乐园官网</a></li>
+          <li><a href="https://www.kaiyuangroup.com/" target="_blank" rel="noopener">开元旅业集团官网</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>开业报道</h4>
+        <ul>
+          <li><a href="https://cn.chinadaily.com.cn/a/202404/30/WS6630dc4aa3109f7860ddbe8a.html" target="_blank" rel="noopener">中国日报：舟山保利开元森泊盛大开业（2024）</a></li>
+          <li><a href="https://www.gzhaisan.cn/show/4877.html" target="_blank" rel="noopener">海山游乐：舟山保利开元森泊盛大开园</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+
+var zonesLocal = [
+  { name: '室内水乐园<br><small>近1万㎡ · 恒温30°C</small>', lng: 122.385132, lat: 29.875167, color: '#26C6DA' },
+  { name: '度假酒店<br><small>424间 · 海景房</small>', lng: 122.384294, lat: 29.875761, color: '#4CAF50' },
+  { name: '奇妙幻想岛<br><small>海底世界主题</small>', lng: 122.384294, lat: 29.875761, color: '#9C27B0' },
+  { name: '海滨室外区<br><small>无边泳池 · 星空酒廊</small>', lng: 122.383200, lat: 29.874800, color: '#1E88E5' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, zones, center, zoom, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView(center, zoom);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zones);
+
+  if (withBoundary) {
+    L.circle(center, { radius: 350, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.6 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', [{ name: '舟山保利开元森泊度假乐园<br><small>2024年 · 超25万㎡ · 首家海滨</small>', lng: 122.384294, lat: 29.875761, color: '#FFB300' }], [29.8758, 122.3843], 13, false);
+  initMap('satmap', 'sat', zonesLocal, [29.8758, 122.3843], 16, true);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>上海玛雅海滩水公园 — 华东最大露天水乐园，1.46万㎡造浪池可造3.5米巨浪，佘山国家旅游度假区</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #00838F;
+  --clr-primary-light: #26C6DA;
+  --clr-primary-dark: #006064;
+  --clr-accent: #FFB300;
+}
+
+.hero {
+  background: linear-gradient(160deg, #003C4F 0%, #006064 40%, #00838F 70%, #4DD0E1 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(255,179,0,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%);
+}
+.data-table tbody tr:hover { background: rgba(0,131,143,0.05); }
+
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: 12px; z-index: 0; margin-top: 1rem; }
+
+@media (max-width: 768px) {
+  .hero { padding: 3rem 0 2.5rem; }
+  .hero .kpi-row { gap: 0.8rem; }
+  .hero .kpi-card { padding: 0.8rem 1rem; min-width: 120px; }
+  .hero .kpi-number { font-size: 1.3rem; }
+  #parkmap, #satmap { height: 300px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>上海玛雅海滩水公园</h1>
+    <p class="hero-subtitle">华东最大露天水乐园，2013年7月在佘山开园——1.46万㎡「加勒比海滩」造浪池可造3.5米巨浪，亚洲最大直径23米超级大喇叭</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">2013</div><div class="kpi-label">华东最大露天水乐园</div></div>
+      <div class="kpi-card"><div class="kpi-number">12.8<span style="font-size:0.7em;opacity:0.7">万㎡</span></div><div class="kpi-label">开园占地（一说20万㎡）</div></div>
+      <div class="kpi-card"><div class="kpi-number">1.46<span style="font-size:0.7em;opacity:0.7">万㎡</span></div><div class="kpi-label">加勒比海滩造浪池</div></div>
+      <div class="kpi-card"><div class="kpi-number">3.5<span style="font-size:0.7em;opacity:0.7">米</span></div><div class="kpi-label">造浪池巨浪</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal"><div class="card"><h3>基本信息</h3><table class="data-table"><tbody>
+<tr><td><strong>项目名称</strong></td><td>上海玛雅海滩水公园</td></tr>
+<tr><td><strong>运营方</strong></td><td>华侨城集团·上海欢乐谷</td></tr>
+<tr><td><strong>品牌位次</strong></td><td>玛雅系列华东首站，华东最大露天水乐园</td></tr>
+<tr><td><strong>开业</strong></td><td>2013年6月30日试营业，7月5日正式开业</td></tr>
+<tr><td><strong>占地</strong></td><td>约12.8万㎡（2024年起宣传口径20万㎡）</td></tr>
+<tr><td><strong>分区</strong></td><td>五大亲子游乐区＋玛雅水寨＋童话水世界</td></tr>
+<tr><td><strong>供应商</strong></td><td>加拿大白水（一期约半数设施，2016年扩建）</td></tr>
+</tbody></table></div>
+<div class="card"><h3>坐标与交通</h3><table class="data-table"><tbody>
+<tr><td><strong>坐标</strong></td><td>GCJ-02 (121.210363, 31.095419)</td></tr>
+<tr><td><strong>地址</strong></td><td>上海市松江区佘山镇，上海欢乐谷西南部</td></tr>
+<tr><td><strong>区位</strong></td><td>佘山国家旅游度假区</td></tr>
+<tr><td><strong>地铁</strong></td><td>9号线佘山站，免费接驳车约8分钟</td></tr>
+<tr><td><strong>水陆联动</strong></td><td>与上海欢乐谷一墙之隔</td></tr>
+</tbody></table></div></div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3>
+<p>上海玛雅海滩水公园位于松江佘山国家旅游度假区，与上海欢乐谷一墙之隔，2013年6月30日试营业、7月5日正式开业，是玛雅系列在华东的首站、华东最大的露天水上公园。开园口径占地约12.8万㎡，2024年起官方宣传「20万平方米玩水空间」（含扩建）。</p>
+<p>园区最大招牌是「加勒比海滩」造浪池：水域1.46万㎡，可造3.5米巨浪，号称世界水域面积最大的人工造浪池。设备矩阵包括亚洲最大直径23米的超级大喇叭、17.6米高塔8道竞速的大章鱼滑道、水磁动力双轨过山车「大黄蜂」、17米高「极速水蟒」水上跳楼机，以及玛雅营地、动物王国、深海秘境、快乐丛林、跳跳地带五大亲子游乐区共100余款戏水项目。截至2023年底累计接待800多万人次。</p>
+</div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>惊险与合家并存</h3><p>上海园的设计理念是「惊险刺激」与「合家游乐」兼容：左侧大黄蜂、极速水蟒等高强度滑道，右侧玛雅营地、深海秘境等五大亲子区。100余款亲子戏水项目与亚洲级刺激设备在同一园区分层共存，覆盖全年龄客群。</p></div>
+      <div class="card"><h3>白水的两段合作</h3><p>2011年白水即提供概念设计与方案深化设计，一期约一半设施由白水提供；2016年扩建新增四道大水环组合。加勒比海滩造浪池的水效设计、滑道群布局均出自这段长期合作。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>占地面积</td><td>约12.8万㎡</td><td>2024年起宣传20万㎡</td></tr>
+          <tr><td>造浪池</td><td>加勒比海滩</td><td>水域1.46万㎡</td><td>可造3.5米巨浪</td></tr>
+          <tr><td>设备</td><td>超级大喇叭</td><td>直径23米</td><td>亚洲最大，4人浮筏</td></tr>
+          <tr><td>设备</td><td>大章鱼滑道</td><td>8道 · 17.6米高塔</td><td>世界水上竞速之王</td></tr>
+          <tr><td>设备</td><td>大黄蜂</td><td>双轨水上过山车</td><td>水磁动力，四次俯仰</td></tr>
+          <tr><td>设备</td><td>极速水蟒</td><td>17米高</td><td>水上跳楼机</td></tr>
+          <tr><td>设备</td><td>巨兽碗</td><td>123米滑道入碗</td><td>—</td></tr>
+          <tr><td>设备</td><td>太阳迷漩</td><td>17.3米高</td><td>家庭三人筏</td></tr>
+          <tr><td>亲子</td><td>五大亲子游乐区</td><td>100余款项目</td><td>玛雅营地/动物王国/深海秘境等</td></tr>
+          <tr><td>客流</td><td>累计接待</td><td>800万+</td><td>截至2023年底</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据截至2026年8月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#26C6DA;"></span>街道图：水公园在佘山度假区的位置</span>
+        <span><span class="dot" style="background:#4CAF50;"></span>卫星图：水公园内部功能分区</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 520" role="img" aria-label="上海玛雅海滩水公园空间结构示意图">
+          <rect width="800" height="520" fill="#0B1D2B" rx="12"/>
+
+          <text x="400" y="30" text-anchor="middle" fill="#CCC" font-family="Playfair Display,serif" font-size="16" font-weight="700">上海玛雅海滩水公园空间结构示意</text>
+
+          <!-- 上海欢乐谷 -->
+          <rect x="0" y="330" width="800" height="190" fill="rgba(76,175,80,0.06)" stroke="#4CAF50" stroke-width="1" stroke-dasharray="6,4" opacity="0.5"/>
+          <text x="60" y="360" fill="#A5D6A7" font-family="DM Sans,sans-serif" font-size="11">上海欢乐谷 · 一墙之隔</text>
+
+          <!-- 造浪池 -->
+          <rect x="60" y="60" width="300" height="120" rx="10" fill="rgba(30,136,229,0.12)" stroke="#1E88E5" stroke-width="2"/>
+          <text x="210" y="92" text-anchor="middle" fill="#64B5F6" font-family="Playfair Display,serif" font-size="14" font-weight="700">🌊 加勒比海滩造浪池</text>
+          <text x="210" y="114" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">水域1.46万㎡ · 3.5米巨浪</text>
+          <text x="210" y="132" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">懒人河 · 酷爽SPA · 乘风破浪</text>
+
+          <!-- 刺激滑道区 -->
+          <rect x="420" y="60" width="280" height="120" rx="10" fill="rgba(38,198,218,0.15)" stroke="#26C6DA" stroke-width="2"/>
+          <text x="560" y="92" text-anchor="middle" fill="#4DD0E1" font-family="Playfair Display,serif" font-size="14" font-weight="700">🎢 刺激滑道区</text>
+          <text x="560" y="114" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">超级大喇叭23米 · 大章鱼8道</text>
+          <text x="560" y="132" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">大黄蜂 · 极速水蟒 · 巨兽碗</text>
+
+          <!-- 玛雅水寨 -->
+          <rect x="60" y="210" width="160" height="90" rx="10" fill="rgba(255,179,0,0.12)" stroke="#FFB300" stroke-width="1.5"/>
+          <text x="140" y="242" text-anchor="middle" fill="#FFD54F" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">⛲ 玛雅水寨</text>
+          <text x="140" y="264" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">标志性互动水寨</text>
+
+          <!-- 五大亲子区 -->
+          <rect x="250" y="210" width="220" height="90" rx="10" fill="rgba(156,39,176,0.15)" stroke="#9C27B0" stroke-width="1.5"/>
+          <text x="360" y="242" text-anchor="middle" fill="#CE93D8" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">🧸 五大亲子游乐区</text>
+          <text x="360" y="264" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">玛雅营地 · 深海秘境 · 跳跳地带</text>
+
+          <!-- 童话水世界 -->
+          <rect x="500" y="210" width="200" height="90" rx="10" fill="rgba(76,175,80,0.15)" stroke="#4CAF50" stroke-width="1.5"/>
+          <text x="600" y="242" text-anchor="middle" fill="#A5D6A7" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">🧜 童话水世界</text>
+          <text x="600" y="264" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">低龄儿童玩水世界</text>
+
+          <!-- North arrow -->
+          <g transform="translate(760,30)">
+            <polygon points="0,25 8,0 16,25 8,18" fill="#CCC"/>
+            <text x="8" y="-4" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10" font-weight="700">北</text>
+          </g>
+
+          <!-- Legend -->
+          <rect x="40" y="470" width="300" height="28" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)"/>
+          <text x="50" y="488" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">━━ 实线框：水公园功能板块　╌╌ 虚线框：上海欢乐谷</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>🌊 加勒比海滩造浪池</h3><p>水域1.46万㎡，可造3.5米巨浪，是上海园乃至华东最响亮的水域名片；懒人河、酷爽SPA、乘风破浪（虚拟冲浪）构成休闲板块。</p></div>
+      <div class="card"><h3>🎢 亚洲级刺激滑道</h3><p>亚洲最大直径23米超级大喇叭、17.6米高塔8道竞速的大章鱼滑道、水磁动力双轨过山车「大黄蜂」、17米高「极速水蟒」水上跳楼机，一个园区集齐亚洲级参数。</p></div>
+      <div class="card"><h3>⛲ 玛雅水寨与童话水世界</h3><p>玛雅水寨是标志性玛雅主题互动水寨；童话水世界专为低龄儿童设计，是带娃家庭的安全玩水区。</p></div>
+      <div class="card"><h3>🧸 五大亲子游乐区</h3><p>玛雅营地（18项）、动物王国、深海秘境（30套）、快乐丛林（近20项）、跳跳地带共100余款亲子戏水项目，全部冠以玛雅图腾与丛林意象。</p></div>
+      <div class="card"><h3>🦈 深海水族艺术</h3><p>2026年「入园即入海」版本主打海洋奇遇记主题与膨胀水族馆艺术展，「深海龙宫」NPC天团与美人鱼互动，把水乐园演出化。</p></div>
+      <div class="card"><h3>🌙 夜场与水陆联动</h3><p>夜场16:00入场、22:00闭园；与上海欢乐谷EV音乐乐园水陆联动；2026年畅玩年卡499元365天运营期无限次。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2013年6月30日</div><div class="timeline-content"><h4>试营业</h4><p>上海市文旅局发布试营业信息，首日约3000人。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2013年7月5日</div><div class="timeline-content"><h4>正式开业</h4><p>华东最大露天水上公园开业，一个多月累计接待近60万人次。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2016年</div><div class="timeline-content"><h4>扩建</h4><p>白水新增四道大水环组合，园区进一步扩容。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card"><h3>累计接待</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">800万+</p><p class="f-caption">截至2023年底</p></div>
+      <div class="card"><h3>日均接待</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">2.6万人</p><p class="f-caption">高峰单日超3万</p></div>
+      <div class="card"><h3>全球榜单</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">亚太第11</p><p class="f-caption">《2021全球主题公园报告》</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>造浪水效</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">3.5米巨浪</p><p class="f-caption">1.46万㎡造浪池可造3.5米巨浪，华东同类之最。</p></div>
+      <div class="card"><h3>水磁动力过山车</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">大黄蜂</p><p class="f-caption">双轨水上过山车采用水磁动力技术，四次俯仰，国内罕见。</p></div>
+      <div class="card"><h3>水处理升级</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">24小时循环</p><p class="f-caption">2026年全园上线迪芬特水处理系统，活水24小时循环。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>水陆双园配套</h3><p>与上海欢乐谷一墙之隔，共享接驳与配套；2025年成人全日票249元、早鸟109元、亲子1大1小409元，灵活组合。</p></div>
+      <div class="card"><h3>佘山度假圈</h3><p>地处佘山国家旅游度假区，地铁9号线佘山站免费接驳约8分钟；周边佘山、辰山植物园、广富林串联成上海西南度假一日圈。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>2026「入园即入海」</h3><p>7月3日起以海洋奇遇记主题运营至8月30日，膨胀水族馆艺术展、深海龙宫NPC、美人鱼互动，加上夜场电音派对，把水乐园做成夏日演艺场。</p></div>
+      <div class="card"><h3>华东水乐园常青树</h3><p>十三年持续扩容与更新，上海园以「最大造浪池＋亚洲级滑道」维持华东标杆地位，是玛雅品牌在长三角的压舱石。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <div class="resource-group">
+        <h4>官方信息</h4>
+        <ul>
+          <li><a href="http://sh.happyvalley.cn/" target="_blank" rel="noopener">上海欢乐谷官网（含玛雅海滩）</a></li>
+          <li><a href="https://www.happyvalley.cn/" target="_blank" rel="noopener">上海欢乐谷官网</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>报道与数据</h4>
+        <ul>
+          <li><a href="https://whlyj.sh.gov.cn/gqfc/20130701/0022-17041.html" target="_blank" rel="noopener">上海市文旅局：玛雅海滩水公园6月30日起试营业（2013）</a></li>
+          <li><a href="https://www.jfdaily.com/sgh/detail?id=4004749" target="_blank" rel="noopener">解放日报：上海玛雅海滩「入园即入海」（2026）</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+
+var zonesLocal = [
+  { name: '加勒比海滩造浪池<br><small>1.46万㎡ · 3.5米巨浪</small>', lng: 121.210363, lat: 31.095419, color: '#1E88E5' },
+  { name: '刺激滑道区<br><small>超级大喇叭 · 大黄蜂</small>', lng: 121.210363, lat: 31.095419, color: '#26C6DA' },
+  { name: '玛雅水寨<br><small>标志性互动水寨</small>', lng: 121.210363, lat: 31.095419, color: '#FFB300' },
+  { name: '五大亲子游乐区<br><small>玛雅营地 · 深海秘境</small>', lng: 121.210363, lat: 31.095419, color: '#9C27B0' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, zones, center, zoom, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView(center, zoom);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zones);
+
+  if (withBoundary) {
+    L.circle(center, { radius: 260, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.6 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', [{ name: '上海玛雅海滩水公园<br><small>2013年 · 12.8万㎡ · 华东最大</small>', lng: 121.210363, lat: 31.095419, color: '#FFB300' }], [31.0954, 121.2104], 13, false);
+  initMap('satmap', 'sat', zonesLocal, [31.0954, 121.2104], 15, true);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>桐庐开元森泊度假乐园 — 开元森泊3.0版，2026年6月开园，室内水乐园全年恒温30°C，含森泊首条水激流过山车</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #1B7A3D;
+  --clr-primary-light: #4CAF50;
+  --clr-primary-dark: #0F4D26;
+  --clr-accent: #00ACC1;
+}
+
+.hero {
+  background: linear-gradient(160deg, #0F4D26 0%, #1B7A3D 40%, #4CAF50 70%, #B2DFDB 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(0,172,193,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%);
+}
+.data-table tbody tr:hover { background: rgba(27,122,61,0.05); }
+
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+
+@media (max-width: 768px) {
+  .hero { padding: 3rem 0 2.5rem; }
+  .hero .kpi-row { gap: 0.8rem; }
+  .hero .kpi-card { padding: 0.8rem 1rem; min-width: 120px; }
+  .hero .kpi-number { font-size: 1.3rem; }
+  #parkmap, #satmap { height: 300px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>桐庐开元森泊度假乐园</h1>
+    <p class="hero-subtitle">开元森泊3.0版，2026年6月27日在桐庐瑶琳开园——室内水乐园全年恒温30°C，室外水激流过山车为森泊首条，全域规划约3平方公里</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">2026</div><div class="kpi-label">森泊第8园 · 3.0版</div></div>
+      <div class="kpi-card"><div class="kpi-number">3<span style="font-size:0.7em;opacity:0.7">km²</span></div><div class="kpi-label">全域规划规模</div></div>
+      <div class="kpi-card"><div class="kpi-number">334<span style="font-size:0.7em;opacity:0.7"> 间</span></div><div class="kpi-label">度假酒店客房</div></div>
+      <div class="kpi-card"><div class="kpi-number">30<span style="font-size:0.7em;opacity:0.7">°C</span></div><div class="kpi-label">室内水乐园恒温</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal"><div class="card"><h3>基本信息</h3><table class="data-table"><tbody>
+<tr><td><strong>项目名称</strong></td><td>桐庐开元森泊度假乐园</td></tr>
+<tr><td><strong>运营方</strong></td><td>开元旅业·开元森泊品牌</td></tr>
+<tr><td><strong>品牌位次</strong></td><td>开元森泊第8园，3.0版项目</td></tr>
+<tr><td><strong>开业</strong></td><td>2026年6月27日</td></tr>
+<tr><td><strong>全域规划</strong></td><td>约3平方公里（桐庐开元森泊度假区）</td></tr>
+<tr><td><strong>总投资</strong></td><td>约20亿元</td></tr>
+<tr><td><strong>客房</strong></td><td>334间（6层度假酒店）</td></tr>
+</tbody></table></div>
+<div class="card"><h3>坐标与交通</h3><table class="data-table"><tbody>
+<tr><td><strong>坐标</strong></td><td>GCJ-02 (119.544426, 29.906350)</td></tr>
+<tr><td><strong>地址</strong></td><td>杭州市桐庐县瑶琳镇</td></tr>
+<tr><td><strong>区位</strong></td><td>桐庐开元森泊度假区二期核心项目</td></tr>
+<tr><td><strong>高铁</strong></td><td>杭黄高铁桐庐站约30分钟车程</td></tr>
+<tr><td><strong>自驾</strong></td><td>杭州绕城西复线，杭州主城约1.5小时</td></tr>
+</tbody></table></div></div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3>
+<p>桐庐开元森泊度假乐园是开元森泊的第8园，也是品牌最新的3.0版项目，2026年6月27日在桐庐县瑶琳镇开园，是桐庐开元森泊度假区的二期核心。整个度假区全域规划约3平方公里、投资约20亿元，把森泊从「乐园＋酒店」升级为「全维度度假区」：水上、冰雪、马术、宠物、溶洞咖啡都在同一片山水里。</p>
+<p>园区水乐园总面积约2.5万㎡：室内4740–5000㎡全年恒温30°C，含造浪池、组合滑道、冲浪模拟器与欢乐岛；室外超2万㎡，含开元森泊首条水激流过山车（全国仅四座）、大喇叭、儿童水寨、漂流河、巨浪池、懒人河等数十种项目。另有6层334间客房度假酒店、37.3公顷原亚运马术中心、2500㎡滨水无动力乐园与18°C溶洞咖啡馆。</p>
+</div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>森泊3.0：从乐园到度假区</h3><p>前7座森泊是「酒店＋乐园」，桐庐把半径放大成全维度度假区：在原有酒店与水乐园之上，叠入马术中心（原杭州亚运马术比赛场地，占地37.3公顷）、2500㎡滨水无动力乐园、18°C溶洞咖啡馆，并计划于2026年10月开放冰雪主题的「奥能空间」与萌宠街区、萌宠酒店，让不同季节都有留在山里的理由。</p></div>
+      <div class="card"><h3>瑶琳山水与亚运遗产</h3><p>桐庐瑶琳以溶洞、溪流与山地景观著称，园区把山水地形直接用作动线；亚运马术场地的再利用是最大亮点，让「奥运级马术」与「亲子度假」在同一园区并置，这也是国内度假区少见的业态组合。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>投资</td><td>总投资</td><td>约20亿元</td><td>桐庐开元森泊度假区</td></tr>
+          <tr><td>规模</td><td>全域规划</td><td>约3平方公里</td><td>度假区整体</td></tr>
+          <tr><td>规模</td><td>度假酒店</td><td>6层 · 334间</td><td>二期核心配套</td></tr>
+          <tr><td>水乐园</td><td>水乐园总面积</td><td>约2.5万㎡</td><td>室内＋室外</td></tr>
+          <tr><td>水乐园</td><td>室内水乐园</td><td>约4740–5000㎡ 恒温30°C</td><td>全年开放</td></tr>
+          <tr><td>水乐园</td><td>室外水乐园</td><td>超2万㎡</td><td>含水激流过山车</td></tr>
+          <tr><td>水乐园</td><td>水激流过山车</td><td>森泊首条</td><td>全国仅四座</td></tr>
+          <tr><td>运动</td><td>马术中心</td><td>37.3公顷</td><td>原杭州亚运马术场地</td></tr>
+          <tr><td>配套</td><td>滨水无动力乐园</td><td>2500㎡</td><td>—</td></tr>
+          <tr><td>预期</td><td>全年客流预估</td><td>40–50万人次</td><td>初步测算</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据截至2026年8月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#26C6DA;"></span>街道图：园区在桐庐瑶琳的位置</span>
+        <span><span class="dot" style="background:#4CAF50;"></span>卫星图：园区内部功能分区</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 520" role="img" aria-label="桐庐开元森泊度假乐园空间结构示意图">
+          <rect width="800" height="520" fill="#0B1D2B" rx="12"/>
+
+          <text x="400" y="30" text-anchor="middle" fill="#CCC" font-family="Playfair Display,serif" font-size="16" font-weight="700">桐庐开元森泊度假乐园空间结构示意</text>
+
+          <!-- 山 -->
+          <path d="M0,330 L0,140 L120,70 L260,200 L400,330 Z" fill="rgba(102,187,106,0.15)" stroke="#66BB6A" stroke-width="1.5"/>
+          <text x="130" y="180" fill="#A5D6A7" font-family="DM Sans,sans-serif" font-size="11" transform="rotate(-12,130,180)">瑶琳山地 · 溶洞</text>
+
+          <!-- 室内水乐园 -->
+          <rect x="50" y="60" width="250" height="105" rx="10" fill="rgba(38,198,218,0.15)" stroke="#26C6DA" stroke-width="2"/>
+          <text x="175" y="90" text-anchor="middle" fill="#4DD0E1" font-family="Playfair Display,serif" font-size="14" font-weight="700">🏊 室内水乐园</text>
+          <text x="175" y="112" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">约5000㎡ · 恒温30°C · 全年</text>
+          <text x="175" y="130" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">造浪池 · 冲浪模拟器 · 欢乐岛</text>
+
+          <!-- 室外水乐园 -->
+          <rect x="360" y="60" width="250" height="105" rx="10" fill="rgba(30,136,229,0.12)" stroke="#1E88E5" stroke-width="2"/>
+          <text x="485" y="90" text-anchor="middle" fill="#64B5F6" font-family="Playfair Display,serif" font-size="13" font-weight="700">🌊 室外水乐园 超2万㎡</text>
+          <text x="485" y="112" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">水激流过山车 · 大喇叭</text>
+          <text x="485" y="130" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">儿童水寨 · 漂流河 · 巨浪池</text>
+
+          <!-- 度假酒店 -->
+          <rect x="50" y="195" width="560" height="62" rx="10" fill="rgba(76,175,80,0.15)" stroke="#4CAF50" stroke-width="2"/>
+          <text x="330" y="222" text-anchor="middle" fill="#A5D6A7" font-family="DM Sans,sans-serif" font-size="12" font-weight="600">🏨 度假酒店 · 6层 · 334间</text>
+          <text x="330" y="242" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">滨水而建 · 看山望水</text>
+
+          <!-- 马术中心 -->
+          <rect x="650" y="60" width="120" height="120" rx="10" fill="rgba(255,179,0,0.12)" stroke="#FFB300" stroke-width="1.5"/>
+          <text x="710" y="100" text-anchor="middle" fill="#FFD54F" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">🐎 马术中心</text>
+          <text x="710" y="122" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="8">37.3公顷</text>
+          <text x="710" y="140" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="8">原亚运马术场地</text>
+
+          <!-- 溶洞咖啡馆 -->
+          <rect x="650" y="200" width="120" height="57" rx="8" fill="rgba(156,39,176,0.15)" stroke="#9C27B0" stroke-width="1.5"/>
+          <text x="710" y="224" text-anchor="middle" fill="#CE93D8" font-family="DM Sans,sans-serif" font-size="10" font-weight="600">☕ 18°C溶洞咖啡</text>
+          <text x="710" y="244" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="8">滨水无动力乐园</text>
+
+          <!-- 奥能空间 -->
+          <text x="400" y="300" text-anchor="middle" fill="#888" font-family="DM Sans,sans-serif" font-size="10">冰雪「奥能空间」 · 萌宠街区 · 萌宠酒店（2026年10月开放）</text>
+
+          <!-- North arrow -->
+          <g transform="translate(760,30)">
+            <polygon points="0,25 8,0 16,25 8,18" fill="#CCC"/>
+            <text x="8" y="-4" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10" font-weight="700">北</text>
+          </g>
+
+          <!-- Legend -->
+          <rect x="40" y="470" width="280" height="28" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)"/>
+          <text x="50" y="488" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">━━ 实线框：功能板块　▧ 瑶琳山地　⛰ 溶洞</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>🏊 室内水乐园 · 恒温30°C</h3><p>约4740–5000㎡室内水乐园全年恒温30°C，含造浪池、组合滑道、冲浪模拟器与欢乐岛，四季亲水不断档，是森泊3.0「全时」的核心载体。</p></div>
+      <div class="card"><h3>🌊 室外水乐园 · 水激流过山车</h3><p>室外超2万㎡，开元森泊首条水激流过山车（全国仅四座）是招牌项目，另有「大喇叭」组合滑道、儿童水寨、漂流河、巨浪池、懒人河等数十种项目，覆盖全年龄段。</p></div>
+      <div class="card"><h3>🏨 度假酒店 · 334间</h3><p>6层度假酒店334间客房滨水而建、看山望水，是度假区二期的住宿核心，衔接水乐园与马术中心动线。</p></div>
+      <div class="card"><h3>🐎 亚运马术中心</h3><p>37.3公顷原杭州亚运马术比赛场地改造为马术中心，提供马术体验与培训，把「奥运级场地」变成普通家庭的度假项目，国内罕见。</p></div>
+      <div class="card"><h3>☕ 溶洞咖啡馆 · 无动力乐园</h3><p>18°C溶洞咖啡馆利用瑶琳天然溶洞资源打造，配2500㎡滨水无动力乐园，是森泊3.0「沉浸式体验」的又一表达。</p></div>
+      <div class="card"><h3>❄ 冰雪与萌宠（2026年10月）</h3><p>计划于2026年10月开放以冰雪运动为主题的「奥能空间」以及萌宠街区、萌宠酒店，让度假区跨入冬季业态，形成四季全开的产品矩阵。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">前期</div><div class="timeline-content"><h4>度假区规划</h4><p>桐庐开元森泊度假区全域规划约3平方公里，二期核心为度假乐园。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年6月27日</div><div class="timeline-content"><h4>正式开园</h4><p>桐庐开元森泊度假乐园开园，森泊第8园、3.0版落地，含水乐园、酒店、马术中心等一期业态。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年10月</div><div class="timeline-content"><h4>二期业态</h4><p>冰雪「奥能空间」、萌宠街区与萌宠酒店计划开放。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card"><h3>全年客流预估</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">40–50万 人次</p><p class="f-caption">初步测算</p></div>
+      <div class="card"><h3>度假区规划</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">3 km²</p><p class="f-caption">全域多业态布局</p></div>
+      <div class="card"><h3>酒店客房</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">334 间</p><p class="f-caption">6层度假酒店</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>恒温体系</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">30°C 全年</p><p class="f-caption">室内水乐园约5000㎡全年恒温30°C，造浪池、冲浪模拟器四季可玩。</p></div>
+      <div class="card"><h3>水激流过山车</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">森泊首条</p><p class="f-caption">全国仅四座的水激流过山车落户室外水乐园，是3.0版的技术名片。</p></div>
+      <div class="card"><h3>亚运遗产利用</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">37.3公顷</p><p class="f-caption">原杭州亚运马术场地改作马术中心，稀缺场地资源直接转化为体验业态。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>住宿与餐饮</h3><p>334间客房滨水度假酒店看山望水；度假区内餐饮配套覆盖亲子与家庭客群，溶洞咖啡馆、萌宠酒店等特色业态丰富停留理由。</p></div>
+      <div class="card"><h3>区域联动</h3><p>桐庐以瑶琳仙境溶洞群、富春江山水闻名，园区与瑶琳景区、富春江慢生活动线衔接，承接杭州主城与杭黄高铁沿线客源，是森泊3.0的全维度度假样板。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>江浙沪遛娃新地标</h3><p>开园即以「水乐园＋马术＋冰雪」的组合切入暑期市场，被本地媒体称作桐庐休闲度假新地标，预期全年客流40–50万人次。</p></div>
+      <div class="card"><h3>3.0模式验证</h3><p>桐庐是森泊从「乐园」走向「度假区」的转折点，亚运遗产再利用与冰雪、萌宠等四季业态的叠加，将为品牌后续大型项目提供新范式。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <div class="resource-group">
+        <h4>官方信息</h4>
+        <ul>
+          <li><a href="https://www.senboresorts.com/" target="_blank" rel="noopener">开元森泊度假乐园官网</a></li>
+          <li><a href="https://www.kaiyuangroup.com/" target="_blank" rel="noopener">开元旅业集团官网</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>开业报道</h4>
+        <ul>
+          <li><a href="http://zj.xinhuanet.com/20260629/c45f9ae19f7344f693cdc91aba163f38/c.html" target="_blank" rel="noopener">新华网浙江：超2万方水乐园，桐庐新晋休闲度假地标开业（2026）</a></li>
+          <li><a href="https://hznews.hangzhou.com.cn/chengshi/content/2026-06/27/content_9246145.htm" target="_blank" rel="noopener">杭州网：水上「过山车」来了，桐庐上线玩水度假新地标（2026）</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+
+var zonesLocal = [
+  { name: '室内水乐园<br><small>约5000㎡ · 恒温30°C</small>', lng: 119.545950, lat: 29.904679, color: '#26C6DA' },
+  { name: '室外水乐园<br><small>超2万㎡ · 水激流过山车</small>', lng: 119.544426, lat: 29.906122, color: '#1E88E5' },
+  { name: '度假酒店<br><small>334间 · 6层</small>', lng: 119.544426, lat: 29.906350, color: '#4CAF50' },
+  { name: '马术中心<br><small>亚运场地 · 37.3公顷</small>', lng: 119.544426, lat: 29.906350, color: '#FFB300' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, zones, center, zoom, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView(center, zoom);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zones);
+
+  if (withBoundary) {
+    L.circle(center, { radius: 350, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.6 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', [{ name: '桐庐开元森泊度假乐园<br><small>2026年 · 3.0版 · 森泊第8园</small>', lng: 119.544426, lat: 29.906350, color: '#FFB300' }], [29.9064, 119.5444], 13, false);
+  initMap('satmap', 'sat', zonesLocal, [29.9064, 119.5444], 15, true);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

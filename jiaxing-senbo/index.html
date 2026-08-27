@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>嘉兴开元森泊度假乐园 — 开元森泊首家可以泡汤的乐园，溪禾汤泉9600㎡，室内水乐园5000㎡全年30°C恒温</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #1B7A3D;
+  --clr-primary-light: #4CAF50;
+  --clr-primary-dark: #0F4D26;
+  --clr-accent: #00ACC1;
+}
+
+.hero {
+  background: linear-gradient(160deg, #0F4D26 0%, #1B7A3D 40%, #4CAF50 70%, #B2DFDB 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(0,172,193,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%);
+}
+.data-table tbody tr:hover { background: rgba(27,122,61,0.05); }
+
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+
+@media (max-width: 768px) {
+  .hero { padding: 3rem 0 2.5rem; }
+  .hero .kpi-row { gap: 0.8rem; }
+  .hero .kpi-card { padding: 0.8rem 1rem; min-width: 120px; }
+  .hero .kpi-number { font-size: 1.3rem; }
+  #parkmap, #satmap { height: 300px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>嘉兴开元森泊度假乐园</h1>
+    <p class="hero-subtitle">开元森泊第5园，2024年8月在南北湖开园——首家可以泡汤的森泊，溪禾汤泉9600㎡，室内水乐园5000㎡巨型穹顶下全年30°C恒温</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">2024</div><div class="kpi-label">森泊第5园 · 首家汤泉</div></div>
+      <div class="kpi-card"><div class="kpi-number">550<span style="font-size:0.7em;opacity:0.7">亩</span></div><div class="kpi-label">总用地规模</div></div>
+      <div class="kpi-card"><div class="kpi-number">439<span style="font-size:0.7em;opacity:0.7"> 间</span></div><div class="kpi-label">度假客房</div></div>
+      <div class="kpi-card"><div class="kpi-number">30<span style="font-size:0.7em;opacity:0.7">°C</span></div><div class="kpi-label">室内水乐园恒温</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal"><div class="card"><h3>基本信息</h3><table class="data-table"><tbody>
+<tr><td><strong>项目名称</strong></td><td>嘉兴开元森泊度假乐园（南北湖）</td></tr>
+<tr><td><strong>运营方</strong></td><td>开元旅业·开元森泊品牌</td></tr>
+<tr><td><strong>品牌位次</strong></td><td>开元森泊第5园，首家汤泉主题园</td></tr>
+<tr><td><strong>开工/开业</strong></td><td>2022年开工，2024年8月开园</td></tr>
+<tr><td><strong>总用地</strong></td><td>550亩（约36.7万㎡）</td></tr>
+<tr><td><strong>总投资</strong></td><td>15亿元</td></tr>
+<tr><td><strong>客房</strong></td><td>439间</td></tr>
+</tbody></table></div>
+<div class="card"><h3>坐标与交通</h3><table class="data-table"><tbody>
+<tr><td><strong>坐标</strong></td><td>GCJ-02 (120.870025, 30.389525)</td></tr>
+<tr><td><strong>地址</strong></td><td>嘉兴市海盐县澉浦镇澉浦大道1677号</td></tr>
+<tr><td><strong>区位</strong></td><td>国家4A级景区南北湖内，湖光山色海景兼得</td></tr>
+<tr><td><strong>高速</strong></td><td>乍嘉苏高速、常台高速海盐口接驳</td></tr>
+<tr><td><strong>高铁</strong></td><td>嘉兴南站约40分钟车程</td></tr>
+</tbody></table></div></div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3>
+<p>嘉兴开元森泊度假乐园坐落国家4A级景区南北湖，园区水系贯穿、百亩橘林盘绕，湖光、山色、海景一园兼得。2022年开工、2024年8月开园，是开元森泊第5园，也是品牌第一个「可以泡汤」的园区——9600㎡的溪禾汤泉中心让森泊第一次有了独立的冬季产品。</p>
+<p>园区设六个游乐区域：森泊水乐园、幻想岛儿童乐园、矿坑主题乐园、头号玩家、森夜酒吧与溪禾汤泉。水乐园总占地3.1万㎡，室内5000㎡在巨型透明穹顶下全年30°C恒温，含恒温造浪池与4个温泉泡池；室外2.6万㎡夏季开放。客房439间分度假酒店、度假木屋、汤泉酒店三档，50㎡水上船屋漂浮湖面之上。</p>
+</div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>南北湖的山水底色</h3><p>南北湖是中国罕有的集湖、山、海于一体的4A景区，园区借景造园：水系从湖引入贯穿全园，百亩橘林围合建筑，把「泡汤看湖、游湖赏橘」写进动线。室内水乐园中央的9米海岛树屋是标志性空间，登顶可俯瞰整个室内乐园。</p></div>
+      <div class="card"><h3>汤泉补齐冬季拼图</h3><p>溪禾汤泉是开元森泊首个独立汤泉中心，9600㎡，室内汤池350余㎡配绿植环绕的室外泡池，设原汤池、药浴池、花瓣池、碳酸泉泡池等。水乐园解决夏、汤泉解决冬，「夏天玩水、冬天泡汤」让森泊的四季产品首次拼完整。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>投资</td><td>总投资</td><td>15亿元</td><td>含南北湖景区配套</td></tr>
+          <tr><td>规模</td><td>总用地</td><td>550亩</td><td>约36.7万㎡</td></tr>
+          <tr><td>规模</td><td>建筑面积</td><td>10.2万㎡</td><td>—</td></tr>
+          <tr><td>规模</td><td>客房总数</td><td>439 间</td><td>188度假酒店＋130木屋＋121汤泉酒店</td></tr>
+          <tr><td>水乐园</td><td>森泊水乐园占地</td><td>3.1万㎡</td><td>室内＋室外</td></tr>
+          <tr><td>水乐园</td><td>室内水乐园</td><td>5000㎡ 恒温30°C</td><td>巨型透明穹顶，含4个温泉泡池</td></tr>
+          <tr><td>水乐园</td><td>室外水乐园</td><td>2.6万㎡</td><td>夏季开放</td></tr>
+          <tr><td>水乐园</td><td>游乐项目</td><td>30余项</td><td>11台国际标准设备，可容纳4000人</td></tr>
+          <tr><td>汤泉</td><td>溪禾汤泉中心</td><td>9600㎡</td><td>首家可以泡汤的森泊</td></tr>
+          <tr><td>儿童</td><td>幻想岛儿童乐园</td><td>2300㎡</td><td>8米层高，800㎡四层探索城堡</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据截至2026年8月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#26C6DA;"></span>街道图：园区在南北湖景区的位置</span>
+        <span><span class="dot" style="background:#4CAF50;"></span>卫星图：园区内部功能分区</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 520" role="img" aria-label="嘉兴开元森泊度假乐园空间结构示意图">
+          <rect width="800" height="520" fill="#0B1D2B" rx="12"/>
+
+          <text x="400" y="30" text-anchor="middle" fill="#CCC" font-family="Playfair Display,serif" font-size="16" font-weight="700">嘉兴开元森泊度假乐园空间结构示意</text>
+
+          <!-- 湖 -->
+          <rect x="0" y="330" width="800" height="190" fill="rgba(38,198,218,0.10)"/>
+          <text x="60" y="360" fill="#4DD0E1" font-family="DM Sans,sans-serif" font-size="11">△ 南北湖 · 湖光山色海景</text>
+
+          <!-- 橘林 (top right) -->
+          <rect x="620" y="90" width="160" height="120" rx="10" fill="rgba(255,179,0,0.10)" stroke="#FFB300" stroke-width="1" stroke-dasharray="4,4" opacity="0.7"/>
+          <text x="700" y="140" text-anchor="middle" fill="#FFD54F" font-family="DM Sans,sans-serif" font-size="11">百亩橘林</text>
+          <text x="700" y="162" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">柑橘采摘 · 环园步道</text>
+
+          <!-- 室内水乐园 -->
+          <rect x="60" y="60" width="250" height="120" rx="10" fill="rgba(38,198,218,0.15)" stroke="#26C6DA" stroke-width="2"/>
+          <text x="185" y="92" text-anchor="middle" fill="#4DD0E1" font-family="Playfair Display,serif" font-size="14" font-weight="700">🏊 室内水乐园</text>
+          <text x="185" y="114" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">5000㎡ · 穹顶恒温30°C</text>
+          <text x="185" y="132" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">恒温造浪池 · 4个温泉泡池 · 9米树屋</text>
+
+          <!-- 室外水乐园 -->
+          <rect x="60" y="200" width="250" height="90" rx="10" fill="rgba(30,136,229,0.12)" stroke="#1E88E5" stroke-width="1.5"/>
+          <text x="185" y="232" text-anchor="middle" fill="#64B5F6" font-family="DM Sans,sans-serif" font-size="12" font-weight="600">🌊 室外水乐园 2.6万㎡</text>
+          <text x="185" y="254" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">夏季开放 · 30余项游乐</text>
+
+          <!-- 溪禾汤泉 -->
+          <rect x="360" y="60" width="220" height="120" rx="10" fill="rgba(255,87,34,0.13)" stroke="#FF5722" stroke-width="2"/>
+          <text x="470" y="92" text-anchor="middle" fill="#FF8A65" font-family="Playfair Display,serif" font-size="13" font-weight="700">♨ 溪禾汤泉中心</text>
+          <text x="470" y="114" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">9600㎡ · 首家可以泡汤的森泊</text>
+          <text x="470" y="132" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">室内汤池 · 药浴池 · 花瓣池 · 碳酸泉</text>
+
+          <!-- 幻想岛 -->
+          <rect x="360" y="200" width="220" height="90" rx="10" fill="rgba(156,39,176,0.15)" stroke="#9C27B0" stroke-width="1.5"/>
+          <text x="470" y="232" text-anchor="middle" fill="#CE93D8" font-family="DM Sans,sans-serif" font-size="12" font-weight="600">🧸 幻想岛儿童乐园</text>
+          <text x="470" y="254" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">2300㎡ · 四层探索城堡</text>
+
+          <!-- 矿坑主题乐园 -->
+          <rect x="620" y="230" width="160" height="80" rx="10" fill="rgba(255,179,0,0.12)" stroke="#FFB300" stroke-width="1.5"/>
+          <text x="700" y="258" text-anchor="middle" fill="#FFD54F" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">⛏ 矿坑主题乐园</text>
+          <text x="700" y="280" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">约3.07万㎡ 户外游乐</text>
+
+          <!-- 度假酒店 -->
+          <rect x="620" y="46" width="160" height="40" rx="8" fill="rgba(76,175,80,0.15)" stroke="#4CAF50" stroke-width="1.5"/>
+          <text x="700" y="70" text-anchor="middle" fill="#A5D6A7" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">🏨 度假酒店 439间</text>
+
+          <!-- North arrow -->
+          <g transform="translate(760,30)">
+            <polygon points="0,25 8,0 16,25 8,18" fill="#CCC"/>
+            <text x="8" y="-4" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10" font-weight="700">北</text>
+          </g>
+
+          <!-- Legend -->
+          <rect x="40" y="470" width="280" height="28" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)"/>
+          <text x="50" y="488" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">━━ 实线框：功能板块　╌╌ 虚线框：户外配套　△ 湖面</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>🏊 室内水乐园 · 穹顶恒温</h3><p>5000㎡室内水乐园在巨型透明穹顶下全年30°C恒温，夏天不怕晒、冬天不怕冷。含恒温造浪池、4个温泉泡池、激流河、漂流河、星际盘旋、阳光岛戏水水寨等13项大型设备，中央9米海岛树屋可俯瞰全景。</p></div>
+      <div class="card"><h3>♨ 溪禾汤泉中心</h3><p>9600㎡疗愈汤泉，是开元森泊首家「可以泡汤」的独立汤泉中心。室内汤池350余㎡，配绿植环绕的室外泡池，原汤池、药浴池、花瓣池、碳酸泉泡池各安其位，把森泊的冬季产品补齐。</p></div>
+      <div class="card"><h3>🏨 度假酒店群 · 439间</h3><p>188间度假酒店＋130间度假木屋＋121间汤泉酒店，水上船屋为50㎡独栋弧形木屋、漂浮湖面；另有湖滨城堡、精灵蘑菇屋、汤泉疗愈等特色房型。</p></div>
+      <div class="card"><h3>🧸 幻想岛儿童乐园</h3><p>2300㎡超大型室内儿童乐园，近8米层高，内含超800㎡四层复式探索城堡，配套手工坊、旅拍等亲子项目，雨天也能遛娃一整天。</p></div>
+      <div class="card"><h3>⛏ 矿坑主题乐园</h3><p>约3.07万㎡户外矿坑主题乐园，利用南北湖原有山体矿坑地貌改造，与头号玩家、森夜酒吧一起构成户外与夜间的娱乐补充。</p></div>
+      <div class="card"><h3>🍊 山水与橘林</h3><p>园区水系贯穿、百亩橘林盘绕，柑橘采摘与环园步道把景区资源写进度假动线；森泊之家3336㎡（162间员工宿舍）为运营与暑期旺季提供保障。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2022年</div><div class="timeline-content"><h4>开工建设</h4><p>海盐南北湖地块动工，定位森泊第5园、汤泉主题园。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年8月</div><div class="timeline-content"><h4>正式开园</h4><p>嘉兴开元森泊度假乐园开业，溪禾汤泉同步亮相，首家「可以泡汤的森泊」。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年10月</div><div class="timeline-content"><h4>运营初况</h4><p>开园两个多月累计接待游客4万人次，单日最高超5000人。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card"><h3>开园初期接待</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">4 万人次</p><p class="f-caption">开园至2024年10月</p></div>
+      <div class="card"><h3>单日峰值</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">5,000+ 人</p><p class="f-caption">开园初期</p></div>
+      <div class="card"><h3>水乐园容纳</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">4,000 人</p><p class="f-caption">同时游玩上限</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>恒温体系</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">30°C 全年</p><p class="f-caption">室内水乐园5000㎡在巨型透明穹顶下全年恒温30°C，含恒温造浪池与4个温泉泡池。</p></div>
+      <div class="card"><h3>汤泉产品</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">9,600㎡</p><p class="f-caption">溪禾汤泉中心是森泊首个独立汤泉产品，室内外泡池组合，补齐冬季运营。</p></div>
+      <div class="card"><h3>设备配置</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">11台</p><p class="f-caption">30余个游乐项目，11台国际领先标准水上游乐设备，可容纳4000人。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>住宿与餐饮</h3><p>439间客房分度假酒店、度假木屋、汤泉酒店三档，水上船屋、蘑菇屋等特色房型承接亲子与情侣客群；园内餐饮配套南北湖时鲜，橘林与湖景入席。</p></div>
+      <div class="card"><h3>四季产品组合</h3><p>夏有水乐园、冬有汤泉、四季有幻想岛与矿坑乐园，配合头号玩家与森夜酒吧，「夏天玩水、冬天泡汤、雨天遛娃」形成全季全时闭环。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>江浙沪亲子新宠</h3><p>开园即以「泡汤＋遛娃」差异化切入江浙沪短途度假市场，单日最高接待超5000人，成为上海、杭州、嘉兴三地辐射圈内的周末目的地。</p></div>
+      <div class="card"><h3>汤泉模式示范</h3><p>溪禾汤泉验证了「水乐园＋汤泉」的双冬夏产品结构，为森泊后续园区（含未来汤泉项目）提供了可复制的冬季运营样本。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <div class="resource-group">
+        <h4>官方信息</h4>
+        <ul>
+          <li><a href="https://www.senboresorts.com/" target="_blank" rel="noopener">开元森泊度假乐园官网</a></li>
+          <li><a href="https://www.kaiyuangroup.com/" target="_blank" rel="noopener">开元旅业集团官网</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>开业报道</h4>
+        <ul>
+          <li><a href="https://zjrb.zjol.com.cn/html/2024-10/12/content_3775651.htm?div=-1" target="_blank" rel="noopener">浙江日报：海盐澉浦「三支队伍」筑基（2024）</a></li>
+          <li><a href="http://paper.hyxww.com/html/2024-06/25/content_116977_17549751.htm" target="_blank" rel="noopener">海盐新闻：南北湖开元森泊开业在即（2024）</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+
+var zonesLocal = [
+  { name: '室内水乐园<br><small>5000㎡ · 穹顶恒温30°C</small>', lng: 120.870162, lat: 30.389510, color: '#26C6DA' },
+  { name: '溪禾汤泉中心<br><small>9600㎡ · 首家泡汤</small>', lng: 120.870162, lat: 30.389510, color: '#FF5722' },
+  { name: '度假酒店<br><small>439间 · 汤泉酒店</small>', lng: 120.870025, lat: 30.389525, color: '#4CAF50' },
+  { name: '幻想岛<br><small>2300㎡儿童乐园</small>', lng: 120.870025, lat: 30.389525, color: '#9C27B0' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, zones, center, zoom, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView(center, zoom);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zones);
+
+  if (withBoundary) {
+    L.circle(center, { radius: 350, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.6 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', [{ name: '嘉兴开元森泊度假乐园<br><small>2024年 · 550亩 · 森泊第5园</small>', lng: 120.870025, lat: 30.389525, color: '#FFB300' }], [30.3895, 120.8700], 13, false);
+  initMap('satmap', 'sat', zonesLocal, [30.3895, 120.8700], 15, true);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

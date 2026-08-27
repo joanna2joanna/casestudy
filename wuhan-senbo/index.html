@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>武汉城建开元森泊度假乐园 — 开元森泊华中旗舰，后官湖畔703亩，室内水乐园1万㎡四季恒温含七组合滑道</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #1B7A3D;
+  --clr-primary-light: #4CAF50;
+  --clr-primary-dark: #0F4D26;
+  --clr-accent: #00ACC1;
+}
+
+.hero {
+  background: linear-gradient(160deg, #0F4D26 0%, #1B7A3D 40%, #4CAF50 70%, #B2DFDB 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(0,172,193,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%);
+}
+.data-table tbody tr:hover { background: rgba(27,122,61,0.05); }
+
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+
+@media (max-width: 768px) {
+  .hero { padding: 3rem 0 2.5rem; }
+  .hero .kpi-row { gap: 0.8rem; }
+  .hero .kpi-card { padding: 0.8rem 1rem; min-width: 120px; }
+  .hero .kpi-number { font-size: 1.3rem; }
+  #parkmap, #satmap { height: 300px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>武汉城建开元森泊度假乐园</h1>
+    <p class="hero-subtitle">开元森泊华中旗舰，2025年6月在蔡甸后官湖开园——703亩独享3.4公里湿地湖岸线，室内水乐园1万㎡四季恒温，含国内最新七组合滑道</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">2025</div><div class="kpi-label">森泊第7园 · 华中旗舰</div></div>
+      <div class="kpi-card"><div class="kpi-number">703<span style="font-size:0.7em;opacity:0.7">亩</span></div><div class="kpi-label">占地规模</div></div>
+      <div class="kpi-card"><div class="kpi-number">585<span style="font-size:0.7em;opacity:0.7"> 间</span></div><div class="kpi-label">度假客房（含90船屋树屋）</div></div>
+      <div class="kpi-card"><div class="kpi-number">30<span style="font-size:0.7em;opacity:0.7">°C</span></div><div class="kpi-label">室内水乐园恒温</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal"><div class="card"><h3>基本信息</h3><table class="data-table"><tbody>
+<tr><td><strong>项目名称</strong></td><td>武汉城建开元森泊度假乐园</td></tr>
+<tr><td><strong>投资运营</strong></td><td>武汉城建集团投资，杭州开元森泊共同运营</td></tr>
+<tr><td><strong>品牌位次</strong></td><td>开元森泊第7园，华中首个旗舰项目</td></tr>
+<tr><td><strong>开业</strong></td><td>2025年6月13日</td></tr>
+<tr><td><strong>占地</strong></td><td>703亩（约46.9万㎡）</td></tr>
+<tr><td><strong>总投资</strong></td><td>22亿元</td></tr>
+<tr><td><strong>客房</strong></td><td>585间（495集中酒店＋90船屋树屋）</td></tr>
+</tbody></table></div>
+<div class="card"><h3>坐标与交通</h3><table class="data-table"><tbody>
+<tr><td><strong>坐标</strong></td><td>GCJ-02 (114.127767, 30.536222)</td></tr>
+<tr><td><strong>地址</strong></td><td>武汉市蔡甸区中法武汉生态示范城</td></tr>
+<tr><td><strong>区位</strong></td><td>后官湖畔，独享3.4公里国家级湿地公园湖岸线</td></tr>
+<tr><td><strong>地铁</strong></td><td>武汉地铁4号线延伸，蔡甸核心区辐射</td></tr>
+<tr><td><strong>知音故里</strong></td><td>蔡甸区「文旅建设年」标杆项目</td></tr>
+</tbody></table></div></div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3>
+<p>武汉城建开元森泊度假乐园是开元森泊在华中地区的首个旗舰项目，也是品牌全国第7园。项目由武汉城建集团投资建设、杭州开元森泊共同运营管理，位于蔡甸区中法武汉生态示范城核心地带、后官湖畔，独享3.4公里国家级湿地公园湖岸线。2023年3月开工，从签约到开业仅用两年，比原计划提前一年。</p>
+<p>园区占地703亩、建筑面积11.8万㎡：室内水乐园1万㎡四季恒温，引入国内最新的「超级魔法时空」七组合滑道；室外水乐园1.8万㎡，含1800㎡超级火山造浪池与华中首条207米人体直滑激流河；室内外儿童乐园共1.2万㎡，以「星际穿越」为主题。585间客房中，有90间临湖船屋、树屋，含全国第一棵人造榕树树屋。</p>
+</div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>城建＋开元的政企合作</h3><p>武汉城建集团出资建设、开元森泊输出品牌与运营，是森泊继舟山保利之后又一次「投资方＋品牌方」的合作。项目落在中法武汉生态示范城，蔡甸区将其作为「文旅建设年」精品样板，2023年3月开工、2025年6月开业，签约到开业仅两年。</p></div>
+      <div class="card"><h3>湿地湖岸线的生态底牌</h3><p>园区独享3.4公里后官湖国家级湿地公园湖岸线，法式「绿野仙踪」风格融入湖岸湿地生态，90间临湖船屋、树屋沿水而设。知音故里的文化叙事与湿地生态叠加，构成武汉近郊度假的稀缺资源。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>投资</td><td>总投资</td><td>22亿元</td><td>含生态配套</td></tr>
+          <tr><td>规模</td><td>占地面积</td><td>703亩</td><td>一说343亩，官方口径703亩</td></tr>
+          <tr><td>规模</td><td>建筑面积</td><td>11.8万㎡</td><td>—</td></tr>
+          <tr><td>规模</td><td>客房总数</td><td>585 间</td><td>495集中＋90船屋/树屋</td></tr>
+          <tr><td>水乐园</td><td>室内水乐园</td><td>1万㎡ 四季恒温</td><td>「超级魔法时空」七组合滑道</td></tr>
+          <tr><td>水乐园</td><td>室外水乐园</td><td>1.8万㎡</td><td>1800㎡火山造浪池</td></tr>
+          <tr><td>水乐园</td><td>华中首条激流河</td><td>207米</td><td>人体直滑式</td></tr>
+          <tr><td>儿童</td><td>儿童乐园</td><td>1.2万㎡</td><td>室内外，「星际穿越」主题</td></tr>
+          <tr><td>会议</td><td>中法国际会议中心</td><td>6000㎡</td><td>8个宴会厅/会议室</td></tr>
+          <tr><td>餐饮</td><td>三大主题餐厅</td><td>—</td><td>星际/雁来轩/朗慕法餐</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据截至2026年8月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#26C6DA;"></span>街道图：园区在后官湖湿地的位置</span>
+        <span><span class="dot" style="background:#4CAF50;"></span>卫星图：园区内部功能分区</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 520" role="img" aria-label="武汉城建开元森泊度假乐园空间结构示意图">
+          <rect width="800" height="520" fill="#0B1D2B" rx="12"/>
+
+          <text x="400" y="30" text-anchor="middle" fill="#CCC" font-family="Playfair Display,serif" font-size="16" font-weight="700">武汉城建开元森泊度假乐园空间结构示意</text>
+
+          <!-- 后官湖 -->
+          <rect x="0" y="330" width="800" height="190" fill="rgba(38,198,218,0.12)"/>
+          <text x="60" y="360" fill="#4DD0E1" font-family="DM Sans,sans-serif" font-size="11">△ 后官湖 · 国家级湿地公园 · 3.4公里湖岸线</text>
+
+          <!-- 室内水乐园 -->
+          <rect x="60" y="60" width="260" height="120" rx="10" fill="rgba(38,198,218,0.15)" stroke="#26C6DA" stroke-width="2"/>
+          <text x="190" y="92" text-anchor="middle" fill="#4DD0E1" font-family="Playfair Display,serif" font-size="14" font-weight="700">🏊 室内水乐园</text>
+          <text x="190" y="114" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">1万㎡ · 四季恒温30°C</text>
+          <text x="190" y="132" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">「超级魔法时空」七组合滑道</text>
+
+          <!-- 室外水乐园 -->
+          <rect x="370" y="60" width="250" height="120" rx="10" fill="rgba(30,136,229,0.12)" stroke="#1E88E5" stroke-width="2"/>
+          <text x="495" y="92" text-anchor="middle" fill="#64B5F6" font-family="Playfair Display,serif" font-size="13" font-weight="700">🌊 室外水乐园</text>
+          <text x="495" y="114" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">1.8万㎡ · 1800㎡火山造浪池</text>
+          <text x="495" y="132" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">华中首条207米直滑激流河</text>
+
+          <!-- 儿童乐园 -->
+          <rect x="650" y="60" width="120" height="120" rx="10" fill="rgba(156,39,176,0.15)" stroke="#9C27B0" stroke-width="1.5"/>
+          <text x="710" y="100" text-anchor="middle" fill="#CE93D8" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">🧸 儿童乐园</text>
+          <text x="710" y="122" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="8">1.2万㎡</text>
+          <text x="710" y="140" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="8">星际穿越主题</text>
+
+          <!-- 度假酒店 -->
+          <rect x="60" y="220" width="360" height="80" rx="10" fill="rgba(76,175,80,0.15)" stroke="#4CAF50" stroke-width="2"/>
+          <text x="240" y="250" text-anchor="middle" fill="#A5D6A7" font-family="DM Sans,sans-serif" font-size="12" font-weight="600">🏨 集中酒店 · 495间</text>
+          <text x="240" y="272" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">星际主题餐厅 · 雁来轩 · 朗慕法餐厅</text>
+
+          <!-- 船屋树屋 -->
+          <rect x="470" y="220" width="300" height="80" rx="10" fill="rgba(255,179,0,0.12)" stroke="#FFB300" stroke-width="1.5"/>
+          <text x="620" y="250" text-anchor="middle" fill="#FFD54F" font-family="DM Sans,sans-serif" font-size="12" font-weight="600">🚤 临湖船屋 · 树屋 · 90间</text>
+          <text x="620" y="272" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">含全国第一棵人造榕树树屋</text>
+
+          <!-- 会议中心 -->
+          <rect x="370" y="200" width="180" height="38" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.15)"/>
+          <text x="460" y="223" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">中法国际会议中心 6000㎡</text>
+
+          <!-- North arrow -->
+          <g transform="translate(760,30)">
+            <polygon points="0,25 8,0 16,25 8,18" fill="#CCC"/>
+            <text x="8" y="-4" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10" font-weight="700">北</text>
+          </g>
+
+          <!-- Legend -->
+          <rect x="40" y="470" width="280" height="28" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)"/>
+          <text x="50" y="488" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">━━ 实线框：功能板块　△ 湖面　🚤 沿湖住宿</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>🏊 室内水乐园 · 七组合滑道</h3><p>1万㎡室内水乐园四季恒温30°C，引入国内最新的「超级魔法时空」七组合滑道，是华中罕见的超大室内组合水游乐集群。</p></div>
+      <div class="card"><h3>🌊 室外水乐园 · 火山造浪池</h3><p>1.8万㎡室外水乐园含1800㎡超级火山造浪池与华中首条207米人体直滑激流河，造浪池与激流河都是华中同类设备的首发之作。</p></div>
+      <div class="card"><h3>🏨 集中酒店 · 495间</h3><p>495间集中酒店客房配套星际主题餐厅、雁来轩中餐厅、朗慕法餐厅三大主题餐饮，中法国际会议中心6000㎡含8个宴会厅，会议与度假兼得。</p></div>
+      <div class="card"><h3>🚤 临湖船屋 · 树屋</h3><p>90间临湖船屋、树屋沿湿地湖岸线分布，其中全国第一棵人造榕树树屋是园区打卡地标，把湖景资源直接转化为过夜客房。</p></div>
+      <div class="card"><h3>🧸 星际穿越儿童乐园</h3><p>1.2万㎡室内外儿童乐园以「星际穿越」为主题，与水乐园联动，是华中最大的以水为主题的全龄全时全季亲子度假乐园。</p></div>
+      <div class="card"><h3>🌿 湿地生态度假</h3><p>3.4公里国家级湿地公园湖岸线是园区最稀缺的资源，法式「绿野仙踪」景观与湿地生态结合，知音故里的文化底蕴加持，承接武汉近郊周末度假。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2023年3月</div><div class="timeline-content"><h4>开工建设</h4><p>武汉城建集团出资、开元森泊运营，中法武汉生态示范城动工。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年6月13日</div><div class="timeline-content"><h4>正式开业</h4><p>华中旗舰开园，从签约到开业仅两年，比原计划提前一年。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">预售10天</div><div class="timeline-content"><h4>开盘热销</h4><p>2025年5月23日启动预售，10天销售额破亿，开业时已突破1.3亿元。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card"><h3>预售销售额</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">1.3 亿元</p><p class="f-caption">开业时累计</p></div>
+      <div class="card"><h3>预计年游客量</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">56 万人次</p><p class="f-caption">项目规划</p></div>
+      <div class="card"><h3>带动就业</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">1,000 人</p><p class="f-caption">区域就业</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>恒温体系</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">30°C 四季</p><p class="f-caption">室内水乐园1万㎡四季恒温，配国内最新七组合滑道，全季可玩。</p></div>
+      <div class="card"><h3>华中首发设备</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">207米</p><p class="f-caption">华中首条人体直滑激流河，配1800㎡超级火山造浪池，均为区域首发。</p></div>
+      <div class="card"><h3>湿地湖岸线</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">3.4km</p><p class="f-caption">独享后官湖国家级湿地公园湖岸线，90间船屋树屋沿湖而设。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>住宿与餐饮</h3><p>585间客房横跨集中酒店与临湖船屋树屋两档；三大主题餐厅覆盖星际主题、杭帮本帮与法式餐饮；中法国际会议中心6000㎡承接商务会议与婚宴。</p></div>
+      <div class="card"><h3>区域联动</h3><p>园区地处中法武汉生态示范城核心，承接武汉近郊与华中高铁圈客流，与后官湖湿地公园、知音故里文旅动线衔接，是华中大型一站式城市近郊度假综合体的填补之作。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>华中文旅新地标</h3><p>作为华中最大的以水为主题的全龄全时全季一站式亲子度假乐园，园区被寄望于带动蔡甸「文旅建设年」与中法生态示范城的人气与投资。</p></div>
+      <div class="card"><h3>政企合作样本</h3><p>城建集团出资、开元运营的模式验证后，为森泊在华中、华南的城市近郊复制提供了范本，华中首个旗舰的运营数据将成为品牌扩张的重要参考。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <div class="resource-group">
+        <h4>官方信息</h4>
+        <ul>
+          <li><a href="https://www.senboresorts.com/" target="_blank" rel="noopener">开元森泊度假乐园官网</a></li>
+          <li><a href="https://www.kaiyuangroup.com/" target="_blank" rel="noopener">开元旅业集团官网</a></li>
+          <li><a href="https://whucg.cn/news/16342.html" target="_blank" rel="noopener">武汉城建集团：华中文旅再添旗舰（2025）</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>开业报道</h4>
+        <ul>
+          <li><a href="https://www.cnr.cn/hubei/wlrd/20250613/t20250613_527209337.shtml" target="_blank" rel="noopener">央广网：武汉城建开元森泊正式开业（2025）</a></li>
+          <li><a href="http://www.hb.chinanews.com.cn/news/2025/0613/417993.html" target="_blank" rel="noopener">中新网湖北：知音故里蔡甸邀您度周末（2025）</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+
+var zonesLocal = [
+  { name: '室内水乐园<br><small>1万㎡ · 四季恒温30°C</small>', lng: 114.129393, lat: 30.536899, color: '#26C6DA' },
+  { name: '室外水乐园<br><small>1.8万㎡ · 火山造浪池</small>', lng: 114.129393, lat: 30.536899, color: '#1E88E5' },
+  { name: '度假酒店<br><small>495间集中客房</small>', lng: 114.127767, lat: 30.536222, color: '#4CAF50' },
+  { name: '临湖船屋树屋<br><small>90间 · 榕树树屋</small>', lng: 114.127767, lat: 30.536222, color: '#FFB300' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, zones, center, zoom, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView(center, zoom);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zones);
+
+  if (withBoundary) {
+    L.circle(center, { radius: 350, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.6 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', [{ name: '武汉城建开元森泊度假乐园<br><small>2025年 · 703亩 · 华中旗舰</small>', lng: 114.127767, lat: 30.536222, color: '#FFB300' }], [30.5362, 114.1278], 13, false);
+  initMap('satmap', 'sat', zonesLocal, [30.5362, 114.1278], 15, true);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>重庆玛雅海滩水公园 — 1万㎡风洞造浪池，约90%设备来自白水，2017年随重庆欢乐谷二期开园</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #00838F;
+  --clr-primary-light: #26C6DA;
+  --clr-primary-dark: #006064;
+  --clr-accent: #FFB300;
+}
+
+.hero {
+  background: linear-gradient(160deg, #003C4F 0%, #006064 40%, #00838F 70%, #4DD0E1 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(255,179,0,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%);
+}
+.data-table tbody tr:hover { background: rgba(0,131,143,0.05); }
+
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: 12px; z-index: 0; margin-top: 1rem; }
+
+@media (max-width: 768px) {
+  .hero { padding: 3rem 0 2.5rem; }
+  .hero .kpi-row { gap: 0.8rem; }
+  .hero .kpi-card { padding: 0.8rem 1rem; min-width: 120px; }
+  .hero .kpi-number { font-size: 1.3rem; }
+  #parkmap, #satmap { height: 300px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>重庆玛雅海滩水公园</h1>
+    <p class="hero-subtitle">2017年7月8日随重庆欢乐谷二期开园，占地18万㎡——1万㎡风洞造浪池，约90%设备来自加拿大白水，西南最大露天水乐园</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">2017</div><div class="kpi-label">随欢乐谷二期开园</div></div>
+      <div class="kpi-card"><div class="kpi-number">18<span style="font-size:0.7em;opacity:0.7">万㎡</span></div><div class="kpi-label">占地规模</div></div>
+      <div class="kpi-card"><div class="kpi-number">1<span style="font-size:0.7em;opacity:0.7">万㎡</span></div><div class="kpi-label">风洞造浪池</div></div>
+      <div class="kpi-card"><div class="kpi-number">90%</div><div class="kpi-label">设备来自白水</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal"><div class="card"><h3>基本信息</h3><table class="data-table"><tbody>
+<tr><td><strong>项目名称</strong></td><td>重庆玛雅海滩水公园</td></tr>
+<tr><td><strong>运营方</strong></td><td>华侨城集团·重庆欢乐谷</td></tr>
+<tr><td><strong>品牌位次</strong></td><td>玛雅系列西南首站，西南最大露天水乐园</td></tr>
+<tr><td><strong>开业</strong></td><td>2017年7月8日</td></tr>
+<tr><td><strong>占地</strong></td><td>约18万㎡</td></tr>
+<tr><td><strong>供应商</strong></td><td>加拿大白水（约90%设备）</td></tr>
+</tbody></table></div>
+<div class="card"><h3>坐标与交通</h3><table class="data-table"><tbody>
+<tr><td><strong>坐标</strong></td><td>GCJ-02 (106.513516, 29.666821)</td></tr>
+<tr><td><strong>地址</strong></td><td>重庆市渝北区礼嘉镇金渝大道29号</td></tr>
+<tr><td><strong>区位</strong></td><td>重庆欢乐谷二期板块</td></tr>
+<tr><td><strong>轨道</strong></td><td>轨道交通6号线欢乐谷站直达</td></tr>
+<tr><td><strong>山地特色</strong></td><td>依坡地而建的「山地版」水乐园</td></tr>
+</tbody></table></div></div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3>
+<p>重庆玛雅海滩水公园位于渝北区礼嘉，2017年7月8日作为重庆欢乐谷二期开园，占地约18万㎡，是西南最大的露天水上乐园。与多数平地而建的水乐园不同，重庆园依坡地层层递进，把山地高差做进滑道落差里，被称为「山地版玛雅」。</p>
+<p>园区核心是1万㎡风洞造浪池，配合玛雅水寨、垂直滑道、大喇叭等刺激设备；约90%的游乐设施由加拿大白水公司提供，让重庆园成为玛雅系列中白水含量最高的一座。山地布局与高水效造浪是这座园的两张名片。</p>
+</div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>山地高差做进落差</h3><p>重庆多坡地的地貌被直接利用：园区依地势分层设置功能区，滑道起点抬高、入水点压低，天然形成更大滑行落差。这种「顺着山势排设备」的思路与武汉、顺德等平地园区形成鲜明对比。</p></div>
+      <div class="card"><h3>白水含量最高</h3><p>约90%设备由加拿大白水提供，覆盖造浪池、滑道群与儿童戏水区。高比例的单一供应商让园区设备风格高度统一，也便于统一维保与水效管理。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>占地面积</td><td>约18万㎡</td><td>西南最大露天水乐园</td></tr>
+          <tr><td>造浪池</td><td>风洞造浪池</td><td>1万㎡</td><td>风洞造浪技术</td></tr>
+          <tr><td>设备</td><td>白水设备占比</td><td>约90%</td><td>全系列设备</td></tr>
+          <tr><td>设备</td><td>玛雅水寨</td><td>多层互动水寨</td><td>标志性项目</td></tr>
+          <tr><td>设备</td><td>垂直滑道</td><td>近垂直自由落体</td><td>刺激类设备</td></tr>
+          <tr><td>设备</td><td>大喇叭</td><td>多人浮筏</td><td>经典水滑道</td></tr>
+          <tr><td>布局</td><td>山地式布局</td><td>依坡地分层</td><td>山地版玛雅</td></tr>
+          <tr><td>交通</td><td>轨道交通</td><td>6号线欢乐谷站</td><td>出站即达</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据截至2026年8月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#26C6DA;"></span>街道图：水公园在重庆欢乐谷二期的位置</span>
+        <span><span class="dot" style="background:#4CAF50;"></span>卫星图：水公园内部功能分区</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 520" role="img" aria-label="重庆玛雅海滩水公园空间结构示意图">
+          <rect width="800" height="520" fill="#0B1D2B" rx="12"/>
+
+          <text x="400" y="30" text-anchor="middle" fill="#CCC" font-family="Playfair Display,serif" font-size="16" font-weight="700">重庆玛雅海滩水公园空间结构示意</text>
+
+          <!-- 山地示意 -->
+          <path d="M 0 380 L 200 250 L 420 330 L 620 200 L 800 300 L 800 400 L 0 400 Z" fill="rgba(76,175,80,0.08)" stroke="#4CAF50" stroke-width="1" stroke-dasharray="6,4" opacity="0.5"/>
+          <text x="60" y="360" fill="#A5D6A7" font-family="DM Sans,sans-serif" font-size="11">依坡地而建 · 山地版玛雅</text>
+
+          <!-- 造浪池 -->
+          <rect x="70" y="60" width="280" height="110" rx="10" fill="rgba(30,136,229,0.12)" stroke="#1E88E5" stroke-width="2"/>
+          <text x="210" y="92" text-anchor="middle" fill="#64B5F6" font-family="Playfair Display,serif" font-size="14" font-weight="700">🌊 风洞造浪池</text>
+          <text x="210" y="114" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">1万㎡ · 西南最大</text>
+          <text x="210" y="132" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">风洞造浪 · 懒人河</text>
+
+          <!-- 刺激滑道区 -->
+          <rect x="430" y="60" width="290" height="110" rx="10" fill="rgba(38,198,218,0.15)" stroke="#26C6DA" stroke-width="2"/>
+          <text x="575" y="92" text-anchor="middle" fill="#4DD0E1" font-family="Playfair Display,serif" font-size="14" font-weight="700">🎢 刺激滑道区</text>
+          <text x="575" y="114" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">垂直滑道 · 大喇叭</text>
+          <text x="575" y="132" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">白水设备约90%</text>
+
+          <!-- 玛雅水寨 -->
+          <rect x="70" y="205" width="180" height="90" rx="10" fill="rgba(255,179,0,0.12)" stroke="#FFB300" stroke-width="1.5"/>
+          <text x="160" y="237" text-anchor="middle" fill="#FFD54F" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">⛲ 玛雅水寨</text>
+          <text x="160" y="259" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">多层互动水寨</text>
+
+          <!-- 儿童戏水区 -->
+          <rect x="280" y="205" width="200" height="90" rx="10" fill="rgba(156,39,176,0.15)" stroke="#9C27B0" stroke-width="1.5"/>
+          <text x="380" y="237" text-anchor="middle" fill="#CE93D8" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">🧸 儿童戏水区</text>
+          <text x="380" y="259" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">亲子合家欢项目</text>
+
+          <!-- 重庆欢乐谷 -->
+          <rect x="510" y="205" width="220" height="90" rx="10" fill="rgba(76,175,80,0.15)" stroke="#4CAF50" stroke-width="1.5"/>
+          <text x="620" y="237" text-anchor="middle" fill="#A5D6A7" font-family="DM Sans,sans-serif" font-size="11" font-weight="600">🎡 重庆欢乐谷</text>
+          <text x="620" y="259" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">二期联动 · 6号线直达</text>
+
+          <!-- North arrow -->
+          <g transform="translate(760,30)">
+            <polygon points="0,25 8,0 16,25 8,18" fill="#CCC"/>
+            <text x="8" y="-4" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10" font-weight="700">北</text>
+          </g>
+
+          <!-- Legend -->
+          <rect x="40" y="470" width="320" height="28" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)"/>
+          <text x="50" y="488" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">━━ 实线框：水公园功能板块　╌╌ 虚线框：欢乐谷二期/山地</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>🌊 风洞造浪池</h3><p>1万㎡风洞造浪池是西南最大的造浪水域，配合懒人河构成水上休闲主板块，是重庆园最聚人气的核心。</p></div>
+      <div class="card"><h3>🎢 山地高差滑道</h3><p>垂直滑道近乎自由落体入水，大喇叭多人浮筏回旋；设备顺着坡地高差排布，滑行落差比平地园区更足。</p></div>
+      <div class="card"><h3>⛲ 玛雅水寨</h3><p>多层互动水寨延续玛雅图腾与雨林装饰语言，是水乐园的互动中心与家庭聚集地。</p></div>
+      <div class="card"><h3>🧸 儿童戏水区</h3><p>面向低龄客群的浅水互动区，与成人刺激区物理分隔，保证亲子客群的绝对安全。</p></div>
+      <div class="card"><h3>🎡 欢乐谷二期联动</h3><p>作为重庆欢乐谷二期板块，与陆园共享客流入口与配套，轨道交通6号线欢乐谷站出站即达。</p></div>
+      <div class="card"><h3>🏔 山地版玛雅</h3><p>「顺山势、借高差」的布局在玛雅系列中独一无二，是西南户外玩水与山地文旅结合的样本。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2017年7月8日</div><div class="timeline-content"><h4>开园</h4><p>重庆玛雅海滩水公园作为重庆欢乐谷二期正式开园，成为西南最大露天水乐园。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card"><h3>开园年份</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">2017</p><p class="f-caption">重庆欢乐谷二期板块</p></div>
+      <div class="card"><h3>西南定位</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">最大</p><p class="f-caption">西南最大露天水乐园</p></div>
+      <div class="card"><h3>轨道直达</h3><p style="font-family:'DM Mono',monospace;font-size:1.6rem;color:var(--clr-primary);">6号线</p><p class="f-caption">欢乐谷站出站即达</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>风洞造浪</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">1万㎡水域</p><p class="f-caption">风洞造浪技术支撑西南最大造浪池。</p></div>
+      <div class="card"><h3>白水设备</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">约90%</p><p class="f-caption">单一供应商高占比，设备风格与维保统一。</p></div>
+      <div class="card"><h3>山地落差</h3><p style="font-family:'DM Mono',monospace;font-size:1.3rem;color:var(--clr-primary);">借高差</p><p class="f-caption">坡地布局放大滑道落差，形成山地版特色。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>水陆双园配套</h3><p>与重庆欢乐谷同属一个度假板块，共享入口、停车与配套服务，水陆联票是主要售卖方式。</p></div>
+      <div class="card"><h3>礼嘉度假圈</h3><p>渝北礼嘉片区轨道6号线贯穿，紧邻嘉陵江畔；玛雅海滩串联欢乐谷、礼嘉智慧公园，构成重庆主城东北的周末度假圈。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>西南水乐园标杆</h3><p>重庆园以「最大造浪池＋山地布局＋高比例白水设备」站稳西南，是玛雅品牌下沉成渝都市圈的开路先锋。</p></div>
+      <div class="card"><h3>成渝联动</h3><p>依托华侨城西南布局，重庆园与川渝其他文旅项目联动，山地玩水与温泉度假的错季组合可期。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. RESOURCES ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <div class="resource-group">
+        <h4>官方信息</h4>
+        <ul>
+          <li><a href="https://www.happyvalley.cn/" target="_blank" rel="noopener">重庆欢乐谷官网</a></li>
+          <li><a href="https://www.whitewaterwest.com/" target="_blank" rel="noopener">WhiteWater 白水官网</a></li>
+        </ul>
+      </div>
+      <div class="resource-group">
+        <h4>报道与数据</h4>
+        <ul>
+          <li><a href="https://www.cbg.cn/" target="_blank" rel="noopener">重庆广电：重庆欢乐谷二期水公园开园报道</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+
+var zonesLocal = [
+  { name: '风洞造浪池<br><small>1万㎡ · 西南最大</small>', lng: 106.513516, lat: 29.666821, color: '#1E88E5' },
+  { name: '刺激滑道区<br><small>垂直滑道 · 大喇叭</small>', lng: 106.513516, lat: 29.666821, color: '#26C6DA' },
+  { name: '玛雅水寨<br><small>多层互动水寨</small>', lng: 106.513516, lat: 29.666821, color: '#FFB300' },
+  { name: '儿童戏水区<br><small>亲子合家欢</small>', lng: 106.513516, lat: 29.666821, color: '#9C27B0' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, zones, center, zoom, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView(center, zoom);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zones);
+
+  if (withBoundary) {
+    L.circle(center, { radius: 260, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.6 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', [{ name: '重庆玛雅海滩水公园<br><small>2017年 · 18万㎡ · 西南最大</small>', lng: 106.513516, lat: 29.666821, color: '#FFB300' }], [29.6668, 106.5135], 13, false);
+  initMap('satmap', 'sat', zonesLocal, [29.6668, 106.5135], 15, true);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>星球大战：银河边缘（加州）— 迪士尼乐园沉浸式星战区深度分析</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #2E7DD6;
+  --clr-primary-light: #5BA0E8;
+  --clr-primary-dark: #12264D;
+  --clr-accent: #E64545;
+}
+
+.hero {
+  background: linear-gradient(160deg, #0B1226 0%, #12264D 40%, #2E7DD6 70%, #5BA0E8 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(230,69,69,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>星球大战：银河边缘（加州）</h1>
+    <p class="hero-subtitle">加州迪士尼乐园史上最大单主题扩建 · 巴图星黑峰前哨 · 2019年5月31日开业</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">5.7 公顷</div><div class="kpi-label">园区占地（14英亩）</div></div>
+      <div class="kpi-card"><div class="kpi-number">约 US$10 亿</div><div class="kpi-label">单园造价（报道口径）</div></div>
+      <div class="kpi-card"><div class="kpi-number">2 大</div><div class="kpi-label">沉浸式骑乘</div></div>
+      <div class="kpi-card"><div class="kpi-number">US$104–224</div><div class="kpi-label">迪士尼乐园 2026 单日票</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目名称</h3><p>Star Wars: Galaxy's Edge<br>星球大战：银河边缘<br><span class="f-caption">位于加州迪士尼乐园（Disneyland Park）内</span></p></div>
+      <div class="card"><h3>地理位置</h3><p>美国加州阿纳海姆 · 迪士尼乐园度假区<br>迪士尼乐园园区西北部<br>坐标：33°48′52″N, 117°55′18″W</p></div>
+      <div class="card"><h3>开业时间</h3><p>2019 年 5 月 31 日向公众开放<br>抵抗组织崛起：2020 年 1 月 17 日<br>迪士尼乐园史上最大单主题扩建</p></div>
+      <div class="card"><h3>设计方</h3><p>华特迪士尼幻想工程（Walt Disney Imagineering）<br>联合开发：卢卡斯影业（Lucasfilm）<br>2012 年迪士尼收购卢卡斯影业后立项</p></div>
+      <div class="card"><h3>面积与造价</h3><p>占地约 14 英亩 ≈ 5.7 公顷<br>造价约 10 亿美元（报道口径，迪士尼未官方披露）<br>2016 年 4 月动工，历时约 3 年</p></div>
+      <div class="card"><h3>门票价格</h3><p>迪士尼乐园一园单日成人票 US$104–224<br>按日期分 7 档定价（2026 年）<br>银河边缘含在乐园门票内，无需另购</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>星球大战：银河边缘是迪士尼乐园史上最大的单一主题园区扩建，占地约 5.7 公顷，将《星球大战》世界观实体化为外环行星巴图星（Batuu）的黑峰前哨（Black Spire Outpost），故事时间线置于《最后的绝地武士》与《天行者崛起》之间。园区由华特迪士尼幻想工程与卢卡斯影业联合打造，包含两大沉浸式骑乘——全尺寸千年隼号合作互动骑乘「千年隼：走私者逃亡」，以及被称为迪士尼史上技术最复杂骑乘之一的「抵抗组织崛起」无轨黑暗骑乘。加州与奥兰多两处银河边缘占地相同、体验几乎一致，加州版于 2019 年 5 月 31 日率先开业。2026 年起，加州园区永久扩展时间线，引入达斯·维达、汉·索罗等原始三部曲角色，并升级千年隼任务至 Unreal Engine 5 画面，进入开园以来最大规模的内容更新期。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>公司 / 机构</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>设计方</td><td>华特迪士尼幻想工程 WDI</td><td>园区总体设计、骑乘系统与沉浸式场景打造</td></tr>
+          <tr><td>IP 联合开发</td><td>卢卡斯影业 Lucasfilm</td><td>世界观设定、Batuu 正史构建与故事线把控</td></tr>
+          <tr><td>建造周期</td><td>2016 年 4 月动工 · 2019 年 5 月开业</td><td>约 3 年，动用约 6,700 名建筑工人与工匠</td></tr>
+          <tr><td>数字建造</td><td>WDI + Epic Games（Unreal）</td><td>BIM 建筑信息模型接入 Unreal Engine，先在数字世界建一遍再实体建造</td></tr>
+          <tr><td>立项背景</td><td>2012 年迪士尼收购卢卡斯影业</td><td>2015 年 D23 博览会宣布加州 + 佛州两处乐园</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>园区占地面积</td><td class="num">约 5.7 公顷</td><td>14 英亩，迪士尼乐园史上最大单主题扩建</td></tr>
+          <tr><td>规模</td><td>骑乘设施</td><td class="num">2 大沉浸式骑乘</td><td>千年隼：走私者逃亡 + 抵抗组织崛起</td></tr>
+          <tr><td>规模</td><td>餐饮与体验点</td><td class="num">10+ 处</td><td>酒吧、餐厅、光剑工坊、机器人工坊等</td></tr>
+          <tr><td>投资</td><td>单园造价</td><td class="num">约 US$10 亿</td><td>报道口径，迪士尼官方未披露</td></tr>
+          <tr><td>投资</td><td>两处园区合计</td><td class="num">约 US$20 亿</td><td>另一口径为两处共享约 10 亿美元</td></tr>
+          <tr><td>建设</td><td>建设周期</td><td class="num">约 3 年</td><td>2016 年 4 月至 2019 年 5 月</td></tr>
+          <tr><td>建设</td><td>建设人力</td><td class="num">约 6,700 人</td><td>加州园区建筑工人与工匠</td></tr>
+          <tr><td>体验</td><td>千年隼产能</td><td class="num">约 1,800 人/小时</td><td>专利旋转圆盘系统</td></tr>
+          <tr><td>体验</td><td>抵抗组织崛起时长</td><td class="num">18–20 分钟</td><td>四系统混合沉浸体验</td></tr>
+          <tr><td>体验</td><td>抵抗组织崛起身高要求</td><td class="num">102 厘米</td><td>40 英寸</td></tr>
+          <tr><td>技术</td><td>无轨定位精度</td><td class="num">3 毫米</td><td>RFID + 无线电三角定位 + 激光传感器</td></tr>
+          <tr><td>技术</td><td>电子动画人偶</td><td class="num">65 具</td><td>其中 50 名暴风兵</td></tr>
+          <tr><td>技术</td><td>AT-AT 机甲</td><td class="num">15 米高 ×2</td><td>镜像造出四座观感</td></tr>
+          <tr><td>场景</td><td>岩石景观</td><td class="num">约 18,600 m²</td><td>200,000 平方英尺</td></tr>
+          <tr><td>场景</td><td>主题灰泥</td><td class="num">约 24,200 m²</td><td>260,000 平方英尺</td></tr>
+          <tr><td>场景</td><td>千年隼号模型</td><td class="num">约 30 米长</td><td>100 英尺，全尺寸</td></tr>
+          <tr><td>场景</td><td>道具数量</td><td class="num">7,000+ 件</td><td>园区布景道具</td></tr>
+          <tr><td>客流</td><td>迪士尼乐园 2024 客流</td><td class="num">约 1,730 万</td><td>TEA 口径</td></tr>
+          <tr><td>票价</td><td>乐园单日成人票</td><td class="num">US$104–224</td><td>7 档日期定价</td></tr>
+          <tr><td>消费</td><td>光剑工坊</td><td class="num">US$249.99</td><td>2025 年 10 月涨价后</td></tr>
+          <tr><td>消费</td><td>机器人工坊</td><td class="num">US$119.99</td><td>2025 年 10 月涨价后</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源：维基百科、迪士尼官网、TEA/AECOM、行业报道（2026 年 8 月检索）。造价为报道口径，迪士尼官方从未披露确切数字。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="map-legend">
+          <span><span class="dot" style="background:#2E7DD6;"></span> 银河边缘园区（约5.7公顷）</span>
+          <span><span class="dot" style="background:#E64545;"></span> 园区范围圈</span>
+        </div>
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 820 520" xmlns="http://www.w3.org/2000/svg">
+          <rect width="820" height="520" fill="#0B1226" rx="12"/>
+          <text x="410" y="32" fill="#5BA0E8" font-family="Playfair Display,serif" font-size="16" text-anchor="middle" font-weight="600">星球大战：银河边缘（加州）· 黑峰前哨空间示意</text>
+          <line x1="60" y1="52" x2="760" y2="52" stroke="#5BA0E8" stroke-width="0.5" opacity="0.3"/>
+
+          <!-- 园区边界 -->
+          <rect x="120" y="80" width="580" height="360" rx="10" fill="#12264D" opacity="0.4" stroke="#2E7DD6" stroke-width="1.2"/>
+          <text x="410" y="105" fill="rgba(255,255,255,0.7)" text-anchor="middle" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">黑峰前哨 Black Spire Outpost</text>
+
+          <!-- 入口/集市（左下） -->
+          <rect x="150" y="330" width="150" height="80" rx="5" fill="#3A2A6B" opacity="0.7" stroke="#5BA0E8" stroke-width="0.8"/>
+          <text x="225" y="360" fill="#fff" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif">集市 Marketplace</text>
+          <text x="225" y="380" fill="rgba(255,255,255,0.55)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">入口 · 商店群 · 角色互动</text>
+          <text x="225" y="396" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">Droid Depot · Dok-Ondar 古物店</text>
+
+          <!-- 千年隼（右下，大） -->
+          <rect x="380" y="300" width="290" height="120" rx="6" fill="#1A3A5C" opacity="0.8" stroke="#5BA0E8" stroke-width="1"/>
+          <text x="525" y="335" fill="#fff" text-anchor="middle" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">千年隼：走私者逃亡</text>
+          <text x="525" y="355" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Millennium Falcon: Smugglers Run</text>
+          <text x="525" y="375" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">全尺寸千年隼 · 6人合作互动 · 约1800人/小时</text>
+          <text x="525" y="395" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">2019.5.31 开园即开放</text>
+
+          <!-- 抵抗组织崛起（左中，大） -->
+          <rect x="150" y="150" width="200" height="150" rx="6" fill="#5A1B3C" opacity="0.7" stroke="#E64545" stroke-width="1"/>
+          <text x="250" y="185" fill="#fff" text-anchor="middle" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">抵抗组织崛起</text>
+          <text x="250" y="205" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Rise of the Resistance</text>
+          <text x="250" y="225" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">无轨黑暗骑乘 · 四系统混合</text>
+          <text x="250" y="245" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">50暴风兵 · 15米AT-AT · 7米自由落体</text>
+          <text x="250" y="265" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">加州版 2020.1.17 开放</text>
+
+          <!-- 中央餐饮区（右上） -->
+          <rect x="420" y="150" width="180" height="50" rx="4" fill="#C8A45C" opacity="0.25" stroke="#C8A45C" stroke-width="0.7"/>
+          <text x="510" y="172" fill="#F0D078" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif">Oga's Cantina 酒吧</text>
+          <text x="510" y="188" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">全园唯一售酒处 · DJ R3X</text>
+
+          <rect x="420" y="215" width="180" height="50" rx="4" fill="#C8A45C" opacity="0.25" stroke="#C8A45C" stroke-width="0.7"/>
+          <text x="510" y="237" fill="#F0D078" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif">Docking Bay 7 餐厅</text>
+          <text x="510" y="253" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">巴图风格宇宙餐食</text>
+
+          <rect x="420" y="280" width="180" height="50" rx="4" fill="#C8A45C" opacity="0.25" stroke="#C8A45C" stroke-width="0.7"/>
+          <text x="510" y="302" fill="#F0D078" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif">Savi's Workshop 光剑工坊</text>
+          <text x="510" y="318" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">组装式光剑 · US$249.99</text>
+
+          <!-- 范围外虚线 -->
+          <rect x="720" y="100" width="80" height="120" rx="4" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="760" y="170" fill="rgba(255,255,255,0.35)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">范围外</text>
+          <text x="760" y="185" fill="rgba(255,255,255,0.25)" text-anchor="middle" font-size="7" font-family="DM Sans,sans-serif">迪士尼乐园其余</text>
+          <text x="760" y="197" fill="rgba(255,255,255,0.25)" text-anchor="middle" font-size="7" font-family="DM Sans,sans-serif">主题园区</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(770, 70)">
+            <polygon points="0,-14 3,-2 0,-4 -3,-2" fill="#5BA0E8"/>
+            <polygon points="0,14 3,2 0,4 -3,2" fill="#3A4A6B"/>
+            <text x="0" y="-18" text-anchor="middle" fill="#5BA0E8" font-size="10" font-family="DM Sans,sans-serif">N</text>
+          </g>
+
+          <!-- 图例 -->
+          <rect x="140" y="455" width="540" height="40" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+          <rect x="165" y="468" width="12" height="12" fill="#1A3A5C" opacity="0.9" rx="1"/>
+          <text x="185" y="479" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">千年隼区</text>
+          <rect x="270" y="468" width="12" height="12" fill="#5A1B3C" opacity="0.8" rx="1"/>
+          <text x="290" y="479" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">抵抗组织区</text>
+          <rect x="400" y="468" width="12" height="12" fill="#C8A45C" opacity="0.6" rx="1"/>
+          <text x="420" y="479" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">餐饮/工坊</text>
+          <text x="520" y="479" fill="rgba(255,255,255,0.3)" font-size="9" font-family="DM Sans,sans-serif">布局为空间示意，非精确比例</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>千年隼：走私者逃亡</h3><p>全尺寸千年隼号前，6 名乘客分任飞行员、炮手、工程师三岗合作驾驶，200+ 可操作按钮，飞行表现随团队配合实时变化。专利转盘系统支撑约 1,800 人/小时产能，开园日即开放。</p></div>
+      <div class="card"><h3>抵抗组织崛起</h3><p>步行导览 + 旋转台运动模拟 + 无轨黑暗骑乘 + 受控自由落体四系统合一，全程 18–20 分钟。65 具电子动画人偶、15 米 AT-AT、凯洛·伦全息投影，定位精度 3 毫米。被称迪士尼史上技术最复杂骑乘。</p></div>
+      <div class="card"><h3>Oga's Cantina</h3><p>全园唯一售酒处（加州迪士尼乐园基本禁酒）。犯罪头目 Oga Garra 经营的星际酒吧，机器人 DJ R3X 打碟，招牌 Black Spire Brew，需提前预约。</p></div>
+      <div class="card"><h3>Savi's Workshop</h3><p>组装式光剑体验，选晶体、剑柄与能量来源，仪式感十足。2025 年 10 月涨价至 249.99 美元，是园区单价最高的付费体验之一。</p></div>
+      <div class="card"><h3>Droid Depot</h3><p>机器人工坊，亲手拼装 BB、C、R 系列机器人。2025 年 3 月起无需预约，2025 年 10 月涨价至 119.99 美元。</p></div>
+      <div class="card"><h3>集市 Marketplace</h3><p>园区商业区，黑市气息的商店群。2026 年角色调整后，曼达洛人、古古与阿索卡驻扎于此，成为园区互动重心。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT & CONSTRUCTION TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2012.10</div><div class="timeline-content"><h4>迪士尼收购卢卡斯影业</h4><p>以约 40.5 亿美元收购卢卡斯影业，获得《星球大战》全 IP 授权，为星战主题园区奠定基础。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2015.08</div><div class="timeline-content"><h4>D23 宣布两处银河边缘</h4><p>D23 博览会正式宣布在加州迪士尼乐园与佛州迪士尼好莱坞影城各建一处星战园区。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2016.04</div><div class="timeline-content"><h4>加州园区动工</h4><p>清理场地，关闭 Big Thunder Ranch 等旧设施，正式进入建设期。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2017.07</div><div class="timeline-content"><h4>正式命名 Galaxy's Edge</h4><p>D23 公布园区名为「星球大战：银河边缘」，设定巴图星黑峰前哨。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019.05.31</div><div class="timeline-content"><h4>加州银河边缘开业</h4><p>向公众开放，千年隼：走私者逃亡同步运行；初期 24 天实行预约制。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019.08.29</div><div class="timeline-content"><h4>奥兰多版开业</h4><p>迪士尼好莱坞影城版开业，两处体验几乎一致。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2020.01.17</div><div class="timeline-content"><h4>抵抗组织崛起加州上线</h4><p>分段上线的第二骑乘在加州开放（奥兰多版 2019 年 12 月 5 日先行），园区两大核心体验齐备。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025.10</div><div class="timeline-content"><h4>光剑与机器人涨价</h4><p>Savi's Workshop 与 Droid Depot 分别涨至 249.99 与 119.99 美元。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026.04.29</div><div class="timeline-content"><h4>永久扩展时间线</h4><p>加州园区加入达斯·维达、汉·索罗、莱娅、卢克、丘巴卡等原始三部曲角色与约翰·威廉姆斯配乐，是开业以来最大规模内容调整。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026.05.22</div><div class="timeline-content"><h4>千年隼曼达洛人任务上线</h4><p>千年隼骑乘新增《曼达洛人与古古》任务，画面升级 Unreal Engine 5，两处园区同步上线。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONAL INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+
+    <div class="grid-2 reveal">
+      <div class="card"><h3>迪士尼乐园年度客流</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>年份</th><th>客流</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>2019</td><td class="num">1,866.6 万</td><td>全球第二（TEA）</td></tr>
+            <tr><td>2023</td><td class="num">约 1,725 万</td><td></td></tr>
+            <tr><td>2024</td><td class="num">约 1,730 万</td><td>同比 +0.5%</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">2025 年 CEO Iger 称整个迪士尼乐园度假区年客流接近 3,000 万，首次超越佛州神奇王国成为全球最热门主题乐园度假区。</p>
+      </div>
+      <div class="card"><h3>开业季客流意外回落</h3>
+        <p>银河边缘开业非但未带来预期「爆满」，反而令迪士尼乐园 2019 财年三季度客流同比下降 3%。Iger 承认市场预判「错得离谱」，原因是迪士尼主动限制年票通行、票价上涨 10%，以及游客对拥挤的担忧。但同期国内园区营收仍增长 7% 至 66 亿美元，人均消费增 10%。</p>
+        <p class="f-caption" style="margin-top:0.6rem;">这一案例说明：大型 IP 园区开业 ≠ 客流立刻暴增，限流策略与票价政策会显著改变短期客流曲线。</p>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>与奥兰多版对比</h3>
+      <table class="data-table">
+        <thead><tr><th>对比维度</th><th>加州迪士尼乐园</th><th>奥兰多迪士尼好莱坞影城</th></tr></thead>
+        <tbody>
+          <tr><td>开业日期</td><td>2019-05-31</td><td>2019-08-29</td></tr>
+          <tr><td>抵抗组织崛起</td><td>2020-01-17</td><td>2019-12-05</td></tr>
+          <tr><td>占地</td><td class="num">约 5.7 公顷</td><td class="num">约 5.7 公顷</td></tr>
+          <tr><td>售酒政策</td><td>仅 Oga's 一处售酒</td><td>园区普遍售酒</td></tr>
+          <tr><td>入口/动线</td><td>多处入口</td><td>单一主入口（Grand Avenue 隧道）</td></tr>
+          <tr><td>气候</td><td>年降水约 35 天</td><td>年降水约 114 天</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>无轨黑暗骑乘</h3><p><span class="f-mono">Rise of the Resistance</span><br>美国迪士尼首个无轨黑暗骑乘<br>RFID 地板芯片 + 无线电三角定位<br>定位精度 3 毫米 · 四系统混合</p></div>
+      <div class="card"><h3>合作互动骑乘</h3><p><span class="f-mono">Smugglers Run</span><br>全球首个大型合作式互动骑乘<br>6 人分三角色 · 200+ 可操作按钮<br>团队表现决定飞行成绩</p></div>
+      <div class="card"><h3>数字建造</h3><p><span class="f-mono">BIM + Unreal Engine</span><br>先在数字世界完整建模再实体建造<br>WDI 与 Epic Games 合作<br>大幅降低施工返工风险</p></div>
+      <div class="card"><h3>电子动画技术</h3><p>65 具电子动画人偶<br>50 名暴风兵 + 凯洛·伦 A-1000 电子面部<br>15 米 AT-AT 镜像成四座<br>项目代码超 500 万行</p></div>
+      <div class="card"><h3>全尺寸千年隼</h3><p>约 30 米长的全尺寸千年隼模型<br>比例 1:1 还原影视道具<br>园区视觉与骑乘容器合一<br>星战迷的合影圣地</p></div>
+      <div class="card"><h3>正史世界观构建</h3><p>巴图星与黑峰前哨写入星战正史<br>小说、漫画补全前传背景<br>园内演员全程处于角色中<br>沉浸式叙事的深度样本</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>Oga's Cantina</h3><p>全园唯一酒吧，需 60 天前预约。机器人 DJ R3X、纪念杯 42 美元、招牌 Black Spire Brew，是园区社交中心。</p></div>
+      <div class="card"><h3>Docking Bay 7 餐厅</h3><p>巴图风格宇宙餐食，主厨「Cookie」Tuggs，主打 Batuuan 牛肉脆 Topato 等，晚间另有观焰火套餐。</p></div>
+      <div class="card"><h3>Savi's Workshop</h3><p>光剑组装仪式，四类晶体任选，仪式感拉满。249.99 美元，是付费体验标杆。</p></div>
+      <div class="card"><h3>Droid Depot</h3><p>机器人拼装工坊，BB/C/R 系列零件自由组合，119.99 美元，亲子向热门项目。</p></div>
+      <div class="card"><h3>Marketplace 集市</h3><p>黑市风格商店群，Dok-Ondar 古物店收藏稀有星战藏品，曼达洛人与古古 2026 年起在此常驻互动。</p></div>
+      <div class="card"><h3>范围外·乐园配套</h3><p>银河边缘仅是迪士尼乐园西北角一片。游客可联动乐园其他园区与加州冒险乐园，构成完整度假区体验。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>原始三部曲回归（2026-04-29）</h3><p>加州银河边缘永久扩展时间线，达斯·维达、汉·索罗、莱娅、卢克、丘巴卡进场，配乐加入约翰·威廉姆斯经典原声。这是开园以来最大规模的内容与基调调整。</p></div>
+      <div class="card"><h3>千年隼曼达洛人任务（2026-05-22）</h3><p>配合电影《曼达洛人与古古》上映，千年隼骑乘新增任务线：超空间跳至塔图因、工程师三选目的地、炮手切换手动/自动瞄准，画面升级 Unreal Engine 5。</p></div>
+      <div class="card"><h3>付费体验涨价（2025-10）</h3><p>光剑工坊从 219.99 涨至 249.99 美元，机器人工坊从 99.99 涨至 119.99 美元，反映园区对高价值付费体验的定价上探。</p></div>
+      <div class="card"><h3>迪士尼乐园 70 周年（2025-07-17）</h3><p>度假区 70 周年庆典，Iger 披露整个度假区年客流接近 3,000 万，首次成为全球最热门主题乐园度假区。</p></div>
+      <div class="card"><h3>「从后传回调原始三部曲」的行业讨论</h3><p>2026 年 4 月有报道称银河边缘最初设计方向即原始三部曲（塔图因方向已设计一年多），后调整至后传 + 巴图星，如今正逐步回调。迪士尼未正面回应，但园区内容调整印证了方向修正。</p></div>
+      <div class="card"><h3>时间线扩展仅加州实施</h3><p>原始三部曲角色与配乐的调整目前仅在加州园区执行，奥兰多版暂未跟进，两处园区的内容差异化正在拉开。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+
+    <div class="resource-group reveal">
+      <h4>官方来源</h4>
+      <ul>
+        <li><a href="https://disneyland.disney.go.com/" target="_blank" rel="noopener">迪士尼乐园度假区 — 官方网站</a> <span class="tag">官网</span></li>
+        <li><a href="https://www.starwars.com/" target="_blank" rel="noopener">StarWars.com — 星战官方</a> <span class="tag">官方</span></li>
+        <li><a href="https://disneyworld.disney.go.com/" target="_blank" rel="noopener">华特迪士尼世界 — 官方网站</a> <span class="tag">官网</span></li>
+      </ul>
+    </div>
+
+    <div class="resource-group reveal">
+      <h4>维基与百科</h4>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Star_Wars:_Galaxy%27s_Edge" target="_blank" rel="noopener">Wikipedia — Star Wars: Galaxy's Edge</a> <span class="tag">百科</span></li>
+        <li><a href="https://en.wikipedia.org/wiki/Star_Wars:_Rise_of_the_Resistance" target="_blank" rel="noopener">Wikipedia — 抵抗组织崛起骑乘</a> <span class="tag">百科</span></li>
+        <li><a href="https://commons.wikimedia.org/wiki/Category:Star_Wars:_Galaxy%27s_Edge" target="_blank" rel="noopener">Wikimedia Commons — 园区图片集</a> <span class="tag">图库</span></li>
+      </ul>
+    </div>
+
+    <div class="resource-group reveal">
+      <h4>深度技术报道</h4>
+      <ul>
+        <li><a href="https://techcrunch.com/2019/02/27/how-disney-built-star-wars-in-real-life/" target="_blank" rel="noopener">TechCrunch — 迪士尼如何实体建造星战</a> <span class="tag">技术</span></li>
+        <li><a href="https://blooloop.com/theme-park/in-depth/black-spire-outpost-galaxys-edge/" target="_blank" rel="noopener">Blooloop — 黑峰前哨深度解析</a> <span class="tag">行业</span></li>
+        <li><a href="https://apnews.com/movies-general-news-3ae1f6bd15c34160bdf4f575efbfb778" target="_blank" rel="noopener">AP News — 命名公布现场报道</a> <span class="tag">报道</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (Overseas: ESRI ArcGIS + WGS-84) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+  var tilesLoaded = false;
+
+  var map = L.map('parkmap', {
+    center: [33.8143, -117.9218],
+    zoom: 16,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+
+  tileLayer.on('load', function() {
+    tilesLoaded = true;
+    clearTimeout(tileTimer);
+    fallback.style.display = 'none';
+  });
+
+  tileLayer.addTo(map);
+
+  var tileTimer = setTimeout(function() {
+    if (!tilesLoaded) fallback.style.display = 'block';
+  }, 8000);
+
+  // Markers
+  var blueIcon = L.divIcon({className: 'custom-marker', html: '<div style="background:#2E7DD6;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>', iconSize: [14,14], iconAnchor: [7,7]});
+
+  L.marker([33.8143, -117.9218], {icon: blueIcon}).addTo(map)
+    .bindPopup('<b>星球大战：银河边缘（加州）</b><br>Star Wars: Galaxy\'s Edge<br>约 5.7 公顷 · 2019.5.31 开业');
+
+  L.circle([33.8143, -117.9218], {radius: 150, color: '#E64545', weight: 2, fill: false, dashArray: '6,4', opacity: 0.6}).addTo(map)
+    .bindPopup('银河边缘园区范围圈<br>约 5.7 公顷（14 英亩）');
+
+  // Fit bounds
+  var bounds = L.latLngBounds([
+    [33.8126, -117.9240],
+    [33.8160, -117.9195]
+  ]);
+  map.fitBounds(bounds, {padding: [20, 20]});
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+<footer class="footer"><p>张走走的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy">GitHub</a> 托管</p></footer>
+</body>
+</html>

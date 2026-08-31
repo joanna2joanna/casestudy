@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>星球大战：银河边缘与星际巡洋舰（奥兰多）— 沉浸式星战区与主题酒店深度分析</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #2E7DD6;
+  --clr-primary-light: #5BA0E8;
+  --clr-primary-dark: #12264D;
+  --clr-accent: #F0C330;
+}
+
+.hero {
+  background: linear-gradient(160deg, #0B1226 0%, #12264D 40%, #2E7DD6 70%, #5BA0E8 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(240,195,48,0.16) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>星球大战：银河边缘与星际巡洋舰（奥兰多）</h1>
+    <p class="hero-subtitle">迪士尼好莱坞影城星战园区 + 旗舰沉浸式主题酒店「星际巡洋舰」· 开业两年即关停的行业复盘</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">5.7 公顷</div><div class="kpi-label">银河边缘占地</div></div>
+      <div class="kpi-card"><div class="kpi-number">100 间</div><div class="kpi-label">星际巡洋舰舱房</div></div>
+      <div class="kpi-card"><div class="kpi-number">18 个月</div><div class="kpi-label">酒店运营期（2022.3–2023.9）</div></div>
+      <div class="kpi-card"><div class="kpi-number">约 US$3 亿</div><div class="kpi-label">酒店关停减损（迪士尼财报）</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>园区部分</h3><p>Star Wars: Galaxy's Edge<br>星球大战：银河边缘<br><span class="f-caption">位于奥兰多迪士尼好莱坞影城（Disney's Hollywood Studios）东部</span></p></div>
+      <div class="card"><h3>酒店部分</h3><p>Star Wars: Galactic Starcruiser<br>星球大战：星际巡洋舰<br><span class="f-caption">沉浸式主题酒店，2023 年 9 月永久关闭</span></p></div>
+      <div class="card"><h3>地理位置</h3><p>美国佛州布埃纳文图拉湖 · 华特迪士尼世界度假区<br>好莱坞影城东北角<br>坐标：28°21′26″N, 81°33′38″W</p></div>
+      <div class="card"><h3>开业时间</h3><p>银河边缘：2019 年 8 月 29 日<br>抵抗组织崛起：2019 年 12 月 5 日<br>星际巡洋舰：2022 年 3 月 1 日</p></div>
+      <div class="card"><h3>设计方</h3><p>华特迪士尼幻想工程（Walt Disney Imagineering）<br>联合开发：卢卡斯影业（Lucasfilm）<br>酒店概念由「沉浸式叙事」先驱团队主导</p></div>
+      <div class="card"><h3>酒店造价与关闭</h3><p>造价约 3.5–4 亿美元<br>2023 年 9 月永久关闭<br>关闭产生约 3 亿美元减损（迪士尼财报披露）</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>本案例涵盖华特迪士尼世界内的两个星战主题项目。银河边缘与加州版同为约 5.7 公顷、位于迪士尼好莱坞影城东侧，2019 年 8 月开业，与加州版体验几乎一致。星际巡洋舰则是迪士尼史上最具野心的沉浸式体验：一座把住客装进《星球大战》连续剧场的故事驱动型酒店，两人两晚定价 4,809 美元起，含 100 间无窗「舱房」、全员角色扮演演员与全天剧本。2022 年 3 月开业后入住率长期低迷，2023 年 9 月仅运营 18 个月即宣布关闭，成为主题酒店业「重投入 · 高客单 · 低复购」模式的标志性反面案例，关闭后设施改作迪士尼幻想工程内部研发中心（Project H）。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>项目</th><th>设计方</th><th>建设周期</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>银河边缘</td><td>WDI + Lucasfilm</td><td>约 2017–2019</td><td>与加州版同步设计，独立施工</td></tr>
+          <tr><td>星际巡洋舰</td><td>WDI 沉浸式叙事团队</td><td>约 2019–2022</td><td>概念可追溯至 2012 年收购卢卡斯影业前后</td></tr>
+          <tr><td>角色设计</td><td>迪士尼现场演艺</td><td>—</td><td>酒店全员角色演员，两日两夜全程叙事</td></tr>
+          <tr><td>核心技术</td><td>WDI + Epic Games</td><td>—</td><td>桥楼全息投影、交互面板、NFC 叙事追踪</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>银河边缘占地</td><td class="num">约 5.7 公顷</td><td>14 英亩</td></tr>
+          <tr><td>规模</td><td>银河边缘骑乘</td><td class="num">2 大沉浸式骑乘</td><td>千年隼：走私者逃亡 + 抵抗组织崛起</td></tr>
+          <tr><td>酒店</td><td>星际巡洋舰舱房</td><td class="num">100 间</td><td>无窗「舱房」，含家庭舱与旗舰套房</td></tr>
+          <tr><td>酒店</td><td>单船最大载客</td><td class="num">约 375 人</td><td>每 2 晚一组「航程」</td></tr>
+          <tr><td>酒店</td><td>两人两晚定价</td><td class="num">US$4,809 起</td><td>含餐饮与娱乐，高峰旺季更高</td></tr>
+          <tr><td>酒店</td><td>造价</td><td class="num">约 US$3.5–4 亿</td><td>媒体报道口径</td></tr>
+          <tr><td>酒店</td><td>运营期</td><td class="num">18 个月</td><td>2022.3–2023.9</td></tr>
+          <tr><td>酒店</td><td>关闭减损</td><td class="num">约 US$3 亿</td><td>迪士尼 2023 财报确认</td></tr>
+          <tr><td>酒店</td><td>历史入住率</td><td class="num">低</td><td>早期报道约 25% 上下，长期难以填满</td></tr>
+          <tr><td>体验</td><td>抵抗组织崛起身高要求</td><td class="num">102 厘米</td><td>40 英寸</td></tr>
+          <tr><td>消费</td><td>光剑工坊</td><td class="num">US$249.99</td><td>2025 年 10 月涨价后，两园一致</td></tr>
+          <tr><td>客流</td><td>好莱坞影城 2024 客流</td><td class="num">约 1,140 万</td><td>TEA 口径</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源：维基百科、迪士尼官网、迪士尼季度财报、TEA/AECOM、行业报道（2026 年 8 月检索）。星际巡洋舰造价与入住率为报道口径，迪士尼未完整披露运营数据。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="map-legend">
+          <span><span class="dot" style="background:#2E7DD6;"></span> 银河边缘园区（约5.7公顷）</span>
+          <span><span class="dot" style="background:#F0C330;"></span> 星际巡洋舰（已关闭）</span>
+          <span><span class="dot" style="background:#E64545;"></span> 范围圈</span>
+        </div>
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 820 520" xmlns="http://www.w3.org/2000/svg">
+          <rect width="820" height="520" fill="#0B1226" rx="12"/>
+          <text x="410" y="32" fill="#5BA0E8" font-family="Playfair Display,serif" font-size="16" text-anchor="middle" font-weight="600">星球大战：银河边缘与星际巡洋舰（奥兰多）空间示意</text>
+          <line x1="60" y1="52" x2="760" y2="52" stroke="#5BA0E8" stroke-width="0.5" opacity="0.3"/>
+
+          <!-- 好莱坞影城范围（大虚线框） -->
+          <rect x="110" y="80" width="480" height="360" rx="10" fill="#12264D" opacity="0.25" stroke="#5BA0E8" stroke-width="1" stroke-dasharray="6,4"/>
+          <text x="350" y="100" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif">迪士尼好莱坞影城 Disney's Hollywood Studios（范围示意）</text>
+
+          <!-- 银河边缘（右下） -->
+          <rect x="280" y="270" width="280" height="150" rx="6" fill="#12264D" opacity="0.7" stroke="#2E7DD6" stroke-width="1.4"/>
+          <text x="420" y="300" fill="#fff" text-anchor="middle" font-size="13" font-family="DM Sans,sans-serif" font-weight="600">星球大战：银河边缘</text>
+          <text x="420" y="320" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Star Wars: Galaxy's Edge · 约5.7公顷</text>
+          <text x="420" y="342" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">千年隼：走私者逃亡 · 2019.8.29</text>
+          <text x="420" y="360" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">抵抗组织崛起 · 2019.12.5</text>
+          <text x="420" y="380" fill="rgba(255,255,255,0.35)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">与加州版体验几乎一致 · 全园普遍售酒</text>
+
+          <!-- 星际巡洋舰（右侧独立块，标注已关闭） -->
+          <rect x="590" y="200" width="180" height="150" rx="6" fill="#3A3A2A" opacity="0.6" stroke="#F0C330" stroke-width="1.4"/>
+          <text x="680" y="235" fill="#F0D078" text-anchor="middle" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">星际巡洋舰</text>
+          <text x="680" y="255" fill="rgba(255,255,255,0.55)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Galactic Starcruiser</text>
+          <text x="680" y="275" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">100间无窗舱房 · 约375客/航</text>
+          <text x="680" y="295" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">2022.3 开业 → 2023.9 关闭</text>
+          <text x="680" y="315" fill="#E64545" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif" font-weight="600">已永久关闭 · 改作 WDI 研发中心</text>
+
+          <!-- 影城内其他区域（示意） -->
+          <rect x="130" y="120" width="120" height="60" rx="4" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)" stroke-width="0.6"/>
+          <text x="190" y="150" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">日落大道</text>
+          <text x="190" y="164" fill="rgba(255,255,255,0.25)" text-anchor="middle" font-size="7" font-family="DM Sans,sans-serif">好莱坞塔酒店等</text>
+
+          <rect x="130" y="200" width="120" height="60" rx="4" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)" stroke-width="0.6"/>
+          <text x="190" y="230" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">玩具总动员乐园</text>
+          <text x="190" y="244" fill="rgba(255,255,255,0.25)" text-anchor="middle" font-size="7" font-family="DM Sans,sans-serif">2018 年开业</text>
+
+          <rect x="130" y="280" width="120" height="60" rx="4" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)" stroke-width="0.6"/>
+          <text x="190" y="310" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">回声湖</text>
+          <text x="190" y="324" fill="rgba(255,255,255,0.25)" text-anchor="middle" font-size="7" font-family="DM Sans,sans-serif">外星人飞碟骑行等</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(770, 70)">
+            <polygon points="0,-14 3,-2 0,-4 -3,-2" fill="#5BA0E8"/>
+            <polygon points="0,14 3,2 0,4 -3,2" fill="#3A4A6B"/>
+            <text x="0" y="-18" text-anchor="middle" fill="#5BA0E8" font-size="10" font-family="DM Sans,sans-serif">N</text>
+          </g>
+
+          <!-- 图例 -->
+          <rect x="140" y="455" width="540" height="40" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+          <rect x="165" y="468" width="12" height="12" fill="#12264D" opacity="0.9" rx="1"/>
+          <text x="185" y="479" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">银河边缘</text>
+          <rect x="270" y="468" width="12" height="12" fill="#3A3A2A" opacity="0.9" rx="1"/>
+          <text x="290" y="479" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">星际巡洋舰（关闭）</text>
+          <rect x="410" y="468" width="12" height="12" fill="rgba(255,255,255,0.06)" rx="1"/>
+          <text x="430" y="479" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">影城其他园区</text>
+          <text x="520" y="479" fill="rgba(255,255,255,0.3)" font-size="9" font-family="DM Sans,sans-serif">布局为空间示意，非精确比例</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>千年隼：走私者逃亡</h3><p>全尺寸千年隼，6 人分三角色合作驾驶，200+ 可操作按钮，与加州版同规格。奥兰多版最大差别：园区普遍售酒，无需挤在 Oga's。</p></div>
+      <div class="card"><h3>抵抗组织崛起</h3><p>四系统混合沉浸骑乘，步行 + 旋转台 + 无轨车 + 受控落体，全程 18–20 分钟。奥兰多版 2019 年 12 月 5 日上线，比加州早一个多月。</p></div>
+      <div class="card"><h3>Oga's Cantina</h3><p>星战酒吧，机器人 DJ R3X 打碟。奥兰多园区普遍售酒，酒吧作为氛围节点而非唯一饮酒点。</p></div>
+      <div class="card"><h3>Savi's Workshop</h3><p>组装式光剑体验，2025 年 10 月涨价至 249.99 美元，与加州版同步。</p></div>
+      <div class="card"><h3>Droid Depot</h3><p>机器人工坊，2025 年 3 月起无需预约，2025 年 10 月涨价至 119.99 美元。</p></div>
+      <div class="card"><h3>星际巡洋舰（已关闭）</h3><p>全沉浸式主题酒店，曾容纳约 375 人/航程。2023 年 9 月永久关闭，设施改作迪士尼幻想工程 Project H 研发中心。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT & CONSTRUCTION TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2015.08</div><div class="timeline-content"><h4>宣布加州 + 奥兰多两处银河边缘</h4><p>D23 博览会同步公布两处星战园区，奥兰多版落地好莱坞影城东侧。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2017.12</div><div class="timeline-content"><h4>星际巡洋舰概念公开</h4><p>迪士尼披露将建一座「连续叙事」的星战主题酒店，住客全程处于星战宇宙中。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019.08.29</div><div class="timeline-content"><h4>奥兰多银河边缘开业</h4><p>好莱坞影城版开业，与加州版体验几乎一致。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019.12.05</div><div class="timeline-content"><h4>抵抗组织崛起奥兰多上线</h4><p>第二骑乘率先在奥兰多开放，早于加州的 2020 年 1 月。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022.03.01</div><div class="timeline-content"><h4>星际巡洋舰开业</h4><p>两人两晚定价 4,809 美元起，首航即被抢订，被媒体称「一生一次的星战旅行」。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022 下半年</div><div class="timeline-content"><h4>入住率走低被曝光</h4><p>报道指酒店入住率长期仅约 25%，单航次大量舱位空置，与开业抢订形成反差。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023.05</div><div class="timeline-content"><h4>宣布 9 月底关闭</h4><p>迪士尼官宣星际巡洋舰将于 2023 年 9 月底永久停运，运营仅 15 个月。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023.09.30</div><div class="timeline-content"><h4>末航结束 · 正式关闭</h4><p>最后航次 9 月 28 日出发，9 月 30 日完成全部航程后酒店永久关闭。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023.11</div><div class="timeline-content"><h4>财报确认约 3 亿美元减损</h4><p>迪士尼 2023 财年确认星际巡洋舰关闭相关的资产减损约 3 亿美元。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024 起</div><div class="timeline-content"><h4>改作 WDI 内部研发中心</h4><p>设施转为迪士尼幻想工程 Project H 秘密研发基地，主题酒店形态就此终结。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONAL INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+
+    <div class="grid-2 reveal">
+      <div class="card"><h3>好莱坞影城年度客流</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>年份</th><th>客流</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>2019</td><td class="num">1,149.6 万</td><td>全球第 8（TEA）</td></tr>
+            <tr><td>2023</td><td class="num">约 1,100 万</td><td></td></tr>
+            <tr><td>2024</td><td class="num">约 1,140 万</td><td>同比 +3.5%</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">银河边缘是影城近十年最重要的客流引擎，开业首年推动影城从华特迪士尼世界四大园末位提升。</p>
+      </div>
+      <div class="card"><h3>星际巡洋舰：为何难以为继</h3>
+        <p>定位高端沉浸式「一生一次」体验，代价是低频：2 晚 4,809 美元起、单船仅约 375 人、无法像乐园一样滚动承接客流。低入住率（约 25%）意味着高单价无法摊薄固定成本，迪士尼 2023 财年确认约 3 亿美元减损后关闭。它留下的行业问题是：沉浸式叙事的成本与可复用性，能否撑起一个酒店的商业模式。</p>
+        <p class="f-caption" style="margin-top:0.6rem;">与之对照，银河边缘把沉浸叙事做进乐园门票内、可无限复用，仍持续盈利——两者形成了鲜明的商业模式对比。</p>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>加州 vs 奥兰多银河边缘对比</h3>
+      <table class="data-table">
+        <thead><tr><th>对比维度</th><th>加州迪士尼乐园</th><th>奥兰多好莱坞影城</th></tr></thead>
+        <tbody>
+          <tr><td>开业日期</td><td>2019-05-31</td><td>2019-08-29</td></tr>
+          <tr><td>抵抗组织崛起</td><td>2020-01-17</td><td>2019-12-05</td></tr>
+          <tr><td>占地</td><td class="num">约 5.7 公顷</td><td class="num">约 5.7 公顷</td></tr>
+          <tr><td>售酒政策</td><td>仅 Oga's 一处售酒</td><td>园区普遍售酒</td></tr>
+          <tr><td>2026 时间线扩展</td><td>已实施（原始三部曲回归）</td><td>未跟进</td></tr>
+          <tr><td>周边配套</td><td>无同园区主题酒店</td><td>曾有星际巡洋舰（已关闭）</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>无轨黑暗骑乘</h3><p><span class="f-mono">Rise of the Resistance</span><br>美国迪士尼首个无轨黑暗骑乘<br>RFID 地板芯片 + 无线电三角定位<br>定位精度 3 毫米 · 四系统混合</p></div>
+      <div class="card"><h3>合作互动骑乘</h3><p><span class="f-mono">Smugglers Run</span><br>6 人分三角色合作驾驶<br>200+ 可操作按钮<br>团队表现决定飞行成绩</p></div>
+      <div class="card"><h3>连续叙事引擎</h3><p><span class="f-mono">Halcyon</span><br>星际巡洋舰全员剧本驱动<br>NFC 徽章追踪每位住客故事线<br>约 375 人同步演出「两日连续剧」</p></div>
+      <div class="card"><h3>全息桥楼</h3><p><span class="f-mono">Starcruiser Bridge</span><br>超大透明全息投影舷窗<br>交互式导航面板<br>住客实时「驾驶」星际飞船</p></div>
+      <div class="card"><h3>全尺寸千年隼</h3><p>约 30 米全尺寸千年隼模型<br>1:1 还原影视道具<br>园区视觉与骑乘容器合一<br>星战迷的合影圣地</p></div>
+      <div class="card"><h3>数字建造</h3><p><span class="f-mono">BIM + Unreal Engine</span><br>先在数字世界完整建模再实体建造<br>WDI 与 Epic Games 合作<br>两园共享建设方法论</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>Oga's Cantina</h3><p>星战酒吧，机器人 DJ 打碟。奥兰多园区普遍售酒，酒吧定位是氛围节点，而非唯一饮酒点。</p></div>
+      <div class="card"><h3>Docking Bay 7 餐厅</h3><p>巴图风格宇宙餐食，晚间另有观烟火套餐，与加州版同规格。</p></div>
+      <div class="card"><h3>Savi's Workshop</h3><p>光剑组装仪式，249.99 美元，奥兰多园区的付费体验标杆。</p></div>
+      <div class="card"><h3>Droid Depot</h3><p>机器人拼装工坊，119.99 美元，亲子向热门项目。</p></div>
+      <div class="card"><h3>星际巡洋舰旧址</h3><p>2024 年起转为迪士尼幻想工程 Project H 内部研发中心，不再对公众开放。迪士尼未披露其新用途细节。</p></div>
+      <div class="card"><h3>好莱坞影城整体</h3><p>银河边缘之外，影城含日落大道、回声湖、玩具总动员乐园等片区，星战园区是东北角的核心引擎。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>星际巡洋舰关闭复盘</h3><p>2023 年 9 月关闭后，行业持续讨论其教训：高客单 + 低频次 + 高固定成本 + 容量天花板。约 3 亿美元减损是迪士尼近年最贵的主题酒店实验。</p></div>
+      <div class="card"><h3>Project H 研发中心</h3><p>设施改作迪士尼幻想工程内部研发基地，迪士尼未披露具体研发方向，外界猜测与下一代沉浸式技术相关。</p></div>
+      <div class="card"><h3>千年隼曼达洛人任务（2026-05-22）</h3><p>配合电影《曼达洛人与古古》上映，千年隼骑乘新增任务线，画面升级 Unreal Engine 5，两园同步上线。</p></div>
+      <div class="card"><h3>时间线扩展仅加州实施</h3><p>原始三部曲角色与配乐调整目前仅在加州园区执行，奥兰多版暂未跟进，两处园区的内容差异化正在拉开。</p></div>
+      <div class="card"><h3>付费体验涨价（2025-10）</h3><p>光剑工坊与机器人工坊同步涨至 249.99 与 119.99 美元，两园定价一致。</p></div>
+      <div class="card"><h3>好莱坞影城未来的重心</h3><p>失去星际巡洋舰后，影城的沉浸式叙事仍以银河边缘与舞台演出为核心，客流稳定在约 1,100 万量级。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+
+    <div class="resource-group reveal">
+      <h4>官方来源</h4>
+      <ul>
+        <li><a href="https://disneyworld.disney.go.com/" target="_blank" rel="noopener">华特迪士尼世界 — 官方网站</a> <span class="tag">官网</span></li>
+        <li><a href="https://disneyland.disney.go.com/" target="_blank" rel="noopener">迪士尼乐园度假区 — 官方网站</a> <span class="tag">官网</span></li>
+        <li><a href="https://www.starwars.com/" target="_blank" rel="noopener">StarWars.com — 星战官方</a> <span class="tag">官方</span></li>
+      </ul>
+    </div>
+
+    <div class="resource-group reveal">
+      <h4>维基与百科</h4>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Star_Wars:_Galaxy%27s_Edge" target="_blank" rel="noopener">Wikipedia — Star Wars: Galaxy's Edge</a> <span class="tag">百科</span></li>
+        <li><a href="https://en.wikipedia.org/wiki/Star_Wars:_Galactic_Starcruiser" target="_blank" rel="noopener">Wikipedia — Star Wars: Galactic Starcruiser</a> <span class="tag">百科</span></li>
+        <li><a href="https://en.wikipedia.org/wiki/Star_Wars:_Rise_of_the_Resistance" target="_blank" rel="noopener">Wikipedia — 抵抗组织崛起骑乘</a> <span class="tag">百科</span></li>
+      </ul>
+    </div>
+
+    <div class="resource-group reveal">
+      <h4>复盘与行业报道</h4>
+      <ul>
+        <li><a href="https://on.theverge.com/news/603910/disney-star-wars-hotel-galactic-starcruiser-imagineering-office" target="_blank" rel="noopener">The Verge — 星际巡洋舰转作办公空间</a> <span class="tag">报道</span></li>
+        <li><a href="https://www.orlandosentinel.com/" target="_blank" rel="noopener">Orlando Sentinel — 奥兰多本地新闻</a> <span class="tag">报道</span></li>
+        <li><a href="https://blooloop.com/" target="_blank" rel="noopener">Blooloop — 主题公园行业媒体</a> <span class="tag">行业</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (Overseas: ESRI ArcGIS + WGS-84) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+  var tilesLoaded = false;
+
+  var map = L.map('parkmap', {
+    center: [28.3542, -81.5612],
+    zoom: 15,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+
+  tileLayer.on('load', function() {
+    tilesLoaded = true;
+    clearTimeout(tileTimer);
+    fallback.style.display = 'none';
+  });
+
+  tileLayer.addTo(map);
+
+  var tileTimer = setTimeout(function() {
+    if (!tilesLoaded) fallback.style.display = 'block';
+  }, 8000);
+
+  // Markers
+  var blueIcon = L.divIcon({className: 'custom-marker', html: '<div style="background:#2E7DD6;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>', iconSize: [14,14], iconAnchor: [7,7]});
+  var goldIcon = L.divIcon({className: 'custom-marker', html: '<div style="background:#F0C330;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>', iconSize: [14,14], iconAnchor: [7,7]});
+
+  L.marker([28.357252, -81.560618], {icon: blueIcon}).addTo(map)
+    .bindPopup('<b>星球大战：银河边缘（奥兰多）</b><br>迪士尼好莱坞影城<br>约 5.7 公顷 · 2019.8.29 开业');
+
+  L.marker([28.351104, -81.561753], {icon: goldIcon}).addTo(map)
+    .bindPopup('<b>星际巡洋舰（已关闭）</b><br>Galactic Starcruiser<br>2022.3–2023.9 · 现为 WDI 研发中心');
+
+  L.circle([28.357252, -81.560618], {radius: 180, color: '#E64545', weight: 2, fill: false, dashArray: '6,4', opacity: 0.6}).addTo(map)
+    .bindPopup('银河边缘园区范围圈<br>约 5.7 公顷（14 英亩）');
+
+  L.circle([28.351104, -81.561753], {radius: 90, color: '#E64545', weight: 2, fill: false, dashArray: '6,4', opacity: 0.6}).addTo(map)
+    .bindPopup('星际巡洋舰建筑范围圈<br>已关闭 · 约 100 间舱房');
+
+  // Fit bounds
+  var bounds = L.latLngBounds([
+    [28.3485, -81.5650],
+    [28.3600, -81.5570]
+  ]);
+  map.fitBounds(bounds, {padding: [20, 20]});
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+<footer class="footer"><p>张走走的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy">GitHub</a> 托管</p></footer>
+</body>
+</html>

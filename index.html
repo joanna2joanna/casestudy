@@ -129,6 +129,7 @@ body {
 .card-accent.garden { background: linear-gradient(90deg, #2E7D32, #8BC34A); }
 .card-accent.scifi { background: linear-gradient(90deg, #6A1B9A, #00BCD4); }
 .card-accent.tool { background: linear-gradient(90deg, #E8590C, #F08C3E); }
+.card-accent.ref { background: linear-gradient(90deg, #1A3552, #C8A45C); }
 
 .tools-section {
   max-width: 1100px;
@@ -151,42 +152,6 @@ body {
   color: #8B7355;
 }
 .tools-section { scroll-margin-top: 60px; }
-
-/* 文献参考紧凑列表 */
-.ref-list { border-top: 1px solid #E8E0D5; }
-.ref-row {
-  display: block;
-  padding: 0.9rem 0.2rem;
-  border-bottom: 1px solid #E8E0D5;
-  text-decoration: none;
-  transition: background 0.2s;
-}
-.ref-row:hover { background: #FBF7F0; }
-.ref-row .ref-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #1A1520;
-  margin-right: 0.6rem;
-}
-.ref-row:hover .ref-title { color: #8B3A4A; }
-.ref-row .ref-meta {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
-  color: #8B7355;
-}
-.ref-row .ref-note {
-  display: block;
-  margin-top: 0.3rem;
-  font-size: 0.85rem;
-  color: #6B5E50;
-  line-height: 1.55;
-}
-.ref-row .ref-arrow {
-  float: right;
-  font-size: 1rem;
-  color: #C8A45C;
-}
 
 .card-body { padding: 1.5rem 1.8rem; }
 .card-body .tag {
@@ -256,7 +221,7 @@ body {
   <a href="#americas">美洲<span class="nav-count">8</span></a>
   <a href="#global">全球品牌<span class="nav-count">1</span></a>
   <a href="#tools">工具</a>
-  <a href="#literature">文献</a>
+  <a href="literature/">文献</a>
 </nav>
 
 <!-- ====== 中国 ====== -->
@@ -981,32 +946,17 @@ body {
 <div class="tools-section" id="literature">
   <div class="tools-header">
     <h2>文献参考</h2>
-    <p>主题乐园规划结构与设计方向的公开研究资料，均含示意图</p>
+    <p>主题乐园规划结构与设计方向的公开研究资料，独立成页，首页不罗列</p>
   </div>
-  <div class="ref-list">
-    <a class="ref-row" href="https://www.sohu.com/a/413457655_100066567" target="_blank" rel="noopener">
-      <span class="ref-arrow">↗</span>
-      <span class="ref-title">主题公园规划布局模式研究</span>
-      <span class="ref-meta">绿维文旅 · 中国游艺机游乐园协会</span>
-      <span class="ref-note">基于寻路行为，将主题乐园划分为主轴式、循环式、通道式三种布局模式，各配示意图，另附珠海长隆海洋王国导览图，全文 47 张图。</span>
-    </a>
-    <a class="ref-row" href="https://www.sohu.com/a/455916946_120912897" target="_blank" rel="noopener">
-      <span class="ref-arrow">↗</span>
-      <span class="ref-title">规划主题乐园入口区 · 基础理论篇</span>
-      <span class="ref-meta">大象艺术文旅院</span>
-      <span class="ref-note">拆解入口区构成：入口广场及服务区、入口大门（借景式 / 牌坊式）、入口商业街，配加州迪士尼与珠海长隆示意图，全文 29 张图。</span>
-    </a>
-    <a class="ref-row" href="https://vectree.io/c/disneyland-spatial-design-architecture" target="_blank" rel="noopener">
-      <span class="ref-arrow">↗</span>
-      <span class="ref-title">Disneyland 的 Hub and Spoke 可视化讲解</span>
-      <span class="ref-meta">Vectree 交互式图解</span>
-      <span class="ref-note">迪士尼经典规划结构，分五块：Central Hub、Compression Entry（主街压缩透视）、Visual Magnets（weenie 视觉磁铁）、The Berm（土堤围合）、Threshold Logic，交互式图解，支持与同类结构对比。</span>
-    </a>
-    <a class="ref-row" href="http://artofrobertrowe.blogspot.com/2010/09/theme-park-circulation-loop-plan.html" target="_blank" rel="noopener">
-      <span class="ref-arrow">↗</span>
-      <span class="ref-title">Theme Park Circulation · The Loop Plan</span>
-      <span class="ref-meta">Art of Robert Rowe 博客</span>
-      <span class="ref-note">主题公园设计师的手绘规划结构图解，Loop Plan（环球影城式回环动线）、Chaos Plan 等经典模式。博客托管在 blogspot，部分网络环境需代理才能打开。</span>
+  <div class="grid">
+    <a href="literature/" class="case-card">
+      <div class="card-accent ref"></div>
+      <div class="card-body">
+        <div class="tag">研究资料</div>
+        <h2>主题乐园规划结构文献</h2>
+        <div class="location">4 条 · 独立子页</div>
+        <div class="desc">规划结构、入口区、国际经典范式的手绘图解与交互式讲解，每条附来源与内容说明，避免首页长篇罗列。</div>
+      </div>
     </a>
   </div>
 </div>

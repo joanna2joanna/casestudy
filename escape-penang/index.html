@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESCAPE Penang — 全球唯一四项吉尼斯的户外冒险乐园</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #1B7A3D;
+  --clr-primary-light: #57A96A;
+  --clr-primary-dark: #0B3D20;
+  --clr-accent: #E88A1A;
+}
+
+.hero {
+  background: linear-gradient(160deg, #0B3D20 0%, #1B7A3D 40%, #57A96A 70%, #F0C04A 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(232,138,26,0.2) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>ESCAPE Penang</h1>
+    <p class="hero-subtitle">全球唯一持四项吉尼斯世界纪录的户外冒险乐园</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">2012</div><div class="kpi-label">开业年份</div></div>
+      <div class="kpi-card"><div class="kpi-number">17.8 公顷</div><div class="kpi-label">园区占地</div></div>
+      <div class="kpi-card"><div class="kpi-number">4 项</div><div class="kpi-label">吉尼斯世界纪录</div></div>
+      <div class="kpi-card"><div class="kpi-number">24 万</div><div class="kpi-label">2024 年客流人次</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><div class="f-caption">开业时间</div><div class="f-title">2012 年</div></div>
+      <div class="card"><div class="f-caption">开发 / 运营</div><div class="f-title">Sim Leisure Group</div></div>
+      <div class="card"><div class="f-caption">地理位置</div><div class="f-title">马来西亚槟城直落巴巷（Teluk Bahang）</div></div>
+      <div class="card"><div class="f-caption">园区类型</div><div class="f-title">户外生态冒险乐园</div></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3>
+      <p class="f-body">ESCAPE Penang 是 ESCAPE 品牌的起点，2012 年在槟城直落巴巷一片废弃建筑工地上开业。创始人 Sim Choo Kheng 的念头来自一次越南出差：他看见乡村孩子爬树、跳水、自制滑车，用他童年那套方式玩耍。他不造机械乐园，用低科技设施把人的身体动作变成乐趣，官方以「微笑每小时」衡量成败。</p>
+      <p class="f-body" style="margin-top:0.6rem;">园区划成冒险（Adventureplay）、水上（Waterplay）、重力（Gravityplay）、露营（Base Camp）四块，40 余项设施。截至 2025 年 2 月持四项吉尼斯世界纪录，是全球唯一达到这个数量的主题乐园。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <h3 style="margin-bottom:0.8rem;">「低科技，高乐趣」是怎么建起来的</h3>
+      <p class="f-body"><strong>复古生态定位。</strong>园区自我定位为「复古生态冒险公园」（Retro Eco Adventure Park），建在废弃建筑工地上，不砍雨林，让设施顺着地形和树冠走。绝大多数项目靠重力、绳索和人体自身发力，运营中后期才引入少量机械动力设施。</p>
+      <p class="f-body" style="margin-top:0.6rem;"><strong>人手造纪录。</strong>1111 米管状水滑道是园区最艰难的一次工程：穿越天然雨林，最高点距地面约 70 米。为避免伤害雨林，施工不用重型机械，工人手工搭鹰架干了 8 个月，用掉 488 个部件、326 块侧挡板、1 万余颗螺栓和 66 吨钢管。</p>
+      <p class="f-body" style="margin-top:0.6rem;"><strong>分区让风险与乐趣分层。</strong>冒险区按三档难度分级（Monkey Business 绳索课程设 111 个挑战），水上区独立成片，露营区把人留在园里过夜——一条低门槛到高刺激的完整动线。</p>
+      <div style="overflow-x:auto;margin-top:0.8rem;">
+        <table class="data-table">
+          <thead><tr><th>对比</th><th>ESCAPE Penang（槟城）</th><th>ESCAPE Johor Bahru（柔佛）</th></tr></thead>
+          <tbody>
+            <tr><td>形态</td><td>户外，山地与雨林</td><td>室内，商场约 5 层垂直空间</td></tr>
+            <tr><td>开业</td><td class="f-mono">2012 年</td><td class="f-mono">2025 年</td></tr>
+            <tr><td>规模</td><td class="f-mono">约 17.8 公顷</td><td class="f-mono">商场内（无独立占地）</td></tr>
+            <tr><td>设施</td><td class="f-mono">40+ 项</td><td class="f-mono">10 个挑战站点</td></tr>
+            <tr><td>世界纪录</td><td class="f-mono">4 项吉尼斯</td><td class="f-mono">无</td></tr>
+            <tr><td>运营环境</td><td>看天气 · 有淡旺季</td><td>空调恒温 · 全年</td></tr>
+            <tr><td>意义</td><td>理念的原点</td><td>室内可复制性的试验</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>基础</td><td>开业时间</td><td class="f-mono">2012 年</td><td>ESCAPE 品牌原点</td></tr>
+          <tr><td>规模</td><td>园区占地</td><td class="f-mono">约 17.8 公顷</td><td>由废弃建筑工地改建</td></tr>
+          <tr><td>分区</td><td>园区类别</td><td class="f-mono">4 类</td><td>冒险 / 水上 / 重力 / 露营</td></tr>
+          <tr><td>设施</td><td>游乐设施</td><td class="f-mono">40+ 项</td><td>含滑索、绳索、水滑道</td></tr>
+          <tr><td>纪录</td><td>吉尼斯世界纪录</td><td class="f-mono">4 项</td><td>全球唯一持四项的主题乐园</td></tr>
+          <tr><td>纪录</td><td>最长管状水滑道</td><td class="f-mono">1111 米</td><td>2016 年开放 · 穿雨林</td></tr>
+          <tr><td>纪录</td><td>最长 Zip Coaster</td><td class="f-mono">1135 米</td><td>2022 年认证</td></tr>
+          <tr><td>纪录</td><td>最长 Tubby Racer</td><td class="f-mono">453.3 米</td><td>2025 年认证</td></tr>
+          <tr><td>纪录</td><td>最大倾倒桶</td><td class="f-mono">28,757 升</td><td>2025 年认证 · 约 10 分钟蓄满</td></tr>
+          <tr><td>水滑道</td><td>最高点 / 速度</td><td class="f-mono">约 70 米 / 15 km/h</td><td>全程约 4 分钟</td></tr>
+          <tr><td>客流</td><td>2024 年</td><td class="f-mono">约 24 万人次</td><td>2025 目标 25 万人次</td></tr>
+          <tr><td>运营</td><td>开放时间</td><td class="f-mono">10:00–18:00</td><td>人脸识别检票</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">占地口径为公开报道换算；水滑道开放年份以槟城官方刊物为准。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <p class="f-caption" style="padding:0.8rem 1rem 0;margin:0;">ESRI 卫星底图（WGS-84）。园区内部各分区无独立 POI，标注主园区与范围圈。</p>
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+      <svg viewBox="0 0 820 520" xmlns="http://www.w3.org/2000/svg">
+        <rect x="15" y="15" width="790" height="490" rx="14" fill="#1a1f2b"/>
+        <text x="60" y="48" fill="#cfd4e0" font-size="13" font-weight="700" font-family="DM Sans">ESCAPE Penang · 园区分区示意（山地雨林）</text>
+        <!-- 雨林山地底色 -->
+        <path d="M70 90 L 750 90 L 750 420 Q 410 460, 70 420 Z" fill="#23422e"/>
+        <path d="M70 90 Q 200 60, 350 90 L 350 95 L 70 95 Z" fill="#2d5239" opacity="0.8"/>
+        <path d="M350 90 Q 540 55, 750 90 L 750 95 L 350 95 Z" fill="#2d5239" opacity="0.8"/>
+        <circle cx="120" cy="160" r="8" fill="#3f6b51" opacity="0.7"/>
+        <circle cx="720" cy="300" r="10" fill="#3f6b51" opacity="0.7"/>
+        <circle cx="640" cy="130" r="7" fill="#3f6b51" opacity="0.7"/>
+        <circle cx="250" cy="360" r="9" fill="#3f6b51" opacity="0.7"/>
+        <!-- 主路（南侧） -->
+        <path d="M70 440 L 750 440" stroke="#4a5268" stroke-width="5" stroke-linecap="round"/>
+        <text x="410" y="462" text-anchor="middle" fill="#8a93ab" font-size="10" font-family="DM Sans">Jalan Teluk Bahang 主路 · 园区入口</text>
+        <!-- Adventureplay（左） -->
+        <rect x="90" y="120" width="280" height="210" rx="12" fill="#1B7A3D" opacity="0.92"/>
+        <text x="230" y="150" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">Adventureplay · 冒险乐园</text>
+        <!-- Zip Coaster 曲线 -->
+        <path d="M120 190 C 200 150, 260 230, 330 170" fill="none" stroke="#F0C04A" stroke-width="2.5" stroke-dasharray="6 4"/>
+        <text x="230" y="205" text-anchor="middle" fill="#f7e2a8" font-size="9" font-family="DM Sans">Zip Coaster · 滑索过山车 1135m</text>
+        <!-- Monkey Business -->
+        <rect x="110" y="225" width="110" height="55" rx="6" fill="#57A96A" opacity="0.85"/>
+        <text x="165" y="248" text-anchor="middle" fill="#fff" font-size="10" font-weight="600" font-family="DM Sans">Monkey Business</text>
+        <text x="165" y="263" text-anchor="middle" fill="#e3f2e7" font-size="9" font-family="DM Sans">绳索课程 · 111 挑战</text>
+        <!-- Atan's Leap 塔 -->
+        <rect x="240" y="225" width="105" height="55" rx="6" fill="#57A96A" opacity="0.85"/>
+        <text x="292" y="248" text-anchor="middle" fill="#fff" font-size="10" font-weight="600" font-family="DM Sans">Atan's Leap</text>
+        <text x="292" y="263" text-anchor="middle" fill="#e3f2e7" font-size="9" font-family="DM Sans">自由落体跳台</text>
+        <!-- Waterplay（右） -->
+        <rect x="430" y="120" width="300" height="210" rx="12" fill="#0e5a80" opacity="0.92"/>
+        <text x="580" y="150" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">Waterplay · 水上乐园</text>
+        <!-- 1111m 水滑道长曲线 -->
+        <path d="M455 200 C 520 150, 560 260, 640 180 C 680 145, 700 240, 710 200" fill="none" stroke="#9ec7db" stroke-width="3" stroke-linecap="round"/>
+        <text x="580" y="210" text-anchor="middle" fill="#d0ecf8" font-size="9" font-family="DM Sans">管状水滑道 · 1111m 世界纪录</text>
+        <!-- 倾倒桶 -->
+        <circle cx="500" cy="265" r="16" fill="none" stroke="#F0C04A" stroke-width="2"/>
+        <text x="500" y="270" text-anchor="middle" fill="#F0C04A" font-size="10" font-weight="700" font-family="DM Sans">桶</text>
+        <text x="500" y="292" text-anchor="middle" fill="#d0ecf8" font-size="9" font-family="DM Sans">倾倒桶 28,757L</text>
+        <!-- Base Camp（北） -->
+        <rect x="540" y="60" width="160" height="45" rx="8" fill="#E88A1A" opacity="0.92"/>
+        <text x="620" y="82" text-anchor="middle" fill="#fff" font-size="11" font-weight="700" font-family="DM Sans">Base Camp 露营区</text>
+        <!-- 指北针 -->
+        <g transform="translate(748, 55)">
+          <polygon points="0,0 8,-20 16,0" fill="#F0C04A"/>
+          <text x="8" y="-24" text-anchor="middle" fill="#cfd4e0" font-size="10" font-family="DM Sans">N</text>
+        </g>
+        <!-- 图例 -->
+        <g font-family="DM Sans" font-size="10" fill="#cfd4e0">
+          <rect x="60" y="90" width="14" height="14" rx="3" fill="#1B7A3D"/><text x="80" y="101">冒险区</text>
+          <rect x="140" y="90" width="14" height="14" rx="3" fill="#0e5a80"/><text x="160" y="101">水上区</text>
+          <rect x="220" y="90" width="14" height="14" rx="3" fill="#E88A1A"/><text x="240" y="101">露营区</text>
+          <path d="M300 90 h14" stroke="#F0C04A" stroke-width="3" stroke-dasharray="4 3"/><text x="320" y="101">纪录设施</text>
+          <circle cx="402" cy="96" r="5" fill="#3f6b51"/><text x="413" y="101">雨林</text>
+        </g>
+        <text x="410" y="495" text-anchor="middle" font-size="10" fill="#8a93ab" font-family="DM Sans">示意图，非精确平面 · 分区依公开资料示意 · 室内版见<a xlink:href="../escape-johor-bahru/" fill="#8a93ab">ESCAPE 柔佛案例</a></text>
+      </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><div class="f-caption">冒险乐园</div><div class="f-body">Zip Coaster 滑索过山车 1135 米创纪录；Monkey Business 绳索课程设 111 个挑战；Atan's Leap 自由落体、Flying Lemur 150 米丛林滑索、Slingshot 弹弓。</div></div>
+      <div class="card"><div class="f-caption">水上乐园</div><div class="f-body">1111 米管状水滑道穿雨林而下；Tubby Racer 453.3 米高速滑道超 30 km/h；最大倾倒桶蓄满约 10 分钟翻倒；另有死海泳池与多条水滑梯。</div></div>
+      <div class="card"><div class="f-caption">重力乐园</div><div class="f-body">以重力驱动的速度类项目，是马来西亚第一个设有滑雪坡的主题乐园，用坡道与冲力放大身体动能。</div></div>
+      <div class="card"><div class="f-caption">露营区</div><div class="f-body">Base Camp 提供过夜露营，两日票与三日票含住宿，把「玩一天」拉长成「住一晚」的度假。</div></div>
+      <div class="card"><div class="f-caption">低幼区</div><div class="f-body">Monkey School 面向儿童，降低门槛让亲子家庭一起入场，配合免费陪同入场政策承接全年龄客群。</div></div>
+      <div class="card"><div class="f-caption">周边环境</div><div class="f-body">园区紧邻直落巴巷水坝与热带雨林，滑道穿越山林时可俯瞰水坝风景，环境本身是卖点。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT & CONSTRUCTION TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1998 年</div><div class="timeline-content"><strong>灵感起点</strong><p>Sim Choo Kheng 在越南出差时，看见乡村孩子用他童年的方式爬树、跳水、自制滑车。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2012 年</div><div class="timeline-content"><strong>ESCAPE Penang 开园</strong><p>在直落巴巷废弃建筑工地建起首期冒险区，品牌成立。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2016 年</div><div class="timeline-content"><strong>1111 米水滑道开放</strong><p>穿过天然雨林的管状滑道，手工搭鹰架耗时 8 个月，获吉尼斯世界纪录认证。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022 年</div><div class="timeline-content"><strong>Zip Coaster 认证</strong><p>1135 米滑索过山车获吉尼斯认证。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024 年</div><div class="timeline-content"><strong>客流 24 万</strong><p>年接待约 24 万人次，80% 游客为 35 岁以下。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025 年 2 月</div><div class="timeline-content"><strong>再添两项吉尼斯</strong><p>Tubby Racer（453.3 米）与最大倾倒桶（28,757 升）获认证，园区成全球唯一持四项纪录的主题乐园。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025 年</div><div class="timeline-content"><strong>客流目标 25 万</strong><p>创始人远景是 15 年内年客流达 50 万人次，并呼吁改善入园道路。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONAL INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card">
+        <h4 style="margin-bottom:0.6rem;">票务体系</h4>
+        <div class="f-body" style="margin-top:0.4rem;">
+          <p>线上购票最高可享 30% 折扣，票价另加 10% 槟城州娱乐税。</p>
+          <p style="margin-top:0.4rem;">入园采用人脸识别，需提前在线上传自拍照注册。</p>
+          <p style="margin-top:0.4rem;">由付费游客陪同者可免费入场（需出示证件）；12 岁及以下须成人陪同。</p>
+          <p style="margin-top:0.4rem;">两日票与三日票含 Base Camp 露营住宿，鼓励过夜。</p>
+        </div>
+      </div>
+      <div class="card">
+        <h4 style="margin-bottom:0.6rem;">客流结构</h4>
+        <div class="f-body" style="margin-top:0.4rem;">
+          <p>2024 年接待约 24 万人次，2025 年目标约 25 万人次，年增约 10%。</p>
+          <p style="margin-top:0.4rem;">80% 游客为 35 岁以下年轻人，家庭与团建并重。</p>
+          <p style="margin-top:0.4rem;">游客反馈中，非假日周末人潮也不小，热门设施需排队。</p>
+          <p style="margin-top:0.4rem;">开放时间 10:00–18:00，全天通票含全部设施。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><div class="f-caption">世界纪录</div><div class="f-data">4 项</div><div class="f-body">全球唯一持四项吉尼斯纪录的主题乐园：水滑道、Zip Coaster、Tubby Racer、倾倒桶。</div></div>
+      <div class="card"><div class="f-caption">生态施工</div><div class="f-data">0 重型机械</div><div class="f-body">纪录滑道全程人手搭鹰架建成，不伤害雨林，施工本身是技术能力的体现。</div></div>
+      <div class="card"><div class="f-caption">理念</div><div class="f-data">微笑每小时</div><div class="f-body">以「smiles per hour」而非客流论成败，低科技设施把身体动作变成乐趣。</div></div>
+      <div class="card"><div class="f-caption">票务科技</div><div class="f-data">人脸识别</div><div class="f-body">线上注册自拍、入园刷脸，取代实体票据。</div></div>
+      <div class="card"><div class="f-caption">客群</div><div class="f-data">80% 青年</div><div class="f-body">35 岁以下游客占八成，Monkey School 与露营区补足亲子和过夜场景。</div></div>
+      <div class="card"><div class="f-caption">空间可复制</div><div class="f-data">室内化输出</div><div class="f-body">2025 年室内版落地柔佛商场，验证同一理念在垂直空间的可行性。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><div class="f-caption">过夜</div><div class="f-body">Base Camp 露营区，两日票与三日票含帐篷住宿，配套浴室与营地活动。</div></div>
+      <div class="card"><div class="f-caption">亲子服务</div><div class="f-body">Kiddocare 托儿保姆服务、Monkey School 低龄设施，12 岁以下须成人陪同。</div></div>
+      <div class="card"><div class="f-caption">交通</div><div class="f-body">园区位于直落巴巷，创始人多次呼吁政府改善丹绒武雅至直落巴巷道路以放大客流。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><div class="f-caption">新纪录</div><div class="f-body">2025 年 2 月，Tubby Racer 与最大倾倒桶两项设施获吉尼斯认证，园区跃升为全球唯一持四项纪录的主题乐园。</div></div>
+      <div class="card"><div class="f-caption">客流目标</div><div class="f-body">2025 年客流目标约 25 万人次，创始人远景是 15 年内达到年 50 万人次。</div></div>
+      <div class="card"><div class="f-caption">品牌扩张</div><div class="f-body">室内版 ESCAPE Johor Bahru 已在柔佛商场开业，品牌计划把理念复制到怡保、金马仑及中东、南亚。</div></div>
+      <div class="card"><div class="f-caption">基建诉求</div><div class="f-body">入园道路仍是客流瓶颈，创始人持续呼吁州政府升级路网，把「进得来」变成增长前提。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>类型</th><th>资料</th><th>说明</th><th>链接</th></tr></thead>
+        <tbody>
+          <tr><td>官方</td><td>ESCAPE 官网：Penang 园区页</td><td>官方设施、票价与购票入口</td><td><a href="https://www.escape.my/pg" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>政府</td><td>马来西亚旅游局：ESCAPE Penang</td><td>官方目的地介绍</td><td><a href="https://ebrochures.malaysia.travel/en/fun-and-fantasy/escape-penang/" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>主流媒体</td><td>the Star：再添两项吉尼斯纪录</td><td>2025 年 2 月纪录认证报道</td><td><a href="https://www.thestar.com.my/lifestyle/travel/2025/02/08/this-theme-park-in-penang-just-secured-two-guinness-world-records" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>主流媒体</td><td>中国报：Escape 再创两项世界级设施</td><td>2025 年客流目标与设施报道</td><td><a href="https://penang.chinapress.com.my/20250203/escape%e5%86%8d%e5%88%9b2%e4%b8%96%e7%95%8c%e7%ba%a7%e8%ae%be%e6%96%bd-%e7%9b%ae%e6%a0%87%e6%98%af%e5%90%b8%e5%bc%9525%e4%b8%87%e5%90%8d%e6%b8%b8%e5%ae%a2/" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>政府刊物</td><td>Buletin Mutiara：最大翻斗水桶及最长滑道</td><td>槟城州政府刊物纪录报道</td><td><a href="https://www.buletinmutiara.com/最大翻斗水桶及最长滑道/" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>政府刊物</td><td>Buletin Mutiara：世外逃园世界最长滑水道</td><td>1111 米水滑道纪录报道</td><td><a href="https://www.buletinmutiara.com/世外逃园世界最长滑水道/" target="_blank" rel="noopener">访问</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (Overseas: ESRI ArcGIS + WGS-84) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+  var tilesLoaded = false;
+
+  var map = L.map('parkmap', {
+    center: [5.448652, 100.216632],
+    zoom: 15,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+
+  tileLayer.on('load', function() {
+    tilesLoaded = true;
+    clearTimeout(tileTimer);
+    fallback.style.display = 'none';
+  });
+
+  tileLayer.addTo(map);
+
+  var tileTimer = setTimeout(function() {
+    if (!tilesLoaded) fallback.style.display = 'block';
+  }, 8000);
+
+  // Markers
+  var icon = L.divIcon({
+    className: 'zone-marker',
+    html: '<div style="background:#1B7A3D;color:#fff;padding:6px 14px;border-radius:16px;font-size:13px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35);border:2px solid rgba(255,255,255,0.9);font-family:\'DM Sans\',sans-serif;">ESCAPE Penang</div>',
+    iconSize: [0, 0], iconAnchor: [0, 0]
+  });
+  L.marker([5.448652, 100.216632], { icon: icon }).addTo(map).bindPopup('ESCAPE Penang · 直落巴巷 Teluk Bahang');
+
+  // Range circle
+  L.circle([5.448652, 100.216632], { radius: 380, color: '#E88A1A', weight: 2, fill: false, dashArray: '6,4', opacity: 0.6 }).addTo(map);
+
+  // Fit bounds
+  var bounds = L.latLngBounds([
+    [5.4458, 100.2135],
+    [5.4516, 100.2198]
+  ]);
+  map.fitBounds(bounds, {padding: [20, 20]});
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

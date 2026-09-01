@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>深圳欢乐谷 — 一期遇冷与二期翻盘</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #E2590A;
+  --clr-primary-light: #F0954B;
+  --clr-primary-dark: #8A3200;
+  --clr-accent: #C93B2A;
+}
+
+.hero {
+  background: linear-gradient(160deg, #4A1C00 0%, #8A3200 40%, #E2590A 75%, #F0954B 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(201,59,42,0.22) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,210,150,0.10) 0%, transparent 50%);
+}
+
+/* China: dual-map layout */
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+
+/* 一期 / 二期 色块标记（技术总表） */
+.tag-i { display:inline-block; padding:2px 8px; border-radius:99px; font-size:0.72rem; font-weight:600; background:#fde8d6; color:#8A3200; }
+.tag-ii { display:inline-block; padding:2px 8px; border-radius:99px; font-size:0.72rem; font-weight:600; background:#d9f0e6; color:#0f6b4a; }
+.tag-later { display:inline-block; padding:2px 8px; border-radius:99px; font-size:0.72rem; font-weight:600; background:#e8e6f2; color:#4a4377; }
+
+/* 翻盘对比数据行 */
+.turnaround { border-left: 4px solid var(--clr-accent); padding: 0.6rem 1rem 0.6rem 1.1rem; margin-bottom: 0.9rem; background: var(--clr-bg-card); border-radius: 0 var(--radius-md) var(--radius-md) 0; }
+.turnaround .f-data { color: var(--clr-primary); }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>深圳欢乐谷</h1>
+    <p class="hero-subtitle">1998 年一期开园即遇冷，2002 年二期以翻倍投资翻盘</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">1998</div><div class="kpi-label">一期开园年份</div></div>
+      <div class="kpi-card"><div class="kpi-number">35 万 m²</div><div class="kpi-label">一、二期合计占地</div></div>
+      <div class="kpi-card"><div class="kpi-number">230 万</div><div class="kpi-label">2002 年入园人次</div></div>
+      <div class="kpi-card"><div class="kpi-number">¥4639 万</div><div class="kpi-label">2002 年净利润</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><div class="f-caption">开业时间</div><div class="f-title">1998 年 10 月 1 日</div></div>
+      <div class="card"><div class="f-caption">开发 / 运营</div><div class="f-title">华侨城集团（OCT）</div></div>
+      <div class="card"><div class="f-caption">地理位置</div><div class="f-title">深圳市南山区华侨城片区</div></div>
+      <div class="card"><div class="f-caption">景区等级</div><div class="f-title">国家 AAAAA 级（首批）</div></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3>
+      <p class="f-body">深圳欢乐谷是华侨城继锦绣中华、中国民俗文化村、世界之窗之后开发的第四座主题公园，也是欢乐谷连锁品牌的发源地。它开创了「高科技机动游乐 + 主题化情景包装 + 全天候演艺 + 常年策划活动」的产品模式，是中国首个参与型、体验型新一代主题公园。</p>
+      <p class="f-body" style="margin-top:0.6rem;">但一期开园后的三年并不顺利：客流不达预期、2000 年出现亏损。转折点出现在 2002 年——二期以近乎翻倍的投资和面积开放，当年客流冲上 230 万人次、净利润 4639 万元，一举翻盘。此后欢乐谷把「建不完的欢乐谷，玩不完的欢乐谷」变成常态，滚动开发持续至今。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+
+    <div class="reveal"><h3 style="margin-bottom:0.8rem;">一期：1998 年开园，随后三年遇冷</h3></div>
+    <div class="card reveal">
+      <p class="f-body">一期占地约 17 万平方米，投资约 4 亿元人民币，设欢乐广场、卡通城、冒险山、欢乐岛、玛雅水公园五个主题区。开园当年就定下「体验式」路线，但市场给出的回应是冷清。对比同期成熟景区：1998 年锦绣中华接待 91 万人次，深圳欢乐谷只有 28 万人次。</p>
+      <p class="f-body" style="margin-top:0.6rem;">客流与利润逐年滑向低谷，被行业研究称为「首期效应不显著、生命周期很短」的典型：</p>
+      <div style="overflow-x:auto;margin-top:0.8rem;">
+        <table class="data-table">
+          <thead><tr><th>年份</th><th>入园人次</th><th>净利润</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>1998</td><td class="f-mono">28 万</td><td class="f-mono">—</td><td>开园当年，同期锦绣中华 91 万人次</td></tr>
+            <tr><td>1999</td><td class="f-mono">133 万</td><td class="f-mono">—</td><td>仍远低于预期</td></tr>
+            <tr><td>2000</td><td class="f-mono">116.9 万</td><td class="f-mono" style="color:var(--clr-accent);">-¥111 万</td><td>经营低谷，出现亏损</td></tr>
+            <tr><td>2001</td><td class="f-mono">—</td><td class="f-mono">¥351 万</td><td>仅微利，未摆脱困境</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 style="margin:1.4rem 0 0.6rem;">遇冷的原因</h4>
+      <div class="grid-2">
+        <div class="card"><div class="f-caption">原因一</div><div class="f-body">产品定位不准，对「新一代主题公园」该做成什么样，目标客群是谁，判断不清晰。</div></div>
+        <div class="card"><div class="f-caption">原因二</div><div class="f-body">开发理念不成熟，一期直接承袭国外案例，大量「舶来品」缺乏自身特色，纵深不足。</div></div>
+        <div class="card"><div class="f-caption">原因三</div><div class="f-body">大型游乐设施依赖进口，核心技术握在国外厂商手里，建设成本高、还受制于人。</div></div>
+        <div class="card"><div class="f-caption">原因四</div><div class="f-body">市场接受度低，90 年代内地游客对「体验型游乐 + 主题包装」的消费习惯尚未养成。</div></div>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top:2.4rem;"><h3 style="margin-bottom:0.8rem;">二期：2002 年，以近乎翻倍的投入赌翻盘</h3></div>
+    <div class="card reveal">
+      <p class="f-body">华侨城没有选择收缩，而是判定「症结在产品纵深不足」，用滚动扩建来续命。资金在 2000 年就位：当年配股募资 2.37 亿元，定向全部投入二期工程，2001 年动工建设，2002 年 5 月 1 日二期全新开放。</p>
+      <div style="overflow-x:auto;margin-top:0.8rem;">
+        <table class="data-table">
+          <thead><tr><th>维度</th><th>一期（1998）</th><th>二期（2002）</th><th>变化</th></tr></thead>
+          <tbody>
+            <tr><td>占地</td><td class="f-mono">17 万 m²</td><td class="f-mono">+18 万 m²</td><td>累计约 35 万 m²，近一倍</td></tr>
+            <tr><td>投资</td><td class="f-mono">约 ¥4 亿</td><td class="f-mono">+约 ¥4 亿</td><td>累计约 ¥8 亿，近一倍</td></tr>
+            <tr><td>主题区</td><td class="f-mono">5 个</td><td class="f-mono">+4 个</td><td>共 8 大主题区</td></tr>
+            <tr><td>游乐项目</td><td class="f-mono">—</td><td class="f-mono">+68 个</td><td>两期合计近百个</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="f-body" style="margin-top:0.8rem;">二期新增金矿镇、香格里拉森林、飓风湾、阳光海岸四大主题区，主环道全长 3.5 公里，走完一、二期所有项目约需 10 小时。选址策略对准了两代人的变化：深圳常住人口平均年龄约 26 岁，年轻人要刺激；快速城市化里，城市人开始向往自然与异域风情。于是淘金年代的西部、加勒比海、热带丛林、海滨沙滩各自成区。</p>
+      <p class="f-body" style="margin-top:0.6rem;">效果立竿见影。二期开放百天迎客 100 万人次、收入超 1 亿元；2002 年全年入园 230 万人次，跻身全国主题乐园前三甲，净利润 4639 万元，与 2000 年的亏损形成镜像。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>总占地面积</td><td class="f-mono">35 万 m²</td><td>一期 17 万 + 二期 18 万</td></tr>
+          <tr><td>投资</td><td>一期投资</td><td class="f-mono">约 ¥4 亿</td><td><span class="tag-i">一期 1998</span></td></tr>
+          <tr><td>投资</td><td>二期新增投资</td><td class="f-mono">约 ¥4 亿</td><td><span class="tag-ii">二期 2002</span>，2000 年配股 2.37 亿定向投入</td></tr>
+          <tr><td>投资</td><td>累计投资（两期后）</td><td class="f-mono">约 ¥8 亿</td><td>含历次扩建，今日累计近 ¥20 亿</td></tr>
+          <tr><td>分区</td><td>一期主题区</td><td class="f-mono">5 个</td><td>欢乐广场 · 卡通城 · 冒险山 · 欢乐岛 · 玛雅水公园</td></tr>
+          <tr><td>分区</td><td>二期新增主题区</td><td class="f-mono">4 个</td><td>金矿镇 · 香格里拉森林 · 飓风湾 · 阳光海岸</td></tr>
+          <tr><td>设施</td><td>二期新建项目</td><td class="f-mono">68 个</td><td>两期合计近百个</td></tr>
+          <tr><td>设施</td><td>二期主环道</td><td class="f-mono">3.5 km</td><td>走完一、二期约需 10 小时</td></tr>
+          <tr><td>设施</td><td>最高落差水滑道（二期）</td><td class="f-mono">26 m</td><td>飓风湾「激流勇进」，当时世界最高落差</td></tr>
+          <tr><td>设施</td><td>标志过山车（今日）</td><td class="f-mono">135 km/h</td><td>香格里拉·雪域「雪域雄鹰」弹射式</td></tr>
+          <tr><td>运营</td><td>2002 年入园人次</td><td class="f-mono">230 万</td><td>全国主题乐园前三甲</td></tr>
+          <tr><td>运营</td><td>2002 年净利润</td><td class="f-mono">¥4639 万</td><td>2000 年曾亏损 ¥111 万</td></tr>
+          <tr><td>运营</td><td>累计接待游客</td><td class="f-mono">7000 万+</td><td>截至 2025 年</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">投资口径：一期、二期各约 4 亿元为中新网 2002 年报道等公开源口径；「累计近 20 亿」含后续第三至六期及历次改造。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <p class="f-caption" style="margin-bottom:0.6rem;">高德地图（GCJ-02）。园内分区间距小，只标入口与间距足够的独立分区，完整分区见下方示意图。</p>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+      <svg viewBox="0 0 1000 850" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="20" width="960" height="810" rx="16" fill="#1a1f2b"/>
+        <g transform="translate(920,55)"><polygon points="0,26 7,0 14,26 7,20" fill="#F0954B"/><text x="7" y="42" text-anchor="middle" font-size="11" fill="#cfd4e0" font-family="DM Sans">N</text></g>
+        <!-- 水域：阳光海岸湖 -->
+        <ellipse cx="330" cy="285" rx="120" ry="42" fill="#2b4a63" opacity="0.9"/>
+        <text x="330" y="290" text-anchor="middle" fill="#8fb7d8" font-size="11" font-family="DM Sans">阳光海岸 · 湖</text>
+        <!-- 一期区域 -->
+        <rect x="380" y="700" width="240" height="80" rx="10" fill="#C93B2A" opacity="0.9" stroke="#fff" stroke-width="1.6"/>
+        <text x="500" y="735" text-anchor="middle" fill="#fff" font-size="13" font-weight="700" font-family="DM Sans">西班牙广场（入口）</text><text x="500" y="753" text-anchor="middle" fill="#ffd9c9" font-size="9" font-family="DM Sans">一期 · 综合服务区</text>
+        <rect x="380" y="565" width="240" height="120" rx="10" fill="#B4652F" opacity="0.9" stroke="#fff" stroke-width="1.6"/>
+        <text x="500" y="615" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">冒险山</text><text x="500" y="633" text-anchor="middle" fill="#ffe2c4" font-size="9" font-family="DM Sans">一期 · 2022 年迷你世界 IP 化改造</text>
+        <rect x="680" y="565" width="260" height="120" rx="10" fill="#B4652F" opacity="0.9" stroke="#fff" stroke-width="1.6"/>
+        <text x="810" y="615" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">玛雅海滩水公园</text><text x="810" y="633" text-anchor="middle" fill="#ffe2c4" font-size="9" font-family="DM Sans">一期 · 水上游乐 · 夏季开放</text>
+        <!-- 二期区域（亮色突出） -->
+        <rect x="40" y="560" width="300" height="130" rx="10" fill="#E2590A" stroke="#fff" stroke-width="2.2"/>
+        <text x="190" y="612" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">西部矿镇（金矿镇）</text><text x="190" y="630" text-anchor="middle" fill="#ffe2c4" font-size="9" font-family="DM Sans">二期 · 淘金年代 · 矿山车</text>
+        <rect x="40" y="360" width="300" height="160" rx="10" fill="#E2590A" stroke="#fff" stroke-width="2.2"/>
+        <text x="190" y="425" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">香格里拉·雪域</text><text x="190" y="443" text-anchor="middle" fill="#ffe2c4" font-size="9" font-family="DM Sans">二期 · 雪域雄鹰 · 雪山飞龙</text>
+        <rect x="40" y="200" width="300" height="120" rx="10" fill="#E2590A" stroke="#fff" stroke-width="2.2"/>
+        <text x="190" y="250" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">阳光海岸</text><text x="190" y="268" text-anchor="middle" fill="#ffe2c4" font-size="9" font-family="DM Sans">二期 · 海滨休闲</text>
+        <rect x="700" y="360" width="240" height="160" rx="10" fill="#E2590A" stroke="#fff" stroke-width="2.2"/>
+        <text x="820" y="425" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">飓风湾</text><text x="820" y="443" text-anchor="middle" fill="#ffe2c4" font-size="9" font-family="DM Sans">二期 · 激流勇进 · 完美风暴</text>
+        <!-- 后期区域 -->
+        <rect x="380" y="360" width="240" height="160" rx="10" fill="#5a5478" opacity="0.9" stroke="#fff" stroke-width="1.6"/>
+        <text x="500" y="425" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">欢乐时光</text><text x="500" y="443" text-anchor="middle" fill="#d6d1e8" font-size="9" font-family="DM Sans">三期 2005 · 夜场主力</text>
+        <rect x="380" y="160" width="240" height="150" rx="10" fill="#5a5478" opacity="0.9" stroke="#fff" stroke-width="1.6"/>
+        <text x="500" y="220" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">魔幻城堡</text><text x="500" y="238" text-anchor="middle" fill="#d6d1e8" font-size="9" font-family="DM Sans">四期 2008 · 亲子区</text>
+        <rect x="700" y="160" width="240" height="150" rx="10" fill="#5a5478" opacity="0.9" stroke="#fff" stroke-width="1.6"/>
+        <text x="820" y="220" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">欢乐时光扩展区</text><text x="820" y="238" text-anchor="middle" fill="#d6d1e8" font-size="9" font-family="DM Sans">2025 焕新 · 泰浪街</text>
+        <!-- 图例 -->
+        <g font-family="DM Sans" font-size="11" fill="#cfd4e0">
+          <rect x="680" y="700" width="16" height="16" rx="3" fill="#E2590A"/><text x="704" y="713">二期新增（2002）</text>
+          <rect x="680" y="726" width="16" height="16" rx="3" fill="#B4652F"/><text x="704" y="739">一期延续（1998）</text>
+          <rect x="680" y="752" width="16" height="16" rx="3" fill="#5a5478"/><text x="704" y="765">三/四期及焕新</text>
+          <rect x="860" y="726" width="16" height="16" rx="3" fill="#2b4a63" stroke="#8fb7d8"/><text x="884" y="739">水域</text>
+        </g>
+        <text x="500" y="810" text-anchor="middle" font-size="11" fill="#8a93ab" font-family="DM Sans">示意图：暗色底为示意用途，非园区真实夜景 · 基于官方地图与卫星影像整理 · 北向上</text>
+      </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><div class="f-caption"><span class="tag-i">一期</span> 西班牙广场</div><div class="f-body">入口综合服务区，售票、客服、餐饮、购物与欢乐干线站。</div></div>
+      <div class="card"><div class="f-caption"><span class="tag-later">三期 2005</span> 欢乐时光</div><div class="f-body">欧洲小镇背景，UFO、发现者、四维影院，夜场运营主力区。</div></div>
+      <div class="card"><div class="f-caption"><span class="tag-later">四期 2008</span> 魔幻城堡</div><div class="f-body">亲子主题区，后部分区域 2025 年改造为「迷你星球」亲子乐园。</div></div>
+      <div class="card"><div class="f-caption"><span class="tag-i">一期</span> 冒险山</div><div class="f-body">2022 年以「迷你世界」IP 改造，四分区 + 六设施 + 十五景观。</div></div>
+      <div class="card"><div class="f-caption"><span class="tag-ii">二期</span> 西部矿镇（金矿镇）</div><div class="f-body">18 世纪美国西部淘金年代，矿山车、金矿漂流、金涛骇浪。</div></div>
+      <div class="card"><div class="f-caption"><span class="tag-ii">二期</span> 香格里拉·雪域</div><div class="f-body">由香格里拉森林演进，弹射式过山车「雪域雄鹰」、悬挂式「雪山飞龙」。</div></div>
+      <div class="card"><div class="f-caption"><span class="tag-ii">二期</span> 飓风湾</div><div class="f-body">加勒比风情，26 米落差激流勇进、完美风暴、7D 互动剧场。</div></div>
+      <div class="card"><div class="f-caption"><span class="tag-ii">二期</span> 阳光海岸</div><div class="f-body">沙滩、湖水、绿茵长廊，蹦极与游船，海滨休闲带。</div></div>
+      <div class="card"><div class="f-caption"><span class="tag-i">一期</span> 玛雅海滩水公园</div><div class="f-body">古玛雅主题水上乐园，夏季开放，历次升级后保留至今。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1998 年 10 月</div><div class="timeline-content"><strong>一期开园</strong><p>投资约 ¥4 亿，占地约 17 万 m²，五主题区。当年客流仅 28 万人次。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2000 年</div><div class="timeline-content"><strong>经营低谷，同时募资</strong><p>全年 116.9 万人次、净利润 -¥111 万。华侨城配股募资 2.37 亿元，定向全部投入二期工程。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2001 年</div><div class="timeline-content"><strong>二期动工</strong><p>二期工程投入建设，当年仅微利 ¥351 万。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2002 年 5 月</div><div class="timeline-content"><strong>二期翻盘</strong><p>新增约 ¥4 亿、18 万 m²、68 个项目。百天迎客 100 万人次、收入超 ¥1 亿；全年 230 万人次、净利 ¥4639 万。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2005 年</div><div class="timeline-content"><strong>三期「欢乐时光」+ 夜场</strong><p>降低入园门槛、提高设备使用率，当年突破 300 万人次，重游率 41%。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2008 年</div><div class="timeline-content"><strong>魔幻城堡</strong><p>投资 ¥2 亿的亲子主题区，金融危机年仍逆势投入。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2010 年</div><div class="timeline-content"><strong>五期：香格里拉·雪域</strong><p>弹射过山车「雪域雄鹰」上线，玛雅水公园同步升级。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2016 / 2019</div><div class="timeline-content"><strong>飓风湾升级 · 六期全面升级</strong><p>XD 动感影院、黑暗骑乘剧场；西部矿镇、玛雅水公园、阳光海岸改造。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022–2024</div><div class="timeline-content"><strong>冒险山 IP 化</strong><p>「迷你世界·冒险山」主题区落地。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025</div><div class="timeline-content"><strong>全园焕新</strong><p>国产 LSM 弹射过山车「幻影摩托」在原雪山飞龙场地登场，「迷你星球」亲子区、泰浪街开放。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="reveal">
+      <h3 style="margin-bottom:0.8rem;">翻盘前后：客流与利润的镜像</h3>
+      <div class="grid-2">
+        <div class="card">
+          <div class="f-caption">翻盘前 · 低谷 2000 年</div>
+          <div class="turnaround" style="border-left-color:#C93B2A;"><span class="f-data f-title">116.9 万</span><span class="f-caption"> 入园人次</span></div>
+          <div class="turnaround" style="border-left-color:#C93B2A;"><span class="f-data f-title">-¥111 万</span><span class="f-caption"> 净利润</span></div>
+        </div>
+        <div class="card">
+          <div class="f-caption">翻盘后 · 二期首年 2002 年</div>
+          <div class="turnaround"><span class="f-data f-title">230 万</span><span class="f-caption"> 入园人次，全国前三甲</span></div>
+          <div class="turnaround"><span class="f-data f-title">¥4639 万</span><span class="f-caption"> 净利润，扭亏为盈</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card reveal" style="margin-top:1.2rem;">
+      <h4 style="margin-bottom:0.6rem;">翻盘后的爬坡</h4>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>年份</th><th>入园人次</th><th>备注</th></tr></thead>
+          <tbody>
+            <tr><td>2002</td><td class="f-mono">230 万</td><td>二期开放当年，净利 ¥4639 万</td></tr>
+            <tr><td>2003</td><td class="f-mono">200 万</td><td>受 SARS 影响仍保持高位</td></tr>
+            <tr><td>2004</td><td class="f-mono">252 万</td><td>全国主题公园游客量居前</td></tr>
+            <tr><td>2005</td><td class="f-mono">300 万+</td><td>三期+夜场，重游率 41%、满意度 98%</td></tr>
+            <tr><td>2006–2009</td><td class="f-mono">280–323 万</td><td>连续入围亚太地区主题公园前十强</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="f-caption" style="margin-top:0.7rem;">2005 年起连续五年净利润超亿元。2009 年金融危机下仍接待 280 万人次，居当年全国主题公园单一景区首位。</p>
+    </div>
+    <div class="card reveal" style="margin-top:1.2rem;">
+      <h4 style="margin-bottom:0.6rem;">长期运营基调：每年持续改造</h4>
+      <p class="f-body">欢乐谷把「建不完的欢乐谷，玩不完的欢乐谷」当作经营方针：每年投入 3000–5000 万元改造或新建项目，每三年导入一个新主题产品并做一次主题包装升级。这套「滚动开发」机制正是对一期失败教训的制度化回应。</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><div class="f-caption">二期带来的「中国第一」</div><div class="f-data">4 项</div><div class="f-body">矿山车、完美风暴、悬挂式过山车「雪山飞龙」，以及当时世界最高落差（26 米）的激流勇进。</div></div>
+      <div class="card"><div class="f-caption">二期带来的「亚洲之最」</div><div class="f-data">2 项</div><div class="f-body">亚洲最高的太空梭（惊险之塔），亚洲首座四维影院。</div></div>
+      <div class="card"><div class="f-caption">今日旗舰过山车</div><div class="f-data">135 km/h</div><div class="f-body">香格里拉·雪域「雪域雄鹰」弹射式过山车，2 秒弹射提速。</div></div>
+      <div class="card"><div class="f-caption">2025 国产新旗舰</div><div class="f-data">88 km/h</div><div class="f-body">LSM 电磁弹射过山车「幻影摩托」，轨道 790 米、最高点 38 米，国内首批开环+换轨往复设计。</div></div>
+      <div class="card"><div class="f-caption">设备来源</div><div class="f-data">美荷德</div><div class="f-body">二期从美国、荷兰、德国引入设备；一期设备依赖进口是建设成本高的重要成因。</div></div>
+      <div class="card"><div class="f-caption">亲子新板块</div><div class="f-data">2000 m²</div><div class="f-body">2025 年「迷你星球」亲子乐园，16 个功能分区，开放不久即接待超 14 万人次。</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><div class="f-caption">餐饮</div><div class="f-body">20+ 主题餐厅与小吃亭，覆盖中西餐、快餐与甜品。</div></div>
+      <div class="card"><div class="f-caption">周边住宿</div><div class="f-body">华侨城洲际大酒店、威尼斯酒店、万豪行政公寓、城市客栈等。</div></div>
+      <div class="card"><div class="f-caption">停车</div><div class="f-body">约 3000 车位，地面加地下立体车库。</div></div>
+      <div class="card"><div class="f-caption">交通</div><div class="f-body">地铁 1、2 号线世界之窗站，欢乐干线观光轻轨，多路公交枢纽。</div></div>
+      <div class="card"><div class="f-caption">演艺设施</div><div class="f-body">欢乐剧场、四维影院、7D 互动剧场、街头表演点。</div></div>
+      <div class="card"><div class="f-caption">片区联动</div><div class="f-body">与锦绣中华、世界之窗同处华侨城片区，形成景区集群与联动客流。</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><div class="f-caption">2025 全园焕新</div><div class="f-body">五大新项目上线：幻影摩托、勇士之锤、完美风暴、落日飞车、激流勇进升级版；中部广场预告高空悬停、瞬间弹射、U 型轨道赛车等新设备。</div></div>
+      <div class="card"><div class="f-caption">IP 联动密集</div><div class="f-body">与《蛋仔派对》《迷你世界》《巴啦啦小魔仙》《葫芦兄弟》《英雄联盟》等联动，推出主题巡游、玩水区与「城市峡谷」主题活动。</div></div>
+      <div class="card"><div class="f-caption">经营信号</div><div class="f-body">2025 年狂欢节期间创下单日营收历史新高；华侨城集团旗下主题公园清明假期接待近 50 万人次，同比增长 13%。</div></div>
+      <div class="card"><div class="f-caption">母公司承压</div><div class="f-body">华侨城 A 2025 年旅游综合板块营收 213.72 亿元，同比下降 21.71%；在管主题公园 25 座、遍及 13 城。</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>类型</th><th>资料</th><th>说明</th><th>链接</th></tr></thead>
+        <tbody>
+          <tr><td>原始报道</td><td>中新网：华侨城巨资扩建欢乐谷</td><td>2002 年 4 月，二期开放在即的现场报道，载明投资、面积与新区</td><td><a href="http://www.chinanews.com.cn/2002-04-30/26/182802.html" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>原始报道</td><td>证券之星：欢乐谷二期开业百天收入过亿</td><td>2002 年 8 月，二期运营百天数据</td><td><a href="https://news.stockstar.com/SS2002081400578528.shtml" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>行业分析</td><td>科学智库：深圳欢乐谷的生命周期解释</td><td>以生命周期视角解读一、二期转折，是「翻盘」叙事的学术依据</td><td><a href="https://thinktank.sciencereading.cn/booklib/v/subLibPreview/122/247/1703649.html" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>行业报道</td><td>新浪广东：成功源自创新（开业七周年）</td><td>2005 年，复盘一至三期运营与「常建常新」理念</td><td><a href="http://gd.sina.com.cn/life/news/2005-10-08/1772217.html" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>行业报道</td><td>搜狐新闻：「常建常新」成就欢乐谷</td><td>2006 年，滚动开发机制的深度解读</td><td><a href="http://news.sohu.com/20060211/n241773346.shtml" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>官方</td><td>华侨城集团官网</td><td>2025 年「迷你星球」亲子乐园项目动态</td><td><a href="https://www.chinaoct.com/hqc_m/624036/624038/723649/index.html" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>政府</td><td>深圳市南山区人民政府：深圳欢乐谷</td><td>景区概况官方页面</td><td><a href="https://www.szns.gov.cn/mlns/whns/lyjq/content/post_12590146.html" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>图库</td><td>Wikimedia Commons</td><td>自由版权图片：园区鸟瞰与设施</td><td><a href="https://commons.wikimedia.org/wiki/Category:Happy_Valley_Shenzhen" target="_blank" rel="noopener">访问</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+
+var zonesGcj02 = [
+  { name: '西班牙广场（入口）', lng: 113.978904, lat: 22.538778, color: '#C93B2A' },
+  { name: '玛雅海滩水公园', lng: 113.980123, lat: 22.54191, color: '#16A085' },
+  { name: '香格里拉·雪域', lng: 113.981732, lat: 22.543912, color: '#1A5276' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([22.54159, 113.980295], 16);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesGcj02);
+
+  if (withBoundary) {
+    L.circle([22.54159, 113.980295], { radius: 380, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

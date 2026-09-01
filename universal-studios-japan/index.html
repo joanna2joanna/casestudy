@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日本环球影城 — 从3年连续赤字到世界第3的绝地翻身</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #1C4BA8;
+  --clr-primary-light: #4F7FD0;
+  --clr-primary-dark: #0E2E6B;
+  --clr-accent: #F5B01C;
+}
+
+.hero {
+  background: linear-gradient(160deg, #0E2E6B 0%, #1C4BA8 40%, #4F7FD0 70%, #7EA6E6 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(245,176,28,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>日本环球影城</h1>
+    <p class="hero-subtitle">美国以外首座环球影城 · 大阪湾填海地 · 总敷地约 54 公顷 · 2024 年客流约 1,600 万列全球第 3</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">~1,600 万</div><div class="kpi-label">2024 年游客量（全球第 3）</div></div>
+      <div class="kpi-card"><div class="kpi-number">54 公顷</div><div class="kpi-label">总敷地面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">3 年连续</div><div class="kpi-label">世界第 3 位</div></div>
+      <div class="kpi-card"><div class="kpi-number">JP¥1,700 亿</div><div class="kpi-label">初始投资（约 ¥85 亿）</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目名称</h3><p>Universal Studios Japan<br>日本环球影城（USJ）<br><span class="f-caption">美国以外首座环球影城主题公园</span></p></div>
+      <div class="card"><h3>地理位置</h3><p>大阪市此花区樱岛 2-1-33<br>大阪湾填海地，JR 梦咲线 Universal City 站<br>坐标：34°39′56″N, 135°25′57″E</p></div>
+      <div class="card"><h3>开业时间</h3><p>2001 年 3 月 31 日<br>1998 年 10 月动工，工期约 2 年半<br>亚洲首座、世界第 3 座环球影城</p></div>
+      <div class="card"><h3>开发商 / 运营商</h3><p>运营方：合同会社 USJ<br>IP 授权：环球目的地与体验（UD&amp;E）<br>2015 年起成为康卡斯特 NBC 环球子公司</p></div>
+      <div class="card"><h3>占地面积</h3><p>总敷地约 54 公顷（54 万 m²）<br>公园面积约 46.4 公顷（2024 年）<br>开业时约 39 公顷，历经 4 次扩展</p></div>
+      <div class="card"><h3>门票价格</h3><p>1 日 Studio Pass 成人<br>JP¥8,900–11,900（2026 年 9 月前）<br>2026 年 9 月起最低 JP¥8,400 起动态浮动</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>日本环球影城位于大阪湾填海地，2001 年 3 月开园时总事业费约 JP¥1,700 亿，大阪市出资约四分之一。开业即赶上全球旅游业低迷，连续 3 年赤字，被视作环球影城海外扩张的失败样本。转折从 2012 年亲子区「环球奇境」开始，2014 年哈利波特魔法世界（约 JP¥450 亿）与 2015 年康卡斯特收购完成全 IP 化运营，2021 年超级任天堂世界（约 JP¥600 亿）以游戏 IP 破圈。到 2024 年客流约 1,600 万人次，连续 3 年列世界第 3、日本国内第 1，是母公司环球主题公园中客流最高的一座。2026 年 3 月进入开业 25 周年庆典期。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>公司 / 机构</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>运营方</td><td>合同会社 USJ</td><td>大阪市等三方出资的第三部门起步，2015 年康卡斯特取得控股权</td></tr>
+          <tr><td>乐园设计</td><td>环球创意 Universal Creative</td><td>环球影城主题区的概念设计与体验开发</td></tr>
+          <tr><td>任天堂区共创</td><td>任天堂（宫本茂监修）</td><td>超级任天堂世界由任天堂与环球联合开发，世界首创</td></tr>
+          <tr><td>初期出资</td><td>大阪市</td><td>出资约初期投资四分之一（约 US$8,200 万）</td></tr>
+          <tr><td>母公司</td><td>康卡斯特 NBC 环球</td><td>2015 年收购 51%，后推进完全子公司化</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>总敷地面积</td><td class="num">约 54 公顷</td><td>大阪湾填海地</td></tr>
+          <tr><td>规模</td><td>公园面积</td><td class="num">约 46.4 公顷</td><td>2001 年约 39 公顷，历经 4 次扩展</td></tr>
+          <tr><td>规模</td><td>主题区</td><td class="num">8 大主题区</td><td>好莱坞/纽约/旧金山/侏罗纪/小黄人/环球奇境/哈利波特/任天堂世界</td></tr>
+          <tr><td>规模</td><td>常设游乐设施</td><td class="num">约 26 种</td><td>另有阿米蒂村与水上特技秀等表演区</td></tr>
+          <tr><td>投资</td><td>初始总事业费</td><td class="num">约 JP¥1,700 亿</td><td>约合人民币 85 亿元，大阪市出资约 1/4</td></tr>
+          <tr><td>投资</td><td>哈利波特魔法世界</td><td class="num">约 JP¥450 亿</td><td>2014 年开业</td></tr>
+          <tr><td>投资</td><td>超级任天堂世界</td><td class="num">约 JP¥600 亿</td><td>2021 年开业</td></tr>
+          <tr><td>客流</td><td>2024 年游客量</td><td class="num">约 1,600 万人次</td><td>TEA/AECOM，全球第 3，连续 3 年</td></tr>
+          <tr><td>客流</td><td>2023 年游客量</td><td class="num">约 1,600 万人次</td><td>与上年持平</td></tr>
+          <tr><td>票价</td><td>1 日 Studio Pass（2026.9 前）</td><td class="num">JP¥8,900–11,900</td><td>5 档动态定价</td></tr>
+          <tr><td>票价</td><td>1 日 Studio Pass（2026.9 起）</td><td class="num">JP¥8,400 起</td><td>越早买越便宜，发售后随销售上涨</td></tr>
+          <tr><td>酒店</td><td>官方酒店</td><td class="num">7 家</td><td>正门旁步行 1–10 分钟</td></tr>
+          <tr><td>扩建</td><td>大阪市相邻市有地</td><td class="num">约 3.1 万 m²</td><td>2026 年 9 月协商出租，为后续扩建铺路</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源：维基百科、USJ 官网、TEA/AECOM 主题指数、Bloomberg 与路透社报道。汇率以 2026-09 为准，1 JPY ≈ 0.05 CNY。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="map-legend">
+          <span><span class="dot" style="background:#1C4BA8;"></span> 日本环球影城（总敷地约54公顷）</span>
+          <span><span class="dot" style="background:#E8485A;"></span> 研究范围圈</span>
+        </div>
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+          <rect width="900" height="600" fill="#0A1628" rx="12"/>
+          <text x="450" y="32" fill="#F5B01C" font-family="Playfair Display,serif" font-size="16" text-anchor="middle" font-weight="600">日本环球影城 · 主题区空间结构示意</text>
+          <line x1="60" y1="52" x2="840" y2="52" stroke="#F5B01C" stroke-width="0.5" opacity="0.3"/>
+
+          <!-- 主入口（南侧中央） -->
+          <path d="M 420 568 L 380 540 L 480 540 Z" fill="#4F7FD0" opacity="0.5"/>
+          <text x="430" y="530" fill="rgba(255,255,255,0.7)" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif">主入口</text>
+          <text x="430" y="585" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">JR Universal City 站 · 步行约5分钟</text>
+
+          <!-- 好莱坞大道（中央竖带） -->
+          <rect x="360" y="360" width="130" height="170" rx="4" fill="#C41E3A" opacity="0.7"/>
+          <text x="425" y="452" fill="#fff" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">好莱坞</text>
+          <text x="425" y="468" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">好莱坞梦过山车</text>
+
+          <!-- 纽约（东侧） -->
+          <rect x="520" y="400" width="120" height="70" rx="4" fill="#E8784A" opacity="0.7"/>
+          <text x="580" y="432" fill="#fff" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">纽约</text>
+          <text x="580" y="450" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">电影街区 · 限时IP</text>
+
+          <!-- 小黄人乐园（东南） -->
+          <rect x="660" y="420" width="120" height="70" rx="4" fill="#F0D048" opacity="0.9"/>
+          <text x="720" y="452" fill="#0A1628" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">小黄人乐园</text>
+          <text x="720" y="470" fill="rgba(10,22,40,0.7)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">小黄人乘车游 · 射击</text>
+
+          <!-- 旧金山（西南） -->
+          <rect x="200" y="400" width="120" height="70" rx="4" fill="#0277BD" opacity="0.75"/>
+          <text x="260" y="432" fill="#fff" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">旧金山</text>
+          <text x="260" y="450" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">港口街景 · 主题餐饮</text>
+
+          <!-- 阿米蒂村（大白鲨，中偏西） -->
+          <rect x="200" y="310" width="110" height="55" rx="4" fill="rgba(23,119,151,0.55)" stroke="#16809F" stroke-width="0.8"/>
+          <text x="255" y="332" fill="rgba(255,255,255,0.85)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">阿米蒂村</text>
+          <text x="255" y="348" fill="rgba(255,255,255,0.55)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">大白鲨</text>
+
+          <!-- 侏罗纪公园（西侧） -->
+          <rect x="90" y="300" width="110" height="105" rx="4" fill="#2E7D32" opacity="0.75"/>
+          <text x="145" y="340" fill="#fff" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">侏罗纪</text>
+          <text x="145" y="360" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">飞天翼龙</text>
+          <text x="145" y="378" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">激流勇进</text>
+
+          <!-- 水世界（西北） -->
+          <rect x="90" y="180" width="110" height="80" rx="4" fill="rgba(0,96,160,0.6)" stroke="#1E88E5" stroke-width="0.8"/>
+          <text x="145" y="215" fill="rgba(255,255,255,0.85)" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">水世界</text>
+          <text x="145" y="235" fill="rgba(255,255,255,0.55)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">水上特技秀</text>
+
+          <!-- 哈利波特（北部偏西） -->
+          <rect x="220" y="150" width="170" height="90" rx="4" fill="#5D2E8C" opacity="0.8"/>
+          <text x="305" y="188" fill="#fff" text-anchor="middle" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">哈利波特魔法世界</text>
+          <text x="305" y="206" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">霍格沃茨城堡 · 活米村 · 2014</text>
+
+          <!-- 环球奇境（东北） -->
+          <rect x="600" y="250" width="120" height="70" rx="4" fill="#E91E63" opacity="0.7"/>
+          <text x="660" y="282" fill="#fff" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">环球奇境</text>
+          <text x="660" y="300" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">史努比 · 凯蒂猫 · 芝麻街</text>
+
+          <!-- 超级任天堂世界（北部偏东） -->
+          <rect x="560" y="130" width="200" height="95" rx="4" fill="#C62828" opacity="0.85"/>
+          <text x="660" y="168" fill="#fff" text-anchor="middle" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">超级任天堂世界</text>
+          <text x="660" y="186" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">马里奥赛车 · 耀西冒险 · 2021</text>
+          <text x="660" y="204" fill="rgba(245,176,28,0.9)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">+ Donkey Kong Country · 2024</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(850, 80)">
+            <polygon points="0,-16 4,-2 0,-5 -4,-2" fill="#F5B01C"/>
+            <polygon points="0,16 4,2 0,5 -4,2" fill="#5A6A80"/>
+            <text x="0" y="-20" text-anchor="middle" fill="#F5B01C" font-size="10" font-family="DM Sans,sans-serif">N</text>
+          </g>
+
+          <!-- 图例 -->
+          <rect x="140" y="520" width="620" height="46" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+          <rect x="165" y="536" width="12" height="12" fill="#C62828" opacity="0.8" rx="1"/>
+          <text x="185" y="547" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">任天堂世界</text>
+          <rect x="280" y="536" width="12" height="12" fill="#5D2E8C" opacity="0.8" rx="1"/>
+          <text x="300" y="547" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">哈利波特</text>
+          <rect x="390" y="536" width="12" height="12" fill="#2E7D32" opacity="0.75" rx="1"/>
+          <text x="410" y="547" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">侏罗纪</text>
+          <rect x="480" y="536" width="12" height="12" fill="#E91E63" opacity="0.7" rx="1"/>
+          <text x="500" y="547" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">亲子区</text>
+          <rect x="570" y="536" width="12" height="12" fill="#C41E3A" opacity="0.7" rx="1"/>
+          <text x="590" y="547" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">电影街区</text>
+          <text x="450" y="572" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="8" font-family="DM Sans,sans-serif">布局为空间示意，非精确比例 · 主入口在南 · 主题区向北展开</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>好莱坞 Hollywood</h3><p>园区主入口大道，重现好莱坞黄金时代街景。好莱坞梦之过山车含正转与后转两种模式，是 USJ 的招牌过山车。</p></div>
+      <div class="card"><h3>纽约 New York</h3><p>电影布景式街区，纽约夜景氛围。常设项目以限时 IP 活动为主，终结者 2:3D 等早期经典项目已长期休止。</p></div>
+      <div class="card"><h3>旧金山 San Francisco</h3><p>港口与仓库街景，水岸表演和主题餐饮所在地。与阿米蒂村相邻，大白鲨游船项目即在阿米蒂村。</p></div>
+      <div class="card"><h3>侏罗纪公园 Jurassic Park</h3><p>王牌项目飞天翼龙为全球首台俯卧式过山车，另有侏罗纪公园激流勇进，以恐龙场景与落差水花著称。</p></div>
+      <div class="card"><h3>小黄人乐园 Minion Park</h3><p>小黄人疯狂乘车游与 2025 年新开的射击项目，明黄色主题，是家庭客群集中区。</p></div>
+      <div class="card"><h3>环球奇境 Universal Wonderland</h3><p>2012 年开业，史努比、凯蒂猫、芝麻街三大 IP 的亲子区，被视为 USJ 客流止跌回升的转折点项目。</p></div>
+      <div class="card"><h3>哈利波特魔法世界</h3><p>2014 年开业，1:1 再现霍格沃茨城堡与活米村。禁忌之旅为 4K 影像与实景混合的黑暗骑乘，投资约 JP¥450 亿。</p></div>
+      <div class="card"><h3>超级任天堂世界</h3><p>2021 年开业，马里奥赛车 AR 与耀西冒险。2024 年多 Key Kong Country 开区后，该区面积扩至约 1.7 倍。</p></div>
+      <div class="card"><h3>水世界 Water World</h3><p>水上特技表演场，爆炸、摩托艇与高空坠落场面闻名，是环球系大型露天秀场的代表。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT & CONSTRUCTION TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1998.10.28</div><div class="timeline-content"><h4>项目动工</h4><p>在阿诺德·施瓦辛格出席下举行起工式，于大阪湾填海地开工。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2001.3.31</div><div class="timeline-content"><h4>开园 · 连续 3 年赤字</h4><p>总事业费约 JP¥1,700 亿，大阪市出资约四分之一。开园即遇国际旅游业低迷，客流不达预期，连续 3 年亏损。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2005</div><div class="timeline-content"><h4>高盛注资</h4><p>高盛出资约 200 亿日元进入，协助重组运营。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2007</div><div class="timeline-content"><h4>东证 Mothers 上市</h4><p>以高估值登陆东证创业板，一度成为市场热点。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2009</div><div class="timeline-content"><h4>雷曼冲击 · 下市</h4><p>全球金融危机导致客流下滑，接受收购要约后从交易所下市，运营再度承压。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2012.3</div><div class="timeline-content"><h4>环球奇境开业 · 转折点</h4><p>史努比、凯蒂猫、芝麻街组成的亲子区落成，本土家庭客群被激活，客流开始回升。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2014.7.15</div><div class="timeline-content"><h4>哈利波特魔法世界开业</h4><p>投资约 JP¥450 亿，1:1 还原电影场景，开业后客流大幅攀升，成为亚洲现象级 IP 乐园。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2015.9.28</div><div class="timeline-content"><h4>康卡斯特收购 51%</h4><p>NBC 环球以约 US$15 亿（约 JP¥1,830 亿）收购过半股权，企业价值约 JP¥7,500 亿；此后推进完全子公司化。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021.3.18</div><div class="timeline-content"><h4>超级任天堂世界开业</h4><p>投资约 JP¥600 亿，任天堂宫本茂监修，马里奥赛车 AR 骑乘为主打，游戏 IP 首次大规模进入主题乐园。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024.12.11</div><div class="timeline-content"><h4>多 Key Kong Country 开区</h4><p>超级任天堂世界扩至约 1.7 倍，世界首台跳跃式家庭过山车登场，宫本茂出席开幕。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026.3.4</div><div class="timeline-content"><h4>25 周年庆典启动</h4><p>「Discover U!!!」周年活动开幕，25 只皮卡丘参与游行的 NO LIMIT! 游行，主题曲由 Vaundy 创作，持续约一年。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026.9</div><div class="timeline-content"><h4>敷地扩建协商 · 门票新制</h4><p>大阪市拟将相邻市有地约 3.1 万 m² 出租给 USJ 用于扩建；同月起门票改为最低 8,400 日元、越晚买越贵的动态体系。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONAL INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+
+    <div class="grid-2 reveal">
+      <div class="card"><h3>年度游客量</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>年份</th><th>游客量</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>2024</td><td class="num">约 1,600 万</td><td>全球第 3，连续 3 年</td></tr>
+            <tr><td>2023</td><td class="num">约 1,600 万</td><td>与上年持平</td></tr>
+            <tr><td>2019</td><td class="num">约 1,450 万</td><td>疫情前峰值区间</td></tr>
+            <tr><td>2012</td><td class="num">约 980 万</td><td>环球奇境开业当年回升</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">2010 年代初期约 1,000 万上下，哈利波特开业后持续攀升。2025 年全年数待 TEA/AECOM 公布。</p>
+      </div>
+      <div class="card"><h3>门票价格（动态定价）</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>时期</th><th>1 日成人票</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>2001 年开业</td><td class="num">JP¥5,500</td><td>单一票价</td></tr>
+            <tr><td>2026.9 前</td><td class="num">JP¥8,900–11,900</td><td>5 档日付动态定价</td></tr>
+            <tr><td>2026.9 起</td><td class="num">JP¥8,400 起</td><td>早购更便宜，发售后随销售上涨</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>运营亮点与全球地位</h3>
+      <p>USJ 是母公司环球主题公园板块中客流最高的一座，超过本家佛罗里达（约 950 万）与好莱坞（约 870 万），也压过东京迪士尼乐园与海洋。复兴的关键是 IP 本土化：哈利波特与任天堂世界把「世界级 IP + 日本消费力」绑成一体，再以季节性 IP 活动（鬼灭之刃、海贼王等）维持长尾热度。2026 年 9 月起把票价改为随销售动态浮动的体系，配合早期购票优惠，意在平抑高峰、拉高淡季入园率。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>好莱坞梦之过山车</h3><p><span class="f-mono">Hollywood Dream The Ride</span><br>USJ 招牌过山车<br>正转与后转两种模式<br>后转版最高点约 43 m</p></div>
+      <div class="card"><h3>飞天翼龙</h3><p><span class="f-mono">The Flying Dinosaur</span><br>世界首台俯卧式翼龙过山车<br>趴伏姿势从约 50 m 高空俯冲<br>侏罗纪公园区核心项目</p></div>
+      <div class="card"><h3>禁忌之旅</h3><p><span class="f-mono">Harry Potter and the Forbidden Journey</span><br>4K 影像与实景道具混合的黑暗骑乘<br>模拟魁地奇追逐<br>哈利波特区招牌</p></div>
+      <div class="card"><h3>马里奥赛车 AR</h3><p><span class="f-mono">Mario Kart: Koopa's Challenge</span><br>AR 全息互动骑乘<br>佩戴头显进入马里奥赛车世界<br>世界首创的游戏区深度还原</p></div>
+      <div class="card"><h3>多 Key Kong 疯狂矿车</h3><p><span class="f-mono">Donkey Kong Country</span><br>世界首台跳跃式家庭过山车<br>轨道断点与跳跃式行进<br>2024 年随 DK Country 开区</p></div>
+      <div class="card"><h3>IP 共创与独有率</h3><p>任天堂与环球联合开发的任天堂世界<br>宫本茂监修，全球独有<br>哈利波特区为亚洲首个完整还原<br>25 周年庆典期密集上新</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>官方酒店 7 家</h3><p>正门旁步行 1–10 分钟。Park Front 酒店距主门最近（约 1 分钟，598 间），另有环球港、京阪塔、近铁等。多设家庭与 IP 主题房。</p></div>
+      <div class="card"><h3>Universal City Walk</h3><p>乐园正门前的商业街，餐饮、购物与影院一体，含环球影城周边商品旗舰店，是入园前后的消费动线。</p></div>
+      <div class="card"><h3>交通枢纽</h3><p>JR 梦咲线 Universal City 站步行约 5 分钟，从大阪站约 20 分钟可达，与大阪市区及关西机场衔接。</p></div>
+      <div class="card"><h3>演出与季节性内容</h3><p>除常规骑乘外，每年推出万圣节、圣诞、海贼王、鬼灭之刃等限定活动，演出频次与 IP 组合构成复购来源。</p></div>
+      <div class="card"><h3>25 周年庆典</h3><p>2026 年 3 月至 2027 年 3 月「Discover U!!!」周年企划，含限定游行、名车展与周年纪念商品。</p></div>
+      <div class="card"><h3>万博联动红利</h3><p>2025 年大阪·关西世博会在邻近梦洲举办，与园区形成相互引流，关西旅游人口显著上抬。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>25 周年庆典（2026-03 起）</h3><p>「Discover U!!!」周年企划持续约一年，NO LIMIT! 游行有 25 只皮卡丘现身，主题曲《Destiny Journeys》由 Vaundy 创作，另有名车主题展。</p></div>
+      <div class="card"><h3>门票制度改版（2026-09-01）</h3><p>1 日票最低价降至 JP¥8,400，改为越早买越便宜、发售后随销售上涨的动态体系，意在平抑高峰客流。</p></div>
+      <div class="card"><h3>敷地扩建协商（2026-09）</h3><p>大阪市拟将相邻市有地约 3.1 万 m² 出租给 USJ，为园区下一步扩张预留空间，具体用途尚未公布。</p></div>
+      <div class="card"><h3>任天堂世界持续扩张</h3><p>超级任天堂世界自 2021 年开业后不断扩区，多 Key Kong Country 使面积翻至约 1.7 倍，任天堂 IP 库仍有大量可开发空间。</p></div>
+      <div class="card"><h3>大阪·关西世博联动</h3><p>2025 年世博会带来的关西入境游红利延续，园区以限定联动与夜间内容承接增量。</p></div>
+      <div class="card"><h3>康卡斯特主题公园板块</h3><p>USJ 是康卡斯特 NBC 环球主题公园板块的客流冠军，全球环球影城（好莱坞、奥兰多、新加坡、北京）的新区与 IP 联动策略常以 USJ 为测试场。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+
+    <div class="resource-group reveal">
+      <h4>官方来源</h4>
+      <ul>
+        <li><a href="https://www.usj.co.jp/" target="_blank" rel="noopener">日本环球影城 — 官方网站</a> <span class="tag">官网</span></li>
+        <li><a href="https://www.usj.co.jp/company/" target="_blank" rel="noopener">USJ 公司信息与新闻发布</a> <span class="tag">官方</span></li>
+        <li><a href="https://www.usj.co.jp/company/company_e/news/2024/1211/" target="_blank" rel="noopener">官方英文新闻 — Donkey Kong Country 开业</a> <span class="tag">官方</span></li>
+      </ul>
+    </div>
+
+    <div class="resource-group reveal">
+      <h4>维基与百科</h4>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Universal_Studios_Japan" target="_blank" rel="noopener">Wikipedia — Universal Studios Japan</a> <span class="tag">百科</span></li>
+        <li><a href="https://ja.wikipedia.org/wiki/ユニバーサル・スタジオ・ジャパン" target="_blank" rel="noopener">日本語版 Wikipedia — ユニバーサル・スタジオ・ジャパン</a> <span class="tag">百科</span></li>
+        <li><a href="https://commons.wikimedia.org/wiki/Category:Universal_Studios_Japan" target="_blank" rel="noopener">Wikimedia Commons — 园区图片集</a> <span class="tag">图库</span></li>
+      </ul>
+    </div>
+
+    <div class="resource-group reveal">
+      <h4>行业报道</h4>
+      <ul>
+        <li><a href="https://jp.reuters.com/article/2015/09/28/idJPL3N11Y1V220150928/" target="_blank" rel="noopener">路透社日文 — 康卡斯特收购 USJ 报道</a> <span class="tag">报道</span></li>
+        <li><a href="https://china.kyodonews.net/articles/-/7524" target="_blank" rel="noopener">共同社中文 — 日本环球影城开业 25 周年庆祝活动</a> <span class="tag">报道</span></li>
+        <li><a href="https://hicbc.com/magazine/article/gallery/?id=radichubu-62986" target="_blank" rel="noopener">CBC MAGAZINE — 从 3 年连续赤字到世界第 3 的 25 年</a> <span class="tag">行业</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (Overseas: ESRI ArcGIS + WGS-84) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+  var tilesLoaded = false;
+
+  var map = L.map('parkmap', {
+    center: [34.665639, 135.432453],
+    zoom: 15,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+
+  tileLayer.on('load', function() {
+    tilesLoaded = true;
+    clearTimeout(tileTimer);
+    fallback.style.display = 'none';
+  });
+
+  tileLayer.addTo(map);
+
+  var tileTimer = setTimeout(function() {
+    if (!tilesLoaded) fallback.style.display = 'block';
+  }, 8000);
+
+  // Markers
+  var blueIcon = L.divIcon({className: 'custom-marker', html: '<div style="background:#1C4BA8;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>', iconSize: [14,14], iconAnchor: [7,7]});
+
+  L.marker([34.665639, 135.432453], {icon: blueIcon}).addTo(map)
+    .bindPopup('<b>日本环球影城</b><br>Universal Studios Japan<br>总敷地约 54 公顷 · 8 大主题区');
+
+  L.circle([34.665639, 135.432453], {radius: 480, color: '#E8485A', weight: 2, fill: false, dashArray: '6,4', opacity: 0.6}).addTo(map)
+    .bindPopup('研究范围圈<br>USJ 主体园区');
+
+  // Fit bounds
+  var bounds = L.latLngBounds([
+    [34.6635, 135.4290],
+    [34.6685, 135.4360]
+  ]);
+  map.fitBounds(bounds, {padding: [20, 20]});
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+<footer class="footer"><p>张走走的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy">GitHub</a> 托管</p></footer>
+</body>
+</html>

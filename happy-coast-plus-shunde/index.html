@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>顺德欢乐海岸 PLUS — 不收门票的开放式主题公园</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #E0531F;
+  --clr-primary-light: #F08C3E;
+  --clr-primary-dark: #8C2F0D;
+  --clr-accent: #F5A623;
+}
+
+.hero {
+  background: linear-gradient(160deg, #8C2F0D 0%, #E0531F 40%, #F08C3E 70%, #F7C873 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(245,166,35,0.2) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.12) 0%, transparent 50%);
+}
+
+/* China: dual-map layout */
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>顺德欢乐海岸 PLUS</h1>
+    <p class="hero-subtitle">华侨城二代文商旅 · 开放式公园 + 岭南街区 + 世界美食之都</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">2019</div><div class="kpi-label">开业年份</div></div>
+      <div class="kpi-card"><div class="kpi-number">¥120亿</div><div class="kpi-label">一期总投资</div></div>
+      <div class="kpi-card"><div class="kpi-number">3.36 km²</div><div class="kpi-label">项目占地</div></div>
+      <div class="kpi-card"><div class="kpi-number">70%</div><div class="kpi-label">夜间营收占比</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><div class="f-caption">开业时间</div><div class="f-title">2019 年 9 月 16 日</div></div>
+      <div class="card"><div class="f-caption">开发 / 运营</div><div class="f-title">华侨城集团</div></div>
+      <div class="card"><div class="f-caption">地理位置</div><div class="f-title">佛山顺德大良 · 欢乐大道 1 号</div></div>
+      <div class="card"><div class="f-caption">项目类型</div><div class="f-title">文商旅综合体（商业 + 乐园 + 文化 + 生态）</div></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3>
+      <p class="f-body">顺德欢乐海岸 PLUS 是华侨城走出深圳、复制的第一座欢乐海岸，2019 年 9 月开业。它把商业街区、主题公园、岭南文化、生态湿地揉进一个项目：欢乐时光陆公园免费开放、玛雅海滩水公园售票、曲水湾承接「世界美食之都」的餐饮势能。</p>
+      <p class="f-body" style="margin-top:0.6rem;">运营两年总营收超 10 亿元，其中夜间营收占 70%，2022 年 8 月入选国家级夜间文化和旅游消费集聚区。它的核心命题是：主题公园不收门票，钱从哪里来？</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <h3 style="margin-bottom:0.8rem;">三大设计基因</h3>
+      <p class="f-body"><strong>开放式主题公园。</strong>欢乐时光是华侨城首个开放式运营的主题公园，也是国内首个全开放式的主题乐园。取消大门票，改为单项目收费——大摆锤的入口可能是一家轻食店，海盗船旁边也许是一家亲子餐厅，商业与游乐边界消失。官方复盘称：免门票看似让渡门票收益，整体空间收入反而上升，疫情期间抗风险能力显著提高。</p>
+      <p class="f-body" style="margin-top:0.6rem;"><strong>岭南文化转译。</strong>曲水湾以传统岭南院落式布局，荷院、水院、戏院三大组团，镬耳屋等古建筑元素入街，龙舟、永春、香云纱、广绣、状元等广府文化植入动线，被称为顺德版《清明上河图》。</p>
+      <p class="f-body" style="margin-top:0.6rem;"><strong>美食之都势能。</strong>顺德 2014 年获评联合国「世界美食之都」，曲水湾把这一城市 IP 转化为 70 余家餐饮商家与美食文化的聚集，形成其他城市难以复制的客源磁极。</p>
+      <div style="overflow-x:auto;margin-top:0.8rem;">
+        <table class="data-table">
+          <thead><tr><th>对比</th><th>深圳欢乐海岸（一代）</th><th>顺德欢乐海岸 PLUS（二代）</th></tr></thead>
+          <tbody>
+            <tr><td>亮相</td><td class="f-mono">2011 年</td><td class="f-mono">2019 年</td></tr>
+            <tr><td>产品内核</td><td>mall + 曲水湾街区</td><td>在 mall + 曲水湾之上叠加双乐园 + 摩天轮</td></tr>
+            <tr><td>乐园</td><td>以商业文化为主</td><td>欢乐时光（免费）+ 玛雅（一票制）+ 顺德眼 99 米</td></tr>
+            <tr><td>区位属性</td><td>一线城市滨海</td><td>制造业名城 · 世界美食之都</td></tr>
+            <tr><td>迭代意义</td><td>开创文商旅模式</td><td>首次走出深圳，验证可复制性</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>基础</td><td>开业时间</td><td class="f-mono">2019 年 9 月 16 日</td><td>2019 年 8 月试业</td></tr>
+          <tr><td>基础</td><td>项目类型</td><td class="f-mono">文商旅综合体</td><td>商业 + 乐园 + 文化 + 生态</td></tr>
+          <tr><td>规模</td><td>项目占地</td><td class="f-mono">3.36 km²</td><td>六大板块</td></tr>
+          <tr><td>规模</td><td>游乐 + 商业核心区</td><td class="f-mono">约 20 万 m²</td><td>约 300 亩</td></tr>
+          <tr><td>投资</td><td>一期总投资</td><td class="f-mono">¥120 亿</td><td>华侨城</td></tr>
+          <tr><td>投资</td><td>二期总投资</td><td class="f-mono">¥60 亿</td><td>华侨城 + 顺控城投 · 预计 2026 开业</td></tr>
+          <tr><td>设备</td><td>陆公园 · 欢乐时光</td><td class="f-mono">7 万 m²</td><td>免门票 · 40 余项设备</td></tr>
+          <tr><td>设备</td><td>水公园 · 玛雅海滩</td><td class="f-mono">7 万 m²</td><td>一票制 · 20 余项进口设备</td></tr>
+          <tr><td>地标</td><td>顺德眼摩天轮</td><td class="f-mono">99 米</td><td>36 球形轿厢 · 双立柱全拉索</td></tr>
+          <tr><td>商业</td><td>曲水湾风情街</td><td class="f-mono">70+ 餐饮商家</td><td>荷院 / 水院 / 戏院三院落</td></tr>
+          <tr><td>客流</td><td>三年累计</td><td class="f-mono">3200 万人次</td><td>截至 2022 年</td></tr>
+          <tr><td>营收</td><td>开业两年</td><td class="f-mono">超 ¥10 亿</td><td>夜间营收占 70%</td></tr>
+          <tr><td>荣誉</td><td>国家级夜间集聚区</td><td class="f-mono">2022 年 8 月</td><td>第二批国家级夜间文旅消费集聚区</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">客流量为官方与公开报道口径；建筑面积官方未披露，表中为占地面积或分区面积。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <p class="f-caption" style="padding:0.8rem 1rem 0;margin:0;">高德底图（GCJ-02，直连高德瓦片）。五个分区标注；O'PLAZA 购物中心与湿地公园无可靠 POI，不标注。橙色虚线为项目核心范围。</p>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+      <svg viewBox="0 0 820 520" xmlns="http://www.w3.org/2000/svg">
+        <rect x="15" y="15" width="790" height="490" rx="14" fill="#1a1f2b"/>
+        <text x="60" y="48" fill="#cfd4e0" font-size="13" font-weight="700" font-family="DM Sans">欢乐海岸 PLUS · 六大板块布局示意</text>
+        <!-- 水域（南侧） -->
+        <path d="M60 420 C 220 460, 560 470, 760 420 L 760 495 Q 410 510, 60 495 Z" fill="#264e66" opacity="0.9"/>
+        <text x="410" y="470" text-anchor="middle" fill="#9ec7db" font-size="10" font-family="DM Sans">桂畔湖 · 水域</text>
+        <!-- 湿地公园（西侧外围） -->
+        <rect x="110" y="150" width="150" height="120" rx="10" fill="#2a4d3a" stroke="#3f6b51" stroke-width="1.5"/>
+        <text x="185" y="205" text-anchor="middle" fill="#a9cfb8" font-size="11" font-weight="700" font-family="DM Sans">华侨城湿地公园</text>
+        <!-- OPLAZA 购物中心（西北） -->
+        <rect x="320" y="150" width="200" height="110" rx="10" fill="#F59E0B" opacity="0.9"/>
+        <text x="420" y="198" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">O'PLAZA 购物中心</text>
+        <text x="420" y="216" text-anchor="middle" fill="#fff3d6" font-size="9" font-family="DM Sans">都市商业载体</text>
+        <!-- 蓝汐假日酒店（东北） -->
+        <rect x="580" y="150" width="180" height="110" rx="10" fill="#4CAF50" opacity="0.9"/>
+        <text x="670" y="198" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">蓝汐假日酒店</text>
+        <text x="670" y="216" text-anchor="middle" fill="#d9f2e0" font-size="9" font-family="DM Sans">项目配套住宿</text>
+        <!-- 曲水湾风情街（西侧临水） -->
+        <rect x="110" y="310" width="150" height="110" rx="10" fill="#E0531F" opacity="0.92"/>
+        <text x="185" y="352" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">曲水湾风情街</text>
+        <text x="185" y="370" text-anchor="middle" fill="#ffe6d6" font-size="9" font-family="DM Sans">荷院 · 水院 · 戏院</text>
+        <text x="185" y="384" text-anchor="middle" fill="#ffe6d6" font-size="9" font-family="DM Sans">70+ 美食商家</text>
+        <!-- 欢乐时光陆公园（中南） -->
+        <rect x="320" y="280" width="200" height="140" rx="10" fill="#9C27B0" opacity="0.92"/>
+        <text x="420" y="322" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">欢乐时光 · 陆公园</text>
+        <text x="420" y="340" text-anchor="middle" fill="#f0d6ff" font-size="9" font-family="DM Sans">免门票 · 单项目收费</text>
+        <!-- 顺德眼摩天轮 -->
+        <circle cx="560" cy="340" r="34" fill="none" stroke="#F5A623" stroke-width="2.5" opacity="0.95"/>
+        <line x1="526" y1="340" x2="594" y2="340" stroke="#F5A623" stroke-width="1" opacity="0.7"/>
+        <line x1="560" y1="306" x2="560" y2="374" stroke="#F5A623" stroke-width="1" opacity="0.7"/>
+        <line x1="536" y1="316" x2="584" y2="364" stroke="#F5A623" stroke-width="1" opacity="0.7"/>
+        <line x1="584" y1="316" x2="536" y2="364" stroke="#F5A623" stroke-width="1" opacity="0.7"/>
+        <circle cx="560" cy="340" r="5" fill="#F5A623"/>
+        <text x="560" y="398" text-anchor="middle" fill="#F5A623" font-size="11" font-weight="700" font-family="DM Sans">顺德眼 · 99 米</text>
+        <!-- 玛雅海滩水公园（东南） -->
+        <rect x="600" y="280" width="160" height="120" rx="10" fill="#0088B0" opacity="0.92"/>
+        <text x="680" y="322" text-anchor="middle" fill="#fff" font-size="12" font-weight="700" font-family="DM Sans">玛雅海滩水公园</text>
+        <text x="680" y="340" text-anchor="middle" fill="#d0ecf8" font-size="9" font-family="DM Sans">一票制 · 7 万 m²</text>
+        <!-- 指北针 -->
+        <g transform="translate(748, 55)">
+          <polygon points="0,0 8,-20 16,0" fill="#F5A623"/>
+          <text x="8" y="-24" text-anchor="middle" fill="#cfd4e0" font-size="10" font-family="DM Sans">N</text>
+        </g>
+        <!-- 图例 -->
+        <g font-family="DM Sans" font-size="10" fill="#cfd4e0">
+          <rect x="60" y="118" width="14" height="14" rx="3" fill="#9C27B0"/><text x="80" y="129">开放式乐园</text>
+          <rect x="150" y="118" width="14" height="14" rx="3" fill="#E0531F"/><text x="170" y="129">文化商业街</text>
+          <rect x="246" y="118" width="14" height="14" rx="3" fill="#0088B0"/><text x="266" y="129">售票水公园</text>
+          <rect x="360" y="118" width="14" height="14" rx="3" fill="#2a4d3a"/><text x="380" y="129">生态湿地</text>
+          <circle cx="522" cy="125" r="7" fill="none" stroke="#F5A623" stroke-width="2"/><text x="536" y="129">摩天轮</text>
+        </g>
+        <text x="410" y="505" text-anchor="middle" font-size="10" fill="#8a93ab" font-family="DM Sans">示意图，非精确平面 · 玛雅海滩水公园详见<a xlink:href="../maya-beach-water-park/" fill="#8a93ab" underline="true">顺德玛雅案例</a></text>
+      </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><div class="f-caption">欢乐时光 · 陆公园</div><div class="f-body">华侨城首个开放式主题公园，免门票、单项目收费。40 余项游乐设备 + 99 米顺德眼，动线与商户交错——大摆锤入口是轻食店。</div></div>
+      <div class="card"><div class="f-caption"><a href="../maya-beach-water-park/">玛雅海滩水公园 →</a></div><div class="f-body">一票制海岛水乐园，69 米海神山、子母造浪池、咔吧大水寨、粉红沙滩。详见独立案例。</div></div>
+      <div class="card"><div class="f-caption">曲水湾风情街</div><div class="f-body">岭南三院落布局，镬耳屋建筑，70+ 美食商家承接「世界美食之都」IP，每晚 20:00 声光电水舞免费上演。</div></div>
+      <div class="card"><div class="f-caption">O'PLAZA 购物中心</div><div class="f-body">都市商业主体，承接乐园外溢客流，购物与餐饮业态与曲水湾错位互补。</div></div>
+      <div class="card"><div class="f-caption">蓝汐假日酒店</div><div class="f-body">项目配套住宿，延长游客停留时间，把「逛」变成「过夜」。</div></div>
+      <div class="card"><div class="f-caption">华侨城湿地公园</div><div class="f-body">生态板块，毗邻顺峰山公园，构成项目「城央绿心」的生态基底。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2011 年</div><div class="timeline-content"><strong>深圳欢乐海岸亮相</strong><p>华侨城第一代欢乐海岸，开创「商业 + 娱乐 + 文化 + 旅游 + 生态」模式。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019 年 8 月</div><div class="timeline-content"><strong>顺德欢乐海岸 PLUS 试业</strong><p>顺德眼摩天轮完成安装，项目以文旅 IP 先行亮相。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019 年 9 月 16 日</div><div class="timeline-content"><strong>正式开业</strong><p>一代投资 120 亿元，六大板块全线开业。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021 年</div><div class="timeline-content"><strong>开业两年</strong><p>累计客流超 2000 万人次，总营收超 10 亿元，夜间营收占 70%。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022 年 8 月</div><div class="timeline-content"><strong>国家级夜间集聚区</strong><p>入选第二批国家级夜间文化和旅游消费集聚区，三年累计客流 3200 万人次。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023 年 2 月</div><div class="timeline-content"><strong>二期动工</strong><p>华侨城 + 顺控城投投资 60 亿元，占地 366 亩（约 24.4 公顷），定位「欢乐海岸 3.0」。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026（预计）</div><div class="timeline-content"><strong>二期开业</strong><p>预计新增年客流 500 万人次、就业岗位 1 万个，整体客流或达每年 1500 万人次。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card">
+        <h4 style="margin-bottom:0.6rem;">双轨门票模式</h4>
+        <table class="data-table">
+          <thead><tr><th>板块</th><th>模式</th><th>参考价</th></tr></thead>
+          <tbody>
+            <tr><td>欢乐时光陆公园</td><td>免门票 · 单项目收费</td><td class="f-mono">畅享票 ¥150 起</td></tr>
+            <tr><td>顺德眼摩天轮</td><td>单项目</td><td class="f-mono">¥90–99</td></tr>
+            <tr><td>玛雅海滩水公园</td><td>一票制</td><td class="f-mono">成人 ¥180 / 夜场 ¥130</td></tr>
+            <tr><td>曲水湾水舞秀</td><td>免费</td><td class="f-mono">每晚 20:00</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption" style="margin-top:0.5rem;">价格为公开渠道报价，各平台略有差异。</p>
+      </div>
+      <div class="card">
+        <h4 style="margin-bottom:0.6rem;">免门票的生意经</h4>
+        <div class="f-body" style="margin-top:0.4rem;">
+          <p>取消大门票后，个人游乐成本下降，热门项目复购率提升，人流变大让商业曝光价值上升。</p>
+          <p style="margin-top:0.4rem;">全园区 215 家商户中，夜间经营占比达 99%；夜间营收占项目总营收约 70%。</p>
+          <p style="margin-top:0.4rem;">运营团队复盘称，这一模式整体空间收入不降反升，疫情期抗风险能力明显更强。</p>
+          <p style="margin-top:0.4rem;">节假日表现：2023 年春节客流超 90 万人次，连续三年国庆客流近 60 万人次。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><div class="f-caption">开放式乐园</div><div class="f-data">国内首个</div><div class="f-body">华侨城首个、国内首个全开放式主题公园，商业与游乐零边界。</div></div>
+      <div class="card"><div class="f-caption">顺德眼</div><div class="f-data">99 米</div><div class="f-body">南中国首座双立柱全拉索摩天轮，开业时为粤港澳大湾区最高。</div></div>
+      <div class="card"><div class="f-caption">夜间经济</div><div class="f-data">70%</div><div class="f-body">夜间营收占项目总营收约 70%，国家级夜间文旅消费集聚区。</div></div>
+      <div class="card"><div class="f-caption">美食势能</div><div class="f-data">70+ 商家</div><div class="f-body">依托顺德「世界美食之都」IP，曲水湾聚集 70 余家餐饮商家。</div></div>
+      <div class="card"><div class="f-caption">产品迭代</div><div class="f-data">2.0</div><div class="f-body">欢乐海岸产品线第二代，走出深圳第一站，验证「mall + 街区 + 乐园」可复制性。</div></div>
+      <div class="card"><div class="f-caption">客流规模</div><div class="f-data">3200 万</div><div class="f-body">三年累计客流 3200 万人次；二期建成后整体或达每年 1500 万人次。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><div class="f-caption">轨道交通</div><div class="f-body">佛山地铁 3 号线设欢乐海岸站，二期地块距站点约 600 米，广佛客流直达。</div></div>
+      <div class="card"><div class="f-caption">生态联动</div><div class="f-body">毗邻顺峰山公园，二期拟以水、陆两路联动，串联顺德博物馆、图书馆、演艺中心。</div></div>
+      <div class="card"><div class="f-caption">文商配套</div><div class="f-body">O'PLAZA 购物中心 + 蓝汐假日酒店 + 华侨城湿地公园，构成过夜与复合消费闭环。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><div class="f-caption">二期 3.0</div><div class="f-body">二期以「狂野大自然」欢乐森林为主题，打造湾区最大开放式城央公园，规划中心嘉年华海滩区、欢乐丛林区、小岛露营区。</div></div>
+      <div class="card"><div class="f-caption">新地标</div><div class="f-body">全国首台定制心形轨道电磁弹射过山车、中国首个 5.0 城市科幻海洋馆、全国首个室内外结合自然探索中心将落户二期。</div></div>
+      <div class="card"><div class="f-caption">区域整合</div><div class="f-body">建成后拟与顺峰山公园、寻味顺德小镇整合，目标国家级旅游度假区、国家 5A 景区。</div></div>
+      <div class="card"><div class="f-caption">经济预期</div><div class="f-body">二期预计新增年客流 500 万人次、就业岗位 1 万个，预估创造旅游及商业年消费近 15 亿元。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>类型</th><th>资料</th><th>说明</th><th>链接</th></tr></thead>
+        <tbody>
+          <tr><td>政府</td><td>佛山市委宣传部：第二批国家级夜间文旅消费集聚区名单</td><td>欢乐海岸 PLUS 入选官方名单</td><td><a href="http://www.fsxcb.gov.cn/gzdt/zxdt/content/post_731244.html" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>行业媒体</td><td>赢商网：欢乐海岸商业旗舰的迭代升级</td><td>一代到二代的模式演进分析</td><td><a href="http://m.winshang.com/news716849.html" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>行业媒体</td><td>赢商网：对话顺德华侨城邵瑞</td><td>2000 万 + 客流运营复盘</td><td><a href="http://news.winshang.com/html/069/2184.html" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>主流媒体</td><td>中国经济网：欢乐海岸 PLUS 二期动工</td><td>二期投资与工期报道</td><td><a href="http://finance1.ce.cn/stock/gsgdbd/202302/02/t20230202_38372499.shtml" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>主流媒体</td><td>羊城晚报：佛山新增国家级夜间集聚区</td><td>省级媒体名单报道</td><td><a href="https://ep.ycwb.com/epaper/ywdf/h5/html5/2022-08/26/content_542_520565.htm" target="_blank" rel="noopener">访问</a></td></tr>
+          <tr><td>主流媒体</td><td>观点网：二期项目奠基动工</td><td>投资 60 亿元开工报道</td><td><a href="https://www.guandian.cn/article/20230206/329736.html" target="_blank" rel="noopener">访问</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+
+var zonesGcj02 = [
+  { name: '曲水湾风情街<br><small>岭南三院落 · 70+ 美食</small>', lng: 113.303071, lat: 22.817047, color: '#E0531F' },
+  { name: '欢乐时光 · 陆公园<br><small>免门票 · 单项目收费</small>', lng: 113.304323, lat: 22.816537, color: '#9C27B0' },
+  { name: '顺德眼摩天轮<br><small>99 米 · 双立柱全拉索</small>', lng: 113.303377, lat: 22.816186, color: '#F5A623' },
+  { name: '玛雅海滩水公园<br><small>一票制 · 7 万 m²</small>', lng: 113.304407, lat: 22.815471, color: '#0088B0' },
+  { name: '蓝汐假日酒店<br><small>项目配套住宿</small>', lng: 113.303975, lat: 22.818375, color: '#4CAF50' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([22.8164, 113.3035], 16);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesGcj02);
+
+  if (withBoundary) {
+    L.circle([22.8164, 113.3035], { radius: 450, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

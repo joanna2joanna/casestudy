@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2015 米兰世博会（Expo Milano 2015） — 以「滋养地球、生命能源」为主题的 184 天世界综合博览，罗马营城式会场与会后整体转型的 MIND 创新区</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #1F7A4D;
+  --clr-primary-light: #57B584;
+  --clr-primary-dark: #0B3B22;
+  --clr-accent: #E8B54B;
+}
+
+.hero {
+  background: linear-gradient(160deg, #062A18 0%, #0F4A2E 38%, #2E8A5E 70%, #A8D9A0 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 22% 78%, rgba(232,181,75,0.18) 0%, transparent 55%),
+              radial-gradient(ellipse at 80% 18%, rgba(168,217,160,0.16) 0%, transparent 50%);
+}
+.data-table tbody tr:hover { background: rgba(31,122,77,0.05); }
+
+@media (max-width: 768px) {
+  .hero { padding: 3rem 0 2.5rem; }
+  .hero .kpi-row { gap: 0.8rem; }
+  .hero .kpi-card { padding: 0.8rem 1rem; min-width: 118px; }
+  .hero .kpi-number { font-size: 1.3rem; }
+  #parkmap { height: 350px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>2015 米兰世博会（Expo Milano 2015）</h1>
+    <p class="hero-subtitle">以「滋养地球，生命能源」为主题的注册类世界博览会，2015 年 5 月 1 日至 10 月 31 日在米兰西北连开 184 天。罗马营城式的 110 公顷会场迎来 145 个参展国与约 2,150 万人次入场，会后场地整体转型为欧洲最大产城融合试验之一：MIND 创新区。</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">110<span style="font-size:0.7em;opacity:0.7"> 公顷</span></div><div class="kpi-label">会场占地 · Rho–Pero</div></div>
+      <div class="kpi-card"><div class="kpi-number">145<span style="font-size:0.7em;opacity:0.7"> 国</span></div><div class="kpi-label">参展国 · 另含国际组织</div></div>
+      <div class="kpi-card"><div class="kpi-number">2,150<span style="font-size:0.7em;opacity:0.7"> 万</span></div><div class="kpi-label">官方累计入场人次</div></div>
+      <div class="kpi-card"><div class="kpi-number">184</div><div class="kpi-label">天展期 · 每日开园</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal"><div class="card">
+        <h3>基本信息</h3>
+        <table class="data-table">
+          <tbody>
+            <tr><td><strong>项目名称</strong></td><td>2015 米兰世博会（Expo Milano 2015）</td></tr>
+            <tr><td><strong>展会性质</strong></td><td>注册类（综合类）世界博览会，由国际展览局（BIE）认可</td></tr>
+            <tr><td><strong>主题</strong></td><td>滋养地球，生命能源（Feeding the Planet, Energy for Life）</td></tr>
+            <tr><td><strong>会期</strong></td><td>2015 年 5 月 1 日—10 月 31 日 · 184 天</td></tr>
+            <tr><td><strong>申办成功</strong></td><td>2008 年 3 月 31 日 · BIE 巴黎大会以 86:65 击败土耳其伊兹密尔</td></tr>
+            <tr><td><strong>场地</strong></td><td>意大利米兰西北 Rho–Pero 地区，比邻既有 Rho Fiera 会展中心</td></tr>
+            <tr><td><strong>组织方</strong></td><td>Expo 2015 S.p.A.（意大利政府、伦巴第大区与米兰市等合组）· 会址产权方 Arexpo</td></tr>
+            <tr><td><strong>主题定位</strong></td><td>食物与可持续发展 · 城市型世博的财政与遗产实验</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3>坐标与会后现状</h3>
+        <table class="data-table">
+          <tbody>
+            <tr><td><strong>现址坐标</strong></td><td>45.5197°N, 9.1056°E（OSM 实测，WGS-84）</td></tr>
+            <tr><td><strong>距米兰市中心</strong></td><td>约 10 千米</td></tr>
+            <tr><td><strong>会后去向</strong></td><td>整体转为 MIND 创新区（Arexpo 持有 + Lendlease 99 年开发）</td></tr>
+            <tr><td><strong>保留建筑</strong></td><td>原意大利馆（Palazzo Italia）→ Human Technopole 科研总部</td></tr>
+            <tr><td><strong>轨交接驳</strong></td><td>地铁 M1 线 Rho Fiera / Pero 站直达 · MIND–Merlata 铁路（规划中）</td></tr>
+            <tr><td><strong>城市背景</strong></td><td>意大利经济与时尚之都，欧洲大陆铁路与航空枢纽，长期运营成熟会展体系</td></tr>
+            <tr><td><strong>中国参展</strong></td><td>中国馆首次以海外自建馆形式参展，合计约 6,700 m² 为全场参展规模最大</td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p class="f-body">2015 米兰世博会是一场把「吃饭」当主题的世界博览会。在欧债危机阴影下申办成功的意大利，用古罗马营城式的十字轴线组织 110 公顷会场：一条约 1.5 千米长的东西向「世界大道」（Decumanus）串起 145 个参展国，展馆沿大道两侧每隔 18—20 米排布，垂直的 Cardo 轴则留给东道主意大利。184 天展期里官方累计约 2,150 万人次入场，中国馆等热门展馆外常排起上百米长队。这场世博的特殊之处在会后：多数临时馆拆除后，场址没有被荒置，而是由公共平台 Arexpo 与开发商 Lendlease 签下 99 年协议，整体改造为占地约 100 万平方米的 MIND 创新区，原意大利馆变身国家生命科学机构 Human Technopole 的总部，米兰大学的新校区正在其中生长。它是 21 世纪城市型世博「办完以后怎么办」的一个完整样本。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>申办与命题：为什么是米兰</h3><p class="f-body">2008 年 3 月 31 日，国际展览局在巴黎投票，米兰以 86:65 击败土耳其伊兹密尔，拿下 2015 年注册类世博主办权，主题定为<b>「滋养地球，生命能源」</b>。命题逻辑是食物：意大利是地中海饮食与农业强国，米兰所在的伦巴第大区又是欧洲最具生产能力的农业腹地之一，主办方想借一届世博讨论全球粮食安全、营养与可持续农业的未来，而非单纯炫耀科技展品。这一主题也决定了场地规划的风格，它更像一座「可口的城市」，而不是传统的机械馆集群。</p></div>
+      <div class="card"><h3>总体设计：古罗马营城的当代转译</h3><p class="f-body">场地概念规划由<b>赫尔佐格与德梅隆（Herzog &amp; de Meuron）</b>与 Stefano Boeri、Richard Burdett、William McDonough 联合完成。方案借用古罗马军城的 cardo / decumanus 正交路网：东西向的 Decumanus 世界大道约 1.5 千米长、35 米宽，顶部覆大型遮阳棚架，国家馆两侧相隔 18—20 米一节；垂直的 Cardo 轴约 350 米，归意大利的政区与企业馆所有。场地四周以运河围合成「岛」，强调水与灌溉。受欧债危机与意大利政坛更迭影响，原概念中大量激进部分没有落地，真正实现的正是这套正交骨架，它保证了 145 个参展国能在 110 公顷内高效排布。</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.2rem;"><h3>标志性单体：意大利馆与生命之树</h3><p class="f-body">东道主的<b>意大利馆 Palazzo Italia</b> 由 Nemesi Architects 设计，是全场少数按永久标准建造的建筑。它取意「城市森林」：四组体量围合中央广场，玻璃光伏屋顶供能；外立面约 9,000 m²、由 750 块异形板拼成树状纹理，材料是意大利水泥的「光催化生物动力」水泥（i.active），能吸附空气中氮氧化物等污染物并转化为惰性盐，相当于一层会呼吸的皮肤。会场北端湖畔竞技场（Lake Arena）中央，矗立着高约 37 米的<b>生命之树（Albero della Vita）</b>装置，由意大利制作人 Marco Balich 创意设计，灵感来自米开朗琪罗的一幅素描，钢结构上覆满 LED，夜间配合湖水与喷泉上演灯光水秀，是米兰世博流传最广的视觉记忆。</p></div>
+    <div class="card reveal" style="margin-top:1.2rem;"><h3>财政风波：预算、审计与腐败调查</h3><p class="f-body">这是米兰世博绕不开的一课。组织方 Expo 2015 S.p.A. 由公共资金与私人及各国参展投入大致各半支撑，活动总预算约在 26 亿欧元量级，其中意大利公共口径投入约 13 亿欧元。筹备期恰逢欧债危机：预算多次压缩，审计机构批评工期与造价失控，意大利馆造价就从约 6,300 万欧元上调到约 9,200 万欧元；2014 年场馆工程又卷入腐败调查，反贪机构介入、数十家企业被排除。会期结束后，参观人次与门票收入低于申办时的乐观预估，「世博是否划算」的争论延续多年。也正因如此，会址此后的再开发，成为评判这届世博成败的真正标尺。</p></div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody><tr><td>规格</td><td>展会性质</td><td class="num">注册类世博会</td><td>综合类 · BIE 认可</td></tr>
+<tr><td>规格</td><td>会期</td><td class="num">184 天</td><td>2015-05-01—10-31 · 每日开园</td></tr>
+<tr><td>规格</td><td>会场面积</td><td class="num">约 110 公顷</td><td>米兰西北 Rho–Pero，会后即 MIND 地块</td></tr>
+<tr><td>规格</td><td>参展国</td><td class="num">145 个</td><td>另含 3 个国际组织、NGO 与企业馆</td></tr>
+<tr><td>规划</td><td>Decumanus 主轴线</td><td class="num">约 1.5 km × 35 m</td><td>东西向「世界大道」，棚架覆盖</td></tr>
+<tr><td>规划</td><td>Cardo 南北轴</td><td class="num">约 350 m</td><td>意大利政区与企业馆所在</td></tr>
+<tr><td>规划</td><td>轴心广场</td><td class="num">74 m × 74 m</td><td>Piazza Italia，卡轴与世界大道交汇处</td></tr>
+<tr><td>运营</td><td>累计入场</td><td class="num">约 2,150 万人次</td><td>官方口径，按入场人次计</td></tr>
+<tr><td>运营</td><td>日均入场</td><td class="num">约 11.7 万人次</td><td>约 2,150 万 ÷ 184 天</td></tr>
+<tr><td>运营</td><td>单日峰值</td><td class="num">约 27.3 万人次</td><td>2015 年 10 月（闭幕前）</td></tr>
+<tr><td>标志</td><td>生命之树</td><td class="num">高 37 m</td><td>Marco Balich 创意 · 湖畔竞技场中央</td></tr>
+<tr><td>建筑</td><td>意大利馆外立面</td><td class="num">约 9,000 m²</td><td>750 块光催化水泥异形板 · 会后保留</td></tr>
+<tr><td>展馆</td><td>中国馆面积</td><td class="num">约 4,590 m²</td><td>中国首座海外自建国家馆</td></tr>
+<tr><td>投资</td><td>活动总预算</td><td class="num">约 26 亿欧元</td><td>公共约 13 亿 + 私人及各国参展约 13 亿（组织方口径）</td></tr>
+<tr><td>遗产</td><td>MIND 再开发面积</td><td class="num">约 100 万 m²</td><td>Arexpo 持有 · Lendlease 99 年运营</td></tr></tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">口径说明：参观量以官方「累计入场人次」为准，另有约 2,220 万人次（含多次入场的票种口径）与媒体估计约 1,900 万「真实访客」等说法；参展国 145 个为通用口径，个别意大利语资料按签约期记作 137 个。金额为欧元投入口径，未做通胀调整；意大利馆造价上调数据见 Businesspeople 清算报道，各国自建馆投入与米兰外围配套不并入活动预算。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="map-legend"><span><span class="dot" style="background:#1F7A4D"></span> MIND 园区（原世博址）</span><span><span class="dot" style="background:#E8B54B"></span> 保留建筑</span><span><span class="dot" style="background:#57B584"></span> 落成设施</span></div>
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+    <p class="f-caption" style="margin-top:0.5rem;">坐标来源：OpenStreetMap 实测（WGS-84）· 点击标记查看详情。2015 年 40 余个国家馆会后绝大多数拆除，卫星图为 2026 年 MIND 现状：保留的在用节点包括原意大利馆、Galeazzi 医院等。</p>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container"><svg viewBox="0 0 1200 850" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0B3B22"/><stop offset="100%" stop-color="#062A18"/></linearGradient>
+<linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4F9EBD"/><stop offset="100%" stop-color="#1F6A8C"/></linearGradient>
+<linearGradient id="bandGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#57B584"/><stop offset="100%" stop-color="#2E8A5E"/></linearGradient></defs>
+<rect width="1200" height="850" fill="url(#bgGrad)" rx="14"/>
+<text x="600" y="46" text-anchor="middle" font-family="Playfair Display,serif" font-size="22" font-weight="700" fill="#E8B54B">2015 米兰世博会场 · 罗马营城式结构示意</text>
+<text x="600" y="70" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11.5" fill="#A8D9A0">Decumanus 世界大道（东西）与 Cardo 南北轴正交 · 抽象示意，非实测比例与朝向</text>
+<!-- site & water ring -->
+<rect x="90" y="90" width="1020" height="650" rx="18" fill="#E8B54B" opacity="0.03" stroke="#E8B54B" stroke-width="1.4" stroke-dasharray="8,6"/>
+<rect x="118" y="116" width="964" height="594" rx="14" fill="none" stroke="#4F9EBD" stroke-width="1.6" opacity="0.45"/>
+<text x="128" y="142" font-family="DM Sans,sans-serif" font-size="10.5" fill="#7FBEDB">环场运河（示意）</text>
+<!-- Decumanus axis -->
+<rect x="300" y="430" width="600" height="34" rx="6" fill="url(#bandGrad)" opacity="0.55"/>
+<text x="600" y="452" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" font-weight="700" fill="#EAF9EC">Decumanus · 世界大道（东西向，约 1.5 km × 35 m）</text>
+<!-- Cardo axis -->
+<rect x="583" y="278" width="34" height="470" fill="#57B584" opacity="0.3"/>
+<text x="636" y="330" font-family="DM Sans,sans-serif" font-size="10.5" font-weight="700" fill="#BDE6CD">Cardo（约 350 m · 意大利展区）</text>
+<!-- Piazza Italia -->
+<rect x="578" y="424" width="44" height="46" fill="#0B3B22" stroke="#E8B54B" stroke-width="1.8"/>
+<text x="600" y="452" text-anchor="middle" font-family="Playfair Display,serif" font-size="9" font-weight="700" fill="#FFE9AE">Piazza Italia</text>
+<!-- Lake Arena + Tree of Life (north end of Cardo) -->
+<ellipse cx="600" cy="190" rx="200" ry="64" fill="url(#waterGrad)" opacity="0.5"/>
+<ellipse cx="600" cy="190" rx="200" ry="64" fill="none" stroke="#9FD4E8" stroke-width="1.2" stroke-dasharray="6,5" opacity="0.6"/>
+<text x="600" y="118" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="700" fill="#CFEAF6">湖畔竞技场 Lake Arena（Cardo 北端）</text>
+<circle cx="600" cy="172" r="26" fill="#E8B54B" opacity="0.9"/>
+<circle cx="600" cy="172" r="26" fill="none" stroke="#FFE9AE" stroke-width="1.4"/>
+<text x="600" y="177" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9.5" font-weight="700" fill="#3a2a00">37 m</text>
+<text x="600" y="222" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#D9F1EE">生命之树 Tree of Life</text>
+<!-- Italy Pavilion on Cardo -->
+<rect x="508" y="316" width="184" height="46" rx="8" fill="#E8B54B" opacity="0.16" stroke="#E8B54B" stroke-width="1.3"/>
+<text x="600" y="336" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11.5" font-weight="700" fill="#FFE9AE">意大利馆 Palazzo Italia</text>
+<text x="600" y="352" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#EFD9A6">会后保留 → Human Technopole</text>
+<!-- Mediterranean Hill (west end) -->
+<ellipse cx="212" cy="447" rx="52" ry="30" fill="#57B584" opacity="0.3" stroke="#A8D9A0" stroke-width="1.2"/>
+<path d="M186,436 Q212,400 238,436 Z" fill="#57B584" opacity="0.55"/>
+<text x="212" y="500" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10.5" font-weight="700" fill="#BDE6CD">地中海山丘</text>
+<text x="212" y="514" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#9CCFB0">Collina（Decumanus 西端）</text>
+<!-- Expo Centre (east end) -->
+<rect x="938" y="424" width="86" height="46" rx="6" fill="#1F7A4D" opacity="0.4" stroke="#57B584" stroke-width="1.2"/>
+<text x="981" y="446" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10.5" font-weight="700" fill="#D7F0E1">世博中心</text>
+<text x="981" y="460" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#A8D9A0">Expo Centre</text>
+<!-- Open Air Theatre (south end of Cardo) -->
+<path d="M520,690 Q600,640 680,690" fill="none" stroke="#9FD4E8" stroke-width="2" opacity="0.8"/>
+<text x="600" y="716" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#CFEAF6">露天剧场 Open Air Theatre（Cardo 南端）</text>
+<!-- countries along Decumanus note -->
+<text x="420" y="502" font-family="DM Sans,sans-serif" font-size="10.5" fill="#C9E7D3">各国自建馆与联合馆沿世界大道两侧每隔约 18—20 米一节排布（中国馆、德国馆等均在其中）</text>
+<line x1="420" y1="516" x2="780" y2="516" stroke="#57B584" stroke-width="1" opacity="0.5"/>
+<!-- compass -->
+<g transform="translate(1050,135)">
+<polygon points="0,18 7,0 14,18 7,13" fill="#E8B54B"/>
+<text x="7" y="32" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="700" fill="#E8B54B">N</text>
+</g>
+<!-- scale bar -->
+<line x1="80" y1="806" x2="300" y2="806" stroke="#8FB0D6" stroke-width="2"/>
+<line x1="80" y1="800" x2="80" y2="812" stroke="#8FB0D6" stroke-width="2"/>
+<line x1="300" y1="800" x2="300" y2="812" stroke="#8FB0D6" stroke-width="2"/>
+<text x="190" y="824" text-anchor="middle" font-family="DM Mono,monospace" font-size="11" fill="#8FB0D6">约 500 m</text>
+<!-- legend -->
+<rect x="420" y="800" width="12" height="12" rx="3" fill="#57B584"/>
+<text x="438" y="811" font-family="DM Sans,sans-serif" font-size="10.5" fill="#8FB0D6">正交主轴</text>
+<rect x="540" y="800" width="12" height="12" rx="3" fill="#E8B54B"/>
+<text x="558" y="811" font-family="DM Sans,sans-serif" font-size="10.5" fill="#8FB0D6">地标/保留建筑</text>
+<rect x="700" y="800" width="12" height="12" rx="3" fill="#1F6A8C"/>
+<text x="718" y="811" font-family="DM Sans,sans-serif" font-size="10.5" fill="#8FB0D6">运河与湖</text>
+</svg></div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;"><div class="card"><h3>Decumanus 世界大道</h3><p class="f-caption">全场的脊梁。约 1.5 千米长、35 米宽，顶部覆棚架遮阳，两侧容纳绝大多数国家展馆，馆与馆之间以 18—20 米为一节。设计隐喻「城市通往田野」：大道一端连着消费城市的入口，另一端通向代表生产的主题园区。会期里它是最拥挤也最热闹的街道，闭幕两周内基本拆空。</p></div>
+<div class="card"><h3>Cardo 南北轴与 Piazza Italia</h3><p class="f-caption">垂直世界大道的意大利之轴，长约 350 米，集中意大利大区、企业与机构馆，轴心处是 74 米见方的 Piazza Italia 广场。Palazzo Italia 与欧洲区展馆沿此轴布设，北端收于湖畔竞技场。两轴正交的结构直接脱胎于古罗马营城传统，是这套设计最终保留下来的全部。</p></div>
+<div class="card"><h3>湖畔竞技场与生命之树</h3><p class="f-caption">Cardo 北端的圆湖如一座罗马斗兽场式的露天剧场，中央是 37 米高的生命之树装置。钢结构骨架上覆满 LED，白天是喷泉，夜间随音乐与火光变换成米兰世博的标志性画面；湖滨台阶可坐下数万观众观看演出，闭幕日的人潮与告别秀都在这里收束。</p></div>
+<div class="card"><h3>意大利馆 → Human Technopole</h3><p class="f-caption">Nemesi 设计的意大利馆是少数按永久标准建造的展馆，白色「城市森林」外皮由光催化水泥制成，能分解空气污染物。会后它没有随大流拆除，而是被整体整建为国家生命科学机构 Human Technopole 的总部，继续履行建筑当年「为未来而建」的承诺，成为世博资产再生的标志案例。</p></div>
+<div class="card"><h3>中国馆：首座海外自建馆</h3><p class="f-caption">中国馆面积约 4,590 m²，是新中国第一次在海外以完全自建形式参展世博会，设计团队为清华大学美术学院与北京清尚。展区以「希望的田野」为核，2 万余根 LED「麦秆」构成的金色麦田与人气影片《团圆》是排队热点；加企业联合馆与万科馆，中国合计参展约 6,700 m²，为全场整体规模最大的参展方。</p></div>
+<div class="card"><h3>MIND：从世博到创新区</h3><p class="f-caption">会后场地没有闲置。公共平台 Arexpo 将约 100 万平方米原址交给 Lendlease 进行 99 年分期开发，形成 MIND 创新区：人类基因组研究机构 Human Technopole、骨科专科医院 Galeazzi、米兰大学新校区与多家企业研发中心在此聚落，成为欧洲把世博遗产转为长期城市资产的范例。</p></div></div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT & CONSTRUCTION TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline"><div class="timeline-item reveal"><div class="timeline-year">2008-03-31</div><div class="timeline-content"><h4>申办成功</h4><p>国际展览局巴黎大会以 86:65 选定米兰，主题「滋养地球，生命能源」。同届对手伊兹密尔一度误以为获胜，米兰以 21 票优势翻盘。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2009—2013</div><div class="timeline-content"><h4>筹备与场址建设</h4><p>Expo 2015 S.p.A. 组建；Rho–Pero 原会展区旁新辟约 110 公顷会址。欧债危机中公共资金迟滞，赫佐格团队的概念被一再简化，最终只有正交路网完整落地。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2014</div><div class="timeline-content"><h4>贪腐调查与整改</h4><p>场馆工程曝出涉黑贪腐指控，反贪机构介入，数十家企业被排除招标。审计与舆论压力下，工期与造价问题贯穿全年。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2015-05-01</div><div class="timeline-content"><h4>开幕</h4><p>主题为「滋养地球」的注册类世博在米兰开园，145 个参展国与国际组织亮相。中国馆开馆 20 天即迎 25 万人次。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2015-10-31</div><div class="timeline-content"><h4>闭幕</h4><p>184 天会期结束，官方累计约 2,150 万人次入场。随后数月内多数展馆拆除，仅意大利馆等少数建筑按规划保留，场地移交 Arexpo 处置。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2016—2019</div><div class="timeline-content"><h4>从会址到 MIND</h4><p>Arexpo 启动再开发，与 Lendlease 签署约 99 年开发运营协议，规划把约 100 万 m² 原址转为以生命科学、数字化与可持续为主题的创新区。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2022</div><div class="timeline-content"><h4>Galeazzi 医院新院落成</h4><p>骨科专科医院 Galeazzi 的新楼成为 MIND 首批落成的公共设施，比原计划更早把园区接入城市的医疗网络。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2022—2023</div><div class="timeline-content"><h4>Human Technopole 整建入驻</h4><p>原意大利馆完成改扩建，成为国家生命科学机构 Human Technopole 的总部；米兰大学 Statale 约 21 万 m² 新校区同年启动建设。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2023—2032</div><div class="timeline-content"><h4>MIND 生长与成熟</h4><p>企业研发总部、学生公寓与大学校区分批交付。按 2032 年整体成熟的目标，Arexpo 与 Lendlease 预计园区远期日均人流可达 6 万—7 万人次。</p></div></div></div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONAL INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>客流规模（口径差异）</h3><table class="data-table"><thead><tr><th>指标</th><th>数值</th><th>备注</th></tr></thead><tbody>
+<tr><td>官方累计入场</td><td class="num">约 2,150 万人次</td><td>官方口径 · 按入场人次</td></tr>
+<tr><td>票种口径累计</td><td class="num">约 2,220 万人次</td><td>含多次入场票，部分媒体采用</td></tr>
+<tr><td>「真实访客」估计</td><td class="num">约 1,900 万</td><td>清算报道按票种反推的口径</td></tr>
+<tr><td>日均入场</td><td class="num">约 11.7 万人次</td><td>约 2,150 万 ÷ 184 天</td></tr>
+<tr><td>单日峰值</td><td class="num">约 27.3 万人次</td><td>2015 年 10 月 · 闭幕前</td></tr>
+</tbody></table><p class="f-caption" style="margin-top:0.5rem;">三类口径差异来自「人次」与「人数」之分：多次入场与套票使数字虚高。申办期曾预估约 3,000 万人次，实际未达。</p></div>
+<div class="card"><h3>中国馆运营热度</h3><table class="data-table"><thead><tr><th>时点</th><th>数据</th><th>说明</th></tr></thead><tbody>
+<tr><td>开馆 20 天</td><td class="num">累计 25 万人次</td><td>2015-05-20 前后报道</td></tr>
+<tr><td>6 月上旬</td><td class="num">累计超 50 万人次</td><td>开馆约 38 天达成</td></tr>
+<tr><td>日均峰值</td><td class="num">最高约 1.5 万人次</td><td>开馆初期常态水平</td></tr>
+<tr><td>排队情况</td><td class="num">常态超百米</td><td>烈日下从花园排至馆前，馆内烤鸭、片场等成话题</td></tr>
+</tbody></table><p class="f-caption" style="margin-top:0.5rem;">中国馆被官方称为园区「热度最高、排队最长」的展馆之一；巴西馆等同样人流居前。</p></div>
+</div>
+<div class="grid-2 reveal" style="margin-top:1.2rem;">
+<div class="card"><h3>展期运营机制</h3><table class="data-table"><thead><tr><th>板块</th><th>做法</th></tr></thead><tbody>
+<tr><td>组织架构</td><td>Expo 2015 S.p.A. 商业化运营，国家馆日、主题周轮番造势</td></tr>
+<tr><td>票务</td><td>单日/多次票与促销票并存，实际成交均价低于原规划</td></tr>
+<tr><td>动线管理</td><td>两轴禁行机动车，仅服务与应急车辆通行；热门馆预约分流</td></tr>
+<tr><td>夜场经济</td><td>湖畔竞技场夜间灯光水秀 + 各国馆日演出，摊薄白天排队压力</td></tr>
+<tr><td>服务保障</td><td>多语种志愿与导览、无障碍设施、婴儿车/轮椅租赁、医疗点</td></tr>
+<tr><td>文化输出</td><td>世博护照盖章；《米兰宪章》闭幕时递交联合国，呼吁可持续食物权</td></tr>
+</tbody></table></div>
+<div class="card"><h3>会后的算账：教训与转机</h3><table class="data-table"><thead><tr><th>项目</th><th>结果</th></tr></thead><tbody>
+<tr><td>门票收入</td><td>低于申办预估，运营方年终报亏损，审计批评接踵而至</td></tr>
+<tr><td>媒体口径</td><td>意大利馆造价 6,300 万欧元级上调至 9,200 万欧元级，成为超支样本</td></tr>
+<tr><td>会址处置</td><td>未烂尾：Arexpo + Lendlease 99 年协议，转向长周期科学城开发</td></tr>
+<tr><td>转机逻辑</td><td>世博账本看短期亏损，米兰用几十年城市资产账把它「扳回」</td></tr>
+</tbody></table><p class="f-caption" style="margin-top:0.5rem;">短期财务与长期遗产的两本账，构成理解米兰世博的核心框架。</p></div>
+</div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal"><div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">110 公顷</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">会场面积</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">会后整体转为 MIND 地块</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">1.5 km</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">Decumanus 世界大道</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">35 m 宽 · 棚架覆盖 · 18—20 m 一馆</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">37 m</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">生命之树装置高度</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">Marco Balich 创意 · LED 全覆钢骨</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">9,000 m²</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">意大利馆「会呼吸」外皮</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">750 块光催化水泥板 · 分解空气污染物</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">2,150 万</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">官方累计入场人次</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">184 天 · 三种统计口径并存</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">100 万 m²</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">MIND 再开发体量</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">Lendlease 99 年分期 · 2032 目标成熟</div></div></div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>会期的城市级配套</h3><table class="data-table"><thead><tr><th>类型</th><th>内容</th><th>说明</th></tr></thead><tbody>
+<tr><td>对外交通</td><td>地铁 M1 线 Rho Fiera / Pero 站</td><td>延伸段直达，与城际会展客流共用</td></tr>
+<tr><td>场内动线</td><td>Decumanus + Cardo 步行轴线</td><td>全园禁车，仅服务车辆；轴长决定游线</td></tr>
+<tr><td>服务配套</td><td>无障碍 · 轮椅与婴儿车租赁 · 医疗点</td><td>配合高温排队场景的补水与遮阳体系</td></tr>
+<tr><td>餐饮矩阵</td><td>各国馆内餐饮 + 中央餐饮区</td><td>「国家馆即餐厅」：烤鸭、面食等成排队热点</td></tr>
+<tr><td>夜间演艺</td><td>生命之树灯光水秀 · 露天剧场演出</td><td>用夜间内容分流白天高峰客流</td></tr>
+</tbody></table></div>
+<div class="card"><h3>会后持久配套（MIND 时代）</h3><table class="data-table"><thead><tr><th>类型</th><th>设施</th><th>状态</th></tr></thead><tbody>
+<tr><td>科研旗舰</td><td>Human Technopole（原意大利馆）</td><td>国家生命科学机构总部，已入驻</td></tr>
+<tr><td>医疗</td><td>Galeazzi 骨科医院新楼</td><td>2022 年启用</td></tr>
+<tr><td>高等教育</td><td>米兰大学 Statale 新校区 · 约 21 万 m²</td><td>建设中，计划 2027 年前后分批投用</td></tr>
+<tr><td>学生居住</td><td>两座学生公寓（合计约 1,150 床位）</td><td>2025 年开工</td></tr>
+<tr><td>企业研发</td><td>ABB · E.On · Bayer · Esselunga 等研发与总部</td><td>园区西侧企业组团陆续落成</td></tr>
+<tr><td>对外轨道</td><td>MIND–Merlata 铁路站</td><td>规划推进中，远期加密园区通勤</td></tr>
+</tbody></table></div>
+</div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>MIND 现状（2026 年视角）</h3><ul style="list-style:disc;padding-left:1.2rem;font-size:0.95rem;line-height:1.8;">
+<li><strong>机构聚落成形：</strong>截至 2025 年口径，园区聚集约 50 家机构、日均到访约 1 万人次，Human Technopole 与 Galeazzi 医院构成公共科研与医疗的底盘。</li>
+<li><strong>大学城动工：</strong>米兰大学约 21 万 m² 新校区已进入主体施工，第一批教学建筑预计 2027 年前后投用。</li>
+<li><strong>企业迁入：</strong>ABB、E.On、Bayer、Esselunga 等研发中心沿园区西侧落成，产业人口逐步填充。</li>
+</ul></div>
+<div class="card"><h3>2032 愿景</h3><ul style="list-style:disc;padding-left:1.2rem;font-size:0.95rem;line-height:1.8;">
+<li><strong>整体成熟时间表：</strong>Arexpo 与 Lendlease 的目标是到 2032 年前后让 MIND 完整运行，预计远期日均人流 6 万—7 万人次。</li>
+<li><strong>功能拼图：</strong>科研 + 医疗 + 大学 + 企业 + 住宅与配套商业，正在把「世博临时城市」改写为「常驻创新城区」。</li>
+<li><strong>中期节点：</strong>未来数年将陆续交付学生公寓、二期实验室与企业楼宇，轨道接驳同步加密。</li>
+</ul></div>
+</div>
+<div class="grid-2 reveal" style="margin-top:1.2rem;">
+<div class="card"><h3>对城市型世博的启示</h3><p class="f-body">多数世博会场会在闭幕后荒置，米兰提供了另一条路径：公共平台 Arexpo 牢牢持有土地产权，再以 99 年长约引入单一开发商 Lendlease 分期兑现，避免「会期一结束、没人管地」的断档。它没有试图保留全部展馆，而是只留下意大利馆这类按永久标准建造、且能找到新主人的硬资产，其余果断拆除。主题的延续同样关键，从「滋养地球」的食物命题长出的正是生命科学、医疗与农业科技，世博不是结束，而是园区的第一场招商发布会。</p></div>
+<div class="card"><h3>行业位置与对照</h3><p class="f-body">世博遗产运营一直是全球难题，米兰 MIND 被欧洲城市规划界视为样本，却也需要几十年公共耐心：短期账本难看，长期资产账才刚翻开。对照 2010 年上海世博会的园区改造，两者共同点是「产权清晰 + 功能导入 + 轨道先行」，差异在于米兰体量更小、主题更聚焦，因而更接近一个可复制的城市场景而非单城奇迹。它留给后来者的真正问题是：办一届世博前，先想好会场将来住着谁。</p></div>
+</div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>1. 官方渠道</h4><ul>
+<li><a href="https://www.mindmilano.it/" target="_blank" rel="noopener">MIND 米兰创新区官网</a> <span class="tag">官方 · 遗产运营方</span></li>
+<li><a href="https://humantechnopole.it/" target="_blank" rel="noopener">Human Technopole 官网（意大利生命科学研究机构）</a> <span class="tag">官方</span></li></ul></div>
+<div class="resource-group reveal"><h4>2. 权威资料 / 百科</h4><ul>
+<li><a href="https://en.wikipedia.org/wiki/Expo_2015" target="_blank" rel="noopener">Wikipedia — Expo 2015</a> <span class="tag">百科</span></li>
+<li><a href="https://it.wikipedia.org/wiki/Expo_2015" target="_blank" rel="noopener">Wikipedia (Italiano) — Expo 2015</a> <span class="tag">百科</span></li></ul></div>
+<div class="resource-group reveal"><h4>3. 中文媒体报道</h4><ul>
+<li><a href="http://politics.people.com.cn/n/2015/0521/c70731-27037632.html" target="_blank" rel="noopener">人民网 — 米兰世博会中国馆「开门红」迎 25 万观众</a> <span class="tag">报道</span></li>
+<li><a href="http://finance.cnr.cn/gundong/20150521/t20150521_518608266.shtml" target="_blank" rel="noopener">央广网 — 中国馆日均游客量最高达 1.5 万人次</a> <span class="tag">报道</span></li>
+<li><a href="http://www.xinhuanet.com//world/2015-06/08/c_1115547868.htm" target="_blank" rel="noopener">新华网 — 专访：中国馆馆长谈展馆「高人气」</a> <span class="tag">报道</span></li></ul></div>
+<div class="resource-group reveal"><h4>4. 高清实拍视频</h4><ul>
+<li><a href="https://www.youtube.com/results?search_query=Expo+Milano+2015+walkthrough+tour" target="_blank" rel="noopener">YouTube — 米兰世博全景游园记录</a> <span class="tag">视频</span></li>
+<li><a href="https://www.youtube.com/results?search_query=Expo+2015+Tree+of+Life+light+show" target="_blank" rel="noopener">YouTube — 生命之树灯光水秀</a> <span class="tag">视频</span></li>
+<li><a href="https://www.youtube.com/results?search_query=Expo+Milano+2015+China+Pavilion+%E4%B8%AD%E5%9B%BD%E9%A6%86" target="_blank" rel="noopener">YouTube — 米兰世博中国馆现场</a> <span class="tag">视频</span></li></ul></div>
+<div class="resource-group reveal"><h4>5. 档案与回顾</h4><ul>
+<li><a href="http://www.expo-museum.com/sbbwg/n137/n138/n164/n168/u1ai18525.html" target="_blank" rel="noopener">上海世博会博物馆 — 米兰世博会中国馆人气回顾</a> <span class="tag">档案</span></li></ul></div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (Overseas: ESRI ArcGIS + WGS-84) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// ====== MAP INITIALIZATION (overseas: ESRI ArcGIS World_Imagery + WGS-84) ======
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+  var tilesLoaded = false;
+
+  var map = L.map('parkmap', {
+    center: [45.5195, 9.1015],
+    zoom: 15,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+
+  tileLayer.on('load', function() {
+    tilesLoaded = true;
+    clearTimeout(tileTimer);
+    fallback.style.display = 'none';
+  });
+
+  tileLayer.addTo(map);
+
+  var tileTimer = setTimeout(function() {
+    if (!tilesLoaded) fallback.style.display = 'block';
+  }, 8000);
+
+  // ====== MAP MARKERS (OSM-verified WGS-84) ======
+  function zoneIcon(color, text) {
+    return L.divIcon({
+      className: 'custom-div-icon',
+      html: '<div style="background:' + color + ';color:#fff;padding:3px 9px;border-radius:4px;font-size:12px;font-weight:600;white-space:nowrap;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,0.4);font-family:DM Sans,sans-serif;">' + text + '</div>',
+      iconAnchor: [10, 12]
+    });
+  }
+
+  L.marker([45.519677, 9.105599], { icon: zoneIcon('#1F7A4D', 'MIND 创新区') }).addTo(map).bindPopup('<b>MIND 创新区</b><br>2015 米兰世博会原址 · Arexpo + Lendlease 99 年开发 · 约 100 万 m²');
+  L.marker([45.520011, 9.106093], { icon: zoneIcon('#E8B54B', '原意大利馆') }).addTo(map).bindPopup('<b>意大利馆 Palazzo Italia</b><br>Nemesi 设计 · 会中为意大利国家馆<br>会后保留并整建为 Human Technopole 总部');
+  L.marker([45.522412, 9.096151], { icon: zoneIcon('#57B584', 'Galeazzi 医院') }).addTo(map).bindPopup('<b>Galeazzi 骨科医院新楼</b><br>2022 年启用 · MIND 首批落成公共设施');
+
+  // Fit bounds
+  var bounds = L.latLngBounds([
+    [45.5145, 9.0925],
+    [45.5265, 9.1115]
+  ]);
+  map.fitBounds(bounds, { padding: [20, 20] });
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+});
+
+// ====== SCROLL REVEAL ======
+(function() {
+  var revealElements = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    revealElements.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  revealElements.forEach(function(el) { observer.observe(el); });
+})();
+
+// ====== BACK TO TOP ======
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+<footer class="footer"><p>张走走的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy">GitHub</a> 托管</p>
+<p style="margin-top:0.4rem;opacity:0.7;">2015 米兰世博会数据截至 2026 年 9 月 · 坐标 OSM 验证 (WGS-84) · 参观量三种口径见正文</p></footer>
+</body>
+</html>

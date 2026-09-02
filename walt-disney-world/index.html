@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>华特迪士尼世界度假区 — 佛罗里达中部约110平方公里的自洽之城：四座主题乐园×两座水乐园×Disney Springs商圈</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #4A2C7A;
+  --clr-primary-light: #7C5BC0;
+  --clr-primary-dark: #241242;
+  --clr-accent: #F5A623;
+  --clr-accent-warm: #E86A4A;
+}
+
+.hero {
+  background: linear-gradient(160deg, #1B0C38 0%, #4A2C7A 40%, #7C5BC0 70%, #C9A8F2 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 22% 78%, rgba(245,166,35,0.15) 0%, transparent 55%),
+              radial-gradient(ellipse at 80% 18%, rgba(201,168,242,0.14) 0%, transparent 50%);
+}
+.data-table tbody tr:hover { background: rgba(74,44,122,0.05); }
+
+@media (max-width: 768px) {
+  .hero { padding: 3rem 0 2.5rem; }
+  .hero .kpi-row { gap: 0.8rem; }
+  .hero .kpi-card { padding: 0.8rem 1rem; min-width: 118px; }
+  .hero .kpi-number { font-size: 1.3rem; }
+  #parkmap { height: 350px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>华特迪士尼世界度假区</h1>
+    <p class="hero-subtitle">1964 年起秘密买下佛罗里达中部大片沼泽，换来一座约 110 km² 的迪士尼自洽之城——四座主题乐园、两座水乐园与 Disney Springs 商圈之间，跑着 1971 年首日启用的单轨铁路和 2019 年上天的空中缆车</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">110<span style="font-size:0.7em;opacity:0.7"> km²</span></div><div class="kpi-label">总占地 · 与旧金山相当</div></div>
+      <div class="kpi-card"><div class="kpi-number">4,910<span style="font-size:0.7em;opacity:0.7"> 万</span></div><div class="kpi-label">2024 四园客流合计</div></div>
+      <div class="kpi-card"><div class="kpi-number">4+2</div><div class="kpi-label">主题乐园 × 水乐园</div></div>
+      <div class="kpi-card"><div class="kpi-number">3 万+</div><div class="kpi-label">全区酒店客房</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal"><div class="card">
+        <h3>基本信息</h3>
+        <table class="data-table">
+          <tbody>
+            <tr><td><strong>项目名称</strong></td><td>华特迪士尼世界度假区（Walt Disney World Resort）</td></tr>
+            <tr><td><strong>开园时间</strong></td><td>1971 年 10 月 1 日（魔法王国与首批酒店同日迎客）</td></tr>
+            <tr><td><strong>地理位置</strong></td><td>美国佛罗里达州奥兰多都会区西南，湾湖与布埃纳维斯塔湖两座市镇境内</td></tr>
+            <tr><td><strong>占地面积</strong></td><td>约 110 km²，面积与旧金山城区相当、约为两个曼哈顿</td></tr>
+            <tr><td><strong>空间结构</strong></td><td>4 座主题乐园 + 2 座水乐园 + Disney Springs 商圈 + 度假酒店群</td></tr>
+            <tr><td><strong>运营方</strong></td><td>迪士尼乐园与体验（Disney Experiences，迪士尼自有）</td></tr>
+            <tr><td><strong>创意方</strong></td><td>华特迪士尼幻想工程（原 WED Enterprises）</td></tr>
+            <tr><td><strong>治理主体</strong></td><td>中佛罗里达旅游监督区（CFTOD，2023 年由 Reedy Creek 区更名）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3>坐标与交通</h3>
+        <table class="data-table">
+          <tbody>
+            <tr><td><strong>精确坐标</strong></td><td>28°25′09″N, 81°34′54″W（魔法王国锚点）</td></tr>
+            <tr><td><strong>十进制坐标</strong></td><td>28.4191°N, 81.5817°W（OSM 实测）</td></tr>
+            <tr><td><strong>全区尺度</strong></td><td>东西宽约 10 公里、南北纵深约 11 公里</td></tr>
+            <tr><td><strong>园区方位</strong></td><td>魔法王国居北，动物王国居西，EPCOT 居中，影城居西南，Disney Springs 居东</td></tr>
+            <tr><td><strong>区内交通</strong></td><td>单轨 3 线 + 空中缆车 + 巴士 + 水上渡船</td></tr>
+            <tr><td><strong>主干道路</strong></td><td>World Drive 环状主干道贯通全区，接驳 I-4 州际高速</td></tr>
+            <tr><td><strong>最近机场</strong></td><td>奥兰多国际机场（MCO）</td></tr>
+            <tr><td><strong>自治特区</strong></td><td>1967 年佛州立法设立，规划、消防与公用事业自营</td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p class="f-body">华特迪士尼世界不是一座乐园，而是迪士尼以「城市」为单位的作品。1964—1965 年间，公司以多家空壳公司秘密买下佛罗里达中部约 110 km² 的柑橘园与沼泽地，1967 年经州立法获得自治特区权限后动工，1971 年 10 月 1 日魔法王国首开。此后五十余年，这片土地先后长出 EPCOT、好莱坞影城与动物王国，以及两座水乐园、一个购物商圈、一片度假酒店群与 ESPN 体育城，是当今全球占地面积最大、年度客流最高的单体度假目的地。它真正的独特性在内部逻辑：整片度假区像一座自给自足的微型城市——单轨、缆车、巴士、渡船构成多模式交通网，魔法王国垫高在后台通道之上，电力、供水与垃圾处理由自家特区运营。2024 年四座主题乐园合计接待约 4,910 万人次，仅魔法王国一座就位列全球主题乐园客流第一。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>大佛罗里达项目：先买一座城市的地</h3><p class="f-body">1964—1965 年，迪士尼在公众不知情时通过数十家空壳公司陆续买入佛罗里达中部奥西奥拉县约 110 km² 土地，总价约 550 万美元，1965 年 11 月对外公布「佛罗里达项目」。华特·迪士尼的本意是借这片土地实现他毕生的「明日实验社区（EPCOT）」理想——一座由公司规划、永远扩建中的自给城市。1966 年 12 月华特去世，其兄罗伊接过项目，公司决定以兄长之名将度假区命名为 Walt Disney World，并沿用「特区自治」的骨架：1967 年佛州议会设立 Reedy Creek 改善区，赋予其独立的土地规划、建筑审批与公用事业权力，为后世所有建设扫清外部掣肘。</p></div>
+      <div class="card"><h3>幻想工程的开山尺码：从园区规划到城市系统</h3><p class="f-body">与先在加州阿纳海姆（迪士尼乐园）那样「先建园再补配套」不同，佛罗里达项目第一次从零规划整个「城市」。幻想工程在买地之初就同步设计单轨环线、环状主干道、地下后台通道与能源水务系统，魔法王国、EPCOT 的选址与预留地相互咬合。乐园与酒店密度刻意压低，用大片湿地、林带与高尔夫球场作缓冲，既隔离外界视线、营造沉浸感，也为日后半个世纪留下持续扩建的土地储备——如今约 110 km² 中仍有大量未开发的绿带与保育区。</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.2rem;"><h3>技术骨架：把乐园垫高一层的 utilidor 后台城</h3><p class="f-body">佛州地下水位高、不适宜开挖深隧道，于是魔法王国反其道而行：先在地面层修建一片约 3.6 公顷的后台走廊（utilidors，utility corridors 的缩写），再把整个乐园垫到其上约一层楼高，游客脚下的「地面」其实是架空层顶板。这条后台走廊串起服装间、厨房、仓储与气压垃圾回收系统，演职人员在此换装穿行，垃圾与脏布草全程不见光，前台永远是干净的童话街景。1971 年开幕当天曾有约 25 名员工在通道里迷路——这套「前台/后台分离」的设计从此成为迪士尼乐园建设的通用文法，魔法王国是它的发源地与最大实例。</p></div>
+    <div class="card reveal" style="margin-top:1.2rem;"><h3>五十年四代乐园的扩容节奏</h3><table class="data-table">
+      <thead><tr><th>乐园</th><th>开园</th><th>占地</th><th>一句话定位</th></tr></thead>
+      <tbody>
+        <tr><td>魔法王国 Magic Kingdom</td><td class="num">1971</td><td class="num">约 43 ha</td><td>灰姑娘城堡坐镇的六区童话总门面，全美客流之王</td></tr>
+        <tr><td>EPCOT 艾波卡特</td><td class="num">1982</td><td class="num">约 123 ha</td><td>华特「未来城市」理想改装的科技×文化实验场</td></tr>
+        <tr><td>好莱坞影城 Hollywood Studios</td><td class="num">1989</td><td class="num">约 55 ha</td><td>从「影视片场」转向 IP 叙事园区，银河边缘所在</td></tr>
+        <tr><td>动物王国 Animal Kingdom</td><td class="num">1998</td><td class="num">约 235 ha</td><td>全球单体面积居首的主题乐园，真动物×奇幻历险</td></tr>
+      </tbody>
+    </table><p class="f-caption" style="margin-top:0.6rem;">占地为公开常见口径，各源略有出入；四座乐园叠加两座水乐园即构成度假区的游乐矩阵。每座乐园的成长（如 EPCOT 的街区改造、影城与动物王国的换代）均有独立案例可查。</p></div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody><tr><td>规模</td><td>总占地面积</td><td class="num">约 110 km²</td><td>与旧金山城区相当 · 约为两个曼哈顿</td></tr>
+<tr><td>规模</td><td>2024 协议核准开发范围</td><td class="num">约 70 km²</td><td>2024 年 15 年开发协议覆盖其约 70 km² 自有地</td></tr>
+<tr><td>结构</td><td>主题乐园</td><td class="num">4 座</td><td>魔法王国 1971 · EPCOT 1982 · 影城 1989 · 动物王国 1998</td></tr>
+<tr><td>结构</td><td>水乐园</td><td class="num">2 座</td><td>台风潟湖 1989 · 暴风雪海滩 1995（错峰季休）</td></tr>
+<tr><td>结构</td><td>度假区酒店客房</td><td class="num">3 万间+</td><td>直营约 2.3 万间 + 第三方特许约 7,300 间</td></tr>
+<tr><td>运营</td><td>2024 四园客流合计</td><td class="num">约 4,910 万</td><td>TEA/AECOM 口径，四园同增</td></tr>
+<tr><td>运营</td><td>演职人员规模</td><td class="num">约 8 万</td><td>全美最大单一园区雇主</td></tr>
+<tr><td>交通</td><td>单轨铁路</td><td class="num">约 22.5 km</td><td>3 线 · 1971 年开园首日运行</td></tr>
+<tr><td>交通</td><td>Skyliner 空中缆车</td><td class="num">约 10 km 缆线</td><td>2019 年 · 约 300 台车厢 · 2 园 + 4 酒店</td></tr>
+<tr><td>市政</td><td>魔法王国后台通道</td><td class="num">约 3.6 ha</td><td>地面层 utilidors，乐园整体垫高其上</td></tr>
+<tr><td>投资</td><td>1971 年首期造价</td><td class="num">约 ¥28 亿</td><td>1971 年 US$4 亿 · 含魔法王国与两座首代酒店</td></tr>
+<tr><td>投资</td><td>2024 开发协议承诺</td><td class="num">≥¥568 亿（10 年）</td><td>至 20 年累计约 US$170 亿 · 授权第 5 座主题乐园</td></tr></tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">注：占地与各园面积为公开常见口径，来源间略有出入；游客量来自 TEA/AECOM 2024 年度报告（2025 年 10 月发布）。外汇按 1 美元 ≈ 7.1 元人民币折算，历史造价未做通胀调整。2024 年开发协议由迪士尼与中佛罗里达旅游监督区于 2024 年 6 月签署，覆盖其自有约 70 km² 土地。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="map-legend"><span><span class="dot" style="background:#4A2C7A"></span> 主题乐园</span><span><span class="dot" style="background:#1FA7C4"></span> 水乐园</span><span><span class="dot" style="background:#F5A623"></span> 商圈</span><span><span class="dot" style="background:#9AA5B1"></span> 体育设施</span></div>
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+    <p class="f-caption" style="margin-top:0.5rem;">全区卫星示意 · 坐标来源 OpenStreetMap 实测（WGS-84）· 点击芯片查看园区详情 · 四园之间是大片度假酒店、高尔夫球场与保育绿地</p>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container"><svg viewBox="0 0 1200 980" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#180B36"/><stop offset="100%" stop-color="#241242"/></linearGradient>
+<linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3E86C8"/><stop offset="100%" stop-color="#15507E"/></linearGradient></defs>
+<rect width="1200" height="980" fill="url(#bgGrad)" rx="14"/>
+<text x="600" y="44" text-anchor="middle" font-family="Playfair Display,serif" font-size="23" font-weight="700" fill="#F5A623">华特迪士尼世界度假区 · 空间与交通骨架示意图</text>
+<text x="600" y="68" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12.5" fill="#A98BD8">上北下南 · 非精确比例，仅示意相对方位与连接骨架 · 全区约 110 km²</text>
+<!-- Buffer / conservation greenwash (behind, faint) -->
+<ellipse cx="140" cy="300" rx="170" ry="130" fill="#2E7D46" opacity="0.07"/>
+<ellipse cx="200" cy="820" rx="260" ry="150" fill="#2E7D46" opacity="0.06"/>
+<ellipse cx="700" cy="930" rx="300" ry="70" fill="#2E7D46" opacity="0.05"/>
+<text x="60" y="250" font-family="DM Sans,sans-serif" font-size="10.5" fill="#6FAF86" opacity="0.9">未开发缓冲带</text>
+<text x="60" y="264" font-family="DM Sans,sans-serif" font-size="10.5" fill="#6FAF86" opacity="0.9">与保育绿地</text>
+<!-- Bay Lake -->
+<polygon points="170,320 235,210 330,140 450,165 480,235 430,330 300,360 190,355" fill="url(#waterGrad)" opacity="0.5"/>
+<text x="315" y="262" text-anchor="middle" font-family="Playfair Display,serif" font-size="13" font-weight="700" fill="#CFE6F8" opacity="0.9">湾湖 Bay Lake</text>
+<!-- Magic Kingdom node -->
+<rect x="398" y="144" width="204" height="92" rx="12" fill="#7C5BC0" opacity="0.18" stroke="#7C5BC0" stroke-width="1.5" stroke-dasharray="6,4"/>
+<text x="500" y="176" text-anchor="middle" font-family="Playfair Display,serif" font-size="16" font-weight="700" fill="#FFFFFF">魔法王国</text>
+<text x="500" y="196" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10.5" fill="#D9C9F5">Magic Kingdom · 1971</text>
+<text x="500" y="214" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#C4ABEF">约 43 ha · 6 主题区 · 客流全球第一</text>
+<circle cx="500" cy="144" r="6" fill="#F5A623"/>
+<!-- Seven Seas Lagoon -->
+<ellipse cx="780" cy="210" rx="120" ry="52" fill="url(#waterGrad)" opacity="0.45"/>
+<text x="780" y="207" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#BFE0F5" opacity="0.95">七海潟湖</text>
+<!-- First-generation resort hotels -->
+<rect x="908" y="118" width="196" height="62" rx="10" fill="#E8A33D" opacity="0.14" stroke="#E8A33D" stroke-width="1.3" stroke-dasharray="6,4"/>
+<text x="1006" y="144" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="700" fill="#FFD9A0">首代酒店圈</text>
+<text x="1006" y="160" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9.5" fill="#EBC69A">当代 · 波利尼西亚 · 大佛罗里达</text>
+<circle cx="908" cy="149" r="5" fill="#F5A623"/>
+<circle cx="1104" cy="149" r="5" fill="#F5A623"/>
+<!-- EPCOT node -->
+<rect x="752" y="352" width="196" height="78" rx="12" fill="#7C5BC0" opacity="0.18" stroke="#7C5BC0" stroke-width="1.5" stroke-dasharray="6,4"/>
+<text x="850" y="384" text-anchor="middle" font-family="Playfair Display,serif" font-size="15" font-weight="700" fill="#FFFFFF">EPCOT 艾波卡特</text>
+<text x="850" y="404" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10.5" fill="#D9C9F5">1982 · 约 123 ha · 三街区 + 环湖 11 国馆</text>
+<text x="850" y="420" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#C4ABEF">球体 Spaceship Earth · 2024 改造收官</text>
+<circle cx="850" cy="430" r="6" fill="#F5A623"/>
+<!-- Hollywood Studios node -->
+<rect x="520" y="575" width="200" height="72" rx="12" fill="#7C5BC0" opacity="0.18" stroke="#7C5BC0" stroke-width="1.5" stroke-dasharray="6,4"/>
+<text x="620" y="606" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#FFFFFF">好莱坞影城</text>
+<text x="620" y="624" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#D9C9F5">1989 · 约 55 ha · 银河边缘</text>
+<text x="620" y="638" text-anchor="middle" font-family="DM Mono,monospace" font-size="9.5" fill="#C4ABEF">Monstropolis 2027 前后</text>
+<circle cx="620" cy="575" r="6" fill="#F5A623"/>
+<!-- Animal Kingdom node -->
+<rect x="195" y="545" width="210" height="76" rx="12" fill="#7C5BC0" opacity="0.18" stroke="#7C5BC0" stroke-width="1.5" stroke-dasharray="6,4"/>
+<text x="300" y="576" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#FFFFFF">动物王国</text>
+<text x="300" y="594" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#D9C9F5">1998 · 约 235 ha · 全球单体居首</text>
+<text x="300" y="610" text-anchor="middle" font-family="DM Mono,monospace" font-size="9.5" fill="#C4ABEF">潘多拉 2017 · 热带美洲 2027</text>
+<circle cx="300" cy="545" r="6" fill="#F5A623"/>
+<!-- Disney Springs node -->
+<rect x="986" y="298" width="178" height="66" rx="10" fill="#F5A623" opacity="0.15" stroke="#F5A623" stroke-width="1.4" stroke-dasharray="6,4"/>
+<text x="1075" y="326" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" font-weight="700" fill="#FFD9A0">Disney Springs</text>
+<text x="1075" y="343" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9.5" fill="#EBC69A">商圈四区 · 2015 更名</text>
+<text x="1075" y="356" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="#D9B066">前身 1975 购物村 · 免费入场</text>
+<circle cx="1075" cy="298" r="6" fill="#F5A623"/>
+<!-- Typhoon Lagoon node -->
+<rect x="930" y="528" width="166" height="58" rx="10" fill="#1FA7C4" opacity="0.16" stroke="#1FA7C4" stroke-width="1.4" stroke-dasharray="6,4"/>
+<text x="1013" y="554" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12.5" font-weight="700" fill="#9FE3EE">台风潟湖</text>
+<text x="1013" y="572" text-anchor="middle" font-family="DM Mono,monospace" font-size="9.5" fill="#9CCDDD">1989 · 约 23 ha · 北美造浪池</text>
+<!-- Blizzard Beach node -->
+<rect x="362" y="730" width="156" height="60" rx="10" fill="#1FA7C4" opacity="0.16" stroke="#1FA7C4" stroke-width="1.4" stroke-dasharray="6,4"/>
+<text x="440" y="756" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12.5" font-weight="700" fill="#9FE3EE">暴风雪海滩</text>
+<text x="440" y="774" text-anchor="middle" font-family="DM Mono,monospace" font-size="9.5" fill="#9CCDDD">1995 · 约 27 ha · 融雪滑雪场</text>
+<!-- ESPN node -->
+<rect x="620" y="858" width="180" height="52" rx="10" fill="#9AA5B1" opacity="0.16" stroke="#9AA5B1" stroke-width="1.3" stroke-dasharray="6,4"/>
+<text x="710" y="882" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="700" fill="#D7DDE4">ESPN 体育城</text>
+<text x="710" y="898" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="#B9C2CC">1997 · 赛事与训练场群</text>
+<!-- Monorail: Express MK-TTC-EPCOT -->
+<polyline points="500,236 640,298 848,430" fill="none" stroke="#F5A623" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+<circle cx="640" cy="298" r="11" fill="#F5A623" stroke="#241242" stroke-width="2"/>
+<circle cx="500" cy="236" r="6" fill="#F5A623"/>
+<text x="640" y="284" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#FFD9A0">交通枢纽 TTC</text>
+<text x="640" y="322" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="#D9B066">单轨快线 MK ↔ EPCOT</text>
+<!-- Resort monorail spur (dashed) -->
+<polyline points="500,150 720,150 908,149" fill="none" stroke="#F5A623" stroke-width="2" stroke-dasharray="7,5" opacity="0.75"/>
+<text x="716" y="140" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9.5" fill="#D9B066">单轨度假区线 · 串联三酒店</text>
+<!-- Skyliner: EPCOT - hub - Hollywood Studios -->
+<polyline points="850,352 762,520 620,575" fill="none" stroke="#1FA7C4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+<circle cx="762" cy="520" r="11" fill="#1FA7C4" stroke="#241242" stroke-width="2"/>
+<text x="762" y="506" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#A8ECF5">Skyliner 枢纽</text>
+<text x="762" y="544" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="#7FB7C6">空中缆车 2019 · 2 园 + 4 酒店</text>
+<!-- Skyliner dashed branch to west resorts -->
+<polyline points="762,520 700,690 470,752" fill="none" stroke="#1FA7C4" stroke-width="1.8" stroke-dasharray="7,5" opacity="0.6"/>
+<text x="640" y="690" font-family="DM Sans,sans-serif" font-size="9.5" fill="#7FB7C6">缆车另接流行世纪、艺术动画等沿线酒店</text>
+<!-- Compass -->
+<g transform="translate(1142,96)">
+<polygon points="0,16 6,0 12,16 6,12" fill="#F5A623"/>
+<text x="6" y="30" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" font-weight="700" fill="#F5A623">N</text>
+</g>
+<!-- Legend -->
+<rect x="330" y="936" width="14" height="14" rx="3" fill="#7C5BC0"/>
+<text x="352" y="948" font-family="DM Sans,sans-serif" font-size="12" fill="#C4ABEF">主题乐园</text>
+<rect x="470" y="936" width="14" height="14" rx="3" fill="#1FA7C4"/>
+<text x="492" y="948" font-family="DM Sans,sans-serif" font-size="12" fill="#8FD8E4">水乐园</text>
+<rect x="610" y="936" width="14" height="14" rx="3" fill="#F5A623"/>
+<text x="632" y="948" font-family="DM Sans,sans-serif" font-size="12" fill="#FFD9A0">商圈 / 酒店 / 枢纽</text>
+<rect x="818" y="936" width="14" height="14" rx="3" fill="#9AA5B1"/>
+<text x="840" y="948" font-family="DM Sans,sans-serif" font-size="12" fill="#C6CDD6">体育设施</text>
+<line x1="960" y1="943" x2="1010" y2="943" stroke="#F5A623" stroke-width="3"/>
+<text x="1020" y="948" font-family="DM Sans,sans-serif" font-size="12" fill="#FFD9A0">单轨</text>
+<line x1="1080" y1="943" x2="1130" y2="943" stroke="#1FA7C4" stroke-width="3"/>
+<text x="1140" y="948" font-family="DM Sans,sans-serif" font-size="12" fill="#8FD8E4">缆车</text>
+</svg></div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;"><div class="card"><h3>魔法王国 Magic Kingdom</h3><p class="f-caption">1971 年 10 月 1 日开园的首座乐园，占地约 43 公顷，是四园中面积最小、客流最大的一座（2024 年约 1,784 万人次，居全球主题乐园第一，日均约 4.88 万人次）。主街、探险、边域、自由广场、梦幻、明日世界六个主题区围着灰姑娘城堡排布，脚下则踩着约 3.6 公顷的 utilidor 后台通道。</p></div>
+<div class="card"><h3>EPCOT 艾波卡特</h3><p class="f-caption">1982 年开园、占地约 123 公顷。2019 年启动、2024 年收官的「世纪改造」后，由世界庆典、世界发现、世界自然三个街区与环湖 11 国馆组成，2024 年客流约 1,213 万、全球第 8。球体 Spaceship Earth 与夜秀 Luminous 是它的精神地标，详细拆解见 EPCOT 单园案例。</p></div>
+<div class="card"><h3>好莱坞影城 Hollywood Studios</h3><p class="f-caption">1989 年以「迪士尼-米高梅影城」之名开园、占地约 55 公顷，从影视片场逐步转型为 IP 主题乐园：2018 年玩具总动员园、2019 年星球大战：银河边缘相继落地（银河边缘另有单园案例），2024 年客流约 1,033 万。Monstropolis《怪兽电力公司》主题区预计 2027 年前后开业。</p></div>
+<div class="card"><h3>动物王国 Animal Kingdom</h3><p class="f-caption">1998 年开园、占地约 235 公顷，是全球单体面积居首的主题乐园。非洲、亚洲、潘多拉·阿凡达世界与以约 44 米生命之树为中心的发现岛把真实动物保育和电影奇观并置；迪诺天地将在 2027 年前后让位给热带美洲新园区。</p></div>
+<div class="card"><h3>台风潟湖 + 暴风雪海滩</h3><p class="f-caption">两座水乐园分别于 1989 年与 1995 年开业，占地约 23 与 27 公顷，全年错峰休整、轮换运营。台风潟湖主打风暴后热带海滩，拥有北美规模居首的造浪池；暴风雪海滩把水乐园包装成一座「融化的滑雪场」。</p></div>
+<div class="card"><h3>Disney Springs 商圈</h3><p class="f-caption">度假区的开放式购物餐饮娱乐区：前身是 1975 年开业的湖布埃纳维斯塔购物村，2015 年 9 月更名 Disney Springs，由市场、兰丁、镇中心、西侧四区组成，免费入场停车，World of Disney 号称全球最大的迪士尼商店。</p></div></div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT & CONSTRUCTION TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline"><div class="timeline-item reveal"><div class="timeline-year">1964—1965</div><div class="timeline-content"><h4>秘密购地约 110 km²</h4><p>迪士尼借数十家空壳公司避开抬价，从一百多位地主手中陆续买入佛罗里达中部土地，总价约 550 万美元；1965 年 11 月对外公布「佛罗里达项目」。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">1966 年 12 月</div><div class="timeline-content"><h4>华特去世 · 项目更名纪念</h4><p>华特·迪士尼离世，公司决定把整片度假区命名为 Walt Disney World，以兄长之名承载其「明日社区」遗愿。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">1967</div><div class="timeline-content"><h4>州立法设立自治特区</h4><p>佛州议会设立 Reedy Creek 改善区（今 CFTOD），赋予土地规划、消防与公用事业自治权；魔法王国动工，utilidor 后台通道与单轨同步设计。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">1971 年 10 月 1 日</div><div class="timeline-content"><h4>魔法王国首开 · 首期造价约 ¥28 亿</h4><p>魔法王国、当代与波利尼西亚两座酒店、露营地和单轨铁路同日迎客，1971 年美元口径造价约 4 亿美元，是当时美国规模最大的私营建筑工程之一。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">1975</div><div class="timeline-content"><h4>商圈前身购物村开业</h4><p>湖布埃纳维斯塔购物村开门营业，即今日 Disney Springs 的最早起点；1976 年首座水乐园乡村河湾随之开业。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">1982 年 10 月 1 日</div><div class="timeline-content"><h4>EPCOT Center 开园</h4><p>华特「未来城市」构想改装的第二座乐园面世，造价约 US$8–14 亿（1982 年美元），一度号称全球最大的私营建筑项目。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">1989</div><div class="timeline-content"><h4>影城与台风潟湖双开</h4><p>迪士尼-米高梅影城（今好莱坞影城）于 5 月开园，台风潟湖水乐园于 6 月跟进，度假区进入「乐园矩阵」时代。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">1995—1998</div><div class="timeline-content"><h4>水乐园与第四园补齐</h4><p>1995 年暴风雪海滩开园；1997 年 Downtown Disney 西区与 ESPN 体育城落地；1998 年 4 月动物王国开园，四座主题乐园矩阵成型。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2017—2019</div><div class="timeline-content"><h4>影城换代与新交通上线</h4><p>动物王国潘多拉·阿凡达世界（2017）、影城玩具总动员园（2018）与星球大战：银河边缘（2019）先后落地；2019 年 9 月 Skyliner 空中缆车投运。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2024 年 6 月</div><div class="timeline-content"><h4>15 年开发协议终结与佛州龃龉</h4><p>迪士尼与 CFTOD 签署协议：前十年至少投入 US$80 亿、至 20 年累计最高 US$170 亿，并首次授权「第 5 座大型主题乐园」与至多 5 座次要乐园的规划空间。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2026 年 8 月</div><div class="timeline-content"><h4>「史上最大扩建清单」官宣</h4><p>D23 大会公布 Villains Land、赛车主题区、热带美洲、Monstropolis 等一批 2027 年前后项目，此前数年魔法王国河流区已为赛车主题区让路动工。</p></div></div></div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONAL INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>四园游客量（TEA/AECOM 2024）</h3><table class="data-table"><thead><tr><th>园区</th><th>游客量</th><th>同比</th><th>全球排名</th></tr></thead><tbody>
+<tr><td>魔法王国</td><td class="num">17,840,000</td><td class="num">+0.7%</td><td>第 1</td></tr>
+<tr><td>EPCOT</td><td class="num">12,130,000</td><td class="num">+1.3%</td><td>第 8</td></tr>
+<tr><td>好莱坞影城</td><td class="num">10,330,000</td><td class="num">+0.3%</td><td>第 9</td></tr>
+<tr><td>动物王国</td><td class="num">8,800,000</td><td class="num">+0.3%</td><td>第 15</td></tr>
+<tr><td>四园合计</td><td class="num">约 4,910 万</td><td class="num">—</td><td>全球客流居首的乐园集群</td></tr>
+</tbody></table><p class="f-caption" style="margin-top:0.5rem;">四园 2024 年同告增长；若计入两座水乐园与 Disney Springs 商圈客流，度假区年度接待量远超此数。</p></div>
+<div class="card"><h3>运营底盘</h3><table class="data-table"><thead><tr><th>维度</th><th>表现</th></tr></thead><tbody>
+<tr><td>单园天花板</td><td>魔法王国连续多年居全球主题乐园客流首位</td></tr>
+<tr><td>日均客流</td><td>魔法王国 2024 年日均约 4.88 万人次</td></tr>
+<tr><td>水乐园节律</td><td>两座水乐园按季节错峰休整，维持全年可玩性</td></tr>
+<tr><td>免票引流层</td><td>Disney Springs 免费入场，承担无票客群与餐饮消费</td></tr>
+<tr><td>重游率引擎</td><td>酒店住宿 + 多日联票 + 商圈构成一周级度假动线</td></tr>
+</tbody></table></div>
+</div>
+<div class="grid-2 reveal" style="margin-top:1.2rem;">
+<div class="card"><h3>人力资源与区域影响</h3><table class="data-table"><thead><tr><th>指标</th><th>数值/说明</th></tr></thead><tbody>
+<tr><td>演职人员</td><td>约 80,000 人 · 全美最大单一园区雇主</td></tr>
+<tr><td>岗位构成</td><td>从骑乘操作员、角色演员到兽医、厨师、工程师与园丁，工种跨度极大</td></tr>
+<tr><td>区域地位</td><td>奥兰多都会区最大雇主之一，度假区带动中佛罗里达旅游业</td></tr>
+<tr><td>扩张就业</td><td>2024 协议与后续扩建预计在中长期创造上万岗位</td></tr>
+</tbody></table></div>
+<div class="card"><h3>运营模式与数字化</h3><table class="data-table"><thead><tr><th>机制</th><th>说明</th></tr></thead><tbody>
+<tr><td>动态票价</td><td>日期浮动定价，旺季与淡季单日票价差异明显</td></tr>
+<tr><td>MagicBand+</td><td>可穿戴手环合一票务、酒店房卡、支付与快速通道</td></tr>
+<tr><td>优先通行</td><td>Lightning Lane 付费优先体验作为可选增项</td></tr>
+<tr><td>联程生态</td><td>酒店—乐园—商圈消费闭环，延长停留与人均支出</td></tr>
+</tbody></table></div>
+</div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal"><div class="card" style="text-align:center;"><div class="f-mono" style="font-size:1.9rem;color:var(--clr-primary);font-weight:700;">22.5 km</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">单轨铁路总长</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">3 线 · 1971 年开园首日运行至今</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:1.9rem;color:var(--clr-primary);font-weight:700;">约 10 km</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">Skyliner 空中缆车</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">2019 年 · 约 300 台车厢 · 2 园 + 4 酒店</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:1.9rem;color:var(--clr-primary);font-weight:700;">3.6 ha</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">魔法王国后台 utilidors</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">地面层服务城市 · 乐园垫高其上</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:1.9rem;color:var(--clr-primary);font-weight:700;">约 8 万</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">演职人员规模</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">全美最大单一园区雇主</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:1.9rem;color:var(--clr-primary);font-weight:700;">4+2 座</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">主题乐园 × 水乐园</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">1971—1998 五十年矩阵式扩容</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:1.9rem;color:var(--clr-primary);font-weight:700;">1967</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">自治特区立法年份</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">电力、供水、消防与环卫自营</div></div></div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>住宿体系分级</h3><table class="data-table"><thead><tr><th>层级</th><th>代表</th><th>定位</th></tr></thead><tbody>
+<tr><td>顶级奢华</td><td>大佛罗里达、当代、波利尼西亚、里维埃拉</td><td>贴近魔法王国湖区，单轨或缆车直达乐园</td></tr>
+<tr><td>湖畔中坚</td><td>加勒比海滩、游艇/海滩俱乐部等</td><td>环湖而建，Skyliner 枢纽与步道串联</td></tr>
+<tr><td>值与经济型</td><td>流行世纪、艺术动画、全明星系列</td><td>主题立面张扬、客房平价，面向家庭</td></tr>
+<tr><td>DVC 度假别墅</td><td>老基韦斯特、萨拉托加斯普林斯等</td><td>分时度假公寓，带厨房起居，散布于各物业</td></tr>
+</tbody></table></div>
+<div class="card"><h3>住宿规模速览（2025 财年口径）</h3><table class="data-table"><thead><tr><th>指标</th><th>数值</th><th>备注</th></tr></thead><tbody>
+<tr><td>迪士尼直营度假物业</td><td class="num">约 18 处</td><td>含 DVC 度假别墅物业</td></tr>
+<tr><td>直营客房</td><td class="num">约 23,000 间</td><td>迪士尼财报口径</td></tr>
+<tr><td>DVC 单元</td><td class="num">约 3,900 套</td><td>散布多家物业的分时度假公寓</td></tr>
+<tr><td>第三方特许</td><td class="num">约 7,300 间</td><td>承租迪士尼土地、独立运营的酒店</td></tr>
+<tr><td>全区合计</td><td class="num">3 万间以上</td><td>官方营销口径为「逾 25 家迪士尼度假酒店」</td></tr>
+</tbody></table><p class="f-caption" style="margin-top:0.5rem;">口径说明：迪士尼 2025 财年报告自营度假物业与客房数；官方网站则按营销口径表述为 25 家以上。数字差异来自统计边界。</p></div>
+</div>
+<div class="grid-3 reveal" style="margin-top:1.2rem;">
+<div class="card"><h3>商圈与消费</h3><p class="f-caption">• Disney Springs 四区（市场/兰丁/镇中心/西侧）<br>• 免费入场 + 大型停车楼<br>• World of Disney 全球最大迪士尼商店<br>• 滨湖餐饮、现场音乐与夜间娱乐</p></div>
+<div class="card"><h3>体育与休闲</h3><p class="f-caption">• ESPN 体育城（1997）：场馆与训练场群<br>• 高尔夫：3 个 18 洞球场 + 1 个 9 洞球场<br>• 迷你高尔夫：梦幻花园、冬日夏日乐园两场<br>• 湖区水上运动、单车与慢跑步道</p></div>
+<div class="card"><h3>市政与游客服务</h3><p class="f-caption">• CFTOD 特区自营电力、供水、污水与消防<br>• 全区免费巴士 + 收费停车分级<br>• MagicBand+ 手环贯通票务与消费<br>• 无障碍通行、行李接送等全套服务</p></div>
+</div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>2024—2026：协议落地与动工潮</h3><ul style="list-style:disc;padding-left:1.2rem;font-size:0.95rem;line-height:1.8;">
+<li><strong>2024 年 6 月：</strong>与 CFTOD 的 15 年开发协议签署，佛州政府围绕自治区的多年龃龉落幕，迪士尼承诺前十年至少投入 US$80 亿。</li>
+<li><strong>2024 年：</strong>魔法王国《蒂安娜的河口冒险》开园；EPCOT 多街区改造以 CommuniCore 收官。</li>
+<li><strong>2025 年 5 月：</strong>边域世界河流区与汤姆·索亚岛永久关闭，正式为赛车主题区让路，工地开始围挡施工。</li>
+</ul></div>
+<div class="card"><h3>2026 年 8 月 D23：史上最大扩建清单</h3><ul style="list-style:disc;padding-left:1.2rem;font-size:0.95rem;line-height:1.8;">
+<li><strong>魔法王国 Villains Land：</strong>反派主题新区，规模对标银河边缘，含玛琳菲森过山车与「魔镜」黑暗骑乘。</li>
+<li><strong>边域世界赛车区：</strong>Cars Ridge Run Rally 越野弹射过山车 + Miss Fritter 家庭骑乘，顶替已关闭的河流区。</li>
+<li><strong>动物王国热带美洲：</strong>木制动物旋转木马、Encanto 家庭骑乘与「翡翠蛇神」印第安纳琼斯过山车（含首个以哈里森·福特为原型的真人形象 AA）。</li>
+<li><strong>影城 Monstropolis：</strong>《怪兽电力公司》主题区 2027 年前后开业，门库过山车随后跟进。</li>
+</ul></div>
+</div>
+<div class="grid-2 reveal" style="margin-top:1.2rem;">
+<div class="card"><h3>为什么是现在：土地与资本的共振</h3><p class="f-body">这座度假区自 1960 年代就囤下远超所需的地，2024 年协议又把约 70 km² 自有地正式纳入长期开发框架，历史上第一次为「第 5 座大型主题乐园」留出规划许可。当下它进入一种罕见节奏：四座存量乐园照常运营，同时 Villains Land、赛车区、热带美洲与 Monstropolis 多条线同步开建，多数瞄准 2027 年前后落成。迪士尼高层称这是华特迪士尼世界历史上规模最大的一轮扩建，也是自上世纪九十年代四园齐建以来，土地储备首次被如此集中地兑现。</p></div>
+<div class="card"><h3>行业位置与竞争</h3><p class="f-body">2025 年 5 月，环球影城的新园 Epic Universe 在奥兰多开业，双巨头正面竞争进入新阶段。华特迪士尼世界以 2024 年四园合计约 4,910 万人次稳居全球目的地首位，其护城河不止在魔法王国等单园票房，更在于把「度假区」做成了不可复制的规模壁垒：多园联票、单轨缆车交通网、三万间客房与全业态商圈构成一周以上的完整度假动线，这是单体乐园难以对标的整体性产品。</p></div>
+</div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>1. 官方渠道</h4><ul>
+<li><a href="https://disneyworld.disney.go.com/" target="_blank" rel="noopener">华特迪士尼世界官方网站</a> <span class="tag">官方</span></li>
+<li><a href="https://disneyparks.disney.go.com/blog/" target="_blank" rel="noopener">Disney Parks Blog — 迪士尼乐园官方博客</a> <span class="tag">官方</span></li></ul></div>
+<div class="resource-group reveal"><h4>2. 权威资料 / 百科</h4><ul>
+<li><a href="https://en.wikipedia.org/wiki/Walt_Disney_World" target="_blank" rel="noopener">Wikipedia — Walt Disney World</a> <span class="tag">百科</span></li>
+<li><a href="https://zh.wikipedia.org/wiki/华特迪士尼世界度假区" target="_blank" rel="noopener">中文维基 — 华特迪士尼世界度假区</a> <span class="tag">百科</span></li>
+<li><a href="https://commons.wikimedia.org/wiki/Category:Walt_Disney_World" target="_blank" rel="noopener">Wikimedia Commons — 华特迪士尼世界图库</a> <span class="tag">自由版权</span></li></ul></div>
+<div class="resource-group reveal"><h4>3. 高清实拍视频</h4><ul>
+<li><a href="https://www.youtube.com/results?search_query=Walt+Disney+World+4K+aerial+full+resort+tour" target="_blank" rel="noopener">YouTube — 全区航拍 4K</a> <span class="tag">视频</span></li>
+<li><a href="https://www.youtube.com/results?search_query=Walt+Disney+World+monorail+ride+4K" target="_blank" rel="noopener">YouTube — 单轨铁路乘车视角</a> <span class="tag">视频</span></li>
+<li><a href="https://www.youtube.com/results?search_query=Disney+Skyliner+full+ride+4K" target="_blank" rel="noopener">YouTube — Skyliner 缆车全景</a> <span class="tag">视频</span></li>
+<li><a href="https://www.youtube.com/results?search_query=Magic+Kingdom+fireworks+Happily+Ever+After+4K" target="_blank" rel="noopener">YouTube — 魔法王国烟花秀</a> <span class="tag">视频</span></li></ul></div>
+<div class="resource-group reveal"><h4>4. 深度报道 / 攻略</h4><ul>
+<li><a href="https://wdwnt.com/" target="_blank" rel="noopener">WDW News Today — 迪士尼世界新闻站</a> <span class="tag">行业媒体</span></li>
+<li><a href="https://www.wdwinfo.com/" target="_blank" rel="noopener">WDW Info — 迪士尼世界攻略资料库</a> <span class="tag">攻略</span></li>
+<li><a href="https://blogmickey.com/" target="_blank" rel="noopener">BlogMickey — 奥兰多主题公园报道</a> <span class="tag">行业媒体</span></li></ul></div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (Overseas: ESRI ArcGIS + WGS-84) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// ====== MAP INITIALIZATION (overseas: ESRI ArcGIS World_Imagery + WGS-84) ======
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+  var tilesLoaded = false;
+
+  var map = L.map('parkmap', {
+    center: [28.3750, -81.5580],
+    zoom: 12,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+
+  tileLayer.on('load', function() {
+    tilesLoaded = true;
+    clearTimeout(tileTimer);
+    fallback.style.display = 'none';
+  });
+
+  tileLayer.addTo(map);
+
+  var tileTimer = setTimeout(function() {
+    if (!tilesLoaded) fallback.style.display = 'block';
+  }, 8000);
+
+  // ====== MAP MARKERS (OSM-verified WGS-84) ======
+  function zoneIcon(color, text, big) {
+    var pad = big ? '8px 14px' : '3px 9px';
+    var size = big ? '13px' : '11px';
+    return L.divIcon({
+      className: 'custom-div-icon',
+      html: '<div style="background:' + color + ';color:#fff;padding:' + pad + ';border-radius:5px;font-size:' + size + ';font-weight:700;white-space:nowrap;border:2px solid #fff;box-shadow:0 2px 7px rgba(0,0,0,0.5);font-family:DM Sans,sans-serif;">' + text + '</div>',
+      iconAnchor: [10, 14]
+    });
+  }
+
+  // 度假区总标
+  L.marker([28.3800, -81.5840], { icon: zoneIcon('#4A2C7A', '华特迪士尼世界度假区', true) }).addTo(map).bindPopup('<b>华特迪士尼世界度假区</b><br>全区约 110 km² · 四园两水园 + 商圈酒店群 · 本图定位为度假区地理中心');
+
+  // 主题乐园
+  L.marker([28.4191, -81.5817], { icon: zoneIcon('#7C5BC0', '魔法王国') }).addTo(map).bindPopup('<b>魔法王国 Magic Kingdom</b><br>1971 首园 · 2024 客流约 1,784 万 · 全球第一');
+  L.marker([28.3714, -81.5490], { icon: zoneIcon('#7C5BC0', 'EPCOT') }).addTo(map).bindPopup('<b>EPCOT 艾波卡特</b><br>1982 · 三街区 + 环湖 11 国馆 · 2024 客流约 1,213 万');
+  L.marker([28.3573, -81.5606], { icon: zoneIcon('#7C5BC0', '好莱坞影城') }).addTo(map).bindPopup('<b>好莱坞影城 Hollywood Studios</b><br>1989 · 银河边缘所在地 · 2024 客流约 1,033 万');
+  L.marker([28.3608, -81.5915], { icon: zoneIcon('#7C5BC0', '动物王国') }).addTo(map).bindPopup('<b>动物王国 Animal Kingdom</b><br>1998 · 全球单体面积居首 · 2024 客流约 880 万');
+
+  // 水乐园
+  L.marker([28.3696, -81.5261], { icon: zoneIcon('#1FA7C4', '台风潟湖') }).addTo(map).bindPopup('<b>台风潟湖 Typhoon Lagoon</b><br>1989 · 北美规模居首的造浪池');
+  L.marker([28.3515, -81.5748], { icon: zoneIcon('#1FA7C4', '暴风雪海滩') }).addTo(map).bindPopup('<b>暴风雪海滩 Blizzard Beach</b><br>1995 · 融雪滑雪场主题水乐园');
+
+  // 商圈与设施
+  L.marker([28.3712, -81.5184], { icon: zoneIcon('#F5A623', 'Disney Springs') }).addTo(map).bindPopup('<b>Disney Springs</b><br>商圈四区 · 2015 更名 · 免费入场');
+  L.marker([28.3377, -81.5575], { icon: zoneIcon('#9AA5B1', 'ESPN 体育城') }).addTo(map).bindPopup('<b>ESPN 体育城</b><br>1997 年 · 赛事与训练场群');
+
+  // Fit bounds (whole district, illustrative)
+  var bounds = L.latLngBounds([
+    [28.3300, -81.6040],
+    [28.4260, -81.5050]
+  ]);
+  map.fitBounds(bounds, { padding: [18, 18] });
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+});
+
+// ====== SCROLL REVEAL ======
+(function() {
+  var revealElements = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    revealElements.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  revealElements.forEach(function(el) { observer.observe(el); });
+})();
+
+// ====== BACK TO TOP ======
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+<footer class="footer"><p>张走走的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy">GitHub</a> 托管</p>
+<p style="margin-top:0.4rem;opacity:0.7;">华特迪士尼世界度假区 数据截至 2026 年 9 月 · 坐标 OSM 验证 (WGS-84) · 游客量 TEA/AECOM 2024 · 面积与造价为公开常见口径</p></footer>
+</body>
+</html>

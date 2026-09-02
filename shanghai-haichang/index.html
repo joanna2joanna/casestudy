@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>上海海昌海洋公园 — 滴水湖畔的极地与海洋主题乐园</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #0E5B8C;
+  --clr-primary-light: #3FA0CC;
+  --clr-primary-dark: #07324F;
+  --clr-accent: #F2A03D;
+}
+
+.hero {
+  background: linear-gradient(160deg, #052238 0%, #0B3F63 38%, #0E5B8C 68%, #2E9BD6 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 18% 82%, rgba(242,160,61,0.20) 0%, transparent 55%),
+              radial-gradient(ellipse at 82% 18%, rgba(62,180,230,0.14) 0%, transparent 50%);
+}
+
+#parkmap { width: 100%; height: 520px; border-radius: var(--radius-lg); z-index: 0; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+
+.zone-card { border-left: 4px solid var(--clr-accent); padding: 1rem 1.2rem; background: var(--clr-card-bg); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.zone-card h4 { font-family: 'DM Sans', sans-serif; font-size: 1.02rem; font-weight: 600; color: var(--clr-primary-dark); }
+.zone-card p { font-size: 0.87rem; color: var(--clr-text-secondary); margin-top: 0.3rem; }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>上海海昌海洋公园</h1>
+    <p class="hero-subtitle">滴水湖畔的极地与海洋主题乐园，以「秋涟河」分界：西区极地冰雪、东区海洋奇域。五大主题区收进3万余只海洋生物，奥特曼、航海王主题区相继落地，二期「东方海洋」扩容在即。</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">29.7</div><div class="kpi-label">公顷 · 园区占地</div></div>
+      <div class="kpi-card"><div class="kpi-number">¥50亿</div><div class="kpi-label">一期项目投资</div></div>
+      <div class="kpi-card"><div class="kpi-number">3万+</div><div class="kpi-label">海洋生物总量</div></div>
+      <div class="kpi-card"><div class="kpi-number">5</div><div class="kpi-label">大主题分区</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目名称</h3><p class="f-body">上海海昌海洋公园（Shanghai Haichang Ocean Park）</p><p class="f-caption">曾用名「上海海昌极地海洋世界」；港交所上市主体为海昌海洋公园控股有限公司（2255.HK）</p></div>
+      <div class="card"><h3>开园时间</h3><p class="f-body">2018年11月16日</p><p class="f-caption">主体工程2018年6月30日竣工；同年10月1日起定向试运营，11月16日正式开园</p></div>
+      <div class="card"><h3>地理位置</h3><p class="f-body">上海市浦东新区南汇新城临港·滴水湖畔（银飞路166号）</p><p class="f-caption">近地铁16号线临港大道站，园区接驳车约10分钟</p></div>
+      <div class="card"><h3>主题与场馆</h3><p class="f-body">5大主题区 · 6大动物场馆</p><p class="f-caption">人鱼海湾 / 极地小镇 / 冰雪王国 / 海底奇域 / 海洋部落</p></div>
+      <div class="card"><h3>票价（2026年8月口径）</h3><p class="f-body">成人标准票 常规日¥369 · 高峰日¥399</p><p class="f-caption">一票制；高峰日为7-8月、法定节假日及部分周末</p></div>
+      <div class="card"><h3>景区等级</h3><p class="f-body">国家AAAA级景区</p><p class="f-caption">2020年6月获评；园区占地约29.7公顷，总建面约20.5万m²</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3>
+      <p class="f-body">上海海昌海洋公园是海昌海洋公园在国内布局的旗舰项目之一，地处浦东临港新片区滴水湖畔，距上海市中心约80公里。一期总投资约50亿元，以「极地 + 海洋」双主题切入长三角近郊亲子度假市场：园区被秋涟河分为东西两片，西片是企鹅、北极熊、虎鲸所在的极地与冰雪世界，东片铺开鲨鱼、水母、海豚所在的海洋奇域。开园后陆续引入奥特曼、航海王（ONE PIECE）等授权IP主题馆与主题酒店，在「动物展示 + 演出 + 过山车」之外叠出二次元消费层。集团层面，2025年10月祥源控股注资入主上市公司；公园正门对面的「东方海洋」扩容项目（二期）已完成主体封顶，官方口径预计2026年内开业。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <p class="f-body">园区由海昌投资开发运营，主园区主题与概念设计由美国 Legacy Entertainment 担纲（早期曾邀三家设计公司比稿后选定）。主题叙事围绕「人与海洋」展开：入口以虎鲸喷泉与海王三叉戟组成「WOW」大门，把游客直接放进海洋世界观；一条秋涟河横贯园区，西岸营造寒冷极地、东岸铺陈热带海洋（含火山造型），两大气候带在同一园区内并置，靠跨河缆车与北极桥、南极桥两座人行桥缝合动线。建筑多用大跨度室内场馆承载动物展示，场馆外壳即主题包装，让「看动物」与「逛主题」合流。</p>
+    </div>
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>企鹅超级碗</h3><p class="f-body">360° 环绕式企鹅展缸</p><p class="f-caption">南极企鹅馆内，官方称全球首座360度展现企鹅生活形态的「超级碗」展缸，游客可环缸观看帝企鹅游动。</p></div>
+      <div class="card"><h3>《时空之海》天幕影院</h3><p class="f-body">360° 裸眼3D球幕影院</p><p class="f-caption">球幕直径约18米，海洋主题沉浸影片，官方口径为国内少有的360度裸眼3D海洋球幕。</p></div>
+      <div class="card"><h3>时空缆车 + 海豚过山车</h3><p class="f-body">跨河双通道交通与游乐</p><p class="f-caption">时空缆车总长约600米，跨秋涟河连接冰山北极馆与火山鲨鱼馆；海豚过山车轨道长1,009米、高28米，全程约75秒。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>园区占地面积</td><td class="num">约29.7公顷</td><td>国家AAAA级景区</td></tr>
+          <tr><td>规模</td><td>一期总建筑面积</td><td class="num">约20.5万m²</td><td>含场馆、主题商业与配套</td></tr>
+          <tr><td>规模</td><td>一期项目投资</td><td class="num">约¥50亿元</td><td>公开报道口径</td></tr>
+          <tr><td>分区</td><td>主题分区</td><td class="num">5大主题区</td><td>人鱼海湾 / 极地小镇 / 冰雪王国 / 海底奇域 / 海洋部落</td></tr>
+          <tr><td>动物</td><td>动物展示场馆</td><td class="num">6大场馆</td><td>企鹅馆·海兽探秘馆·冰山北极馆·海底世界馆·火山鲨鱼馆·珊瑚水母馆</td></tr>
+          <tr><td>动物</td><td>海洋生物总量</td><td class="num">3万余只（尾）</td><td>含帝企鹅、北极熊、虎鲸等极地与海洋物种</td></tr>
+          <tr><td>演艺</td><td>虎鲸科普秀</td><td class="num">国内首个</td><td>虎鲸剧场，位于冰雪王国</td></tr>
+          <tr><td>演艺</td><td>《时空之海》天幕影院</td><td class="num">360°裸眼3D球幕</td><td>球幕直径约18米</td></tr>
+          <tr><td>工程</td><td>企鹅超级碗</td><td class="num">360°企鹅展缸</td><td>官方称全球首座，位于南极企鹅馆</td></tr>
+          <tr><td>设施</td><td>时空缆车</td><td class="num">总长约600m</td><td>跨秋涟河，连接冰山北极馆与火山鲨鱼馆</td></tr>
+          <tr><td>设施</td><td>海豚过山车</td><td class="num">轨道长1,009m · 高28m</td><td>全程约75秒，穿越美人鱼广场并跨秋涟河</td></tr>
+          <tr><td>设施</td><td>游乐设施</td><td class="num">10余项</td><td>深海奇航、火山漂流等</td></tr>
+          <tr><td>门票</td><td>成人标准票</td><td class="num">常规日¥369 · 高峰日¥399</td><td>一票制，2026年8月口径</td></tr>
+          <tr><td>扩容</td><td>二期「东方海洋」</td><td class="num">建面约14万m² · 投资超¥18亿</td><td>2021年9月动工，官方口径2026年内开业</td></tr>
+          <tr><td>上市</td><td>集团上市主体</td><td class="num">海昌海洋公园控股</td><td>港交所 2255.HK</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">综合官方园区资料、政府新闻、主流媒体与上市公司公开信息整理；数据截至2026年8月，设施参数为官方/媒体口径。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局：一河分两岸，极地与海洋并置</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#0A4A73;"></span> 主园区</span>
+        <span><span class="dot" style="background:#E8853B;"></span> 人鱼海湾·主入口</span>
+        <span><span class="dot" style="background:#2E9BD6;"></span> 极地小镇场馆</span>
+        <span><span class="dot" style="background:#42698C;"></span> 冰雪王国场馆</span>
+        <span><span class="dot" style="background:#D9553F;"></span> 海底奇域场馆</span>
+        <span><span class="dot" style="background:#A95CCB;"></span> 海洋部落场馆</span>
+        <span><span class="dot" style="background:#2F6FE4;"></span> IP主题区</span>
+        <span><span class="dot" style="background:#C9A24B;"></span> 度假住宿</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+      <p class="f-caption" style="margin-top:0.5rem;">坐标经高德POI核对（GCJ-02，与高德瓦片同坐标系，直接显示）；金色虚线为园区范围示意圈。右上角图层按钮可切换街道图 / 卫星图。</p>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 880 600" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#24547A"/><stop offset="100%" stop-color="#1E3F5C"/></linearGradient>
+          </defs>
+          <rect width="880" height="600" fill="#0A1F33"/>
+          <!-- 标题 -->
+          <text x="24" y="36" fill="#6FA8CC" font-size="12" font-family="DM Mono">上海海昌海洋公园 · 空间结构示意（非等比例）</text>
+          <!-- 指北针 -->
+          <g transform="translate(846,40)"><polygon points="0,-16 -6,5 0,0 6,5" fill="#F2A03D"/><text x="0" y="-22" fill="#F2A03D" font-size="11" font-family="DM Sans" text-anchor="middle">N</text></g>
+          <!-- 二期（正门对面地块，在建） -->
+          <rect x="150" y="62" width="580" height="58" rx="10" fill="rgba(242,160,61,0.10)" stroke="#F2A03D" stroke-width="1.5" stroke-dasharray="7,5"/>
+          <text x="440" y="90" text-anchor="middle" fill="#FFFFFF" font-size="13" font-family="Playfair Display" font-weight="600">二期「东方海洋」项目（在建，隔银飞路）</text>
+          <text x="440" y="110" text-anchor="middle" fill="#E8C9A0" font-size="9" font-family="DM Sans">海洋探索中心 · 主题酒店 · 温泉 · 商业展演，官方口径预计 2026 年内开业</text>
+          <!-- 园区边界 -->
+          <rect x="120" y="160" width="640" height="360" rx="14" fill="#10263C" stroke="#2E9BD6" stroke-width="1" opacity="0.95"/>
+          <!-- 秋涟河（东西分界） -->
+          <rect x="414" y="160" width="36" height="360" fill="url(#sea)"/>
+          <text x="432" y="186" text-anchor="middle" fill="#9CCBEA" font-size="10" font-family="DM Mono">秋涟河</text>
+          <!-- 人鱼海湾（北侧入口区） -->
+          <rect x="120" y="160" width="640" height="78" fill="rgba(232,133,59,0.14)" stroke="#E8853B" stroke-width="1"/>
+          <text x="440" y="196" text-anchor="middle" fill="#F8D9A8" font-size="12" font-family="DM Sans" font-weight="600">人鱼海湾 · 主入口区</text>
+          <text x="440" y="218" text-anchor="middle" fill="#BFD9EF" font-size="9" font-family="DM Sans">「WOW」虎鲸喷泉大门 · 游客中心 · 美人鱼广场 · 纪念品商店</text>
+          <!-- 西区 · 极地小镇 -->
+          <rect x="150" y="252" width="238" height="130" rx="10" fill="rgba(46,155,214,0.16)" stroke="#2E9BD6" stroke-width="1"/>
+          <text x="269" y="278" text-anchor="middle" fill="#8FD0F0" font-size="12" font-family="DM Sans" font-weight="700">极地小镇</text>
+          <text x="269" y="302" text-anchor="middle" fill="#C9E7F7" font-size="9" font-family="DM Sans">南极企鹅馆 · 企鹅超级碗</text>
+          <text x="269" y="320" text-anchor="middle" fill="#C9E7F7" font-size="9" font-family="DM Sans">《时空之海》360° 球幕影院</text>
+          <text x="269" y="338" text-anchor="middle" fill="#C9E7F7" font-size="9" font-family="DM Sans">海兽探秘馆 · 海狮剧场</text>
+          <!-- 西区 · 冰雪王国 -->
+          <rect x="150" y="408" width="238" height="100" rx="10" fill="rgba(66,105,140,0.35)" stroke="#7E9EC2" stroke-width="1"/>
+          <text x="269" y="434" text-anchor="middle" fill="#D6E5F2" font-size="12" font-family="DM Sans" font-weight="700">冰雪王国</text>
+          <text x="269" y="458" text-anchor="middle" fill="#DCEAF5" font-size="9" font-family="DM Sans">冰山北极馆 · 北极熊 · 白鲸之恋</text>
+          <text x="269" y="476" text-anchor="middle" fill="#DCEAF5" font-size="9" font-family="DM Sans">虎鲸剧场 · 虎鲸科普秀（国内首个）</text>
+          <!-- 东区 · 海底奇域 -->
+          <rect x="492" y="252" width="238" height="130" rx="10" fill="rgba(217,85,63,0.13)" stroke="#D9553F" stroke-width="1"/>
+          <text x="611" y="278" text-anchor="middle" fill="#F6B7A6" font-size="12" font-family="DM Sans" font-weight="700">海底奇域</text>
+          <text x="611" y="302" text-anchor="middle" fill="#F2DCD4" font-size="9" font-family="DM Sans">海底世界馆 · 双通道海底隧道</text>
+          <text x="611" y="320" text-anchor="middle" fill="#F2DCD4" font-size="9" font-family="DM Sans">火山鲨鱼馆 · 七度倾斜鲸鲨展缸</text>
+          <text x="611" y="338" text-anchor="middle" fill="#F2DCD4" font-size="9" font-family="DM Sans">深海奇航 · 火山漂流 · 美人鱼餐厅</text>
+          <!-- 东区 · 海洋部落 -->
+          <rect x="492" y="408" width="238" height="100" rx="10" fill="rgba(169,92,203,0.16)" stroke="#B877D0" stroke-width="1"/>
+          <text x="611" y="434" text-anchor="middle" fill="#E7C6F2" font-size="12" font-family="DM Sans" font-weight="700">海洋部落</text>
+          <text x="611" y="458" text-anchor="middle" fill="#F0E2F6" font-size="9" font-family="DM Sans">珊瑚水母馆 · 海豚剧场 · 海豚发现湖</text>
+          <text x="611" y="476" text-anchor="middle" fill="#F0E2F6" font-size="9" font-family="DM Sans">海豚过山车 · 童趣乐园</text>
+          <!-- 时空缆车（跨河） -->
+          <line x1="390" y1="450" x2="490" y2="352" stroke="#FFD27A" stroke-width="1.4" stroke-dasharray="5,4"/>
+          <text x="436" y="408" text-anchor="middle" fill="#FFD27A" font-size="8" font-family="DM Sans">时空缆车</text>
+          <!-- 东西区注记 -->
+          <text x="269" y="544" text-anchor="middle" fill="#7FA6C4" font-size="9" font-family="DM Sans">西区 · 极地冰雪场景</text>
+          <text x="611" y="544" text-anchor="middle" fill="#7FA6C4" font-size="9" font-family="DM Sans">东区 · 海洋场景</text>
+          <text x="440" y="585" text-anchor="middle" fill="#5C7E9A" font-size="9" font-family="DM Sans">以秋涟河为界分东西两片；位置与尺度经简化，请以官方园区地图为准</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="zone-card"><h4>人鱼海湾</h4><p>入口第一区，游客集散与形象展示。虎鲸喷泉与水系构成「WOW」大门，美人鱼广场衔接各主题区，主题纪念品商店集中于此。</p></div>
+      <div class="zone-card"><h4>极地小镇</h4><p>北欧小镇风貌。南极企鹅馆内置企鹅超级碗与《时空之海》360°球幕影院；海兽探秘馆可观海狮、海牛、水獭；另有海狮剧场。</p></div>
+      <div class="zone-card"><h4>冰雪王国</h4><p>冰山北极馆展示北极熊、北极狼、白鲸、斑海豹等极地物种，上演《白鲸之恋》；虎鲸剧场推出国内首个虎鲸科普秀。时空缆车在此出发。</p></div>
+      <div class="zone-card"><h4>海底奇域</h4><p>火山造型建筑内的火山鲨鱼馆坐拥七度倾斜沉浸式鲸鲨展缸，上演《人鱼童话》；海底世界馆设双通道海底隧道；配深海奇航、火山漂流等游乐。</p></div>
+      <div class="zone-card"><h4>海洋部落</h4><p>珊瑚水母馆汇集珊瑚与水母群落；海豚剧场与海豚发现湖相连，上演《海豚奇缘》；海豚过山车穿越美人鱼广场、跨秋涟河、环绕珊瑚水母馆，童趣乐园服务亲子客群。</p></div>
+      <div class="zone-card"><h4>六大动物场馆</h4><p>南极企鹅馆、海兽探秘馆（极地小镇）、冰山北极馆（冰雪王国）、海底世界馆、火山鲨鱼馆（海底奇域）、珊瑚水母馆（海洋部落）构成动物展示骨架，海洋生物总量3万余只（尾）。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2015年</div><div class="timeline-content"><h4>奠基动工</h4><p>2015年3月29日举行奠基仪式，同年10月动工兴建，一期总投资约50亿元（公开报道口径）。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2018年6月</div><div class="timeline-content"><h4>主体工程施工完成</h4><p>项目位于临港滴水湖畔，历经约三年建设期，主体工程于6月30日竣工。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2018年10月</div><div class="timeline-content"><h4>全渠道售票启动</h4><p>开园前约一个月开启预售，多渠道购票全面开放。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2018年11月16日</div><div class="timeline-content"><h4>正式开园</h4><p>一期占地约29.7公顷、总建面约20.5万m²，五大主题区同期开放，为上海近郊新增一座极地与海洋主题乐园。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2020年6月</div><div class="timeline-content"><h4>获评国家4A级旅游景区</h4><p>景区等级评定落地；次年5月又获评农业农村部长江江豚人工繁育和科普教育基地。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021年</div><div class="timeline-content"><h4>竞得正门对面地块，二期动工</h4><p>海昌联合港城集团以3.67亿元竞得公园正门对面地块；9月29日二期「东方海洋」首发项目正式动工，采取合作方出资、海昌运营的轻资产模式。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022年7月</div><div class="timeline-content"><h4>全球首家奥特曼主题馆开馆</h4><p>7月24日开启试运营，约2,226m²的奥特曼主题娱乐区落地园区，成为全球首个奥特曼主题馆，海昌「海洋 + 授权IP」模式首次跑通。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023年1月</div><div class="timeline-content"><h4>全球首家奥特曼主题酒店试营业</h4><p>105间客房均含主题盲盒玩法，酒店区域落成一尊约10米高的奥特曼巨型装置并获吉尼斯世界纪录认证。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023年</div><div class="timeline-content"><h4>航海王主题馆区上线</h4><p>获东映动画授权，约820m²的「航海王（ONE PIECE）」主题馆区对外开放，IP阵容从特摄延伸至日漫。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年</div><div class="timeline-content"><h4>客流高峰年</h4><p>国庆假期10月2日至3日单日客流突破5万人次，创开园以来单日高峰。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年10月</div><div class="timeline-content"><h4>祥源控股入主上市公司</h4><p>祥源控股注资约22.95亿港元正式入主海昌海洋公园控股（2255.HK）；至2025年底二期「东方海洋」各场馆与酒店主体结构全部封顶。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年</div><div class="timeline-content"><h4>二期「东方海洋」预计开业</h4><p>建面约14万m²、投资超¥18亿，含海洋探索中心、主题酒店（配套航海王、奥特曼主题酒店）、温泉与商业展演；官方口径仍为2026年内开业，原定2025年的计划曾延后。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <h3>2026开年客流：双位数增长</h3>
+      <p class="f-body">据园方通报，2026年元旦首日客流同比增长约60%；2026年春节假期客流同比增长约24%，其中大年初四（2月20日）单日接待4.10万人次，同比增46.4%。园区2024年国庆已现单日破5万的峰值，说明旺季承载与淡旺季落差同时存在。</p>
+    </div>
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>一票制门票</h3><p><span class="f-data">¥369 / ¥399</span></p><p class="f-caption">成人标准票常规日与高峰日两档，2026年8月口径；另有优待票与限时活动价。</p></div>
+      <div class="card"><h3>单日客流峰值</h3><p><span class="f-data">5万+</span> 人次</p><p class="f-caption">2024年国庆10月2-3日创下；2026年春节初四为4.10万人次。</p></div>
+      <div class="card"><h3>票价体系分层</h3><p><span class="f-data">淡旺季浮动</span></p><p class="f-caption">高峰日覆盖7-8月、法定节假日及调休日与部分周末，与客流周期对应。</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;">
+      <h3>收入结构：门票之外的二次消费</h3>
+      <p class="f-body">园区运营在门票外打开三条线：一是主题酒店住宿（自营度假酒店 + 奥特曼主题酒店盲盒房）；二是授权IP衍生消费（奥特曼、航海王主题馆的商品与餐饮）；三是演出与游乐的园区内消费。奥特曼、航海王等IP以固定授权馆形式落位，把「打卡型客流」转化为可预期的园内消费，是海昌近年对抗门票内卷的主要抓手。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECH & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>企鹅超级碗</h3><p><span class="f-data">360°</span> 环绕展缸</p><p class="f-caption">南极企鹅馆内，官方称全球首座，环缸观企鹅</p></div>
+      <div class="card"><h3>时空缆车</h3><p><span class="f-data">约600m</span> 跨河索道</p><p class="f-caption">秋涟河上空连接冰山北极馆与火山鲨鱼馆</p></div>
+      <div class="card"><h3>海豚过山车</h3><p><span class="f-data">1,009m</span> 轨道 · 高28m</p><p class="f-caption">全程约75秒，穿越美人鱼广场跨秋涟河</p></div>
+      <div class="card"><h3>天幕影院</h3><p><span class="f-data">直径约18m</span> 球幕</p><p class="f-caption">《时空之海》360°裸眼3D海洋球幕</p></div>
+      <div class="card"><h3>动物场馆</h3><p><span class="f-data">6</span> 大场馆 · 3万余只</p><p class="f-caption">企鹅、海兽、北极、海底世界、鲨鱼、水母六大主题馆</p></div>
+      <div class="card"><h3>主题分区</h3><p><span class="f-data">5</span> 大主题区</p><p class="f-caption">人鱼海湾 · 极地小镇 · 冰雪王国 · 海底奇域 · 海洋部落</p></div>
+      <div class="card"><h3>一期规模</h3><p><span class="f-data">¥50亿</span> 投资 · 20.5万m²</p><p class="f-caption">占地约29.7公顷，2018年开园</p></div>
+      <div class="card"><h3>二期扩容</h3><p><span class="f-data">14万m²</span> · 超¥18亿</p><p class="f-caption">「东方海洋」轻资产项目，2026年计划开业</p></div>
+      <div class="card"><h3>授权IP</h3><p><span class="f-data">奥特曼 · 航海王</span></p><p class="f-caption">特摄与日漫双IP主题馆，含全球首家奥特曼主题酒店</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>主题酒店</h3><p class="f-body">园内自营度假酒店 + 奥特曼主题酒店</p><p class="f-caption">奥特曼主题酒店为全球首家，105间客房均含主题盲盒玩法；二期还将新增海洋主题与航海王主题酒店。</p></div>
+      <div class="card"><h3>园区餐饮</h3><p class="f-body">按分区布局主题餐厅</p><p class="f-caption">海底奇域的美人鱼餐厅为「魔都首座深海美人鱼餐厅」，各主题区配套快餐、咖啡与简餐。</p></div>
+      <div class="card"><h3>主题商业</h3><p class="f-body">纪念品 + IP衍生零售</p><p class="f-caption">人鱼宝藏商店等主题纪念品店之外，奥特曼、航海王主题馆内置专属商品区。</p></div>
+      <div class="card"><h3>交通接驳</h3><p class="f-body">地铁16号线临港大道站 + 接驳车</p><p class="f-caption">公交1135路、申港4路可达；自驾经S2沪芦高速至临港片区，距上海市中心约80公里。</p></div>
+      <div class="card"><h3>片区联动</h3><p class="f-body">临港「冰雪 + 海洋」双园组合</p><p class="f-caption">相邻区域2024年开出大型室内滑雪场耀雪冰雪世界，与海昌海洋公园隔路呼应，延长游客停留与区域过夜。</p></div>
+      <div class="card"><h3>医疗与服务</h3><p class="f-body">游客服务中心、医务室、母婴室</p><p class="f-caption">面向亲子客群的园区基础服务按主题区布局，演出与科普秀时间表每日更新。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. NEWS ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>二期「东方海洋」2026开业冲刺</h3><p class="f-body">截至2025年底，二期各场馆与酒店主体结构全部封顶、土建完工，不存在烂尾。二期为合作方出资、海昌运营的轻资产项目，含海洋探索中心、主题酒店（配套航海王、奥特曼主题酒店）、温泉馆与商业展演。开业窗口曾由2025年延后至2026年，官方口径仍为2026年内，大概率在下半年旺季前。公司将其列为2026年业绩核心增量。</p></div>
+      <div class="card"><h3>2025年10月：祥源控股入主</h3><p class="f-body">祥源控股注资约22.95亿港元，正式入主海昌海洋公园控股（2255.HK）。集团此前多年文旅主业承压、收紧资本开支，新股东入场后资本结构变化将直接影响上海二期推进节奏。</p></div>
+      <div class="card"><h3>授权IP矩阵持续扩容</h3><p class="f-body">从2022年全球首家奥特曼主题馆，到2023年奥特曼主题酒店与航海王主题馆区，海昌以「馆 + 酒店 + 商品」把单IP做深。未来二期若能按计划开出航海王主题酒店，上海园区将成为国内授权IP密度最高的海洋主题公园之一。</p></div>
+      <div class="card"><h3>旺季客流与竞争格局</h3><p class="f-body">2026开年元旦、春节客流双位数增长，说明近郊海洋主题仍有刚需；同时临港耀雪冰雪世界分流冬季客源、与公园形成互补。在上海迪士尼与临港文旅带的双圈挤压下，海昌的差异化在于海洋动物内容与IP授权的组合，而不与迪士尼正面竞争。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. RESOURCES ====== -->
+<section class="section section-alt" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="reveal">
+      <div class="resource-group"><h4>官方网站</h4><ul>
+        <li><a href="https://www.haichangoceanpark.com/shanghai/park-info" target="_blank" rel="noopener">上海海昌海洋公园 · 园区介绍</a><span class="tag">主题区·场馆·演出</span></li>
+        <li><a href="https://www.haichangoceanpark.com/" target="_blank" rel="noopener">海昌海洋公园官方网站</a><span class="tag">集团入口</span></li>
+      </ul></div>
+      <div class="resource-group"><h4>百科与资料</h4><ul>
+        <li><a href="https://zh.wikipedia.org/wiki/上海海昌海洋公园" target="_blank" rel="noopener">上海海昌海洋公园 — 维基百科（中文）</a></li>
+        <li><a href="https://m.sh.bendibao.com/tour/281904.html" target="_blank" rel="noopener">上海本地宝 — 上海海昌海洋公园门票价格一览（2026年8月更新）</a></li>
+      </ul></div>
+      <div class="resource-group"><h4>权威报道与政府信息</h4><ul>
+        <li><a href="https://m.jfdaily.com/wx/detail.do?id=109008" target="_blank" rel="noopener">解放日报·上观 — 360度球幕、全球最大企鹅「超级碗」：探秘上海海昌（2018）</a></li>
+        <li><a href="https://www.shio.gov.cn/TrueCMS/shxwbgs/ywts/content/20fe9768-e114-46b4-862f-1ce162cd2c10.html" target="_blank" rel="noopener">上海市政府新闻发布 — 上海海昌11月16日正式开园（2018）</a></li>
+        <li><a href="https://caifuhao.eastmoney.com/news/20260710160452576416380" target="_blank" rel="noopener">东方财富 — 上海海昌二期没有取消、不会烂尾，官方仍明确2026年内开业（2026-07）</a></li>
+      </ul></div>
+      <div class="resource-group"><h4>视频</h4><ul>
+        <li><a href="https://search.bilibili.com/all?keyword=上海海昌海洋公园" target="_blank" rel="noopener">B站 — 上海海昌海洋公园相关视频</a></li>
+      </ul></div>
+      <p class="f-caption" style="margin-top:1.2rem;">数据核实说明：园区占地、建面、投资、主题区与场馆、票价、客流、二期进度均来自官方园区资料、政府新闻、上市公司公告与主流媒体，并尽量交叉核对；坐标经高德地图POI核对（GCJ-02），非实测。运营数据随季度更新，请以官网为准。页面数据截至2026年8月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：高德 POI 返回 GCJ-02，高德瓦片同为 GCJ-02，直接使用，无需任何坐标转换
+
+var zonesGcj02 = [
+  { name: '上海海昌海洋公园<br><small>滴水湖畔 · 五大主题区</small>', lat: 30.9126, lng: 121.9052, color: '#0A4A73' },
+  { name: '主入口<br><small>人鱼海湾 · 虎鲸喷泉「WOW」大门</small>', lat: 30.914913, lng: 121.904685, color: '#E8853B' },
+  { name: '南极企鹅馆<br><small>企鹅超级碗 · 极地小镇</small>', lat: 30.913610, lng: 121.904847, color: '#2E9BD6' },
+  { name: '虎鲸剧场<br><small>冰雪王国 · 虎鲸科普秀</small>', lat: 30.912919, lng: 121.901761, color: '#42698C' },
+  { name: '火山鲨鱼馆<br><small>海底奇域 · 七度倾斜鲸鲨展缸</small>', lat: 30.911580, lng: 121.908585, color: '#D9553F' },
+  { name: '珊瑚水母馆<br><small>海洋部落</small>', lat: 30.913191, lng: 121.906684, color: '#A95CCB' },
+  { name: '奥特曼主题娱乐区<br><small>IP 主题馆 · 2022 年开幕</small>', lat: 30.911450, lng: 121.905842, color: '#2F6FE4' },
+  { name: '度假酒店<br><small>园内主题住宿</small>', lat: 30.914167, lng: 121.907011, color: '#C9A24B' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([30.9128, 121.9052], 16);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesGcj02);
+
+  if (withBoundary) {
+    L.circle([30.9127, 121.9051], { radius: 430, color: '#F2A03D', weight: 2, fill: false, dashArray: '6,4', opacity: 0.55 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+<footer class="footer"><p>张走走的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy">GitHub</a> 托管</p></footer>
+</body>
+</html>

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EPCOT 艾波卡特 — 迪士尼世界的科技文化实验场，环湖11国展馆与三大未来街区</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #1B3A6B;
+  --clr-primary-light: #3D7ED9;
+  --clr-primary-dark: #0A1C36;
+  --clr-accent: #F2B90C;
+  --clr-accent-warm: #E8762C;
+}
+
+.hero {
+  background: linear-gradient(160deg, #081831 0%, #123A6D 38%, #2F6FB2 70%, #7FB6E8 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 22% 78%, rgba(242,185,12,0.16) 0%, transparent 55%),
+              radial-gradient(ellipse at 80% 18%, rgba(127,182,232,0.14) 0%, transparent 50%);
+}
+.data-table tbody tr:hover { background: rgba(27,58,107,0.05); }
+
+@media (max-width: 768px) {
+  .hero { padding: 3rem 0 2.5rem; }
+  .hero .kpi-row { gap: 0.8rem; }
+  .hero .kpi-card { padding: 0.8rem 1rem; min-width: 118px; }
+  .hero .kpi-number { font-size: 1.3rem; }
+  #parkmap { height: 350px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>EPCOT 艾波卡特</h1>
+    <p class="hero-subtitle">华特·迪士尼未竟的「明日社区」理想，落成佛罗里达 123 公顷的科技人文实验场——三大未来街区 + 环湖 11 国世界馆，1982 年开园至今</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">123<span style="font-size:0.7em;opacity:0.7"> ha</span></div><div class="kpi-label">园区占地 · 四园第二</div></div>
+      <div class="kpi-card"><div class="kpi-number">1,213<span style="font-size:0.7em;opacity:0.7"> 万</span></div><div class="kpi-label">2024 年游客 · 全球第8</div></div>
+      <div class="kpi-card"><div class="kpi-number">11<span style="font-size:0.7em;opacity:0.7"> 国</span></div><div class="kpi-label">世界馆环湖展馆</div></div>
+      <div class="kpi-card"><div class="kpi-number">1982</div><div class="kpi-label">开园 · EPCOT Center</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal"><div class="card">
+        <h3>基本信息</h3>
+        <table class="data-table">
+          <tbody>
+            <tr><td><strong>项目名称</strong></td><td>EPCOT 艾波卡特（原名 EPCOT Center）</td></tr>
+            <tr><td><strong>名称由来</strong></td><td>Experimental Prototype Community of Tomorrow「明日的实验性原型社区」</td></tr>
+            <tr><td><strong>开园时间</strong></td><td>1982 年 10 月 1 日（华特迪士尼世界第 2 座乐园）</td></tr>
+            <tr><td><strong>地理位置</strong></td><td>美国佛罗里达州布埃纳维斯塔湖（奥兰多），华特迪士尼世界度假区</td></tr>
+            <tr><td><strong>占地面积</strong></td><td>约 123 公顷</td></tr>
+            <tr><td><strong>主题定位</strong></td><td>科技创新 × 国际文化 · 教育娱乐型主题乐园</td></tr>
+            <tr><td><strong>运营方</strong></td><td>迪士尼乐园与体验（Disney Experiences，迪士尼自有）</td></tr>
+            <tr><td><strong>创意方</strong></td><td>华特迪士尼幻想工程（原 WED Enterprises）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3>坐标与交通</h3>
+        <table class="data-table">
+          <tbody>
+            <tr><td><strong>精确坐标</strong></td><td>28°22′17″N, 81°32′56″W</td></tr>
+            <tr><td><strong>十进制坐标</strong></td><td>28.3714°N, 81.5490°W（OSM 实测）</td></tr>
+            <tr><td><strong>分区结构</strong></td><td>3 未来街区 + 1 环湖馆区 = 4 街区</td></tr>
+            <tr><td><strong>前门交通</strong></td><td>EPCOT 单轨铁路直达交通换乘枢纽与魔法王国</td></tr>
+            <tr><td><strong>后门闸口</strong></td><td>国际闸口（International Gateway）步行通滨海步道区</td></tr>
+            <tr><td><strong>空港</strong></td><td>奥兰多国际机场（MCO）车程约 30 分钟</td></tr>
+            <tr><td><strong>自驾</strong></td><td>I-4 高速 → World Drive → Epcot Center Drive</td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p class="f-body">EPCOT 是华特·迪士尼世界四座主题乐园中气质最特殊的一座：它不围绕童话城堡或电影世界，而把「人类如何共同创造更好的未来」当作主题。1966 年华特·迪士尼在生前最后一次公开构想中，提出要在佛罗里达建一座 2 万人居住、永远在扩建的实验城市「EPCOT」；他去世后，公司把这一乌托邦愿景改建成主题乐园，于 1982 年以 EPCOT Center 之名开园，当时号称全球最大的私营建筑工程。今天的 EPCOT 由<b>世界庆典、世界发现、世界自然</b>三个未来主题街区，加上环湖排布的<b>11 国世界馆</b>组成：一半是航天、海洋、移动科技与自然生态的科普现场，一半是浓缩了墨西哥、挪威、中国、法国等 11 国的建筑、餐饮与歌舞。它常年用美国最大规模的年度节庆体系（艺术节、花艺园艺节、美食美酒节、假日节）吸引大量成人游客，2024 年接待约 1,213 万人次，是全球访问量第 8 的主题乐园。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>一个从未建成的理想城市</h3><p class="f-body">1966 年 10 月，华特·迪士尼在影片中展示了他的终极构想：<b>EPCOT——一座规划容纳约 2 万居民的封闭式未来城市</b>，用单轨和「明日交通」串联同心圆布局，居民在此体验技术、教育与生活的融合。同年 12 月华特去世，这个「城市」从未动工。继任管理层判定城市实验风险过高，但保留缩写与理念，将其转化为一座「永远开放的世界博览会」式主题公园。因此 EPCOT 是四座迪士尼乐园中唯一<b>先有乌托邦概念、后有公园形态</b>的产物——科普与教育自始就是它的立园基因。</p></div>
+      <div class="card"><h3>幻想工程的系统级设计</h3><p class="f-body">公园由<b>华特迪士尼幻想工程（WED Enterprises）</b>总体创意，汇聚约翰·亨奇、马蒂·斯克拉等第一代幻想工程师。园区以「未来社区」的理性主义构图：入口广场 → 大地测量学球体 Spaceship Earth → 两侧科技展馆 → 尽端世界馆人工湖，形成一条清晰的中轴线叙事。建筑大量采用 1970—1980 年代粗野主义与未来主义语汇。为控制工期与造价，世界馆采用各国政府与企业赞助共建模式——摩洛哥国王出资建造本国馆、挪威由企业财团捐建，是主题乐园史上罕见的外交型建设。</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.2rem;"><h3>技术骨架：大地测量学球体</h3><p class="f-body">EPCOT 的中轴线地标<b>Spaceship Earth</b>是主题乐园史上最具雄心的单体构筑物之一：一座直径约 50 米、连基座高约 55 米的不锈钢包覆大地测量学球体，由约 1.1 万块银色三角面板组成外壳，白天反射阳光、夜间在灯光下如一枚悬浮星球。球体内是一条缓行的年代巡礼黑暗骑乘，自 1982 年起以不同叙述者版本讲述人类沟通史。2019 年迪士尼公布「把未来世界拆成三个街区」的世纪改造，时任乐园主席称之为公司史上最大规模的单园改造，疫情让工程拖到 2024 年才完整收官。</p></div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody><tr><td>规模</td><td>总占地面积</td><td class="num">约 123 ha</td><td>度假区四园中第二，仅次于动物王国</td></tr>
+<tr><td>规模</td><td>世界馆人工湖</td><td class="num">约 15 ha</td><td>独立估算，官方未公布</td></tr>
+<tr><td>规模</td><td>主题街区</td><td class="num">4 个</td><td>庆典/发现/自然 3 未来街区 + 环湖馆区</td></tr>
+<tr><td>规模</td><td>世界馆国家</td><td class="num">11 个</td><td>1982 开园 9 国，1984 摩洛哥、1988 挪威先后加入</td></tr>
+<tr><td>地标</td><td>Spaceship Earth 球体</td><td class="num">Ø50 m · 高 55 m</td><td>外覆约 1.1 万块银色三角面板</td></tr>
+<tr><td>演艺</td><td>夜间水上烟火</td><td class="num">每晚</td><td>Luminous: The Symphony of Us（2023 年 12 月起）</td></tr>
+<tr><td>交通</td><td>全园最高速骑乘</td><td class="num">约 104 km/h</td><td>Test Track 户外冲刺段</td></tr>
+<tr><td>水体</td><td>The Seas 最大水族缸</td><td class="num">约 2.2 万 m³</td><td>西半球最大之一</td></tr>
+<tr><td>运营</td><td>2024 年游客量</td><td class="num">12,133,000</td><td>TEA/AECOM，全球第 8、北美第 3</td></tr>
+<tr><td>运营</td><td>2024 年同比</td><td class="num">+1.3%</td><td>疫后最强，WDW 四园增速第一</td></tr>
+<tr><td>投资</td><td>1982 年首期造价</td><td class="num">约 US$8–14 亿</td><td>估算口径，当年号称全球最大私营建筑工程</td></tr></tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">注：面积与湖体为公开口径或独立估算；游客量来自 TEA/AECOM 2024 年度报告（2025 年 10 月发布）。历史造价为 1982 年美元估算值，按 2026 年汇率 1 美元 ≈ 7.1 元人民币折算约合人民币 57–99 亿元，未做通胀调整。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="map-legend"><span><span class="dot" style="background:#F2B90C"></span> 入口/主节点</span><span><span class="dot" style="background:#7C5CBF"></span> 世界庆典</span><span><span class="dot" style="background:#1FA7C4"></span> 世界发现</span><span><span class="dot" style="background:#3E9B4F"></span> 世界自然</span><span><span class="dot" style="background:#E8762C"></span> 世界馆</span></div>
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+    <p class="f-caption" style="margin-top:0.5rem;">坐标来源：OpenStreetMap 实测（WGS-84）· 点击标记查看分区详情 · 地图边界为示意范围</p>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container"><svg viewBox="0 0 1200 850" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#12305A"/><stop offset="100%" stop-color="#081831"/></linearGradient>
+<linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3E86C8"/><stop offset="100%" stop-color="#15507E"/></linearGradient>
+<radialGradient id="sphereGrad" cx="0.35" cy="0.3" r="0.9"><stop offset="0%" stop-color="#A9CFF2"/><stop offset="55%" stop-color="#7FB6E8"/><stop offset="100%" stop-color="#3D6FB0"/></radialGradient>
+<filter id="glow"><feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#7FB6E8" flood-opacity="0.5"/></filter></defs>
+<rect width="1200" height="850" fill="url(#bgGrad)" rx="14"/>
+<text x="600" y="42" text-anchor="middle" font-family="Playfair Display,serif" font-size="22" font-weight="700" fill="#F2B90C">EPCOT 空间结构示意图</text>
+<text x="600" y="64" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" fill="#8FB0D6">北向：单轨主入口在上 · 中轴：球体→庆典→世界馆人工湖 · 示意比例非精确测绘</text>
+<!-- Entrance (north, top) -->
+<rect x="505" y="92" width="190" height="58" rx="28" fill="#F2B90C" opacity="0.18" stroke="#F2B90C" stroke-width="1.6"/>
+<text x="600" y="115" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="700" fill="#F2B90C">主入口 · 单轨车站</text>
+<text x="600" y="133" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#FFE9A8">Monorail Station</text>
+<line x1="600" y1="150" x2="600" y2="176" stroke="#F2B90C" stroke-width="2" stroke-dasharray="5,4"/>
+<!-- World Celebration (center axis) -->
+<rect x="470" y="182" width="260" height="210" rx="14" fill="#7C5CBF" opacity="0.16" stroke="#7C5CBF" stroke-width="1.4" stroke-dasharray="6,4"/>
+<circle cx="600" cy="252" r="52" fill="url(#sphereGrad)" stroke="#BBD6F5" stroke-width="1.6" filter="url(#glow)"/>
+<text x="600" y="246" text-anchor="middle" font-family="Playfair Display,serif" font-size="11" font-weight="700" fill="#0A1C36">Spaceship</text>
+<text x="600" y="260" text-anchor="middle" font-family="Playfair Display,serif" font-size="11" font-weight="700" fill="#0A1C36">Earth</text>
+<text x="600" y="318" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#D9C9F5">世界庆典</text>
+<text x="600" y="334" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9.5" fill="#C4ABEF">World Celebration · Ø50m 球体</text>
+<rect x="510" y="352" width="180" height="30" rx="6" fill="#7C5CBF" opacity="0.3"/>
+<text x="600" y="371" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10.5" fill="#EFE6FF">CommuniCore 庆典大厅 · 2024</text>
+<!-- World Discovery (east / right) -->
+<rect x="862" y="150" width="298" height="262" rx="14" fill="#1FA7C4" opacity="0.13" stroke="#1FA7C4" stroke-width="1.4" stroke-dasharray="6,4"/>
+<text x="1011" y="178" text-anchor="middle" font-family="Playfair Display,serif" font-size="15" font-weight="700" fill="#7FDFF0">世界发现</text>
+<text x="1011" y="196" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#9FD8E8">World Discovery</text>
+<rect x="892" y="212" width="238" height="44" rx="8" fill="#1FA7C4" opacity="0.28"/>
+<text x="1011" y="230" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#EAF8FC">Cosmic Rewind · 2022 逆向弹射</text>
+<text x="1011" y="247" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9.5" fill="#BFE9F3">全球最长室内过山车之一</text>
+<rect x="892" y="268" width="238" height="44" rx="8" fill="#1FA7C4" opacity="0.22"/>
+<text x="1011" y="286" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#EAF8FC">Test Track 3.0 · 2025</text>
+<text x="1011" y="303" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9.5" fill="#BFE9F3">户外冲刺约 104 km/h</text>
+<rect x="892" y="324" width="238" height="44" rx="8" fill="#1FA7C4" opacity="0.22"/>
+<text x="1011" y="342" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#EAF8FC">Mission: SPACE 航天模拟</text>
+<text x="1011" y="359" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9.5" fill="#BFE9F3">离心力发射体验</text>
+<!-- World Nature (west / left) -->
+<rect x="40" y="150" width="298" height="262" rx="14" fill="#3E9B4F" opacity="0.13" stroke="#3E9B4F" stroke-width="1.4" stroke-dasharray="6,4"/>
+<text x="189" y="178" text-anchor="middle" font-family="Playfair Display,serif" font-size="15" font-weight="700" fill="#9FE0A8">世界自然</text>
+<text x="189" y="196" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#A8D8AE">World Nature</text>
+<rect x="70" y="212" width="238" height="44" rx="8" fill="#3E9B4F" opacity="0.28"/>
+<text x="189" y="230" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#EAF9EC">Journey of Water · 2023</text>
+<text x="189" y="247" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9.5" fill="#C4E9CB">海洋奇缘主题互动水径</text>
+<rect x="70" y="268" width="238" height="44" rx="8" fill="#3E9B4F" opacity="0.22"/>
+<text x="189" y="286" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#EAF9EC">The Land · Soarin' 飞越</text>
+<text x="189" y="303" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9.5" fill="#C4E9CB">真实温室「与大地共生」</text>
+<rect x="70" y="324" width="238" height="44" rx="8" fill="#3E9B4F" opacity="0.22"/>
+<text x="189" y="342" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#EAF9EC">The Seas 海底世界</text>
+<text x="189" y="359" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9.5" fill="#C4E9CB">约 2.2 万 m³ 巨型水族缸</text>
+<!-- World Showcase lagoon (south) -->
+<ellipse cx="600" cy="566" rx="468" ry="170" fill="url(#waterGrad)" opacity="0.5"/>
+<ellipse cx="600" cy="566" rx="468" ry="170" fill="none" stroke="#7FB6E8" stroke-width="1.4" stroke-dasharray="7,5" opacity="0.55"/>
+<text x="600" y="558" text-anchor="middle" font-family="Playfair Display,serif" font-size="15" font-weight="700" fill="#D6EAFA">世界馆人工湖 · World Showcase Lagoon</text>
+<text x="600" y="578" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#B5D6EE">每晚 Luminous 水上烟火</text>
+<!-- 11 country chips around the lake -->
+<g font-family="DM Sans,sans-serif" font-size="10.5" font-weight="600">
+<rect x="86" y="596" width="92" height="26" rx="6" fill="#E8762C" opacity="0.24"/><text x="132" y="613" text-anchor="middle" fill="#FFE0C2">墨西哥</text>
+<rect x="196" y="634" width="92" height="26" rx="6" fill="#E8762C" opacity="0.24"/><text x="242" y="651" text-anchor="middle" fill="#FFE0C2">挪威</text>
+<rect x="306" y="596" width="92" height="26" rx="6" fill="#E8762C" opacity="0.24"/><text x="352" y="613" text-anchor="middle" fill="#FFE0C2">中国</text>
+<rect x="416" y="634" width="92" height="26" rx="6" fill="#E8762C" opacity="0.24"/><text x="462" y="651" text-anchor="middle" fill="#FFE0C2">德国</text>
+<rect x="526" y="596" width="92" height="26" rx="6" fill="#E8762C" opacity="0.24"/><text x="572" y="613" text-anchor="middle" fill="#FFE0C2">意大利</text>
+<rect x="636" y="634" width="92" height="26" rx="6" fill="#E8762C" opacity="0.24"/><text x="682" y="651" text-anchor="middle" fill="#FFE0C2">美国馆</text>
+<rect x="746" y="596" width="92" height="26" rx="6" fill="#E8762C" opacity="0.24"/><text x="792" y="613" text-anchor="middle" fill="#FFE0C2">日本</text>
+<rect x="856" y="634" width="92" height="26" rx="6" fill="#E8762C" opacity="0.24"/><text x="902" y="651" text-anchor="middle" fill="#FFE0C2">摩洛哥</text>
+<rect x="966" y="596" width="92" height="26" rx="6" fill="#E8762C" opacity="0.24"/><text x="1012" y="613" text-anchor="middle" fill="#FFE0C2">法国</text>
+<rect x="744" y="716" width="92" height="26" rx="6" fill="#E8762C" opacity="0.24"/><text x="790" y="733" text-anchor="middle" fill="#FFE0C2">英国</text>
+<rect x="624" y="716" width="92" height="26" rx="6" fill="#E8762C" opacity="0.24"/><text x="670" y="733" text-anchor="middle" fill="#FFE0C2">加拿大</text>
+</g>
+<text x="600" y="682" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#FFB066">11 国展馆环湖排布</text>
+<!-- International gateway -->
+<text x="120" y="470" font-family="DM Sans,sans-serif" font-size="10.5" fill="#7FB6E8">← 国际闸口 International Gateway</text>
+<!-- North compass -->
+<g transform="translate(1155,96)">
+<polygon points="0,16 6,0 12,16 6,12" fill="#F2B90C"/>
+<text x="6" y="28" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="700" fill="#F2B90C">N</text>
+</g>
+<!-- Scale bar -->
+<line x1="80" y1="806" x2="300" y2="806" stroke="#8FB0D6" stroke-width="2"/>
+<line x1="80" y1="800" x2="80" y2="812" stroke="#8FB0D6" stroke-width="2"/>
+<line x1="300" y1="800" x2="300" y2="812" stroke="#8FB0D6" stroke-width="2"/>
+<text x="190" y="824" text-anchor="middle" font-family="DM Mono,monospace" font-size="11" fill="#8FB0D6">约 400 m</text>
+<!-- Legend -->
+<rect x="420" y="800" width="12" height="12" rx="3" fill="#7C5CBF"/>
+<text x="438" y="811" font-family="DM Sans,sans-serif" font-size="10.5" fill="#8FB0D6">未来街区</text>
+<rect x="540" y="800" width="12" height="12" rx="3" fill="#E8762C"/>
+<text x="558" y="811" font-family="DM Sans,sans-serif" font-size="10.5" fill="#8FB0D6">世界馆</text>
+<rect x="660" y="800" width="12" height="12" rx="3" fill="#15507E"/>
+<text x="678" y="811" font-family="DM Sans,sans-serif" font-size="10.5" fill="#8FB0D6">人工湖</text>
+</svg></div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;"><div class="card"><h3>世界庆典 World Celebration</h3><p class="f-caption">EPCOT 的中轴心脏：银球 Spaceship Earth 镇守入口回望点，CommuniCore Hall &amp; Plaza（2024 年开放）承接全年节庆活动，2023 年揭幕的 Dreamer's Point 立有全球首座坐姿华特·迪士尼雕像。经典黑暗骑乘《Journey Into Imagination with Figment》也在此街区。</p></div>
+<div class="card"><h3>世界发现 World Discovery</h3><p class="f-caption">科技与肾上腺素之区。2022 年开业的 Guardians of the Galaxy: Cosmic Rewind 是全球最长室内过山车之一，也是迪士尼首条「逆向弹射」发车的轨道，车体可 360° 自旋对准投影。同区还有户外冲刺时速约 104 km/h 的 Test Track（2025 年 3.0 版回归）与离心航天模拟 Mission: SPACE。</p></div>
+<div class="card"><h3>世界自然 World Nature</h3><p class="f-caption">自然科普之区。2023 年的 Journey of Water 让游客伸手与「活水」互动；The Land 展馆内的 Soarin' 飞越影院与真实温室骑行 Living with the Land 呈现农业科技；The Seas 展馆拥有约 2.2 万 m³ 的巨型水族缸，是西半球最大的水族空间之一。</p></div>
+<div class="card"><h3>世界馆 World Showcase · 环湖 11 国</h3><p class="f-caption">EPCOT 的灵魂所在：墨西哥、挪威、中国、德国、意大利、美国、日本、摩洛哥、法国、英国、加拿大 11 国沿约 15 公顷人工湖排布，每国一栋代表性建筑、一家本国料理与一片街区氛围。开园时只有 9 国，摩洛哥 1984、挪威 1988 补入。</p></div>
+<div class="card"><h3>挪威馆 · Frozen Ever After</h3><p class="f-caption">世界馆中最受欢迎的骑乘：以《冰雪奇缘》世界观乘船穿行冰封峡湾。2026 年 2 月重开，安娜、艾莎、克斯托夫换装新一代人物动画，表情更接近真人电影质感，技术方案与香港迪士尼《魔雪奇缘世界》同源。</p></div>
+<div class="card"><h3>法国馆 · Remy's Ratatouille Adventure</h3><p class="f-caption">2021 年开业的轨道式黑暗骑乘，游客在「缩小成老鼠」的厨房里躲避厨师追逐。法国馆一带也是园区后门国际闸口的所在：从这里可步行至滨海步道区，或换乘空中缆车 Skyliner 前往好莱坞影城方向的度假酒店。</p></div></div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT & CONSTRUCTION TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline"><div class="timeline-item reveal"><div class="timeline-year">1966</div><div class="timeline-content"><h4>华特·迪士尼公布 EPCOT 城市构想</h4><p>10 月释出 EPCOT「明日实验性原型社区」影片：一座 2 万人居住的封闭式未来城市。两个月后华特去世，构想搁置。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">1979</div><div class="timeline-content"><h4>EPCOT Center 动工</h4><p>在佛罗里达买地约 1.1 万公顷中的一片开建，宣传为「当时全球最大私营建筑工程」。Spaceship Earth 球体钢结构历时约 26 个月建成。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">1982 年 10 月 1 日</div><div class="timeline-content"><h4>EPCOT Center 开园</h4><p>华特迪士尼世界第 2 座乐园开业，9 国世界馆随园亮相，1982 年美元估算造价约 8–14 亿美元，一度被称为全球最大的私营建筑项目。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">1984 / 1988</div><div class="timeline-content"><h4>摩洛哥馆、挪威馆加入</h4><p>世界馆凑齐 11 国：摩洛哥由国王出资捐建，挪威由企业财团筹资约 3,000 万美元建成。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">1990 年代中期</div><div class="timeline-content"><h4>改名 Epcot</h4><p>官方名称从 EPCOT Center 简化为 Epcot，弱化「中心」字眼，转向更现代的视觉识别。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2019 年 8 月</div><div class="timeline-content"><h4>公布「世纪改造」</h4><p>D23 博览会宣布将「未来世界」拆为世界庆典、世界发现、世界自然三个街区，时任乐园主席称这是公司史上最大规模单园改造。原定 2021 年前后完工，受疫情延误。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2021—2023</div><div class="timeline-content"><h4>新骑乘陆续落成</h4><p>2021 年法国馆 Remy's Ratatouille Adventure 开业；2022 年 5 月 Guardians of the Galaxy: Cosmic Rewind 开业；2023 年 10 月 Journey of Water 开放；同年 12 月 5 日华特雕像与夜秀 Luminous 同日亮相。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2024 年 6 月 10 日</div><div class="timeline-content"><h4>CommuniCore Hall 开放 · 改造收官</h4><p>世界庆典最后一个拼图落地，标志 2019 年启动的多街区重构正式完成。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2025 年 7 月 22 日</div><div class="timeline-content"><h4>Test Track 3.0 回归</h4><p>通用汽车冠名的全新版本重开：从「设计一辆车」转为「移动科技过去与未来」，保留约 104 km/h 户外冲刺段。</p></div></div>
+<div class="timeline-item reveal"><div class="timeline-year">2026 年（进行中）</div><div class="timeline-content"><h4>存量焕新窗口开启</h4><p>Soarin' Across America 限定版与 Frozen Ever After 升级先后落地；8 月 D23 官宣 Spaceship Earth 与 Figment 骑乘将迎重大重构。</p></div></div></div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONAL INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>游客量（TEA/AECOM 口径）</h3><table class="data-table"><thead><tr><th>指标</th><th>数值</th><th>备注</th></tr></thead><tbody>
+<tr><td>2024 年游客量</td><td class="num">12,133,000</td><td>全球第 8</td></tr>
+<tr><td>2024 年同比</td><td class="num">+1.3%</td><td>WDW 四园增速第一</td></tr>
+<tr><td>北美排名</td><td class="num">第 3</td><td>仅次于魔法王国与迪士尼乐园</td></tr>
+<tr><td>疫后恢复</td><td class="num">创新高</td><td>2019 年以来最佳单年客流</td></tr>
+</tbody></table></div>
+<div class="card"><h3>全年节庆体系（成人游客引擎）</h3><table class="data-table"><thead><tr><th>节庆</th><th>档期（约）</th><th>看点</th></tr></thead><tbody>
+<tr><td>国际艺术节</td><td class="num">1–2 月</td><td>街头艺术、绘画课、美食画盘</td></tr>
+<tr><td>花艺园艺节</td><td class="num">3–5 月</td><td>全园植物雕塑与主题花园</td></tr>
+<tr><td>美食美酒节</td><td class="num">夏秋</td><td>数十个环球小吃亭与品鉴</td></tr>
+<tr><td>假日节</td><td class="num">11–12 月</td><td>11 国圣诞传统与灯光秀</td></tr>
+</tbody></table><p class="f-caption" style="margin-top:0.5rem;">档期为常年规律，每年以官方公告为准。节庆体系是 EPCOT 成人客群与重游率的核心支撑。</p></div>
+</div>
+<div class="grid-2 reveal" style="margin-top:1.2rem;">
+<div class="card"><h3>与魔法王国对比</h3><table class="data-table"><thead><tr><th>维度</th><th>EPCOT</th><th>魔法王国</th></tr></thead><tbody>
+<tr><td>开园</td><td>1982</td><td>1971</td></tr>
+<tr><td>2024 游客</td><td class="num">约 1,213 万</td><td class="num">约 1,780 万</td></tr>
+<tr><td>结构</td><td>4 街区 + 环湖 11 国馆</td><td>6 个童话主题园区 + 城堡中轴</td></tr>
+<tr><td>核心客群</td><td>成人 · 节庆 · 科普</td><td>全年龄 · 经典童话</td></tr>
+<tr><td>夜间主秀</td><td>Luminous 水上烟火</td><td>城堡烟花秀</td></tr>
+</tbody></table></div>
+<div class="card"><h3>运营特色</h3><table class="data-table"><thead><tr><th>项目</th><th>详情</th></tr></thead><tbody>
+<tr><td>票制</td><td>与度假区其他乐园同体系的日期浮动动态票价，旺季成人单日票约在 US$100–180 区间（约合 ¥700–1,300）</td></tr>
+<tr><td>双入口</td><td>前门单轨站 + 后门国际闸口，便于住度假区西侧酒店的游客入园</td></tr>
+<tr><td>教育基因</td><td>「科普即娱乐」传统延续：温室、水族、航天模拟均保留讲解与展示属性</td></tr>
+<tr><td>美食权重</td><td>11 国馆本国料理 + 每年节庆小吃亭，餐饮在体验权重中明显高于传统乐园</td></tr>
+</tbody></table></div>
+</div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal"><div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">55 m</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">Spaceship Earth 全高</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">Ø50 m 大地测量学球体 · 约 1.1 万块面板</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">1,213 万</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">2024 年游客量</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">全球第 8 · 北美第 3</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">4 街区</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">3 未来街区 + 环湖馆区</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">2019 年公布的世纪改造产物</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">11 国</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">世界馆国家</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">1982 开园 9 国 → 1988 年凑齐</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">104 km/h</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">Test Track 户外冲刺</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">WDW 时速最快的单体骑乘</div></div>
+<div class="card" style="text-align:center;"><div class="f-mono" style="font-size:2rem;color:var(--clr-primary);font-weight:700;">2.2 万 m³</div><div style="font-size:0.9rem;color:var(--clr-text-secondary);margin-top:0.3rem;">The Seas 巨型水族缸</div><div style="font-size:0.8rem;color:var(--clr-text-muted);">西半球最大水族空间之一</div></div></div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>餐饮：世界馆即美食版图</h3><table class="data-table"><thead><tr><th>类型</th><th>代表</th><th>特色</th></tr></thead><tbody>
+<tr><td>空间站主题</td><td>Space 220</td><td>「轨道餐厅」，模拟距地约 350 公里的空间站用餐</td></tr>
+<tr><td>水族馆餐厅</td><td>Coral Reef</td><td>巨型水族缸环绕的鱼类主题正餐</td></tr>
+<tr><td>德国馆</td><td>Biergarten</td><td>巴伐利亚长桌自助 + 现场乐队</td></tr>
+<tr><td>法国馆</td><td>Chefs de France / 甜品</td><td>法餐正餐与马卡龙</td></tr>
+<tr><td>节庆食摊</td><td>全年轮换</td><td>艺术节/花艺节/美食节期间全球风味小亭</td></tr>
+</tbody></table></div>
+<div class="card"><h3>双入口与外部串联</h3><table class="data-table"><thead><tr><th>接驳方式</th><th>方向</th><th>说明</th></tr></thead><tbody>
+<tr><td>单轨铁路</td><td>前门 → 交通枢纽/魔法王国</td><td>EPCOT 单轨环线，连接度假区北片</td></tr>
+<tr><td>Skyliner 缆车</td><td>国际闸口 ↔ 度假酒店</td><td>空轨直达好莱坞影城方向酒店群</td></tr>
+<tr><td>步行</td><td>国际闸口 ↔ 滨海步道区</td><td>约 5–10 分钟，穿 Yacht/Beach 度假村</td></tr>
+<tr><td>自驾</td><td>前门主停车场</td><td>紧邻单轨站，酒店住客免费停车</td></tr>
+</tbody></table></div>
+</div>
+<div class="grid-3 reveal" style="margin-top:1.2rem;">
+<div class="card"><h3>相邻度假设施</h3><p class="f-caption">• BoardWalk 滨海步道区（餐饮+夜间娱乐）<br>• Yacht &amp; Beach Club 度假村<br>• Swan / Dolphin 酒店<br>• Caribbean Beach · Riviera 等 Skyliner 沿线酒店</p></div>
+<div class="card"><h3>园区服务</h3><p class="f-caption">• 11 国馆多语种服务<br>• 轮椅/婴儿车租赁与无障碍通行<br>• 单项优先通道（Lightning Lane）付费可选<br>• 护照盖章童趣互动（Kidcot）</p></div>
+<div class="card"><h3>夜秀与演艺</h3><p class="f-caption">• Luminous 水上烟火 · 每晚<br>• 各国街头艺人轮演<br>• 美国馆 Voices of Liberty 无伴奏合唱<br>• 节日限定舞台秀（如 Encanto 歌舞）</p></div>
+</div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+<div class="card"><h3>2026 年已落地</h3><ul style="list-style:disc;padding-left:1.2rem;font-size:0.95rem;line-height:1.8;">
+<li><strong>Soarin' Across America（2026 年 5 月 26 日开）：</strong>为美国建国 250 周年打造的飞越影院限定版，航拍跨越全美多州地标，配乐由 Bruce Broughton 重新编配，排队区新增与《国家地理》联动的答题体验。结束日期未公布。</li>
+<li><strong>Frozen Ever After 升级重开（2026 年 2 月）：</strong>挪威馆乘船骑乘的主角换装新一代高拟真人物动画，面部细节显著提升。</li>
+<li><strong>Test Track 3.0 持续运营：</strong>2025 年 7 月回归后成为世界发现街区的主力过山车体验。</li>
+</ul></div>
+<div class="card"><h3>2026 年 8 月 D23 官宣：两大经典进入重写窗口</h3><ul style="list-style:disc;padding-left:1.2rem;font-size:0.95rem;line-height:1.8;">
+<li><strong>Spaceship Earth：</strong>确认迎来自 2007 年以来的首次重大叙事重构，主题从「人类沟通史」拓宽为「人与人的联结」，并延伸到互联网时代之后；球体结构与运载系统保留。这是它 1982 年以来的第 4 次整体改版（此前为 1986、1994、2007）。关闭与重开日期未公布，外界预计窗口在 2027—2028 年。</li>
+<li><strong>Journey Into Imagination with Figment：</strong>确认将重构并让 1998 年后淡出的 Dreamfinder 角色回归，仍处早期创作阶段，无时间表。</li>
+</ul></div>
+</div>
+<div class="grid-2 reveal" style="margin-top:1.2rem;">
+<div class="card"><h3>存量焕新逻辑</h3><p class="f-body">2019 年启动、2024 年收官的「世纪改造」以新增和街区重组为主；收官之后，EPCOT 的更新重心明显转向对既有明星骑乘的迭代——2025–2026 年一年内，Test Track、Frozen Ever After、Soarin' 三部主力作品先后改版，Spaceship Earth 与 Figment 又在同届 D23 被官宣重写。对一座 40 余岁的乐园而言，这更像是在为「下一个 EPCOT」做技术储备。</p></div>
+<div class="card"><h3>行业位置</h3><p class="f-body">2024 年 EPCOT 以约 1,213 万客流位列全球第 8，是疫后恢复最强的迪士尼乐园之一。它的差异化在于不依赖单一 IP 年更，而以「世界馆 + 节庆 + 科普」构筑成人客群的基本盘。迪士尼母公司近年强调主题乐园投资回报，EPCOT 这类重运营、轻新建的乐园形态，被视为集团在资本开支压力下优先保住的客流与现金流基本盘。</p></div>
+</div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>1. 官方渠道</h4><ul>
+<li><a href="https://disneyworld.disney.go.com/destinations/epcot/" target="_blank" rel="noopener">EPCOT 官方网站（华特迪士尼世界）</a> <span class="tag">官方</span></li></ul></div>
+<div class="resource-group reveal"><h4>2. 权威资料 / 百科</h4><ul>
+<li><a href="https://en.wikipedia.org/wiki/Epcot" target="_blank" rel="noopener">Wikipedia — Epcot</a> <span class="tag">百科</span></li>
+<li><a href="https://zh.wikipedia.org/wiki/艾波卡特" target="_blank" rel="noopener">中文维基 — 艾波卡特</a> <span class="tag">百科</span></li>
+<li><a href="https://commons.wikimedia.org/wiki/Category:Epcot" target="_blank" rel="noopener">Wikimedia Commons — Epcot 分类图库</a> <span class="tag">自由版权</span></li></ul></div>
+<div class="resource-group reveal"><h4>3. 高清实拍视频</h4><ul>
+<li><a href="https://www.youtube.com/results?search_query=Epcot+full+tour+4K+walkthrough" target="_blank" rel="noopener">YouTube — EPCOT 全景步行 4K</a> <span class="tag">视频</span></li>
+<li><a href="https://www.youtube.com/results?search_query=Guardians+of+the+Galaxy+Cosmic+Rewind+POV" target="_blank" rel="noopener">YouTube — Cosmic Rewind 乘车视角</a> <span class="tag">视频</span></li>
+<li><a href="https://www.youtube.com/results?search_query=Luminous+Epcot+fireworks+full+show" target="_blank" rel="noopener">YouTube — Luminous 夜秀完整版</a> <span class="tag">视频</span></li></ul></div>
+<div class="resource-group reveal"><h4>4. 深度报道 / 攻略</h4><ul>
+<li><a href="https://wdwnt.com/" target="_blank" rel="noopener">WDW News Today — 迪士尼世界新闻站</a> <span class="tag">行业媒体</span></li>
+<li><a href="https://www.themeparkinsider.com/" target="_blank" rel="noopener">Theme Park Insider — 主题公园深度评论</a> <span class="tag">行业媒体</span></li>
+<li><a href="https://blogmickey.com/" target="_blank" rel="noopener">BlogMickey — 奥兰多主题公园攻略</a> <span class="tag">攻略</span></li></ul></div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// ====== MAP INITIALIZATION (overseas: ESRI ArcGIS World_Imagery + WGS-84) ======
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+  var tilesLoaded = false;
+
+  var map = L.map('parkmap', {
+    center: [28.3714, -81.5490],
+    zoom: 15,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+
+  tileLayer.on('load', function() {
+    tilesLoaded = true;
+    clearTimeout(tileTimer);
+    fallback.style.display = 'none';
+  });
+
+  tileLayer.addTo(map);
+
+  var tileTimer = setTimeout(function() {
+    if (!tilesLoaded) fallback.style.display = 'block';
+  }, 8000);
+
+  // ====== MAP MARKERS (OSM-verified WGS-84) ======
+  function zoneIcon(color, text) {
+    return L.divIcon({
+      className: 'custom-div-icon',
+      html: '<div style="background:' + color + ';color:#fff;padding:3px 9px;border-radius:4px;font-size:12px;font-weight:600;white-space:nowrap;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,0.4);font-family:DM Sans,sans-serif;">' + text + '</div>',
+      iconAnchor: [10, 12]
+    });
+  }
+  var entranceIcon = L.divIcon({ className: 'custom-div-icon', html: '<div style="background:#F2B90C;color:#3a2a00;width:24px;height:24px;border-radius:50%;text-align:center;line-height:20px;font-weight:bold;font-size:13px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.35);">&#9733;</div>', iconSize: [24,24], iconAnchor: [12,12] });
+
+  // Center anchor (project name shown on map)
+  L.marker([28.3714, -81.5490], { icon: zoneIcon('#1B3A6B', 'EPCOT 艾波卡特') }).addTo(map).bindPopup('<b>EPCOT 艾波卡特</b><br>园区几何中心 · 庆典街区与世界馆人工湖交界');
+
+  L.marker([28.3766, -81.5497], { icon: entranceIcon }).addTo(map).bindPopup('<b>主入口 · EPCOT 单轨车站</b><br>大门广场 · 单轨铁路直达交通枢纽与魔法王国');
+  L.marker([28.375286, -81.549397], { icon: zoneIcon('#7C5CBF', '世界庆典') }).addTo(map).bindPopup('<b>世界庆典 World Celebration</b><br>Spaceship Earth · CommuniCore Hall (2024) · Dreamer&#39;s Point 华特雕像');
+  L.marker([28.375527, -81.547680], { icon: zoneIcon('#1FA7C4', '世界发现') }).addTo(map).bindPopup('<b>世界发现 World Discovery</b><br>Cosmic Rewind (2022) · Test Track 3.0 (2025) · Mission: SPACE');
+  L.marker([28.374657, -81.550398], { icon: zoneIcon('#3E9B4F', '世界自然') }).addTo(map).bindPopup('<b>世界自然 World Nature</b><br>Journey of Water (2023) · The Land · The Seas 水族馆');
+  L.marker([28.369506, -81.549502], { icon: zoneIcon('#E8762C', '世界馆') }).addTo(map).bindPopup('<b>世界馆 World Showcase</b><br>环湖 11 国展馆 · 人工湖 · Luminous 夜秀');
+  L.marker([28.367927, -81.552823], { icon: zoneIcon('#E8762C', '法国馆') }).addTo(map).bindPopup('<b>法国馆</b><br>Remy&#39;s Ratatouille Adventure · 邻近国际闸口与 Skyliner 缆车站');
+
+  // Park boundary (illustrative)
+  L.polygon([
+    [28.3786, -81.5560], [28.3786, -81.5435],
+    [28.3650, -81.5435], [28.3650, -81.5562]
+  ], { color: '#F2B90C', weight: 2, fill: false, dashArray: '6,4' }).addTo(map);
+
+  // Fit bounds
+  var bounds = L.latLngBounds([
+    [28.3650, -81.5562],
+    [28.3786, -81.5435]
+  ]);
+  map.fitBounds(bounds, { padding: [20, 20] });
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+});
+
+// ====== SCROLL REVEAL ======
+(function() {
+  var revealElements = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    revealElements.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  revealElements.forEach(function(el) { observer.observe(el); });
+})();
+
+// ====== BACK TO TOP ======
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+<footer class="footer"><p>张走走的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy">GitHub</a> 托管</p>
+<p style="margin-top:0.4rem;opacity:0.7;">EPCOT 数据截至 2026 年 9 月 · 坐标 OSM 验证 (WGS-84) · 游客量 TEA/AECOM 2024</p></footer>
+</body>
+</html>

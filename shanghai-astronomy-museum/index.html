@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>上海天文馆 — 三球定格的宇宙时刻 · Ennead 设计 · 8K 球幕影院与三大展区</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #4C46A6;
+  --clr-primary-light: #8379D8;
+  --clr-primary-dark: #2C2670;
+  --clr-accent: #F5B041;
+}
+
+.hero {
+  background: linear-gradient(160deg, #241D63 0%, #4C46A6 40%, #8379D8 70%, #B9B2EC 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(245,176,65,0.16) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.07) 0%, transparent 50%);
+}
+
+/* China: dual-map layout */
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>上海天文馆</h1>
+    <p class="hero-subtitle">上海科技馆分馆 · Ennead 设计，三体运行轨迹化作建筑动线 · 家园 / 宇宙 / 征程三大展区 · 8K 球幕影院与望舒天文台</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">3.8万m²</div><div class="kpi-label">总建筑面积 · 开馆时全球最大天文馆</div></div>
+      <div class="kpi-card"><div class="kpi-number">300+</div><div class="kpi-label">展项 · 原创比例 85%</div></div>
+      <div class="kpi-card"><div class="kpi-number">2021</div><div class="kpi-label">正式开馆年份</div></div>
+      <div class="kpi-card"><div class="kpi-number">¥5.28亿</div><div class="kpi-label">工程总投资（口径见文）</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目名称</h3><p>上海天文馆<br>Shanghai Astronomy Museum<br><span class="f-caption">上海科技馆（Shanghai Science &amp; Technology Museum）分馆</span></p></div>
+      <div class="card"><h3>地理位置</h3><p>上海市浦东新区临港新城 · 滴水湖北岸<br>临港大道与环湖北三路交界<br>坐标：30°54′46″N, 121°55′37″E</p></div>
+      <div class="card"><h3>开馆时间</h3><p>2021 年 7 月正式开放<br>建筑 2019 年 9 月竣工后经展陈布展调试<br><span class="f-caption">网络实名分时段预约，周一闭馆</span></p></div>
+      <div class="card"><h3>归属 / 运营主体</h3><p>运营主体：上海科技馆<br>科学内容支撑：中国科学院上海天文台<br>临港新片区重点文化设施之一</p></div>
+      <div class="card"><h3>规模构成</h3><p>总建筑面积 3.8万m² · 用地 5.86万m²<br>三大常设展区「家园 / 宇宙 / 征程」+ 特色展区<br>8K 球幕影院 · 光学天象厅 · 观测塔群</p></div>
+      <div class="card"><h3>门票政策</h3><p>主展馆成人 ¥30<br>8K 球幕影院 ¥40 / 场（另购）<br><span class="f-caption">网络实名预约，提前 7 天，价格以官方为准</span></p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>上海天文馆坐落在浦东临港新片区滴水湖北岸，是上海科技馆旗下的天文主题分馆，2021 年 7 月正式开放时以约 3.8 万m² 总建筑面积成为全球建筑规模最大的天文馆。建筑由美国 Ennead 建筑事务所与上海建筑设计研究院联合设计，主创托马斯·黄从「三体问题」与天体轨道运行取灵感：先定三个圆球，再用一条假想的卫星轨迹把建筑串成整体动线——圆洞天窗、倒转穹顶与球幕影院既是建筑造型，也是日晷、观星镜和放映厅。馆内设「家园」「宇宙」「征程」三大常设展区与中华问天、好奇星球、航向火星等特色展区，300 余件展项中原创比例达 85%，配 8K 球幕影院、光学天象厅、望舒天文台与羲和太阳塔等观测设施。开馆即「一票难求」，2021 年压力测试曾 18 万人抢 3,000 张票；截至 2023 年累计接待约 200 万人次。2025 年以来馆方以夜间观星「邂逅星空」、XR 数字科普和淡季动态运营把热度从「抢票」推向常态化经营。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>单位</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>建筑设计</td><td>ennead architects LLP（美国纽约）</td><td>主创托马斯·黄 Thomas J. Wong，提出「三体 + 轨道动线」概念</td></tr>
+          <tr><td>联合设计院</td><td>上海建筑设计研究院有限公司</td><td>本地落地、施工图与结构协调（结构总工李亚明团队）</td></tr>
+          <tr><td>建设单位</td><td>上海科技馆</td><td>上海天文馆筹建与建设主体，建成后纳入上海科技馆体系运营</td></tr>
+          <tr><td>技术支撑</td><td>中国科学院上海天文台</td><td>展项科学内容与天文观测设备的技术来源</td></tr>
+          <tr><td>施工总承包</td><td>上海建工七建集团有限公司</td><td>主体土建总承包，以 BIM 应对异形曲面施工</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>「三球」：把天文仪器做成建筑</h3>
+      <p>建筑几乎找不出一条直线或直角。Ennead 先从物理学的「三体问题」出发设计三个圆球，再假想一颗卫星沿轨道运行，把弧线路径变成串联全馆的参观动线——游客沿「轨道」行进，如同在天体之间穿行。三个球体各有实际功能：主入口上方的圆洞天窗是一枚悬挑的日晷，日光穿过圆洞在广场上投下移动光斑，每年夏至前后正午与地面预设圆环完全重合；中庭顶部的倒转穹顶以直径约 45 米的倒置网壳「巨碗」罩住庭院，屏蔽城市光害与喧嚣，环形坡道盘旋而上，让人在观星平台上重新看见地平线；另一端的球幕影院建筑外径约 30 米，仅靠 6 个支撑点与壳体相连，像一颗悬浮失重的行星。</p>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>无柱悬挑与全生命周期 BIM</h3>
+      <p>为了实现无直角的异形曲面，项目混合了钢筋混凝土、钢结构与铝合金网壳等多种体系。入口圆洞天窗悬挑超过 40 米、跨度超过 60 米且范围内无柱，是全国最大的悬挑结构之一；倒转穹顶采用单层网壳，悬浮球幕的位置与牛腿支座依赖 BIM 精确定位。项目以全生命周期 BIM 打通建筑、结构、机电单一模型，用于工程量、施工模拟与碰撞检测，并采用地源热泵等节能技术。2016 年 11 月开工、2019 年 9 月竣工，主体土建总承包为上海建工七建。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>总建筑面积</td><td class="num">38,164 m²</td><td>开馆时为全球建筑规模最大的天文馆</td></tr>
+          <tr><td>规模</td><td>用地面积</td><td class="num">58,602 m²</td><td>滴水湖北岸 · 临港大道与环湖北三路交界</td></tr>
+          <tr><td>投资</td><td>工程总投资</td><td class="num">约 ¥5.28 亿</td><td>工程档案口径 52,841 万元；澎湃 2023 报道称含综合投入约十亿，口径不同</td></tr>
+          <tr><td>建筑</td><td>圆洞天窗（入口日晷）</td><td class="num">悬挑超 40 m</td><td>跨度超 60 m、无柱，全国最大悬挑结构之一</td></tr>
+          <tr><td>建筑</td><td>倒转穹顶</td><td class="num">直径约 45 m</td><td>倒置单层网壳，环形坡道盘旋，上设观星平台</td></tr>
+          <tr><td>建筑</td><td>球幕影院</td><td class="num">外径约 30 m</td><td>内设约 23 m 级球幕，仅 6 支点与壳体相连</td></tr>
+          <tr><td>体验</td><td>常设展区</td><td class="num">3 大展区</td><td>家园 / 宇宙 / 征程 + 中华问天等特色展区</td></tr>
+          <tr><td>体验</td><td>展项总数</td><td class="num">300+ 件</td><td>原创比例 85%，互动展项占比超 50%</td></tr>
+          <tr><td>展陈</td><td>8K 球幕影院</td><td class="num">8K 数字投影</td><td>多功能球幕，太空与天文主题影片</td></tr>
+          <tr><td>展陈</td><td>光学天象厅</td><td class="num">家园展区内</td><td>高保真光学天象仪，重现野外裸眼星空</td></tr>
+          <tr><td>藏品</td><td>陨石标本</td><td class="num">约 70 件</td><td>含上海唯一目击陨石「长兴陨石」（21.4 kg）</td></tr>
+          <tr><td>藏品</td><td>天文文物</td><td class="num">120+ 件/套</td><td>牛顿、开普勒、伽利略等科学巨匠原版著作</td></tr>
+          <tr><td>观测</td><td>公众观测设施</td><td class="num">望舒 + 羲和</td><td>夜间观星与太阳观测两套体系，含科研级设备转公众科普</td></tr>
+          <tr><td>客流</td><td>开馆前两年累计观众</td><td class="num">约 200 万</td><td>截至 2023 年公开口径，常年一票难求</td></tr>
+          <tr><td>容量</td><td>限流上限</td><td class="num">6,000 人/日</td><td>瞬时最大 3,000 人，实名分时段预约</td></tr>
+          <tr><td>时序</td><td>开工 / 竣工 / 开放</td><td class="num">2016.11 / 2019.09 / 2021.07</td><td>竣工后经展陈布展调试再开放</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源：上海天文馆官网、新华社、澎湃新闻、Ennead 官方资料及工程档案。建筑面积、用地面积与建设时序为公开口径；投资金额各来源口径不一，已并列注明。数据截至 2026 年。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#4C46A6;"></span> 上海天文馆（主体 + 附属观测设施）</span>
+        <span><span class="dot" style="background:#E53935;"></span> 滴水湖站（地铁 16 号线 · 步行约 700 m）</span>
+        <span><span class="dot" style="background:#F5B041;"></span> 园区范围（示意圈）</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+          <rect width="900" height="600" fill="#141131" rx="12"/>
+          <text x="450" y="34" fill="#F5B041" font-family="Playfair Display,serif" font-size="16" text-anchor="middle" font-weight="600">上海天文馆 · 三球构成的建筑动线示意</text>
+          <line x1="60" y1="54" x2="840" y2="54" stroke="#F5B041" stroke-width="0.5" opacity="0.3"/>
+
+          <!-- 轨道动线 -->
+          <path d="M 130 300 Q 240 150 430 190 Q 700 240 700 300 Q 700 420 470 430" fill="none" stroke="#8379D8" stroke-width="2" stroke-dasharray="10,6" opacity="0.5"/>
+          <text x="250" y="170" fill="rgba(131,121,216,0.85)" font-size="10" font-family="DM Sans,sans-serif">轨道动线：观众沿「卫星轨迹」穿行展馆</text>
+
+          <!-- 圆洞天窗（主入口） -->
+          <circle cx="190" cy="300" r="62" fill="rgba(245,176,65,0.14)" stroke="#F5B041" stroke-width="2"/>
+          <text x="190" y="288" fill="#F5B041" text-anchor="middle" font-size="13" font-family="DM Sans,sans-serif" font-weight="600">圆洞天窗</text>
+          <text x="190" y="306" fill="rgba(255,255,255,0.7)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Oculus · 入口日晷</text>
+          <text x="190" y="322" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">无柱悬挑 · 光斑报时</text>
+
+          <!-- 中庭 倒转穹顶 -->
+          <circle cx="430" cy="300" r="95" fill="none" stroke="#B9B2EC" stroke-width="2" stroke-dasharray="6,5"/>
+          <text x="430" y="280" fill="#B9B2EC" text-anchor="middle" font-size="13" font-family="DM Sans,sans-serif" font-weight="600">倒转穹顶（中庭）</text>
+          <text x="430" y="300" fill="rgba(255,255,255,0.55)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">直径约 45 m · 倒置网壳</text>
+          <text x="430" y="316" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">螺旋坡道 → 观星平台</text>
+
+          <!-- 展区主体 -->
+          <rect x="330" y="350" width="300" height="120" rx="10" fill="#4C46A6" opacity="0.2" stroke="#8379D8" stroke-width="1.5"/>
+          <text x="480" y="376" fill="#fff" text-anchor="middle" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">三大常设展区</text>
+          <text x="480" y="398" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">家园（含光学天象厅）· 宇宙 · 征程</text>
+          <text x="480" y="418" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">300+ 展项 · 原创 85% · 互动超 50%</text>
+          <text x="480" y="452" fill="rgba(255,255,255,0.35)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">中华问天 · 好奇星球 · 航向火星 · 临展厅</text>
+
+          <!-- 球幕影院 -->
+          <circle cx="720" cy="250" r="68" fill="#F5B041" opacity="0.12" stroke="#F5B041" stroke-width="2"/>
+          <text x="720" y="240" fill="#F5B041" text-anchor="middle" font-size="13" font-family="DM Sans,sans-serif" font-weight="600">球幕影院</text>
+          <text x="720" y="258" fill="rgba(255,255,255,0.7)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">外径约 30 m · 6 支点悬浮</text>
+          <text x="720" y="274" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">8K 数字球幕 · 约 23 m 级</text>
+
+          <!-- 观测设施 -->
+          <rect x="130" y="430" width="150" height="58" rx="6" fill="rgba(46,125,50,0.14)" stroke="#66BB6A" stroke-width="1.2"/>
+          <text x="205" y="454" fill="#A5D6A7" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif">望舒天文台 · 羲和太阳塔</text>
+          <text x="205" y="472" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">夜间观星 · 太阳观测</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(858, 80)">
+            <polygon points="0,-16 4,-2 0,-5 -4,-2" fill="#F5B041"/>
+            <polygon points="0,16 4,2 0,5 -4,2" fill="#5A6A80"/>
+            <text x="0" y="-20" text-anchor="middle" fill="#F5B041" font-size="10" font-family="DM Sans,sans-serif">N</text>
+          </g>
+
+          <!-- 图例 -->
+          <rect x="120" y="540" width="660" height="42" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+          <circle cx="150" cy="561" r="6" fill="#F5B041" opacity="0.6"/>
+          <text x="166" y="565" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">球体建筑（三球）</text>
+          <rect x="330" y="555" width="12" height="12" fill="#4C46A6" opacity="0.7" rx="1"/>
+          <text x="350" y="565" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">展区主体</text>
+          <rect x="470" y="555" width="12" height="12" fill="#2E7D32" opacity="0.6" rx="1"/>
+          <text x="490" y="565" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">观测设施</text>
+          <line x1="610" y1="561" x2="640" y2="561" stroke="#8379D8" stroke-width="2" stroke-dasharray="6,4"/>
+          <text x="650" y="565" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">轨道动线</text>
+          <text x="450" y="586" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="8" font-family="DM Sans,sans-serif">空间为示意图，非精确方位与比例 · 建筑环滴水湖北岸而设，主入口偏南近湖方向</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>圆洞天窗 · 入口广场</h3><p>主入口上方的无柱大悬挑如同一只日晷：日光穿洞投下的光斑随时辰与季节移动，每年夏至前后正午与地面圆环重合。入口连倒影池、序厅与螺旋坡道，是全馆动线的起点。</p></div>
+      <div class="card"><h3>中庭 · 倒转穹顶</h3><p>直径约 45 米的倒置「巨碗」罩住中庭，屏蔽城市光害，环形坡道沿壁盘旋而上，登顶观星平台可重新望见地平线——设计者把它称作与宇宙「真实对话」的地方。</p></div>
+      <div class="card"><h3>家园 Home</h3><p>从神话讲到太阳系：高仿真日月地系统、直径 6 米的 3D 打印月球模型、约 70 件著名陨石矩阵；区内光学天象厅以高保真天象仪重现野外裸眼星空，是上海少见的「真星空」体验。</p></div>
+      <div class="card"><h3>宇宙 Universe</h3><p>从「时空、引力、光、元素、生命」五个角度展开当代宇宙学，黑洞体验、引力透镜等互动装置把相对论与量子前沿变成可动手的问题。</p></div>
+      <div class="card"><h3>征程 Journey</h3><p>以时间线纵览天文学史，配「天文数字实验室」模拟科研工作；中国航天板块以嫦娥五号、祝融号、天和核心舱等高仿真模型与月壤样品展示探月与空间站进程。</p></div>
+      <div class="card"><h3>特色展区与影院</h3><p>中华问天梳理中国古代天学，好奇星球面向低龄儿童，航向火星为沉浸式航天体验；另有 8K 球幕影院与临展厅承担影片与特展轮换。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2012–2013</div><div class="timeline-content"><h4>前期论证启动</h4><p>上海启动天文馆筹建论证，此前国内尚无大体量专题天文馆，筹建跨越十余年（澎湃称「十年磨一剑」）。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2014</div><div class="timeline-content"><h4>立项并完成概念设计</h4><p>项目 2014 年立项，Ennead 主创托马斯·黄团队完成「三球 + 轨道动线」概念方案并中标落地。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2016.11.08</div><div class="timeline-content"><h4>正式开工</h4><p>上海建工七建总承包动工，工程总投资口径约 ¥5.28 亿，异形曲面以全生命周期 BIM 管理。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019.09.26</div><div class="timeline-content"><h4>主体竣工</h4><p>建筑竣工，三球结构落成；随后转入展陈深化设计与展项制作阶段。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019–2021</div><div class="timeline-content"><h4>展陈布展调试</h4><p>家园/宇宙/征程展项安装、8K 球幕与天象厅调试、陨石与文物入馆，含嫦娥五号月壤等样品展陈准备。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021.07</div><div class="timeline-content"><h4>正式开馆</h4><p>7 月先期压力测试与试运营，随后正式开放。预约制下「一票难求」成为现象：压力测试 18 万人抢 3,000 张票。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021–2023</div><div class="timeline-content"><h4>现象级热度与限流常态</h4><p>暑期线上票开售即空、现场排队 1–3 小时；馆方维持每日上限 6,000、瞬时 3,000 的限流。截至 2023 年累计约 200 万人次。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024–2025</div><div class="timeline-content"><h4>从「抢票」到常态运营</h4><p>推出夜间观星「邂逅星空」、XR「行走的天文馆」数字科普、动态票控与团队服务，探索淡季运营与文旅联动。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025 末</div><div class="timeline-content"><h4>夜场爆满与客流结构优化</h4><p>国庆中秋档夜场活动售罄后常态化开放预约；2025 年 11 月以来展区单月 4.66 万人次、同比增 23%，境外与团队客流回升。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>限流上限</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">6,000 人/日</p><p class="f-caption">瞬时最大 3,000 人 · 实名分时段</p></div>
+      <div class="card" style="text-align:center;"><h4>累计观众（截至 2023）</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">200万+</p><p class="f-caption">开馆两年即达，常年一票难求</p></div>
+      <div class="card" style="text-align:center;"><h4>成人门票</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">¥30</p><p class="f-caption">8K 球幕影院 ¥40 / 场另购</p></div>
+    </div>
+
+    <div class="grid-2 reveal">
+      <div class="card"><h3>参观信息</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>项目</th><th>详情</th></tr></thead>
+          <tbody>
+            <tr><td>开放时间</td><td>9:30–16:00，入馆分上午 / 下午时段</td></tr>
+            <tr><td>休馆日</td><td>周一（法定节假日除外）</td></tr>
+            <tr><td>预约</td><td>官网 / 公众号实名预约，提前 7 天</td></tr>
+            <tr><td>交通</td><td>地铁 16 号线滴水湖站步行约 700 m</td></tr>
+            <tr><td>建议时长</td><td>半日至一日（含影厅与天象厅场次）</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">票价与时段以馆方实时公告为准。</p>
+      </div>
+      <div class="card"><h3>热度与客流结构（公开口径）</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>时段</th><th>数据</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>2021 压力测试</td><td class="num">18 万人抢 3,000 票</td><td>开馆即「现象级」</td></tr>
+            <tr><td>2023 暑期</td><td class="num">线上票开售即空</td><td>现场排队 1–3 小时</td></tr>
+            <tr><td>截至 2023</td><td class="num">累计约 200 万人次</td><td>开馆两年累计</td></tr>
+            <tr><td>2025 年 11 月起</td><td class="num">单月展区 4.66 万 / +23%</td><td>团队约占 20%，境外散客回升</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">2025 年数据引自人民日报客户端上海频道报道。</p>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>运营特点</h3>
+      <p>上海天文馆的运营大体经历两个阶段。开馆头两年靠「稀缺」制造热度：实名分时段预约 + 每日 6,000 上限，把流量控制在体验质量之内，也把「抢票」变成持续的社交话题；天象厅、8K 球幕与夜场观测等分项另购票，拉高二次消费与停留时长。2024 年起转向常态化经营：夜间观星「邂逅星空」在假期售罄后转为常设预约，XR「行走的天文馆」把展陈内容送进学校与社区，「淡季不淡」的动态票控与团队个性化服务让工作日与旺季错峰互补。作为上海科技馆三馆体系（科技馆、自然博物馆、天文馆）的一员，它在内容上获得中科院上海天文台的科研支撑，承担国民天文科普与临港新城文化目的地的双重角色。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>圆洞天窗 · 建筑即日晷</h3><p>入口大悬挑超 40 m、跨度超 60 m 且无柱。日光穿洞成移动光斑报时，夏至前后正午与地面圆环重合——把时间测量做进建筑本体，全国最大悬挑结构之一。</p></div>
+      <div class="card"><h3>倒转穹顶 · 观星巨碗</h3><p>直径约 45 米的中庭倒置网壳穹顶，屏蔽城市光害与声浪；环形坡道盘旋而上，顶端观星平台用建筑高差重造「地平线」，让都市人重新看见完整星空。</p></div>
+      <div class="card"><h3>8K 球幕影院</h3><p>建筑球体外径约 30 m，仅 6 个支撑点与壳体相连，营造悬浮失重感；内设约 23 m 级球幕与 8K 数字投影，是馆内放映与特展的主舞台。</p></div>
+      <div class="card"><h3>光学天象厅</h3><p>位于「家园」展区的高保真天象厅：以光学天象仪逐颗复现星座与银河，模拟野外裸眼星空，与数字球幕互补，构成馆内两套「星空放映」体系。</p></div>
+      <div class="card"><h3>观测塔群</h3><p>望舒天文台主司夜间观星、羲和太阳塔主司白昼太阳观测，与中科院上海天文台共建，配置含自适应光学太阳望远镜等设备，是少数把科研级观测转作公众科普的场馆。</p></div>
+      <div class="card"><h3>原创展陈体系</h3><p>300+ 展项中原创比例 85%、互动占比超 50%，AR/VR/体感与数据可视化普遍应用；约 70 件著名陨石与 120+ 件科学原版著作构成展陈的实物底座。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>公众观测体系</h3><p>望舒天文台（夜间观星活动与望远镜探索）、羲和太阳塔（太阳观测）、青少年观测基地构成完整的「真观测」链条，多数需另行预约，是天文馆区别于普通博物馆的核心配套。</p></div>
+      <div class="card"><h3>影厅与星空放映</h3><p>8K 球幕影院、家园内光学天象厅双线放映太空与天文节目；两类影厅场次是拉长停留与二次消费的主力，常与夜场活动打包。</p></div>
+      <div class="card"><h3>特色展区与临展</h3><p>中华问天、好奇星球（低龄）、航向火星（沉浸式）与临展厅支撑主题轮换；临展与馆方研学活动构成内容更新的主要通道。</p></div>
+      <div class="card"><h3>服务配套</h3><p>馆内设餐饮、纪念品商店与公共休憩空间，配备母婴室、寄存与无障碍设施，服务低龄家庭与老年观众；团队可定制讲解。</p></div>
+      <div class="card"><h3>交通与可达</h3><p>地铁 16 号线滴水湖站步行约 700 m；周边设自驾停车与出租车落客区，临港大道一线可达，是浦东远郊中地铁可达性较强的文化设施。</p></div>
+      <div class="card"><h3>区域联动</h3><p>与滴水湖景区、上海海昌海洋公园等同处临港文旅集群；向上承接上海科技馆三馆体系与中科院资源，是临港新城文化版图的重要拼图。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. NEWS ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>夜间观星「邂逅星空」常态化</h3><p>2025 年国庆中秋假期夜间活动一售而空，此后转为常设预约：观星指南、展厅深度讲解、球幕观影、天象厅模拟与望舒天文台望远镜探索打包成夜场体验。</p></div>
+      <div class="card"><h3>「让淡季不淡」动态运营</h3><p>人民日报客户端上海频道 2025 年底报道馆方淡季运营：动态票务调控、团队个性化服务与文旅联动并举，2025 年 11 月以来展区单月接待 4.66 万人次、同比增长 23%。</p></div>
+      <div class="card"><h3>境外与团队客流回升</h3><p>2025 年 10 月下旬以来境外散客 4,000 余人次、同比增长 22%；团队观众约占客流总量 20%，银龄团队亦明显增长，客源结构从本地向多元扩散。</p></div>
+      <div class="card"><h3>XR「行走的天文馆」</h3><p>馆方以 XR 沉浸式科学教育把天文内容送进校园与社区，配合数字展厅与线上资源，尝试突破单一场馆的物理边界。</p></div>
+      <div class="card"><h3>从「抢票」到常态化预约</h3><p>随放量与分时段机制成熟，开馆初期「18 万人抢 3,000 票」的极端稀缺已缓解，预约体验与淡旺季错峰成为运营主轴。</p></div>
+      <div class="card"><h3>展望：科研科普双轮</h3><p>依托中科院上海天文台的观测与科研资源，馆方正把「真望远镜观测 + 展陈叙事 + 数字内容」合成完整产品线，向临港天文科普基地与城市级科学目的地演进。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. RESOURCES ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal">
+      <h4>官方来源</h4>
+      <ul>
+        <li><a href="https://www.sstm-sam.org.cn/" target="_blank" rel="noopener">上海天文馆 — 官方网站</a> <span class="tag">官网</span></li>
+        <li><a href="https://www.sstm.org.cn/" target="_blank" rel="noopener">上海科技馆 — 三馆体系官网</a> <span class="tag">官方</span></li>
+      </ul>
+    </div>
+    <div class="resource-group reveal">
+      <h4>设计与解读</h4>
+      <ul>
+        <li><a href="https://ennead.com/zh/work/shanghai-astronomy-museum" target="_blank" rel="noopener">ennead — 上海天文馆项目页</a> <span class="tag">设计</span></li>
+        <li><a href="https://www.thepaper.cn/newsDetail_forward_13576280" target="_blank" rel="noopener">澎湃新闻 — 星辰可及：如何用建筑「定格」宇宙</a> <span class="tag">报道</span></li>
+      </ul>
+    </div>
+    <div class="resource-group reveal">
+      <h4>新闻与数据</h4>
+      <ul>
+        <li><a href="https://www.xinhuanet.com/local/2021-07/10/c_1127642685.htm" target="_blank" rel="noopener">新华社 — 探秘全球规模最大天文馆</a> <span class="tag">报道</span></li>
+        <li><a href="https://sdxw.iqilu.com/w/article/YS0yMS0xNjg4OTA0NA.html" target="_blank" rel="noopener">人民日报客户端 — 让淡季不淡，天文馆激活文旅联动</a> <span class="tag">报道</span></li>
+        <li><a href="https://www.thepaper.cn/newsDetail_forward_24780623" target="_blank" rel="noopener">澎湃新闻 — 「杂家」打造的上海天文馆为何能出圈</a> <span class="tag">报道</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+// 如坐标来自海外工具 (Nominatim/Photon)，则需 WGS-84 → GCJ-02 转换（见 template-overseas.html）
+
+var zonesGcj02 = [
+  { name: '上海天文馆', lng: 121.926924, lat: 30.912800, color: '#4C46A6' },
+  { name: '滴水湖站<br><small>地铁16号线 · 步行约700m</small>', lng: 121.929583, lat: 30.907245, color: '#E53935' },
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([30.9108, 121.9273], 15);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesGcj02);
+
+  if (withBoundary) {
+    L.circle([30.912800, 121.926924], { radius: 210, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+<footer class="footer"><p>张走走的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy">GitHub</a> 托管</p></footer>
+</body>
+</html>

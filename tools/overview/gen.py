@@ -4,7 +4,7 @@ import os
 _dir=os.path.dirname(os.path.abspath(__file__))
 rows = json.load(open(os.path.join(_dir,'data.json'),encoding='utf-8'))
 
-CH_ORDER = ['中国','亚洲 · 中东','欧洲','美洲','全球品牌']
+CH_ORDER = ['欧洲','美洲','亚洲 · 中东','中国','全球品牌']
 def sub_of(r): return r['subgroup'] or ''
 
 html_parts = []

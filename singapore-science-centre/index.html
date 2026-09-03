@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新加坡科学馆 — 裕廊东国民科学教育地标 · 千件互动展品与 8K 穹顶影院</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #1668A8;
+  --clr-primary-light: #57A6DC;
+  --clr-primary-dark: #0B3A6B;
+  --clr-accent: #F4B83E;
+}
+
+.hero {
+  background: linear-gradient(160deg, #0B3A6B 0%, #1668A8 40%, #57A6DC 70%, #A7D3F0 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(244,184,62,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>新加坡科学馆</h1>
+    <p class="hero-subtitle">Science Centre Singapore · 教育部辖下的国民科学教育地标 · 现馆位于裕廊东 · 2027 年迁址裕廊湖区新馆</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">1977</div><div class="kpi-label">开幕年份 · 运营近半世纪</div></div>
+      <div class="kpi-card"><div class="kpi-number">1,000+</div><div class="kpi-label">互动展品 · 14 个常设展馆</div></div>
+      <div class="kpi-card"><div class="kpi-number">100万+</div><div class="kpi-label">年均到馆客流</div></div>
+      <div class="kpi-card"><div class="kpi-number">2027</div><div class="kpi-label">新馆目标开幕 · 建馆 50 周年</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目名称</h3><p>Science Centre Singapore<br>新加坡科学馆<br><span class="f-caption">2007 年建馆 30 周年时启用现英文名 · 马来语：Pusat Sains Singapura</span></p></div>
+      <div class="card"><h3>地理位置</h3><p>新加坡裕廊东 · 15 Science Centre Road<br>距裕廊东地铁站（东西线/南北线换乘）步行约 10 分钟<br>坐标：1°19′58″N, 103°44′10″E</p></div>
+      <div class="card"><h3>开业时间</h3><p>1977 年 12 月 10 日开幕<br>2027 年底计划迁入裕廊湖区新馆（建馆 50 周年）<br><span class="f-caption">现馆将运营至新馆就绪</span></p></div>
+      <div class="card"><h3>归属 / 运营商</h3><p>新加坡教育部（MOE）下属科学馆局（Science Centre Board）<br>法定机构直营，承担全国性科学教育职能<br>新馆由同一机构开发</p></div>
+      <div class="card"><h3>规模构成</h3><p>千余件互动展品 · 14 个常设展馆<br>户外展区约 2 万㎡（动能花园 / 生态园 / 水力坊）<br>+ 万象馆穹顶影院 · KidsSTOP · 雪城</p></div>
+      <div class="card"><h3>门票政策</h3><p>常设展：非居民成人 S$12 / 儿童 S$8<br>新加坡公民与永久居民：学期间平日免费，峰期成人 S$6<br><span class="f-caption">万象馆 / KidsSTOP 另购票，价格以馆方公告为准</span></p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>新加坡科学馆是新加坡的国家科学教育机构，由教育部辖下的科学馆局直营，1969 年政府决策筹建，1977 年 12 月在裕廊东开幕，是亚洲最早的一批现代化互动科学馆之一。与「看展柜」的传统博物馆不同，它从开幕起就主张「动手探究」：逾千件互动展品散布在 14 个常设展馆，配合每日排片的高能科学演示（特斯拉线圈放电、火龙卷）、亚洲最大的镜面迷宫、万象馆穹顶影院与天文观星传统，把抽象原理变成可亲手摸、可当场尖叫的体验。场馆年均接待超过 100 万人次，同时是新加坡中小学科学教育与全国性竞赛的基地。2023 年 11 月，由扎哈·哈迪德建筑事务所设计的新馆在裕廊湖区动土，建筑面积约 5.5 万㎡、比现馆大约两成半，预计 2027 年底、建馆 50 周年时开幕；现馆持续运营至新馆就绪，届时裕廊东现址将交还重新开发。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>公司 / 机构</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>业主 / 运营方</td><td>科学馆局 Science Centre Board</td><td>新加坡教育部下属法定机构，负责现馆与裕廊湖区新馆的开发运营</td></tr>
+          <tr><td>现馆主馆设计</td><td>胡国钊 Raymond Woo（新加坡）</td><td>1970 年代设计竞赛胜出，主馆 1977 年落成</td></tr>
+          <tr><td>新馆总建筑师</td><td>扎哈·哈迪德建筑事务所 ZHA</td><td>2019 年起主导新馆设计，五个互锁体量「漂浮」于公园之上</td></tr>
+          <tr><td>新馆本地协作</td><td>Architects 61 Pte Ltd</td><td>与 ZHA 联合设计，本地审批与深化落地</td></tr>
+          <tr><td>新馆总承建</td><td>Obayashi Singapore（大林组）</td><td>2023 年动土后负责主体施工，现处于建设阶段</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>现馆：从互动实验场到城市科学地标</h3>
+      <p>1969 年新加坡政府决定把国家博物馆转为艺术与历史博物馆，同时依科学理事会的建议另建专职科技教育的机构。本土建筑师胡国钊的方案在设计竞赛中胜出，成为现馆主馆的设计师。主馆以中央中庭串接多个展厅，把展陈组织成可以动手、可以走动的大型「科学实验场」；随后几十年逐步补全配套——1987 年建万象馆穹顶影院，1989 年设馆区天文台，2000 年开放雪城，2007 年在建馆 30 周年时更名为 Science Centre Singapore。半世纪以来，展馆历经多轮更新，始终把「手不能摸」变成这条展陈准则的反面教材。</p>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>新馆：为裕廊湖区而生的 STEM 地标</h3>
+      <p>新馆选址裕廊湖区裕华园地铁站旁 7.4 公顷的公园带，由扎哈·哈迪德建筑事务所与 Architects 61 联合设计。建筑由五个互相咬合的矩形体量组成，架空「漂浮」在公园绿化之上，大片「单片眼镜」式的观景窗面向裕廊湖与裕华园宝塔；底层庭院与步行道把地铁站、湖畔步道串联成一条公共通廊。方案主打「科学遇见自然」，设有大型观演室外剧场、30 米宽活动广场与屋顶花园，并回应新加坡绿色计划，以光伏屋顶、绿化隔热与自然通风等手段冲击超低能耗绿建铂金认证，目标较同类建筑节能四成以上。新馆 2023 年 11 月 1 日动土，现处于主体施工阶段，预计 2027 年底开幕。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>现馆园区面积</td><td class="num">约 6 公顷</td><td>维基百科口径，官方未公开明确数字，部分资料记 10 公顷</td></tr>
+          <tr><td>规模</td><td>常设展馆</td><td class="num">14 个</td><td>千余件互动展品，另有户外展区约 2 万㎡</td></tr>
+          <tr><td>规模</td><td>现馆客流动线</td><td class="num">中庭 + 展馆 A–F</td><td>主馆分级分区，临时特展设于 Annex 附馆</td></tr>
+          <tr><td>投资</td><td>现馆 1977 年造价</td><td class="num">S$1,200 万</td><td>1977 年建成时总造价，政府财政投入</td></tr>
+          <tr><td>投资</td><td>新馆总造价</td><td class="num">S$6.4 亿</td><td>公开口径约 S$6.395 亿（约 US$4.7 亿）</td></tr>
+          <tr><td>投资</td><td>新馆建筑面积</td><td class="num">约 5.5 万㎡</td><td>报道称比现馆大约两成半</td></tr>
+          <tr><td>投资</td><td>新馆用地</td><td class="num">7.4 公顷</td><td>裕华园地铁站旁公园带</td></tr>
+          <tr><td>体验</td><td>万象馆 Omni-Theatre</td><td class="num">23 米穹顶</td><td>221 座，兼数字天文馆；由东南亚首个 IMAX Dome（1987）在 2015 年换装 Digistar 5 8K 数字系统</td></tr>
+          <tr><td>体验</td><td>万象馆建成</td><td class="num">1987.12</td><td>建馆十周年配套，1987-12-10 由时任总统黄金辉揭幕</td></tr>
+          <tr><td>体验</td><td>镜面迷宫</td><td class="num">105 面镜</td><td>亚洲最大镜面迷宫（Professor Crackitt's Light Fantastic）</td></tr>
+          <tr><td>体验</td><td>现场科学演示</td><td class="num">每日多场</td><td>特斯拉线圈放电、火龙卷等，含定时排片</td></tr>
+          <tr><td>客流</td><td>年均到馆客流</td><td class="num">100万+ 人次</td><td>含学校团体，本地家庭与游客并重</td></tr>
+          <tr><td>教育</td><td>儿童馆 KidsSTOP</td><td class="num">2014 年开放</td><td>面向 18 个月至 8 岁，角色扮演式分龄设计</td></tr>
+          <tr><td>配套</td><td>雪城 Snow City</td><td class="num">2000 年开放</td><td>新加坡首个常设室内雪乐园</td></tr>
+          <tr><td>票价</td><td>常设展非居民票价</td><td class="num">成人 S$12</td><td>儿童 S$8；公民/PR 学期间平日免费、峰期 S$6</td></tr>
+          <tr><td>时序</td><td>新馆动土 / 开幕</td><td class="num">2023.11 / 2027</td><td>建馆 50 周年目标；现馆持续运营至新馆就绪</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源：科学馆局官网、MOE 新闻稿、维基百科及 2025 年前后媒体报道。票价为 2026 年公开口径，可能变动；「S$1,200 万」为 1977 年建成价。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="map-legend">
+          <span><span class="dot" style="background:#1668A8;"></span> 新加坡科学馆现址（裕廊东）</span>
+          <span><span class="dot" style="background:#F4B83E;"></span> 主馆 · 万象馆 · KidsSTOP 等馆区</span>
+        </div>
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+          <rect width="900" height="600" fill="#0A1628" rx="12"/>
+          <text x="450" y="32" fill="#F4B83E" font-family="Playfair Display,serif" font-size="16" text-anchor="middle" font-weight="600">新加坡科学馆 · 裕廊东现址空间结构示意</text>
+          <line x1="60" y1="52" x2="840" y2="52" stroke="#F4B83E" stroke-width="0.5" opacity="0.3"/>
+
+          <!-- 主馆：中庭与各展馆 -->
+          <rect x="70" y="120" width="520" height="300" rx="8" fill="#1668A8" opacity="0.22" stroke="#57A6DC" stroke-width="1.5"/>
+          <text x="330" y="148" fill="#fff" text-anchor="middle" font-size="15" font-family="DM Sans,sans-serif" font-weight="600">主馆 · 中庭 + 常设展馆</text>
+          <text x="330" y="168" fill="rgba(255,255,255,0.55)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">14 个展馆 · 千余件互动展品 · 现场科学演示</text>
+
+          <g font-family="DM Sans,sans-serif" font-size="9">
+            <rect x="90" y="200" width="150" height="46" rx="3" fill="#0B3A6B" opacity="0.85"/><text x="165" y="222" fill="#fff" text-anchor="middle">入口大厅 / 视觉错觉</text><text x="165" y="237" fill="rgba(255,255,255,0.6)" text-anchor="middle">The Mind's Eye</text>
+            <rect x="255" y="200" width="150" height="46" rx="3" fill="#0B3A6B" opacity="0.85"/><text x="330" y="222" fill="#fff" text-anchor="middle">镜面迷宫 Hall A</text><text x="330" y="237" fill="rgba(255,255,255,0.6)" text-anchor="middle">105 面镜 · 亚洲最大</text>
+            <rect x="420" y="200" width="150" height="46" rx="3" fill="#0B3A6B" opacity="0.85"/><text x="495" y="222" fill="#fff" text-anchor="middle">恐惧的科学 Hall B</text><text x="495" y="237" fill="rgba(255,255,255,0.6)" text-anchor="middle">Phobia²</text>
+            <rect x="90" y="270" width="220" height="46" rx="3" fill="#0B3A6B" opacity="0.85"/><text x="200" y="292" fill="#fff" text-anchor="middle">更多常设展馆</text><text x="200" y="307" fill="rgba(255,255,255,0.6)" text-anchor="middle">太空 · 生命 · 地球 · 技术等</text>
+            <rect x="325" y="270" width="245" height="46" rx="3" fill="#0B3A6B" opacity="0.85"/><text x="447" y="292" fill="#fff" text-anchor="middle">演示剧场 / 特展空间</text><text x="447" y="307" fill="rgba(255,255,255,0.6)" text-anchor="middle">特斯拉线圈 · 火龙卷 · 临展</text>
+          </g>
+          <text x="330" y="400" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">现馆园区设有多个人行出入口，主体面向裕廊市政厅路一侧</text>
+
+          <!-- 万象馆：穹顶 -->
+          <circle cx="720" cy="230" r="62" fill="#F4B83E" opacity="0.16" stroke="#F4B83E" stroke-width="1.5"/>
+          <text x="720" y="222" fill="#F4B83E" text-anchor="middle" font-size="13" font-family="DM Sans,sans-serif" font-weight="600">万象馆</text>
+          <text x="720" y="240" fill="rgba(255,255,255,0.7)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Omni-Theatre</text>
+          <text x="720" y="256" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">8K 3D 穹顶 · 23 米</text>
+
+          <!-- 雪城：独立入场 -->
+          <rect x="600" y="380" width="240" height="62" rx="4" fill="none" stroke="#E8485A" stroke-width="1" stroke-dasharray="5,4" opacity="0.6"/>
+          <text x="720" y="408" fill="rgba(232,72,90,0.9)" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif">雪城 Snow City</text>
+          <text x="720" y="426" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">新加坡首个常设室内雪乐园 · 独立入场</text>
+
+          <!-- KidsSTOP -->
+          <rect x="70" y="450" width="210" height="62" rx="4" fill="#2E7D32" opacity="0.2" stroke="#4CAF50" stroke-width="1"/>
+          <text x="175" y="478" fill="#A5D6A7" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif">KidsSTOP 儿童科学馆</text>
+          <text x="175" y="496" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">2014 · 面向 18 个月至 8 岁</text>
+
+          <!-- 户外园区 -->
+          <rect x="330" y="460" width="210" height="52" rx="4" fill="#2E7D32" opacity="0.14" stroke="#4CAF50" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="435" y="484" fill="#A5D6A7" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif">户外园区</text>
+          <text x="435" y="500" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">动能花园 · 生态园 · 水力坊</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(858, 86)">
+            <polygon points="0,-16 4,-2 0,-5 -4,-2" fill="#F4B83E"/>
+            <polygon points="0,16 4,2 0,5 -4,2" fill="#5A6A80"/>
+            <text x="0" y="-20" text-anchor="middle" fill="#F4B83E" font-size="10" font-family="DM Sans,sans-serif">N</text>
+          </g>
+
+          <!-- 图例 -->
+          <rect x="140" y="540" width="620" height="42" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+          <rect x="165" y="554" width="12" height="12" fill="#1668A8" opacity="0.7" rx="1"/>
+          <text x="185" y="565" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">主馆建筑</text>
+          <circle cx="316" cy="560" r="6" fill="#F4B83E" opacity="0.5"/>
+          <text x="332" y="565" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">万象馆穹顶</text>
+          <rect x="452" y="554" width="12" height="12" fill="#2E7D32" opacity="0.6" rx="1"/>
+          <text x="472" y="565" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">儿童馆 / 户外园区</text>
+          <rect x="622" y="554" width="12" height="12" fill="none" stroke="#E8485A" stroke-width="1" rx="1"/>
+          <text x="642" y="565" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">雪城（独立入场）</text>
+          <text x="450" y="586" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="8" font-family="DM Sans,sans-serif">布局为空间示意，非精确比例 · 新馆迁址后本园区将交还重新开发</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>主馆常设展馆</h3><p>以中庭为中心串接多个展厅，逾千件互动展品覆盖物理、生命、地球、太空与技术等主题。招牌内容含恐惧的科学 Phobia²（心理与生理层面的恐惧体验）与亚洲最大镜面迷宫等。</p></div>
+      <div class="card"><h3>万象馆 Omni-Theatre</h3><p>1987 年建成的穹顶影院，历经升级后为东南亚首个 8K 3D 数字穹顶，23 米倾斜穹顶配环绕立体声，可切换数字天文馆模式，播放太空与自然主题节目。</p></div>
+      <div class="card"><h3>KidsSTOP 儿童科学馆</h3><p>2014 年开放的儿童科学空间，面向 18 个月至 8 岁。以角色扮演与生活场景切入科学，让孩子在「玩职业」里接触物理与逻辑，是科学馆的分龄设计试验场。</p></div>
+      <div class="card"><h3>现场科学演示</h3><p>科学馆的「剧场传统」：每日多场定时演示，特斯拉线圈在室内劈出闪电，火龙卷在特制烟囱里升腾数层楼高，以高能场面把抽象电学与流体概念当场演给你看。</p></div>
+      <div class="card"><h3>户外园区</h3><p>约 2 万㎡ 户外展区：动能花园 Kinetic Garden 的大型动力学互动装置、生态园 Ecogarden 的植物与昆虫观察、水力坊 Waterworks 的水上装置，适合低龄与天气晴好时段。</p></div>
+      <div class="card"><h3>雪城 Snow City</h3><p>2000 年开放的新加坡首个常设室内雪乐园，位于馆区邻近、独立入场。常年造雪的坡道与雪场，是热带新加坡少见的下雪体验，常与科学馆串联成一整天的亲子行程。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT & CONSTRUCTION TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1969</div><div class="timeline-content"><h4>政府决定另建科学教育机构</h4><p>国家博物馆转型为艺术与历史博物馆后，政府依科学理事会的建议筹建专职科技教育场馆，为新加坡科学馆奠基。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1977.12.10</div><div class="timeline-content"><h4>现馆开幕</h4><p>主馆落成开幕，总造价约 S$1,200 万，由本土建筑师胡国钊的方案胜出。以「动手探究」理念开馆，成为亚洲较早的互动式科学馆。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1987.12.10</div><div class="timeline-content"><h4>万象馆穹顶影院启用</h4><p>建馆十周年之际，东南亚首个 IMAX Dome 穹顶影院万象馆揭幕，由时任总统黄金辉主持，是本地大画幅观影与天文放映的起点。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1989</div><div class="timeline-content"><h4>馆区天文台设立</h4><p>在馆区增设天文台，面向公众观星与天文科普，延续至今的观星传统。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1998–2003</div><div class="timeline-content"><h4>14 个展馆全面整修</h4><p>对全部常设展馆进行系统翻新，更新展项与展陈手段。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2000</div><div class="timeline-content"><h4>雪城 Snow City 开放</h4><p>新加坡首个常设室内雪乐园落地馆区邻近，独立入场。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2007.12</div><div class="timeline-content"><h4>更名 Science Centre Singapore</h4><p>建馆 30 周年之际启用现英文名，进一步确立国家级科学教育机构定位。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2014</div><div class="timeline-content"><h4>KidsSTOP 儿童科学馆开幕</h4><p>面向 18 个月至 8 岁的儿童科学空间启用，补足分龄教育链条。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019.05</div><div class="timeline-content"><h4>新馆设计团队敲定</h4><p>科学馆局将新馆设计合同授予 Architects 61 领衔、含扎哈·哈迪德事务所的团队，最初目标 2025 年建成。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022.12</div><div class="timeline-content"><h4>新馆开幕推迟至 2027</h4><p>受疫情与造价优化影响，官方宣布新馆改在 2027 年、建馆 50 周年时开幕，选址裕华园地铁站旁公园带。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023.11.01</div><div class="timeline-content"><h4>新馆动土</h4><p>新馆举行动土仪式，造价约 S$6.4 亿，总承建为 Obayashi Singapore，新加坡教育部长等出席。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025–2026</div><div class="timeline-content"><h4>新馆主体施工</h4><p>完成临建后进入主体结构施工阶段；科学馆方面在现馆展出新馆建筑模型与方案展示。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2027（目标）</div><div class="timeline-content"><h4>新馆开幕 · 建馆 50 周年</h4><p>计划 2027 年底开幕，KidsSTOP 将扩大一倍以上并增设新天文台；现馆持续运营至新馆就绪后交还现址。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONAL INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+
+    <div class="grid-2 reveal">
+      <div class="card"><h3>常设展门票（2026 公开口径）</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>人群</th><th>非居民</th><th>公民 / 永久居民</th></tr></thead>
+          <tbody>
+            <tr><td>成人</td><td class="num">S$12</td><td class="num">学期间平日免费 · 峰期 S$6</td></tr>
+            <tr><td>儿童（3–12 岁）</td><td class="num">S$8</td><td class="num">学期间平日免费 · 峰期 S$4</td></tr>
+            <tr><td>年长（60 岁+）</td><td class="num">S$12</td><td class="num">峰期 S$4</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">峰期含周末、公共假日与学校假期；需提前网上预约，现场不设售票。价格以馆方公告为准。</p>
+      </div>
+      <div class="card"><h3>分项收费与开放时间</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>项目</th><th>收费 / 时间</th></tr></thead>
+          <tbody>
+            <tr><td>万象馆 Omni-Theatre</td><td class="num">约 S$14 / 场 · 另购票预约</td></tr>
+            <tr><td>KidsSTOP（儿童）</td><td class="num">峰期 S$5 / 淡期 S$2</td></tr>
+            <tr><td>镜面迷宫</td><td class="num">含于常设展门票</td></tr>
+            <tr><td>开放时间</td><td class="num">周二–五 10:00–17:00</td></tr>
+            <tr><td>休馆日</td><td class="num">周一（公共与学校假期除外）</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">周六、周日与学校假日常延至 18:00 闭馆。</p>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>运营特点与客流结构</h3>
+      <p>科学馆年均接待超过 100 万人次，是新加坡公民教育体系之外的科普主阵地，也被本地家庭视为周末常去的「放电型」目的地。运营端有三条主线：其一是常设展加定时科学演示的「日日更新」，把单次到访做成半日乃至全天的行程；其二是学校团体与全国性竞赛（科学与工程类赛事、青年科学院等），让场馆承担国民 STEM 教育职能；其三是高频轮换的临时特展与主题活动（2024 年前后有 BTS 艺术展、NASA 主题 VR 体验等），吸引非核心客群反复回访。门票实行「公民与游客双轨」定价——新加坡公民与永久居民平日免费、游客全价——既是社会福利设计，也把本地客流与入境游客客流区隔管理。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>千余件互动展品</h3><p><span class="f-mono">1,000+ interactive exhibits</span><br>分布于 14 个常设展馆<br>「动手探究」展陈理念<br>半世纪持续更新的展项体系</p></div>
+      <div class="card"><h3>万象馆 8K 穹顶</h3><p><span class="f-mono">Omni-Theatre</span><br>23 米穹顶 · 221 座<br>2015 年由模拟 IMAX 换装 Digistar 5 8K 数字系统<br>兼数字天文馆与天文台</p></div>
+      <div class="card"><h3>亚洲最大镜面迷宫</h3><p><span class="f-mono">Professor Crackitt's Light Fantastic</span><br>105 面镜 · 真人尺寸迷宫<br>光学错觉与寻路结合<br>含于常设展门票的招牌展项</p></div>
+      <div class="card"><h3>高能现场演示</h3><p><span class="f-mono">Energy Titans / Fire Tornado</span><br>特斯拉线圈室内放电<br>火龙卷烟囱实验<br>每日定时排片的高能科学秀</p></div>
+      <div class="card"><h3>分龄儿童教育</h3><p><span class="f-mono">KidsSTOP™</span><br>2014 · 18 个月至 8 岁<br>角色扮演式科学启蒙<br>新馆将扩大至两倍以上</p></div>
+      <div class="card"><h3>天文观星传统</h3><p><span class="f-mono">Astronomy</span><br>1989 年馆区天文台设立<br>本地天文科普的长期传统<br>新馆将新建天文台接续</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>雪城 Snow City</h3><p>2000 年开放的新加坡首个常设室内雪乐园，紧邻馆区、独立入场，常年造雪；常见「科学馆 + 雪城」组合票，撑起一整天的亲子行程。</p></div>
+      <div class="card"><h3>餐饮与零售</h3><p>主馆中庭与附馆设轻食、餐厅与纪念品商店；万象馆入口一带集中放映配套；馆区整体适合半日以上的停留动线。</p></div>
+      <div class="card"><h3>可达与停车</h3><p>距裕廊东地铁站（东西线 / 南北线换乘）步行约 10 分钟，邻近巴士网络与多层停车场，自驾与公共交通都便利。</p></div>
+      <div class="card"><h3>无障碍服务</h3><p>馆区提供轮椅通道与无障碍卫生间，万象馆亦设有无障碍座位区，kids 推车可入馆区。</p></div>
+      <div class="card"><h3>裕廊湖区联动</h3><p>现馆毗邻裕廊湖花园等绿地；迁址后的新馆将直接嵌入裕廊湖区公园带，成为区域「科学 + 自然」目的地的一部分。</p></div>
+      <div class="card"><h3>新馆配套（规划）</h3><p>新馆将增设数字制造实验室、创客空间、屋顶花园、30 米宽室外活动广场与室外剧场，并规划夜间 STEM 节目，配套从「白天场馆」升级为全天候目的地。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>裕廊湖区新馆施工推进（2025–2026）</h3><p>新馆于 2023 年 11 月 1 日动土后进入主体施工阶段，总承建为 Obayashi Singapore。馆方在现馆公开展示新馆建筑模型与「Wonderfully Yours」方案展。</p></div>
+      <div class="card"><h3>开幕瞄准建馆 50 周年</h3><p>新馆目标 2027 年底开幕，恰逢科学馆 1977 年建馆 50 周年。KidsSTOP 儿童馆将扩大至两倍以上，并规划全新天文台。</p></div>
+      <div class="card"><h3>现馆持续运营至搬迁</h3><p>裕廊东现馆将继续运营至新馆就绪，万象馆 8K 穹顶影院与雪城等照常服务；现址日后将交还重新开发。</p></div>
+      <div class="card"><h3>新馆设计看点</h3><p>扎哈·哈迪德建筑事务所方案：五个互锁矩形体量「漂浮」于公园带，大面积单片眼镜式观景窗面向裕廊湖；建筑以光伏屋顶、绿化隔热、自然通风冲击超低能耗绿建铂金认证，目标节能四成以上。</p></div>
+      <div class="card"><h3>STEM 节与公众活动</h3><p>科学馆持续承办大型公众科学节庆（如 2026 年 8 月的 STEM 节），以路演、比赛与夜间节目扩大覆盖；此类活动也常在万象馆、剧场等空间排片。</p></div>
+      <div class="card"><h3>从场馆到区域引擎</h3><p>新馆是裕廊湖区（新加坡「第二 CBD」）的锚点文化项目之一，与裕廊湖花园、湖畔社区共同构成西区升级的公共节点，运营半径将从单一场馆延展到湖区目的地。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+
+    <div class="resource-group reveal">
+      <h4>官方来源</h4>
+      <ul>
+        <li><a href="https://www.science.edu.sg/" target="_blank" rel="noopener">新加坡科学馆 — 官方网站</a> <span class="tag">官网</span></li>
+        <li><a href="https://www.moe.gov.sg/news/press-releases/20231101-groundbreaking-ceremony-for-new-science-centre" target="_blank" rel="noopener">新加坡教育部 MOE — 新馆动土新闻稿</a> <span class="tag">官方</span></li>
+        <li><a href="https://tickets.science.edu.sg/attraction/science-centre-singapore-57974" target="_blank" rel="noopener">科学馆官方票务 — 科学馆入口</a> <span class="tag">官方</span></li>
+      </ul>
+    </div>
+
+    <div class="resource-group reveal">
+      <h4>维基与百科</h4>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Science_Centre_Singapore" target="_blank" rel="noopener">Wikipedia — Science Centre Singapore</a> <span class="tag">百科</span></li>
+        <li><a href="https://en.wikipedia.org/wiki/Omni-Theatre,_Science_Centre_Singapore" target="_blank" rel="noopener">Wikipedia — Omni-Theatre, Science Centre Singapore</a> <span class="tag">百科</span></li>
+        <li><a href="https://commons.wikimedia.org/wiki/Category:Science_Centre_Singapore" target="_blank" rel="noopener">Wikimedia Commons — 科学馆图片集</a> <span class="tag">图库</span></li>
+      </ul>
+    </div>
+
+    <div class="resource-group reveal">
+      <h4>行业与新闻报道</h4>
+      <ul>
+        <li><a href="https://www.channelnewsasia.com/singapore/singapore-science-centre-jurong-lake-district-design-opening-2027-5597961" target="_blank" rel="noopener">CNA — 新馆设计公布、开幕推迟至 2027</a> <span class="tag">报道</span></li>
+        <li><a href="https://www.straitstimes.com/singapore/five-highlights-to-look-out-for-at-the-new-science-centre" target="_blank" rel="noopener">海峡时报 — 新科学馆五大看点</a> <span class="tag">报道</span></li>
+        <li><a href="https://constructionreviewonline.com/science-centre-singapore-project-valued-at-sg-639-50m-is-underway/" target="_blank" rel="noopener">Construction Review — 新馆造价与施工报道</a> <span class="tag">行业</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (Overseas: ESRI ArcGIS + WGS-84) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+  var tilesLoaded = false;
+
+  var map = L.map('parkmap', {
+    center: [1.332897, 103.735993],
+    zoom: 16,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>',
+    maxZoom: 19
+  });
+
+  tileLayer.on('load', function() {
+    tilesLoaded = true;
+    clearTimeout(tileTimer);
+    fallback.style.display = 'none';
+  });
+
+  tileLayer.addTo(map);
+
+  var tileTimer = setTimeout(function() {
+    if (!tilesLoaded) fallback.style.display = 'block';
+  }, 8000);
+
+  // Markers
+  var blueIcon = L.divIcon({className: 'custom-marker', html: '<div style="background:#1668A8;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>', iconSize: [14,14], iconAnchor: [7,7]});
+
+  L.marker([1.332897, 103.735993], {icon: blueIcon}).addTo(map)
+    .bindPopup('<b>新加坡科学馆</b><br>Science Centre Singapore<br>15 Science Centre Rd · 1977 年开幕');
+
+  // Fit bounds
+  var bounds = L.latLngBounds([
+    [1.3312, 103.7338],
+    [1.3346, 103.7382]
+  ]);
+  map.fitBounds(bounds, {padding: [20, 20]});
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+<footer class="footer"><p>张走走的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy">GitHub</a> 托管</p></footer>
+</body>
+</html>

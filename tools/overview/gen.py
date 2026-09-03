@@ -104,6 +104,7 @@ for kind,title,lst in organized():
 
 n_annual = len([r for r in rows if (r['chip'].startswith('TEA 20')) or (r['chip'][:4].isdigit() and not any(k in r['chip'] for k in ['估','预','累计','商场','合计','四园','整体','含本园','未标','峰值','高峰','展期','前十月','过夜','容量','计划','规划','接待上限','入住率','国庆','暑期','非年度']))])
 n_pph = len([r for r in rows if r['pph']])
+cnt = len(rows)
 
 CSS = """
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -172,9 +173,9 @@ doc = """<!DOCTYPE html>
   <a class="back" href="index.html">← 返回首页</a>
   <div class="header-inner">
     <h1>案例总览</h1>
-    <p class="sub">71 个已上线案例一表纵览：单园客流（尽量取年度实值，非年度口径一律单独标注）+ 娱乐值 PPH（全园设施理论小时载客总量）。客流值取自各案例页已核实研究，凡该园登上 TEA《2024 全球体验指数》榜单的，一律以 TEA 2024 精确值统一口径。</p>
+    <p class="sub">%d 个已上线案例一表纵览：单园客流（尽量取年度实值，非年度口径一律单独标注）+ 娱乐值 PPH（全园设施理论小时载客总量）。客流值取自各案例页已核实研究，凡该园登上 TEA《2024 全球体验指数》榜单的，一律以 TEA 2024 精确值统一口径。</p>
     <div class="stats">
-      <span class="stat">71 案例</span>
+      <span class="stat">%d 案例</span>
       <span class="stat">%d 例有单园年度客流</span>
       <span class="stat">%d 例有 PPH 实值</span>
     </div>
@@ -194,7 +195,7 @@ doc = """<!DOCTYPE html>
       <th class="c-desc">关键描述</th>
     </tr></thead>
     <tbody>
-""" % (n_annual, n_pph) + body + """
+""" % (cnt, cnt, n_annual, n_pph) + body + """
     </tbody>
   </table>
   </div>

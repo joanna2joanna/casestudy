@@ -147,12 +147,12 @@ html { font-size: 17px; }
     <!-- Map (NO reveal class — 红线) -->
     <div>
       <div class="card" style="padding:0;overflow:hidden;">
-        <div class="map-legend"><span><span class="dot" style="background:#4A2C7A"></span> 主题乐园</span><span><span class="dot" style="background:#1FA7C4"></span> 水乐园</span><span><span class="dot" style="background:#F5A623"></span> 商圈</span><span><span class="dot" style="background:#9AA5B1"></span> 体育设施</span></div>
+        <div class="map-legend"><span><span class="dot" style="background:#4A2C7A"></span> 主题乐园</span><span><span class="dot" style="background:#1FA7C4"></span> 水乐园</span><span><span class="dot" style="background:#F5A623"></span> 商圈</span><span><span class="dot" style="background:#9AA5B1"></span> 体育设施</span><span><span class="dot" style="background:#C93D74"></span> 酒店 / 营地</span></div>
         <div id="parkmap"></div>
         <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
       </div>
     </div>
-    <p class="f-caption" style="margin-top:0.5rem;">全区卫星示意 · 坐标来源 OpenStreetMap 实测（WGS-84）· 点击芯片查看园区详情 · 四园之间是大片度假酒店、高尔夫球场与保育绿地</p>
+    <p class="f-caption" style="margin-top:0.5rem;">全区卫星示意 · 坐标来源 OpenStreetMap 实测（WGS-84）· 点击芯片查看园区与酒店详情 · 玫红为住宿/营地代表点（取各物业中心，示意）· 中南带适中酒店、动物王国西翼与 Disney Springs 外围合作酒店见「住宿与营地」全名录，未在地图逐个标注 · 四园之间是大片度假酒店、高尔夫球场与保育绿地</p>
 
     <!-- SVG Spatial Structure Diagram -->
     <div class="reveal" style="margin-top:1.5rem;">
@@ -186,6 +186,18 @@ html { font-size: 17px; }
 <text x="1006" y="160" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9.5" fill="#EBC69A">当代 · 波利尼西亚 · 大佛罗里达</text>
 <circle cx="908" cy="149" r="5" fill="#F5A623"/>
 <circle cx="1104" cy="149" r="5" fill="#F5A623"/>
+<!-- Wilderness Lodge + Fort Wilderness（湾湖岸住宿营地块） -->
+<rect x="150" y="392" width="230" height="66" rx="10" fill="#E8A33D" opacity="0.13" stroke="#E8A33D" stroke-width="1.3" stroke-dasharray="6,4"/>
+<text x="265" y="414" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11.5" font-weight="700" fill="#FFD9A0">荒野旅舍 · 荒野营地</text>
+<text x="265" y="430" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#EBC69A">Wilderness Lodge · Fort Wilderness</text>
+<text x="265" y="446" text-anchor="middle" font-family="DM Mono,monospace" font-size="8.5" fill="#D9B066">约 800 营位 · DVC 木屋 350+ · 骑马垂钓</text>
+<circle cx="265" cy="392" r="5" fill="#F5A623"/>
+<!-- EPCOT 湖畔豪圈 -->
+<rect x="592" y="456" width="168" height="54" rx="9" fill="#E8A33D" opacity="0.12" stroke="#E8A33D" stroke-width="1.3" stroke-dasharray="6,4"/>
+<text x="676" y="475" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#FFD9A0">EPCOT 湖畔豪圈</text>
+<text x="676" y="491" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="8.5" fill="#EBC69A">游艇 · 海滩 · 海滨步道</text>
+<text x="676" y="504" text-anchor="middle" font-family="DM Mono,monospace" font-size="8" fill="#D9B066">步行至 EPCOT · 影城</text>
+<circle cx="676" cy="456" r="5" fill="#F5A623"/>
 <!-- EPCOT node -->
 <rect x="752" y="352" width="196" height="78" rx="12" fill="#7C5BC0" opacity="0.18" stroke="#7C5BC0" stroke-width="1.5" stroke-dasharray="6,4"/>
 <text x="850" y="384" text-anchor="middle" font-family="Playfair Display,serif" font-size="15" font-weight="700" fill="#FFFFFF">EPCOT 艾波卡特</text>
@@ -604,6 +616,15 @@ document.addEventListener('DOMContentLoaded', function() {
   // 商圈与设施
   L.marker([28.3712, -81.5184], { icon: zoneIcon('#F5A623', 'Disney Springs') }).addTo(map).bindPopup('<b>Disney Springs</b><br>商圈四区 · 2015 更名 · 免费入场');
   L.marker([28.3377, -81.5575], { icon: zoneIcon('#9AA5B1', 'ESPN 体育城') }).addTo(map).bindPopup('<b>ESPN 体育城</b><br>1997 年 · 赛事与训练场群');
+
+  // 核心区住宿 / 营地（代表点取 OSM 物业中心）
+  L.marker([28.4164, -81.5737], { icon: zoneIcon('#C93D74', '当代 · 湾湖塔') }).addTo(map).bindPopup('<b>当代 Contemporary + 湾湖塔 Bay Lake Tower</b><br>1971 · 单轨穿楼而过 · 塔楼为 2009 年 DVC');
+  L.marker([28.4113, -81.5877], { icon: zoneIcon('#C93D74', '大佛罗里达') }).addTo(map).bindPopup('<b>大佛罗里达 Grand Floridian</b><br>1988 · 七海湖畔旗舰 · 单轨与渡船直达魔法王国');
+  L.marker([28.4055, -81.5854], { icon: zoneIcon('#C93D74', '波利尼西亚') }).addTo(map).bindPopup('<b>波利尼西亚村落 Polynesian Village</b><br>1971 · 七海湖畔 · 水上草屋房型');
+  L.marker([28.4095, -81.5724], { icon: zoneIcon('#C93D74', '荒野旅舍') }).addTo(map).bindPopup('<b>荒野旅舍 Wilderness Lodge</b><br>1994 · 湾湖畔木构大旅馆 · 邻近 DVC 博尔德岭/铜溪');
+  L.marker([28.4036, -81.5568], { icon: zoneIcon('#C93D74', '荒野营地 Fort') }).addTo(map).bindPopup('<b>荒野营地 Fort Wilderness</b><br>营地约 800 营位 · 2024-07 起 DVC 木屋 350+ · 骑马/垂钓/篝火 · 渡船抵魔法王国');
+  L.marker([28.3688, -81.5576], { icon: zoneIcon('#C93D74', 'EPCOT 湖畔豪圈') }).addTo(map).bindPopup('<b>EPCOT 湖畔豪圈</b><br>游艇 · 海滩 · 海滨步道 · 天鹅/海豚 · 步行至 EPCOT 与影城');
+  L.marker([28.3580, -81.5455], { icon: zoneIcon('#C93D74', 'Skyliner 沿线') }).addTo(map).bindPopup('<b>Skyliner 沿线酒店</b><br>里维埃拉 · 加勒比海滩 · 动画艺术 · 流行世纪 · 缆车直连 EPCOT 与影城');
 
   // Fit bounds (whole district, illustrative)
   var bounds = L.latLngBounds([

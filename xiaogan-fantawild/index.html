@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>孝感方特旅游区 — 华中首座恐龙主题方特乐园 · 一陆一水一酒店</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #1E6B45;
+  --clr-primary-light: #3E9A68;
+  --clr-primary-dark: #0C2E1E;
+  --clr-accent: #E39B2C;
+}
+
+.hero {
+  background: linear-gradient(160deg, #071A11 0%, #0C2E1E 38%, #1E6B45 68%, #3E9A68 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 18% 82%, rgba(227,155,44,0.20) 0%, transparent 55%),
+              radial-gradient(ellipse at 82% 18%, rgba(94,190,140,0.16) 0%, transparent 50%);
+}
+
+#parkmap { width: 100%; height: 520px; border-radius: var(--radius-lg); z-index: 0; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+
+.zone-card { border-left: 4px solid var(--clr-accent); padding: 1rem 1.2rem; background: var(--clr-card-bg); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.zone-card h4 { font-family: 'DM Sans', sans-serif; font-size: 1.02rem; font-weight: 600; color: var(--clr-primary-dark); }
+.zone-card p { font-size: 0.87rem; color: var(--clr-text-secondary); margin-top: 0.3rem; }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>孝感方特旅游区</h1>
+    <p class="hero-subtitle">2026年6月17日开园，华强方特与孝感市政府共同投资建设。一陆一水一酒店：恐龙主题的方特狂野大陆、水上乐园，以及华中首座熊出没主题酒店。</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">2026</div><div class="kpi-label">开园年份</div></div>
+      <div class="kpi-card"><div class="kpi-number">约75.7</div><div class="kpi-label">公顷 · 规划总用地</div></div>
+      <div class="kpi-card"><div class="kpi-number">¥43亿</div><div class="kpi-label">计划总投资</div></div>
+      <div class="kpi-card"><div class="kpi-number">400万</div><div class="kpi-label">人次 · 规划年接待能力</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目名称</h3><p class="f-body">孝感方特旅游区（Xiaogan Fantawild Resort）</p><p class="f-caption">华强方特与孝感市人民政府共同投资建设；对外统一口径为「一陆一水一酒店」</p></div>
+      <div class="card"><h3>开园时间</h3><p class="f-body">2026年6月17日</p><p class="f-caption">三大板块同步开放；2023年2月签约，同年7月28日在临空经济区开工</p></div>
+      <div class="card"><h3>地理位置</h3><p class="f-body">湖北省孝感市临空经济区（孝南区欢乐大道88号）</p><p class="f-caption">距武汉天河国际机场约16公里、汉口火车站约30公里</p></div>
+      <div class="card"><h3>项目构成</h3><p class="f-body">方特狂野大陆 · 方特水上乐园 · 熊出没酒店</p><p class="f-caption">狂野大陆核心区约39.9公顷，水上乐园核心区约7.6公顷</p></div>
+      <div class="card"><h3>票价（开园口径）</h3><p class="f-body">狂野大陆标准票 ¥280 · 水上乐园标准票 ¥180</p><p class="f-caption">小童与老人优待票分别为 ¥199、¥120；早鸟预售另计</p></div>
+      <div class="card"><h3>主题定位</h3><p class="f-body">华中首个恐龙主题方特乐园</p><p class="f-caption">狂野大陆五大主题区：科研基地 / 恐龙山谷 / 龙坛圣地 / 古夏部落 / 云梦古城</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3>
+      <p class="f-body">孝感方特旅游区落在孝感市临空经济区，距天河机场约16公里，是华强方特在湖北开出的第二座方特乐园——首座为2019年9月开园的荆州方特东方神画。项目由三个板块拼成：恐龙主题的方特狂野大陆划出科研基地、恐龙山谷、龙坛圣地、古夏部落、云梦古城五区，配9项室内高科技项目与30余项室外游乐设备；方特水上乐园以《熊出没·原始时代》为创意蓝本，规划15个合家欢互动项目；熊出没酒店是华中首座熊出没主题酒店，396间主题客房。园区2023年2月签约、7月28日开工，计划总投资43亿元，官方口径建设用时约两年。孝感方特的客群定位与荆州园区错开：荆州主打文化与长线度假，孝感主打亲子探秘与当天往返的微度假，两者在湖北形成南文北探的分工。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <p class="f-body">设计沿着恐龙与熊出没两条 IP 线铺开。狂野大陆承担恐龙叙事，从科研基地的发掘现场一路走到古夏部落与云梦古城，把史前场景和孝感本地的古云梦泽地名接在一起。水上乐园取《熊出没·原始时代》当创意蓝本，把电影里的原始丛林场景搬进戏水区，滑道与水寨都套在 IP 外壳里。酒店承接过夜，把熊出没形象做成396间主题客房。三个板块共用一条动线：狂野大陆的恐龙叙事、水上乐园的亲子戏水、酒店的住宿，覆盖当天往返和短住两种客群。</p>
+    </div>
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>冲上云霄</h3><p class="f-body">国产 LSM 电磁弹射过山车</p><p class="f-caption">金马游乐自主研发制造，轨道全长超800米、反转4次、每列承载20人，双车交替运行。</p></div>
+      <div class="card"><h3>飞翔</h3><p class="f-body">大型裸眼5D球幕飞行骑乘</p><p class="f-caption">全园顶流项目之一，游客悬空进入球幕画面；园方未公布球幕直径等硬性参数。</p></div>
+      <div class="card"><h3>飞上蓝天</h3><p class="f-body">360°魔球剧场</p><p class="f-caption">可容纳约600人同场观看；同区另有《恐龙危机》室内轨道动感项目。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>基础</td><td>开园时间</td><td class="num">2026年6月17日</td><td>三大板块同步开放</td></tr>
+          <tr><td>基础</td><td>位置</td><td class="num">孝感市临空经济区</td><td>孝南区欢乐大道88号</td></tr>
+          <tr><td>规模</td><td>规划总用地</td><td class="num">约75.7公顷</td><td>另有约70.4公顷口径，见页面末尾说明</td></tr>
+          <tr><td>规模</td><td>狂野大陆核心区</td><td class="num">约39.9公顷</td><td>恐龙主题乐园</td></tr>
+          <tr><td>规模</td><td>水上乐园核心区</td><td class="num">约7.6公顷</td><td>建设案名「熊出没水上运动基地」</td></tr>
+          <tr><td>投资</td><td>计划总投资</td><td class="num">¥43亿元</td><td>签约与开工阶段口径，非决算数</td></tr>
+          <tr><td>分区</td><td>狂野大陆主题区</td><td class="num">5大区</td><td>科研基地 / 恐龙山谷 / 龙坛圣地 / 古夏部落 / 云梦古城</td></tr>
+          <tr><td>设施</td><td>狂野大陆项目数</td><td class="num">9项室内 + 30余项室外</td><td>另有数百处景观</td></tr>
+          <tr><td>设施</td><td>水上乐园项目数</td><td class="num">15个合家欢互动项目</td><td>大喇叭 / 超级碗 / 飞跃河谷 / 飓风湾等</td></tr>
+          <tr><td>设施</td><td>冲上云霄过山车</td><td class="num">轨道超800m · 反转4次</td><td>金马游乐制造，厂家口径高约30m、最高90km/h</td></tr>
+          <tr><td>住宿</td><td>熊出没酒店客房</td><td class="num">396间</td><td>华中首座熊出没主题酒店</td></tr>
+          <tr><td>住宿</td><td>酒店餐饮配套</td><td class="num">餐位超800个</td><td>含无柱大宴会厅，可容纳800余人</td></tr>
+          <tr><td>门票</td><td>狂野大陆标准票</td><td class="num">¥280</td><td>优待票 ¥199</td></tr>
+          <tr><td>门票</td><td>水上乐园标准票</td><td class="num">¥180</td><td>优待票 ¥120</td></tr>
+          <tr><td>客流</td><td>规划年接待能力</td><td class="num">400万人次</td><td>狂野大陆约300万 + 水上乐园约100万，可研口径</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">综合孝感市政府官网、新华社、央广网、湖北日报与华强方特公开资料整理；投资额为计划口径，面积按公制换算。数据截至2026年9月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局：一陆一水一酒店</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#1E6B45;"></span> 方特狂野大陆</span>
+        <span><span class="dot" style="background:#2E8FC4;"></span> 方特水上乐园</span>
+        <span><span class="dot" style="background:#C9803A;"></span> 熊出没酒店</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+      <p class="f-caption" style="margin-top:0.5rem;">坐标经高德POI核对（GCJ-02，与高德瓦片同坐标系，直接显示）；金色虚线为园区范围示意圈。右上角图层按钮可切换街道图 / 卫星图。</p>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 880 620" xmlns="http://www.w3.org/2000/svg">
+          <rect width="880" height="620" fill="#0B1F15"/>
+          <text x="24" y="34" fill="#6FA88A" font-size="12" font-family="DM Mono">孝感方特旅游区 · 空间结构示意（非等比例）</text>
+          <g transform="translate(846,38)"><polygon points="0,-16 -6,5 0,0 6,5" fill="#E39B2C"/><text x="0" y="-22" fill="#E39B2C" font-size="11" font-family="DM Sans" text-anchor="middle">N</text></g>
+
+          <!-- 旅游区边界 -->
+          <rect x="52" y="60" width="776" height="500" rx="16" fill="#0F2A1C" stroke="#3E9A68" stroke-width="1" stroke-dasharray="8,6" opacity="0.9"/>
+
+          <!-- 方特狂野大陆 -->
+          <rect x="76" y="80" width="500" height="360" rx="12" fill="rgba(30,107,69,0.22)" stroke="#3E9A68" stroke-width="1.2"/>
+          <text x="326" y="106" text-anchor="middle" fill="#A8E0C4" font-size="13" font-family="DM Sans" font-weight="700">方特狂野大陆</text>
+          <text x="326" y="123" text-anchor="middle" fill="#7FBFA0" font-size="9" font-family="DM Sans">华中首个恐龙主题方特乐园</text>
+
+          <rect x="96" y="138" width="146" height="118" rx="8" fill="rgba(62,154,104,0.20)" stroke="#4FA87C" stroke-width="1"/>
+          <text x="169" y="180" text-anchor="middle" fill="#D9F0E5" font-size="11" font-family="DM Sans" font-weight="600">科研基地</text>
+          <text x="169" y="199" text-anchor="middle" fill="#9FCFB8" font-size="8" font-family="DM Sans">恐龙发掘现场</text>
+
+          <rect x="256" y="138" width="146" height="118" rx="8" fill="rgba(62,154,104,0.20)" stroke="#4FA87C" stroke-width="1"/>
+          <text x="329" y="180" text-anchor="middle" fill="#D9F0E5" font-size="11" font-family="DM Sans" font-weight="600">恐龙山谷</text>
+          <text x="329" y="199" text-anchor="middle" fill="#9FCFB8" font-size="8" font-family="DM Sans">室外游乐集中区</text>
+
+          <rect x="416" y="138" width="140" height="118" rx="8" fill="rgba(62,154,104,0.20)" stroke="#4FA87C" stroke-width="1"/>
+          <text x="486" y="180" text-anchor="middle" fill="#D9F0E5" font-size="11" font-family="DM Sans" font-weight="600">龙坛圣地</text>
+          <text x="486" y="199" text-anchor="middle" fill="#9FCFB8" font-size="8" font-family="DM Sans">主题演艺场地</text>
+
+          <rect x="96" y="270" width="224" height="152" rx="8" fill="rgba(62,154,104,0.14)" stroke="#4FA87C" stroke-width="1"/>
+          <text x="208" y="340" text-anchor="middle" fill="#D9F0E5" font-size="11" font-family="DM Sans" font-weight="600">古夏部落</text>
+          <text x="208" y="359" text-anchor="middle" fill="#9FCFB8" font-size="8" font-family="DM Sans">史前聚落场景</text>
+
+          <rect x="332" y="270" width="224" height="152" rx="8" fill="rgba(62,154,104,0.14)" stroke="#4FA87C" stroke-width="1"/>
+          <text x="444" y="340" text-anchor="middle" fill="#D9F0E5" font-size="11" font-family="DM Sans" font-weight="600">云梦古城</text>
+          <text x="444" y="359" text-anchor="middle" fill="#9FCFB8" font-size="8" font-family="DM Sans">孝感古云梦泽地名</text>
+
+          <!-- 水上乐园 -->
+          <rect x="596" y="80" width="212" height="170" rx="12" fill="rgba(46,143,196,0.20)" stroke="#2E8FC4" stroke-width="1.2"/>
+          <text x="702" y="146" text-anchor="middle" fill="#9FD2EE" font-size="12" font-family="DM Sans" font-weight="700">方特水上乐园</text>
+          <text x="702" y="166" text-anchor="middle" fill="#86BBD8" font-size="8.5" font-family="DM Sans">15个合家欢互动项目</text>
+          <text x="702" y="183" text-anchor="middle" fill="#86BBD8" font-size="8.5" font-family="DM Sans">《熊出没·原始时代》蓝本</text>
+
+          <!-- 熊出没酒店 -->
+          <rect x="596" y="270" width="212" height="170" rx="12" fill="rgba(201,128,58,0.20)" stroke="#C9803A" stroke-width="1.2"/>
+          <text x="702" y="340" text-anchor="middle" fill="#F0CB9C" font-size="12" font-family="DM Sans" font-weight="700">熊出没酒店</text>
+          <text x="702" y="360" text-anchor="middle" fill="#D9B183" font-size="8.5" font-family="DM Sans">396间主题客房</text>
+          <text x="702" y="377" text-anchor="middle" fill="#D9B183" font-size="8.5" font-family="DM Sans">华中首座熊出没主题酒店</text>
+
+          <!-- 主入口 -->
+          <rect x="76" y="462" width="732" height="52" rx="8" fill="rgba(227,155,44,0.16)" stroke="#E39B2C" stroke-width="1" stroke-dasharray="5,4"/>
+          <text x="442" y="487" text-anchor="middle" fill="#F5D9A8" font-size="11" font-family="DM Sans" font-weight="600">主入口 · 游客中心 · 商业配套</text>
+          <text x="442" y="504" text-anchor="middle" fill="#C9A876" font-size="8.5" font-family="DM Sans">孝南区欢乐大道88号</text>
+
+          <text x="440" y="583" text-anchor="middle" fill="#5C7E6C" font-size="9" font-family="DM Sans">分区名称为官方口径；各区块位置与尺度经简化，请以官方园区地图为准</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="zone-card"><h4>科研基地</h4><p>狂野大陆的入口区，以恐龙发掘现场为题铺开。室内高科技项目集中在这一带，配《飞翔》球幕飞行骑乘与《恐龙危机》室内轨道动感项目。</p></div>
+      <div class="zone-card"><h4>恐龙山谷</h4><p>室外游乐集中的一片，过山车《冲上云霄》、大摆锤、太空飞梭、勇闯恐龙谷、高空跳伞塔等设备分布于此，是园区的刺激度担当。</p></div>
+      <div class="zone-card"><h4>龙坛圣地</h4><p>主题演艺场地所在，360°魔球剧场《飞上蓝天》可容纳约600人同场观看；开园首日的仪式活动也安排在这一区。</p></div>
+      <div class="zone-card"><h4>古夏部落</h4><p>史前聚落场景，用茅屋、图腾与实景布景营造部落生活氛围，是全园拍照密度较高的区域之一。</p></div>
+      <div class="zone-card"><h4>云梦古城</h4><p>接上古云梦泽的地名脉络，把楚地水系与城郭意象做进主题包装，与前面的史前场景形成时间上的收束。</p></div>
+      <div class="zone-card"><h4>方特水上乐园</h4><p>以《熊出没·原始时代》为创意蓝本，规划15个合家欢互动项目，含《大喇叭》《超级碗》《飞跃河谷》《飓风湾》《翻江倒海》《熊出没水寨》《全家总动员》等。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2023年2月</div><div class="timeline-content"><h4>签约</h4><p>华强方特与孝感市人民政府就共建孝感方特旅游区达成合作，计划总投资43亿元。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023年7月28日</div><div class="timeline-content"><h4>开工</h4><p>项目在孝感市临空经济区开工，同期披露三个子项：方特文化科技创新示范园、熊出没水上运动基地、熊出没主题酒店。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年1月</div><div class="timeline-content"><h4>规划方案公示</h4><p>项目规划方案进入公示环节；次月发布设计服务招标，建安投资约10.2亿元。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年3月</div><div class="timeline-content"><h4>主体陆续封顶</h4><p>21个单体建筑中19个完成封顶，进入内外装与设备安装阶段。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年6月3日</div><div class="timeline-content"><h4>早鸟预售开抢</h4><p>狂野大陆特惠票低至五折，水上乐园早鸟票同期放出，预售票限开园后使用、不退不改。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年6月17日</div><div class="timeline-content"><h4>正式开园</h4><p>方特狂野大陆、方特水上乐园、熊出没酒店三大板块同步开放，成为湖北第二座开业的方特乐园、华中首座恐龙主题方特乐园。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <h3>开园首日：客流过万</h3>
+      <p class="f-body">2026年6月17日开园首日，湖北广电口径为「迎客过万」。端午假期（6月19日至21日）孝感方特是全市核心引流景区，但官方假期综述未单列方特客流数字。项目可研阶段的规划年接待能力为400万人次，其中狂野大陆约300万、水上乐园约100万，属设计值，不等于实际客流。开业至今的累计客流，公开渠道尚无可靠来源。</p>
+    </div>
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>狂野大陆票价</h3><p><span class="f-data">¥280</span> / 优待票 ¥199</p><p class="f-caption">开园标准票口径；早鸟预售阶段曾放出五折特惠。</p></div>
+      <div class="card"><h3>水上乐园票价</h3><p><span class="f-data">¥180</span> / 优待票 ¥120</p><p class="f-caption">独立售票，与狂野大陆分开计费；玩水季畅玩卡与金马年卡另售。</p></div>
+      <div class="card"><h3>酒店接待能力</h3><p><span class="f-data">396</span> 间客房</p><p class="f-caption">餐饮餐位超800个，含可容纳800余人的无柱大宴会厅，配套儿童乐园、户外泳池与室内温泉。</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;">
+      <h3>集团背景：华强方特的规模与压力</h3>
+      <p class="f-body">运营方华强方特是国内主题公园数量最多的企业。2025年公司接待游客8716.8万人次，按TEA口径居全球第二；但同一年营业收入61.5亿元、同比下降11%，归母净利润2.44亿元、同比下降65.66%，折旧摊销费用14.16亿元是主要拖累。2026年上半年营收回升到27.63亿元、同比增3.11%，归母净利润7799.96万元、同比增8.3%。孝感方特的三板块是2026年新开业项目的组成部分，也是公司在下沉市场的又一次落子。IP 侧，熊出没系列电影至2026年3月已上映12部，累计总票房约95.43亿元。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECH & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>冲上云霄</h3><p><span class="f-data">800m+</span> 轨道 · 反转4次</p><p class="f-caption">国产 LSM 电磁弹射过山车，金马游乐自主研发制造</p></div>
+      <div class="card"><h3>过山车速度</h3><p><span class="f-data">82.1～90</span> km/h</p><p class="f-caption">设施资料与厂家口径并存；高度约28.2米（厂家口径约30米）</p></div>
+      <div class="card"><h3>飞翔</h3><p><span class="f-data">裸眼5D</span> 球幕飞行</p><p class="f-caption">全园顶流项目之一，园方未公布硬性参数</p></div>
+      <div class="card"><h3>飞上蓝天</h3><p><span class="f-data">约600</span> 人 · 360°魔球剧场</p><p class="f-caption">狂野大陆的室内演艺主力</p></div>
+      <div class="card"><h3>大喇叭</h3><p><span class="f-data">19m</span> 高空俯冲</p><p class="f-caption">水上乐园招牌项目，体重需40公斤以上</p></div>
+      <div class="card"><h3>狂野大陆规模</h3><p><span class="f-data">9+30</span> 项室内外项目</p><p class="f-caption">9项室内高科技项目、30余项室外游乐项目、数百处景观</p></div>
+      <div class="card"><h3>水上乐园规模</h3><p><span class="f-data">15</span> 个互动项目</p><p class="f-caption">核心区约7.6公顷，以《熊出没·原始时代》为蓝本</p></div>
+      <div class="card"><h3>投资与用地</h3><p><span class="f-data">¥43亿</span> · 约75.7公顷</p><p class="f-caption">规划总用地与计划总投资均为签约阶段口径</p></div>
+      <div class="card"><h3>熊出没酒店</h3><p><span class="f-data">396间</span> 主题客房</p><p class="f-caption">华中首座熊出没主题酒店，含主题儿童乐园与室内温泉</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>主题住宿</h3><p class="f-body">熊出没酒店，396间主题客房</p><p class="f-caption">客房按熊出没形象分主题布置，配主题儿童乐园、户外泳池、室内温泉与健身中心。</p></div>
+      <div class="card"><h3>餐饮与会展</h3><p class="f-body">餐位超800个</p><p class="f-caption">全日制餐厅、熊熊亲子餐厅与中餐VIP包厢之外，另设可容纳800余人的无柱大宴会厅，兼顾本地婚宴与会展需求。</p></div>
+      <div class="card"><h3>交通接驳</h3><p class="f-body">临空经济区，近天河机场</p><p class="f-caption">距武汉天河国际机场约16公里、汉口火车站约30公里，自驾经孝汉大道进入临空经济区。</p></div>
+      <div class="card"><h3>区域联动</h3><p class="f-body">孝感临空经济区的文旅锚点</p><p class="f-caption">项目被定位为孝感临空经济区的一站式度假产品，与武汉都市圈的周末微度假客流直接对接。</p></div>
+      <div class="card"><h3>商业配套</h3><p class="f-body">主入口商业街与园区零售</p><p class="f-caption">主入口一侧集中布置游客中心与商业设施，各主题区内分布主题商店与快餐点位。</p></div>
+      <div class="card"><h3>季节性运营</h3><p class="f-body">水上乐园按季节开放</p><p class="f-caption">水上乐园为季节性项目，秋冬停业、次年玩水季重启；狂野大陆与酒店全年运营。出行前建议核对当日开放板块。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. NEWS ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>2026年6月17日：三板块同日开园</h3><p class="f-body">孝感方特旅游区是2026年湖北文旅的重点开业项目，开园首日客流过万。三大板块同步开放，酒店同期接客，与多数主题公园先开园、后开酒店的做法不同。</p></div>
+      <div class="card"><h3>湖北主题公园的第四张方特牌</h3><p class="f-body">官方与媒体称孝感方特为「湖北第4座方特乐园」，这一口径把荆州方特东方神画、荆州方特东方欲晓、十堰方特一并计入；若只算已开业项目，孝感是湖北第2座。湖北已建成及在建、占地超千亩的主题乐园已有6个，供给端的拥挤已经开始显现。</p></div>
+      <div class="card"><h3>集团承压下的新项目</h3><p class="f-body">华强方特2025年营收与净利润双降，折旧摊销压力明显。2026年上半年增收增利，但高科技文旅项目营收同比下滑17.45%。孝感三板块与安阳方特殷商神画同为2026年新开业项目，能否把客流转化为利润，要看开业后的实际运营。</p></div>
+      <div class="card"><h3>IP 基本盘仍在</h3><p class="f-body">熊出没系列电影至2026年3月已上映12部、累计总票房约95.43亿元，最新一部《熊出没·年年有熊》于2026年2月17日上映，第19天破10亿元。IP 的票房号召力是方特在二三线城市铺园区的底气，也是孝感酒店与水上乐园共用的内容来源。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. RESOURCES ====== -->
+<section class="section section-alt" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="reveal">
+      <div class="resource-group"><h4>官方网站</h4><ul>
+        <li><a href="https://www.fangte.com/" target="_blank" rel="noopener">华强方特集团官网</a><span class="tag">集团入口</span></li>
+        <li><a href="https://hotel.fangte.com/wap/xiaogan/introduce.shtml" target="_blank" rel="noopener">孝感熊出没酒店 · 酒店介绍</a><span class="tag">客房·餐饮·配套</span></li>
+      </ul></div>
+      <div class="resource-group"><h4>政府与官方信息</h4><ul>
+        <li><a href="https://www.xiaogan.gov.cn/zx/xgyw/202606/t20260618_580601.shtml" target="_blank" rel="noopener">孝感市人民政府 — 孝感方特旅游区精彩开园（2026-06-18）</a></li>
+        <li><a href="https://www.xiaogan.gov.cn/zx/xgyw/202606/t20260613_580078.shtml" target="_blank" rel="noopener">孝感市人民政府 — 开园前项目介绍（2026-06-13）</a></li>
+        <li><a href="https://www.news.cn/travel/20260617/e29b612aa2924456a2378376b0110e05/c.html" target="_blank" rel="noopener">新华网 — 孝感方特旅游区开园报道（2026-06-17）</a></li>
+      </ul></div>
+      <div class="resource-group"><h4>建设与投资报道</h4><ul>
+        <li><a href="http://m.cnhubei.com/content/2023-07/28/content_16298948.html" target="_blank" rel="noopener">荆楚网 — 孝感方特项目开工，计划总投资43亿元（2023-07-28）</a></li>
+        <li><a href="http://www.hbhcgt.com/qxqy/jzwlt/jzwltcyjj/zjxm/202409/t20240920_253714.shtml" target="_blank" rel="noopener">湖北环城国投 — 华强方特孝感项目情况（2024-09）</a></li>
+        <li><a href="https://finance.eastmoney.com/a/202608223850142474.html" target="_blank" rel="noopener">东方财富 — 华强方特2026年半年报要点（2026-08）</a></li>
+      </ul></div>
+      <div class="resource-group"><h4>视频</h4><ul>
+        <li><a href="https://search.bilibili.com/all?keyword=孝感方特" target="_blank" rel="noopener">B站 — 孝感方特相关视频</a></li>
+      </ul></div>
+      <p class="f-caption" style="margin-top:1.2rem;">数据核实说明：开园时间、板块构成、主题区名称、票价与酒店客房数来自孝感市政府官网、新华网、央广网与酒店官方页面；投资额43亿元为签约与开工阶段的计划口径，非审计决算，政府与企业出资比例未见公开；规划总用地75.7公顷与70.4公顷两种口径并存，页面采用权威媒体较通用的75.7公顷；过山车《冲上云霄》的高度与速度存在设施资料（28.2米 / 82.1千米每小时）与厂家口径（约30米 / 90千米每小时）两个版本，页面并列呈现。坐标经高德地图POI核对（GCJ-02），非实测。页面数据截至2026年9月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：高德 POI 返回 GCJ-02，高德瓦片同为 GCJ-02，直接使用，无需任何坐标转换
+
+var zonesGcj02 = [
+  { name: '方特狂野大陆<br><small>恐龙主题乐园 · 五大主题区</small>', lat: 30.820675, lng: 114.107957, color: '#1E6B45' },
+  { name: '方特水上乐园<br><small>《熊出没·原始时代》蓝本 · 15个项目</small>', lat: 30.818268, lng: 114.106701, color: '#2E8FC4' },
+  { name: '熊出没酒店<br><small>396间主题客房 · 华中首座</small>', lat: 30.816535, lng: 114.105581, color: '#C9803A' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([30.8195, 114.1076], 16);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesGcj02);
+
+  if (withBoundary) {
+    L.circle([30.8195, 114.1076], { radius: 600, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

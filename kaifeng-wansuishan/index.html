@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>万岁山武侠城 — 日均上千场演出的中式主题公园 · 开封</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #8C1D1D;
+  --clr-primary-light: #C0392B;
+  --clr-primary-dark: #2B0A0A;
+  --clr-accent: #D4A24C;
+}
+
+.hero {
+  background: linear-gradient(160deg, #1A0708 0%, #4A0F12 38%, #8C1D1D 68%, #C0392B 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 18% 82%, rgba(212,162,76,0.22) 0%, transparent 55%),
+              radial-gradient(ellipse at 82% 18%, rgba(192,57,43,0.18) 0%, transparent 50%);
+}
+
+#parkmap { width: 100%; height: 520px; border-radius: var(--radius-lg); z-index: 0; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+
+.zone-card { border-left: 4px solid var(--clr-accent); padding: 1rem 1.2rem; background: var(--clr-card-bg); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.zone-card h4 { font-family: 'DM Sans', sans-serif; font-size: 1.02rem; font-weight: 600; color: var(--clr-primary-dark); }
+.zone-card p { font-size: 0.87rem; color: var(--clr-text-secondary); margin-top: 0.3rem; }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>万岁山武侠城</h1>
+    <p class="hero-subtitle">2003年开园，2023年由「大宋武侠城」更名为万岁山武侠城。不靠大型游乐设备，靠3700余名演职人员与1500多名互动NPC撑起日均上千场演出，2025年入园2452.2万人次。</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">2003</div><div class="kpi-label">开园年份</div></div>
+      <div class="kpi-card"><div class="kpi-number">约33</div><div class="kpi-label">公顷 · 占地面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">¥100</div><div class="kpi-label">全价票 · 含三日不限次入园</div></div>
+      <div class="kpi-card"><div class="kpi-number">2452万</div><div class="kpi-label">人次 · 2025年入园</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>景区名称</h3><p class="f-body">万岁山武侠城（Wansuishan Wuxia City）</p><p class="f-caption">曾用名「万岁山·大宋武侠城」，2023年12月6日更名；国家4A级旅游景区</p></div>
+      <div class="card"><h3>开园时间</h3><p class="f-body">2003年10月</p><p class="f-caption">在原开封国家森林公园基础上建成开放；2012年10月确立大宋武侠主题定位</p></div>
+      <div class="card"><h3>地理位置</h3><p class="f-body">河南省开封市龙亭区东京大道中段</p><p class="f-caption">毗邻龙亭湖风景区，公交1路、15路、30路、33路等可达</p></div>
+      <div class="card"><h3>运营主体</h3><p class="f-body">开封市万岁山游览区有限公司</p><p class="f-caption">2020年开封文投集团下属子公司入股40%，由民营转为混合所有制</p></div>
+      <div class="card"><h3>门票价格</h3><p class="f-body">全价 ¥100 · 优惠票 ¥50</p><p class="f-caption">2025年10月1日起执行，含赠翰园碑林、开封城墙、铁塔公园，三日内不限次入园</p></div>
+      <div class="card"><h3>核心打法</h3><p class="f-body">演艺驱动，不是设备驱动</p><p class="f-caption">3700余名专职演职人员、1500多名互动NPC，全园日均常态化演出超1000场</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3>
+      <p class="f-body">万岁山武侠城在开封城西北角，紧挨龙亭湖，前身是2003年在一片国家森林公园用地上建起来的万岁山游览区。2012年换了大宋武侠的主题，此后十几年陆续加进《三打祝家庄》实景马战、打铁花、九龙瀑，2023年正式改名万岁山武侠城。这座园子的路线在国内少见：不砸钱上大型过山车，把资金投向人——3700余名专职演职人员、1500多名互动NPC，全园日均常态化演出超过1000场，2026年春节期间每天超过4000场。票价也压得低，全价100元还送翰园碑林、开封城墙、铁塔公园三个景区，三日内不限次入园。2025年入园2452.2万人次、综合营收12.7亿元；2026年上半年入园1446.7万人次、营收9.4亿元。按开封市2025年全年接待1.16亿人次算，万岁山贡献了其中约五分之一。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设：轻资产，重演出</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <p class="f-body">万岁山的建设思路和多数主题公园相反。园区被媒体描述为「没有重金投入的森林公园」，钱主要不花在游乐设备上，而是花在人身上：编导演团队、NPC、服化道。一座仿古城墙、一条武侠街、一处马战场地，硬件投入有限，靠每天不断上演的剧目把场景盘活。游客进门看到的不是排队两小时玩三分钟的设备，而是走到哪都能撞上演出的街面。这个模式对客流密度的依赖很高——2025年售票1162.2万张，入园2452.2万人次，差额来自「三日内不限次入园」政策带来的复访。2026年园区计划再投入3亿元扩建二期，目标把年接待量推到3000万人次以上。</p>
+    </div>
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>《三打祝家庄》</h3><p class="f-body">实景马战演出</p><p class="f-caption">2016年10月1日首演，在城寨沙场环抱式仿古观景台上演；2016年推出时景区斥资千万打造。</p></div>
+      <div class="card"><h3>《王婆说媒》</h3><p class="f-body">互动相亲演艺</p><p class="f-caption">主持人赵梅被游客叫作「王干娘」，地点在水浒街王婆茶馆；2024年3月走红，含在门票内不另收费。</p></div>
+      <div class="card"><h3>打铁花与无人机</h3><p class="f-body">夜间压轴项目</p><p class="f-caption">非遗打铁花在城寨沙场表演；无人机表演自2025年12月27日起常态化，每晚两场、每场1700架次。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>基础</td><td>开园时间</td><td class="num">2003年10月</td><td>原开封国家森林公园基础上建成</td></tr>
+          <tr><td>基础</td><td>更名时间</td><td class="num">2023年12月6日</td><td>由「万岁山·大宋武侠城」更名</td></tr>
+          <tr><td>基础</td><td>位置</td><td class="num">开封市龙亭区东京大道中段</td><td>毗邻龙亭湖风景区</td></tr>
+          <tr><td>规模</td><td>占地面积</td><td class="num">约33公顷</td><td>公开报道口径折算，见页面末尾说明</td></tr>
+          <tr><td>规模</td><td>建筑面积</td><td class="num">未见公开数据</td><td>未找到可靠来源</td></tr>
+          <tr><td>投资</td><td>历史累计建设投资</td><td class="num">未见公开数据</td><td>景区未披露累计投资额</td></tr>
+          <tr><td>投资</td><td>2026年二期计划投入</td><td class="num">¥3亿元</td><td>管理层公开表述，目标年接待量突破3000万人次</td></tr>
+          <tr><td>投资</td><td>《三打祝家庄》单项</td><td class="num">斥资千万</td><td>2016年推出时口径</td></tr>
+          <tr><td>演艺</td><td>演职人员规模</td><td class="num">3700余名</td><td>计划年内突破5000人</td></tr>
+          <tr><td>演艺</td><td>互动 NPC</td><td class="num">1500多名</td><td>分散在全园街面</td></tr>
+          <tr><td>演艺</td><td>日均演出场次</td><td class="num">超1000场</td><td>另有2000至3000场口径；2026年春节每天超4000场</td></tr>
+          <tr><td>演艺</td><td>无人机表演</td><td class="num">每晚两场 · 每场1700架次</td><td>2025年12月27日起常态化</td></tr>
+          <tr><td>门票</td><td>全价票</td><td class="num">¥100</td><td>含赠翰园碑林、开封城墙、铁塔公园，三日内不限次入园</td></tr>
+          <tr><td>门票</td><td>优惠票 / 年票</td><td class="num">¥50 / 成人年票 ¥150</td><td>学生年票 ¥75</td></tr>
+          <tr><td>运营</td><td>2025年入园人次</td><td class="num">2452.2万</td><td>含三日内不限次入园，同比增146.9%</td></tr>
+          <tr><td>运营</td><td>2025年综合营收</td><td class="num">¥12.7亿元</td><td>同比增136.5%</td></tr>
+          <tr><td>景区</td><td>等级</td><td class="num">国家4A级</td><td>2018年9月入选</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">综合开封市文化广电和旅游局、河南省人民政府、大河网、澎湃新闻与景区公开信息整理；历史累计建设投资额、建筑面积未见公开来源，不列估值。数据截至2026年9月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局：六大主题区与演艺场地</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#8C1D1D;"></span> 万岁山武侠城</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+      <p class="f-caption" style="margin-top:0.5rem;">坐标经高德POI核对（GCJ-02，与高德瓦片同坐标系，直接显示）；金色虚线为园区范围示意圈。园区内部为演艺街区，无独立分区 POI，故只标主入口一处。右上角图层按钮可切换街道图 / 卫星图。</p>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 880 620" xmlns="http://www.w3.org/2000/svg">
+          <rect width="880" height="620" fill="#1A0B0C"/>
+          <text x="24" y="34" fill="#B08A6A" font-size="12" font-family="DM Mono">万岁山武侠城 · 空间结构示意（非等比例）</text>
+          <g transform="translate(846,38)"><polygon points="0,-16 -6,5 0,0 6,5" fill="#D4A24C"/><text x="0" y="-22" fill="#D4A24C" font-size="11" font-family="DM Sans" text-anchor="middle">N</text></g>
+
+          <rect x="52" y="60" width="776" height="500" rx="16" fill="#251011" stroke="#8C1D1D" stroke-width="1" stroke-dasharray="8,6" opacity="0.95"/>
+
+          <!-- 第一排三区 -->
+          <rect x="76" y="84" width="236" height="150" rx="10" fill="rgba(140,29,29,0.26)" stroke="#C0392B" stroke-width="1"/>
+          <text x="194" y="152" text-anchor="middle" fill="#F2C9BE" font-size="13" font-family="DM Sans" font-weight="700">水浒区</text>
+          <text x="194" y="173" text-anchor="middle" fill="#D9A99C" font-size="8.5" font-family="DM Sans">十字坡 · 野猪林 · 擂台</text>
+
+          <rect x="322" y="84" width="236" height="150" rx="10" fill="rgba(140,29,29,0.20)" stroke="#C0392B" stroke-width="1"/>
+          <text x="440" y="152" text-anchor="middle" fill="#F2C9BE" font-size="13" font-family="DM Sans" font-weight="700">仙侠奇境</text>
+          <text x="440" y="173" text-anchor="middle" fill="#D9A99C" font-size="8.5" font-family="DM Sans">仙侠题材场景与互动</text>
+
+          <rect x="568" y="84" width="236" height="150" rx="10" fill="rgba(140,29,29,0.20)" stroke="#C0392B" stroke-width="1"/>
+          <text x="686" y="152" text-anchor="middle" fill="#F2C9BE" font-size="13" font-family="DM Sans" font-weight="700">江湖狂欢</text>
+          <text x="686" y="173" text-anchor="middle" fill="#D9A99C" font-size="8.5" font-family="DM Sans">街面演出与巡游</text>
+
+          <!-- 第二排三区 -->
+          <rect x="76" y="254" width="236" height="150" rx="10" fill="rgba(140,29,29,0.20)" stroke="#C0392B" stroke-width="1"/>
+          <text x="194" y="322" text-anchor="middle" fill="#F2C9BE" font-size="13" font-family="DM Sans" font-weight="700">武侠影视街</text>
+          <text x="194" y="343" text-anchor="middle" fill="#D9A99C" font-size="8.5" font-family="DM Sans">大宋武馆 · 1:1 大宋海船</text>
+
+          <rect x="322" y="254" width="236" height="150" rx="10" fill="rgba(140,29,29,0.20)" stroke="#C0392B" stroke-width="1"/>
+          <text x="440" y="322" text-anchor="middle" fill="#F2C9BE" font-size="13" font-family="DM Sans" font-weight="700">山水田园</text>
+          <text x="440" y="343" text-anchor="middle" fill="#D9A99C" font-size="8.5" font-family="DM Sans">九龙瀑 · 园林景观</text>
+
+          <rect x="568" y="254" width="236" height="150" rx="10" fill="rgba(140,29,29,0.20)" stroke="#C0392B" stroke-width="1"/>
+          <text x="686" y="322" text-anchor="middle" fill="#F2C9BE" font-size="13" font-family="DM Sans" font-weight="700">十里洋场</text>
+          <text x="686" y="343" text-anchor="middle" fill="#D9A99C" font-size="8.5" font-family="DM Sans">民国风貌街景</text>
+
+          <!-- 演艺场地 -->
+          <rect x="76" y="424" width="356" height="104" rx="10" fill="rgba(212,162,76,0.16)" stroke="#D4A24C" stroke-width="1.2"/>
+          <text x="254" y="466" text-anchor="middle" fill="#F5DCA8" font-size="12" font-family="DM Sans" font-weight="700">城寨沙场</text>
+          <text x="254" y="488" text-anchor="middle" fill="#D4B47C" font-size="8.5" font-family="DM Sans">《三打祝家庄》实景马战 · 非遗打铁花</text>
+          <text x="254" y="506" text-anchor="middle" fill="#D4B47C" font-size="8.5" font-family="DM Sans">环抱式仿古观景台 · 需实名预约</text>
+
+          <rect x="452" y="424" width="352" height="104" rx="10" fill="rgba(212,162,76,0.16)" stroke="#D4A24C" stroke-width="1.2"/>
+          <text x="628" y="466" text-anchor="middle" fill="#F5DCA8" font-size="12" font-family="DM Sans" font-weight="700">水浒街 · 王婆茶馆</text>
+          <text x="628" y="488" text-anchor="middle" fill="#D4B47C" font-size="8.5" font-family="DM Sans">《王婆说媒》互动演艺</text>
+          <text x="628" y="506" text-anchor="middle" fill="#D4B47C" font-size="8.5" font-family="DM Sans">2024年3月起走红 · 含在门票内</text>
+
+          <text x="440" y="552" text-anchor="middle" fill="#8C6A5A" font-size="9" font-family="DM Sans">注：六大主题区名称取自公开资料口径</text>
+          <text x="440" y="583" text-anchor="middle" fill="#6E5048" font-size="9" font-family="DM Sans">各区块位置与尺度经简化，请以景区当日导览图为准</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="zone-card"><h4>水浒区</h4><p>以《水浒传》为题的一区，含十字坡、野猪林、擂台等场景。武松、鲁智深一类角色的互动演出在这一带密度最高，游客容易被拉进剧情里。</p></div>
+      <div class="zone-card"><h4>仙侠奇境</h4><p>仙侠题材场景区，把仙山、洞府一类意象做成可走进去的布景，与武侠主线错开一个题材层次。</p></div>
+      <div class="zone-card"><h4>江湖狂欢</h4><p>街面演出与巡游的集中地，NPC 密度高，演出没有固定舞台，随时在游客身边发生。</p></div>
+      <div class="zone-card"><h4>武侠影视街</h4><p>含大宋武馆、雕版印刷博物馆与按 1:1 复原的大宋海船，兼顾展陈与体验。</p></div>
+      <div class="zone-card"><h4>山水田园</h4><p>园林景观区，九九龙瀑在此，2015年2月19日竣工开放，是国内较大的人造溪流瀑布群之一。武侠街区之外的一片缓冲地带。</p></div>
+      <div class="zone-card"><h4>十里洋场</h4><p>民国风貌街景。这一区的存在让万岁山的时间线不只停在大宋，夜场演艺与餐饮多集中于此。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2003年10月</div><div class="timeline-content"><h4>建成开放</h4><p>在原开封国家森林公园基础上建成万岁山游览区，对游客开放。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2012年10月</div><div class="timeline-content"><h4>转向大宋武侠主题</h4><p>更名为「万岁山·大宋武侠城」，确立武侠主题定位，此后的改造都沿这条线走。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2015年2月19日</div><div class="timeline-content"><h4>九九龙瀑开放</h4><p>山水田园区的瀑布景观竣工开放，园区从人造街景扩展到自然型景观。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2016年10月1日</div><div class="timeline-content"><h4>《三打祝家庄》首演</h4><p>斥资千万打造的实景马战在城寨沙场上演，成为园区此后十余年的招牌剧目。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2018年9月</div><div class="timeline-content"><h4>获评国家4A级景区</h4><p>河南省公示4A级景区评定结果，万岁山入选。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2020年</div><div class="timeline-content"><h4>国资入股，转为混合所有制</h4><p>开封文投集团下属子公司入股40%，景区由民营转为「国资 + 民营」结构。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023年12月6日</div><div class="timeline-content"><h4>更名为万岁山武侠城</h4><p>去掉「大宋」二字，主题范围从单一朝代扩展到更宽的武侠题材。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年3月</div><div class="timeline-content"><h4>《王婆说媒》走红</h4><p>水浒街王婆茶馆的互动相亲演艺在社交平台传播开来，主持人赵梅被游客称作「王干娘」，成为园区客流的重要增量。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年10月1日</div><div class="timeline-content"><h4>门票调整至100元</h4><p>全价票由80元调至100元，同时恢复「三日内不限次入园」，并继续赠送翰园碑林、开封城墙、铁塔公园。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年12月27日</div><div class="timeline-content"><h4>无人机表演常态化</h4><p>与千机科技合作的无人机表演正式开启常态化运营，每晚两场、每场1700架次。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年</div><div class="timeline-content"><h4>二期扩建启动</h4><p>管理层计划投入3亿元扩建二期，目标年接待量突破3000万人次。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <h3 style="margin-bottom:0.8rem;">客流与营收：三年翻数倍</h3>
+      <table class="data-table">
+        <thead><tr><th>年份</th><th>入园人次</th><th>综合营收</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>2023年</td><td class="num">约400万</td><td class="num">¥1.8亿元</td><td>人次为据2024年增幅反推的推算值</td></tr>
+          <tr><td>2024年</td><td class="num">约850万</td><td class="num">¥5.4亿元</td><td>另有「突破800万」口径</td></tr>
+          <tr><td>2025年</td><td class="num">2452.2万</td><td class="num">¥12.7亿元</td><td>含三日内不限次入园，同比增146.9% / 136.5%</td></tr>
+          <tr><td>2026年上半年</td><td class="num">1446.7万</td><td class="num">¥9.4亿元</td><td>同比增41.3% / 55.6%</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">2023年人次为推算值，非官方披露；2025年前10月一度出现「1700万人次」的网传口径，景区于2025年12月3日公告更正为2077.5万人次、综合营收10.77亿元。上表采用更正后口径的全年数据。</p>
+    </div>
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>收入结构</h3><p><span class="f-data">62% / 38%</span></p><p class="f-caption">2025年门票营收7.9亿元占62.2%，商业二消4.8亿元占37.8%；二消增速153.6%快于门票的127.2%。</p></div>
+      <div class="card"><h3>2026上半年结构</h3><p><span class="f-data">63% / 37%</span></p><p class="f-caption">门票5.9亿元、二消3.5亿元；售票697.3万张，同比增18%，增速较2025年明显回落。</p></div>
+      <div class="card"><h3>单日峰值</h3><p><span class="f-data">10万+</span> 人次</p><p class="f-caption">2026年春节日均客流超10万人次，约为平时的三倍；正月初一起连续多日限流停售。</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;">
+      <h3>与开封文旅大盘的关系</h3>
+      <p class="f-body">开封市2025年全年接待游客突破1.16亿人次，旅游综合收入870.68亿元，数据由开封市副市长在2026年8月河南省新闻发布会上介绍。按此计算，万岁山一家贡献了全市游客量约五分之一。2026年元旦假期，万岁山接待29.3万人次，居河南全省景区第一，高于清明上河园的26.7万人次；同期全市接待1073.56万人次、旅游综合收入75.8亿元（春节假期口径）。在开封「宋文化」这条主线上，万岁山与清明上河园构成双核，一个主打实景演艺与街头互动，一个主打园区化游览。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECH & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>演职团队</h3><p><span class="f-data">3700+</span> 名专职演职人员</p><p class="f-caption">计划年内突破5000人，另配1500多名互动 NPC</p></div>
+      <div class="card"><h3>演出密度</h3><p><span class="f-data">1000+</span> 场 / 日</p><p class="f-caption">全园常态化演出场次，另有2000至3000场口径；2026年春节每天超4000场</p></div>
+      <div class="card"><h3>《三打祝家庄》</h3><p><span class="f-data">2016</span> 年首演</p><p class="f-caption">城寨沙场实景马战，每日两场，2025年3月31日起实行实名预约观演</p></div>
+      <div class="card"><h3>无人机表演</h3><p><span class="f-data">1700</span> 架次 / 场</p><p class="f-caption">2025年12月27日起常态化，每晚两场</p></div>
+      <div class="card"><h3>门票政策</h3><p><span class="f-data">¥100</span> · 三日不限次</p><p class="f-caption">含赠翰园碑林、开封城墙、铁塔公园，复访被计入入园人次</p></div>
+      <div class="card"><h3>九九龙瀑</h3><p><span class="f-data">2015</span> 年开放</p><p class="f-caption">国内较大的人造溪流瀑布群之一</p></div>
+      <div class="card"><h3>占地面积</h3><p><span class="f-data">约33</span> 公顷</p><p class="f-caption">公开报道口径折算，园区以演艺街区为主，无大型游乐设备用地</p></div>
+      <div class="card"><h3>二期扩建</h3><p><span class="f-data">¥3亿</span> 计划投入</p><p class="f-caption">2026年管理层公开表述，目标年接待量突破3000万人次</p></div>
+      <div class="card"><h3>景区等级</h3><p><span class="f-data">国家4A</span> 级</p><p class="f-caption">2018年9月入选，为开封老城区主要引流景区之一</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>街区餐饮</h3><p class="f-body">以园区自营与联营店铺为主</p><p class="f-caption">十里洋场等区域集中布置餐饮，2025年商业二消营收4.8亿元，占综合营收的37.8%。</p></div>
+      <div class="card"><h3>交通接驳</h3><p class="f-body">公交 1 / 15 / 30 / 33 路等</p><p class="f-caption">「万岁山武侠城」站下车即到；园区位于东京大道中段，紧邻龙亭湖风景区，与清明上河园、龙亭等老城景点成片。</p></div>
+      <div class="card"><h3>预约与限流</h3><p class="f-body">核心演出需实名预约</p><p class="f-caption">《三打祝家庄》自2025年3月31日起、《王婆说媒》自2026年4月2日起实行预约制，参与相亲环节需现场抽签。</p></div>
+      <div class="card"><h3>票务联动</h3><p class="f-body">一票含四景区</p><p class="f-caption">购万岁山门票赠送翰园碑林、开封城墙、铁塔公园，三日内不限次入园，把单点客流导向老城其他景点。</p></div>
+      <div class="card"><h3>节庆运营</h3><p class="f-body">春节与五一为全年峰值</p><p class="f-caption">2026年春节期间门票规则临时调整为「三日内万岁山仅可入园一次」，赠票的三个景区仍三日不限次。</p></div>
+      <div class="card"><h3>周边住宿</h3><p class="f-body">带动老城住宿需求</p><p class="f-caption">2026年五一假期，园区周边酒店预订增长205%，周边民宿预订量同比增长1.2倍，增速居全国商圈第二。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. NEWS ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>客流数据更正与「黄牛」问题</h3><p class="f-body">2025年12月3日，景区公告更正此前流传的客流数字：前10个月实际接待2077.5万人次，比网传的「1700万」多出近400万，同时宣布彻查黄牛。数据口径的混乱本身说明这座园子这两年热度上得太快，票务与统计没有跟上。</p></div>
+      <div class="card"><h3>「对赌协议」舆情</h3><p class="f-body">2026年1月，针对12.7亿元营收背后存在第三方运营「对赌协议」的传闻，景区发声明否认，称涉事的「完善景观细节设计及其服务费100至200万元」约定被误读，并表示已签署排他协议。</p></div>
+      <div class="card"><h3>春节与五一的限流常态化</h3><p class="f-body">2026年春节日均客流超10万人次，正月初一起连续多日限流并停止售票；五一假期同样多次限流停售。为避免「三日内不限次」在极端客流下压垮承载，园区在春节临时把规则改为三日内仅可入园一次，假期结束后恢复。限流正在从应急手段变成旺季的常规操作。</p></div>
+      <div class="card"><h3>接盘恒大文旅城，输出运营能力</h3><p class="f-body">2025年底，开封市平稳基金以2.83亿元收购原恒大文旅城的文旅核心地块与在建工程，后续预计再投入18亿元续建。2026年8月，开封文投联合万岁山接盘，项目更名「郑开童话世界」，计划2028年暑期开园，万岁山负责输出实景演艺与沉浸式运营经验。这是它第一次把「重演出」的方法论搬到自家园区之外。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. RESOURCES ====== -->
+<section class="section section-alt" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="reveal">
+      <div class="resource-group"><h4>官方网站</h4><ul>
+        <li><a href="http://wansuishan.com.cn/" target="_blank" rel="noopener">万岁山武侠城官方网站</a><span class="tag">票务·演出时间</span></li>
+      </ul></div>
+      <div class="resource-group"><h4>百科与资料</h4><ul>
+        <li><a href="https://zh.wikipedia.org/wiki/万岁山武侠城" target="_blank" rel="noopener">万岁山武侠城 — 维基百科（中文）</a></li>
+        <li><a href="https://www.henan.gov.cn/2018/09-18/691776.html" target="_blank" rel="noopener">河南省人民政府 — 4A级景区公示（2018-09-18）</a></li>
+      </ul></div>
+      <div class="resource-group"><h4>政府信息与权威报道</h4><ul>
+        <li><a href="https://www.henan.gov.cn/2026/08-25/3407165.html" target="_blank" rel="noopener">河南省人民政府 — 开封2025年文旅数据发布（2026-08-25）</a></li>
+        <li><a href="http://wgl.kaifeng.gov.cn/kfswhgdhlyj/swgljgzdt/pc/content/content_2007746776382107648.html" target="_blank" rel="noopener">开封市文化广电和旅游局 — 2026年元旦假期综述</a></li>
+        <li><a href="https://5g.dahe.cn/news/202504211922789" target="_blank" rel="noopener">大河网 — 万岁山门票价格调整公告（2025-04-21）</a></li>
+        <li><a href="https://www.thepaper.cn/newsDetail_forward_31086498" target="_blank" rel="noopener">澎湃新闻 — 2025年上半年经营数据（2025）</a></li>
+        <li><a href="https://www.guandian.cn/m/show/535619" target="_blank" rel="noopener">观点网 — 2025年全年营收12.7亿元与二期计划</a></li>
+        <li><a href="https://www.guandian.cn/article/20260805/581052.html" target="_blank" rel="noopener">观点网 — 接盘恒大文旅城更名郑开童话世界（2026-08）</a></li>
+      </ul></div>
+      <div class="resource-group"><h4>视频</h4><ul>
+        <li><a href="https://search.bilibili.com/all?keyword=万岁山武侠城" target="_blank" rel="noopener">B站 — 万岁山武侠城相关视频</a></li>
+      </ul></div>
+      <p class="f-caption" style="margin-top:1.2rem;">数据核实说明：开园与更名时间、客流与营收、票价政策、演艺规模来自开封市文化广电和旅游局、河南省人民政府、大河网、澎湃新闻与景区公告；景区自身的历史累计建设投资额与建筑面积未找到可靠来源，页面不列估值；占地面积系由公开报道口径折算为公制，存在约正负3%的换算误差；六大主题区的名称取自公开资料口径，未获第二来源交叉印证；2023年入园人次为推算值而非官方披露；不同来源对《三打祝家庄》的看台容量（3000人与5000人）、时长（30分钟与40分钟）与演员规模存在分歧，页面不列具体数值，出行以景区当日节目单为准。坐标经高德地图POI核对（GCJ-02），非实测。页面数据截至2026年9月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：高德 POI 返回 GCJ-02，高德瓦片同为 GCJ-02，直接使用，无需任何坐标转换
+
+var zonesGcj02 = [
+  { name: '万岁山武侠城<br><small>龙亭区东京大道中段 · 国家4A级景区</small>', lat: 34.819966, lng: 114.351800, color: '#8C1D1D' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([34.8200, 114.3518], 16);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesGcj02);
+
+  if (withBoundary) {
+    L.circle([34.8200, 114.3518], { radius: 550, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

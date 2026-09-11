@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>锦绣中华·中国民俗文化村 — 中国内地第一座主题公园 · 深圳华侨城</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #1F6E63;
+  --clr-primary-light: #3E9E90;
+  --clr-primary-dark: #08231F;
+  --clr-accent: #C4553B;
+}
+
+.hero {
+  background: linear-gradient(160deg, #061A17 0%, #0F3B36 38%, #1F6E63 68%, #3E9E90 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 18% 82%, rgba(196,85,59,0.22) 0%, transparent 55%),
+              radial-gradient(ellipse at 82% 18%, rgba(94,190,172,0.16) 0%, transparent 50%);
+}
+
+#parkmap { width: 100%; height: 520px; border-radius: var(--radius-lg); z-index: 0; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+
+.zone-card { border-left: 4px solid var(--clr-accent); padding: 1rem 1.2rem; background: var(--clr-card-bg); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.zone-card h4 { font-family: 'DM Sans', sans-serif; font-size: 1.02rem; font-weight: 600; color: var(--clr-primary-dark); }
+.zone-card p { font-size: 0.87rem; color: var(--clr-text-secondary); margin-top: 0.3rem; }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>锦绣中华 · 中国民俗文化村</h1>
+    <p class="hero-subtitle">1989年11月22日开园，中国内地第一座主题公园。西边复刻82处中国名胜，东边按1:1建24个民族村寨，2003年合并为一票通玩。三十七年后，这座园子正把静态景观改造成可参与的国风体验。</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">1989</div><div class="kpi-label">开园年份</div></div>
+      <div class="kpi-card"><div class="kpi-number">约53</div><div class="kpi-label">万平方米 · 园区合计</div></div>
+      <div class="kpi-card"><div class="kpi-number">¥220</div><div class="kpi-label">成人全票</div></div>
+      <div class="kpi-card"><div class="kpi-number">近7000万</div><div class="kpi-label">人次 · 累计接待（截至2019年）</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>景区名称</h3><p class="f-body">锦绣中华 · 中国民俗文化村（Splendid China · China Folk Culture Villages）</p><p class="f-caption">由锦绣中华微缩景区与中国民俗文化村合并运营，一票通玩</p></div>
+      <div class="card"><h3>开园时间</h3><p class="f-body">1989年11月22日（微缩景区）</p><p class="f-caption">中国民俗文化村1991年10月1日开园；2003年1月1日两园合并</p></div>
+      <div class="card"><h3>地理位置</h3><p class="f-body">广东省深圳市南山区深南大道9003号</p><p class="f-caption">华侨城商圈内，地铁1号线华侨城站D出口步行可达</p></div>
+      <div class="card"><h3>运营主体</h3><p class="f-body">深圳锦绣中华发展有限公司</p><p class="f-caption">1988年8月4日成立；香港中旅国际投资持股51%、深圳华侨城持股49%的合资结构</p></div>
+      <div class="card"><h3>门票价格</h3><p class="f-body">全票 ¥220 · 半票 ¥110</p><p class="f-caption">夜场票 ¥99（原价 ¥120）；青少年票 ¥150；成人年卡 ¥399，优待年卡 ¥299</p></div>
+      <div class="card"><h3>园区构成</h3><p class="f-body">82处微缩景观 + 24个民族村寨</p><p class="f-caption">微缩景观多按1:15比例复制，陶艺小人约5万多个；村寨按1:1建成</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3>
+      <p class="f-body">锦绣中华·中国民俗文化村在深圳南山区深南大道，坐着华侨城商圈最核心的一块地。1989年11月22日开业，是中国内地第一座主题公园，比深圳世界之窗还早五年。园区分两块：一侧的锦绣中华微缩景区把82处中国名胜缩到一园之内，多数按1:15比例建造，配上五万多个陶艺小人，被叫作「小人国」；另一侧的中国民俗文化村1991年10月1日开园，按1:1盖起24个民族的村寨，口号是「二十四个村寨，五十六族风情」。2003年1月1日两园合并，一票通玩。三十多年里累计接待近7000万人次，1992年的客流峰值放到今天仍然是国内主题公园的前列。眼下的挑战不在客流，而在地段：身处深圳房价最高的一片区域，靠静态景观收门票的模式越来越撑不住，园区近年的动作是把「造景」改成「造境」——让游客走进戏里，2024年底与腾讯视频联手的「锦绣盛市·梦华录」主题区是这条线上最新的一步。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设：从造景到造境</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <p class="f-body">1989年开园时的设计思路是「缩地成寸」：把中国最有名的景观按比例搬进一座园子，游客半天走完大江南北。这在当年是国内从未有过的产品形态，开业一年左右即收回投资。三十多年后，同一套逻辑遇上了麻烦——静态微缩景观看一次就够，复访率上不去，而园区脚下的土地价值早已翻了几十倍。园方的应对是把体验从「看」推到「进」：村寨里加互动演艺，街面上加 NPC，2024年底与腾讯视频联合推出占地2万平方米的「锦绣盛市·梦华录」主题区，把影视 IP 的十大组团场景搬进园区，走「场景 + 演艺 + NPC + 餐饮 + 文创」的组合。华侨城将这条路径概括为从「造景」到「造境」。</p>
+    </div>
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>锦绣中华微缩景区</h3><p class="f-body">82处微缩景观</p><p class="f-caption">含长城、故宫、布达拉宫、莫高窟等，多数按1:15比例建造，配陶艺小人五万多个。</p></div>
+      <div class="card"><h3>中国民俗文化村</h3><p class="f-body">24个民族村寨</p><p class="f-caption">按1:1比例建成，覆盖21个民族的生活场景，另有20多处景点。</p></div>
+      <div class="card"><h3>锦绣盛市·梦华录</h3><p class="f-body">2万平方米主题区</p><p class="f-caption">与腾讯视频联合打造，2024年12月31日首发，含锦绣楼、樊楼、州桥夜市等十大组团场景。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>基础</td><td>微缩景区开园</td><td class="num">1989年11月22日</td><td>1989年9月起部分建成试业</td></tr>
+          <tr><td>基础</td><td>民俗文化村开园</td><td class="num">1991年10月1日</td><td>1991年10月开园</td></tr>
+          <tr><td>基础</td><td>两园合并</td><td class="num">2003年1月1日</td><td>一体化经营，一票通玩</td></tr>
+          <tr><td>基础</td><td>位置</td><td class="num">深圳南山区深南大道9003号</td><td>华侨城商圈</td></tr>
+          <tr><td>规模</td><td>微缩景区面积</td><td class="num">约30万平方米</td><td>另有29.8公顷口径</td></tr>
+          <tr><td>规模</td><td>民俗村面积</td><td class="num">20多万平方米</td><td>另有18公顷、23万平方米口径</td></tr>
+          <tr><td>规模</td><td>两园合计</td><td class="num">约53万平方米</td><td>2026年报道口径；简单相加约50万平方米</td></tr>
+          <tr><td>投资</td><td>微缩景区建设投资</td><td class="num">1亿港元</td><td>1986年由中旅集团与华侨城共同筹集，当时约合7000万元人民币</td></tr>
+          <tr><td>投资</td><td>民俗村建设投资</td><td class="num">约1.1亿元</td><td>另有1亿元口径</td></tr>
+          <tr><td>内容</td><td>微缩景观</td><td class="num">82处</td><td>多数按1:15比例复制</td></tr>
+          <tr><td>内容</td><td>陶艺小人</td><td class="num">约5万多个</td><td>分布在微缩景观中</td></tr>
+          <tr><td>内容</td><td>民族村寨</td><td class="num">24个</td><td>覆盖21个民族；另有27至28个村寨的较新口径</td></tr>
+          <tr><td>演艺</td><td>《龙凤舞中华》</td><td class="num">上演6000余场</td><td>2025年焕新上演，沉淀35年演艺内容</td></tr>
+          <tr><td>演艺</td><td>《大漠传奇》</td><td class="num">实景战马秀</td><td>百名马术演员与近百匹战马</td></tr>
+          <tr><td>门票</td><td>成人全票</td><td class="num">¥220</td><td>半票 ¥110；夜场票 ¥99</td></tr>
+          <tr><td>运营</td><td>历史峰值客流</td><td class="num">716万至730万人次</td><td>1992年，各来源口径不一</td></tr>
+          <tr><td>运营</td><td>累计接待</td><td class="num">近7000万人次</td><td>截至2019年11月开园30周年</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">综合维基百科、光明日报、深圳市政府与文体旅游局公开信息、华侨城集团官网与主流媒体报道整理。面积、投资额与村寨数量的多种口径均在表内并列。数据截至2026年9月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局：一园两片，微缩与村寨并置</h2><div class="section-line"></div></div>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#1F6E63;"></span> 锦绣中华微缩景区</span>
+        <span><span class="dot" style="background:#3E9E90;"></span> 微缩景观地标</span>
+        <span><span class="dot" style="background:#C4553B;"></span> 中国民俗文化村</span>
+        <span><span class="dot" style="background:#8A6BB0;"></span> 民族村寨</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+      <p class="f-caption" style="margin-top:0.5rem;">坐标经高德POI核对（GCJ-02，与高德瓦片同坐标系，直接显示）；金色虚线为园区范围示意圈。园区内部 POI 稀疏，只标出可核实的几处，未逐一标注全部景观。右上角图层按钮可切换街道图 / 卫星图。</p>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 880 620" xmlns="http://www.w3.org/2000/svg">
+          <rect width="880" height="620" fill="#061C19"/>
+          <text x="24" y="34" fill="#6FA89C" font-size="12" font-family="DM Mono">锦绣中华·中国民俗文化村 · 空间结构示意（非等比例）</text>
+          <g transform="translate(846,38)"><polygon points="0,-16 -6,5 0,0 6,5" fill="#C4553B"/><text x="0" y="-22" fill="#C4553B" font-size="11" font-family="DM Sans" text-anchor="middle">N</text></g>
+
+          <rect x="52" y="60" width="776" height="500" rx="16" fill="#0B2A25" stroke="#3E9E90" stroke-width="1" stroke-dasharray="8,6" opacity="0.95"/>
+
+          <!-- 微缩景区 -->
+          <rect x="76" y="86" width="376" height="330" rx="12" fill="rgba(31,110,99,0.28)" stroke="#3E9E90" stroke-width="1.2"/>
+          <text x="264" y="116" text-anchor="middle" fill="#A8E0D4" font-size="13" font-family="DM Sans" font-weight="700">锦绣中华微缩景区</text>
+          <text x="264" y="135" text-anchor="middle" fill="#7FBFAF" font-size="9" font-family="DM Sans">82处微缩景观 · 多数按 1:15 比例</text>
+
+          <rect x="100" y="156" width="160" height="110" rx="8" fill="rgba(62,158,144,0.18)" stroke="#4FA894" stroke-width="1"/>
+          <text x="180" y="206" text-anchor="middle" fill="#D9F0EA" font-size="11" font-family="DM Sans" font-weight="600">万里长城</text>
+          <text x="180" y="225" text-anchor="middle" fill="#9FCFC2" font-size="8" font-family="DM Sans">微缩地标</text>
+
+          <rect x="272" y="156" width="156" height="110" rx="8" fill="rgba(62,158,144,0.18)" stroke="#4FA894" stroke-width="1"/>
+          <text x="350" y="206" text-anchor="middle" fill="#D9F0EA" font-size="11" font-family="DM Sans" font-weight="600">故宫</text>
+          <text x="350" y="225" text-anchor="middle" fill="#9FCFC2" font-size="8" font-family="DM Sans">微缩地标</text>
+
+          <rect x="100" y="280" width="160" height="116" rx="8" fill="rgba(62,158,144,0.14)" stroke="#4FA894" stroke-width="1"/>
+          <text x="180" y="332" text-anchor="middle" fill="#D9F0EA" font-size="11" font-family="DM Sans" font-weight="600">布达拉宫</text>
+          <text x="180" y="351" text-anchor="middle" fill="#9FCFC2" font-size="8" font-family="DM Sans">微缩地标</text>
+
+          <rect x="272" y="280" width="156" height="116" rx="8" fill="rgba(62,158,144,0.14)" stroke="#4FA894" stroke-width="1"/>
+          <text x="350" y="332" text-anchor="middle" fill="#D9F0EA" font-size="11" font-family="DM Sans" font-weight="600">莫高窟</text>
+          <text x="350" y="351" text-anchor="middle" fill="#9FCFC2" font-size="8" font-family="DM Sans">微缩地标</text>
+
+          <!-- 民俗文化村 -->
+          <rect x="476" y="86" width="328" height="330" rx="12" fill="rgba(196,85,59,0.20)" stroke="#C4553B" stroke-width="1.2"/>
+          <text x="640" y="116" text-anchor="middle" fill="#F2C9BA" font-size="13" font-family="DM Sans" font-weight="700">中国民俗文化村</text>
+          <text x="640" y="135" text-anchor="middle" fill="#D9A99C" font-size="9" font-family="DM Sans">24个民族村寨 · 按 1:1 建成</text>
+
+          <rect x="500" y="156" width="140" height="240" rx="8" fill="rgba(196,85,59,0.14)" stroke="#D9705A" stroke-width="1"/>
+          <text x="570" y="268" text-anchor="middle" fill="#F2DCD4" font-size="11" font-family="DM Sans" font-weight="600">民族村寨群</text>
+          <text x="570" y="287" text-anchor="middle" fill="#D9B3A8" font-size="8" font-family="DM Sans">傣寨等</text>
+
+          <rect x="656" y="156" width="124" height="240" rx="8" fill="rgba(196,85,59,0.14)" stroke="#D9705A" stroke-width="1"/>
+          <text x="718" y="268" text-anchor="middle" fill="#F2DCD4" font-size="11" font-family="DM Sans" font-weight="600">翠湖</text>
+          <text x="718" y="287" text-anchor="middle" fill="#D9B3A8" font-size="8" font-family="DM Sans">2万m²水上舞台</text>
+
+          <!-- 演艺与主题区 -->
+          <rect x="76" y="440" width="356" height="96" rx="10" fill="rgba(196,85,59,0.16)" stroke="#C4553B" stroke-width="1.2"/>
+          <text x="254" y="478" text-anchor="middle" fill="#F5C9B8" font-size="12" font-family="DM Sans" font-weight="700">锦绣盛市 · 梦华录</text>
+          <text x="254" y="498" text-anchor="middle" fill="#D9A99C" font-size="8.5" font-family="DM Sans">2万平方米主题区 · 2024年12月31日首发</text>
+          <text x="254" y="516" text-anchor="middle" fill="#D9A99C" font-size="8.5" font-family="DM Sans">锦绣楼 · 樊楼 · 州桥夜市</text>
+
+          <rect x="452" y="440" width="352" height="96" rx="10" fill="rgba(196,85,59,0.16)" stroke="#C4553B" stroke-width="1.2"/>
+          <text x="628" y="478" text-anchor="middle" fill="#F5C9B8" font-size="12" font-family="DM Sans" font-weight="700">主入口 · 深南大道</text>
+          <text x="628" y="498" text-anchor="middle" fill="#D9A99C" font-size="8.5" font-family="DM Sans">地铁1号线华侨城站</text>
+          <text x="628" y="516" text-anchor="middle" fill="#D9A99C" font-size="8.5" font-family="DM Sans">深南大道9003号</text>
+
+          <text x="440" y="578" text-anchor="middle" fill="#6E9A92" font-size="9" font-family="DM Sans">两园自2003年1月1日起合并运营、一票通玩；各区块位置与尺度经简化，请以园区导览图为准</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="zone-card"><h4>锦绣中华微缩景区</h4><p>一园看遍中国。82处微缩景观多数按1:15比例建造，长城、故宫、布达拉宫、莫高窟等名景相距数百步，配上五万多个陶艺小人，构成「小人国」的观感。</p></div>
+      <div class="zone-card"><h4>中国民俗文化村</h4><p>按1:1比例建成的24个民族村寨，覆盖21个民族的居住与生活场景。村寨不是布景板，常年有歌舞、手作与节庆活动在里面发生。</p></div>
+      <div class="zone-card"><h4>翠湖</h4><p>园区中心约2万平方米的水面，是水上实景演出的舞台。近年推出的非遗秀在此上演，打铁花、火壶钢花与百米游船都在湖面上完成。</p></div>
+      <div class="zone-card"><h4>锦绣盛市 · 梦华录</h4><p>2024年12月31日与腾讯视频联合推出的2万平方米主题区，含锦绣楼、勾阑瓦肆、樊楼、州桥夜市等十大组团场景，走「场景 + 演艺 + NPC + 餐饮 + 文创」的组合。</p></div>
+      <div class="zone-card"><h4>驻场演艺</h4><p>《龙凤舞中华》上演二十余年、6000余场，2025年焕新；《大漠传奇》以百名马术演员与近百匹战马复原丝路沙漠战景；另有《东方霓裳》等剧目。</p></div>
+      <div class="zone-card"><h4>节庆与街区</h4><p>2026年元旦推出「印象中国·京剧沉浸街区」与新春非遗灯会，把演出从固定剧场扩散到街区，是园区从静态观览转向沉浸式体验的一条支线。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1986年</div><div class="timeline-content"><h4>筹资</h4><p>中旅集团与华侨城共同筹集1亿港元（当时约合7000万元人民币），启动锦绣中华微缩景区建设。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1988年8月4日</div><div class="timeline-content"><h4>运营公司成立</h4><p>深圳锦绣中华发展有限公司成立，为香港中旅国际投资与深圳华侨城的合资公司。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1989年9月</div><div class="timeline-content"><h4>部分建成试业</h4><p>景区先期开放部分区域，同年11月22日正式开业，成为中国内地第一座主题公园。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1991年10月1日</div><div class="timeline-content"><h4>中国民俗文化村开园</h4><p>紧邻微缩景区，按1:1建起24个民族的村寨，投资约1.1亿元，开业约一年半收回投资。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1992年</div><div class="timeline-content"><h4>客流峰值年</h4><p>两景区当年接待量达到峰值，各来源口径为716万至730万人次，在全国主题公园中居首。此后随同类项目增多逐年回落。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2003年1月1日</div><div class="timeline-content"><h4>两园合并</h4><p>微缩景区与民俗文化村合并为一体化经营的景区，实行一票通玩。合并首日截至下午4时入园7000余人。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019年11月</div><div class="timeline-content"><h4>开园30周年</h4><p>累计接待海内外游客近7000万人次，累计营业收入逾50亿元，利润总额超15亿元。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年12月31日</div><div class="timeline-content"><h4>锦绣盛市·梦华录首发</h4><p>与腾讯视频联合打造的2万平方米主题区开放，园区从静态景观转向沉浸式国风体验的标志性动作。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年11月</div><div class="timeline-content"><h4>土地处置传闻与公司回应</h4><p>市场出现锦绣中华到期土地将推进处置的传闻，华侨城A发布股票交易异常波动公告，称经营正常、无应披露未披露重大信息，但未明确肯定或否认传闻。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年</div><div class="timeline-content"><h4>内容继续加密</h4><p>元旦推出「印象中国·京剧沉浸街区」与新春非遗灯会，同期开启「2026华侨城团圆季」联动活动。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="card reveal">
+      <h3>客流：峰值在1992年，近年靠节假日的阶段性增长</h3>
+      <p class="f-body">1992年的716万至730万人次是这座园子的历史峰值，此后随国内主题公园供给增加逐年回落，1995年锦绣中华已降至122.34万人次。近年公开数据以节假日为主：2023年五一五天累计客流较2019年同期明显增长，夜场客流较2019年同期增长418%；2024年国庆首日日场游客较2023年同期增长约60%，前八个月接待境外游客同比增长1125%；2025年春节假期接待约13万人次，大年初一近3万人次；2026年五一首日客流突破1.5万人次。2023至2025年的全年客流，公开渠道未见单列数据。</p>
+    </div>
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>成人全票</h3><p><span class="f-data">¥220</span></p><p class="f-caption">半票 ¥110，青少年票 ¥150，优待票 ¥110；夜场票 ¥99。2025年口径，各第三方平台报价存在差异。</p></div>
+      <div class="card"><h3>年卡体系</h3><p><span class="f-data">¥399</span> / 优待 ¥299</p><p class="f-caption">单人年卡定价，对应本地复访客群；园区同时推行「一票通玩」，把微缩景区与民俗村打包销售。</p></div>
+      <div class="card"><h3>2025年春节</h3><p><span class="f-data">约13万</span> 人次</p><p class="f-caption">整个春节假期接待量；大年初一（2025年1月29日）近3万人次。</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;">
+      <h3>母公司视角：华侨城主题公园板块承压</h3>
+      <p class="f-body">锦绣中华是华侨城主题公园品牌矩阵中的一员，与欢乐谷全国8座园区、世界之窗并列。母公司华侨城A的财报显示，2025年营业收入313.81亿元、同比下降42.32%，归母净利润亏损144.96亿元；旅游综合行业收入213.72亿元、同比下降21.71%，但占营收比重升至68.10%，全年文旅项目接待游客7970万人次。年报点名锦绣中华《龙凤舞中华》焕新上演。锦绣中华自身的营收从未在年报中单独披露，历年均并入「旅游综合行业」口径。对一座坐在深圳核心地段、开业三十七年的园区来说，土地价值与经营收益之间的落差，是它绕不开的结构性问题。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECH & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>微缩景观</h3><p><span class="f-data">82</span> 处</p><p class="f-caption">多数按 1:15 比例复制，集中在一个园区内</p></div>
+      <div class="card"><h3>陶艺小人</h3><p><span class="f-data">约5万</span> 多个</p><p class="f-caption">分布在微缩景观中，构成「小人国」的细节</p></div>
+      <div class="card"><h3>民族村寨</h3><p><span class="f-data">24</span> 个 · 1:1 比例</p><p class="f-caption">覆盖21个民族；另有27至28个村寨的较新口径</p></div>
+      <div class="card"><h3>园区合计面积</h3><p><span class="f-data">约53</span> 万平方米</p><p class="f-caption">2026年报道口径；两园面积简单相加约50万平方米</p></div>
+      <div class="card"><h3>初始投资</h3><p><span class="f-data">1亿</span> 港元</p><p class="f-caption">1986年筹资口径，当时约合7000万元人民币；民俗村另投约1.1亿元</p></div>
+      <div class="card"><h3>《龙凤舞中华》</h3><p><span class="f-data">6000+</span> 场</p><p class="f-caption">上演二十余年，2025年焕新上演，融合非遗技艺与声光科技</p></div>
+      <div class="card"><h3>《大漠传奇》</h3><p><span class="f-data">100</span> 名马术演员</p><p class="f-caption">配近百匹战马，复原元代丝路沙漠战争场景</p></div>
+      <div class="card"><h3>翠湖水上舞台</h3><p><span class="f-data">2万</span> 平方米</p><p class="f-caption">水上实景非遗秀场地，含打铁花、火壶钢花与百米游船</p></div>
+      <div class="card"><h3>梦华录主题区</h3><p><span class="f-data">2万</span> 平方米</p><p class="f-caption">2024年12月31日首发，十大组团场景</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>交通接驳</h3><p class="f-body">地铁1号线华侨城站 D 出口</p><p class="f-caption">紧邻深南大道主干道，园区位于华侨城商圈内，与深圳世界之窗、欢乐谷同处一片文旅聚集区。</p></div>
+      <div class="card"><h3>街区餐饮与文创</h3><p class="f-body">随主题区同步布置</p><p class="f-caption">「锦绣盛市·梦华录」主题区把餐饮与文创嵌进十大组团场景，游客在街区里消费而非在固定餐厅。</p></div>
+      <div class="card"><h3>节庆活动</h3><p class="f-body">按节令轮转</p><p class="f-caption">春节非遗灯会、元旦京剧沉浸街区等节点活动逐年更替，是拉动旺季客流的主要手段。</p></div>
+      <div class="card"><h3>演出票务</h3><p class="f-body">含在一票通玩内</p><p class="f-caption">主要驻场剧目含在门票内，具体场次与停演日以景区当日公告为准；部分剧目在周一停演。</p></div>
+      <div class="card"><h3>片区联动</h3><p class="f-body">华侨城文旅带</p><p class="f-caption">与深圳世界之窗、欢乐谷同属华侨城片区，构成深圳南山区最密集的主题公园组团。</p></div>
+      <div class="card"><h3>信息服务</h3><p class="f-body">官网与票务平台</p><p class="f-caption">官网提供园区信息；门票价格随平台与促销活动浮动，出行前建议核对官方渠道当日价格。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. NEWS ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>国风与国潮：从造景到造境</h3><p class="f-body">园区把转型方向概括为从「造景」到「造境」，从静态微缩景观转向沉浸式国风文化体验，被华侨城列为产品业态升级与「首发经济」的实践样本。2024年底的「锦绣盛市·梦华录」和2026年初的京剧沉浸街区，都是这条线上的动作。</p></div>
+      <div class="card"><h3>2025年11月：土地传闻与股价异动</h3><p class="f-body">华侨城A在2025年11月11日年内首次两连板，市场流传两条消息：锦绣中华到期土地将推进处置以盘活土地资源，以及深圳欢乐谷可能整体搬迁至光明区。媒体报道明确称传闻「未获官方证实」；公司当日发布股票交易异常波动公告，称经营正常、无应披露未披露重大信息、控股股东正实施增持，但公告并未明确肯定或否认传闻。截至2026年9月，没有官方确认的关闭、转让或土地收回事实。</p></div>
+      <div class="card"><h3>与腾讯视频的 IP 合作</h3><p class="f-body">「锦绣盛市·梦华录」是园区第一次把影视 IP 的完整场景体系搬进景区，占地2万平方米、含锦绣楼与州桥夜市等十大组团。这条路径能否带来复访，是判断园区转型成效的关键观察点。</p></div>
+      <div class="card"><h3>母子公司的双重压力</h3><p class="f-body">母公司华侨城A 2025年营收同比下降42.32%、归母净利润亏损144.96亿元，文旅板块虽在营收中占比升至68.10%，但整体仍处收缩期。锦绣中华自身营收从未单独披露，其转型进度与集团的资本开支节奏绑定在一起。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. RESOURCES ====== -->
+<section class="section section-alt" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="reveal">
+      <div class="resource-group"><h4>官方网站</h4><ul>
+        <li><a href="https://www.szjxzh.com.cn/" target="_blank" rel="noopener">深圳锦绣中华发展有限公司官网</a><span class="tag">园区·票务</span></li>
+        <li><a href="https://www.chinaoct.com/" target="_blank" rel="noopener">华侨城集团官网</a><span class="tag">集团入口</span></li>
+      </ul></div>
+      <div class="resource-group"><h4>百科与资料</h4><ul>
+        <li><a href="https://en.wikipedia.org/wiki/Splendid_China_Folk_Village" target="_blank" rel="noopener">Splendid China Folk Village — Wikipedia（英文）</a></li>
+        <li><a href="https://www.szdag.gov.cn/dawh/tqssn/content/post_947115.html" target="_blank" rel="noopener">深圳市档案馆 — 锦绣中华与民俗文化村史料</a></li>
+      </ul></div>
+      <div class="resource-group"><h4>权威报道与政府信息</h4><ul>
+        <li><a href="https://epaper.gmw.cn/gmrb/html/2011-05/13/nw.D110000gmrb_20110513_2-12.htm" target="_blank" rel="noopener">光明日报 — 华侨城文化产业大事记（2011-05-13）</a></li>
+        <li><a href="http://static.nfapp.southcn.com/content/201911/22/c2830800.html" target="_blank" rel="noopener">南方+ — 锦绣中华开园30周年，累计接待近7000万人次（2019-11-22）</a></li>
+        <li><a href="http://wtl.sz.gov.cn/xxgk/qt/lypc/content/post_11984910.html" target="_blank" rel="noopener">深圳市文化广电旅游体育局 — 2025年春节旅游数据</a></li>
+        <li><a href="http://ex.chinadaily.com.cn/exchange/partners/82/rss/channel/cn/columns/j3u3t6/stories/WS678b52d2a310be53ce3f24e5.html" target="_blank" rel="noopener">中国日报 — 锦绣盛市·梦华录与演艺焕新（2025-01）</a></li>
+        <li><a href="http://www.zqrb.cn/gscy/gongsi/2026-03-31/A1774950056189.html" target="_blank" rel="noopener">证券日报 — 华侨城A 2025年年报要点（2026-03-31）</a></li>
+      </ul></div>
+      <div class="resource-group"><h4>视频</h4><ul>
+        <li><a href="https://search.bilibili.com/all?keyword=锦绣中华民俗村" target="_blank" rel="noopener">B站 — 锦绣中华民俗村相关视频</a></li>
+      </ul></div>
+      <p class="f-caption" style="margin-top:1.2rem;">数据核实说明：开园与合并时间、投资额、景点与村寨数量来自维基百科、光明日报与深圳市档案馆史料；票价来自第三方票务平台，园区官网未提供静态价目页，价格随平台与活动浮动；2023至2025年的全年客流未见公开单列数据，页面只列节假日口径；两园面积存在约50万与53万平方米两种口径，微缩景观数量（82处）多源一致，民俗村村寨数量则有24、25、27、28个多种说法，页面以传统口径为主并标注分歧；1992年客流峰值三个来源分别为716万、720万、730万人次，页面并列呈现；2025年11月的土地处置与搬迁传闻仅有市场消息与公司异动公告，无官方确认，页面按「传闻与回应」处理。坐标经高德地图POI核对（GCJ-02），非实测。页面数据截至2026年9月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (China: Gaode tiles use GCJ-02; amap_search.py already returns GCJ-02 — DO NOT convert) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：高德 POI 返回 GCJ-02，高德瓦片同为 GCJ-02，直接使用，无需任何坐标转换
+
+var zonesGcj02 = [
+  { name: '锦绣中华微缩景区<br><small>82处微缩景观 · 多数按 1:15</small>', lat: 22.532529, lng: 113.984844, color: '#1F6E63' },
+  { name: '中国民俗文化村<br><small>主入口 · 24个民族村寨</small>', lat: 22.530907, lng: 113.988741, color: '#C4553B' },
+  { name: '故宫<br><small>微缩景观地标</small>', lat: 22.531702, lng: 113.992269, color: '#3E9E90' },
+  { name: '傣寨<br><small>民族村寨 · 1:1 建成</small>', lat: 22.530277, lng: 113.983465, color: '#8A6BB0' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([22.5315, 113.9885], 16);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesGcj02);
+
+  if (withBoundary) {
+    L.circle([22.5315, 113.9885], { radius: 450, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

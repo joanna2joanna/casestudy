@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>星海广场游乐场 — 大连城市地标广场里的开放式游乐业态，三十年四轮迭代样本</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #1565C0;
+  --clr-primary-light: #64B5F6;
+  --clr-primary-dark: #0D47A1;
+  --clr-accent: #FF8F00;
+}
+
+.hero {
+  background: linear-gradient(160deg, #0D47A1 0%, #1565C0 40%, #64B5F6 70%, #BBDEFB 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(255,143,0,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>星海广场游乐场</h1>
+    <p class="hero-subtitle">大连城市地标广场里的开放式游乐业态——无独立围墙、无单一投资商，随星海广场三十年四轮迭代：华表变喷泉、会展中心变万象城、摩天轮立项又终止</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">176万㎡</div><div class="kpi-label">星海广场（曾是亚洲最大城市广场）</div></div>
+      <div class="kpi-card"><div class="kpi-number">1997年</div><div class="kpi-label">广场建成 · 华表同年落成</div></div>
+      <div class="kpi-card"><div class="kpi-number">18万/日</div><div class="kpi-label">星海湾片区日均客流（片区口径）</div></div>
+      <div class="kpi-card"><div class="kpi-number">2028年</div><div class="kpi-label">华润万象城计划开业（最新迭代）</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目类型</h3><p>开放式游乐业态——无统一大门票、无独立围墙，散落在城市广场内的动力游乐设施带</p></div>
+      <div class="card"><h3>载体</h3><p>星海广场，176 万㎡，曾是亚洲最大城市广场，1997 年填海造地建成</p></div>
+      <div class="card"><h3>运营主体</h3><p>大连星海湾开发建设集团有限公司（片区整体管理），游乐项目由场地征集方招商、单点经营</p></div>
+      <div class="card"><h3>地理位置</h3><p>大连市沙河口区星海广场，南临星海湾、北接会展路，滨海开放式公共空间</p></div>
+      <div class="card"><h3>前身</h3><p>星海湾废弃盐场与垃圾填埋场，1993 年启动填海造地与土地整理</p></div>
+      <div class="card"><h3>核心特征</h3><p>无单一投资商、无独立投资额，游乐业态随广场地标迭代而多轮更替</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>星海广场游乐场不是一个封闭乐园，而是大连城市地标「星海广场」里的一处开放式游乐业态带。它没有统一大门票，游乐设施（海盗船、飞天秋千、自旋过山车、欢乐飞翔等动力项目）单点收费，散落在 176 万㎡广场的滨海一侧。理解它的关键不在游乐设备本身，而在它依附的城市公共空间如何三十年四轮迭代：1997 年广场随香港回归建成，同年立起 19.97 米的汉白玉九龙华表，1999 年百年城雕揭幕；2016 年华表凌晨拆除、原址改为音乐喷泉；2019 年「大连之星」摩天轮项目立项，2024 年 7 月因审批终止、从未建成；同期的会展中心在 2023–2025 年拆除，原址由华润以约 58.3 亿元建设东北第 3 座 M1 重奢旗舰万象城，计划 2028 年开业。游乐场没有自己的「投资额」「面积」可查——因为它本来就是城市公共空间的附属业态，随广场一起变脸。这一份案例研究，讲的就是这种「无主」游乐业态的迭代逻辑。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>对象</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>广场载体</td><td>星海广场</td><td>176 万㎡，1997 年 6 月 30 日竣工，前身废弃盐场填海造地，曾为亚洲最大城市公用广场</td></tr>
+          <tr><td>已拆地标</td><td>九龙华表（1997–2016）</td><td>汉白玉材质，高 19.97 米对应香港回归年份，2016 年 8 月 5 日凌晨拆除</td></tr>
+          <tr><td>纪念城雕</td><td>百年城雕（1999）</td><td>中央美术学院设计，80 米铸铜脚印浮雕拓印 1000 双市民脚印，1999 年 9 月 19 日揭幕</td></tr>
+          <tr><td>现状地标</td><td>音乐喷泉（华表原址）</td><td>2016 年华表拆除后改建，2026 年 4 月 28 日启幕，免费开放</td></tr>
+          <tr><td>在建项目</td><td>华润万象城（原会展中心）</td><td>约 58.3 亿元投资，42.6 万㎡，东北第 3 座 M1 重奢旗舰，2028 年计划开业</td></tr>
+          <tr><td>未建成项目</td><td>「大连之星」摩天轮（2019–2024）</td><td>2019 年立项，2024 年 7 月终止，从未建成</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>星海广场</td><td>176 万 m²</td><td>曾是亚洲最大城市广场，游乐场载体</td></tr>
+          <tr><td>规模</td><td>百年城雕</td><td>80 m 脚印浮雕 · 1000 双脚印</td><td>1999 年建</td></tr>
+          <tr><td>规模</td><td>九龙华表（已拆）</td><td>高 19.97 m</td><td>1997 年建，2016 年拆</td></tr>
+          <tr><td>投资</td><td>华润万象城</td><td>约 ¥58.3 亿</td><td>会展中心原址，在建</td></tr>
+          <tr><td>设施</td><td>「大连之星」摩天轮</td><td>未建成</td><td>2019 立项，2024 年 7 月终止</td></tr>
+          <tr><td>运营</td><td>音乐喷泉</td><td>免费</td><td>华表原址，2026 年启幕</td></tr>
+          <tr><td>运营</td><td>游乐设施</td><td>单项目收费</td><td>海盗船、飞天秋千等，第三方平台套票约 60–120 元</td></tr>
+          <tr><td>客流</td><td>星海湾片区</td><td>日均约 18 万</td><td>片区口径，非游乐场单点</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">游乐场本身无公开的独立投资额与面积——它是城市公共空间的附属业态。上表以广场载体及其迭代节点为口径。数据来源于公开报道、政府规划及百科，截至 2026 年 9 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 460" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="460" fill="#0C1630" rx="12"/>
+
+          <!-- 华润万象城（北，原会展中心） -->
+          <rect x="250" y="40" width="300" height="60" rx="8" fill="rgba(255,143,0,0.14)" stroke="#FF8F00" stroke-width="2"/>
+          <text x="400" y="66" text-anchor="middle" fill="#FFC107" font-family="Playfair Display,serif" font-size="15" font-weight="700">华润万象城（在建 · 原会展中心）</text>
+          <text x="400" y="86" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">约 ¥58.3 亿 · 东北第 3 座 M1 重奢旗舰 · 2028 开业</text>
+
+          <!-- 音乐喷泉（华表原址） -->
+          <rect x="330" y="130" width="140" height="52" rx="8" fill="rgba(156,39,176,0.16)" stroke="#BA68C8" stroke-width="2"/>
+          <text x="400" y="152" text-anchor="middle" fill="#CE93D8" font-family="Playfair Display,serif" font-size="14" font-weight="700">音乐喷泉</text>
+          <text x="400" y="170" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9.5">原华表址（1997–2016）</text>
+
+          <!-- 星海广场中央 -->
+          <rect x="150" y="215" width="500" height="92" rx="10" fill="rgba(21,101,192,0.14)" stroke="#1565C0" stroke-width="2"/>
+          <text x="400" y="245" text-anchor="middle" fill="#64B5F6" font-family="Playfair Display,serif" font-size="17" font-weight="700">星海广场</text>
+          <text x="400" y="268" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="11">176 万㎡ · 曾是亚洲最大城市广场 · 开放式游乐业态载体</text>
+          <text x="400" y="288" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="10">1997 年填海造地建成 · 南北地下 3000 个停车位</text>
+
+          <!-- 百年城雕 -->
+          <rect x="150" y="340" width="240" height="66" rx="8" fill="rgba(255,143,0,0.14)" stroke="#FF8F00" stroke-width="2"/>
+          <text x="270" y="366" text-anchor="middle" fill="#FFC107" font-family="Playfair Display,serif" font-size="14" font-weight="700">百年城雕</text>
+          <text x="270" y="386" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">80 m 脚印浮雕 · 1000 双脚印</text>
+          <text x="270" y="400" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9.5">1999 年揭幕</text>
+
+          <!-- 星海湾游乐场 -->
+          <rect x="430" y="340" width="250" height="66" rx="8" fill="rgba(21,101,192,0.20)" stroke="#64B5F6" stroke-width="2"/>
+          <text x="555" y="366" text-anchor="middle" fill="#90CAF9" font-family="Playfair Display,serif" font-size="14" font-weight="700">星海湾游乐场</text>
+          <text x="555" y="386" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">海盗船 · 飞天秋千 · 自旋过山车</text>
+          <text x="555" y="400" text-anchor="middle" fill="#999" font-family="DM Sans,sans-serif" font-size="9.5">开放式 · 单项目收费</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(762,30)">
+            <circle cx="0" cy="0" r="16" fill="none" stroke="#FF8F00" stroke-width="1" opacity="0.5"/>
+            <polygon points="0,-14 2,-3 14,0 2,3 0,14 -2,3 -14,0 -2,-3" fill="#FF8F00" opacity="0.8"/>
+            <text x="0" y="-19" text-anchor="middle" fill="#FF8F00" font-size="8" font-weight="700">N</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>星海广场（载体）</h3><p>176 万㎡，南临星海湾、北接会展路。广场地面将改为无行车道，草坪变石材硬铺装，南北地下配 3000 个停车位。</p></div>
+      <div class="card"><h3>音乐喷泉·原华表址</h3><p>2016 年华表拆除后改建，2026 年 4 月 28 日启幕，免费开放，平日及节假日夜间定时表演。</p></div>
+      <div class="card"><h3>百年城雕</h3><p>1999 年纪念大连建市百年的巨型纪念城雕，形如打开的大书平铺海岸，80 米铸铜脚印浮雕拓印 1000 双市民脚印。</p></div>
+      <div class="card"><h3>星海湾游乐场</h3><p>滨海一侧的开放式游乐设施带，海盗船、飞天秋千、自旋过山车、欢乐飞翔等动力项目单点收费。</p></div>
+      <div class="card"><h3>华润万象城（在建）</h3><p>原会展中心地块，约 58.3 亿元投资，含 W 酒店、超甲级写字楼，计划 2028 年开业。</p></div>
+      <div class="card"><h3>星海广场整体改造</h3><p>广场地面去行车道化、园林景观分层升级，地下通道直达地铁，由华润集团分两期操盘。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1993年7月</div><div class="timeline-content"><h4>填海造地启动</h4><p>利用建筑垃圾填海造地 114 公顷、开发土地 62 公顷，将废弃盐场整理为广场用地。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1997年6月</div><div class="timeline-content"><h4>星海广场竣工 · 华表落成</h4><p>6 月 30 日广场竣工，总面积 176 万㎡，成亚洲最大城市公用广场；同年立起 19.97 米汉白玉九龙华表。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1999年9月</div><div class="timeline-content"><h4>百年城雕揭幕</h4><p>9 月 19 日，纪念大连建市百年的 80 米铸铜脚印浮雕正式揭幕，成为广场南端地标。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2016年8月</div><div class="timeline-content"><h4>华表凌晨拆除</h4><p>8 月 5 日凌晨，九龙华表随啤酒节拆棚一并拆除，原址此后改建音乐喷泉。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019年</div><div class="timeline-content"><h4>「大连之星」摩天轮立项</h4><p>大连之星娱乐发展有限公司成立，推进星海广场摩天轮项目，后因审批问题搁置。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023–2025年</div><div class="timeline-content"><h4>会展中心拆除</h4><p>大连国际会展中心拆除，为万象城腾地；2024 年 2 月拆除作业事故致 4 人遇难。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年7月</div><div class="timeline-content"><h4>摩天轮项目终止</h4><p>「大连之星」摩天轮因审批原因终止，项目从未建成。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年4月</div><div class="timeline-content"><h4>音乐喷泉启幕</h4><p>4 月 28 日起音乐喷泉正式启幕，免费开放，成为华表原址的新一代打卡点。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年8月</div><div class="timeline-content"><h4>万象城初出地面</h4><p>万象城地上主体初出地面，规划草案公示，施工总承包启动招标。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2028年</div><div class="timeline-content"><h4>万象城计划开业</h4><p>东北第 3 座 M1 重奢旗舰万象城计划 2028 年 5 月开业，广场下一轮迭代节点。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>星海湾片区客流</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">18万/日</p><p class="f-caption">片区口径 · 沙河口区「十五五」规划</p></div>
+      <div class="card" style="text-align:center;"><h4>门票模式</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">开放式</p><p class="f-caption">无大门票 · 游乐设施单项目收费</p></div>
+      <div class="card" style="text-align:center;"><h4>音乐喷泉</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">免费</p><p class="f-caption">2026 年 4 月 28 日启幕</p></div>
+    </div>
+    <div class="card reveal" style="margin-bottom:1.5rem;">
+      <h3>无单一投资商的开放式业态</h3>
+      <p>星海广场游乐场没有自己的投资额、面积或入园客流可查——这不是数据缺失，而是它的本质属性：它是一片依附于城市公共广场的开放式游乐业态带。广场由大连星海湾开发建设集团做片区整体管理，游乐项目通过场地征集招商、单点经营，游客免费进广场、按项目付费。这种「公共空间 + 点状游乐」的结构，决定了对它的评价标准不是单园投资规模或单园客流，而是它作为城市「会客厅」的聚客能力——沙河口区「十五五」规划给出的口径是星海湾片区日均客流约 18 万人次。</p>
+    </div>
+    <div class="card reveal">
+      <h3>三十年四轮迭代的逻辑</h3>
+      <p>游乐场本身没怎么「新建」，但它依附的广场一直在换脸，这正是你所说的「经过很多年迭代、面貌不同」。第一轮是 1997–2016 年的华表时代，广场以纪念性地标为主；第二轮从 2016 年华表拆除开始，原址让位给音乐喷泉，广场从「纪念」转向「休闲」；第三轮是 2019–2024 年的摩天轮博弈，「大连之星」项目试图给广场加一座地标级游乐设施，最终因审批终止、从未建成；第四轮是 2023 年至今的万象城改造，会展中心让位给重奢商业，广场整体去行车道化、地下化。游乐设施带每一轮都被动调整——这就是城市公共空间里「无主」游乐业态的典型命运：它不决定自己的未来，只反映所在城市空间的意志。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>开放式游乐业态</h3><p>无围墙、无统一大门票，游乐设施散落广场滨海一侧，单项目收费，是「公共空间 + 点状游乐」的典型样本。</p></div>
+      <div class="card"><h3>三十年四轮迭代</h3><p>华表（1997–2016）→ 音乐喷泉、会展中心（2023–2025 拆）→ 万象城（2028 开业）、摩天轮（2019–2024 终止），游乐业态每轮被动调整。</p></div>
+      <div class="card"><h3>城市会客厅定位</h3><p>沙河口区「十五五」规划明确擦亮星海湾「国家级美丽海湾」名片、打造最美「城市会客厅」，星海广场是核心载体。</p></div>
+      <div class="card"><h3>摩天轮教训</h3><p>「大连之星」摩天轮 2019 年立项、2024 年 7 月终止，说明地标级游乐设施在城市公共空间的落地上受审批与规划强约束。</p></div>
+      <div class="card"><h3>万象城 M1 重奢旗舰</h3><p>约 58.3 亿元投资、42.6 万㎡，东北第 3 座 M1 重奢旗舰，含 W 酒店、超甲级写字楼，把广场从「游赏」拉向「消费」。</p></div>
+      <div class="card"><h3>填海造地工程</h3><p>1993 年用建筑垃圾填海造地 114 公顷，造就 176 万㎡广场，是大连滨海公共空间开发的标志性工程。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>游乐设施带</h3><p>海盗船、飞天秋千、自旋过山车、欢乐飞翔等动力项目，单点收费，集中在广场滨海一侧的星海湾游乐场。</p></div>
+      <div class="card"><h3>音乐喷泉</h3><p>华表原址改建，免费开放，2026 年 4 月 28 日启幕，夜间定时表演，是当前广场的核心打卡点。</p></div>
+      <div class="card"><h3>百年城雕</h3><p>80 米铸铜脚印浮雕，拓印 1000 双大连市民脚印，广场南端制高点，兼具纪念与观光功能。</p></div>
+      <div class="card"><h3>华润万象城（在建）</h3><p>原会展中心地块，含 W 酒店、超甲级写字楼、文化展演空间，计划 2028 年开业。</p></div>
+      <div class="card"><h3>地下停车与交通</h3><p>南北地下约 3000 个停车位，地下通道直达地铁，广场地面去行车道化后以步行、地下动线为主。</p></div>
+      <div class="card"><h3>滨海岸线</h3><p>星海湾滨海步道串联广场南端，海上观光、低空旅游、科普研学等多元消费场景在此叠加。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>音乐喷泉启幕</h3><p>2026 年 4 月 28 日起音乐喷泉正式启幕，免费开放，华表原址的新一代地标正式接棒。</p></div>
+      <div class="card"><h3>万象城初出地面</h3><p>2026 年 8 月万象城地上主体初出地面，规划草案公示、施工总承包招标，2028 年开业可期。</p></div>
+      <div class="card"><h3>元旦五处打卡点</h3><p>2026 年元旦星海广场设置五处打卡点，配合灯光与喷泉营造节日氛围，强化「城市会客厅」定位。</p></div>
+      <div class="card"><h3>旅拍乱象整治</h3><p>2026 年 4 月针对广场旅拍乱收费、扰序行为开展整治，规范开放空间的商业化秩序。</p></div>
+      <div class="card"><h3>拆除违规集市</h3><p>2026 年 6 月拆除广场违规集市，为整体改造与业态升级腾出空间。</p></div>
+      <div class="card"><h3>广场整体改造收官</h3><p>广场去行车道化、园林景观分层升级，地下通道与停车工程推进，改造完成后游客活动空间将遍布全广场。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>官方来源与百科</h4><ul>
+      <li><a href="https://zh.wikipedia.org/wiki/%E6%98%9F%E6%B5%B7%E5%B9%BF%E5%9C%BA_(%E5%A4%A7%E8%BF%9E%E5%B8%82)" target="_blank" rel="noopener">维基百科 — 星海广场（大连市）</a><span class="tag">百科</span></li>
+      <li><a href="http://www.dlshk.gov.cn/web/shk/information/detail?id=ab1c4dede1ca4a6d8a442ec64b8fe227" target="_blank" rel="noopener">沙河口区政府 — 「十五五」规划纲要图解</a><span class="tag">官方</span></li>
+      <li><a href="http://epaper.lnd.com.cn/lswbepaper/pc/con/202609/11/content_338353.html" target="_blank" rel="noopener">辽沈晚报 — 擦亮星海湾打造最美「城市会客厅」</a><span class="tag">官方</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>迭代节点与动态</h4><ul>
+      <li><a href="http://www.bjnews.com.cn/news/2016/08/05/412487.html" target="_blank" rel="noopener">新京报 — 「大连华表」凌晨被拆除的背后（2016.8）</a><span class="tag">媒体</span></li>
+      <li><a href="https://news.qq.com/rain/a/20260808A09YJL00" target="_blank" rel="noopener">腾讯新闻 — 星海万象城建设提速，M1 重奢旗舰初出地面</a><span class="tag">媒体</span></li>
+      <li><a href="https://m.dl.bendibao.com/xiuxian/88686.shtm" target="_blank" rel="noopener">大连本地宝 — 2026 星海广场音乐喷泉表演时间</a><span class="tag">本地</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>地图与影像</h4><ul>
+      <li><a href="https://commons.wikimedia.org/w/index.php?search=Xinghai+Square+Dalian" target="_blank" rel="noopener">Wikimedia Commons — 星海广场自由版权图片</a><span class="tag">图库</span></li>
+      <li><a href="https://www.google.com/maps/place/Xinghai+Square+Dalian" target="_blank" rel="noopener">Google Maps — 星海广场</a><span class="tag">地图</span></li>
+    </ul></div>
+    <p class="f-caption" style="text-align:center;margin-top:2rem;">本报告所有数据来源于公开资料，仅供参考研究使用。数据截至 2026 年 9 月。</p>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+// 主 POI：星海湾游乐场（高德 GCJ-02）；百年城雕、音乐喷泉为广场南北两侧地标
+
+var zonesGcj02 = [
+  { name: '星海广场游乐场<br><small>星海湾游乐场（开放式游乐带）</small>', lng: 121.588727, lat: 38.876359, color: '#1565C0' },
+  { name: '百年城雕', lng: 121.586807, lat: 38.876558, color: '#FF8F00' },
+  { name: '音乐喷泉·原华表址', lng: 121.588009, lat: 38.881996, color: '#8E24AA' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([38.8790, 121.5880], 15);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesGcj02);
+
+  if (withBoundary) {
+    L.circle([38.876359, 121.588727], { radius: 300, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

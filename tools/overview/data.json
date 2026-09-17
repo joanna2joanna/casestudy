@@ -999,5 +999,18 @@
     "chip": "2024 年",
     "pph": null,
     "pph_src": null
+  },
+  {
+    "slug": "dalian-xinghai-square-recreation-ground",
+    "name": "星海广场游乐场",
+    "chapter": "中国",
+    "subgroup": "城市文旅与主题乐园",
+    "tag": "城市广场 · 开放式游乐",
+    "location": "辽宁大连（1997-）",
+    "desc": "大连城市地标广场里的开放式游乐业态，无围墙、无单一投资商。随星海广场三十年四轮迭代：华表变喷泉、会展中心变万象城、摩天轮立项又终止。",
+    "vis": "18 万/日",
+    "chip": "片区口径",
+    "pph": null,
+    "pph_src": null
   }
 ]

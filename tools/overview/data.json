@@ -986,5 +986,18 @@
     "chip": "累计",
     "pph": null,
     "pph_src": null
+  },
+  {
+    "slug": "shenzhen-longgang-children-park",
+    "name": "深圳龙岗儿童公园",
+    "chapter": "中国",
+    "subgroup": "城市文旅与主题乐园",
+    "tag": "儿童公园 · 亲子",
+    "location": "广东深圳（2023-）",
+    "desc": "深圳最大儿童公园，32万㎡森林山谷「政府主导+社会资本参与」样本。政府投公益底座、华侨城做总运营、大周游乐以星高度魔法村园中园做动力创收。大湾区海拔最高摩天轮+亚洲最大海盗船。",
+    "vis": "400 万+",
+    "chip": "2024 年",
+    "pph": null,
+    "pph_src": null
   }
 ]

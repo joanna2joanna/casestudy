@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>深圳龙岗儿童公园 — 深圳最大儿童公园，「政府主导+社会资本参与」的森林山谷乐园样本</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #43A047;
+  --clr-primary-light: #81C784;
+  --clr-primary-dark: #1B5E20;
+  --clr-accent: #FF8F00;
+}
+
+.hero {
+  background: linear-gradient(160deg, #1B5E20 0%, #43A047 40%, #81C784 70%, #C8E6C9 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(255,143,0,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>深圳龙岗儿童公园</h1>
+    <p class="hero-subtitle">深圳最大儿童公园——32万㎡森林山谷里的「政府主导+社会资本参与」样本，无动力免费引流、星高度魔法村动力创收</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">32.35万㎡</div><div class="kpi-label">规划管理控制范围（深圳最大）</div></div>
+      <div class="kpi-card"><div class="kpi-number">¥7.73亿</div><div class="kpi-label">总投资（政府投资为主）</div></div>
+      <div class="kpi-card"><div class="kpi-number">2023.12.28</div><div class="kpi-label">开园试运营</div></div>
+      <div class="kpi-card"><div class="kpi-number">400万+</div><div class="kpi-label">2024年入园人次</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>投资运营模式</h3><p>「政府主导 + 社会资本参与」——政府投资为主、免门票，社会资本做动力区与商业配套</p></div>
+      <div class="card"><h3>总运营商</h3><p>深圳华侨城文化集团有限公司龙城分公司（央企二级子公司，委托运营 2023–2043）</p></div>
+      <div class="card"><h3>动力区运营方</h3><p>深圳市大周游乐管理有限公司（星高度魔法村，民营「大周游乐」系）</p></div>
+      <div class="card"><h3>地理位置</h3><p>深圳市龙岗区龙城街道盐龙大道与爱心路交汇处北侧，大窝岭公园体系</p></div>
+      <div class="card"><h3>设计方</h3><p>奥雅股份（子品牌「洛嘉儿童」）</p></div>
+      <div class="card"><h3>主管单位</h3><p>龙岗区城市管理和综合执法局（监管并协调定价）</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>深圳龙岗儿童公园是深圳最大的儿童公园，位于盐龙大道与爱心路交汇处北侧的 U 型森林山谷（高差超 100 米），属大窝岭公园体系。项目 2020 年 10 月开工，总投资 7.73 亿元，规划管理控制范围 32.35 万平方米、建设面积 24.2 万平方米，2023 年 12 月 28 日开园试运营。它最大的特点不在设备规模，而在资本结构——采用「政府主导 + 社会资本参与」模式：政府投资建设公园基础设施与免费的 10 大无动力设施、科普馆，华侨城文化集团做全园总运营商，民营大周游乐以「星高度魔法村」动力区做园中园市场化运营。无动力免费引流、动力创收、商业反哺，配以源自国家级非遗坂田永胜堂舞麒麟的原创 IP「麒麟家族」。开园首年入园超 400 万人次，2024 年位居深圳公园榜第二、龙岗区第一。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>公司/团队</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>景观与规划设计</td><td>奥雅股份（洛嘉儿童）</td><td>以「拥抱」为核心理念，垂直分区、立体串联</td></tr>
+          <tr><td>地形策略</td><td>U 型山谷超 100 米高差</td><td>沿陡坡、缓坡、平台分层布置，分低龄/中龄/大龄区</td></tr>
+          <tr><td>原创 IP</td><td>麒麟家族</td><td>源自国家级非遗坂田永胜堂舞麒麟，六只小麒麟各掌不同森林资源</td></tr>
+          <tr><td>总运营商</td><td>华侨城文化集团龙城分公司</td><td>龙岗区政府引进的央企二级子公司，运营期 20 年</td></tr>
+          <tr><td>动力区投资运营</td><td>大周游乐（星高度魔法村）</td><td>社会资本投资建设，市场化收费，主管单位监管协调</td></tr>
+          <tr><td>模式特点</td><td>无动力免费 + 动力创收 + 商业反哺</td><td>整体免门票，点状商业化，公益与商业并存</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>规划管理控制范围</td><td>32.35 万 m²</td><td>深圳最大儿童公园</td></tr>
+          <tr><td>规模</td><td>建设面积</td><td>24.2 万 m²</td><td>含绿地、场馆、商业配套</td></tr>
+          <tr><td>规模</td><td>星高度魔法村（动力区）</td><td>约 1.5 万 m²</td><td>不含摩天轮</td></tr>
+          <tr><td>规模</td><td>无动力设施区</td><td>约 1.2 万 m²</td><td>10 大设施，免费开放</td></tr>
+          <tr><td>规模</td><td>商业配套</td><td>约 8,255 m²</td><td>餐饮、零售、室内游乐</td></tr>
+          <tr><td>投资</td><td>总投资</td><td>¥7.73 亿</td><td>政府投资为主</td></tr>
+          <tr><td>设施</td><td>无动力设施</td><td>10 大项</td><td>密语魔卷、乘风攀岩等</td></tr>
+          <tr><td>设施</td><td>动力设备</td><td>20 项</td><td>摩天轮、海盗船、冰雪馆等</td></tr>
+          <tr><td>设施</td><td>星空摩天轮「湾区之星」</td><td>直径 88 m · 顶点海拔 193 m</td><td>大湾区海拔最高</td></tr>
+          <tr><td>设施</td><td>魔法海盗船</td><td>108 座</td><td>亚洲容量最大</td></tr>
+          <tr><td>运营</td><td>开园日期</td><td>2023 年 12 月 28 日</td><td>试运营</td></tr>
+          <tr><td>运营</td><td>运营期</td><td>2023–2043（20 年）</td><td>华侨城文化集团委托运营</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">以上数据来源于公开报道、政府公告及奥雅股份项目页。数据截至 2026 年 9 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="450" fill="#0F1B13" rx="12"/>
+
+          <!-- 无动力乐园（半山腰坡面） -->
+          <rect x="140" y="55" width="520" height="85" rx="8" fill="rgba(67,160,71,0.15)" stroke="#43A047" stroke-width="2"/>
+          <text x="400" y="85" text-anchor="middle" fill="#81C784" font-family="Playfair Display,serif" font-size="16" font-weight="700">无动力乐园（免费）</text>
+          <text x="400" y="108" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">密语魔卷 · 乘风攀岩 · 麒麟谷 · 神树梦网 · 精灵森林等 10 大设施，依坡面分低/中/大龄区</text>
+
+          <!-- 星空摩天轮（地标） -->
+          <circle cx="160" cy="205" r="46" fill="none" stroke="#FF8F00" stroke-width="2.5"/>
+          <circle cx="160" cy="205" r="6" fill="#FF8F00"/>
+          <line x1="160" y1="205" x2="160" y2="159" stroke="#FF8F00" stroke-width="1.5"/>
+          <text x="160" y="270" text-anchor="middle" fill="#FFC107" font-family="Playfair Display,serif" font-size="14" font-weight="700">星空摩天轮·湾区之星</text>
+          <text x="160" y="290" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="10">直径 88 m · 顶点海拔 193 m</text>
+
+          <!-- 星高度魔法村（动力区，谷底） -->
+          <rect x="230" y="175" width="330" height="150" rx="10" fill="rgba(255,143,0,0.12)" stroke="#FF8F00" stroke-width="2"/>
+          <text x="395" y="205" text-anchor="middle" fill="#FFC107" font-family="Playfair Display,serif" font-size="16" font-weight="700">星高度魔法村（动力区）</text>
+          <text x="395" y="228" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">20 项动力设备 · 市场化收费</text>
+          <text x="395" y="250" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">魔法海盗船（108 座 · 亚洲容量最大）</text>
+          <text x="395" y="272" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">真企鹅冰雪体验馆（全市首家）</text>
+
+          <!-- 森林主题科普馆（东南角） -->
+          <rect x="590" y="190" width="170" height="80" rx="8" fill="rgba(0,136,176,0.15)" stroke="#0088B0" stroke-width="2"/>
+          <text x="675" y="220" text-anchor="middle" fill="#4FC3F7" font-family="Playfair Display,serif" font-size="14" font-weight="700">森林主题科普馆</text>
+          <text x="675" y="242" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">免费 · 全息投影</text>
+          <text x="675" y="260" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">「最不像科技馆的森林科技馆」</text>
+
+          <!-- 出入口 / 商业配套 -->
+          <rect x="300" y="360" width="200" height="60" rx="8" fill="rgba(129,199,132,0.12)" stroke="#81C784" stroke-width="2"/>
+          <text x="400" y="386" text-anchor="middle" fill="#81C784" font-family="Playfair Display,serif" font-size="14" font-weight="700">东南门入口 · 商业配套</text>
+          <text x="400" y="406" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">约 8,255 m² 餐饮零售 · 停车场东侧</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(760,30)">
+            <circle cx="0" cy="0" r="16" fill="none" stroke="#FF8F00" stroke-width="1" opacity="0.5"/>
+            <polygon points="0,-14 2,-3 14,0 2,3 0,14 -2,3 -14,0 -2,-3" fill="#FF8F00" opacity="0.8"/>
+            <text x="0" y="-19" text-anchor="middle" fill="#FF8F00" font-size="8" font-weight="700">N</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>无动力乐园</h3><p>约 1.2 万㎡，10 大免费设施沿坡面分布——密语魔卷、乘风攀岩、巨鸟坡、麒麟谷、神树梦网、精灵森林、魔力水圈、荔枝球、糖心工坊、种子仓库，按陡坡/缓坡/平台划分低龄、中龄、大龄区。</p></div>
+      <div class="card"><h3>星高度魔法村（动力区）</h3><p>约 1.5 万㎡园中园，20 项动力设备由大周游乐投资运营，含 108 座魔法海盗船、全市首家真企鹅冰雪体验馆等，实行市场调节价。</p></div>
+      <div class="card"><h3>星空摩天轮·湾区之星</h3><p>直径 88 米、36 个轿厢每厢 10 人、绕行约 18 分钟，建于海拔 105 米山体上，顶点海拔 193 米，为粤港澳大湾区海拔最高的摩天轮。</p></div>
+      <div class="card"><h3>森林主题科普馆</h3><p>免费开放，以麒麟精灵串起树木生长知识，全息投影互动，被称「最不像科技馆的森林主题科技馆」。</p></div>
+      <div class="card"><h3>麒麟家族 IP</h3><p>原创 IP 源自国家级非遗坂田永胜堂舞麒麟，六只小麒麟掌握不同魔法、代表不同森林资源，贯穿全园场景与科普叙事。</p></div>
+      <div class="card"><h3>出入口与配套</h3><p>东南门为主动线，约 8,255㎡ 商业配套含餐饮零售与室内游乐，停车场位于东侧。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2020年10月</div><div class="timeline-content"><h4>正式开工</h4><p>龙岗区儿童公园动工，总投资 7.73 亿元，规划管理控制范围 32.35 万㎡，定位深圳最大儿童公园。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023年12月28日</div><div class="timeline-content"><h4>开园试运营</h4><p>免门票开放，无动力乐园与科普馆免费，星高度魔法村动力区及部分商业配套收费。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年</div><div class="timeline-content"><h4>首个完整运营年</h4><p>入园累计超 400 万人次，月均约 33 万，人气居深圳公园榜第二、龙岗区第一。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年3月</div><div class="timeline-content"><h4>动力区收费争议</h4><p>「39 元玩 1 分钟」「摩天轮 99 元/人」引发热议，龙岗区城管局多次协调大周游乐降低非会员价、延长时长。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年</div><div class="timeline-content"><h4>入选创新案例</h4><p>获 CAAPA 文旅创新与高质量发展案例、广东省城市儿童友好空间建设可复制推广典型案例。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年春节</div><div class="timeline-content"><h4>客流持续走高</h4><p>9 天假期接待约 25 万人次，公园仍在推进「公园+经济」融合发展。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>开园首年客流</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">400万+</p><p class="f-caption">2024 年，月均约 33 万</p></div>
+      <div class="card" style="text-align:center;"><h4>全市公园人气</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">第2名</p><p class="f-caption">深圳公园榜 · 龙岗区第一</p></div>
+      <div class="card" style="text-align:center;"><h4>门票模式</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">免门票</p><p class="f-caption">无动力/科普馆免费 · 动力单点收费</p></div>
+    </div>
+    <div class="card reveal" style="margin-bottom:1.5rem;">
+      <h3>三层资本与运营整合关系</h3>
+      <p>深圳龙岗儿童公园不是单一投资商，而是「政府主导 + 社会资本参与」的三层结构：<strong>龙岗区政府</strong>投资 7.73 亿元建设公园基础设施与免费的无动力设施、科普馆，是公益底座；<strong>华侨城文化集团龙城分公司</strong>（央企二级子公司）受托做全园总运营商，管整体秩序与公园经济，运营期 2023–2043；<strong>大周游乐</strong>（民营）以「星高度魔法村」动力区做园中园，投资 20 项动力设备、市场化收费。三层主体资本独立、各算各账，由龙岗区城管局统一监管并协调定价。</p>
+    </div>
+    <div class="card reveal">
+      <h3>「星高度」品牌的园中园打法</h3>
+      <p>星高度是深圳大周游乐投资发展有限公司（2016 年成立，注册资本 1500 万元，法定代表人吴伟星）旗下的青少年儿童主题公园品牌。它不自己拿地建园，而是以「园中园」方式入驻公园——除龙岗儿童公园外，还出现在深圳中山公园、大亚湾儿童公园、星高度云里梦想乐园、星高度大浪梦想乐园、横岗城市梦想乐园等至少 6 个公园。因此龙岗儿童公园里的星高度魔法村，是大周游乐的一处品牌化合作，与公园业主（政府/华侨城）是两套资本、两套账。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>政府主导 + 社会资本参与</h3><p>政府投公益底座、央企做总运营、民营做动力创收。免门票保公益性，点状商业化保可持续，是城市公园运营的典型样本。</p></div>
+      <div class="card"><h3>无动力免费引流模型</h3><p>10 大无动力设施与科普馆全部免费，聚人气；动力设备与商业配套收费创收，形成「免费引流 + 点状变现」闭环。</p></div>
+      <div class="card"><h3>原创麒麟家族 IP</h3><p>从国家级非遗坂田永胜堂舞麒麟提炼六只小麒麟，各掌森林资源、各有魔法，把地域文化转成儿童可亲近的叙事。</p></div>
+      <div class="card"><h3>星空摩天轮·湾区之星</h3><p>直径 88 米、36 轿厢、每厢 10 人、绕行约 18 分钟。建于海拔 105 米山体，顶点海拔 193 米，大湾区海拔最高。</p></div>
+      <div class="card"><h3>魔法海盗船</h3><p>108 座、亚洲容量最大，与摩天轮共同构成动力区的两大「之最」地标。</p></div>
+      <div class="card"><h3>垂直分区·立体串联</h3><p>利用 U 型山谷超 100 米高差，沿陡坡/缓坡/平台分层布置，划分低龄、中龄、大龄区，全部采用国际安全标准。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>无动力乐园</h3><p>密语魔卷、乘风攀岩、巨鸟坡、麒麟谷、神树梦网、精灵森林、魔力水圈、荔枝球、糖心工坊、种子仓库 10 大设施，免费开放。</p></div>
+      <div class="card"><h3>星高度魔法村（动力区）</h3><p>20 项动力设备，含星空摩天轮、魔法海盗船、真企鹅冰雪体验馆等，市场化收费。</p></div>
+      <div class="card"><h3>森林主题科普馆</h3><p>免费开放（现场预约），全息投影互动，把爱林护林教育融入游戏体验。</p></div>
+      <div class="card"><h3>真企鹅冰雪体验馆</h3><p>全市首家真企鹅冰雪体验项目，位于动力区，为南方亲子市场稀缺的冰雪业态。</p></div>
+      <div class="card"><h3>商业配套</h3><p>约 8,255㎡，含餐饮、零售、室内游乐（如造梦亲子手作空间、HiFun 探索乐园），由华侨城统筹招商运营。</p></div>
+      <div class="card"><h3>交通</h3><p>地铁与公交可达，园区配停车场。工作日园区 6:00–22:00、周末节假日 6:00–23:00 开放，动力设备 9:00–21:00。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>「公园+经济」融合</h3><p>2026 年龙岗区政协以 5 号重点提案督办「深化公园+经济融合发展」，龙岗儿童公园是核心载体，推动自然美景向消费场景过渡。</p></div>
+      <div class="card"><h3>收费优化</h3><p>面对「39 元玩 1 分钟」争议，龙岗区城管局协调大周游乐降低非会员价、延长游玩时长，并推动联票、数字人民币套票等优惠。</p></div>
+      <div class="card"><h3>20 年运营期</h3><p>华侨城文化集团运营期至 2043 年，长期委托运营给公园的持续迭代与业态升级提供了稳定主体。</p></div>
+      <div class="card"><h3>星高度品牌扩张</h3><p>大周游乐以星高度品牌在深圳及大湾区多处公园复制「园中园」动力区模式，龙岗儿童公园是其标杆项目之一。</p></div>
+      <div class="card"><h3>行业样本意义</h3><p>「政府主导 + 社会资本参与」跑通了公益性与市场化并存的路径，成为广东省城市儿童友好空间可复制推广的典型案例。</p></div>
+      <div class="card"><h3>大湾区亲子地标</h3><p>凭「大湾区海拔最高摩天轮 + 亚洲最大海盗船」的双地标，叠加免费无动力乐园，正向大湾区亲子目的地持续蓄势。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>官方来源与百科</h4><ul>
+      <li><a href="https://baike.baidu.com/item/%E9%BE%99%E5%B2%97%E5%84%BF%E7%AB%A5%E5%85%AC%E5%9B%AD" target="_blank" rel="noopener">百度百科 — 龙岗儿童公园</a><span class="tag">百科</span></li>
+      <li><a href="http://sz-qb.com/MB/content/202010/30/content_37970.html" target="_blank" rel="noopener">深圳侨报 — 投资 7.73 亿元正式开工（2020.10）</a><span class="tag">官方</span></li>
+      <li><a href="https://www.lg.gov.cn/bmzz/zxwyh/zwdt/xwbd/content/post_12817401.html" target="_blank" rel="noopener">龙岗区政府 — 公园+经济融合发展提案督办（2026）</a><span class="tag">官方</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>设计与运营</h4><ul>
+      <li><a href="http://www.archina.com/index.php?g=works&amp;m=index&amp;a=show&amp;id=161147" target="_blank" rel="noopener">奥雅股份 — 深圳龙岗儿童公园设计案例</a><span class="tag">设计方</span></li>
+      <li><a href="https://static.nfnews.com/content/202503/17/c11088362.html" target="_blank" rel="noopener">南方+ — 专家：公园收费项目应公开收支明细</a><span class="tag">媒体</span></li>
+      <li><a href="https://static.nfnews.com/content/202503/17/c11090382.html" target="_blank" rel="noopener">南方+ — 龙岗儿童公园陷入高价争议</a><span class="tag">媒体</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>地图与影像</h4><ul>
+      <li><a href="https://commons.wikimedia.org/w/index.php?search=Longgang+Children%27s+Park" target="_blank" rel="noopener">Wikimedia Commons — 自由版权图片</a><span class="tag">图库</span></li>
+      <li><a href="https://www.google.com/maps/place/Longgang+Children+Park+Shenzhen" target="_blank" rel="noopener">Google Maps — 龙岗儿童公园</a><span class="tag">地图</span></li>
+    </ul></div>
+    <p class="f-caption" style="text-align:center;margin-top:2rem;">本报告所有数据来源于公开资料，仅供参考研究使用。数据截至 2026 年 9 月。</p>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+// 主 POI：龙岗儿童公园·星高度魔法村（高德 GCJ-02）
+
+var zonesGcj02 = [
+  { name: '深圳龙岗儿童公园<br><small>星高度魔法村（动力区）</small>', lng: 114.225165, lat: 22.736349, color: '#43A047' },
+  { name: '星空摩天轮·湾区之星', lng: 114.224852, lat: 22.737202, color: '#E53935' },
+  { name: '森林主题科普馆', lng: 114.226891, lat: 22.735384, color: '#0088B0' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([22.736349, 114.225165], 15);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesGcj02);
+
+  if (withBoundary) {
+    L.circle([22.736349, 114.225165], { radius: 320, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+<footer class="footer"><p>张走走的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy">GitHub</a> 托管</p></footer>
+</body>
+</html>

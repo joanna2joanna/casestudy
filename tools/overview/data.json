@@ -910,6 +910,19 @@
     "pph_src": "The Park DB"
   },
   {
+    "slug": "us-space-rocket-center",
+    "name": "美国太空与火箭中心",
+    "chapter": "美洲",
+    "subgroup": "",
+    "tag": "博物馆 · 太空营",
+    "location": "美国阿拉巴马亨茨维尔（1970-）",
+    "desc": "NASA马歇尔太空飞行中心官方游客中心，全球最著名青少年太空营（Space Camp）所在地。土星五号+世界唯一完整堆叠航天飞机Pathfinder+1,500余件文物；1982年太空营启动至今90万+学员毕业。",
+    "vis": "约 1,600 万",
+    "chip": "累计（1970-）",
+    "pph": null,
+    "pph_src": null
+  },
+  {
     "slug": "club-med",
     "name": "Club Med 地中海俱乐部",
     "chapter": "全球品牌",

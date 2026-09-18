@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美国太空与火箭中心 — 全球最著名太空营 Space Camp 所在地 · 土星五号 + Pathfinder · NASA 游客中心</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #1D4E89;
+  --clr-primary-light: #4A8AC7;
+  --clr-primary-dark: #0B1D3A;
+  --clr-accent: #E8462C;
+}
+
+.hero {
+  background: linear-gradient(160deg, #060D1A 0%, #1D4E89 40%, #4A8AC7 70%, #7FB0D9 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(232,70,44,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.07) 0%, transparent 50%);
+}
+
+/* Overseas: single-map layout */
+#parkmap { height: 520px; border-radius: var(--radius-lg); }
+@media (max-width: 768px) { #parkmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1><span>美国太空与火箭中心</span><br>U.S. Space &amp; Rocket Center</h1>
+    <p class="hero-subtitle">NASA 马歇尔太空飞行中心官方游客中心 · 全球最著名青少年太空营（Space Camp）所在地 · 土星五号 + Pathfinder 航天飞机坐镇 · 史密森尼学会附属机构</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">1982</div><div class="kpi-label">Space Camp 太空营启动</div></div>
+      <div class="kpi-card"><div class="kpi-number">90万+</div><div class="kpi-label">太空营毕业学员 · 150+ 国家</div></div>
+      <div class="kpi-card"><div class="kpi-number">1,500+</div><div class="kpi-label">火箭与太空文物</div></div>
+      <div class="kpi-card"><div class="kpi-number">1,600万+</div><div class="kpi-label">累计游客（1970 起）</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目名称</h3><p>美国太空与火箭中心<br>U.S. Space &amp; Rocket Center（USSRC）<br><span class="f-caption">NASA 马歇尔太空飞行中心官方游客中心 · 史密森尼学会附属机构</span></p></div>
+      <div class="card"><h3>地理位置</h3><p>美国阿拉巴马州亨茨维尔（火箭之城）<br>1 Tranquility Base, Huntsville, AL<br>坐标：34°42′41″N, 86°39′17″W</p></div>
+      <div class="card"><h3>开馆时间</h3><p>1970 年 3 月 17 日开放<br>最初名「阿拉巴马太空与火箭中心」<br><span class="f-caption">每日 9:00–17:00，感恩节与圣诞、新年闭馆</span></p></div>
+      <div class="card"><h3>归属 / 运营主体</h3><p>阿拉巴马州政府（陆军捐地 · 公民投票资助）<br>NASA 马歇尔太空飞行中心官方游客中心<br>史密森尼学会附属机构</p></div>
+      <div class="card"><h3>规模构成</h3><p>1,500+ 件火箭与太空文物<br>Davidson Center 土星五号大厅（2008）<br>火箭公园 · Space Camp 太空营园区</p></div>
+      <div class="card"><h3>门票政策</h3><p>成人 US$30（约 ¥203）<br>儿童 · 长者 US$20（约 ¥135）· 4 岁以下免费<br><span class="f-caption">HyperShip / Max Flight / VR Explorer 等另购</span></p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>美国太空与火箭中心坐落在阿拉巴马州亨茨维尔——这座因冯·布劳恩的火箭团队而被称为「火箭之城」的城市，是 NASA 马歇尔太空飞行中心的官方游客中心，也是全球最著名的青少年太空营（Space Camp）所在地。它 1970 年开放，藏有 1,500 余件火箭与太空文物：世界仅存三枚的土星五号月球火箭、世界唯一完整堆叠展示的航天飞机 Pathfinder、阿波罗16号指令舱「卡斯珀」、天空实验室轨道工作舱与可触摸的阿波罗12号月球岩石。但真正让它区别于普通博物馆的，是 1982 年启动的 Space Camp 太空营——面向 9–18 岁青少年，用 NASA 宇航员训练技术与模拟器，把「住进仿国际空间站宿舍、执行模拟太空任务」变成一门教育产品，至今已有 90 余万学员从 150 多个国家毕业。2026 年 5 月，由 Aviation Challenge 学员出身、现 NASA 局长 Jared Isaacman 资助的 Inspiration4 训练中心落成，太空营在 Artemis II 月球任务后注册量翻倍，继续证明「真火箭 + 体验教育」双轮驱动的生命力。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>单位 / 人物</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>倡议者</td><td>冯·布劳恩（Wernher von Braun）</td><td>提出建一座展示太空计划硬件的博物馆，20 世纪 50 年代率火箭团队落户亨茨维尔</td></tr>
+          <tr><td>土地 / 资金</td><td>美国陆军捐地 · 州公民投票</td><td>1968 年阿拉巴马州公民投票批准资助建设</td></tr>
+          <tr><td>运营主体</td><td>阿拉巴马州政府</td><td>NASA 马歇尔太空飞行中心官方游客中心，史密森尼学会附属机构</td></tr>
+          <tr><td>Davidson Center</td><td>Turner Construction</td><td>2008 年建成的土星五号专用陈列大厅，造价约 US$22M</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>从火箭之城到国家历史地标</h3>
+      <p>中心的故事始于冷战。20 世纪 50 年代，冯·布劳恩与德国火箭专家随「回纹针行动」来到亨茨维尔，1960 年 NASA 在此成立马歇尔太空飞行中心，由冯·布劳恩任首任主任。他提出「为公众建一座太空博物馆」的想法，陆军捐赠土地，1968 年阿拉巴马州以公民投票批准资助，1970 年 3 月 17 日中心开放。今天它的镇馆之宝是土星五号——这枚把阿波罗送上月球的火箭高约 110 米、直径约 10 米，世界仅存三枚，是同时列入国家历史地标与国家历史机械工程地标的「双料」文物。</p>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>Davidson Center：为保护一枚火箭而建的大厅</h3>
+      <p>土星五号原本露天陈列，饱受风雨侵蚀。2008 年 1 月，专门为它而建的 Davidson Center for Space Exploration 落成——由 Turner Construction 建造，长约 145 米，造价约 US$22M，把整枚横置的土星五号保护在室内，并以约 1.6 万m² 的玻璃幕墙面向 565 号州际公路，让过路车辆也能望见这枚巨箭。馆内除土星五号外，还陈列阿波罗16号指令舱「卡斯珀」、天空实验室与各时期航天器，形成一条从土星五号到航天飞机的时间线。</p>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>「真火箭 + 可训练」的双重展陈</h3>
+      <p>中心没有止步于「把真家伙摆出来」。它把展陈分成两条线：一条是藏品线——土星五号、Pathfinder、指令舱与 1,500 余件文物构成「看得见的航天史」；另一条是训练线——Space Camp 用 NASA 同款模拟器（多轴训练器、1/6 重力椅、任务控制台）让学员「用身体」体验航天。后一条线让中心从「博物馆」升级为「教育体验目的地」，也解释了为什么一个阿拉巴马州的城市景点能吸引全球青少年专程前来。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>藏品</td><td>火箭与太空文物</td><td class="num">1,500+ 件</td><td>世界最全面的载人航天硬件博物馆之一</td></tr>
+          <tr><td>镇馆</td><td>土星五号月球火箭</td><td class="num">高约 110 m · 直径约 10 m</td><td>世界仅存三枚 · 国家历史地标 · 陈列于 Davidson Center</td></tr>
+          <tr><td>镇馆</td><td>Pathfinder 航天飞机</td><td class="num">世界唯一完整堆叠展示</td><td>轨道器 + 外贮箱 + 助推器全套堆叠，火箭公园旁</td></tr>
+          <tr><td>藏品</td><td>阿波罗16号指令舱</td><td class="num">「卡斯珀」Casper</td><td>1972 年任务真品</td></tr>
+          <tr><td>藏品</td><td>天空实验室 · 月球岩石</td><td class="num">轨道工作舱 + 阿波罗12号月岩</td><td>月岩可触摸，公众互动展项</td></tr>
+          <tr><td>建筑</td><td>Davidson Center</td><td class="num">长约 145 m · 2008 开放</td><td>造价约 US$22M（约 ¥1.49 亿），土星五号专用大厅</td></tr>
+          <tr><td>教育</td><td>Space Camp 太空营</td><td class="num">1982 启动</td><td>9–18 岁 + 成人 / 家庭项目（7 岁起）</td></tr>
+          <tr><td>教育</td><td>太空营毕业学员</td><td class="num">90 万+</td><td>来自 150 多个国家与全部 50 州</td></tr>
+          <tr><td>门票</td><td>成人 / 儿童 · 长者</td><td class="num">US$30 / US$20</td><td>约 ¥203 / ¥135，4 岁以下免费</td></tr>
+          <tr><td>客流</td><td>累计 / 年度</td><td class="num">约 1,600万 / 55万+</td><td>1970 起累计；2018 年约 84.9 万，州内第一大付费景点</td></tr>
+          <tr><td>体验</td><td>附加项目</td><td class="num">HyperShip / Max Flight / VR</td><td>动感影院与虚拟体验，另购票</td></tr>
+          <tr><td>时序</td><td>开放 / 太空营 / 新设施</td><td class="num">1970 / 1982 / 2026</td><td>Inspiration4 训练中心 2026 年 5 月落成</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源：U.S. Space &amp; Rocket Center 官网与 Media Kit、维基百科、NASA、Ars Technica、UPI、al.com。客流与土星五号尺寸为公开口径；美元按 2026 年 9 月中间价 1 USD ≈ 6.75 CNY 折算。数据截至 2026 年 9 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+    <p class="section-desc reveal">园区以主博物馆与 Davidson Center 两大陈列体为核心，火箭公园与 Space Camp 园区环绕周边。ESRI 卫星底图，WGS-84 坐标。</p>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#1D4E89;"></span> 美国太空与火箭中心（园区）</span>
+        <span><span class="dot" style="background:#E8462C;"></span> 园区范围（示意圈）</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+          <rect width="900" height="600" fill="#060D1A" rx="12"/>
+          <text x="450" y="34" fill="#E8462C" font-family="Playfair Display,serif" font-size="16" text-anchor="middle" font-weight="600">美国太空与火箭中心 · 园区构成示意</text>
+          <line x1="60" y1="54" x2="840" y2="54" stroke="#E8462C" stroke-width="0.5" opacity="0.3"/>
+
+          <!-- Davidson Center -->
+          <rect x="60" y="80" width="400" height="160" rx="10" fill="rgba(232,70,44,0.10)" stroke="#E8462C" stroke-width="1.6"/>
+          <text x="260" y="104" fill="#F0937F" text-anchor="middle" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">Davidson Center for Space Exploration</text>
+          <text x="260" y="128" fill="#fff" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif">土星五号 Saturn V · 高约 110 m</text>
+          <text x="260" y="150" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">世界仅存三枚 · 国家历史地标 · 长约 145 m 大厅</text>
+          <text x="260" y="172" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">阿波罗16号指令舱「卡斯珀」· 天空实验室</text>
+          <text x="260" y="194" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">2008 开放 · 造价约 US$22M</text>
+
+          <!-- 主博物馆 -->
+          <rect x="60" y="268" width="400" height="140" rx="10" fill="rgba(29,78,137,0.20)" stroke="#4A8AC7" stroke-width="1.4"/>
+          <text x="260" y="292" fill="#8FC1E8" text-anchor="middle" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">主博物馆 Main Museum</text>
+          <text x="260" y="316" fill="#fff" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif">1,500+ 件火箭与太空文物</text>
+          <text x="260" y="338" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">阿波罗12号月球岩石（可触摸）· 探索者1号</text>
+          <text x="260" y="360" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">INTUITIVE® 天象厅 · 国家地理剧场</text>
+          <text x="260" y="382" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">2026 USA TODAY 10Best 全美第一天象厅</text>
+
+          <!-- 火箭公园 -->
+          <rect x="492" y="80" width="348" height="110" rx="10" fill="rgba(74,138,199,0.14)" stroke="#4A8AC7" stroke-width="1.2"/>
+          <text x="666" y="104" fill="#8FC1E8" text-anchor="middle" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">火箭公园 Rocket Park</text>
+          <text x="666" y="128" fill="#fff" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif">多枚等大运载火箭模型</text>
+          <text x="666" y="150" fill="rgba(255,255,255,0.55)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Pathfinder 航天飞机完整堆叠展示</text>
+          <text x="666" y="172" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">世界唯一完整堆叠航天飞机系统</text>
+
+          <!-- Space Camp -->
+          <rect x="492" y="216" width="348" height="192" rx="10" fill="rgba(94,166,84,0.12)" stroke="#66BB6A" stroke-width="1.2"/>
+          <text x="666" y="240" fill="#A5D6A7" text-anchor="middle" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">Space Camp 太空营园区</text>
+          <text x="666" y="264" fill="#fff" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif">1982 启动 · 90万+ 学员 · 150+ 国家</text>
+          <text x="666" y="288" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">宿舍（仿国际空间站）· 训练中心</text>
+          <text x="666" y="310" fill="rgba(255,255,255,0.55)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">任务控制模拟 · 多轴训练器 · 1/6 重力椅</text>
+          <text x="666" y="332" fill="rgba(255,255,255,0.55)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Aviation Challenge（1990）· 机器人营（2013）</text>
+          <text x="666" y="354" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">校友：宇航员克里斯托福雷蒂 · 鲁宾斯等</text>
+
+          <!-- Inspiration4 -->
+          <rect x="60" y="436" width="780" height="80" rx="10" fill="rgba(245,166,35,0.10)" stroke="#F5A623" stroke-width="1.4"/>
+          <text x="450" y="460" fill="#F5A623" text-anchor="middle" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">Inspiration4 Skills Training Complex（2026 年 5 月落成）</text>
+          <text x="450" y="484" fill="rgba(255,255,255,0.7)" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif">VR 跳伞（约 3,000 米）· 27 米滑索 · 室内无人机 · 零重力训练 · FAA 飞行模拟器</text>
+          <text x="450" y="504" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">NASA 局长 Jared Isaacman 捐赠约 US$25M · Artemis II 后太空营注册量翻倍</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(858, 80)">
+            <polygon points="0,-16 4,-2 0,-5 -4,-2" fill="#E8462C"/>
+            <polygon points="0,16 4,2 0,5 -4,2" fill="#5A6A80"/>
+            <text x="0" y="-20" text-anchor="middle" fill="#E8462C" font-size="10" font-family="DM Sans,sans-serif">N</text>
+          </g>
+
+          <!-- 图例 -->
+          <rect x="120" y="540" width="660" height="42" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+          <rect x="150" y="555" width="12" height="12" fill="#E8462C" opacity="0.6" rx="1"/>
+          <text x="170" y="565" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">藏品陈列</text>
+          <rect x="300" y="555" width="12" height="12" fill="#2E7D32" opacity="0.6" rx="1"/>
+          <text x="320" y="565" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">Space Camp 教育</text>
+          <rect x="470" y="555" width="12" height="12" fill="#F5A623" opacity="0.6" rx="1"/>
+          <text x="490" y="565" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">2026 新设施</text>
+          <text x="450" y="586" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="8" font-family="DM Sans,sans-serif">空间为示意图，非精确方位与比例 · 实际园区布局以官方导览为准</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>Davidson Center · 土星五号大厅</h3><p>为保护土星五号而建的专用大厅，长约 145 米，横置的月球火箭横贯全场；同馆陈列阿波罗16号指令舱「卡斯珀」与天空实验室，是园区最重的「真家伙」区。</p></div>
+      <div class="card"><h3>主博物馆 Main Museum</h3><p>1,500 余件火箭与太空文物按时间线陈列，从探索者1号到追梦者，配可触摸的阿波罗12号月球岩石与 INTUITIVE® 天象厅，是全馆的叙事主线。</p></div>
+      <div class="card"><h3>火箭公园 Rocket Park</h3><p>户外陈列多枚等大运载火箭模型与 Pathfinder——世界唯一完整堆叠的航天飞机系统，是园区最具辨识度的「天际线」。</p></div>
+      <div class="card"><h3>Space Camp 太空营</h3><p>1982 年启动的青少年太空营：学员住进仿国际空间站的宿舍，用 NASA 同款模拟器执行模拟任务，是中心区别于普通博物馆的核心产品。</p></div>
+      <div class="card"><h3>Aviation Challenge 航空挑战营</h3><p>1990 年启动的姊妹项目，以军用航空与飞行训练为主题，把 Space Camp 的「航天体验」模式延伸到航空领域。</p></div>
+      <div class="card"><h3>Inspiration4 训练中心</h3><p>2026 年落成的新一代训练设施，VR 跳伞、室内滑索、无人机与零重力训练把太空营体验升级，为 Artemis II 后的注册热潮扩容。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1950s</div><div class="timeline-content"><h4>冯·布劳恩团队落户亨茨维尔</h4><p>德国火箭专家随「回纹针行动」来到阿拉巴马，为「火箭之城」埋下伏笔。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1960</div><div class="timeline-content"><h4>NASA 马歇尔太空飞行中心成立</h4><p>冯·布劳恩任首任主任，亨茨维尔成为美国载人航天的研发心脏。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1968</div><div class="timeline-content"><h4>公民投票批准资助</h4><p>陆军捐赠土地，阿拉巴马州以公民投票批准建设太空博物馆。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1970.03.17</div><div class="timeline-content"><h4>正式开放</h4><p>以「阿拉巴马太空与火箭中心」之名开放，日后成为 NASA 马歇尔中心官方游客中心。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1982</div><div class="timeline-content"><h4>Space Camp 太空营启动</h4><p>源自冯·布劳恩「为青少年办科学营」的愿望，用 NASA 训练技术把航天体验产品化。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1990 / 2013</div><div class="timeline-content"><h4>Aviation Challenge 与机器人营</h4><p>航空挑战营（1990）与 Space Camp 机器人（2013）把体验线从航天延伸到航空与机器人。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2008.01</div><div class="timeline-content"><h4>Davidson Center 落成</h4><p>造价约 US$22M，把露天侵蚀的土星五号移入室内，形成园区最重的藏品锚点。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022–2025</div><div class="timeline-content"><h4>Isaacman 两笔捐赠</h4><p>Aviation Challenge 学员、Inspiration4 指挥官 Jared Isaacman 先捐 US$10M，2025 年 7 月再捐 US$15M，启动新训练中心。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026.05</div><div class="timeline-content"><h4>Inspiration4 训练中心落成</h4><p>时任 NASA 局长 Isaacman 剪彩；Artemis II 后太空营注册量翻倍，2026 秋再装月球/火星任务中心。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>成人门票</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">US$30</p><p class="f-caption">约 ¥203 · 儿童 / 长者 US$20</p></div>
+      <div class="card" style="text-align:center;"><h4>累计客流（1970 起）</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">1,600万+</p><p class="f-caption">年约 55万+ · 2018 年 84.9 万</p></div>
+      <div class="card" style="text-align:center;"><h4>太空营学员</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">90万+</p><p class="f-caption">1982 起 · 150+ 国家</p></div>
+    </div>
+
+    <div class="grid-2 reveal">
+      <div class="card"><h3>参观信息</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>项目</th><th>详情</th></tr></thead>
+          <tbody>
+            <tr><td>开放时间</td><td>每日 9:00–17:00</td></tr>
+            <tr><td>免费人群</td><td>4 岁以下儿童 · 会员 · NASA 现役 / 退休人员</td></tr>
+            <tr><td>惠民票</td><td>Museums for All（EBT/SNAP）US$3</td></tr>
+            <tr><td>附加项目</td><td>HyperShip US$10 · Max Flight US$20 · VR Explorer US$12</td></tr>
+            <tr><td>停车</td><td>免费（含房车与巴士）</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">票价以馆方实时公告为准。</p>
+      </div>
+      <div class="card"><h3>客流与太空营（公开口径）</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>口径</th><th>数据</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>累计游客</td><td class="num">近 1,600万</td><td>1970 开放至今</td></tr>
+            <tr><td>年度游客</td><td class="num">55万+</td><td>多为学校实地考察</td></tr>
+            <tr><td>2018 年</td><td class="num">约 84.9 万</td><td>阿拉巴马州第一大付费景点</td></tr>
+            <tr><td>太空营学员</td><td class="num">90万+</td><td>150+ 国家 · 全部 50 州</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">2026 年 Artemis II 后太空营注册量翻倍。</p>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>运营特点</h3>
+      <p>中心是「博物馆门票 + 教育营」双轮驱动的样本。门票端靠土星五号、Pathfinder 等真家伙守住「必看」的基本盘，US$30 的成人票价与免费停车做成低门槛的城市景点，承担阿拉巴马州第一大付费景点的大众客群；教育端靠 Space Camp 太空营把「航天」从看展升级为可参与的产品——一周营、家庭营、成人营按年龄分层定价，学员住仿国际空间站宿舍、执行模拟任务，90 余万学员构成全球化的品牌与复购基础。两条线互相造血：太空营品牌的校友（如 Isaacman）反过来以捐赠反哺场馆扩建，真火箭的稀缺性又持续为太空营背书。对「没有真火箭」的后来者而言，它最有价值的一点是证明了：航天主题的护城河可以不是藏品，而是把「训练体验」做成可交付、可定价、可跨年复购的教育产品。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>土星五号月球火箭</h3><p>世界仅存三枚的土星五号，高约 110 米、直径约 10 米，是把阿波罗送上月球的「巨箭」，国家历史地标与机械工程地标双料认定。</p></div>
+      <div class="card"><h3>Pathfinder 航天飞机</h3><p>世界唯一完整堆叠展示的航天飞机系统——轨道器、外贮箱与固体助推器全套组合，矗立于火箭公园，是园区最上镜的天际线。</p></div>
+      <div class="card"><h3>Space Camp 训练器</h3><p>NASA 同款多轴训练器、1/6 重力椅、任务控制台与模拟任务，让学员用身体体验航天，是「教育产品化」的技术底座。</p></div>
+      <div class="card"><h3>阿波罗与天空实验室</h3><p>阿波罗16号指令舱「卡斯珀」、天空实验室轨道工作舱与可触摸的阿波罗12号月球岩石，构成载人航天的实物闭环。</p></div>
+      <div class="card"><h3>Inspiration4 训练中心</h3><p>2026 年新设施：VR 跳伞（约 3,000 米 + 风）、27 米室内滑索、无人机实验室、零重力训练与 FAA 认证飞行模拟器。</p></div>
+      <div class="card"><h3>INTUITIVE® 天象厅</h3><p>2026 年 USA TODAY 10Best 读者评选全美第一天象厅，配国家地理剧场与「Black Holes」「Spectra」等新节目。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>Davidson Center</h3><p>土星五号专用大厅，兼作活动与宴会场地，玻璃幕墙面向 565 号州际公路，是园区的地标建筑。</p></div>
+      <div class="card"><h3>INTUITIVE® 天象厅</h3><p>全美第一天象厅（2026），数字天象节目与星空放映，是延长停留、拉高二次消费的主力影厅。</p></div>
+      <div class="card"><h3>国家地理剧场</h3><p>与国家地理合作的影院，放映航天与自然主题影片，与天象厅构成双影厅放映体系。</p></div>
+      <div class="card"><h3>Space Camp 宿舍与训练中心</h3><p>仿国际空间站的住宿单元与训练场地，支撑一周至数周的营地产品，是教育营收的核心设施。</p></div>
+      <div class="card"><h3>HyperShip 与动感体验</h3><p>HyperShip、Max Flight 与 VR Explorer 等另购票体验，覆盖青少年到成年人的动感需求。</p></div>
+      <div class="card"><h3>服务配套</h3><p>礼品店、餐饮与免费停车场（含房车、巴士），会员制与酒店打包套餐服务本地与远程客群。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. NEWS ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>Inspiration4 训练中心落成</h3><p>2026 年 5 月，时任 NASA 局长 Jared Isaacman 为新训练中心剪彩——他 12 岁入营 Aviation Challenge，曾捐 US$10M 与 US$15M 资助建设。</p></div>
+      <div class="card"><h3>Artemis II 后注册量翻倍</h3><p>2026 年 4 月 Artemis II 月球飞越成功后，Space Camp 暑期注册量翻倍，新训练中心正好承接这波航天热潮。</p></div>
+      <div class="card"><h3>月球 / 火星任务中心</h3><p>计划 2026 年秋安装新的任务中心，把营员放进模拟的月球与火星场景，预计年底开放。</p></div>
+      <div class="card"><h3>全美第一天象厅</h3><p>INTUITIVE® 天象厅在 2026 USA TODAY 10Best 读者评选中获全美第一，并推出「Black Holes」「Spectra」等新节目。</p></div>
+      <div class="card"><h3>从博物馆到教育目的地</h3><p>中心持续把「真火箭 + 训练体验」合成产品线，太空营、航空挑战营、机器人营与成人 / 家庭营构成分层教育矩阵。</p></div>
+      <div class="card"><h3>启示：护城河可以不是藏品</h3><p>对没有真火箭的后来者，Space Camp 证明航天主题的可复制价值在「训练体验」——把它做成可定价、可跨年复购的教育产品，比堆藏品更可持续。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. RESOURCES ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal">
+      <h4>官方来源</h4>
+      <ul>
+        <li><a href="https://www.rocketcenter.com/" target="_blank" rel="noopener">U.S. Space &amp; Rocket Center — 官方网站</a> <span class="tag">官网</span></li>
+        <li><a href="https://www.spacecamp.com/" target="_blank" rel="noopener">Space Camp — 太空营官网</a> <span class="tag">官方</span></li>
+        <li><a href="https://en.wikipedia.org/wiki/U.S._Space_%26_Rocket_Center" target="_blank" rel="noopener">维基百科 — U.S. Space &amp; Rocket Center</a> <span class="tag">百科</span></li>
+      </ul>
+    </div>
+    <div class="resource-group reveal">
+      <h4>新闻与数据</h4>
+      <ul>
+        <li><a href="https://arstechnica.com/space/2026/05/did-artemis-ii-break-through-registrations-at-space-camp-double-afterward/" target="_blank" rel="noopener">Ars Technica — Artemis II 后太空营注册量翻倍</a> <span class="tag">报道</span></li>
+        <li><a href="https://www.al.com/news/huntsville/2026/05/honoring-where-his-journey-began-nasa-administrator-jared-isaacman-opens-new-space-camp-facility.html" target="_blank" rel="noopener">al.com — NASA 局长为新太空营设施剪彩</a> <span class="tag">报道</span></li>
+        <li><a href="https://www.upi.com/Science_News/2025/07/11/jared-isaacman-15M-donation-space-rocket-center/1671752257377/" target="_blank" rel="noopener">UPI — Isaacman 向火箭中心捐 US$15M</a> <span class="tag">报道</span></li>
+        <li><a href="https://www.fodors.com/world/north-america/usa/alabama/experiences/news/a-look-inside-alabamas-new-space-camp-facility" target="_blank" rel="noopener">Fodor's — 阿拉巴马新太空营设施一瞥</a> <span class="tag">报道</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== SCRIPTS (Overseas: ESRI ArcGIS + WGS-84) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：Nominatim 返回 WGS-84，ESRI 瓦片原生支持 WGS-84，直接使用无需转换
+
+var ussrcZones = [
+  { name: '美国太空与火箭中心<br><small>U.S. Space &amp; Rocket Center</small>', lat: 34.711362, lng: -86.654611, color: '#1D4E89' },
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('parkmap');
+  if (!el) return;
+  var map = L.map('parkmap', { scrollWheelZoom: false }).setView([34.711362, -86.654611], 16);
+
+  var satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>', maxZoom: 19
+  });
+  var topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>', maxZoom: 19
+  });
+
+  satLayer.addTo(map);
+  L.control.layers({ '卫星图': satLayer, '地形图': topoLayer }, null, { position: 'topright' }).addTo(map);
+  addZoneMarkers(map, ussrcZones);
+
+  L.circle([34.711362, -86.654611], { radius: 260, color: '#E8462C', weight: 2, fill: false, dashArray: '6,4', opacity: 0.55 }).addTo(map);
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  var tileLoaded = false;
+  map.on('tileload', function() { tileLoaded = true; });
+  setTimeout(function() {
+    if (!tileLoaded) {
+      var fb = document.createElement('div');
+      fb.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.9);z-index:10;border-radius:12px;font-size:0.9rem;color:#8C8878;';
+      fb.textContent = '地图瓦片加载超时，请检查网络连接后刷新页面';
+      el.appendChild(fb);
+    }
+  }, 8000);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

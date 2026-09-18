@@ -1012,5 +1012,18 @@
     "chip": "单点收费",
     "pph": null,
     "pph_src": null
+  },
+  {
+    "slug": "chengdu-lichao-aviation-museum",
+    "name": "立巢航空博物馆",
+    "chapter": "中国",
+    "subgroup": "城市文旅与主题乐园",
+    "tag": "文化场馆 · 航空博物馆",
+    "location": "四川成都（2018-）",
+    "desc": "国内首家民营航空主题博物馆。波音737-300退役客机机身段坐镇·约5000m²·六大展区+模拟飞行+航空科普·国家二级博物馆（2024），截至2025年累计约20万人次。",
+    "vis": "约 20 万",
+    "chip": "累计（2025）",
+    "pph": null,
+    "pph_src": null
   }
 ]

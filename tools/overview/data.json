@@ -923,6 +923,32 @@
     "pph_src": null
   },
   {
+    "slug": "butchart-gardens",
+    "name": "布查特花园",
+    "chapter": "美洲",
+    "subgroup": "",
+    "tag": "花园 · 国家历史遗址",
+    "location": "加拿大维多利亚（1904-）",
+    "desc": "从废弃石灰矿坑改造的百年花园：1904年Jennie Butchart起步，下沉/玫瑰/日本/意大利/地中海五园，开放区22公顷（庄园53公顷）。2004年列加拿大国家历史遗址，布查特家族五代私人经营，年游客100万+。",
+    "vis": "100 万+",
+    "chip": "年游客·单园",
+    "pph": null,
+    "pph_src": null
+  },
+  {
+    "slug": "islands-of-adventure",
+    "name": "奥兰多环球冒险岛",
+    "chapter": "美洲",
+    "subgroup": "",
+    "tag": "主题公园",
+    "location": "美国奥兰多（1999-）",
+    "desc": "环球奥兰多第二座主题乐园，1999年开业，八座主题岛屿环中央泻湖。漫威/哈利波特/侏罗纪三大IP坐镇，2010霍格莫德、2021 VelociCoaster两次加码；2022客流峰值1,103万全球第5，2024约945万全球第14。",
+    "vis": "约 945 万",
+    "chip": "TEA 2024",
+    "pph": null,
+    "pph_src": null
+  },
+  {
     "slug": "club-med",
     "name": "Club Med 地中海俱乐部",
     "chapter": "全球品牌",

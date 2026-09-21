@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>主题乐园承载与娱乐量换算器 — 客流↔高峰滞园↔PPH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+:root {
+  --clr-primary: #23405C;
+  --clr-primary-light: #3E6B8A;
+  --clr-primary-dark: #0F1F30;
+  --clr-accent: #C8963E;
+}
+.hero { background: linear-gradient(160deg, #0F1F30 0%, #23405C 45%, #3E6B8A 100%); }
+.hero::before { background: radial-gradient(ellipse at 22% 82%, rgba(200,150,62,0.18) 0%, transparent 55%); }
+
+.tool-wrap { max-width: 920px; margin: 0 auto; }
+
+/* 模式切换 */
+.mode-tabs { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
+.mode-tab {
+  flex: 1 1 0; min-width: 150px; padding: 0.85rem 1rem; text-align: center;
+  border: 1.5px solid var(--clr-primary-light); border-radius: 10px;
+  background: transparent; color: var(--clr-primary); cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.9rem; transition: all 0.18s;
+}
+.mode-tab:hover { border-color: var(--clr-accent); color: var(--clr-accent); }
+.mode-tab.active { background: var(--clr-primary); color: #fff; border-color: var(--clr-primary); }
+.mode-tab .sub { display: block; font-weight: 400; font-size: 0.72rem; opacity: 0.75; margin-top: 2px; }
+
+/* 输入面板 */
+.input-panel { display: none; }
+.input-panel.active { display: block; }
+.input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.9rem; margin-bottom: 1.2rem; }
+.field label { display: block; font-size: 0.78rem; color: var(--clr-primary); font-weight: 600; margin-bottom: 4px; }
+.field input {
+  width: 100%; padding: 0.6rem 0.7rem; border: 1.5px solid #d8dee4; border-radius: 8px;
+  font-family: 'DM Mono', monospace; font-size: 0.95rem; color: var(--clr-primary-dark);
+}
+.field input:focus { outline: none; border-color: var(--clr-accent); }
+.field .hint { font-size: 0.72rem; color: #8C8878; margin-top: 3px; }
+
+/* 结果表 */
+.result-table { width: 100%; border-collapse: collapse; }
+.result-table th, .result-table td { padding: 0.65rem 0.8rem; border-bottom: 1px solid #e6e2d8; text-align: left; font-size: 0.88rem; }
+.result-table thead th { background: var(--clr-primary-dark); color: #fff; font-weight: 600; letter-spacing: 0.02em; }
+.result-table td.num { font-family: 'DM Mono', monospace; text-align: right; font-weight: 500; }
+.result-table tr.anchor td { background: rgba(200,150,62,0.10); }
+.result-table tr.anchor td.num { color: var(--clr-accent); font-weight: 700; }
+.result-table tr:last-child td { border-bottom: none; }
+.badge-input { display: inline-block; background: var(--clr-accent); color: #fff; font-size: 0.66rem; padding: 1px 8px; border-radius: 10px; font-weight: 600; vertical-align: middle; }
+
+/* 系数表 */
+.coef-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.6rem; }
+.coef-card { background: #f7f5ef; border-radius: 8px; padding: 0.7rem 0.8rem; border: 1px solid #e6e2d8; }
+.coef-card .k { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: #8C8878; }
+.coef-card .v { font-family: 'DM Mono', monospace; font-size: 1.05rem; font-weight: 600; color: var(--clr-primary); }
+
+.density-table { width: 100%; border-collapse: collapse; }
+.density-table th, .density-table td { padding: 0.55rem 0.7rem; border-bottom: 1px solid #e6e2d8; text-align: left; font-size: 0.84rem; }
+.density-table thead th { color: var(--clr-primary); font-weight: 600; border-bottom: 2px solid var(--clr-primary-light); }
+.density-table td.src { color: #8C8878; font-size: 0.74rem; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <h1>主题乐园承载与娱乐量换算器</h1>
+    <p class="hero-subtitle">客流 ↔ 高峰小时滞园 ↔ 理论小时娱乐量（PPH）· 一套系数、三个锚点、双向推导</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">7</div><div class="kpi-label">固定系数</div></div>
+      <div class="kpi-card"><div class="kpi-number">3</div><div class="kpi-label">主导变量</div></div>
+      <div class="kpi-card"><div class="kpi-number">8</div><div class="kpi-label">换算链环节</div></div>
+      <div class="kpi-card"><div class="kpi-number">双向</div><div class="kpi-label">推导方向</div></div>
+    </div>
+  </div>
+</header>
+
+<section class="section" id="tool">
+  <div class="container tool-wrap">
+    <div class="section-header"><h2>换算链</h2><div class="section-line"></div></div>
+    <div class="card" style="overflow-x:auto;">
+      <table class="result-table" id="chain-static">
+        <thead><tr><th>环节</th><th>指标</th><th>系数</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>稳定期年游客量</td><td>—</td></tr>
+          <tr><td>1</td><td>高峰月入园</td><td>×18%</td></tr>
+          <tr><td>2</td><td>高峰周入园</td><td>×22.5%</td></tr>
+          <tr><td>3</td><td>高峰日入园</td><td>×30%</td></tr>
+          <tr><td>4</td><td>设计日入园</td><td>×80%</td></tr>
+          <tr><td>5</td><td>高峰小时滞园</td><td>×75%</td></tr>
+          <tr><td>6</td><td>实际小时娱乐量</td><td>×1.2</td></tr>
+          <tr><td>7</td><td>理论小时娱乐量（PPH）</td><td>÷80%</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.7rem;">三个锚点任选其一为变量，其余环节自动推导。反向时每一步取倒数（如理论→实际为 ×80%，而非 ÷80%）。</p>
+    </div>
+
+    <div class="section-header" style="margin-top:2rem;"><h2>选择主导变量</h2><div class="section-line"></div></div>
+    <div class="mode-tabs">
+      <button class="mode-tab active" data-mode="annual">年游客量<span class="sub">需求侧 → 推承载</span></button>
+      <button class="mode-tab" data-mode="pph">理论娱乐量 PPH<span class="sub">设备侧 → 推客流</span></button>
+      <button class="mode-tab" data-mode="hour">高峰小时滞园<span class="sub">空间侧 → 双向推</span></button>
+    </div>
+
+    <!-- 模式一：年游客量 -->
+    <div class="input-panel active" id="panel-annual">
+      <div class="card">
+        <div class="input-grid">
+          <div class="field">
+            <label>稳定期年游客量（人）</label>
+            <input type="number" id="in-annual" value="1000000" min="0" step="1000">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 模式二：PPH -->
+    <div class="input-panel" id="panel-pph">
+      <div class="card">
+        <div class="input-grid">
+          <div class="field">
+            <label>理论小时娱乐量 PPH（人次/小时）</label>
+            <input type="number" id="in-pph" value="10935" min="0" step="10">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 模式三：高峰小时滞园 -->
+    <div class="input-panel" id="panel-hour">
+      <div class="card">
+        <div class="input-grid">
+          <div class="field">
+            <label>室外面积（公顷）</label>
+            <input type="number" id="in-out-area" value="15" min="0" step="0.1">
+            <div class="hint">主题乐园舒适 900人/公顷（8–12㎡/人）</div>
+          </div>
+          <div class="field">
+            <label>室外舒适密度（人/公顷）</label>
+            <input type="number" id="in-out-dens" value="900" min="0" step="10">
+            <div class="hint">手输 · 植物园 30–60㎡/人、水上乐园按水面</div>
+          </div>
+          <div class="field">
+            <label>室内建筑面积（㎡）</label>
+            <input type="number" id="in-in-area" value="0" min="0" step="100">
+          </div>
+          <div class="field">
+            <label>室内舒适密度（人/㎡）</label>
+            <input type="number" id="in-in-dens" value="0.35" min="0" step="0.01">
+            <div class="hint">舒适 0.3–0.4人/㎡ · 上限 0.5人/㎡</div>
+          </div>
+        </div>
+        <p class="f-caption">高峰小时滞园 = 室外面积 × 室外密度 + 室内面积 × 室内密度（单位不同，室内按建筑面积算）。</p>
+      </div>
+    </div>
+
+    <div class="section-header" style="margin-top:2rem;"><h2>计算结果</h2><div class="section-line"></div></div>
+    <div class="card" style="overflow-x:auto;">
+      <table class="result-table">
+        <thead><tr><th>环节</th><th>指标</th><th style="text-align:right;">数值</th></tr></thead>
+        <tbody id="result-body"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="reference">
+  <div class="container tool-wrap">
+    <div class="section-header"><h2>固定系数</h2><div class="section-line"></div></div>
+    <div class="coef-grid">
+      <div class="coef-card"><div class="k">高峰月 / 年</div><div class="v">18%</div></div>
+      <div class="coef-card"><div class="k">高峰周 / 高峰月</div><div class="v">22.5%</div></div>
+      <div class="coef-card"><div class="k">高峰日 / 高峰周</div><div class="v">30%</div></div>
+      <div class="coef-card"><div class="k">设计日 / 高峰日</div><div class="v">80%</div></div>
+      <div class="coef-card"><div class="k">高峰小时滞园 / 设计日</div><div class="v">75%</div></div>
+      <div class="coef-card"><div class="k">人均小时乘坐</div><div class="v">1.2 次</div></div>
+      <div class="coef-card"><div class="k">运载效率（实际/理论）</div><div class="v">80%</div></div>
+    </div>
+
+    <div class="section-header" style="margin-top:2rem;"><h2>舒适密度分档参考</h2><div class="section-line"></div></div>
+    <div class="card" style="overflow-x:auto;">
+      <table class="density-table">
+        <thead><tr><th>空间 / 公园类型</th><th>舒适密度</th><th>偏紧 / 极限</th><th>来源</th></tr></thead>
+        <tbody>
+          <tr><td>室外 · 主题乐园</td><td>8–12㎡/人（≈830–1250人/公顷）</td><td>偏紧 4–6.5㎡/人 · 极限 0.5–1㎡/人</td><td class="src">FORREC · LB/T 034-2014</td></tr>
+          <tr><td>室外 · 水上乐园</td><td>2.5–4㎡/人（按水面）</td><td>池区 0.5人/㎡</td><td class="src">GB/T 18168-2017</td></tr>
+          <tr><td>室外 · 植物园/花园</td><td>30–60㎡/人</td><td>GB51192 专类公园 20–30㎡/人</td><td class="src">GB51192-2016</td></tr>
+          <tr><td>室外 · 儿童公园</td><td>15–25㎡/人</td><td>—</td><td class="src">GB51192-2016</td></tr>
+          <tr><td>室内 · FEC/游乐建筑</td><td>0.3–0.4人/㎡（2.5–3.3㎡/人）</td><td>上限 0.5人/㎡（疏散）</td><td class="src">GB50016-2014</td></tr>
+          <tr><td>室内 · 商店/展览</td><td>1.7–2.3㎡/人</td><td>疏散荷载 1.3㎡/人</td><td class="src">GB50016 5.5.21</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.7rem;">注意区分三种「人均面积」口径：① 舒适体验密度（本工具用）；② LB/T 034 承载下限 = 拥挤极限，不可当舒适值；③ GB51192 整园规划密度（含绿化道路，比舒适值松约 2 倍）。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>主题乐园承载与娱乐量换算器</strong> — 一套系数、三个锚点、双向推导</p>
+  <p style="margin-top:6px;">密度参数来源：FORREC · LB/T 034-2014 · GB51192-2016 · GB50016-2014 · GB/T 18168-2017 &nbsp;|&nbsp; 编制时间：2026年9月</p>
+  <p style="margin-top:1rem;"><a href="../index.html" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例速览首页</a></p>
+  <p>bicc湾创的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy" style="color:#C8963E;">GitHub</a> 托管</p>
+</footer>
+
+<script>
+var C = { month: 0.18, week: 0.225, day: 0.30, design: 0.80, hour: 0.75, rides: 1.2, eff: 0.8 };
+
+var ROWS = [
+  { key: 'annual', label: '稳定期年游客量' },
+  { key: 'month',  label: '高峰月入园' },
+  { key: 'week',   label: '高峰周入园' },
+  { key: 'day',    label: '高峰日入园' },
+  { key: 'design', label: '设计日入园' },
+  { key: 'hour',   label: '高峰小时滞园' },
+  { key: 'actual', label: '实际小时娱乐量' },
+  { key: 'pph',    label: '理论小时娱乐量（PPH）' }
+];
+
+function calcAnnual(a) {
+  return {
+    annual: a,
+    month:  a * C.month,
+    week:   a * C.month * C.week,
+    day:    a * C.month * C.week * C.day,
+    design: a * C.month * C.week * C.day * C.design,
+    hour:   a * C.month * C.week * C.day * C.design * C.hour,
+    actual: a * C.month * C.week * C.day * C.design * C.hour * C.rides,
+    pph:    a * C.month * C.week * C.day * C.design * C.hour * C.rides / C.eff
+  };
+}
+function calcPPH(p) {
+  var actual = p * C.eff;
+  var hour = actual / C.rides;
+  var design = hour / C.hour;
+  var day = design / C.design;
+  var week = day / C.day;
+  var month = week / C.week;
+  return { annual: month / C.month, month: month, week: week, day: day, design: design, hour: hour, actual: actual, pph: p };
+}
+function calcHour(h) {
+  var design = h / C.hour;
+  var day = design / C.design;
+  var week = day / C.day;
+  var month = week / C.week;
+  var actual = h * C.rides;
+  return { annual: month / C.month, month: month, week: week, day: day, design: design, hour: h, actual: actual, pph: actual / C.eff };
+}
+
+function fmt(n) {
+  if (!isFinite(n)) return '—';
+  var r = Math.round(n);
+  return r.toLocaleString('zh-CN');
+}
+
+var currentMode = 'annual';
+var anchorKey = { annual: 'annual', pph: 'pph', hour: 'hour' };
+
+function render(v) {
+  var body = document.getElementById('result-body');
+  var html = '';
+  ROWS.forEach(function(row, i) {
+    var isAnchor = (row.key === anchorKey[currentMode]);
+    var badge = isAnchor ? '<span class="badge-input">输入</span> ' : '';
+    html += '<tr' + (isAnchor ? ' class="anchor"' : '') + '>'
+      + '<td>' + i + '</td>'
+      + '<td>' + badge + row.label + '</td>'
+      + '<td class="num">' + fmt(v[row.key]) + '</td>'
+      + '</tr>';
+  });
+  body.innerHTML = html;
+}
+
+function update() {
+  var v;
+  if (currentMode === 'annual') {
+    v = calcAnnual(parseFloat(document.getElementById('in-annual').value) || 0);
+  } else if (currentMode === 'pph') {
+    v = calcPPH(parseFloat(document.getElementById('in-pph').value) || 0);
+  } else {
+    var outArea = parseFloat(document.getElementById('in-out-area').value) || 0;
+    var outDens = parseFloat(document.getElementById('in-out-dens').value) || 0;
+    var inArea = parseFloat(document.getElementById('in-in-area').value) || 0;
+    var inDens = parseFloat(document.getElementById('in-in-dens').value) || 0;
+    var hour = outArea * outDens + inArea * inDens;
+    v = calcHour(hour);
+  }
+  render(v);
+}
+
+document.querySelectorAll('.mode-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.mode-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.input-panel').forEach(function(p) { p.classList.remove('active'); });
+    tab.classList.add('active');
+    currentMode = tab.getAttribute('data-mode');
+    document.getElementById('panel-' + currentMode).classList.add('active');
+    update();
+  });
+});
+
+['in-annual', 'in-pph', 'in-out-area', 'in-out-dens', 'in-in-area', 'in-in-dens'].forEach(function(id) {
+  document.getElementById(id).addEventListener('input', update);
+});
+
+update();
+</script>
+</body>
+</html>

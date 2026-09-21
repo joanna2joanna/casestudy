@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>布查特花园 — 从废弃石灰矿坑到世界级花园 · 加拿大国家历史遗址 · The Butchart Gardens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #2E7D52;
+  --clr-primary-light: #6FB58A;
+  --clr-primary-dark: #14301F;
+  --clr-accent: #C94F6D;
+}
+
+.hero {
+  background: linear-gradient(160deg, #0E1F15 0%, #2E7D52 40%, #6FB58A 70%, #9BC9A8 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(201,79,109,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.07) 0%, transparent 50%);
+}
+
+/* Overseas: single-map layout */
+#parkmap { height: 520px; border-radius: var(--radius-lg); }
+@media (max-width: 768px) { #parkmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1><span>布查特花园</span><br>The Butchart Gardens</h1>
+    <p class="hero-subtitle">加拿大温哥华岛百年花园 · 加拿大国家历史遗址（2004）· 从废弃石灰矿坑改造而成的世界级花园 · 1904 年建园 · 布查特家族五代经营</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">1904</div><div class="kpi-label">建园年份</div></div>
+      <div class="kpi-card"><div class="kpi-number">22 公顷</div><div class="kpi-label">花园面积（庄园 53 公顷）</div></div>
+      <div class="kpi-card"><div class="kpi-number">100万+</div><div class="kpi-label">年游客量</div></div>
+      <div class="kpi-card"><div class="kpi-number">5 座</div><div class="kpi-label">主题花园</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目名称</h3><p>布查特花园<br>The Butchart Gardens<br><span class="f-caption">又译「布查德花园」「宝翠花园」</span></p></div>
+      <div class="card"><h3>地理位置</h3><p>加拿大不列颠哥伦比亚省温哥华岛<br>Brentwood Bay（维多利亚以北约 23 公里）<br>坐标：48°33′55″N, 123°28′10″W</p></div>
+      <div class="card"><h3>建园时间</h3><p>1904 年起步<br>由 Jennie Butchart 在废弃石灰矿坑上主持建造<br><span class="f-caption">庄园 1908 年定名「Benvenuto」（意大利语「欢迎」）</span></p></div>
+      <div class="card"><h3>归属 / 运营主体</h3><p>布查特家族私人拥有并经营<br>现任业主 Robin-Lee Clarke（创始人曾孙女）<br>2004 年列为加拿大国家历史遗址</p></div>
+      <div class="card"><h3>规模构成</h3><p>花园开放区约 22 公顷，庄园整体 53 公顷<br>下沉花园、玫瑰园、日本庭园、意大利花园、地中海花园五区<br>700 余种植物、逾百万株</p></div>
+      <div class="card"><h3>门票政策</h3><p>成人 CAD$39.50（约 ¥190）<br>青少年（13–17）CAD$19.75 · 儿童（5–12）CAD$5<br><span class="f-caption">淡旺季浮动 · 5 岁以下免费</span></p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>布查特花园坐落在加拿大不列颠哥伦比亚省温哥华岛的 Brentwood Bay，距维多利亚市区以北约 23 公里。它的起点不是一块风景绝佳的宝地，而是一口被挖空的石灰矿坑——Jennie Butchart 的丈夫 Robert Pim Butchart 在这里经营波特兰水泥厂，石灰岩开采掏空后留下一个丑陋的深坑。1904 年，Jennie 决定用花草把它重新「填」起来：她先在家中花园起步，1906 年造日本庭园，1909 年矿坑采尽，1912 年正式启动下沉花园（Sunken Garden）的改造——把废弃矿坑的坑壁变成层层叠叠的花坛。此后一百余年，花园逐步扩展出玫瑰园、意大利花园、地中海花园，配上一座 21 米高的罗斯喷泉与夏季烟花、夜间灯光。今天它每年接待逾百万游客，2004 年被列为加拿大国家历史遗址，却始终由布查特家族私人经营。它最常被引用的一点是：一座「无中生有」的花园，把一个工业废地变成了全球顶级的花园目的地——主题的「表情地带」可以软性缝合空间、拉长停留，也正是它对主题乐园与目的地改造者的价值所在。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>单位 / 人物</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>发起人 / 主理人</td><td>Jennie Butchart</td><td>水泥厂主之妻，1904 年起主导矿坑绿化，把废弃采石场变成花园</td></tr>
+          <tr><td>日本庭园设计</td><td>Isaburo Kishida（岸田伊三郎）</td><td>1906 年受邀设计日本庭园，是花园早期专业化的关键一步</td></tr>
+          <tr><td>庄园命名</td><td>「Benvenuto」</td><td>1908 年定名，意大利语「欢迎」，源自布查特夫妇的意大利旅行</td></tr>
+          <tr><td>下沉花园</td><td>原石灰矿坑改造</td><td>1909 年矿坑采尽，1912 年起逐步把坑壁改造成层层花坛</td></tr>
+          <tr><td>罗斯喷泉</td><td>1964 年落成</td><td>建园 60 周年纪念，水柱高约 21 米</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>从水泥矿坑到「欢迎之家」</h3>
+      <p>故事始于工业而非园艺。Robert Pim Butchart 在温哥华岛经营波特兰水泥厂，就地开采石灰岩。1904 年，Jennie Butchart 开始在自家周边种花；1906 年她请来日本景观设计师岸田伊三郎造日本庭园；1908 年夫妇俩在意大利旅行后把庄园定名「Benvenuto」。真正的转折是 1909 年矿坑采尽、1912 年下沉花园动工——Jennie 把挖空的石灰坑变成一座向地下凹陷的立体花园，坑壁被修成缓坡花坛，坑底种满四季植物。这一「变废为宝」的动作，日后成为整个花园的灵魂。</p>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>家族五代经营的「去公司化」路线</h3>
+      <p>与多数大型花园转交公共机构或公司运营不同，布查特花园一百多年来始终由布查特家族私人持有。Jennie 之后，家族通过几代人交接维持经营，现任业主是创始人的曾孙女 Robin-Lee Clarke。私人持有让它能按园艺的长期节奏投入——花园的设计与维护不计较单季回报，植物以「百年尺度」养护，这是它能从矿坑持续生长成世界级花园的组织基础。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>花园面积</td><td class="num">22 公顷</td><td>占 53 公顷庄园的约 42%，为开放区</td></tr>
+          <tr><td>规模</td><td>庄园总面积</td><td class="num">53 公顷</td><td>含非开放区</td></tr>
+          <tr><td>历史</td><td>建园</td><td class="num">1904 年</td><td>Jennie Butchart 主持</td></tr>
+          <tr><td>历史</td><td>下沉花园动工</td><td class="num">1912 年</td><td>废弃石灰矿坑改造</td></tr>
+          <tr><td>历史</td><td>国家历史遗址</td><td class="num">2004 年</td><td>加拿大认定</td></tr>
+          <tr><td>花园</td><td>主题花园</td><td class="num">5 座</td><td>下沉 / 玫瑰 / 日本 / 意大利 / 地中海</td></tr>
+          <tr><td>花园</td><td>植物规模</td><td class="num">700+ 种 · 逾百万株</td><td>四季更替</td></tr>
+          <tr><td>景观</td><td>罗斯喷泉</td><td class="num">高 21 m · 1964 年</td><td>建园 60 周年纪念</td></tr>
+          <tr><td>运营</td><td>年游客</td><td class="num">100万+</td><td>20 世纪 20 年代约 5 万/年</td></tr>
+          <tr><td>门票</td><td>成人（旺季）</td><td class="num">CAD$39.50（约 ¥190）</td><td>淡旺季浮动 · 5 岁以下免费</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源：The Butchart Gardens 官网与园刊、维基百科、人民网、加拿大公园历史资料。面积、游客量与花园数为公开口径；加元按 2026 年 9 月 21 日中间价 1 CAD ≈ 4.80 CNY 折算。数据截至 2026 年 9 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+    <p class="f-caption reveal">五座主题花园围绕下沉花园展开，配罗斯喷泉与环园步道。ESRI 卫星底图，WGS-84 坐标。</p>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#2E7D52;"></span> 布查特花园（园区）</span>
+        <span><span class="dot" style="background:#C94F6D;"></span> 园区范围（示意圈）</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+          <rect width="900" height="600" fill="#0E1F15" rx="12"/>
+          <text x="450" y="34" fill="#C94F6D" font-family="Playfair Display,serif" font-size="16" text-anchor="middle" font-weight="600">布查特花园 · 五座主题花园构成示意</text>
+          <line x1="60" y1="54" x2="840" y2="54" stroke="#C94F6D" stroke-width="0.5" opacity="0.3"/>
+
+          <!-- 下沉花园（中心） -->
+          <rect x="330" y="200" width="240" height="200" rx="14" fill="rgba(201,79,109,0.12)" stroke="#C94F6D" stroke-width="1.8"/>
+          <text x="450" y="230" fill="#F0937F" text-anchor="middle" font-size="12" font-family="DM Sans,sans-serif" font-weight="600">下沉花园 Sunken Garden</text>
+          <text x="450" y="254" fill="#fff" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif">原石灰矿坑 · 花园灵魂</text>
+          <text x="450" y="278" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">1909 采尽 · 1912 起改造</text>
+          <text x="450" y="300" fill="rgba(255,255,255,0.55)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">坑壁修成层层花坛</text>
+          <text x="450" y="322" fill="rgba(255,255,255,0.4)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">罗斯喷泉（高 21 m）在其东侧</text>
+
+          <!-- 玫瑰园 -->
+          <rect x="90" y="80" width="200" height="100" rx="10" fill="rgba(201,79,109,0.10)" stroke="#E87A96" stroke-width="1.3"/>
+          <text x="190" y="106" fill="#F5A9BA" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">玫瑰园 Rose Garden</text>
+          <text x="190" y="128" fill="#fff" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif">250+ 玫瑰品种</text>
+          <text x="190" y="150" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">6–7 月最佳</text>
+
+          <!-- 日本庭园 -->
+          <rect x="610" y="80" width="200" height="100" rx="10" fill="rgba(111,181,138,0.14)" stroke="#6FB58A" stroke-width="1.3"/>
+          <text x="710" y="106" fill="#A5D6B8" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">日本庭园 Japanese Garden</text>
+          <text x="710" y="128" fill="#fff" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif">石灯笼 · 池塘 · 静水</text>
+          <text x="710" y="150" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">1906 · 岸田伊三郎设计</text>
+
+          <!-- 意大利花园 -->
+          <rect x="90" y="210" width="200" height="100" rx="10" fill="rgba(111,181,138,0.10)" stroke="#6FB58A" stroke-width="1.2"/>
+          <text x="190" y="236" fill="#A5D6B8" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">意大利花园 Italian Garden</text>
+          <text x="190" y="258" fill="#fff" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif">几何绿篱 · 雕塑 · 喷泉</text>
+          <text x="190" y="280" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">前身为网球场</text>
+
+          <!-- 地中海花园 -->
+          <rect x="610" y="210" width="200" height="100" rx="10" fill="rgba(201,79,109,0.08)" stroke="#E87A96" stroke-width="1.2"/>
+          <text x="710" y="236" fill="#F5A9BA" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">地中海花园</text>
+          <text x="710" y="258" fill="#fff" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif">薰衣草 · 橄榄 · 耐旱植物</text>
+          <text x="710" y="280" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Mediterranean Garden</text>
+
+          <!-- 配套 -->
+          <rect x="90" y="440" width="360" height="90" rx="10" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <text x="270" y="466" fill="rgba(255,255,255,0.8)" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif">The Dining Room（原布查特住宅）· 蓝罂粟餐厅</text>
+          <text x="270" y="488" fill="rgba(255,255,255,0.55)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">2025 年 OpenTable 加拿大百强餐厅 · 下午茶</text>
+          <rect x="470" y="440" width="340" height="90" rx="10" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <text x="640" y="466" fill="rgba(255,255,255,0.8)" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif">咖啡厅 · 礼品店 · 旋转木马 · 户外冰场</text>
+          <text x="640" y="488" fill="rgba(255,255,255,0.55)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">圣诞季「Magic of Christmas」灯光秀</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(860, 90)">
+            <polygon points="0,-16 4,-2 0,-5 -4,-2" fill="#C94F6D"/>
+            <polygon points="0,16 4,2 0,5 -4,2" fill="#5A6A80"/>
+            <text x="0" y="-20" text-anchor="middle" fill="#C94F6D" font-size="10" font-family="DM Sans,sans-serif">N</text>
+          </g>
+
+          <!-- 图例 -->
+          <rect x="120" y="550" width="660" height="38" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+          <rect x="150" y="563" width="12" height="12" fill="#C94F6D" opacity="0.6" rx="1"/>
+          <text x="170" y="573" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">花园核心</text>
+          <rect x="300" y="563" width="12" height="12" fill="#6FB58A" opacity="0.6" rx="1"/>
+          <text x="320" y="573" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">主题花园</text>
+          <rect x="470" y="563" width="12" height="12" fill="rgba(255,255,255,0.4)" opacity="0.6" rx="1"/>
+          <text x="490" y="573" fill="rgba(255,255,255,0.6)" font-size="9" font-family="DM Sans,sans-serif">配套 / 餐饮</text>
+          <text x="450" y="596" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="8" font-family="DM Sans,sans-serif">空间为示意图，非精确方位与比例 · 实际园区布局以官方导览为准</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>下沉花园 · 灵魂所在</h3><p>原石灰矿坑改造而成，坑壁修成层层花坛、坑底四季开花，是整座花园的叙事原点——「把工业废地变成花海」的具象化。</p></div>
+      <div class="card"><h3>玫瑰园</h3><p>250 余个玫瑰品种，6–7 月盛放，是花园最「香」的区域，也是夏季客流与摄影的高峰点。</p></div>
+      <div class="card"><h3>日本庭园</h3><p>1906 年由岸田伊三郎设计，石灯笼、池塘与静水营造出与西式花坛截然不同的沉静节奏，是花园最早的专业化区域。</p></div>
+      <div class="card"><h3>意大利花园</h3><p>几何绿篱、雕塑与喷泉构成正式对称的空间，前身为网球场，体现花园「层层加码、不断长出新区域」的扩张逻辑。</p></div>
+      <div class="card"><h3>地中海花园</h3><p>薰衣草、橄榄等耐旱植物，与温哥华岛的湿润气候形成反差，是花园的「异域表情区」。</p></div>
+      <div class="card"><h3>罗斯喷泉</h3><p>1964 年为建园 60 周年落成，水柱高约 21 米，夜间配彩色灯光与编舞喷泉，是花园夜间灯光秀的核心。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>发展时间线</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1904</div><div class="timeline-content"><h4>Jennie 开始种花</h4><p>水泥厂主之妻 Jennie Butchart 在自家周边起步，绿化工业用地。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1906</div><div class="timeline-content"><h4>日本庭园建成</h4><p>请来景观设计师岸田伊三郎，花园第一次专业化。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1908</div><div class="timeline-content"><h4>庄园定名「Benvenuto」</h4><p>意大利语「欢迎」，源自夫妇的意大利旅行。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1909–1912</div><div class="timeline-content"><h4>矿坑采尽 · 下沉花园动工</h4><p>石灰矿坑采尽后，Jennie 启动把坑壁改造成层层花坛的工程，花园灵魂成形。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1929</div><div class="timeline-content"><h4>玫瑰园与意大利花园</h4><p>花园在 20 世纪 20–30 年代持续扩张，年游客已达约 5 万人次。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1964</div><div class="timeline-content"><h4>罗斯喷泉落成</h4><p>建园 60 周年纪念，高约 21 米的喷泉成为新地标。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2004</div><div class="timeline-content"><h4>列为加拿大国家历史遗址</h4><p>从私人花园到国家级文化遗产的百年沉淀。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">今日</div><div class="timeline-content"><h4>年游客逾百万 · 家族五代经营</h4><p>仍由布查特家族私人持有，现任业主为创始人曾孙女 Robin-Lee Clarke。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>年游客量</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">100万+</p><p class="f-caption">20 世纪 20 年代约 5 万/年</p></div>
+      <div class="card" style="text-align:center;"><h4>旺季成人门票</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">CAD$39.50</p><p class="f-caption">约 ¥190 · 淡季下探至约 CAD$15</p></div>
+      <div class="card" style="text-align:center;"><h4>植物规模</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">700+ 种</p><p class="f-caption">逾百万株 · 四季更替</p></div>
+    </div>
+
+    <div class="grid-2 reveal">
+      <div class="card"><h3>参观信息</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>项目</th><th>详情</th></tr></thead>
+          <tbody>
+            <tr><td>旺季（6–9 月）</td><td>成人 CAD$39.50 · 青少年 CAD$19.75 · 儿童 CAD$5</td></tr>
+            <tr><td>淡季（冬季）</td><td>成人约 CAD$15–20，动态定价</td></tr>
+            <tr><td>免费人群</td><td>5 岁以下儿童</td></tr>
+            <tr><td>圣诞季</td><td>12 月初至次年 1 月初「Magic of Christmas」灯光秀</td></tr>
+            <tr><td>夜间灯光</td><td>夏季夜间灯光与周六烟花（含在门票内）</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">票价以园方实时公告为准。</p>
+      </div>
+      <div class="card"><h3>客流与经营（公开口径）</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>口径</th><th>数据</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>年游客</td><td class="num">100万+</td><td>温哥华岛标志性景点</td></tr>
+            <tr><td>1920s 年游客</td><td class="num">约 5 万</td><td>百年间增长约 20 倍</td></tr>
+            <tr><td>运营主体</td><td class="num">布查特家族</td><td>私人持有 · 五代经营</td></tr>
+            <tr><td>认证</td><td class="num">国家历史遗址</td><td>2004 年</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">门票 + 餐饮 + 活动租赁 + 夜间灯光/烟花构成收入结构。</p>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>运营特点</h3>
+      <p>布查特花园走的是「低门票高频次 + 全年运营」路线。它不是靠一次性的大投资或网红点拉动，而是靠花园的持续更新与季节节目（圣诞灯光秀、夏季烟花、夜间灯光、下午茶）把「逛花园」变成一个可全年复访的产品。对主题乐园与目的地改造者而言，它最直接的启示有两点：其一，花园的「表情地带」功能——用软性的景观氛围去缝合空间、过渡动线、聚集活动，把「点」连成「面」；其二，它证明了一个「无中生有」的工业废地可以靠长期主义的园艺投入成长为世界级目的地——主题与空间的魅力可以来自「把一件小事做到极致」，而不必依赖颠覆性改造或换主题。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>下沉花园</h3><p>原石灰矿坑改造，坑壁层层花坛、坑底四季开花，是「工业废地变花海」的技术核心，也是花园的灵魂。</p></div>
+      <div class="card"><h3>日本庭园</h3><p>1906 年由岸田伊三郎设计的东方风格庭园，石灯笼与静水营造沉静节奏，是花园最早的专业化作品。</p></div>
+      <div class="card"><h3>罗斯喷泉</h3><p>高约 21 米的纪念喷泉，夜间配彩色灯光与编舞水景，是花园夜间灯光秀的核心载体。</p></div>
+      <div class="card"><h3>四季更替体系</h3><p>700 余种、逾百万株植物按季节轮换，保证全年有景可看，支撑「全年运营」而非单一花期。</p></div>
+      <div class="card"><h3>夜间灯光与烟花</h3><p>夏季夜间灯光与周六烟花（含在门票内），圣诞季「Magic of Christmas」灯光秀，把夜间时段变成第二产品。</p></div>
+      <div class="card"><h3>餐饮与下午茶</h3><p>The Dining Room 位于原布查特住宅，2025 年入选 OpenTable 加拿大百强餐厅，下午茶成为独立引流产品。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>The Dining Room</h3><p>位于原布查特家族住宅内，西海岸风味与英式下午茶，2025 年 OpenTable 加拿大百强餐厅。</p></div>
+      <div class="card"><h3>蓝罂粟餐厅</h3><p>园内主餐厅，蓝罂粟为花园特色花种，提供正餐与简餐。</p></div>
+      <div class="card"><h3>咖啡厅与礼品店</h3><p>季节性经营，圣诞季以热巧克力、姜饼等氛围餐饮配合灯光秀。</p></div>
+      <div class="card"><h3>旋转木马</h3><p>园内亲子设施（2025 年 12 月起停运检修，恢复时间以园方公告为准）。</p></div>
+      <div class="card"><h3>户外冰场</h3><p>圣诞季「Magic of Christmas」期间开放，滑冰租赁需现场预约。</p></div>
+      <div class="card"><h3>夜间灯光与烟花场地</h3><p>夏季周六烟花与夜间灯光秀，圣诞季灯光步道，构成夜经济载体。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. NEWS ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>Magic of Christmas</h3><p>2025 年 12 月 1 日至 2026 年 1 月 6 日的圣诞季，数千盏灯光、户外冰场、「十二天圣诞」主题步道，日本与地中海花园圣诞季关闭。</p></div>
+      <div class="card"><h3>餐厅入选加拿大百强</h3><p>The Dining Room 入选 OpenTable 2025 年加拿大百强餐厅，下午茶与晚餐成为独立引流产品。</p></div>
+      <div class="card"><h3>春季下午茶</h3><p>2026 年 2 月 2 日至 3 月 31 日推出春季下午茶，CAD$49.50（另收 15% 服务费与税）。</p></div>
+      <div class="card"><h3>旋转木马检修</h3><p>玫瑰旋转木马自 2025 年 12 月起停运检修，恢复时间以官方公告为准。</p></div>
+      <div class="card"><h3>五代家族经营</h3><p>仍由布查特家族私人持有经营，现任业主 Robin-Lee Clarke，延续百年的私人花园路线。</p></div>
+      <div class="card"><h3>行业启示</h3><p>「表情地带」与「无中生有」两条：软性景观可缝合空间、聚集活动；长期主义把工业废地养成世界级花园，不必靠换主题或颠覆改造。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. RESOURCES ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal">
+      <h4>官方来源</h4>
+      <ul>
+        <li><a href="https://www.butchartgardens.com/" target="_blank" rel="noopener">The Butchart Gardens — 官方网站</a> <span class="tag">官网</span></li>
+        <li><a href="https://en.wikipedia.org/wiki/Butchart_Gardens" target="_blank" rel="noopener">维基百科 — Butchart Gardens</a> <span class="tag">百科</span></li>
+        <li><a href="http://parkscanadahistory.com/brochures/butchart/brochure-e-2012.pdf" target="_blank" rel="noopener">加拿大公园历史 — 布查特花园官方园刊（2012，PDF）</a> <span class="tag">资料</span></li>
+      </ul>
+    </div>
+    <div class="resource-group reveal">
+      <h4>新闻与参考</h4>
+      <ul>
+        <li><a href="http://world.people.com.cn/n1/2018/0119/c1002-29776042-43.html" target="_blank" rel="noopener">人民网 — 加拿大布查特花园（世界最美十大花园之一）</a> <span class="tag">报道</span></li>
+        <li><a href="https://victoriabuzz.com/2025/11/this-vancouver-island-restaurant-hidden-in-a-garden-made-canadas-top-100-list/" target="_blank" rel="noopener">Victoria Buzz — 园内餐厅入选加拿大百强</a> <span class="tag">报道</span></li>
+        <li><a href="https://pqbnews.com/2025/12/03/video-magic-of-christmas-lights-up-b-c-s-iconic-butchart-gardens/" target="_blank" rel="noopener">Parksville Qualicum News — 圣诞灯光秀点亮布查特花园</a> <span class="tag">报道</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <p><strong>布查特花园</strong> — 温哥华岛上的百年花园 · 从石灰矿坑到国家历史遗址</p>
+  <p style="margin-top:6px;">数据来源：布查特花园官网 · 维基百科 · 加拿大公园历史 · 人民网 &nbsp;|&nbsp; 编制时间：2026年9月</p>
+  <p style="margin-top:4px;font-size:0.78rem;color:rgba(255,255,255,0.3);">本报告仅供行业研究参考。汇率：1 CAD ≈ 4.80 CNY（2026年9月21日）</p>
+  <p style="margin-top:1rem;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例速览首页</a></p>
+  <p>bicc湾创的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy" style="color:#C94F6D;">GitHub</a> 托管</p>
+</footer>
+
+<!-- ====== SCRIPTS (Overseas: ESRI ArcGIS + WGS-84) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：Nominatim 返回 WGS-84，ESRI 瓦片原生支持 WGS-84，直接使用无需转换
+
+var butchartZones = [
+  { name: '下沉花园<br><small>Sunken Garden · 矿坑花海</small>', lat: 48.5646, lng: -123.4693, color: '#C94F6D' },
+  { name: '玫瑰园<br><small>Rose Garden · 250+ 品种</small>', lat: 48.5663, lng: -123.4690, color: '#E87A96' },
+  { name: '日本庭园<br><small>Japanese Garden · 1906</small>', lat: 48.5649, lng: -123.4681, color: '#6FB58A' },
+  { name: '意大利花园<br><small>Italian Garden</small>', lat: 48.5661, lng: -123.4706, color: '#4A8C3F' },
+  { name: '地中海花园<br><small>Mediterranean Garden</small>', lat: 48.5654, lng: -123.4716, color: '#E8A628' },
+  { name: '罗斯喷泉<br><small>Ross Fountain · 高 21m</small>', lat: 48.5655, lng: -123.4683, color: '#4B94C6' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('parkmap');
+  if (!el) return;
+  var map = L.map('parkmap', { scrollWheelZoom: false }).setView([48.565345, -123.469562], 16);
+
+  var satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>', maxZoom: 19
+  });
+  var topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>', maxZoom: 19
+  });
+
+  satLayer.addTo(map);
+  L.control.layers({ '卫星图': satLayer, '地形图': topoLayer }, null, { position: 'topright' }).addTo(map);
+  addZoneMarkers(map, butchartZones);
+
+  L.circle([48.565345, -123.469562], { radius: 300, color: '#C94F6D', weight: 2, fill: false, dashArray: '6,4', opacity: 0.55 }).addTo(map);
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  var tileLoaded = false;
+  map.on('tileload', function() { tileLoaded = true; });
+  setTimeout(function() {
+    if (!tileLoaded) {
+      var fb = document.createElement('div');
+      fb.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.9);z-index:10;border-radius:12px;font-size:0.9rem;color:#8C8878;';
+      fb.textContent = '地图瓦片加载超时，请检查网络连接后刷新页面';
+      el.appendChild(fb);
+    }
+  }, 8000);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>奥兰多环球冒险岛 — 环泻湖的八座主题岛屿 · 哈利波特魔法世界 · Universal Islands of Adventure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #12659B;
+  --clr-primary-light: #4B94C6;
+  --clr-primary-dark: #0A2339;
+  --clr-accent: #E8833A;
+}
+
+.hero {
+  background: linear-gradient(160deg, #071A2B 0%, #12659B 40%, #4B94C6 70%, #7FB0D9 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(232,131,58,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.07) 0%, transparent 50%);
+}
+
+/* Overseas: single-map layout */
+#parkmap { height: 520px; border-radius: var(--radius-lg); }
+@media (max-width: 768px) { #parkmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1><span>奥兰多环球冒险岛</span><br>Universal Islands of Adventure</h1>
+    <p class="hero-subtitle">环球奥兰多第二座主题乐园 · 1999 年开业 · 八座主题岛屿环中央泻湖 · 哈利波特魔法世界（霍格莫德）与 VelociCoaster 所在地</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">1999</div><div class="kpi-label">开业年份</div></div>
+      <div class="kpi-card"><div class="kpi-number">44.5 公顷</div><div class="kpi-label">园区面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">8 座</div><div class="kpi-label">主题岛屿</div></div>
+      <div class="kpi-card"><div class="kpi-number">1,103万</div><div class="kpi-label">2022 客流峰值（全球第 5）</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目名称</h3><p>奥兰多环球冒险岛<br>Universal Islands of Adventure<br><span class="f-caption">原名 Universal's Islands of Adventure</span></p></div>
+      <div class="card"><h3>地理位置</h3><p>美国佛罗里达州奥兰多<br>Universal Orlando Resort（环球奥兰多度假区）<br>坐标：28°28′19″N, 81°28′16″W</p></div>
+      <div class="card"><h3>开业时间</h3><p>1999 年 5 月 28 日<br>与 CityWalk（环球城市大道）同步开放<br><span class="f-caption">环球奥兰多度假区的第二座主题乐园</span></p></div>
+      <div class="card"><h3>归属 / 运营主体</h3><p>康卡斯特（Comcast）旗下 NBCUniversal<br>环球目的地与体验（Universal Destinations &amp; Experiences）</p></div>
+      <div class="card"><h3>规模构成</h3><p>园区约 44.5 公顷<br>八座主题岛屿环中央泻湖（The Great Inland Sea）<br>由 Universal Creative 设计</p></div>
+      <div class="card"><h3>门票政策</h3><p>单园门票随淡旺季动态定价<br>套票、年卡与度假区打包另计<br><span class="f-caption">以官方实时公告为准</span></p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>环球冒险岛是环球奥兰多度假区的第二座主题乐园，1999 年 5 月 28 日开业。它的空间叙事很清晰：入园即登上一段「冒险旅程」，八座主题岛屿围绕中央泻湖展开——入口的 Port of Entry、北侧的漫威超级英雄岛、西侧的卡通湖、南侧的侏罗纪公园与哈利波特魔法世界（霍格莫德）、东侧的失落洲与苏斯登陆。开园时的王牌是《蜘蛛侠》3D 黑暗骑乘与《无敌浩克》过山车，随后通过两次「手术式加码」不断刷新——2010 年哈利波特魔法世界（霍格莫德）加入，2016 年骷髅岛《金刚：骷髅岛》开园，2019 年《海格的奇兽摩托车冒险》以约 1,540 米轨道成为佛罗里达最长过山车，2021 年《侏罗纪世界》VelociCoaster 以约 47 米最高点与约 113 km/h 时速成为新一代王牌。它的客流峰值出现在 2022 年，约 1,103 万人次、全球第 5，2024 年约 945 万人次、全球第 14。对主题乐园改造者而言，它最有参考价值的一点是：八座岛屿各有一个强 IP 与完整叙事，「密度」来自每块小区域都被一个「能勾魂」的故事撑满，而两次王牌更替证明——可以在不推翻整园的前提下，靠持续往单区加王牌来完成迭代。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>单位 / 人物</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>创意设计</td><td>Universal Creative</td><td>环球内部创意与工程设计团队，负责全园主题叙事与游乐设施</td></tr>
+          <tr><td>投资口径</td><td>约 US$27 亿（度假区扩展）</td><td>媒体口径，含城市大道与豪华酒店，园区单体投资未单列</td></tr>
+          <tr><td>开园概念</td><td>八岛环湖</td><td>八座主题岛屿围绕中央泻湖，入园即是一段「冒险旅程」</td></tr>
+          <tr><td>王牌更替</td><td>2010 / 2019 / 2021</td><td>霍格莫德（2010）、海格奇兽（2019）、VelociCoaster（2021）三次加码</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>「八岛环湖」的空间叙事</h3>
+      <p>冒险岛的开园概念是一段冒险旅程：游客从北侧的 Port of Entry「登船」，环绕中央泻湖（The Great Inland Sea）依次进入漫威超级英雄岛、卡通湖、侏罗纪公园、失落洲、苏斯登陆等主题岛屿。每座岛是一个自洽的「世界」——有自己的 IP、建筑、餐饮、游乐设施与情绪曲线。这种「一湖八岛」的结构，把一个大园区拆成了八块各自能立住的强主题区，密度与叙事深度都高于「一园一主题」的传统做法。</p>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>两次「手术式加码」：哈利波特与 VelociCoaster</h3>
+      <p>冒险岛没有一次性把园子做满。开园 11 年后（2010），它把《哈利波特》魔法世界（霍格莫德村）加进园内，霍格沃茨城堡与「禁忌之旅」骑乘立即成为全园最强的引流点；2021 年又以《侏罗纪世界》VelociCoaster 替换部分旧区，用约 47 米最高点、约 113 km/h 时速的双弹射过山车重新定义王牌。这种「保留骨架、逐区刷新」的路线，正是「手术式精准改造」的行业样本——不推翻整园、不换主题，靠持续往单区加王牌来抬高天花板。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>园区面积</td><td class="num">44.5 公顷</td><td>环球奥兰多第二座主题乐园</td></tr>
+          <tr><td>历史</td><td>开业</td><td class="num">1999-05-28</td><td>与 CityWalk 同步开放</td></tr>
+          <tr><td>投资</td><td>度假区扩展投资</td><td class="num">约 US$27 亿</td><td>媒体口径，含城市大道与酒店</td></tr>
+          <tr><td>主题</td><td>主题岛屿</td><td class="num">8 座</td><td>环中央泻湖</td></tr>
+          <tr><td>设施</td><td>VelociCoaster</td><td class="num">最高约 47 m · 约 113 km/h</td><td>2021 年 · 双弹射 · 四次翻滚</td></tr>
+          <tr><td>设施</td><td>海格奇兽摩托车</td><td class="num">轨道约 1,540 m</td><td>2019 年 · 佛罗里达最长过山车</td></tr>
+          <tr><td>设施</td><td>无敌浩克过山车</td><td class="num">约 108 km/h · 七次翻滚</td><td>1999 年开业即建</td></tr>
+          <tr><td>设施</td><td>蜘蛛侠黑暗骑乘</td><td class="num">3D 黑暗骑乘</td><td>1999 年开业即建</td></tr>
+          <tr><td>主题</td><td>哈利波特魔法世界</td><td class="num">2010 年加入</td><td>霍格莫德村</td></tr>
+          <tr><td>主题</td><td>骷髅岛</td><td class="num">2016 年</td><td>《金刚：骷髅岛》Reign of Kong</td></tr>
+          <tr><td>客流</td><td>2024 年</td><td class="num">约 945 万</td><td>全球第 14</td></tr>
+          <tr><td>客流</td><td>2022 年（峰值）</td><td class="num">约 1,103 万</td><td>全球第 5</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源：维基百科、环球奥兰多官网、Newsweek、thrill-data。客流与设施参数为公开口径；美元按 2026 年 9 月 21 日中间价 1 USD ≈ 6.75 CNY 折算（本表未作美元—人民币换算，以原币呈现）。数据截至 2026 年 9 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+    <p class="f-caption reveal">八座主题岛屿环中央泻湖展开，北侧 Port of Entry 为入口。ESRI 卫星底图，WGS-84 坐标。</p>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#12659B;"></span> 奥兰多环球冒险岛（园区）</span>
+        <span><span class="dot" style="background:#E8833A;"></span> 园区范围（示意圈）</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg">
+          <rect width="900" height="620" fill="#071A2B" rx="12"/>
+          <text x="450" y="34" fill="#E8833A" font-family="Playfair Display,serif" font-size="16" text-anchor="middle" font-weight="600">环球冒险岛 · 八岛环湖空间结构示意</text>
+          <line x1="60" y1="54" x2="840" y2="54" stroke="#E8833A" stroke-width="0.5" opacity="0.3"/>
+
+          <!-- 中央泻湖 -->
+          <ellipse cx="450" cy="300" rx="150" ry="110" fill="rgba(75,148,198,0.18)" stroke="#4B94C6" stroke-width="1.2"/>
+          <text x="450" y="296" fill="#8FC1E8" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">中央泻湖</text>
+          <text x="450" y="316" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">The Great Inland Sea</text>
+
+          <!-- Port of Entry -->
+          <rect x="350" y="70" width="200" height="70" rx="10" fill="rgba(232,131,58,0.12)" stroke="#E8833A" stroke-width="1.3"/>
+          <text x="450" y="96" fill="#F5B98A" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">Port of Entry 入口</text>
+          <text x="450" y="116" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">入园第一站 · 灯塔地标</text>
+
+          <!-- 漫威超级英雄岛 -->
+          <rect x="60" y="170" width="200" height="90" rx="10" fill="rgba(232,131,58,0.10)" stroke="#E8833A" stroke-width="1.2"/>
+          <text x="160" y="196" fill="#F5B98A" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">漫威超级英雄岛</text>
+          <text x="160" y="216" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">蜘蛛侠 · 无敌浩克</text>
+          <text x="160" y="236" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">1999 开业即建</text>
+
+          <!-- 卡通湖 -->
+          <rect x="60" y="290" width="200" height="90" rx="10" fill="rgba(75,148,198,0.12)" stroke="#4B94C6" stroke-width="1.2"/>
+          <text x="160" y="316" fill="#8FC1E8" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">卡通湖 Toon Lagoon</text>
+          <text x="160" y="336" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">经典卡通 · 水上游乐</text>
+
+          <!-- 侏罗纪公园 -->
+          <rect x="60" y="410" width="200" height="90" rx="10" fill="rgba(94,166,84,0.12)" stroke="#66BB6A" stroke-width="1.2"/>
+          <text x="160" y="436" fill="#A5D6A7" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">侏罗纪公园</text>
+          <text x="160" y="456" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">VelociCoaster · 激流勇进</text>
+
+          <!-- 骷髅岛 -->
+          <rect x="640" y="410" width="200" height="90" rx="10" fill="rgba(94,166,84,0.10)" stroke="#66BB6A" stroke-width="1.2"/>
+          <text x="740" y="436" fill="#A5D6A7" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">骷髅岛 Skull Island</text>
+          <text x="740" y="456" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Reign of Kong · 2016</text>
+
+          <!-- 哈利波特霍格莫德 -->
+          <rect x="640" y="290" width="200" height="90" rx="10" fill="rgba(180,150,90,0.14)" stroke="#C9B37E" stroke-width="1.3"/>
+          <text x="740" y="316" fill="#E0D0A8" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">哈利波特 · 霍格莫德</text>
+          <text x="740" y="336" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">霍格沃茨城堡 · 海格奇兽</text>
+          <text x="740" y="356" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">2010 加入 · 最强引流点</text>
+
+          <!-- 失落洲 -->
+          <rect x="640" y="170" width="200" height="90" rx="10" fill="rgba(201,79,109,0.10)" stroke="#C94F6D" stroke-width="1.2"/>
+          <text x="740" y="196" fill="#F0937F" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">失落洲 Lost Continent</text>
+          <text x="740" y="216" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">神话主题 · 2026 起改造</text>
+          <text x="740" y="236" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">或将引入新 IP</text>
+
+          <!-- 苏斯登陆 -->
+          <rect x="300" y="540" width="200" height="60" rx="10" fill="rgba(75,148,198,0.10)" stroke="#4B94C6" stroke-width="1.1"/>
+          <text x="400" y="566" fill="#8FC1E8" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">苏斯登陆 Seuss Landing</text>
+          <text x="400" y="584" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">亲子 · 低龄友好</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(858, 90)">
+            <polygon points="0,-16 4,-2 0,-5 -4,-2" fill="#E8833A"/>
+            <polygon points="0,16 4,2 0,5 -4,2" fill="#5A6A80"/>
+            <text x="0" y="-20" text-anchor="middle" fill="#E8833A" font-size="10" font-family="DM Sans,sans-serif">N</text>
+          </g>
+
+          <!-- 图例 -->
+          <rect x="120" y="586" width="660" height="26" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+          <rect x="150" y="594" width="10" height="10" fill="#E8833A" opacity="0.6" rx="1"/>
+          <text x="168" y="603" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">王牌 / 漫威</text>
+          <rect x="290" y="594" width="10" height="10" fill="#4B94C6" opacity="0.6" rx="1"/>
+          <text x="308" y="603" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">亲子 / 卡通</text>
+          <rect x="430" y="594" width="10" height="10" fill="#66BB6A" opacity="0.6" rx="1"/>
+          <text x="448" y="603" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">侏罗纪 / 骷髅岛</text>
+          <text x="450" y="618" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="8" font-family="DM Sans,sans-serif">空间为示意图，非精确方位与比例 · 实际园区布局以官方导览为准</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>Port of Entry</h3><p>入园第一站，灯塔地标与「冒险旅程」的起点，主题商店、餐饮与服务集中于此。</p></div>
+      <div class="card"><h3>漫威超级英雄岛</h3><p>蜘蛛侠 3D 黑暗骑乘与无敌浩克过山车坐镇，是开园即有的漫威主题区，成人客群的核心。</p></div>
+      <div class="card"><h3>卡通湖</h3><p>经典卡通形象与水上项目，是亲子与低龄客群的缓冲带，与苏斯登陆共同构成家庭线。</p></div>
+      <div class="card"><h3>侏罗纪公园</h3><p>《侏罗纪世界》VelociCoaster（约 47 m、约 113 km/h）与激流勇进，是园区最新的王牌聚集地。</p></div>
+      <div class="card"><h3>哈利波特 · 霍格莫德</h3><p>霍格沃茨城堡与「禁忌之旅」、海格奇兽摩托车（约 1,540 m），2010 年加入后成为最强引流点。</p></div>
+      <div class="card"><h3>骷髅岛</h3><p>2016 年开园的《金刚：骷髅岛》主题区，Reign of Kong 黑暗骑乘，是后续加码的又一例证。</p></div>
+      <div class="card"><h3>失落洲</h3><p>神话主题区，波塞冬之怒等演出曾在此，2023 年部分关闭后进入改造，或引入新 IP。</p></div>
+      <div class="card"><h3>苏斯登陆</h3><p>苏斯博士主题的亲子区，低龄友好，与卡通湖构成家庭客群的闭环。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>发展时间线</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1999.05.28</div><div class="timeline-content"><h4>开业</h4><p>环球奥兰多第二座主题乐园，与 CityWalk 同步开放，八岛环湖结构亮相。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2010</div><div class="timeline-content"><h4>哈利波特魔法世界加入</h4><p>霍格莫德村与霍格沃茨城堡开园，成为全园最强引流点，拉开「加码」序幕。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2016</div><div class="timeline-content"><h4>骷髅岛开园</h4><p>《金刚：骷髅岛》Reign of Kong 黑暗骑乘落成，继续往单区加王牌。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2019.06.13</div><div class="timeline-content"><h4>海格奇兽摩托车</h4><p>约 1,540 米轨道成为佛罗里达最长过山车，替代旧「龙之挑战」双轨。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021.06.10</div><div class="timeline-content"><h4>VelociCoaster 开园</h4><p>《侏罗纪世界》主题，最高约 47 米、时速约 113 km/h，四次翻滚，成为新一代王牌。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022</div><div class="timeline-content"><h4>客流峰值</h4><p>约 1,103 万人次、全球第 5，是园区迄今的最高点。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025.12</div><div class="timeline-content"><h4>失落洲改造启动</h4><p>向橙县提交施工许可（Intamin 为承建方），失落洲原址拟引入新 IP，园区进入新一轮迭代。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026</div><div class="timeline-content"><h4>新一轮改造</h4><p>失落洲区域拆除改造进行中，环球称三座既有乐园均有新项目在开发。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>2024 客流</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">约 945万</p><p class="f-caption">全球第 14</p></div>
+      <div class="card" style="text-align:center;"><h4>2022 客流峰值</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">约 1,103万</p><p class="f-caption">全球第 5</p></div>
+      <div class="card" style="text-align:center;"><h4>主题岛屿</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">8 座</p><p class="f-caption">环中央泻湖</p></div>
+    </div>
+
+    <div class="grid-2 reveal">
+      <div class="card"><h3>门票与套票</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>项目</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>单园门票</td><td>随淡旺季动态定价</td></tr>
+            <tr><td>多园套票</td><td>环球影城 + 冒险岛 + 火山湾联票</td></tr>
+            <tr><td>年卡</td><td>分档，本地与远程客群不同</td></tr>
+            <tr><td>Express 免排队</td><td>额外付费，旺季推荐</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">价格以官方实时公告为准。</p>
+      </div>
+      <div class="card"><h3>客流（TEA 公开口径）</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>年份</th><th>客流</th><th>排名</th></tr></thead>
+          <tbody>
+            <tr><td>2022</td><td class="num">约 1,103万</td><td>全球第 5</td></tr>
+            <tr><td>2024</td><td class="num">约 945万</td><td>全球第 14</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">2025 年数据未披露。</p>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>运营特点</h3>
+      <p>冒险岛的运营靠「强 IP × 高密度」双轮驱动。八座岛屿各自是一个完整的 IP 世界，漫威、哈利波特、侏罗纪三个顶级 IP 构成客流主轴，卡通湖与苏斯登陆承接亲子客群，把「来一次」变成「分几次逛完」。它的迭代方式不是推倒重来，而是「保留骨架、逐区加码」——2010 加霍格莫德、2016 加骷髅岛、2019 加海格奇兽、2021 加 VelociCoaster，每次都在既有地块上塞进一个新王牌，把单园的密度与复游率一起拉高。对后来者最直接的参考是：主题乐园的「娱乐密度」取决于每块小区域是否都被一个能勾魂的故事撑满，而不是园子圈了多大；而「改造」的正确姿势是往单区持续加王牌，不是换主题或翻新整体。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>VelociCoaster</h3><p>《侏罗纪世界》主题，最高约 47 米、时速约 113 km/h，双 LSM 弹射与四次翻滚，含环泻湖翻滚，是园区王牌。</p></div>
+      <div class="card"><h3>海格奇兽摩托车</h3><p>约 1,540 米轨道、佛罗里达最长过山车，七次弹射与一次自由落体，替代旧「龙之挑战」。</p></div>
+      <div class="card"><h3>无敌浩克过山车</h3><p>1999 年开业即建，约 108 km/h、七次翻滚，2016 年整修后重开。</p></div>
+      <div class="card"><h3>蜘蛛侠黑暗骑乘</h3><p>1999 年开业即建的 3D 黑暗骑乘，2012 年升级高清投影，是漫威岛的招牌。</p></div>
+      <div class="card"><h3>哈利波特魔法世界</h3><p>霍格沃茨城堡 + 「禁忌之旅」骑乘 + 海格奇兽，2010 年加入后成为最强引流点。</p></div>
+      <div class="card"><h3>骷髅岛 Reign of Kong</h3><p>2016 年开园的《金刚》黑暗骑乘，是「往单区加王牌」的又一例证。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>CityWalk 城市大道</h3><p>与冒险岛同步开放的商业街区，餐饮、商店、影院连接度假区各园。</p></div>
+      <div class="card"><h3>度假区酒店</h3><p>环球奥兰多多家酒店配套，住客享提前入园等权益，支撑多日游。</p></div>
+      <div class="card"><h3>主题餐饮</h3><p>各岛屿内主题餐厅（如 Mythos 曾获最佳主题乐园餐厅），餐饮即主题叙事的一部分。</p></div>
+      <div class="card"><h3>Express 免排队</h3><p>付费免排队体系，旺季分流与增收并重。</p></div>
+      <div class="card"><h3>火山湾</h3><p>度假区水上乐园，与两座主题乐园构成「多园联游」。</p></div>
+      <div class="card"><h3>交通与停车</h3><p>停车楼 + 度假区内穿梭，支撑大规模自驾与团队客群。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. NEWS ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>失落洲改造启动</h3><p>2023 年波塞冬之怒关闭后，失落洲进入改造；2025 年 12 月 16 日向橙县提交施工许可，承建方为 Intamin，拟引入新王牌过山车。</p></div>
+      <div class="card"><h3>或引入新 IP</h3><p>社区普遍猜测失落洲原址可能引入宝可梦或任天堂主题（不含超级马力欧），官方尚未正式确认。</p></div>
+      <div class="card"><h3>Mythos 餐厅关闭</h3><p>曾多次获「最佳主题乐园餐厅」的 Mythos 预计 2027 年关闭，让位给新一轮改造。</p></div>
+      <div class="card"><h3>Epic Universe 开业</h3><p>2025 年 5 月 22 日，环球奥兰多第三座主题乐园 Epic Universe 开业，度假区进入多园时代。</p></div>
+      <div class="card"><h3>三园同步新增</h3><p>环球高层确认「不仅 Epic Universe，三座既有乐园都有新项目在开发」，冒险岛进入新一轮迭代周期。</p></div>
+      <div class="card"><h3>行业启示</h3><p>「保留骨架、逐区加王牌」的改造路线，是主题乐园手术式迭代的样本——不推翻整园、不换主题，靠往单区持续加码抬高天花板。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. RESOURCES ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal">
+      <h4>官方来源</h4>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Universal_Islands_of_Adventure" target="_blank" rel="noopener">维基百科 — Universal Islands of Adventure</a> <span class="tag">百科</span></li>
+        <li><a href="https://www.universalorlando.com/" target="_blank" rel="noopener">环球奥兰多 — 官方网站</a> <span class="tag">官网</span></li>
+      </ul>
+    </div>
+    <div class="resource-group reveal">
+      <h4>新闻与数据</h4>
+      <ul>
+        <li><a href="https://www.newsweek.com/3-billion-screams-163916" target="_blank" rel="noopener">Newsweek — 开业报道（US$27 亿度假区扩展口径）</a> <span class="tag">报道</span></li>
+        <li><a href="https://wdwnt.com/2025/12/universal-orlando-files-notice-of-commencement-for-new-intamin-ride-in-former-lost-continent-area/" target="_blank" rel="noopener">WDW News Today — 环球奥兰多为失落洲原址提交新 Intamin 设备施工许可</a> <span class="tag">报道</span></li>
+        <li><a href="https://www.thrill-data.com/waits/park/uor/islands-of-adventure/2024/08/01" target="_blank" rel="noopener">Thrill Data — 冒险岛等待时间数据</a> <span class="tag">数据</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <p><strong>奥兰多环球冒险岛</strong> — 环球奥兰多第二座主题乐园 · 环泻湖的八座主题岛屿</p>
+  <p style="margin-top:6px;">数据来源：维基百科 · 环球奥兰多官网 · Newsweek · Thrill Data &nbsp;|&nbsp; 编制时间：2026年9月</p>
+  <p style="margin-top:4px;font-size:0.78rem;color:rgba(255,255,255,0.3);">本报告仅供行业研究参考。汇率：1 USD ≈ 6.75 CNY（2026年9月21日）</p>
+  <p style="margin-top:1rem;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例速览首页</a></p>
+  <p>bicc湾创的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy" style="color:#E8833A;">GitHub</a> 托管</p>
+</footer>
+
+<!-- ====== SCRIPTS (Overseas: ESRI ArcGIS + WGS-84) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：Nominatim 返回 WGS-84，ESRI 瓦片原生支持 WGS-84，直接使用无需转换
+
+var ioaZones = [
+  { name: 'Port of Entry<br><small>入口 · 灯塔地标</small>', lat: 28.4740, lng: -81.4703, color: '#E8833A' },
+  { name: '漫威超级英雄岛<br><small>蜘蛛侠 · 无敌浩克</small>', lat: 28.4736, lng: -81.4696, color: '#E8833A' },
+  { name: '卡通湖<br><small>Toon Lagoon</small>', lat: 28.4720, lng: -81.4730, color: '#4B94C6' },
+  { name: '骷髅岛<br><small>Reign of Kong · 2016</small>', lat: 28.4699, lng: -81.4722, color: '#66BB6A' },
+  { name: '侏罗纪公园<br><small>VelociCoaster</small>', lat: 28.4699, lng: -81.4728, color: '#4A8C3F' },
+  { name: '哈利波特 · 霍格莫德<br><small>霍格沃茨城堡</small>', lat: 28.4696, lng: -81.4713, color: '#C9B37E' },
+  { name: '失落洲<br><small>Lost Continent · 改造中</small>', lat: 28.4707, lng: -81.4694, color: '#C94F6D' },
+  { name: '苏斯登陆<br><small>Seuss Landing</small>', lat: 28.4729, lng: -81.4686, color: '#4B94C6' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('parkmap');
+  if (!el) return;
+  var map = L.map('parkmap', { scrollWheelZoom: false }).setView([28.471879, -81.471211], 15);
+
+  var satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>', maxZoom: 19
+  });
+  var topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>', maxZoom: 19
+  });
+
+  satLayer.addTo(map);
+  L.control.layers({ '卫星图': satLayer, '地形图': topoLayer }, null, { position: 'topright' }).addTo(map);
+  addZoneMarkers(map, ioaZones);
+
+  L.circle([28.471879, -81.471211], { radius: 260, color: '#E8833A', weight: 2, fill: false, dashArray: '6,4', opacity: 0.55 }).addTo(map);
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  var tileLoaded = false;
+  map.on('tileload', function() { tileLoaded = true; });
+  setTimeout(function() {
+    if (!tileLoaded) {
+      var fb = document.createElement('div');
+      fb.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.9);z-index:10;border-radius:12px;font-size:0.9rem;color:#8C8878;';
+      fb.textContent = '地图瓦片加载超时，请检查网络连接后刷新页面';
+      el.appendChild(fb);
+    }
+  }, 8000);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

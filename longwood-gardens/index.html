@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>长木花园 — 皮埃尔·杜邦的百年植物园 · Longwood Gardens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #2E7D32;
+  --clr-primary-light: #4CAF50;
+  --clr-primary-dark: #1B3A2A;
+  --clr-accent: #D9A441;
+}
+
+.hero {
+  background: linear-gradient(160deg, #1B3A2A 0%, #2E7D32 40%, #4CAF50 70%, #7CB342 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(217,164,65,0.20) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.07) 0%, transparent 50%);
+}
+
+/* Overseas: single-map layout */
+#parkmap { height: 520px; border-radius: var(--radius-lg); }
+@media (max-width: 768px) { #parkmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1><span>长木花园</span><br>Longwood Gardens</h1>
+    <p class="hero-subtitle">美国宾夕法尼亚 · 皮埃尔·杜邦 1906 年购入 · 从私人庄园到全美标杆植物园 · 2024 年 163 万客流创纪录</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">约 436 公顷</div><div class="kpi-label">总占地面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">约 163万</div><div class="kpi-label">2024 客流 · 创纪录</div></div>
+      <div class="kpi-card"><div class="kpi-number">约 53 米</div><div class="kpi-label">主喷泉水柱高度</div></div>
+      <div class="kpi-card"><div class="kpi-number">1906</div><div class="kpi-label">皮埃尔·杜邦购入始建</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目名称</h3><p>长木花园<br>Longwood Gardens<br><span class="f-caption">又称「杜邦花园」</span></p></div>
+      <div class="card"><h3>地理位置</h3><p>美国宾夕法尼亚州肯尼特广场<br>Kennett Square, Pennsylvania<br>费城以西 · 约 1 小时车程<br><span class="f-caption">坐标：39°52′17″N, 75°40′29″W</span></p></div>
+      <div class="card"><h3>创立 / 开放</h3><p>1906 年皮埃尔·杜邦购入始建<br>1946 年对公众开放<br><span class="f-caption">前身约 1798 年 Peirce 家族树木园</span></p></div>
+      <div class="card"><h3>归属 / 运营主体</h3><p>非营利机构 Longwood Gardens, Inc.<br>上级 Longwood Foundation, Inc.<br><span class="f-caption">1954 年杜邦去世留下捐赠维持运营</span></p></div>
+      <div class="card"><h3>植物收藏</h3><p>逾 1 万种植物<br>兰花房约 5,000 株兰花<br>温室全年 + 户外四季</p></div>
+      <div class="card"><h3>规模构成</h3><p>总占地约 436 公顷<br>其中近 81 公顷对公众开放<br>温室群约 1.8 公顷</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>长木花园是美国宾夕法尼亚州肯尼特广场的一座百年植物园，前身是 Peirce 家族约 1798 年起的树木园，1906 年由杜邦公司总裁皮埃尔·杜邦购入以拯救园中老树，此后半个世纪他亲手把这里从私人庄园打造成「世界园艺的展示窗」——1921 年温室开放、1931 年主喷泉花园建成，1954 年他去世后留下大额捐赠，让花园以非营利机构持续运营至今。它的价值不在一时一景，而在「私人财富 + 专业园艺 + 公共运营」的百年接力：2024 年完成的约 ¥17 亿（2.5 亿美元）「Longwood Reimagined」改造，用一座 Weiss/Manfredi 设计的西温室把园区推进下一百年。2024 年 163 万客流创纪录，2025 年被 USA TODAY 读者评为全美最佳植物园。对国内文旅与植物园投资者，它最可借鉴的是「以园林本体为核心资产、以温室与喷泉工程为技术壁垒、以非营利捐赠为永续机制」的运营范式。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>单位 / 人物</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>创始人 / 主导</td><td>皮埃尔·杜邦</td><td>杜邦公司总裁、工业家，1906 购入土地，亲自主导园艺与工程设计</td></tr>
+          <tr><td>温室工程</td><td>主温室群（1921）</td><td>首批温室 1921 年开放，含兰花房、舞厅与住宅用管风琴</td></tr>
+          <tr><td>喷泉工程</td><td>主喷泉花园（1931）</td><td>意大利式水上剧场，1,700+ 喷头，水柱最高约 53 米</td></tr>
+          <tr><td>西温室设计</td><td>Weiss/Manfredi（2024）</td><td>新建地中海风格玻璃温室，约 2,970 平方米、1,958 块玻璃面板</td></tr>
+          <tr><td>喷泉花园改造</td><td>Beyer Blinder Belle + West 8</td><td>2014–2017 主喷泉花园大修，园区史上最大工程</td></tr>
+          <tr><td>投资口径</td><td>约 ¥17 亿</td><td>2024 改造总投资 · 2.5 亿美元（2026-09 中间价约 6.75）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>皮埃尔·杜邦：工业家转身园艺家</h3>
+      <p>长木花园的灵魂人物是皮埃尔·杜邦——杜邦公司总裁、一位标准的美国工业家。1906 年他买下这块地，最初的理由朴素得近乎私人：Peirce 家族留下的百年老树即将被砍伐，他出手「救树」。但杜邦不是只救不建——他把工业工程的能力整体搬进了园艺：温室、喷泉、管风琴，每一项都追求当时的技术极限。主温室里藏着一架号称「世界最大的住宅用管风琴」，主喷泉花园是一整套会「演戏」的水力机械，这些都不在传统「富人花园」的清单里。正是这种「用工程手段实现园艺理想」的底色，让长木花园区别于一般收藏奇花异草的私人庄园——它从一开始就在为「面向公众、永续运营」做准备。</p>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>Longwood Reimagined：约 6.9 公顷核心区改造</h3>
+      <p>2024 年 11 月开放、总投资约 ¥17 亿（2.5 亿美元）的「Longwood Reimagined」是园区进入第二个百年的关键一步，改造了核心温室区约 6.9 公顷。中心是 Weiss/Manfredi 设计的西温室（West Conservatory）——一座约 2,970 平方米的玻璃温室，由 1,958 块玻璃面板组成，种植地中海气候植物，配地热制冷制热与电脑控制的开窗通风。同期新增高级餐厅「1906」，并搬迁、修复了巴西景观大师 Roberto Burle Marx 设计的 Cascade Garden。这一轮改造把长木的叙事从「历史名园」拉到了「可持续温室工程」——地热、被动通风、玻璃构造，都是当代植物园技术竞争的前沿。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>总占地面积</td><td class="num">约 436 公顷</td><td>各来源口径略有出入</td></tr>
+          <tr><td>规模</td><td>对公众开放面积</td><td class="num">约 81 公顷</td><td>公共开放区口径约值</td></tr>
+          <tr><td>规模</td><td>温室群</td><td class="num">约 1.8 公顷</td><td>主温室 + 东温室 + 西温室</td></tr>
+          <tr><td>历史</td><td>杜邦购入</td><td class="num">1906</td><td>前身 Peirce 家族约 1798 年树木园</td></tr>
+          <tr><td>历史</td><td>对公众开放</td><td class="num">1946</td><td>获准作为免税公共花园运营</td></tr>
+          <tr><td>植物</td><td>植物收藏</td><td class="num">逾 1 万种</td><td>口径另有「11,000+」</td></tr>
+          <tr><td>植物</td><td>兰花房</td><td class="num">约 5,000 株</td><td>位于主温室</td></tr>
+          <tr><td>温室</td><td>西温室</td><td class="num">约 2,970 平方米</td><td>2024 开放</td></tr>
+          <tr><td>温室</td><td>西温室玻璃面板</td><td class="num">1,958 块</td><td>Weiss/Manfredi 设计</td></tr>
+          <tr><td>喷泉</td><td>主喷泉花园</td><td class="num">1,700+ 喷头</td><td>水柱最高约 53 米</td></tr>
+          <tr><td>投资</td><td>2024 改造投资</td><td class="num">约 ¥17 亿</td><td>2.5 亿美元（2026-09 中间价约 6.75）</td></tr>
+          <tr><td>客流</td><td>2024 客流</td><td class="num">约 163万</td><td>创纪录 · 2022 年 161万</td></tr>
+          <tr><td>荣誉</td><td>全美最佳植物园</td><td class="num">2025</td><td>USA TODAY 10Best 读者选择奖</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源：长木花园官网、维基百科、Visit Philadelphia、USA TODAY、Architectural Record。面积与植物数量各来源口径略有出入，本页取「约 436 公顷 / 逾 1 万种」；汇率按 2026 年 9 月 21 日中间价约 6.75。数据截至 2026 年 9 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+    <p class="f-caption reveal">长木花园总占地约 436 公顷，其中近 81 公顷对公众开放。单标注 + 示意范围圈，ESRI 卫星底图，WGS-84 坐标。</p>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#2E7D32;"></span> 长木花园（访客中心）</span>
+        <span><span class="dot" style="background:#D9A441;"></span> 公共开放区（示意范围）</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 900 660" xmlns="http://www.w3.org/2000/svg">
+          <rect width="900" height="660" fill="#12291B" rx="12"/>
+          <text x="450" y="34" fill="#D9A441" font-family="Playfair Display,serif" font-size="16" text-anchor="middle" font-weight="600">长木花园 · 公共开放区空间结构示意</text>
+          <line x1="60" y1="54" x2="840" y2="54" stroke="#D9A441" stroke-width="0.5" opacity="0.3"/>
+
+          <!-- 草甸林地（背景） -->
+          <ellipse cx="450" cy="340" rx="405" ry="285" fill="rgba(102,187,106,0.05)" stroke="rgba(102,187,106,0.35)" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="450" y="586" fill="rgba(165,214,167,0.55)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">草甸与林地（Meadow &amp; Woodland）· 总占地约 436 公顷的大部，多数未对公众开放</text>
+
+          <!-- 户外花径与创意园（北） -->
+          <rect x="290" y="80" width="320" height="66" rx="12" fill="rgba(102,187,106,0.14)" stroke="#66BB6A" stroke-width="1.2"/>
+          <text x="450" y="107" fill="#A5D6A7" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">户外花径与创意园</text>
+          <text x="450" y="126" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Flower Garden Walk · Idea Garden</text>
+
+          <!-- 西温室（西，2024 新） -->
+          <rect x="70" y="190" width="220" height="128" rx="12" fill="rgba(217,164,65,0.14)" stroke="#D9A441" stroke-width="1.4" stroke-dasharray="5,3"/>
+          <text x="180" y="217" fill="#E8C07A" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">西温室</text>
+          <text x="180" y="236" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">West Conservatory</text>
+          <text x="180" y="253" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">2024 新建 · 地中海植物</text>
+          <text x="180" y="268" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">1,958 块玻璃面板 · 地热</text>
+
+          <!-- 主温室群（中） -->
+          <rect x="330" y="190" width="260" height="128" rx="12" fill="rgba(217,164,65,0.14)" stroke="#D9A441" stroke-width="1.4"/>
+          <text x="460" y="217" fill="#E8C07A" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">主温室群</text>
+          <text x="460" y="236" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Main + East Conservatory</text>
+          <text x="460" y="253" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">兰花房 · 舞厅 · 住宅管风琴</text>
+          <text x="460" y="268" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">1.8 公顷温室群核心</text>
+
+          <!-- 意大利水花园（东） -->
+          <rect x="630" y="190" width="200" height="128" rx="12" fill="rgba(79,195,247,0.12)" stroke="#4FC3F7" stroke-width="1.2"/>
+          <text x="730" y="217" fill="#8FD3F4" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">意大利水花园</text>
+          <text x="730" y="236" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Italian Water Garden</text>
+          <text x="730" y="253" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">几何水景与雕像</text>
+
+          <!-- 主喷泉花园（南） -->
+          <rect x="250" y="380" width="400" height="120" rx="12" fill="rgba(79,195,247,0.12)" stroke="#4FC3F7" stroke-width="1.3"/>
+          <text x="450" y="410" fill="#8FD3F4" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">主喷泉花园</text>
+          <text x="450" y="430" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Main Fountain Garden</text>
+          <text x="450" y="450" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">1,700+ 喷头 · 水柱最高约 53 米</text>
+          <text x="450" y="467" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">音乐喷泉 · 5–10 月喷泉季</text>
+
+          <!-- 入口 -->
+          <text x="450" y="530" fill="#E8C07A" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">← 访客中心入园（1001 Longwood Road）</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(858, 90)">
+            <polygon points="0,-16 4,-2 0,-5 -4,-2" fill="#D9A441"/>
+            <polygon points="0,16 4,2 0,5 -4,2" fill="#5A6A80"/>
+            <text x="0" y="-20" text-anchor="middle" fill="#D9A441" font-size="10" font-family="DM Sans,sans-serif">N</text>
+          </g>
+
+          <!-- 图例 -->
+          <rect x="110" y="606" width="680" height="26" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+          <rect x="140" y="614" width="10" height="10" fill="#D9A441" opacity="0.7" rx="1"/>
+          <text x="158" y="623" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">温室群</text>
+          <rect x="240" y="614" width="10" height="10" fill="#4FC3F7" opacity="0.7" rx="1"/>
+          <text x="258" y="623" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">水景 / 喷泉</text>
+          <rect x="360" y="614" width="10" height="10" fill="#66BB6A" opacity="0.7" rx="1"/>
+          <text x="378" y="623" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">户外花园</text>
+          <text x="600" y="623" fill="rgba(255,255,255,0.45)" font-size="8" font-family="DM Sans,sans-serif">空间为示意图，非精确方位与比例 · 实际布局以官方导览为准</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>主温室群</h3><p>主温室 + 东温室构成室内核心，含兰花房、舞厅（世界最大住宅管风琴所在）与室内儿童园，是全年游览的主轴。</p></div>
+      <div class="card"><h3>西温室</h3><p>2024 年新建，Weiss/Manfredi 设计，约 2,970 平方米玻璃温室，种植地中海植物，配地热制冷制热。</p></div>
+      <div class="card"><h3>主喷泉花园</h3><p>1931 年建成的意大利式水上剧场，1,700+ 喷头、水柱最高约 53 米，配音乐与灯光秀，喷泉季 5–10 月。</p></div>
+      <div class="card"><h3>户外花径与创意园</h3><p>四季户外花径、创意园（Idea Garden）等，是春夏秋三季的开放花境主轴。</p></div>
+      <div class="card"><h3>意大利水花园</h3><p>几何化的水景与雕像庭园，是主温室群东侧的一处经典水景节点。</p></div>
+      <div class="card"><h3>草甸与林地</h3><p>总占地约 436 公顷的大部为草甸与林地，仅近 81 公顷对公众开放，是园区生态本底与「大而克制」的空间来源。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">约 1798</div><div class="timeline-content"><h4>Peirce 家族树木园</h4><p>Peirce 家族自 William Penn 处获地，约 1800 年起营造树木园，是长木花园的植物学前身。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1906</div><div class="timeline-content"><h4>杜邦购入</h4><p>皮埃尔·杜邦买下土地，拯救 Peirce 家族老树免遭砍伐，随后数十年主导园艺与工程建设。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1914</div><div class="timeline-content"><h4>公司化</h4><p>庄园注册为 Longwood, Incorporated（特拉华州私人公司）。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1921.11.25</div><div class="timeline-content"><h4>温室开放</h4><p>首批温室开放，奠定「全年可游」的展示能力。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1931</div><div class="timeline-content"><h4>主喷泉花园建成</h4><p>意大利式水上剧场落成，喷泉季 5–10 月，成为园区最具识别度的地标。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1937</div><div class="timeline-content"><h4>Longwood Foundation 成立</h4><p>8 月 14 日注册非营利基金会，为庄园的永续运营做准备。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1946</div><div class="timeline-content"><h4>对公众开放</h4><p>获准作为免税公共花园运营，定位展览、教学与教育，正式从私人庄园转向公共花园。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1954</div><div class="timeline-content"><h4>杜邦去世</h4><p>皮埃尔·杜邦离世，留下大额捐赠维持花园长期运营。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1970</div><div class="timeline-content"><h4>Longwood Gardens, Inc. 成立</h4><p>8 月 3 日注册，专门负责花园日常运营，Longwood Foundation 为其上级组织。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024.11</div><div class="timeline-content"><h4>Longwood Reimagined 开放</h4><p>约 ¥17 亿（2.5 亿美元）改造完成，西温室落成，约 6.9 公顷核心温室区焕新。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>2024 客流</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">约 163万</p><p class="f-caption">创纪录 · 上一年纪录 2022 年 161万</p></div>
+      <div class="card" style="text-align:center;"><h4>门票</h4><p style="font-family:'DM Mono',monospace;font-size:1.4rem;font-weight:500;color:var(--clr-primary);">约 ¥115–216</p><p class="f-caption">原价 $17–32 · 分季定价 · 需提前预约</p></div>
+      <div class="card" style="text-align:center;"><h4>开放时间</h4><p style="font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:500;color:var(--clr-primary);">10:00–17:00</p><p class="f-caption">除周二外每日开放</p></div>
+    </div>
+
+    <div class="grid-2 reveal">
+      <div class="card"><h3>客流（年）</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>年份</th><th>客流</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>2022</td><td class="num">约 161万</td><td>前纪录</td></tr>
+            <tr><td>2024</td><td class="num">约 163万</td><td>创纪录</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">门票预约制限制日客流，常年稳定在百万人次量级。</p>
+      </div>
+      <div class="card"><h3>运营机制</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>维度</th><th>安排</th></tr></thead>
+          <tbody>
+            <tr><td>运营主体</td><td>Longwood Gardens, Inc.（非营利）</td></tr>
+            <tr><td>票务</td><td>分季定价 + 提前预约</td></tr>
+            <tr><td>节令</td><td>喷泉季 5–10 月 · 冬季圣诞灯饰</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">捐赠 + 门票双轨支撑，是非营利公共花园的典型样本。</p>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>运营特点</h3>
+      <p>长木花园的运营逻辑与主题乐园完全不同：它不靠「设备刺激」或「IP 变现」驱动，而靠「园林本体的季节性内容」滚动获客——春有花径、夏有喷泉秀、秋有彩叶、冬有温室与圣诞灯饰，全年四个波段都有人来的理由。门票分季定价（约 ¥115–216，原价 $17–32）并强制提前预约，既控流也提客单；非营利的 Longwood Gardens, Inc. 依托杜邦留下的捐赠与门票收入双轨运营，把「永续」写进了机构基因。对国内植物园与文旅项目的启示在于：植物园可以不是主题乐园的「配角」，只要把温室、喷泉、节令内容做深，它自己就是一座能稳定引流的「内容型目的地」。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>温室工程</h3><p>西温室约 2,970 平方米、1,958 块玻璃面板，电脑控制开窗通风，是当代玻璃温室技术的前沿样本。</p></div>
+      <div class="card"><h3>喷泉工程</h3><p>主喷泉花园 1,700+ 喷头，水柱最高约 53 米，配音乐与全光谱灯光秀，是「水力机械当舞台」的经典。</p></div>
+      <div class="card"><h3>植物收藏</h3><p>逾 1 万种植物，兰花房约 5,000 株兰花，温室全年 + 户外四季，是北美最重要的园艺收藏之一。</p></div>
+      <div class="card"><h3>地热系统</h3><p>西温室以地热制冷制热，配合被动通风，体现「可持续温室」的技术取向。</p></div>
+      <div class="card"><h3>住宅管风琴</h3><p>主温室舞厅内安置「世界最大的住宅用管风琴」，是杜邦「工程技术进园艺」最直观的注脚。</p></div>
+      <div class="card"><h3>百年接力机制</h3><p>私人庄园 → 公共花园的捐赠运营范式，靠基金会 + 运营公司两层架构实现「永续」。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>主温室群</h3><p>兰花房、舞厅与室内儿童园，是冬季与恶劣天气时的核心室内体验。</p></div>
+      <div class="card"><h3>西温室</h3><p>2024 年新建的地中海植物温室，是「Longwood Reimagined」的新地标。</p></div>
+      <div class="card"><h3>主喷泉花园</h3><p>音乐喷泉秀与夏日灯光夜景，喷泉季 5–10 月的夜间主活动。</p></div>
+      <div class="card"><h3>1906 餐厅</h3><p>2024 年改造新增的高级餐厅，以杜邦购入年份命名，提升餐饮能级。</p></div>
+      <div class="card"><h3>Cascade Garden</h3><p>巴西景观大师 Roberto Burle Marx 设计，2024 年搬迁修复后重新开放。</p></div>
+      <div class="card"><h3>户外花园与草甸</h3><p>花径、创意园与近 81 公顷开放区，承载四季户外游览与教育活动。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. NEWS ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>2024 Reimagined 完成</h3><p>11 月开放，总投资约 ¥17 亿（2.5 亿美元），约 6.9 公顷核心温室区改造，西温室成为新地标。</p></div>
+      <div class="card"><h3>2025 全美最佳植物园</h3><p>USA TODAY 10Best 读者选择奖评出「全美最佳植物园」，长木花园登顶。</p></div>
+      <div class="card"><h3>2024 客流创纪录</h3><p>163 万，超过 2022 年的 161 万前纪录，门票预约制下仍持续增长。</p></div>
+      <div class="card"><h3>西温室新地标</h3><p>Weiss/Manfredi 设计、1,958 块玻璃面板，地中海植物 + 地热制冷制热，成为「可持续温室」样本。</p></div>
+      <div class="card"><h3>喷泉季 5–10 月</h3><p>主喷泉花园音乐喷泉与灯光夜景按季运营，冬季转为圣诞灯饰季。</p></div>
+      <div class="card"><h3>行业启示</h3><p>「园林本体为核心资产、温室与喷泉工程为壁垒、非营利捐赠为永续」的植物园运营范式，对国内文旅可直接借鉴。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. RESOURCES ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal">
+      <h4>官方与百科</h4>
+      <ul>
+        <li><a href="https://longwoodgardens.org/" target="_blank" rel="noopener">长木花园官网 — Longwood Gardens</a> <span class="tag">官网</span></li>
+        <li><a href="https://longwoodgardens.org/history" target="_blank" rel="noopener">长木花园官网 — 历史</a> <span class="tag">官网</span></li>
+        <li><a href="https://en.wikipedia.org/wiki/Longwood_Gardens" target="_blank" rel="noopener">维基百科 — Longwood Gardens</a> <span class="tag">百科</span></li>
+        <li><a href="https://www.visitphilly.com/things-to-do/attractions/longwood-gardens/" target="_blank" rel="noopener">Visit Philadelphia — Longwood Gardens 导览</a> <span class="tag">导览</span></li>
+      </ul>
+    </div>
+    <div class="resource-group reveal">
+      <h4>新闻与报道</h4>
+      <ul>
+        <li><a href="https://www.usatoday.com/story/life/2025/03/21/longwood-gardens-crowned-best-botanical-garden-has-kept-growing/82563495007/" target="_blank" rel="noopener">USA TODAY — Longwood Gardens 获评全美最佳植物园</a> <span class="tag">报道</span></li>
+        <li><a href="https://www.architecturalrecord.com/articles/12860-longwood-gardens-renovation-by-beyer-blinder-belle-and-west-8" target="_blank" rel="noopener">Architectural Record — Longwood Gardens 改造（BBB + West 8）</a> <span class="tag">报道</span></li>
+        <li><a href="https://washingtonian.com/2024/11/25/a-stunning-new-garden-near-dc-features-a-festive-holiday-display/" target="_blank" rel="noopener">Washingtonian — 2024 新园与节日展示</a> <span class="tag">报道</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <p><strong>长木花园</strong> — 皮埃尔·杜邦的百年植物园 · 私人庄园到公共花园的标杆</p>
+  <p style="margin-top:6px;">数据来源：长木花园官网 · 维基百科 · Visit Philadelphia · USA TODAY · Architectural Record &nbsp;|&nbsp; 编制时间：2026年9月</p>
+  <p style="margin-top:1rem;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例速览首页</a></p>
+  <p>bicc湾创的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy" style="color:#D9A441;">GitHub</a> 托管</p>
+</footer>
+
+<!-- ====== SCRIPTS (Overseas: ESRI ArcGIS + WGS-84) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：Nominatim 返回 WGS-84，ESRI 瓦片原生支持 WGS-84，直接使用无需转换
+// Longwood Gardens Visitor Center：39.871386, -75.674833（单标注 + 示意范围圈）
+
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('parkmap');
+  if (!el) return;
+  var map = L.map('parkmap', { scrollWheelZoom: false }).setView([39.871386, -75.674833], 15);
+
+  var satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>', maxZoom: 19
+  });
+  var topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>', maxZoom: 19
+  });
+
+  satLayer.addTo(map);
+  L.control.layers({ '卫星图': satLayer, '地形图': topoLayer }, null, { position: 'topright' }).addTo(map);
+
+  var icon = L.divIcon({
+    className: 'zone-marker',
+    html: '<div style="background:#2E7D32;color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">长木花园</div>',
+    iconSize: [0, 0], iconAnchor: [0, 0]
+  });
+  L.marker([39.871386, -75.674833], { icon: icon }).addTo(map).bindPopup('长木花园<br><small>Longwood Gardens</small>');
+
+  L.circle([39.871386, -75.674833], { radius: 500, color: '#D9A441', weight: 2, fill: false, dashArray: '6,4', opacity: 0.55 }).addTo(map);
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  var tileLoaded = false;
+  map.on('tileload', function() { tileLoaded = true; });
+  setTimeout(function() {
+    if (!tileLoaded) {
+      var fb = document.createElement('div');
+      fb.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.9);z-index:10;border-radius:12px;font-size:0.9rem;color:#8C8878;';
+      fb.textContent = '地图瓦片加载超时，请检查网络连接后刷新页面';
+      el.appendChild(fb);
+    }
+  }, 8000);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

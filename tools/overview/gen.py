@@ -162,7 +162,7 @@ doc = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>总览 · 张走走的文旅案例库</title>
+<title>总览 · bicc湾创的文旅案例库</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
@@ -205,7 +205,7 @@ doc = """<!DOCTYPE html>
   </div>
 </div>
 <div class="footer">
-  <p>张走走的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy" style="color:#8B3A4A;">GitHub</a> 托管 · 客流年份口径以各案例页原文为准</p>
+  <p>bicc湾创的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy" style="color:#8B3A4A;">GitHub</a> 托管 · 客流年份口径以各案例页原文为准</p>
 </div>
 </body>
 </html>

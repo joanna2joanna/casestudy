@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>苏斯登陆 — 环球冒险岛的苏斯博士亲子主题区 · Seuss Landing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #0E8E8E;
+  --clr-primary-light: #2FB9B4;
+  --clr-primary-dark: #0B3E46;
+  --clr-accent: #E84C6B;
+}
+
+.hero {
+  background: linear-gradient(160deg, #0B3E46 0%, #0E8E8E 40%, #2FB9B4 70%, #6FD6CB 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(232,76,107,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.07) 0%, transparent 50%);
+}
+
+/* Overseas: single-map layout */
+#parkmap { height: 520px; border-radius: var(--radius-lg); }
+@media (max-width: 768px) { #parkmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1><span>苏斯登陆</span><br>Seuss Landing</h1>
+    <p class="hero-subtitle">环球奥兰多冒险岛的苏斯博士主题区 · 1999 年随园开放 · 无直线建筑与弯曲棕榈树 · 强 IP 亲子主题区标杆</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">1999</div><div class="kpi-label">随园开业</div></div>
+      <div class="kpi-card"><div class="kpi-number">约 4 公顷</div><div class="kpi-label">主题区面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">6 项</div><div class="kpi-label">游乐·互动设施</div></div>
+      <div class="kpi-card"><div class="kpi-number">0 项</div><div class="kpi-label">惊险设备 · 家庭客群</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>项目名称</h3><p>苏斯登陆<br>Seuss Landing<br><span class="f-caption">冒险岛八座主题岛屿之一</span></p></div>
+      <div class="card"><h3>地理位置</h3><p>美国佛罗里达州奥兰多<br>Universal Islands of Adventure（环球冒险岛）<br>紧邻入口 Port of Entry<br><span class="f-caption">坐标：28°28′23″N, 81°28′10″W</span></p></div>
+      <div class="card"><h3>开业时间</h3><p>1999 年 5 月 28 日<br>随冒险岛同步开放<br><span class="f-caption">开园即设的原始岛屿</span></p></div>
+      <div class="card"><h3>归属 / 运营主体</h3><p>康卡斯特（Comcast）旗下 NBCUniversal<br>环球目的地与体验（Universal Destinations &amp; Experiences）</p></div>
+      <div class="card"><h3>主题 IP</h3><p>Dr. Seuss（苏斯博士，本名 Theodor Geisel）<br>《戴高帽的猫》《一条鱼两条鱼》<br>《绿鸡蛋和火腿》等绘本母题</p></div>
+      <div class="card"><h3>规模构成</h3><p>约 4 公顷（各源口径 4.0–4.5 公顷）<br>6 项游乐·互动设施 · 无惊险设备<br>由 Universal Creative 设计</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>苏斯登陆是环球奥兰多冒险岛的八座主题岛屿之一，1999 年 5 月 28 日随园开放，紧邻入口 Port of Entry。它是一块约 4 公顷的小地块，却塞进了 6 项游乐·互动设施与两家主题餐厅，主题密度远超同等面积的传统区域。它的底层逻辑很直接：每个项目对应一本苏斯博士绘本——《戴高帽的猫》是一部 18 个场景的黑暗骑乘、《一条鱼两条鱼》是一台会湿身的旋转设备、If I Ran the Zoo 是一片互动游乐区——没有任何惊险设备，全部面向低龄与家庭客群。它最大的价值不在「刺激」，而在「沉浸」：苏斯式的建筑几乎没有直线，弯曲的棕榈树与粉彩色块把游客拖进一本立起来的绘本，靠强 IP 与完整叙事把「来一次」拉成「反复来」。对主题区改造者而言，它最可借鉴的一点是「不推翻整园、单区做深」——在冒险岛这样的大园里，它不抢王牌过山车的风头，而是用一块小块地、一个强 IP、一组低门槛项目，稳稳接住家庭客群，成为全园最抗打的「亲子闭环」。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>单位 / 人物</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>创意设计</td><td>Universal Creative</td><td>环球内部创意与工程设计团队，负责主题叙事与游乐设施</td></tr>
+          <tr><td>主题 IP</td><td>Dr. Seuss（苏斯博士）</td><td>本名 Theodor Geisel，美国儿童绘本作家，作品如《戴高帽的猫》</td></tr>
+          <tr><td>设计语言</td><td>「无直线」苏斯式</td><td>「能用弯曲线条就不用直线」，柱子上粗下细、墙面内凹外凸</td></tr>
+          <tr><td>主题顾问</td><td>Audrey Geisel</td><td>苏斯博士遗孀，参与把关，要求把角色与故事三维还原</td></tr>
+          <tr><td>开园概念</td><td>一项目一本书</td><td>每个游乐设施对应一本绘本，餐饮与商店同样取自书中</td></tr>
+          <tr><td>投资口径</td><td>无独立披露</td><td>随 1999 年冒险岛整体建设一并投入，未单列</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>「苏斯式」奇幻建筑：无直线、无直角</h3>
+      <p>苏斯登陆的设计铁律是「能用弯曲的线条，就不用直线」——因为苏斯博士手绘时从不画直线。制作人 Lisa Girolami 把这种风格形容为「curvy, wonky, snergly —— Seussian」：柱子底部粗、向上收，墙面不是直的，而是向外鼓或向内凹，仿佛随时会塌但又立得住。为了实现这种反重力的造型，团队用弯曲钢板与异形钢结构搭骨架，再用聚苯乙烯泡沫雕刻外立面和场景。园区里的棕榈树同样是「演」出来的——不少是当年飓风 Andrew 后从南佛罗里达运来的受灾树木，树干被吹弯后又继续向上生长，天然带出一道 S 形弧线；还有些棕榈被用绳索牵引，刻意养出弯曲的姿态。</p>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>「翻开的书」与 IP 叙事</h3>
+      <p>整个区域的母题是一本「翻开的书」：按制作人的说法，「我们所做的一切都直接来自书里」。苏斯博士遗孀 Audrey Geisel 参与把关，明确要求把书中的角色与故事用三维的方式还原。于是每个项目都绑定一本书——《戴高帽的猫》用 18 个场景把整本书走一遍，高空苏斯小火车从《麦格克马戏团》餐厅上空穿行而过，连食物都在「演戏」：绿鸡蛋和火腿、螺旋纹薯条、moose juice（麋鹿果汁）都是从书中长出来的菜单项。这种「不发明、只还原」的做法，让 IP 的熟悉感直接转化为沉浸感，是亲子主题区最稳的一条路。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>主题区面积</td><td class="num">约 4 公顷</td><td>各来源口径 4.0–4.5 公顷不一</td></tr>
+          <tr><td>历史</td><td>开业</td><td class="num">1999-05-28</td><td>随冒险岛同步开放</td></tr>
+          <tr><td>主题</td><td>IP</td><td class="num">Dr. Seuss（苏斯博士）</td><td>本名 Theodor Geisel</td></tr>
+          <tr><td>设施</td><td>游乐·互动设施</td><td class="num">6 项</td><td>全部无惊险设备</td></tr>
+          <tr><td>设施</td><td>戴高帽的猫</td><td class="num">黑暗骑乘</td><td>18 个场景走完全书</td></tr>
+          <tr><td>设施</td><td>高空苏斯小火车</td><td class="num">高架小火车</td><td>穿行于 Circus McGurkus 上空</td></tr>
+          <tr><td>设施</td><td>苏斯旋转木马</td><td class="num">旋转木马</td><td>2024 夏起关闭，尚未恢复</td></tr>
+          <tr><td>设施</td><td>一条鱼两条鱼</td><td class="num">旋转类 · 会湿身</td><td>2024-04~05 短暂维护</td></tr>
+          <tr><td>设施</td><td>如果我来经营动物园</td><td class="num">互动游乐区</td><td>2025-04 报道围挡</td></tr>
+          <tr><td>设施</td><td>Hop on Pop 戏水区</td><td class="num">戏水喷泉</td><td>低龄戏水</td></tr>
+          <tr><td>餐饮</td><td>主题餐厅</td><td class="num">2 家</td><td>Green Eggs and Ham + Circus McGurkus</td></tr>
+          <tr><td>客群</td><td>定位</td><td class="num">亲子 / 家庭</td><td>低龄友好，无身高与惊险门槛</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源：环球奥兰多官网、维基百科、Orlando Sentinel、WDW News Today、TouringPlans。面积各来源口径不一（约 4.0–4.5 公顷），本页取「约 4 公顷」并标注区间；设施运营状态以 2026 年 9 月公开报道为准，随官方公告可能变动。数据截至 2026 年 9 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+    <p class="f-caption reveal">苏斯登陆是冒险岛的子分区，紧邻入口 Port of Entry。单标注 + 示意范围圈，ESRI 卫星底图，WGS-84 坐标。</p>
+
+    <!-- Map (NO reveal class — 红线) -->
+    <div>
+      <div class="map-legend">
+        <span><span class="dot" style="background:#0E8E8E;"></span> 苏斯登陆（主题区）</span>
+        <span><span class="dot" style="background:#E84C6B;"></span> 主题区范围（示意圈）</span>
+      </div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+    </div>
+
+    <!-- SVG Spatial Structure Diagram -->
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 900 660" xmlns="http://www.w3.org/2000/svg">
+          <rect width="900" height="660" fill="#0B3E46" rx="12"/>
+          <text x="450" y="34" fill="#E84C6B" font-family="Playfair Display,serif" font-size="16" text-anchor="middle" font-weight="600">苏斯登陆 · 主题区空间结构示意</text>
+          <line x1="60" y1="54" x2="840" y2="54" stroke="#E84C6B" stroke-width="0.5" opacity="0.3"/>
+
+          <!-- 高空小火车高架轨道 -->
+          <ellipse cx="450" cy="150" rx="180" ry="52" fill="none" stroke="#2FB9B4" stroke-width="1.4" stroke-dasharray="6,5"/>
+          <text x="450" y="144" fill="#8FE3DE" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">高空苏斯小火车</text>
+          <text x="450" y="163" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">高架轨道 · 穿行于设施与餐厅上空</text>
+
+          <!-- 第一行 -->
+          <rect x="70" y="235" width="230" height="80" rx="12" fill="rgba(232,76,107,0.12)" stroke="#E84C6B" stroke-width="1.3"/>
+          <text x="185" y="264" fill="#F5A6B8" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">戴高帽的猫</text>
+          <text x="185" y="286" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">The Cat in the Hat · 黑暗骑乘</text>
+          <text x="185" y="303" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">18 个场景走完全书</text>
+
+          <ellipse cx="450" cy="275" rx="95" ry="50" fill="rgba(47,185,180,0.14)" stroke="#2FB9B4" stroke-width="1.1"/>
+          <text x="450" y="271" fill="#8FE3DE" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">中央书本广场</text>
+          <text x="450" y="291" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">「翻开的书」母题</text>
+
+          <rect x="600" y="235" width="230" height="80" rx="12" fill="rgba(47,185,180,0.12)" stroke="#2FB9B4" stroke-width="1.2"/>
+          <text x="715" y="264" fill="#8FE3DE" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">一条鱼两条鱼</text>
+          <text x="715" y="286" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">One Fish, Two Fish · 旋转·会湿身</text>
+          <text x="715" y="303" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">2024-04~05 短暂维护</text>
+
+          <!-- 第二行 -->
+          <rect x="70" y="360" width="230" height="80" rx="12" fill="rgba(232,76,107,0.10)" stroke="#E84C6B" stroke-width="1.2"/>
+          <text x="185" y="389" fill="#F5A6B8" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">苏斯旋转木马</text>
+          <text x="185" y="411" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">Caro-Seuss-el · 苏斯式奇兽</text>
+          <text x="185" y="428" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">2024 夏起关闭</text>
+
+          <rect x="600" y="360" width="230" height="80" rx="12" fill="rgba(47,185,180,0.10)" stroke="#2FB9B4" stroke-width="1.2"/>
+          <text x="715" y="389" fill="#8FE3DE" text-anchor="middle" font-size="11" font-family="DM Sans,sans-serif" font-weight="600">如果我来经营动物园</text>
+          <text x="715" y="411" fill="rgba(255,255,255,0.6)" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif">If I Ran the Zoo · 互动游乐区</text>
+          <text x="715" y="428" fill="rgba(255,255,255,0.45)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">2025-04 报道围挡</text>
+
+          <!-- 第三行 -->
+          <rect x="70" y="485" width="230" height="66" rx="12" fill="rgba(232,76,107,0.10)" stroke="#E84C6B" stroke-width="1.1"/>
+          <text x="185" y="512" fill="#F5A6B8" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">绿鸡蛋与火腿</text>
+          <text x="185" y="531" fill="rgba(255,255,255,0.55)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">Green Eggs and Ham Cafe</text>
+
+          <rect x="340" y="485" width="180" height="66" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+          <text x="430" y="512" fill="rgba(255,255,255,0.8)" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">Hop on Pop</text>
+          <text x="430" y="531" fill="rgba(255,255,255,0.5)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">戏水喷泉区</text>
+
+          <rect x="600" y="485" width="230" height="66" rx="12" fill="rgba(47,185,180,0.10)" stroke="#2FB9B4" stroke-width="1.1"/>
+          <text x="715" y="512" fill="#8FE3DE" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">麦格克马戏团</text>
+          <text x="715" y="531" fill="rgba(255,255,255,0.55)" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif">Circus McGurkus Cafe</text>
+
+          <!-- 入口 -->
+          <text x="450" y="586" fill="#F5A6B8" text-anchor="middle" font-size="10" font-family="DM Sans,sans-serif" font-weight="600">← 自 Port of Entry 入园（紧邻入口）</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(858, 90)">
+            <polygon points="0,-16 4,-2 0,-5 -4,-2" fill="#E84C6B"/>
+            <polygon points="0,16 4,2 0,5 -4,2" fill="#5A6A80"/>
+            <text x="0" y="-20" text-anchor="middle" fill="#E84C6B" font-size="10" font-family="DM Sans,sans-serif">N</text>
+          </g>
+
+          <!-- 图例 -->
+          <rect x="110" y="606" width="680" height="26" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+          <rect x="140" y="614" width="10" height="10" fill="#E84C6B" opacity="0.7" rx="1"/>
+          <text x="158" y="623" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">骑乘 / 游乐</text>
+          <rect x="270" y="614" width="10" height="10" fill="#2FB9B4" opacity="0.7" rx="1"/>
+          <text x="288" y="623" fill="rgba(255,255,255,0.6)" font-size="8" font-family="DM Sans,sans-serif">互动 / 餐饮 / 高架轨道</text>
+          <text x="450" y="640" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="8" font-family="DM Sans,sans-serif">空间为示意图，非精确方位与比例 · 实际布局以官方导览为准</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Zone Detail Cards -->
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>戴高帽的猫</h3><p>一部 18 个场景的黑暗骑乘，游客坐在「沙发」上把整本《戴高帽的猫》走一遍，是区域里的主力项目，低龄友好。</p></div>
+      <div class="card"><h3>高空苏斯小火车</h3><p>高架慢速小火车，从半空中俯瞰整个苏斯登陆，穿行于 Circus McGurkus 餐厅上空，几乎不设身高门槛。</p></div>
+      <div class="card"><h3>苏斯旋转木马</h3><p>苏斯式奇兽旋转木马，2024 年夏季起关闭维护，截至 2025 年 4 月报道仍未恢复运营。</p></div>
+      <div class="card"><h3>一条鱼两条鱼</h3><p>基于同名绘本的旋转设备，带喷水元素、可能湿身，2024 年 4 至 5 月短暂维护后恢复。</p></div>
+      <div class="card"><h3>如果我来经营动物园</h3><p>带洞穴、隧道与水景的互动游乐区，2025 年 4 月报道已被施工围挡围起，运营状态待官方确认。</p></div>
+      <div class="card"><h3>戏水与餐饮</h3><p>Hop on Pop 戏水喷泉承接低龄客群；Green Eggs and Ham 与 Circus McGurkus 两家主题餐厅负责餐饮叙事。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1999.05.28</div><div class="timeline-content"><h4>随园开业</h4><p>与冒险岛同步开放，作为开园即设的八岛之一，苏斯式建筑与「一项目一本书」框架一次到位。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021.03</div><div class="timeline-content"><h4>六书下架风波</h4><p>苏斯博士企业以「伤害性图像」为由停止出版并授权六本书（含 If I Ran the Zoo、McElligot's Pool 等），环球随即表示「正在评估」相关游乐区。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021</div><div class="timeline-content"><h4>移除 McElligot's Pool 引用</h4><p>据游客报道，园区移除入口水景处 McElligot's Pool 的相关文字与音频；环球未就具体改动发布公告。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021.12</div><div class="timeline-content"><h4>入口拱形顶部拆除</h4><p>圣诞节前后，装饰成 Grinchmas 的入口拱形因暴风雨受损，顶部被拆除，此后未修复。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022</div><div class="timeline-content"><h4>全园重漆</h4><p>整区进行一次大规模重新油漆，但入口拱形顶部仍未恢复。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023.06</div><div class="timeline-content"><h4>Circus McGurkus 翻新</h4><p>马戏团餐厅关闭翻新，2024 年重开，新增菜单与移动点单取餐窗口。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024 夏</div><div class="timeline-content"><h4>Caro-Seuss-el 关闭</h4><p>苏斯旋转木马关闭维护，2025 年 4 月报道仍未恢复。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025.04</div><div class="timeline-content"><h4>入口立柱破损报道</h4><p>WDW News Today 报道入口三根条纹立柱出现破损、掉漆与污渍；If I Ran the Zoo 亦被围挡围起。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>无独立客流披露</h4><p style="font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:500;color:var(--clr-primary);">并入冒险岛</p><p class="f-caption">分区客流不单独公开</p></div>
+      <div class="card" style="text-align:center;"><h4>母园 2024 客流</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">约 945万</p><p class="f-caption">TEA 口径 · 全球第 14</p></div>
+      <div class="card" style="text-align:center;"><h4>游乐·互动设施</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">6 项</p><p class="f-caption">全部无惊险设备</p></div>
+    </div>
+
+    <div class="grid-2 reveal">
+      <div class="card"><h3>家庭型项目配比</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>类型</th><th>项目</th></tr></thead>
+          <tbody>
+            <tr><td>黑暗骑乘</td><td>戴高帽的猫</td></tr>
+            <tr><td>高架小火车</td><td>高空苏斯小火车</td></tr>
+            <tr><td>旋转木马</td><td>苏斯旋转木马</td></tr>
+            <tr><td>旋转类</td><td>一条鱼两条鱼</td></tr>
+            <tr><td>互动游乐区</td><td>如果我来经营动物园</td></tr>
+            <tr><td>戏水区</td><td>Hop on Pop</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">五类骑乘 + 一片戏水区，无一惊险设备，客群从学龄前覆盖到家庭。</p>
+      </div>
+      <div class="card"><h3>客流（母园口径）</h3>
+        <table class="data-table" style="margin:0.5rem 0;">
+          <thead><tr><th>年份</th><th>冒险岛客流</th><th>排名</th></tr></thead>
+          <tbody>
+            <tr><td>2022（峰值）</td><td class="num">约 1,103万</td><td>全球第 5</td></tr>
+            <tr><td>2024</td><td class="num">约 945万</td><td>全球第 14</td></tr>
+          </tbody>
+        </table>
+        <p class="f-caption">苏斯登陆作为子分区无独立客流，随母园整体口径统计。</p>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>运营特点</h3>
+      <p>苏斯登陆的运营不靠「刺激」驱动，而靠「强 IP × 高密度 × 低门槛」的组合。它把约 4 公顷的小地块塞进 6 项设施与两家餐厅，项目类型覆盖黑暗骑乘、高架小火车、旋转木马、旋转类、互动游乐区与戏水区，几乎没有身高与惊险门槛，是全园最完整的「家庭型项目配比」样本。角色见面区里的戴高帽的猫、Sam I Am、Thing 1 &amp; Thing 2、格林奇持续供给「合个影」的理由，季节性的 Grinchmas 又把苏斯 IP 拉长到全年运营。它的价值对后来者很直接：主题乐园的「娱乐密度」不取决于圈了多大，而取决于每块小区域是否被一个能勾魂的故事撑满；而「单区做深」意味着不用推翻整园、不用上惊险设备，只靠一个强 IP 和一组低门槛项目，就能稳稳接住家庭客群、拉高复游率。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>戴高帽的猫</h3><p>18 个场景的黑暗骑乘，用「沙发」载具把整本《戴高帽的猫》走一遍，是区域的主力项目，也是「一项目一本书」最完整的落地。</p></div>
+      <div class="card"><h3>高空苏斯小火车</h3><p>高架慢速轨道，从半空俯瞰全区域，轨道直接穿过 Circus McGurkus 餐厅上空，把「看」和「被看」都变成了体验。</p></div>
+      <div class="card"><h3>苏斯旋转木马</h3><p>以苏斯式奇兽替代传统马匹的旋转木马，是主题差异化最直接的体现，2024 夏起关闭维护。</p></div>
+      <div class="card"><h3>一条鱼两条鱼</h3><p>带喷水元素的旋转设备，游客按歌词口令控制上下，「可能湿身」本身成了卖点。</p></div>
+      <div class="card"><h3>苏斯式建筑工艺</h3><p>弯曲钢板与异形钢结构搭骨架、聚苯乙烯泡沫雕立面，配合受飓风折弯再直立的棕榈树，营造反重力的「手绘感」。</p></div>
+      <div class="card"><h3>主题密度</h3><p>约 4 公顷内 6 项游乐·互动设施 + 2 家餐厅 + 角色见面区，密度远高于同面积的传统区域，是小地块高密度的范本。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>绿鸡蛋与火腿咖啡</h3><p>形似一只巨大绿火腿的地标小食店，以各式「tots」小食闻名，招牌 2019 年一度拆除、2024 年 11 月回归。</p></div>
+      <div class="card"><h3>麦格克马戏团餐厅</h3><p>基于《如果我来经营马戏团》的室内餐厅，高空小火车从头顶穿行，2023 年起翻新、2024 年重开并新增移动点单。</p></div>
+      <div class="card"><h3>Moose Juice, Goose Juice</h3><p>书里长出来的饮品站，提供苏斯式主题饮品，与两家餐厅共同构成区域餐饮动线。</p></div>
+      <div class="card"><h3>角色见面区</h3><p>戴高帽的猫、Sam I Am、Thing 1 &amp; Thing 2、格林奇等角色的合影点，是亲子客群的情绪锚点。</p></div>
+      <div class="card"><h3>苏斯书店</h3><p>Dr. Seuss' All the Books You Can Read 主题书店，把绘本与周边零售做成体验的一部分。</p></div>
+      <div class="card"><h3>家庭服务</h3><p>低龄友好动线与母婴配套，配合无惊险的项目设置，支撑带娃家庭的一站式停留。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. NEWS ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>六书下架与园区回应</h3><p>2021 年 3 月苏斯博士企业停印停授六本书后，环球表示「正在评估」相关游乐区；同年园区据报移除入口处 McElligot's Pool 的文字与音频，但未发布整体重做计划。</p></div>
+      <div class="card"><h3>入口拱形顶部未修复</h3><p>约 2021 年底受损拆除的入口拱形顶部至今未恢复，2025 年 4 月报道三根入口立柱出现破损、掉漆与污渍。</p></div>
+      <div class="card"><h3>Caro-Seuss-el 仍未恢复</h3><p>苏斯旋转木马自 2024 年夏关闭，截至 2025 年 4 月报道仍未开放；If I Ran the Zoo 互动区也被围挡围起。</p></div>
+      <div class="card"><h3>无整区重做公告</h3><p>截至 2026 年 9 月，环球未发布苏斯登陆整体重做或关闭的官方公告，园区以局部维护为主。</p></div>
+      <div class="card"><h3>粉丝呼吁更新</h3><p>多家行业媒体与粉丝社区指出这个 1999 年的老区需要更新，焦点集中在入口拱形修复与部分停运设施上。</p></div>
+      <div class="card"><h3>行业启示</h3><p>「不推翻整园、单区做深」：靠一个强 IP、一组低门槛项目撑起家庭客群，是主题乐园手术式加码的可复制样本。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. RESOURCES ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal">
+      <h4>官方与百科</h4>
+      <ul>
+        <li><a href="https://www.universalorlando.com/web/en/us/islands-of-adventure/lands/seuss-landing" target="_blank" rel="noopener">环球奥兰多 — Seuss Landing 主题区页</a> <span class="tag">官网</span></li>
+        <li><a href="https://en.wikipedia.org/wiki/Universal_Islands_of_Adventure" target="_blank" rel="noopener">维基百科 — Universal Islands of Adventure</a> <span class="tag">百科</span></li>
+        <li><a href="https://touringplans.com/islands-of-adventure/islands/seuss-landing" target="_blank" rel="noopener">TouringPlans — Seuss Landing 专题</a> <span class="tag">导览</span></li>
+      </ul>
+    </div>
+    <div class="resource-group reveal">
+      <h4>新闻与报道</h4>
+      <ul>
+        <li><a href="https://www.orlandosentinel.com/2001/11/01/seuss-landing-is-curvy-wonky-island/" target="_blank" rel="noopener">Orlando Sentinel — SEUSS LANDING IS ‘CURVY, WONKY’ ISLAND</a> <span class="tag">报道</span></li>
+        <li><a href="https://deadline.com/2021/03/universal-seuss-landing-park-attraction-after-publication-dr-seuss-six-books-1234705720/" target="_blank" rel="noopener">Deadline — 环球「评估」苏斯登陆相关项目</a> <span class="tag">报道</span></li>
+        <li><a href="https://www.nytimes.com/2021/03/02/books/dr-seuss-mulberry-street.html" target="_blank" rel="noopener">纽约时报 — 六本苏斯博士书停止出版</a> <span class="tag">报道</span></li>
+        <li><a href="https://wdwnt.com/2025/04/seuss-landing-entrance-pillars-damaged-at-universal-islands-of-adventure/" target="_blank" rel="noopener">WDW News Today — 苏斯登陆入口立柱破损</a> <span class="tag">报道</span></li>
+        <li><a href="https://www.disneydining.com/universal-removes-mcelligotts-pool-seuss-landing-emd1/" target="_blank" rel="noopener">Disney Dining — 环球移除 McElligot's Pool 相关引用</a> <span class="tag">报道</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <p><strong>苏斯登陆</strong> — 环球冒险岛的苏斯博士亲子主题区 · 强 IP 家庭标杆</p>
+  <p style="margin-top:6px;">数据来源：环球奥兰多官网 · 维基百科 · Orlando Sentinel · WDW News Today · TouringPlans &nbsp;|&nbsp; 编制时间：2026年9月</p>
+  <p style="margin-top:1rem;"><a href="https://joanna2joanna.github.io/casestudy/" style="color:inherit;opacity:0.7;text-decoration:none;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;">← 返回案例速览首页</a></p>
+  <p>bicc湾创的 案例研究 &amp; 工具集 · <a href="https://github.com/joanna2joanna/casestudy" style="color:#E84C6B;">GitHub</a> 托管</p>
+</footer>
+
+<!-- ====== SCRIPTS (Overseas: ESRI ArcGIS + WGS-84) ====== -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：Photon 返回 WGS-84，ESRI 瓦片原生支持 WGS-84，直接使用无需转换
+// Seuss Landing POI：28.472975, -81.469563（子分区单标注 + 示意范围圈）
+
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('parkmap');
+  if (!el) return;
+  var map = L.map('parkmap', { scrollWheelZoom: false }).setView([28.472975, -81.469563], 16);
+
+  var satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>', maxZoom: 19
+  });
+  var topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>', maxZoom: 19
+  });
+
+  satLayer.addTo(map);
+  L.control.layers({ '卫星图': satLayer, '地形图': topoLayer }, null, { position: 'topright' }).addTo(map);
+
+  var icon = L.divIcon({
+    className: 'zone-marker',
+    html: '<div style="background:#0E8E8E;color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">苏斯登陆</div>',
+    iconSize: [0, 0], iconAnchor: [0, 0]
+  });
+  L.marker([28.472975, -81.469563], { icon: icon }).addTo(map).bindPopup('苏斯登陆<br><small>Seuss Landing</small>');
+
+  L.circle([28.472975, -81.469563], { radius: 130, color: '#E84C6B', weight: 2, fill: false, dashArray: '6,4', opacity: 0.55 }).addTo(map);
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  var tileLoaded = false;
+  map.on('tileload', function() { tileLoaded = true; });
+  setTimeout(function() {
+    if (!tileLoaded) {
+      var fb = document.createElement('div');
+      fb.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.9);z-index:10;border-radius:12px;font-size:0.9rem;color:#8C8878;';
+      fb.textContent = '地图瓦片加载超时，请检查网络连接后刷新页面';
+      el.appendChild(fb);
+    }
+  }, 8000);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

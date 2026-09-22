@@ -33,17 +33,16 @@ html { font-size: 17px; }
 .mode-tab.active { background: var(--clr-primary); color: #fff; border-color: var(--clr-primary); }
 .mode-tab .sub { display: block; font-weight: 400; font-size: 0.72rem; opacity: 0.75; margin-top: 2px; }
 
-/* 输入面板 */
-.input-panel { display: none; }
-.input-panel.active { display: block; }
-.input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.9rem; margin-bottom: 1.2rem; }
-.field label { display: block; font-size: 0.78rem; color: var(--clr-primary); font-weight: 600; margin-bottom: 4px; }
-.field input {
-  width: 100%; padding: 0.6rem 0.7rem; border: 1.5px solid #d8dee4; border-radius: 8px;
-  font-family: 'DM Mono', monospace; font-size: 0.95rem; color: var(--clr-primary-dark);
+/* 表格内联输入 */
+.td-input {
+  width: 110px; padding: 0.4rem 0.55rem; border: 1.5px solid #d8dee4; border-radius: 6px;
+  font-family: 'DM Mono', monospace; font-size: 0.9rem; text-align: right; color: var(--clr-primary-dark);
 }
-.field input:focus { outline: none; border-color: var(--clr-accent); }
-.field .hint { font-size: 0.72rem; color: #8C8878; margin-top: 3px; }
+.td-input:focus { outline: none; border-color: var(--clr-accent); }
+.td-input.sm { width: 62px; padding: 0.3rem 0.4rem; font-size: 0.82rem; }
+.hour-cell { text-align: right; font-size: 0.78rem; color: #8C8878; white-space: nowrap; }
+.hour-cell .line { margin: 3px 0; }
+.hour-result { font-family: 'DM Mono', monospace; font-weight: 700; color: var(--clr-accent); font-size: 0.95rem; }
 
 /* 结果表 */
 .result-table { width: 100%; border-collapse: collapse; }
@@ -117,64 +116,13 @@ html { font-size: 17px; }
       <button class="mode-tab" data-mode="hour">高峰小时滞园<span class="sub">空间侧 → 双向推</span></button>
     </div>
 
-    <!-- 模式一：年游客量 -->
-    <div class="input-panel active" id="panel-annual">
-      <div class="card">
-        <div class="input-grid">
-          <div class="field">
-            <label>稳定期年游客量（人）</label>
-            <input type="number" id="in-annual" value="1000000" min="0" step="1000">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 模式二：PPH -->
-    <div class="input-panel" id="panel-pph">
-      <div class="card">
-        <div class="input-grid">
-          <div class="field">
-            <label>理论小时娱乐量 PPH（人次/小时）</label>
-            <input type="number" id="in-pph" value="10935" min="0" step="10">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 模式三：高峰小时滞园 -->
-    <div class="input-panel" id="panel-hour">
-      <div class="card">
-        <div class="input-grid">
-          <div class="field">
-            <label>室外面积（公顷）</label>
-            <input type="number" id="in-out-area" value="15" min="0" step="0.1">
-            <div class="hint">主题乐园舒适 900人/公顷（8–12㎡/人）</div>
-          </div>
-          <div class="field">
-            <label>室外舒适密度（人/公顷）</label>
-            <input type="number" id="in-out-dens" value="900" min="0" step="10">
-            <div class="hint">手输 · 植物园 30–60㎡/人、水上乐园按水面</div>
-          </div>
-          <div class="field">
-            <label>室内建筑面积（㎡）</label>
-            <input type="number" id="in-in-area" value="0" min="0" step="100">
-          </div>
-          <div class="field">
-            <label>室内舒适密度（人/㎡）</label>
-            <input type="number" id="in-in-dens" value="0.35" min="0" step="0.01">
-            <div class="hint">舒适 0.3–0.4人/㎡ · 上限 0.5人/㎡</div>
-          </div>
-        </div>
-        <p class="f-caption">高峰小时滞园 = 室外面积 × 室外密度 + 室内面积 × 室内密度（单位不同，室内按建筑面积算）。</p>
-      </div>
-    </div>
-
     <div class="section-header" style="margin-top:2rem;"><h2>计算结果</h2><div class="section-line"></div></div>
     <div class="card" style="overflow-x:auto;">
       <table class="result-table">
         <thead><tr><th>环节</th><th>指标</th><th style="text-align:right;">数值</th></tr></thead>
         <tbody id="result-body"></tbody>
       </table>
+      <p class="f-caption" style="margin-top:0.7rem;">选择主导变量后，在标「输入」的锚点行直接填数，其余环节自动推导；改动态参数即重算。</p>
     </div>
   </div>
 </section>
@@ -280,55 +228,79 @@ function fmt(n) {
 var currentMode = 'annual';
 var anchorKey = { annual: 'annual', pph: 'pph', hour: 'hour' };
 
-function render(v) {
+function anchorCell(key) {
+  if (key === 'annual') {
+    return '<input type="number" class="td-input" id="in-annual" value="1000000" min="0" step="1000">';
+  }
+  if (key === 'pph') {
+    return '<input type="number" class="td-input" id="in-pph" value="10935" min="0" step="10">';
+  }
+  // 空间侧：高峰小时滞园 = 室外面积×密度 + 室内面积×密度
+  return '<div class="hour-cell">'
+    + '<div class="line">室外 <input type="number" class="td-input sm" id="in-out-area" value="15" min="0" step="0.1" title="主题乐园舒适 900人/公顷（8–12㎡/人）"> 公顷 × <input type="number" class="td-input sm" id="in-out-dens" value="900" min="0" step="10" title="手输 · 植物园 30–60㎡/人、水上乐园按水面"> 人/公顷</div>'
+    + '<div class="line">+ 室内 <input type="number" class="td-input sm" id="in-in-area" value="0" min="0" step="100"> ㎡ × <input type="number" class="td-input sm" id="in-in-dens" value="0.35" min="0" step="0.01" title="舒适 0.3–0.4人/㎡ · 上限 0.5人/㎡"> 人/㎡</div>'
+    + '<div class="line">= <span class="hour-result" id="hour-result"></span></div>'
+    + '</div>';
+}
+
+function buildTable() {
   var body = document.getElementById('result-body');
   var html = '';
   ROWS.forEach(function(row, i) {
     var isAnchor = (row.key === anchorKey[currentMode]);
-    var badge = isAnchor ? '<span class="badge-input">输入</span> ' : '';
     html += '<tr' + (isAnchor ? ' class="anchor"' : '') + '>'
       + '<td>' + i + '</td>'
-      + '<td>' + badge + row.label + '</td>'
-      + '<td class="num">' + fmt(v[row.key]) + '</td>'
+      + '<td>' + (isAnchor ? '<span class="badge-input">输入</span> ' : '') + row.label + '</td>'
+      + (isAnchor ? '<td class="num">' + anchorCell(row.key) + '</td>' : '<td class="num" data-cell="' + row.key + '"></td>')
       + '</tr>';
   });
   body.innerHTML = html;
+  ['in-annual', 'in-pph', 'in-out-area', 'in-out-dens', 'in-in-area', 'in-in-dens'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('input', update);
+  });
+}
+
+function val(id) {
+  var el = document.getElementById(id);
+  return el ? (parseFloat(el.value) || 0) : 0;
 }
 
 function update() {
   readC();
   var v;
   if (currentMode === 'annual') {
-    v = calcAnnual(parseFloat(document.getElementById('in-annual').value) || 0);
+    v = calcAnnual(val('in-annual'));
   } else if (currentMode === 'pph') {
-    v = calcPPH(parseFloat(document.getElementById('in-pph').value) || 0);
+    v = calcPPH(val('in-pph'));
   } else {
-    var outArea = parseFloat(document.getElementById('in-out-area').value) || 0;
-    var outDens = parseFloat(document.getElementById('in-out-dens').value) || 0;
-    var inArea = parseFloat(document.getElementById('in-in-area').value) || 0;
-    var inDens = parseFloat(document.getElementById('in-in-dens').value) || 0;
-    var hour = outArea * outDens + inArea * inDens;
+    var hour = val('in-out-area') * val('in-out-dens') + val('in-in-area') * val('in-in-dens');
     v = calcHour(hour);
+    var hr = document.getElementById('hour-result');
+    if (hr) hr.textContent = fmt(hour) + ' 人';
   }
-  render(v);
+  ROWS.forEach(function(row) {
+    if (row.key === anchorKey[currentMode]) return;
+    var cell = document.querySelector('[data-cell="' + row.key + '"]');
+    if (cell) cell.textContent = fmt(v[row.key]);
+  });
 }
 
 document.querySelectorAll('.mode-tab').forEach(function(tab) {
   tab.addEventListener('click', function() {
     document.querySelectorAll('.mode-tab').forEach(function(t) { t.classList.remove('active'); });
-    document.querySelectorAll('.input-panel').forEach(function(p) { p.classList.remove('active'); });
     tab.classList.add('active');
     currentMode = tab.getAttribute('data-mode');
-    document.getElementById('panel-' + currentMode).classList.add('active');
+    buildTable();
     update();
   });
 });
 
-['in-annual', 'in-pph', 'in-out-area', 'in-out-dens', 'in-in-area', 'in-in-dens',
- 'c-month', 'c-week', 'c-day', 'c-design', 'c-hour', 'c-rides', 'c-eff'].forEach(function(id) {
+['c-month', 'c-week', 'c-day', 'c-design', 'c-hour', 'c-rides', 'c-eff'].forEach(function(id) {
   document.getElementById(id).addEventListener('input', update);
 });
 
+buildTable();
 update();
 </script>
 </body>

@@ -1142,5 +1142,18 @@
     "chip": "2025",
     "pph": null,
     "pph_src": null
+  },
+  {
+    "slug": "fun-spot-america",
+    "name": "Fun Spot America 奥兰多",
+    "chapter": "美洲",
+    "subgroup": "",
+    "tag": "免费入园乐园 · 美国",
+    "location": "美国奥兰多（1997-）",
+    "desc": "1997年以1.9公顷、400万美元起步的家庭乐园，入园和停车免费，靠四条卡丁车道、三座过山车和单点收费做到百万客流，2013年扩建投入2500万美元。",
+    "vis": "约 100 万",
+    "chip": "2013",
+    "pph": null,
+    "pph_src": null
   }
 ]

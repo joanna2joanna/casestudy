@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hollywood Beach Broadwalk — 4 公里砖铺海滨步道，不设门票的城市岸线靠什么养活</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #DB2777;
+  --clr-primary-light: #F472B6;
+  --clr-primary-dark: #500724;
+  --clr-accent: #22D3EE;
+}
+
+.hero {
+  background: linear-gradient(160deg, #500724 0%, #DB2777 40%, #F472B6 70%, #CFFAFE 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(34,211,238,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.07) 0%, transparent 50%);
+}
+
+#parkmap { height: 520px; }
+@media (max-width: 768px) { #parkmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>Hollywood Beach Broadwalk</h1>
+    <p class="hero-subtitle">佛罗里达好莱坞市的 4 公里砖铺海滨步道——1920 年代按「南方大西洋城」的设想建起，不卖门票、不设围墙，靠沿街酒店、餐厅和政府持续二十年的基础设施投入维持运转</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">4.0公里</div><div class="kpi-label">步道全长</div></div>
+      <div class="kpi-card"><div class="kpi-number">1920年代</div><div class="kpi-label">规划起点</div></div>
+      <div class="kpi-card"><div class="kpi-number">349间</div><div class="kpi-label">Margaritaville 客房</div></div>
+      <div class="kpi-card"><div class="kpi-number">免费</div><div class="kpi-label">步道与沙滩</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>产权与运营</h3><p>步道与沙滩为市政公共空间，由好莱坞市政府与海滩社区再开发机构（Beach CRA）负责建设维护</p></div>
+      <div class="card"><h3>地理位置</h3><p>美国佛罗里达州布劳沃德县好莱坞市，大西洋岸线，劳德代尔堡与迈阿密之间</p></div>
+      <div class="card"><h3>建设时间</h3><p>1920 年代规划，1924 年建成赌场与露天剧场，2007 年完成最近一次大规模改造</p></div>
+      <div class="card"><h3>空间规模</h3><p>南北长约 4 公里，初建宽约 9 米，改造后划分步行道与骑行道</p></div>
+      <div class="card"><h3>经营模式</h3><p>步道和沙滩完全免费，沿岸商业由酒店、餐厅和租赁商户自行经营</p></div>
+      <div class="card"><h3>核心客群</h3><p>本地居民、家庭游客、骑行与慢跑人群，以及冬季南下的加拿大「候鸟」</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>Hollywood Beach Broadwalk 是佛罗里达州好莱坞市大西洋岸线上的海滨步道，南北长约 4 公里，路面铺砖，所以名字里用的是 broadwalk 而不是 boardwalk。1920 年代，城市创始人约瑟夫·扬按「城市美化运动」的思路规划这座海滨城市，参考大西洋城的木板道，在沙滩内侧修了这条步行长廊，当时宽约 9 米、铺粉色水泥，后来改铺砖并延长到现在的长度。1924 年，步道上的海滨赌场和露天剧场（Bandshell）建成，1926 年的飓风让城市财政破产，开发一度停摆。此后几十年，步道两侧逐渐长满小旅馆、餐厅和商铺。2007 年，海滩社区再开发机构发债完成了一轮系统改造，划分步行与骑行道，加了石墙、历史风格路灯、无障碍通道和海龟友好照明，同年划设历史街区。2015 年，349 间客房的 Margaritaville 度假酒店在步道中段开业，是这条岸线上最大的一次私人投资。步道和沙滩都不收门票，客流由公共空间带来，消费由沿街商业承接。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>主体 / 内容</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>规划源头</td><td>约瑟夫·扬（Joseph Young）</td><td>城市创始人，按城市美化运动思路规划海滨长廊</td></tr>
+          <tr><td>建设维护</td><td>好莱坞市政府 / 海滩社区再开发机构</td><td>步道、沙滩、照明与排水由公共财政承担</td></tr>
+          <tr><td>2007 年改造</td><td>社区再开发机构发债投入</td><td>约 2,000 万美元，含路面、石墙、路灯、无障碍与照明</td></tr>
+          <tr><td>最大私人项目</td><td>Margaritaville 度假酒店</td><td>349 间客房，公共私营合作，投资约 1.3—1.47 亿美元</td></tr>
+          <tr><td>岸线防护</td><td>海岸韧性工程四期</td><td>投资约 4,820 万美元，抬升路面、重做排水、管线入地</td></tr>
+          <tr><td>交通改造</td><td>A1A 公路管线入地</td><td>约 2,650 万美元，与佛州交通厅合作推进</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid-2 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>一条步道，三种断面</h3><p>靠海一侧是沙滩和低矮护墙，中间是步行与慢跑的主通道，靠陆一侧留给骑行、滑板和商铺外摆。三种速度共用一条廊道，靠铺装颜色和划线分流，不设栏杆。这种断面对管理的要求高，但对游客最友好——不用买票，也不用找入口。</p></div>
+      <div class="card"><h3>公共投入打底，私人投资跟进</h3><p>步道、沙滩、路灯、排水都是政府出钱，酒店和餐厅是私人投资。政府的钱花在「让人愿意来」的部分，私人的钱花在「让人愿意花钱」的部分。2007 年改造完成后，步道沿线的小旅馆陆续翻新，2015 年的大型度假酒店落地，是这条链条最近的一次验证。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>步道长度</td><td>约 4.0 公里</td><td>南北向沿海岸线延伸</td></tr>
+          <tr><td>规模</td><td>步道宽度</td><td>初建约 9 米</td><td>改造后划分步行与骑行道</td></tr>
+          <tr><td>规模</td><td>路面材质</td><td>砖铺</td><td>因此得名 broadwalk 而非 boardwalk</td></tr>
+          <tr><td>住宿</td><td>Margaritaville 客房</td><td>349 间</td><td>17 层，2015 年开业，步道中段</td></tr>
+          <tr><td>住宿</td><td>沿线住宿供给</td><td>以中小旅馆为主</td><td>另有 Marriott、Diplomat 等大型酒店</td></tr>
+          <tr><td>餐饮</td><td>沿街餐饮</td><td>数十家</td><td>从快餐、海鲜到度假酒店餐厅</td></tr>
+          <tr><td>公共设施</td><td>露天剧场</td><td>1 座</td><td>1924 年建，每周多场免费演出</td></tr>
+          <tr><td>公共设施</td><td>公共停车</td><td>多处停车楼与路面车位</td><td>新建 Garfield 停车楼 2026 年开工</td></tr>
+          <tr><td>定价</td><td>步道与沙滩</td><td>免费</td><td>无门票、无围墙、全天开放</td></tr>
+          <tr><td>投资</td><td>2007 年改造</td><td>约 2,000 万美元（约 ¥1.34 亿）</td><td>社区再开发机构发债</td></tr>
+          <tr><td>投资</td><td>Margaritaville</td><td>约 1.3—1.47 亿美元（约 ¥8.73—9.87 亿）</td><td>公共私营合作项目</td></tr>
+          <tr><td>投资</td><td>海岸韧性四期</td><td>约 4,820 万美元（约 ¥3.24 亿）</td><td>在建，含路面抬升与排水重建</td></tr>
+          <tr><td>认证</td><td>蓝旗海滩</td><td>已获认证</td><td>水质与环境管理达标</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">美元兑人民币按 2026 年 11 月 4 日中间价 1 美元 ≈ 6.718 元换算。数据来源为好莱坞市政府与海滩社区再开发机构公开文件、美国规划协会、Visit Florida 及南佛罗里达当地媒体。数据截至 2026 年 11 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="450" fill="#1A0713" rx="12"/>
+
+          <!-- 大西洋 -->
+          <rect x="0" y="0" width="170" height="450" fill="rgba(34,211,238,0.12)"/>
+          <text x="85" y="420" text-anchor="middle" fill="#A5F3FC" font-family="DM Sans,sans-serif" font-size="12" opacity="0.8">大西洋</text>
+
+          <!-- 沙滩 -->
+          <rect x="170" y="0" width="70" height="450" fill="rgba(244,114,182,0.10)"/>
+          <text x="205" y="420" text-anchor="middle" fill="#FBCFE8" font-family="DM Sans,sans-serif" font-size="9" opacity="0.8">沙滩</text>
+
+          <!-- 步道 -->
+          <rect x="240" y="30" width="60" height="390" rx="6" fill="rgba(219,39,119,0.22)" stroke="#DB2777" stroke-width="2"/>
+          <text x="330" y="52" fill="#FBCFE8" font-family="DM Sans,sans-serif" font-size="10">Broadwalk · 4.0 公里 · 砖铺 · 免费</text>
+
+          <!-- 北段 -->
+          <rect x="320" y="30" width="440" height="100" rx="8" fill="rgba(148,163,184,0.10)" stroke="#94A3B8" stroke-width="1"/>
+          <text x="540" y="58" text-anchor="middle" fill="#E2E8F0" font-family="Playfair Display,serif" font-size="14" font-weight="700">北段 · 住宅与公园</text>
+          <text x="540" y="82" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">North Beach Park · 低密度住宅</text>
+          <text x="540" y="102" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">步道北端，人流以本地居民晨跑与骑行为主</text>
+
+          <!-- 中段 -->
+          <rect x="320" y="150" width="440" height="150" rx="8" fill="rgba(219,39,119,0.16)" stroke="#F472B6" stroke-width="2"/>
+          <text x="540" y="178" text-anchor="middle" fill="#FBCFE8" font-family="Playfair Display,serif" font-size="15" font-weight="700">中段 · 核心商业带</text>
+          <text x="540" y="202" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">Margaritaville 度假酒店 349 间客房</text>
+          <text x="540" y="222" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">露天剧场 Bandshell · 免费演出</text>
+          <text x="540" y="242" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">餐厅、酒吧、自行车与水上运动租赁</text>
+          <text x="540" y="266" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">客流最密的一段，活动多在晚间</text>
+
+          <!-- 南段 -->
+          <rect x="320" y="320" width="440" height="100" rx="8" fill="rgba(34,211,238,0.10)" stroke="#22D3EE" stroke-width="1.2"/>
+          <text x="540" y="348" text-anchor="middle" fill="#A5F3FC" font-family="Playfair Display,serif" font-size="14" font-weight="700">南段 · 中小旅馆带</text>
+          <text x="540" y="372" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">数十家家庭旅馆与公寓式酒店</text>
+          <text x="540" y="392" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">冬季加拿大「候鸟」客群的集中居住区</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(752,420)">
+            <circle cx="0" cy="0" r="15" fill="none" stroke="#22D3EE" stroke-width="1" opacity="0.5"/>
+            <polygon points="0,-13 2,-3 13,0 2,3 0,13 -2,3 -13,0 -2,-3" fill="#22D3EE" opacity="0.8"/>
+            <text x="0" y="-18" text-anchor="middle" fill="#22D3EE" font-size="8" font-weight="700">N</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>北段</h3><p>靠近北滩公园，密度最低。步道在这里更多承担通勤和晨练功能，人流以本地居民为主，商业设施少。</p></div>
+      <div class="card"><h3>中段商业带</h3><p>整条步道的重心。349 间客房的度假酒店、露天剧场、餐厅酒吧集中在这一段，白天是游客，晚上是演出和餐饮人流。</p></div>
+      <div class="card"><h3>南段旅馆带</h3><p>几十家两三层的小旅馆和公寓式酒店，价格比中段低，冬季住满了从加拿大南下的长住客。这段的客流稳定但消费单价低。</p></div>
+      <div class="card"><h3>沙滩</h3><p>步道与海之间的沙滩完全开放，没有围栏和收费口。救生员由市政派出，沙滩活动与步道共用同一批客流。</p></div>
+      <div class="card"><h3>露天剧场</h3><p>1924 年建成的 Bandshell 至今每周有多场免费演出，是步道夜间人流的发动机。演出成本由市政和赞助承担。</p></div>
+      <div class="card"><h3>步行与骑行分流</h3><p>2007 年改造把主通道划成步行道和骑行道，靠铺装和标线区分。没有栏杆，管理靠标识和巡逻。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT & CONSTRUCTION TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1920年代初</div><div class="timeline-content"><h4>规划海滨长廊</h4><p>城市创始人约瑟夫·扬参考大西洋城木板道，在沙滩内侧规划步行长廊，初建宽约 9 米。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1924年</div><div class="timeline-content"><h4>赌场与露天剧场建成</h4><p>海滨赌场和 Bandshell 剧场落成，步道成为城市的公共客厅。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1926年</div><div class="timeline-content"><h4>飓风与破产</h4><p>飓风重创城市，财政破产，开发停摆多年。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">20世纪中后期</div><div class="timeline-content"><h4>延长与铺砖</h4><p>步道逐步延长到约 4 公里，路面改铺砖，两侧长满中小旅馆和餐厅。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2007年</div><div class="timeline-content"><h4>系统改造</h4><p>社区再开发机构发债投入约 2,000 万美元，划分步行与骑行道，增设石墙、路灯、无障碍通道与海龟友好照明，同年划设历史街区。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2011年</div><div class="timeline-content"><h4>接入东海岸绿道</h4><p>步道纳入东海岸绿道体系，成为跨州慢行网络的一段。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2015年</div><div class="timeline-content"><h4>Margaritaville 开业</h4><p>349 间客房、17 层的度假酒店在步道中段开业，投资约 1.3—1.47 亿美元，是岸线上最大的一笔私人投资。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年7月</div><div class="timeline-content"><h4>A1A 管线入地</h4><p>与佛州交通厅签订合作协议，投资约 2,650 万美元，把沿海公路的电力与通信管线埋入地下。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年</div><div class="timeline-content"><h4>海滨覆盖区规划</h4><p>五年期海滨覆盖区规划在市议会通过一读，A1A 沿线允许更高建筑，步道沿线高度维持现状。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年10月</div><div class="timeline-content"><h4>停车楼开工</h4><p>Garfield 停车楼动工，缓解海滩与市中心的停车压力。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">在建</div><div class="timeline-content"><h4>海岸韧性四期</h4><p>投资约 4,820 万美元，抬升东西向道路、重建排水、管线入地，应对海平面上升与涨潮内涝。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONAL INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>步道与沙滩</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">免费</p><p class="f-caption">全天开放，无围墙</p></div>
+      <div class="card" style="text-align:center;"><h4>步道长度</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">4.0公里</p><p class="f-caption">南北贯穿海滩</p></div>
+      <div class="card" style="text-align:center;"><h4>度假酒店客房</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">349间</p><p class="f-caption">Margaritaville，2015 年开业</p></div>
+    </div>
+    <div class="card reveal" style="margin-bottom:1.5rem;">
+      <h3>不卖门票，钱从哪里来</h3>
+      <p>步道本身不产生直接收入，它的账要放到整座城市来看。市政府和海滩社区再开发机构出钱建步道、修排水、管停车，钱来自房产税增量和发债；沿岸的商业、酒店、餐厅按各自的生意纳税、雇人、交租。步道的作用是把人引到沙滩边，让沿街的商业有机会成交。这套模式的关键在「公共部分舍得投」：2007 年一轮改造花了约 2,000 万美元，2015 年才等来 349 间客房的大型酒店；2025 年起的海岸韧性工程又要投约 4,820 万美元，赌的是二十年后这条岸线还在。</p>
+    </div>
+    <div class="card reveal">
+      <h3>客流结构</h3>
+      <p>好莱坞市没有单独公布海滩的年度客流，公开数据只到 downtown 片区的季度口径，不能直接当海滩数据用。可以确认的是客群的构成：本地居民全年使用，夏季是家庭游客高峰，冬季则被加拿大和北方的长住客填满，南段那些小旅馆就是为这批人准备的。步道全天开放，清晨是跑步和骑行，白天是沙滩和餐饮，傍晚以后是剧场演出和酒吧，同一段路面在一天里被反复使用。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>公共岸线，免费开放</h3><p>步道和沙滩是市政公共空间，不设门票、不设围墙。客流基数由公共投入带来，商业变现交给沿街的私人商户。</p></div>
+      <div class="card"><h3>慢行分流</h3><p>4 公里长的廊道同时容纳步行、跑步、骑行和滑板，靠铺装分区而不是栏杆。管理成本低，但需要持续的标识和巡逻。</p></div>
+      <div class="card"><h3>公共私营合作</h3><p>Margaritaville 是典型的公私合作项目：政府出地、出配套，私人出投资、出运营，酒店把中段的客流密度拉起来。</p></div>
+      <div class="card"><h3>历史街区做底</h3><p>1924 年的露天剧场和 1920 年代的街区肌理保留下来，2007 年划为历史街区。老建筑给岸线提供了新建项目没有的时间感。</p></div>
+      <div class="card"><h3>韧性基础设施</h3><p>海岸韧性工程抬升路面、重做排水、把管线埋入地下，同时用海龟友好的照明减少对生态的影响。这些投入不直接产生收入，但决定了岸线能不能长期用。</p></div>
+      <div class="card"><h3>低门槛的日常性</h3><p>步道不是「景点」，是本地人每天用的公共空间。日常使用撑起了淡季的人气，也让商业不必只依赖旅游旺季。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>住宿</h3><p>Margaritaville 度假酒店 349 间客房、3 个泳池和冲浪模拟器；沿线另有数十家中小旅馆、公寓式酒店，以及 Marriott、Diplomat 等大型酒店。</p></div>
+      <div class="card"><h3>餐饮与零售</h3><p>步道沿线数十家餐厅、酒吧、咖啡馆和冰淇淋店，另有自行车、沙滩椅、水上运动的租赁摊位。</p></div>
+      <div class="card"><h3>露天剧场</h3><p>1924 年建成的 Bandshell，每周多场免费演出，是夜间人流的核心设施。</p></div>
+      <div class="card"><h3>沙滩服务</h3><p>市政救生员值守，设无障碍通道与 Mobi-Mat 沙滩垫，方便轮椅和婴儿车下沙滩。</p></div>
+      <div class="card"><h3>停车</h3><p>海滩与市区多处公共停车楼和路面车位，Garfield 停车楼 2026 年 10 月开工。</p></div>
+      <div class="card"><h3>慢行网络</h3><p>2011 年纳入东海岸绿道，与区域骑行网络连通；步道本身划分步行与骑行道。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>海滨覆盖区规划</h3><p>2026 年，市议会通过五年期海滨覆盖区规划的一读。A1A 沿线允许更高建筑并向海滩退台，步道沿线高度维持现状，居民对「过度开发」的反对是争论焦点。</p></div>
+      <div class="card"><h3>海岸韧性四期</h3><p>约 4,820 万美元的工程正在推进，抬升东西向道路、重建排水、管线入地，部分路段已完成。</p></div>
+      <div class="card"><h3>A1A 管线入地</h3><p>与佛州交通厅合作，约 2,650 万美元，把沿海公路的电力和通信管线埋入地下，减少风暴时的断电风险。</p></div>
+      <div class="card"><h3>停车补短板</h3><p>Garfield 停车楼 2026 年 10 月开工，海滩停车位长期紧张是本地居民最常提的问题。</p></div>
+      <div class="card"><h3>免费演出常态化</h3><p>Bandshell 每周多场免费音乐会，由市政与赞助方承担成本，是淡季维持夜间人流的主要手段。</p></div>
+      <div class="card"><h3>待观察</h3><p>岸线的长期风险是海平面上升和风暴潮，韧性工程的投入能否跟上，决定了这条步道五十年后还在不在。另一方面，允许建高的规划会不会改变步道现在的低层肌理，本地争议还没有结论。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>百科与官方</h4><ul>
+      <li><a href="https://en.wikipedia.org/wiki/Hollywood,_Florida" target="_blank" rel="noopener">Wikipedia — Hollywood, Florida</a><span class="tag">百科</span></li>
+      <li><a href="https://www.hollywoodfl.org/" target="_blank" rel="noopener">好莱坞市政府 — 官网</a><span class="tag">官方</span></li>
+      <li><a href="https://www.hollywoodcra.org/" target="_blank" rel="noopener">海滩社区再开发机构 — 官网</a><span class="tag">官方</span></li>
+      <li><a href="https://www.visitflorida.com/travel-ideas/articles/beach-guide-hollywood-beach/" target="_blank" rel="noopener">Visit Florida — 好莱坞海滩指南</a><span class="tag">官方</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>行业与报道</h4><ul>
+      <li><a href="https://planning.org/greatplaces/spaces/2013/broadwalk.htm" target="_blank" rel="noopener">美国规划协会 — Broadwalk 入选伟大场所</a><span class="tag">行业</span></li>
+      <li><a href="https://www.islands.com/1612838/best-beach-boardwalk-family-friendly-america-beautiful-florida-hollywood-gem/" target="_blank" rel="noopener">Islands — 美国最佳家庭海滨步道推荐</a><span class="tag">媒体</span></li>
+      <li><a href="https://www.cbsnews.com/miami/news/hollywood-beach-five-year-overlay-plan-vote/" target="_blank" rel="noopener">CBS 迈阿密 — 海滨覆盖区规划表决</a><span class="tag">媒体</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>地图与影像</h4><ul>
+      <li><a href="https://www.google.com/maps/place/Hollywood+Beach+Broadwalk" target="_blank" rel="noopener">Google Maps — Hollywood Beach Broadwalk</a><span class="tag">地图</span></li>
+      <li><a href="https://commons.wikimedia.org/w/index.php?search=Hollywood+Beach+Broadwalk" target="_blank" rel="noopener">Wikimedia Commons — 步道自由版权图片</a><span class="tag">图库</span></li>
+    </ul></div>
+    <p class="f-caption" style="text-align:center;margin-top:2rem;">本报告所有数据来源于公开资料，仅供参考研究使用。数据截至 2026 年 11 月。</p>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：Nominatim 返回 WGS-84，ESRI World Imagery 同为 WGS-84，直接使用
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+
+  var map = L.map('parkmap', { scrollWheelZoom: false }).setView([26.0240, -80.1158], 14);
+
+  var tiles = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>', maxZoom: 19
+  }).addTo(map);
+  tiles.on('load', function() { if (fallback) fallback.style.display = 'none'; });
+
+  var icon = L.divIcon({
+    className: 'zone-marker',
+    html: '<div style="background:#DB2777;color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">Hollywood Beach Broadwalk</div>',
+    iconSize: [0, 0], iconAnchor: [0, 0]
+  });
+  L.marker([26.018810, -80.116231], { icon: icon }).addTo(map).bindPopup('Hollywood Beach Broadwalk<br><small>中段 · 近 Margaritaville</small>');
+
+  L.circle([26.018810, -80.116231], { radius: 1500, color: '#22D3EE', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+  setTimeout(function() { if (fallback && fallback.style.display !== 'none') fallback.style.display = 'block'; }, 8000);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

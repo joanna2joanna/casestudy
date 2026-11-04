@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>狐河渡边森林营地 — 崇州 80 亩水杉林，200 万元起步，一票制一年做到 1000 万营收</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #166534;
+  --clr-primary-light: #4ADE80;
+  --clr-primary-dark: #052E16;
+  --clr-accent: #0EA5E9;
+}
+
+.hero {
+  background: linear-gradient(160deg, #052E16 0%, #166534 40%, #4ADE80 70%, #DCFCE7 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(14,165,233,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>狐河渡边森林营地</h1>
+    <p class="hero-subtitle">崇州观胜镇的 80 亩水杉林——5,000 多棵 30 年以上的水杉原地保留，200 多万元起步，一票制包烤肉，2025 年接待 7.6 万人次</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">80亩</div><div class="kpi-label">占地（约5.3公顷）</div></div>
+      <div class="kpi-card"><div class="kpi-number">178元</div><div class="kpi-label">一票制主力套餐</div></div>
+      <div class="kpi-card"><div class="kpi-number">7.6万+</div><div class="kpi-label">2025 年接待人次</div></div>
+      <div class="kpi-card"><div class="kpi-number">1,000万+</div><div class="kpi-label">2025 年营收</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>运营主体</h3><p>崇州市狐河渡边森林营地有限公司，2025 年 1 月注册</p></div>
+      <div class="card"><h3>地理位置</h3><p>四川省成都市崇州市观胜镇梓潼社区，梓潼大道旁</p></div>
+      <div class="card"><h3>林地本底</h3><p>约 80 亩，水杉林覆盖约 90%，5,000 多棵 30 年以上树龄的水杉</p></div>
+      <div class="card"><h3>开业时间</h3><p>2023 年 7 至 8 月开始运营</p></div>
+      <div class="card"><h3>投资规模</h3><p>约 200 多万元，设施以木屋、天幕和水上项目为主</p></div>
+      <div class="card"><h3>核心模式</h3><p>一票制、全园封闭：一张票含自助烤肉、饮料水果、皮划艇、捞虾和全部园内活动</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>狐河渡边森林营地位于成都崇州市观胜镇梓潼社区，是一片以水杉林为主体的林下营地。场地约 80 亩，水杉覆盖约九成，5,000 多棵水杉的树龄都在 30 年以上，目前实际使用约 40 亩，扩建时不打算把林地占满。项目 2023 年 7 至 8 月开始运营，启动投资约 200 多万元。经营上做一票制：主力套餐 178 元一人，含自助烤肉、饮料水果和园内项目；238 元一人的套餐增加茶点和下午茶；自带食材的套餐 108 元一位。园区单日最大接待量约 1,000 人，配 300 个停车位。2024 年营收约 900 万元，2025 年超过 1,000 万元，全年接待 7.6 万人次。项目与村集体按保底租金加年度营收分红合作。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>主体 / 内容</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>投资运营</td><td>崇州市狐河渡边森林营地有限公司</td><td>2025 年 1 月注册，团队从 2023 年起运营该营地</td></tr>
+          <tr><td>土地合作</td><td>观胜镇梓潼社区村集体</td><td>保底租金加年度营收分红</td></tr>
+          <tr><td>林地策略</td><td>保留原生水杉林</td><td>不砍树、不硬化，木屋和天幕架空在林下</td></tr>
+          <tr><td>场景手法</td><td>北欧木屋、定时雾森、溪流</td><td>用雾森和木屋制造「童话森林」的视觉记忆</td></tr>
+          <tr><td>投资规模</td><td>约 200 多万元</td><td>木屋、天幕、皮划艇、卫浴和基础配套</td></tr>
+          <tr><td>容量控制</td><td>单日最大约 1,000 人</td><td>节假日成人约 850 人、儿童约 150 人</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>占地</td><td>约 80 亩（约 5.3 公顷）</td><td>实际使用约 40 亩，分期扩建</td></tr>
+          <tr><td>规模</td><td>水杉</td><td>5,000 多棵，30 年以上树龄</td><td>林地覆盖率约 90%</td></tr>
+          <tr><td>投资</td><td>启动投资</td><td>约 200 多万元</td><td>轻资产，木屋与设施可拆装</td></tr>
+          <tr><td>定价</td><td>主力套餐</td><td>178 元 / 人</td><td>含自助烤肉、饮料水果、园内项目</td></tr>
+          <tr><td>定价</td><td>升级套餐</td><td>238 元 / 人</td><td>增加茶点、水果和下午茶</td></tr>
+          <tr><td>定价</td><td>自带食材</td><td>108 元 / 位</td><td>只使用场地和设施</td></tr>
+          <tr><td>经营</td><td>2024 年营收</td><td>约 900 万元</td><td>媒体口径</td></tr>
+          <tr><td>经营</td><td>2025 年营收</td><td>1,000 万元以上</td><td>媒体口径</td></tr>
+          <tr><td>接待</td><td>2025 年接待</td><td>7.6 万人次以上</td><td>参与音乐活动 3.5 万人次以上</td></tr>
+          <tr><td>接待</td><td>单日最大</td><td>约 1,000 人</td><td>停车位 300 个</td></tr>
+          <tr><td>荣誉</td><td>行业奖项</td><td>CLE 金鹿鹰年度营地奖</td><td>2025 年获评</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源为四川农村日报、川观新闻、成都日报及行业媒体报道。数据截至 2026 年 11 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="450" fill="#04150B" rx="12"/>
+
+          <!-- 水杉林底色 -->
+          <rect x="30" y="30" width="740" height="320" rx="10" fill="rgba(22,101,52,0.18)" stroke="#166534" stroke-width="1.5" stroke-dasharray="6,4"/>
+          <text x="50" y="54" fill="#86EFAC" font-family="DM Sans,sans-serif" font-size="10">水杉林约 80 亩 · 5,000 多棵 · 覆盖约九成</text>
+
+          <!-- 溪流 -->
+          <path d="M 30 250 C 200 230, 360 290, 520 250 C 640 220, 720 260, 770 240" fill="none" stroke="#0EA5E9" stroke-width="16" opacity="0.22"/>
+          <path d="M 30 250 C 200 230, 360 290, 520 250 C 640 220, 720 260, 770 240" fill="none" stroke="#0EA5E9" stroke-width="1.5" opacity="0.6"/>
+          <text x="560" y="286" fill="#7DD3FC" font-family="DM Sans,sans-serif" font-size="9">浅溪：捞虾 · 抓鱼 · 桨板</text>
+
+          <!-- 木屋区 -->
+          <rect x="70" y="80" width="180" height="80" rx="8" fill="rgba(22,101,52,0.3)" stroke="#4ADE80" stroke-width="1.5"/>
+          <text x="160" y="108" text-anchor="middle" fill="#86EFAC" font-family="Playfair Display,serif" font-size="13" font-weight="700">森林木屋</text>
+          <text x="160" y="128" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">北欧系 · 童话木屋</text>
+          <text x="160" y="146" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">住宿与包场</text>
+
+          <!-- 天幕与烤肉 -->
+          <rect x="290" y="80" width="220" height="80" rx="8" fill="rgba(245,158,11,0.16)" stroke="#F59E0B" stroke-width="1.5"/>
+          <text x="400" y="108" text-anchor="middle" fill="#FCD34D" font-family="Playfair Display,serif" font-size="13" font-weight="700">天幕与自助烤肉</text>
+          <text x="400" y="128" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">一票制，供餐到 20:00</text>
+          <text x="400" y="146" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">停留 10—12 小时</text>
+
+          <!-- 水上项目 -->
+          <rect x="550" y="80" width="190" height="80" rx="8" fill="rgba(14,165,233,0.16)" stroke="#0EA5E9" stroke-width="1.5"/>
+          <text x="645" y="108" text-anchor="middle" fill="#7DD3FC" font-family="Playfair Display,serif" font-size="13" font-weight="700">水上项目</text>
+          <text x="645" y="128" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">皮划艇 · 桨板</text>
+          <text x="645" y="146" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">浅水区，配救生员</text>
+
+          <!-- 夜场活动 -->
+          <rect x="70" y="300" width="300" height="60" rx="8" fill="rgba(148,163,184,0.12)" stroke="#94A3B8" stroke-width="1.5"/>
+          <text x="220" y="326" text-anchor="middle" fill="#CBD5E1" font-family="DM Sans,sans-serif" font-size="11">夜场：篝火 · 烟花 · 露天电影 · 驻唱</text>
+          <text x="220" y="344" text-anchor="middle" fill="#94A3B8" font-family="DM Sans,sans-serif" font-size="9">雾森定时开放</text>
+
+          <!-- 萌宠 -->
+          <rect x="400" y="300" width="150" height="60" rx="8" fill="rgba(251,191,36,0.12)" stroke="#FBBF24" stroke-width="1.2"/>
+          <text x="475" y="326" text-anchor="middle" fill="#FDE68A" font-family="DM Sans,sans-serif" font-size="10">小狐狸「如意」</text>
+          <text x="475" y="344" text-anchor="middle" fill="#94A3B8" font-family="DM Sans,sans-serif" font-size="9">萌宠互动</text>
+
+          <!-- 入口与停车 -->
+          <rect x="570" y="300" width="170" height="60" rx="8" fill="rgba(148,163,184,0.10)" stroke="#94A3B8" stroke-width="1"/>
+          <text x="655" y="326" text-anchor="middle" fill="#CBD5E1" font-family="DM Sans,sans-serif" font-size="10">入口 · 停车 300 位</text>
+          <text x="655" y="344" text-anchor="middle" fill="#94A3B8" font-family="DM Sans,sans-serif" font-size="9">单日限流约 1,000 人</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(50,395)">
+            <circle cx="0" cy="0" r="16" fill="none" stroke="#4ADE80" stroke-width="1" opacity="0.5"/>
+            <polygon points="0,-14 2,-3 14,0 2,3 0,14 -2,3 -14,0 -2,-3" fill="#4ADE80" opacity="0.8"/>
+            <text x="0" y="-19" text-anchor="middle" fill="#4ADE80" font-size="8" font-weight="700">N</text>
+          </g>
+
+          <!-- 图例 -->
+          <g transform="translate(600,390)">
+            <rect x="0" y="0" width="150" height="46" rx="6" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)"/>
+            <rect x="10" y="10" width="12" height="7" fill="rgba(22,101,52,0.4)" stroke="#4ADE80"/>
+            <text x="30" y="17" fill="#CCC" font-family="DM Sans,sans-serif" font-size="8">林地</text>
+            <rect x="10" y="27" width="12" height="7" fill="rgba(14,165,233,0.3)" stroke="#0EA5E9"/>
+            <text x="30" y="34" fill="#CCC" font-family="DM Sans,sans-serif" font-size="8">溪流</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>森林木屋</h3><p>北欧风格的木屋分散在林下，做住宿和包场。木屋架空设置，不破坏水杉根系，也避开了地面潮湿。</p></div>
+      <div class="card"><h3>天幕与自助烤肉</h3><p>一票制的主力区域，天幕架在树干之间。供餐时间拉长到晚上 8 点，游客从上午进园可以待到晚上，停留 10 到 12 小时。</p></div>
+      <div class="card"><h3>水上项目</h3><p>水杉林间的浅溪做皮划艇、桨板和捞虾抓鱼。水深可控，适合亲子和年轻人，是夏季的核心体验。</p></div>
+      <div class="card"><h3>夜场活动</h3><p>篝火、烟花、露天电影和驻唱，把营地从白天延长到夜里。2025 年参与音乐活动的人次超过 3.5 万。</p></div>
+      <div class="card"><h3>萌宠互动</h3><p>小狐狸「如意」是营地的记忆点，配合喂食和拍照，承担社交传播的功能。</p></div>
+      <div class="card"><h3>容量与停车</h3><p>单日最大接待约 1,000 人，节假日成人约 850 人、儿童约 150 人。300 个停车位，入口统一验票，全园封闭管理。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2023年7—8月</div><div class="timeline-content"><h4>开业运营</h4><p>在水杉林里搭起天幕和木屋，以林下营地形态开始营业。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年</div><div class="timeline-content"><h4>营收约900万元</h4><p>全年接待 6 至 7 万人次，一票制模式跑通。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年1月</div><div class="timeline-content"><h4>运营公司注册</h4><p>崇州市狐河渡边森林营地有限公司成立，运营主体独立。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年4月</div><div class="timeline-content"><h4>清明小长假接待超千人</h4><p>成都露营搜索量同比上涨，营地单日接待突破 1,000 人。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年全年</div><div class="timeline-content"><h4>接待7.6万人次</h4><p>营收超过 1,000 万元，参与音乐活动的人次超过 3.5 万。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年</div><div class="timeline-content"><h4>获CLE金鹿鹰年度营地奖</h4><p>在露营行业评选中获年度营地奖，成为成都林下营地的代表项目。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年</div><div class="timeline-content"><h4>周边形成营地集群</h4><p>以狐河渡边为核心，观胜镇一带聚集了 7 家露营地，形成林下亲水休闲的集中区。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>2025 年营收</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">1,000万+</p><p class="f-caption">2024 年约 900 万</p></div>
+      <div class="card" style="text-align:center;"><h4>2025 年接待</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">7.6万+</p><p class="f-caption">人次，音乐活动 3.5 万+</p></div>
+      <div class="card" style="text-align:center;"><h4>单日上限</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">约1,000人</p><p class="f-caption">全园封闭，限流管理</p></div>
+    </div>
+    <div class="card reveal" style="margin-bottom:1.5rem;">
+      <h3>一票制怎么撑起千万营收</h3>
+      <p>主力套餐 178 元一人，含自助烤肉、饮料水果和园内所有项目；升级套餐 238 元，自带食材 108 元。按 2025 年 7.6 万人次、人均 130 元左右估算，全年营收在 1,000 万元上下，和媒体披露的数字对得上。票价里最大的一块成本是烤肉食材，其次是人力。营地把供餐时间拉长到晚上 8 点，游客停留 10 到 12 小时，一顿饭变成两顿，客单价和满意度同时上去。</p>
+    </div>
+    <div class="card reveal">
+      <h3>容量与体验的平衡</h3>
+      <p>林地只有 80 亩，实际使用 40 亩，单日上限约 1,000 人。这个容量决定了营地不能靠走量，只能靠客单价和复游。项目把资源压在体验密度上：水上项目、萌宠、夜场、雾森、木屋，每一项都不大，但凑在一起能填满一天。周边已经聚集 7 家营地，狐河渡边的位置是先发优势，接下来要比的是内容更新速度。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>水杉林就是产品</h3><p>5,000 多棵 30 年以上的水杉，树冠连成一片，夏天遮阴、秋天变色。营地没有另造景观，所有的木屋、天幕和活动都挂在这片林子上。</p></div>
+      <div class="card"><h3>林下架空</h3><p>木屋和平台架空设置，不破坏根系，也不受地面潮湿影响。这套做法让营地可以在林地上快速搭建，撤场时也容易恢复。</p></div>
+      <div class="card"><h3>水系补内容</h3><p>浅溪做皮划艇、桨板和捞虾，是林下营地最缺的亲水内容。水浅、流速慢，安全边界清楚，适合亲子和年轻客群。</p></div>
+      <div class="card"><h3>一票制封闭运营</h3><p>入口验票、全园封闭，园内不再设收费点。收入可预测，管理半径小，也避免了二次消费引发的投诉。</p></div>
+      <div class="card"><h3>夜场延长停留</h3><p>篝火、烟花、露天电影和驻唱把营业时间拉到夜里。灯光和雾森在林中形成视觉效果，社交平台传播主要靠这一段。</p></div>
+      <div class="card"><h3>村集体分红</h3><p>土地按保底租金加年度营收分红合作，村集体不承担经营风险，也能分享增长。周边 7 家营地聚集后，观胜镇形成了营地集群。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>天幕与营位</h3><p>天幕架在水杉之间，配桌椅和烤炉，一票制内包含，不单独收费。</p></div>
+      <div class="card"><h3>森林木屋</h3><p>北欧风格木屋，用于住宿和包场，架空设置。</p></div>
+      <div class="card"><h3>水上项目</h3><p>皮划艇、桨板、捞虾抓鱼，是夏季的核心体验。</p></div>
+      <div class="card"><h3>餐饮</h3><p>自助烤肉为主，食材不限量，另有饮料、水果和棒冰畅吃；238 元套餐增加茶点和下午茶。</p></div>
+      <div class="card"><h3>夜场设施</h3><p>篝火区、露天电影、驻唱舞台和烟花表演区，周末和节假日开放。</p></div>
+      <div class="card"><h3>停车与交通</h3><p>300 个停车位，距成都市区约一小时车程，导航「FoxRiver 狐河·渡边森林营地」可达。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>获全国营地奖</h3><p>2025 年获 CLE 金鹿鹰年度营地奖，是成都林下营地里获奖代表之一。</p></div>
+      <div class="card"><h3>营地集群成形</h3><p>以狐河渡边为核心，观胜镇一带已聚集 7 家露营地，形成林下亲水休闲的集中区。</p></div>
+      <div class="card"><h3>扩建但不扩满</h3><p>实际使用面积约 40 亩，团队表示扩建时不会把 80 亩林地占满，保留林木是底线。</p></div>
+      <div class="card"><h3>音乐活动</h3><p>2025 年参与音乐活动的人次超过 3.5 万，夜场和演出成为区别于普通营地的内容。</p></div>
+      <div class="card"><h3>村集体收益</h3><p>保底租金加年度营收分红，村集体随营地营收增长获得分成。</p></div>
+      <div class="card"><h3>待观察</h3><p>营地容量有限，营收增长要靠客单价和复游。周边 7 家营地分流客源后，内容更新和口碑管理决定谁能留下来。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>主流媒体</h4><ul>
+      <li><a href="https://country.scol.com.cn/shtml/scncrb/20250813/1047904.html" target="_blank" rel="noopener">四川农村日报 — 探索野趣，乡村露营点燃夏日经济（2025.8）</a><span class="tag">媒体</span></li>
+      <li><a href="https://cbgc.scol.com.cn/news/6609013" target="_blank" rel="noopener">川观新闻 — 乡村露营点燃夏日经济，到崇州观胜探索新「野」趣</a><span class="tag">媒体</span></li>
+      <li><a href="https://news.chengdu.cn/2025/0408/2476167.shtml" target="_blank" rel="noopener">成都日报 — 清明小长假成都露营搜索量增长 132%（2025.4）</a><span class="tag">媒体</span></li>
+      <li><a href="https://static.cdsb.com/micropub/Articles/202504/04df845f5750da3fa5efef098a350809.html" target="_blank" rel="noopener">成都商报 — 有露营基地清明接待超千人</a><span class="tag">媒体</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>行业资料</h4><ul>
+      <li><a href="https://www.toutiao.com/article/7623599488573178395/" target="_blank" rel="noopener">今日头条 — 获全国大奖（狐河渡边）</a><span class="tag">行业</span></li>
+      <li><a href="https://www.toutiao.com/article/7623756017112760884/" target="_blank" rel="noopener">今日头条 — 四川值得考察的 12 个「小而美」业态</a><span class="tag">行业</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>地图与影像</h4><ul>
+      <li><a href="https://www.amap.com/search?query=%E7%8B%90%E6%B2%B3%E6%B8%A1%E8%BE%B9%E6%A3%AE%E6%9E%97%E8%90%A5%E5%9C%B0" target="_blank" rel="noopener">高德地图 — 狐河渡边森林营地</a><span class="tag">地图</span></li>
+      <li><a href="https://commons.wikimedia.org/w/index.php?search=Metasequoia+forest" target="_blank" rel="noopener">Wikimedia Commons — 水杉林自由版权图片</a><span class="tag">图库</span></li>
+    </ul></div>
+    <p class="f-caption" style="text-align:center;margin-top:2rem;">本报告所有数据来源于公开资料，仅供参考研究使用。数据截至 2026 年 11 月。</p>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+// 主 POI：FoxRiver 狐河·渡边森林营地（高德 GCJ-02）
+
+var zonesGcj02 = [
+  { name: '狐河渡边森林营地<br><small>水杉林·木屋·浅溪</small>', lng: 103.701805, lat: 30.746815, color: '#166534' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([30.7468, 103.7018], 15);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesGcj02);
+
+  if (withBoundary) {
+    L.circle([30.7468, 103.7018], { radius: 300, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

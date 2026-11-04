@@ -1168,5 +1168,18 @@
   "chip": "2026",
   "pph": null,
   "pph_src": null
+ },
+ {
+  "slug": "santa-monica-pier",
+  "name": "Santa Monica Pier",
+  "chapter": "美洲",
+  "subgroup": "",
+  "tag": "城市栈桥 · 美国",
+  "location": "美国圣莫尼卡（1909-）",
+  "desc": "洛杉矶西端的城市栈桥，土地归市政府、太平洋乐园私人租地经营。桥长488米，乐园仅0.8公顷，上桥免费，年客流约800万人次；租约按营业额超1100万美元后抽成10%，运营方承诺5500万美元资本投入。",
+  "vis": "约 800 万",
+  "chip": "2026",
+  "pph": null,
+  "pph_src": null
  }
 ]

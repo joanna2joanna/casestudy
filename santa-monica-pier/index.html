@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Santa Monica Pier — 城市持有栈桥、私人租地经营乐园，免费开放换来的八百万年客流</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #4338CA;
+  --clr-primary-light: #818CF8;
+  --clr-primary-dark: #1E1B4B;
+  --clr-accent: #FB7185;
+}
+
+.hero {
+  background: linear-gradient(160deg, #1E1B4B 0%, #4338CA 40%, #818CF8 70%, #FECDD3 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(251,113,133,0.16) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.07) 0%, transparent 50%);
+}
+
+#parkmap { height: 520px; }
+@media (max-width: 768px) { #parkmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>Santa Monica Pier</h1>
+    <p class="hero-subtitle">1909 年作为市政排污管道建起的栈桥，如今是洛杉矶西端的城市地标——土地归市政府，乐园由私人租地经营，木栈道免费开放，靠 0.8 公顷的太平洋乐园和整条街的餐饮把人留住</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">约800万</div><div class="kpi-label">年客流（市政口径）</div></div>
+      <div class="kpi-card"><div class="kpi-number">488米</div><div class="kpi-label">主栈桥长度</div></div>
+      <div class="kpi-card"><div class="kpi-number">0.8公顷</div><div class="kpi-label">太平洋乐园占地</div></div>
+      <div class="kpi-card"><div class="kpi-number">免费</div><div class="kpi-label">上桥与入园</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>产权与运营</h3><p>栈桥土地归圣莫尼卡市政府所有，太平洋乐园以租地方式经营，运营方为 Santa Monica Amusements</p></div>
+      <div class="card"><h3>地理位置</h3><p>美国加州圣莫尼卡市，科罗拉多大道西端，66 号公路的终点</p></div>
+      <div class="card"><h3>开放时间</h3><p>1909 年 9 月 9 日建成开放，1996 年 5 月 25 日太平洋乐园开园</p></div>
+      <div class="card"><h3>用地规模</h3><p>栈桥全长约 488 米，桥面合计约 3.6 公顷，其中乐园占 0.8 公顷</p></div>
+      <div class="card"><h3>门票模式</h3><p>上桥和入园免费，游乐项目单点收费或买全天手环</p></div>
+      <div class="card"><h3>核心客群</h3><p>洛杉矶都会区居民、国内外游客与周边餐饮客群，全天候开放</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>圣莫尼卡栈桥建成于 1909 年，最初的功能是把处理过的污水排到防波堤以外，后来逐步加上游乐设施、餐厅和商业，成了洛杉矶西端最著名的城市地标之一。栈桥土地归圣莫尼卡市政府所有，市政厅下设栈桥管理办公室，负责租约、许可、维护和安保。桥面上的商业和游乐由私人承租经营：1996 年太平洋乐园（Pacific Park）在桥面中段开园，占地约 0.8 公顷，是洛杉矶唯一不收门票的游乐园。乐园的核心资产是摩天轮 Pacific Wheel 和跨海过山车 West Coaster，前者 1998 年改为太阳能供电。2011 年乐园的经营权与租约权益以 3,400 万美元售出，土地仍归市政府。按现行修订租约，经营期限到 2030 年、可续至 2070 年，年营业额超过 1,100 万美元后按 10% 缴纳比例租金，运营方同时承诺 5,500 万美元的资本投入。栈桥年客流按市政口径约 800 万人次。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>主体 / 内容</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>土地产权</td><td>圣莫尼卡市政府</td><td>栈桥管理办公室统一负责租约、许可、维护与安保</td></tr>
+          <tr><td>乐园运营</td><td>Santa Monica Amusements</td><td>以租地方式经营太平洋乐园，2024 年 3 月起由 SC Holdings 持有</td></tr>
+          <tr><td>初建</td><td>1909 年市政工程</td><td>作为污水处理排放管道建成，桥长约 488 米</td></tr>
+          <tr><td>重建</td><td>1987—1989 年</td><td>1983 年冬季风暴损毁后重建，桥基改为混凝土桩</td></tr>
+          <tr><td>乐园建设</td><td>1996 年开园</td><td>恢复 1930 年代以来桥面上第一座完整规模的游乐园</td></tr>
+          <tr><td>连接桥</td><td>1939 年建成，2025 年起重建</td><td>长约 177 米，投资约 3,500 万美元，联邦资金承担约七成五</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid-2 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>一条桥，两种产权</h3><p>栈桥和桥面是市政资产，不得买卖；桥面上的乐园、餐厅和商铺是私人投资，按租约经营。政府拿到的是租金和比例分成，不承担经营风险；运营方拿到的是稳定租期和独家经营权，愿意投设备、做活动。这套安排让一座公共设施长出了商业内容。</p></div>
+      <div class="card"><h3>桥面窄，设备只能往上长</h3><p>乐园只有 0.8 公顷，且承重受栈桥结构限制。摩天轮做到 40 米高，跨海过山车贴着桥面起伏，跳楼机、摆锤都做成竖向设备。设备选型首先服从结构，其次才是刺激度。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>主栈桥长度</td><td>约 488 米</td><td>1909 年建成，不含连接桥</td></tr>
+          <tr><td>规模</td><td>桥面总面积</td><td>约 3.6 公顷</td><td>市政栈桥与新康布栈桥合计</td></tr>
+          <tr><td>规模</td><td>太平洋乐园占地</td><td>约 0.8 公顷</td><td>1996 年开园，洛杉矶唯一免门票乐园</td></tr>
+          <tr><td>设施</td><td>游乐项目</td><td>约 12 项</td><td>含摩天轮、过山车、跳楼机、摆锤与儿童项目</td></tr>
+          <tr><td>设施</td><td>Pacific Wheel</td><td>高约 40 米</td><td>1998 年改为太阳能供电，17.4 万颗 LED</td></tr>
+          <tr><td>设施</td><td>West Coaster</td><td>距海面约 17 米</td><td>西海岸唯一建在栈桥上的过山车</td></tr>
+          <tr><td>设施</td><td>游艺摊位</td><td>14 个以上</td><td>嘉年华游戏，单独计费</td></tr>
+          <tr><td>定价</td><td>上桥与入园</td><td>免费</td><td>全天开放</td></tr>
+          <tr><td>定价</td><td>单项游乐</td><td>约 16 美元（约 ¥107）</td><td>按项目计价</td></tr>
+          <tr><td>定价</td><td>全天手环</td><td>30—40 美元（约 ¥202—269）</td><td>不限次数，通玩常规设备</td></tr>
+          <tr><td>租约</td><td>经营期限</td><td>至 2030 年</td><td>含续期选项，最长可到 2070 年</td></tr>
+          <tr><td>租约</td><td>比例租金</td><td>年营业额超 1,100 万美元后按 10%</td><td>约 ¥7,390 万为起征点</td></tr>
+          <tr><td>租约</td><td>资本投入承诺</td><td>5,500 万美元（约 ¥3.69 亿）</td><td>现行修订租约条款</td></tr>
+          <tr><td>客流</td><td>年接待</td><td>约 800 万人次</td><td>市政与运营方口径，第三方估算低至 500 万</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">美元兑人民币按 2026 年 11 月 4 日中间价 1 美元 ≈ 6.718 元换算。数据来源为圣莫尼卡市政府栈桥常见问题与租约文件、太平洋乐园官方资料、Wikipedia 及洛杉矶时报。数据截至 2026 年 11 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="450" fill="#0E0E24" rx="12"/>
+
+          <!-- 海面 -->
+          <rect x="0" y="0" width="800" height="450" fill="rgba(67,56,202,0.10)"/>
+          <text x="660" y="420" text-anchor="middle" fill="#A5B4FC" font-family="DM Sans,sans-serif" font-size="12" opacity="0.85">圣莫尼卡湾</text>
+
+          <!-- 海岸线 -->
+          <rect x="40" y="60" width="90" height="330" rx="6" fill="rgba(251,113,133,0.14)" stroke="#FB7185" stroke-width="1.5"/>
+          <text x="85" y="90" text-anchor="middle" fill="#FECDD3" font-family="Playfair Display,serif" font-size="13" font-weight="700">陆地</text>
+          <text x="85" y="112" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">科罗拉多大道</text>
+          <text x="85" y="130" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">连接桥入口</text>
+
+          <!-- 连接桥 -->
+          <rect x="130" y="200" width="90" height="40" rx="4" fill="rgba(148,163,184,0.18)" stroke="#94A3B8" stroke-width="1"/>
+          <text x="175" y="225" text-anchor="middle" fill="#CBD5E1" font-family="DM Sans,sans-serif" font-size="9">连接桥 177 米</text>
+
+          <!-- 桥面主体 -->
+          <rect x="220" y="160" width="520" height="120" rx="8" fill="rgba(129,140,248,0.16)" stroke="#818CF8" stroke-width="2"/>
+          <text x="480" y="140" text-anchor="middle" fill="#C7D2FE" font-family="DM Sans,sans-serif" font-size="11">栈桥桥面 · 全长约 488 米 · 免费通行</text>
+
+          <!-- 桥面分区 -->
+          <rect x="235" y="180" width="120" height="80" rx="6" fill="rgba(251,113,133,0.16)" stroke="#FB7185" stroke-width="1.2"/>
+          <text x="295" y="206" text-anchor="middle" fill="#FECDD3" font-family="DM Sans,sans-serif" font-size="10" font-weight="600">入口区</text>
+          <text x="295" y="226" text-anchor="middle" fill="#BBB" font-family="DM Sans,sans-serif" font-size="9">餐厅 · 商铺</text>
+          <text x="295" y="244" text-anchor="middle" fill="#BBB" font-family="DM Sans,sans-serif" font-size="9">海豹观察点</text>
+
+          <rect x="370" y="180" width="200" height="80" rx="6" fill="rgba(67,56,202,0.30)" stroke="#818CF8" stroke-width="1.6"/>
+          <text x="470" y="206" text-anchor="middle" fill="#C7D2FE" font-family="DM Sans,sans-serif" font-size="11" font-weight="700">太平洋乐园 0.8 公顷</text>
+          <text x="470" y="226" text-anchor="middle" fill="#BBB" font-family="DM Sans,sans-serif" font-size="9">Pacific Wheel 40 米</text>
+          <text x="470" y="244" text-anchor="middle" fill="#BBB" font-family="DM Sans,sans-serif" font-size="9">West Coaster · 跳楼机 · 摆锤</text>
+
+          <rect x="585" y="180" width="140" height="80" rx="6" fill="rgba(251,113,133,0.12)" stroke="#FB7185" stroke-width="1.2"/>
+          <text x="655" y="206" text-anchor="middle" fill="#FECDD3" font-family="DM Sans,sans-serif" font-size="10" font-weight="600">桥端</text>
+          <text x="655" y="226" text-anchor="middle" fill="#BBB" font-family="DM Sans,sans-serif" font-size="9">观景平台</text>
+          <text x="655" y="244" text-anchor="middle" fill="#BBB" font-family="DM Sans,sans-serif" font-size="9">海钓 · 垂钓区</text>
+
+          <!-- 历史建筑 -->
+          <rect x="235" y="300" width="200" height="70" rx="6" fill="rgba(148,163,184,0.12)" stroke="#94A3B8" stroke-width="1"/>
+          <text x="335" y="326" text-anchor="middle" fill="#CBD5E1" font-family="DM Sans,sans-serif" font-size="10" font-weight="600">Looff 旋转木马厅</text>
+          <text x="335" y="346" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">1916 年建，国家历史地标</text>
+
+          <rect x="450" y="300" width="190" height="70" rx="6" fill="rgba(148,163,184,0.12)" stroke="#94A3B8" stroke-width="1"/>
+          <text x="545" y="326" text-anchor="middle" fill="#CBD5E1" font-family="DM Sans,sans-serif" font-size="10" font-weight="600">Heal the Bay 水族馆</text>
+          <text x="545" y="346" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">公益机构运营，单独售票</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(752,60)">
+            <circle cx="0" cy="0" r="16" fill="none" stroke="#FB7185" stroke-width="1" opacity="0.5"/>
+            <polygon points="0,-14 2,-3 14,0 2,3 0,14 -2,3 -14,0 -2,-3" fill="#FB7185" opacity="0.8"/>
+            <text x="0" y="-19" text-anchor="middle" fill="#FB7185" font-size="8" font-weight="700">N</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>入口区</h3><p>从科罗拉多大道过桥进来，先是一段餐厅和商铺，再往里走才是乐园。餐饮放在前面，游客还没决定玩不玩，已经先消费了。</p></div>
+      <div class="card"><h3>太平洋乐园</h3><p>桥面中段，0.8 公顷挤进约 12 项设备和十几个游艺摊位。摩天轮和过山车都贴着海面，是园区最上镜的部分，也是社交传播的主要素材。</p></div>
+      <div class="card"><h3>桥端观景</h3><p>栈桥最外端是观景平台和海钓区，不收费、不设项目，全天有人。它承担的是「免费目的地」的功能——把人先吸引上桥。</p></div>
+      <div class="card"><h3>Looff 旋转木马厅</h3><p>1916 年建成的木构建筑，里面的手工旋转木马是国家历史地标。历史建筑留在桥面上，是这座栈桥区别于新建海滨乐园的地方。</p></div>
+      <div class="card"><h3>Heal the Bay 水族馆</h3><p>桥下的小型水族馆，由公益机构运营，单独售票。教育内容给栈桥补上了非娱乐的一层，也承接学校团体。</p></div>
+      <div class="card"><h3>桥面本身</h3><p>488 米长、免费通行的桥面是所有业态的公共底座。它既是通道，也是广场、观景台和活动场地，早晚的人流结构完全不同。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT & CONSTRUCTION TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1909年9月9日</div><div class="timeline-content"><h4>栈桥建成</h4><p>作为市政污水处理排放管道开放，桥长约 488 米。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1916年</div><div class="timeline-content"><h4>Looff 旋转木马厅</h4><p>木构建筑与手工旋转木马落成，后来列为国家历史地标。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1939年</div><div class="timeline-content"><h4>连接桥建成</h4><p>从科罗拉多大道直接上桥的引桥建成，长约 177 米。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1983年</div><div class="timeline-content"><h4>冬季风暴损毁</h4><p>风暴冲毁部分桥体，栈桥被迫关闭。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1987—1989年</div><div class="timeline-content"><h4>重建</h4><p>桥基改为混凝土桩，桥面按商业与游乐用途重新组织。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1996年5月25日</div><div class="timeline-content"><h4>太平洋乐园开园</h4><p>恢复 1930 年代以来桥面第一座完整规模的游乐园，占地约 0.8 公顷。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1998年</div><div class="timeline-content"><h4>摩天轮改太阳能</h4><p>Pacific Wheel 改为太阳能供电，成为全球最早用光伏驱动的摩天轮之一。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2011年</div><div class="timeline-content"><h4>乐园权益转手</h4><p>租约权益与经营权以 3,400 万美元售出，土地产权仍归市政府。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年3月</div><div class="timeline-content"><h4>运营方易主</h4><p>SC Holdings 收购乐园运营公司，租约条款不变。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年12月</div><div class="timeline-content"><h4>连接桥重建开工</h4><p>投资约 3,500 万美元，工期约两年，联邦资金承担约七成五，目标在 2028 年奥运会前完成。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年6月</div><div class="timeline-content"><h4>临时人行桥启用</h4><p>施工期间从科罗拉多大道架设临时人行通道，栈桥与乐园照常开放。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2027—2028年</div><div class="timeline-content"><h4>新桥与老招牌复位</h4><p>新桥计划 2027 年底完成，1941 年的霓虹招牌送修后于 2027—2028 年装回。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONAL INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>全天手环</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">¥202—269</p><p class="f-caption">30—40 美元，不限次数</p></div>
+      <div class="card" style="text-align:center;"><h4>单项游乐</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">¥107</p><p class="f-caption">约 16 美元一项</p></div>
+      <div class="card" style="text-align:center;"><h4>年客流</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">约800万</p><p class="f-caption">市政口径，全天开放</p></div>
+    </div>
+    <div class="card reveal" style="margin-bottom:1.5rem;">
+      <h3>一座公共栈桥的租约账</h3>
+      <p>市政府出地、出维护、出安保，运营方出设备、出人力、出内容。租约的核心是两条：一是期限，现行修订版到 2030 年，含续期选项最长可到 2070 年；二是分成，年营业额超过 1,100 万美元之后按 10% 缴纳比例租金，另外承诺 5,500 万美元的资本投入。对政府来说，这是一笔有保底、有上行、不担经营风险的账；对运营方来说，长租期换来了敢投设备的信心——摩天轮、过山车这类资产回本周期都在十年以上，没有长期租约谁也不敢投。免费上桥是这套结构的前提：客流基数由公共部分带来，变现交给私人部分完成。</p>
+    </div>
+    <div class="card reveal">
+      <h3>客流结构与时段</h3>
+      <p>栈桥全天开放，早晚的人流结构差别很大。清晨是本地人跑步、钓鱼、看日出；白天是游客和旅行团；傍晚以后餐饮和摩天轮的夜灯秀接手，周末和节假日一直热闹到深夜。约 800 万人次的年客流里，真正买票玩项目的是少数，多数人上桥是为了走一走、吃顿饭、看海。这也是为什么园区的收入结构里餐饮和活动占比不低——门票从来不是它的主线。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>公共产权加私人运营</h3><p>土地和桥体是市政资产，商业和游乐由私人承租。政府不投设备、不担风险，靠租金和比例分成分享经营成果。</p></div>
+      <div class="card"><h3>免费上桥</h3><p>不收门票意味着客流不受票价抑制，八百万人次的基数摆在这里，餐饮、游乐、活动各自从中筛客。</p></div>
+      <div class="card"><h3>结构约束下的设备选型</h3><p>栈桥承重有限、桥面只有 0.8 公顷，设备只能往高里做、往轻里做。摩天轮、跳楼机、摆锤都是竖向布局。</p></div>
+      <div class="card"><h3>太阳能摩天轮</h3><p>Pacific Wheel 1998 年改为光伏供电，17.4 万颗 LED 做夜间灯光秀。节能是实际收益，也是持续传播的品牌符号。</p></div>
+      <div class="card"><h3>历史资产留存</h3><p>1916 年的旋转木马厅、1941 年的霓虹招牌都留在原位。老建筑不是包袱，是新建海滨项目买不到的时间厚度。</p></div>
+      <div class="card"><h3>全天候时段经营</h3><p>同一段桥面在一天里被切成晨练、观光、餐饮、夜游四个时段，单位面积的产出靠时段拉长，而不是靠加设备。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>游乐设备</h3><p>约 12 项，含 40 米太阳能摩天轮、跨海过山车、跳楼机、海盗船、碰碰车和多项儿童设备，另有 14 个以上游艺摊位。</p></div>
+      <div class="card"><h3>餐饮</h3><p>桥面入口段与中段分布多家餐厅、海鲜排档、冰淇淋和咖啡店，价格带从快餐到正餐都有。</p></div>
+      <div class="card"><h3>历史建筑</h3><p>1916 年 Looff 旋转木马厅为国家历史地标，1941 年霓虹招牌列入加州历史资源名录，正在送修。</p></div>
+      <div class="card"><h3>水族馆</h3><p>桥下的 Heal the Bay 水族馆由公益机构运营，单独售票，承接学校团体和亲子客群。</p></div>
+      <div class="card"><h3>停车与接驳</h3><p>海滩 1 号北停车场紧邻栈桥，另有市区停车场和公交、轻轨接驳；连接桥施工期间设临时人行通道。</p></div>
+      <div class="card"><h3>活动与演出</h3><p>桥面常年排露天演出、电影节、跨年活动和周末市集，免费部分是拉动客流的主要手段。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>连接桥重建</h3><p>1939 年的引桥正在整体更换，投资约 3,500 万美元，工期约两年，按 75 年使用寿命设计，目标在 2028 年奥运会前完成。</p></div>
+      <div class="card"><h3>临时人行桥</h3><p>2026 年 6 月起启用从科罗拉多大道接入的临时人行通道，施工期间栈桥、乐园和停车照常运营。</p></div>
+      <div class="card"><h3>老招牌送修</h3><p>1941 年的霓虹招牌 2026 年 9 月至 10 月拆下，运往拉斯维加斯修复，计划 2027—2028 年装回，位置略高于原处。</p></div>
+      <div class="card"><h3>运营方更替</h3><p>2024 年 3 月 SC Holdings 收购乐园运营公司，租约条款延续，管理层换手后的设备投入方向值得观察。</p></div>
+      <div class="card"><h3>奥运窗口</h3><p>2028 年洛杉矶奥运会前后，圣莫尼卡作为海滨赛区周边目的地，客流预期上升，基础设施改造都按这个时间点倒排。</p></div>
+      <div class="card"><h3>待观察</h3><p>栈桥是建于海上的结构，风浪、盐雾和老化带来的维护成本长期存在。租约把大修责任分给谁，决定了这套公私合作能不能持续。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>百科与官方</h4><ul>
+      <li><a href="https://en.wikipedia.org/wiki/Santa_Monica_Pier" target="_blank" rel="noopener">Wikipedia — Santa Monica Pier</a><span class="tag">百科</span></li>
+      <li><a href="https://en.wikipedia.org/wiki/Pacific_Park" target="_blank" rel="noopener">Wikipedia — Pacific Park</a><span class="tag">百科</span></li>
+      <li><a href="https://www.smgov.net/Departments/OPM/" target="_blank" rel="noopener">圣莫尼卡市 — 栈桥管理办公室</a><span class="tag">官方</span></li>
+      <li><a href="https://pacpark.com/" target="_blank" rel="noopener">Pacific Park — 官网首页</a><span class="tag">官方</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>行业与报道</h4><ul>
+      <li><a href="https://www.santamonica.gov/press/2025/12/09/pier-bridge-replacement-project-construction-begins" target="_blank" rel="noopener">圣莫尼卡市政府 — 连接桥重建开工公告</a><span class="tag">官方</span></li>
+      <li><a href="https://pacpark.com/santa-monica-pier-bridge-replacement-project/" target="_blank" rel="noopener">Pacific Park — 连接桥重建说明</a><span class="tag">官方</span></li>
+      <li><a href="https://santamonicapier.org/" target="_blank" rel="noopener">Santa Monica Pier — 官方访客网站</a><span class="tag">媒体</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>地图与影像</h4><ul>
+      <li><a href="https://www.google.com/maps/place/Santa+Monica+Pier" target="_blank" rel="noopener">Google Maps — Santa Monica Pier</a><span class="tag">地图</span></li>
+      <li><a href="https://commons.wikimedia.org/w/index.php?search=Santa+Monica+Pier" target="_blank" rel="noopener">Wikimedia Commons — 栈桥自由版权图片</a><span class="tag">图库</span></li>
+    </ul></div>
+    <p class="f-caption" style="text-align:center;margin-top:2rem;">本报告所有数据来源于公开资料，仅供参考研究使用。数据截至 2026 年 11 月。</p>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：Nominatim 返回 WGS-84，ESRI World Imagery 同为 WGS-84，直接使用
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+
+  var map = L.map('parkmap', { scrollWheelZoom: false }).setView([34.008896, -118.497400], 16);
+
+  var tiles = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>', maxZoom: 19
+  }).addTo(map);
+  tiles.on('load', function() { if (fallback) fallback.style.display = 'none'; });
+
+  var icon = L.divIcon({
+    className: 'zone-marker',
+    html: '<div style="background:#4338CA;color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">Santa Monica Pier</div>',
+    iconSize: [0, 0], iconAnchor: [0, 0]
+  });
+  L.marker([34.008896, -118.497400], { icon: icon }).addTo(map).bindPopup('Santa Monica Pier<br><small>1909 年建成</small>');
+
+  L.circle([34.008896, -118.497400], { radius: 380, color: '#FB7185', weight: 2, fill: false, dashArray: '6,4', opacity: 0.55 }).addTo(map);
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+  setTimeout(function() { if (fallback && fallback.style.display !== 'none') fallback.style.display = 'block'; }, 8000);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

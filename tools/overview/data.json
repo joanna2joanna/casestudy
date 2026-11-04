@@ -1181,5 +1181,18 @@
   "chip": "2026",
   "pph": null,
   "pph_src": null
+ },
+ {
+  "slug": "hollywood-broadwalk",
+  "name": "Hollywood Beach Broadwalk",
+  "chapter": "美洲",
+  "subgroup": "",
+  "tag": "海滨步道 · 美国",
+  "location": "美国好莱坞市（1920年代-）",
+  "desc": "佛罗里达好莱坞市4公里砖铺海滨步道，1920年代按「南方大西洋城」规划，步道与沙滩免费开放，沿岸靠中小旅馆、餐厅和2015年开业的349间客房度假酒店经营，公共投入累计以千万美元计。",
+  "vis": "未公开",
+  "chip": "2026",
+  "pph": null,
+  "pph_src": null
  }
 ]

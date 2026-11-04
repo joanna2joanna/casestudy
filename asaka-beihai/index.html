@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阿萨卡北海网红城市 — 天下秀在银滩冯家江畔做的 70.23 亩内容园区，影院、美术馆、酒店、摩天轮叠在同一块地上</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #0E7490;
+  --clr-primary-light: #38BDF8;
+  --clr-primary-dark: #164E63;
+  --clr-accent: #F97316;
+}
+
+.hero {
+  background: linear-gradient(160deg, #164E63 0%, #0E7490 40%, #38BDF8 70%, #E0F2FE 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(249,115,22,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>阿萨卡北海网红城市</h1>
+    <p class="hero-subtitle">天下秀在银滩冯家江畔做的一块内容园区——一期 70.23 亩启动区已运营，影院、美术馆、书局、酒店群、摩天轮和水乐园叠在同一块地上</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">约110亿元</div><div class="kpi-label">全周期总投资（官方口径）</div></div>
+      <div class="kpi-card"><div class="kpi-number">70.23亩</div><div class="kpi-label">一期启动区用地</div></div>
+      <div class="kpi-card"><div class="kpi-number">2023.9.25</div><div class="kpi-label">一期启动区正式运营</div></div>
+      <div class="kpi-card"><div class="kpi-number">66米</div><div class="kpi-label">「北海之眼」摩天轮</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>投资方</h3><p>天下秀集团（600556.SH），2019 年 7 月进入北海</p></div>
+      <div class="card"><h3>开发主体</h3><p>北海阿萨卡科技数字有限公司</p></div>
+      <div class="card"><h3>地理位置</h3><p>北海市银海区金海岸大道以南、冯家江两侧，冯家江湿地入海口，距银滩沙滩约 2 公里</p></div>
+      <div class="card"><h3>项目定位</h3><p>自治区「双百双新」项目；以网红经济、内容创作者和数字游民为主题的滨海度假综合体</p></div>
+      <div class="card"><h3>一期用地</h3><p>约 70.23 亩（约 4.68 公顷），规划预留总用地约 2000 亩</p></div>
+      <div class="card"><h3>运营起点</h3><p>2023 年 9 月 25 日，一期启动区正式运营</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>阿萨卡北海网红城市由天下秀集团投资，开发主体为北海阿萨卡科技数字有限公司，项目落在北海银滩旅游度假区的冯家江入海口，金海岸大道以南、冯家江两侧。它和常规主题乐园的差别在于内容结构：园区先建影院、美术馆、图书馆和酒店，再叠加摩天轮、水乐园和非标商业，同时配建住宅和办公。一期启动区 70.23 亩，2023 年 9 月 25 日正式运营；规划预留用地约 2000 亩，二、三期仍在推进。官方公布的全周期总投资约 110 亿元，媒体引述项目主理人的口径称首期实际投入约 20 亿元。园区把「网红城市」当成一套线下空间产品来做：用文化设施和活动把人引来，用酒店群把人留下，用餐饮、游乐和住宅把账做平。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>主体 / 内容</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>投资与策划</td><td>天下秀集团</td><td>红人新经济领域的 A 股上市公司，2019 年 7 月进入北海</td></tr>
+          <tr><td>开发建设</td><td>北海阿萨卡科技数字有限公司</td><td>项目公司，负责一期启动区及后续分期建设</td></tr>
+          <tr><td>影院</td><td>北海之光激光巨幕影院</td><td>启动区首批投运业态，与 RealD 合作</td></tr>
+          <tr><td>美术馆</td><td>爱马思美术馆</td><td>北京 798 爱马思艺术中心的分馆</td></tr>
+          <tr><td>产业内容</td><td>克劳锐会议中心、光年网红学院、直播社区、网红潮流艺术中心</td><td>把红人经济的内容生产放进园区</td></tr>
+          <tr><td>住区配建</td><td>一期配建住宅</td><td>媒体报道约 1257 户，与园区同步开发</td></tr>
+          <tr><td>分期安排</td><td>一期启动区 70.23 亩；二、三期合计约 900 亩</td><td>二、三期规模来自媒体报道，官方尚未公布完整规划</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>一期启动区用地</td><td>约 70.23 亩（约 4.68 公顷）</td><td>金海岸大道以南、冯家江两侧</td></tr>
+          <tr><td>规模</td><td>规划预留用地</td><td>约 2000 亩（约 133 公顷）</td><td>媒体报道口径</td></tr>
+          <tr><td>投资</td><td>全周期总投资</td><td>约 110 亿元</td><td>自治区「双百双新」项目口径</td></tr>
+          <tr><td>投资</td><td>首期实际投入</td><td>约 20 亿元</td><td>项目主理人演讲口径，非官方公告</td></tr>
+          <tr><td>建设</td><td>一期楼栋</td><td>1#—13#</td><td>2025 年 7 月全部封顶，1#、2#、3#、5# 已投用</td></tr>
+          <tr><td>运营</td><td>启动区运营</td><td>2023 年 9 月 25 日</td><td>影院、美术馆、图书馆、酒店首批开放</td></tr>
+          <tr><td>设施</td><td>「北海之眼」摩天轮</td><td>高 66 米</td><td>2026 年 2 月开放，一圈约 13 分 14 秒</td></tr>
+          <tr><td>设施</td><td>水乐园</td><td>白日梦水世界、火星放飞亲子水乐园</td><td>住客凭房卡不限次入场</td></tr>
+          <tr><td>住宿</td><td>园区酒店群</td><td>摩天轮海景、白日梦、骑楼风情等</td><td>房型以 70—110㎡ 套房为主</td></tr>
+          <tr><td>活动</td><td>克劳锐新媒体生态大会</td><td>2026 年 3—4 月举办第十届</td><td>已宣布永久落户北海</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源为北海市政府、广西日报、北海日报及主流媒体报道。标注「媒体报道」「主理人口径」的条目未见官方公告。数据截至 2026 年 11 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="450" fill="#0B1A1F" rx="12"/>
+
+          <!-- 冯家江 -->
+          <path d="M 380 0 C 400 90, 360 170, 390 250 C 410 310, 380 380, 400 450" fill="none" stroke="#38BDF8" stroke-width="26" opacity="0.18"/>
+          <path d="M 380 0 C 400 90, 360 170, 390 250 C 410 310, 380 380, 400 450" fill="none" stroke="#38BDF8" stroke-width="2" opacity="0.7"/>
+          <text x="430" y="300" fill="#7DD3FC" font-family="DM Sans,sans-serif" font-size="10" transform="rotate(78 430 300)">冯家江</text>
+
+          <!-- 西岸：文化启动区 -->
+          <rect x="70" y="80" width="250" height="130" rx="8" fill="rgba(14,116,144,0.25)" stroke="#0E7490" stroke-width="2"/>
+          <text x="195" y="108" text-anchor="middle" fill="#7DD3FC" font-family="Playfair Display,serif" font-size="15" font-weight="700">文化启动区（西岸）</text>
+          <text x="195" y="132" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">北海之光激光巨幕影院 · 爱马思美术馆</text>
+          <text x="195" y="152" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">北海书局 · 克劳锐会议中心</text>
+          <text x="195" y="172" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">光年网红学院 · 直播社区</text>
+
+          <!-- 东岸：酒店与游乐 -->
+          <rect x="470" y="70" width="270" height="150" rx="8" fill="rgba(249,115,22,0.15)" stroke="#F97316" stroke-width="2"/>
+          <text x="605" y="98" text-anchor="middle" fill="#FDBA74" font-family="Playfair Display,serif" font-size="15" font-weight="700">酒店与游乐区（东岸）</text>
+          <text x="605" y="122" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">摩天轮海景酒店 · 白日梦酒店 · 骑楼风情酒店</text>
+          <text x="605" y="142" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">白日梦水世界 · 火星放飞亲子水乐园</text>
+          <text x="605" y="162" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">餐饮街 · 撸猫馆 · 鹿鸣山丘</text>
+
+          <!-- 摩天轮 -->
+          <circle cx="600" cy="255" r="30" fill="none" stroke="#F97316" stroke-width="2.5"/>
+          <circle cx="600" cy="255" r="4" fill="#F97316"/>
+          <text x="600" y="305" text-anchor="middle" fill="#FDBA74" font-family="Playfair Display,serif" font-size="13" font-weight="700">北海之眼 · 66 米</text>
+
+          <!-- 北侧住宅与办公 -->
+          <rect x="140" y="20" width="520" height="42" rx="6" fill="rgba(148,163,184,0.15)" stroke="#94A3B8" stroke-width="1.5"/>
+          <text x="400" y="46" text-anchor="middle" fill="#CBD5E1" font-family="DM Sans,sans-serif" font-size="11">北侧：一期配建住宅与办公楼（1#—13# 楼）</text>
+
+          <!-- 南侧湿地入海口 -->
+          <rect x="120" y="360" width="560" height="60" rx="8" fill="rgba(56,189,248,0.10)" stroke="#38BDF8" stroke-width="1.5" stroke-dasharray="5,4"/>
+          <text x="400" y="388" text-anchor="middle" fill="#7DD3FC" font-family="DM Sans,sans-serif" font-size="11">南侧：冯家江湿地入海口，隔江与银滩度假区相连</text>
+          <text x="400" y="406" text-anchor="middle" fill="#94A3B8" font-family="DM Sans,sans-serif" font-size="9">金海岸大道以北接城市主干路</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(760,390)">
+            <circle cx="0" cy="0" r="16" fill="none" stroke="#F97316" stroke-width="1" opacity="0.5"/>
+            <polygon points="0,-14 2,-3 14,0 2,3 0,14 -2,3 -14,0 -2,-3" fill="#F97316" opacity="0.8"/>
+            <text x="0" y="-19" text-anchor="middle" fill="#F97316" font-size="8" font-weight="700">N</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>文化启动区</h3><p>西岸最先投运的一组建筑，包含北海之光激光巨幕影院、爱马思美术馆、北海书局和克劳锐会议中心。影院和美术馆负责日常引流，会议中心承接行业活动。</p></div>
+      <div class="card"><h3>酒店与游乐区</h3><p>东岸沿滨江路布置摩天轮海景酒店、白日梦酒店和骑楼风情酒店，房型以 70—110㎡ 套房为主；水乐园分成造浪池与亲子水寨两块，住客凭房卡入场。</p></div>
+      <div class="card"><h3>北海之眼摩天轮</h3><p>高 66 米，2026 年 2 月开放，一圈约 13 分 14 秒，是园区目前最高的构筑物，也是银滩一带少有的高空观景设施。</p></div>
+      <div class="card"><h3>北侧住宅与办公</h3><p>一期 1#—13# 楼，2025 年 7 月全部封顶。住宅和办公与园区同步开发，是这套模式里回笼资金的部分。</p></div>
+      <div class="card"><h3>南侧湿地界面</h3><p>园区南端接冯家江湿地入海口，隔江是银滩度假区。这一段界面决定了园区的景观朝向，也把它和银滩的客流连在一起。</p></div>
+      <div class="card"><h3>内部动线</h3><p>园区 24 小时开放，主入口在喜茶旁；外围打卡点免费，进入核心区需要入园券或酒店房卡。影院、美术馆和酒店的票根可以互通。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2019年7月</div><div class="timeline-content"><h4>天下秀进入北海</h4><p>天下秀集团落地北海，阿萨卡项目随后进入筹备。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022年1月</div><div class="timeline-content"><h4>一期拿地</h4><p>项目取得一期用地，媒体报道规模约 200 亩，其中启动区 70.23 亩。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022年年中</div><div class="timeline-content"><h4>一期开工</h4><p>启动区与住宅、办公楼同步开工，总投资口径约 110 亿元。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023年9月25日</div><div class="timeline-content"><h4>启动区正式运营</h4><p>北海之光影院、爱马思美术馆、图书馆和酒店开门营业；同日与宜家签署合作。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年7月</div><div class="timeline-content"><h4>一期楼栋全部封顶</h4><p>1#—13# 楼封顶，其中 1#、2#、3#、5# 已投入使用，网红潮流艺术中心、光年网红学院、直播社区陆续接入启动区。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年2月</div><div class="timeline-content"><h4>摩天轮开放</h4><p>「北海之眼」投入运营，园区第一次有了高空观景地标。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年3—4月</div><div class="timeline-content"><h4>克劳锐大会第十届</h4><p>第十届克劳锐新媒体生态大会在园区举办，北海日报报道园区客流火热。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>启动区运营</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">2023.9</p><p class="f-caption">影院、美术馆、书局、酒店首批开放</p></div>
+      <div class="card" style="text-align:center;"><h4>园区开放</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">24 小时</p><p class="f-caption">外围免费，核心区凭券或房卡</p></div>
+      <div class="card" style="text-align:center;"><h4>克劳锐大会</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">永久落户</p><p class="f-caption">2026 年举办公开报道的第十届</p></div>
+    </div>
+    <div class="card reveal" style="margin-bottom:1.5rem;">
+      <h3>收入结构：五条线同时开着</h3>
+      <p>阿萨卡的现金流不靠单一门票。第一条是住宅和办公销售，一期配建住宅约 1257 户，是回笼资金最快的一条；第二条是酒店住宿，园区内摩天轮海景、白日梦、骑楼风情等酒店形成房量；第三条是入园券与单项游乐，摩天轮、水乐园单独计价；第四条是餐饮和商业租金；第五条是活动与会展，克劳锐大会带来品牌曝光和阶段性客流。五条线里，前两条决定回本，后三条决定园区平时有没有人。</p>
+    </div>
+    <div class="card reveal">
+      <h3>「先文化、后游乐」的开园顺序</h3>
+      <p>启动区 2023 年先开的是影院、美术馆、图书馆和酒店，摩天轮和水乐园到 2025—2026 年才补齐。这个顺序把重资产游乐往后放，先用文化设施和酒店建立日常客流，再用游乐设备补足亲子客群。对同类项目来说，值得看的是它怎么用低成本内容撑过开业前两年，而不是它买了哪些设备。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>网红经济的线下场域</h3><p>园区把直播间、网红学院、会议中心和内容创作者社区放进同一块地，活动期间做行业大会，平时做数字游民长租。这套逻辑的难点在于内容供给要持续，不能只靠开业热度。</p></div>
+      <div class="card"><h3>文化设施先行</h3><p>影院、美术馆、书局三个业态先开，投资强度低于大型游乐设备，却能形成日常到访理由。它们同时承担园区的公共界面，让外围打卡点保持免费。</p></div>
+      <div class="card"><h3>酒店群做留客</h3><p>园区内至少三家主题酒店，房型以 70—110㎡ 套房为主，定价集中在两三百元到五六百元。住宿把一日游转成过夜游，也把水乐园和摩天轮的体验券打包进房费。</p></div>
+      <div class="card"><h3>住宅配建平衡现金流</h3><p>一期同步开发住宅约 1257 户，用销售回款对冲文旅部分的長周期投入。这是「文旅+地产」模式的常规做法，也是这类项目最容易被政策变化影响的一环。</p></div>
+      <div class="card"><h3>地标补位</h3><p>66 米摩天轮填补了银滩一带高空观景的空白，和影院、美术馆形成三个不同时段的到访理由：白天看展、傍晚坐摩天轮、晚上看电影。</p></div>
+      <div class="card"><h3>分期滚动</h3><p>一期 70.23 亩跑通后再推二、三期。已建成的启动区既是样板，也是后续招商和销售的展示面，这种滚动开发降低了单次投入的风险。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>北海之光激光巨幕影院</h3><p>启动区首批投运业态，与 RealD 合作。影院在旅游度假区里承担的是日常娱乐供给，雨天和夜间尤其重要。</p></div>
+      <div class="card"><h3>爱马思美术馆</h3><p>北京 798 爱马思艺术中心的分馆，做当代艺术展览。美术馆为园区提供非游乐的内容，也方便承接品牌活动。</p></div>
+      <div class="card"><h3>北海书局与图书馆</h3><p>园区内的阅读空间，兼做文创零售。它和美术馆一起构成启动区的文化底色。</p></div>
+      <div class="card"><h3>酒店群</h3><p>摩天轮海景度假酒店、白日梦乐园海景酒店、骑楼风情海景酒店等，覆盖亲子、情侣和团队客群，房型以套房为主。</p></div>
+      <div class="card"><h3>水乐园</h3><p>白日梦水世界含造浪池和高速滑道，火星放飞亲子水乐园含泳池和水寨滑梯。两处都向住客开放不限次入场。</p></div>
+      <div class="card"><h3>餐饮与商业</h3><p>园区内有二十多家餐厅和一条嗦粉街，另有撸猫馆、鹿鸣山丘等轻体验业态，主要服务住客和周边打卡客流。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>克劳锐大会永久落户</h3><p>克劳锐新媒体生态大会已宣布永久落户北海，2026 年 3—4 月在园区举办第十届，李连杰、包贝尔等明星到场，北海日报报道园区客流火热。</p></div>
+      <div class="card"><h3>摩天轮补齐地标</h3><p>「北海之眼」2026 年 2 月开放，成人票约 58 元、儿童票约 38 元（OTA 与游客口径），住店客人可获赠体验券。</p></div>
+      <div class="card"><h3>二、三期仍在规划</h3><p>媒体报道二期约 400 亩，规划高端商业、演唱会和音乐节场地；三期约 500 亩，含超五星酒店和写字楼。官方尚未公布完整规划。</p></div>
+      <div class="card"><h3>天下秀推进港股上市</h3><p>天下秀 2026 年 1 月向港交所递表，寻求 A+H 上市。募资用途被媒体解读为推进二、三期和全球化布局，项目后续投入与母公司资本动作相关。</p></div>
+      <div class="card"><h3>数字游民定位</h3><p>园区把长租、办公和内容创作纳入产品，2026 年 5 月广西网络名人行把它称作「数字游民快乐岛」。这一定位能否成立，取决于长租客的留存，而不取决于短期打卡量。</p></div>
+      <div class="card"><h3>对银滩的意义</h3><p>阿萨卡把影院、美术馆、酒店和游乐放在银滩度假区腹地，改变了这一带以海滩和海鲜为主的供给结构。它对周边地块的影响，一是抬高预期，二是分流亲子客群。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>官方来源</h4><ul>
+      <li><a href="http://www.beihai.gov.cn/bhdt/bhyw/t17202166.shtml" target="_blank" rel="noopener">北海市人民政府 — 阿萨卡北海网红城市一期启动区正式运营（2023.9）</a><span class="tag">官方</span></li>
+      <li><a href="http://epaper.gxrb.com.cn/gxrb2/html/2023-04/05/content_1921323.htm" target="_blank" rel="noopener">广西日报 — 北海阿萨卡网红城市项目建设顺利推进（2023.4）</a><span class="tag">官方</span></li>
+      <li><a href="https://www.gxbhxww.cn/content/2025-07/10/content_72611.html" target="_blank" rel="noopener">北海新闻网 — 多楼栋封顶并投入使用（2025.7）</a><span class="tag">官方</span></li>
+      <li><a href="https://m.gxbhxww.cn/content/202604/10/content_1318452.html" target="_blank" rel="noopener">北海日报 — 北海新星阿萨卡（2026.4）</a><span class="tag">媒体</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>建设与运营</h4><ul>
+      <li><a href="https://www.gxbhxww.cn/content/2024-12/02/content_50524.html" target="_blank" rel="noopener">北海新闻网 — 阿萨卡网红城市一期项目加紧推进（2024.12）</a><span class="tag">媒体</span></li>
+      <li><a href="https://mini.gxnews.com.cn/a/21451406" target="_blank" rel="noopener">广西新闻网 — 一期项目主体施工过半</a><span class="tag">媒体</span></li>
+      <li><a href="https://www.gxnews.com.cn/staticpages/20260523/newgx6a11752b-21948003.shtml" target="_blank" rel="noopener">广西新闻网 — 数字游民快乐岛实探（2026.5）</a><span class="tag">媒体</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>地图与影像</h4><ul>
+      <li><a href="https://www.amap.com/search?query=%E9%98%BF%E8%90%A8%E5%8D%A1" target="_blank" rel="noopener">高德地图 — 阿萨卡银滩园区</a><span class="tag">地图</span></li>
+      <li><a href="https://commons.wikimedia.org/w/index.php?search=Beihai+Silver+Beach" target="_blank" rel="noopener">Wikimedia Commons — 北海银滩自由版权图片</a><span class="tag">图库</span></li>
+    </ul></div>
+    <p class="f-caption" style="text-align:center;margin-top:2rem;">本报告所有数据来源于公开资料，仅供参考研究使用。数据截至 2026 年 11 月。</p>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+// 主 POI：北海之眼摩天轮 / 阿萨卡银滩园区（高德 GCJ-02）
+
+var zonesGcj02 = [
+  { name: '阿萨卡北海网红城市<br><small>北海之眼摩天轮·白日梦水世界</small>', lng: 109.160463, lat: 21.411328, color: '#F97316' },
+  { name: '北海之光影院', lng: 109.161793, lat: 21.415099, color: '#0E7490' },
+  { name: '爱马思美术馆', lng: 109.161229, lat: 21.415719, color: '#7C3AED' },
+  { name: '摩天轮海景酒店群', lng: 109.161630, lat: 21.417653, color: '#DC2626' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([21.4145, 109.1611], 16);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesGcj02);
+
+  if (withBoundary) {
+    L.circle([21.4145, 109.1611], { radius: 520, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

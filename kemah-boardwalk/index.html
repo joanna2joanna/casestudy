@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kemah Boardwalk — 加尔维斯顿湾边的免费木栈道，靠餐饮与单点游乐撑起 24 公顷水岸</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #0891B2;
+  --clr-primary-light: #22D3EE;
+  --clr-primary-dark: #0C4A6E;
+  --clr-accent: #F59E0B;
+}
+
+.hero {
+  background: linear-gradient(160deg, #0C4A6E 0%, #0891B2 40%, #22D3EE 70%, #FEF3C7 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(245,158,11,0.16) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.07) 0%, transparent 50%);
+}
+
+#parkmap { height: 520px; }
+@media (max-width: 768px) { #parkmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>Kemah Boardwalk</h1>
+    <p class="hero-subtitle">兰德里餐饮集团在加尔维斯顿湾边做的水岸综合体——木栈道不收费，停车场周末才收钱，靠十几家餐厅、一座 400 泊位的游艇码头和单点收费的游乐设备把客流留住</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">约24公顷</div><div class="kpi-label">水岸园区总面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">400泊位</div><div class="kpi-label">自有游艇码头</div></div>
+      <div class="kpi-card"><div class="kpi-number">56间</div><div class="kpi-label">Boardwalk Inn 客房</div></div>
+      <div class="kpi-card"><div class="kpi-number">免费</div><div class="kpi-label">入园与步行栈道</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>运营方</h3><p>兰德里餐饮集团（Landry's, Inc.），休斯敦本地起家的餐饮与酒店集团</p></div>
+      <div class="card"><h3>地理位置</h3><p>美国得克萨斯州凯马市，加尔维斯顿湾西北岸，距休斯敦市中心约 48 公里</p></div>
+      <div class="card"><h3>开放时间</h3><p>1997 年兰德里拿下水岸地块，1998 年木栈道与游乐设施对公众开放</p></div>
+      <div class="card"><h3>用地规模</h3><p>约 24 公顷，含木栈道、游乐区、餐厅带、酒店与游艇码头</p></div>
+      <div class="card"><h3>门票模式</h3><p>入园与步行栈道免费，游乐项目单点或买通票，停车按日收费</p></div>
+      <div class="card"><h3>核心客群</h3><p>休斯敦都会区的家庭客与自驾游客，以半日到一晚的短途出行为主</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>Kemah Boardwalk 位于得克萨斯州凯马市的加尔维斯顿湾岸边，是兰德里餐饮集团（Landry's）在餐饮主业之外做的一处水岸综合体。1997 年兰德里买下并整合了凯马水岸一线地块，1998 年木栈道、游乐设备、餐厅和 56 间客房的 Boardwalk Inn 一起对外开放。园区沿水岸展开，长条形的步行木栈道串起十几家餐厅、嘉年华游戏摊位、十几项游乐设备，以及一座 400 泊位的游艇码头。入园不收费，游客可以只来吃饭、看船或散步，玩项目另外买票。2007 年建成的木质过山车 Boardwalk Bullet 用不到半公顷的地放下近千米轨道，是园区最具代表性的设备。2008 年飓风艾克重创得州海岸，园区受损后修复重开。2025 年起兰德里在原 Flying Dutchman 餐厅位置报建一座海盗船主题水公园，计划 2027 年开放，投资约 720 万美元。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>主体 / 内容</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>投资运营</td><td>Landry's, Inc.</td><td>餐饮集团自有品牌，餐厅、酒店、游乐一体经营</td></tr>
+          <tr><td>总平面</td><td>沿水岸线性展开</td><td>木栈道为骨架，餐厅临水，游乐区靠陆侧</td></tr>
+          <tr><td>过山车制造</td><td>The Gravity Group / Martin &amp; Vleminckx</td><td>Boardwalk Bullet 木质过山车，2007 年建成</td></tr>
+          <tr><td>水公园设计</td><td>Second Star Group</td><td>2025 年报建的海盗船主题水公园</td></tr>
+          <tr><td>酒店</td><td>Boardwalk Inn</td><td>56 间客房，位于园区中段，客房带观景阳台</td></tr>
+          <tr><td>码头</td><td>400 泊位游艇码头</td><td>园区自营，与餐饮、游乐共用同一段水岸</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid-2 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>沿水岸的线性布局</h3><p>园区没有围墙，也没有一条明确的大门动线。木栈道沿海岸线铺开，餐厅、游戏摊、游乐设备沿栈道两侧排布，游客从停车场走进来就已在园区里。这种做法的好处是没有入口瓶颈，坏处是客流分散、单个项目的可见度低，园区靠栈道本身的步行体验把人流拉长。</p></div>
+      <div class="card"><h3>用地紧，设备往上走</h3><p>Boardwalk Bullet 用不到半公顷的地放下 986 米轨道，靠的是多层交叠的木质结构。Drop Zone 跳楼机、摩天轮、飞行塔这类竖向设备也都是在既有地块里见缝插针，园区没有靠扩地增加容量。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>园区总面积</td><td>约 24 公顷</td><td>含木栈道、游乐区、酒店与码头</td></tr>
+          <tr><td>规模</td><td>木栈道</td><td>沿海岸线线性展开</td><td>无围墙，免费通行</td></tr>
+          <tr><td>住宿</td><td>Boardwalk Inn</td><td>56 间客房</td><td>园区中段，带观景阳台</td></tr>
+          <tr><td>码头</td><td>游艇泊位</td><td>400 个</td><td>园区自营</td></tr>
+          <tr><td>设施</td><td>游乐项目</td><td>12 项（2026 年）</td><td>历史上曾达 15 项，部分设备已撤除</td></tr>
+          <tr><td>设施</td><td>Boardwalk Bullet</td><td>高 29 米、长 986 米</td><td>2007 年木质过山车，占地约 0.4 公顷</td></tr>
+          <tr><td>设施</td><td>Drop Zone</td><td>高 43 米</td><td>2026 年 3 月重开，12 座，最高时速 76 公里</td></tr>
+          <tr><td>设施</td><td>摩天轮</td><td>高约 20 米</td><td>1998 年开园时的初代设备</td></tr>
+          <tr><td>设施</td><td>Boardwalk Beast</td><td>21 米长快艇</td><td>25 分钟湾内航程，时速 64 公里以上</td></tr>
+          <tr><td>餐饮</td><td>餐厅数量</td><td>十余家</td><td>兰德里旗下品牌为主</td></tr>
+          <tr><td>定价</td><td>入园</td><td>免费</td><td>停车另计</td></tr>
+          <tr><td>定价</td><td>单日通票</td><td>29.99 美元（约 ¥201）</td><td>身高 1.22 米以上，含 13 项设备</td></tr>
+          <tr><td>定价</td><td>儿童通票</td><td>23.99 美元（约 ¥161）</td><td>身高 1.22 米以下</td></tr>
+          <tr><td>定价</td><td>停车</td><td>10—15 美元（约 ¥67—101）</td><td>部分停车场工作日免费</td></tr>
+          <tr><td>在建</td><td>水公园投资</td><td>720 万美元（约 ¥4,837 万）</td><td>海盗船主题，8 项水上游乐，计划 2027 年开放</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">美元兑人民币按 2026 年 11 月 4 日中间价 1 美元 ≈ 6.718 元换算。数据来源为 Wikipedia、园区官网、休斯敦纪事报、ABC13 及得州建筑许可备案。数据截至 2026 年 11 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="450" fill="#061E2B" rx="12"/>
+
+          <!-- 水域 -->
+          <path d="M0 340 L800 300 L800 450 L0 450 Z" fill="rgba(8,145,178,0.22)"/>
+          <text x="620" y="410" text-anchor="middle" fill="#67E8F9" font-family="DM Sans,sans-serif" font-size="12" opacity="0.8">加尔维斯顿湾</text>
+
+          <!-- 木栈道主轴 -->
+          <rect x="40" y="230" width="720" height="46" rx="6" fill="rgba(245,158,11,0.16)" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="6,4"/>
+          <text x="400" y="258" text-anchor="middle" fill="#FCD34D" font-family="DM Sans,sans-serif" font-size="12">木栈道主轴 · 免费步行，串联全部业态</text>
+
+          <!-- 游乐区 -->
+          <rect x="40" y="60" width="300" height="150" rx="8" fill="rgba(8,145,178,0.20)" stroke="#22D3EE" stroke-width="2"/>
+          <text x="190" y="88" text-anchor="middle" fill="#A5F3FC" font-family="Playfair Display,serif" font-size="15" font-weight="700">游乐区</text>
+          <text x="190" y="112" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">Boardwalk Bullet 木质过山车</text>
+          <text x="190" y="132" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">Drop Zone · 摩天轮 · 旋转木马</text>
+          <text x="190" y="152" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">飞行塔 · 摆锤 · 滑索</text>
+          <text x="190" y="176" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">单点收费或通票，2026 年共 12 项</text>
+
+          <!-- 餐厅带 -->
+          <rect x="360" y="60" width="230" height="150" rx="8" fill="rgba(245,158,11,0.12)" stroke="#F59E0B" stroke-width="1.5"/>
+          <text x="475" y="88" text-anchor="middle" fill="#FDE68A" font-family="Playfair Display,serif" font-size="15" font-weight="700">餐饮带</text>
+          <text x="475" y="112" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">Landry's Seafood</text>
+          <text x="475" y="132" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">Bubba Gump · Saltgrass</text>
+          <text x="475" y="152" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">Cadillac Bar 等十余家</text>
+          <text x="475" y="176" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">集团自有品牌为主</text>
+
+          <!-- 酒店 -->
+          <rect x="610" y="60" width="150" height="150" rx="8" fill="rgba(148,163,184,0.14)" stroke="#94A3B8" stroke-width="1.5"/>
+          <text x="685" y="88" text-anchor="middle" fill="#E2E8F0" font-family="Playfair Display,serif" font-size="14" font-weight="700">Boardwalk Inn</text>
+          <text x="685" y="112" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">56 间客房</text>
+          <text x="685" y="132" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">观景阳台</text>
+          <text x="685" y="152" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">住客专用泳池</text>
+
+          <!-- 码头 -->
+          <rect x="40" y="300" width="330" height="110" rx="8" fill="rgba(8,145,178,0.14)" stroke="#22D3EE" stroke-width="1.2"/>
+          <text x="205" y="328" text-anchor="middle" fill="#A5F3FC" font-family="Playfair Display,serif" font-size="13" font-weight="700">游艇码头</text>
+          <text x="205" y="350" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">400 个泊位</text>
+          <text x="205" y="370" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">Boardwalk Beast 快艇登船点</text>
+          <text x="205" y="390" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">25 分钟湾内航程</text>
+
+          <!-- 水公园在建 -->
+          <rect x="410" y="300" width="350" height="110" rx="8" fill="rgba(220,38,38,0.12)" stroke="#F87171" stroke-width="1.2" stroke-dasharray="5,4"/>
+          <text x="585" y="328" text-anchor="middle" fill="#FCA5A5" font-family="Playfair Display,serif" font-size="13" font-weight="700">水公园（在建）</text>
+          <text x="585" y="350" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">海盗船主题，8 项水上游乐</text>
+          <text x="585" y="370" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">投资约 720 万美元</text>
+          <text x="585" y="390" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">原 Flying Dutchman 餐厅位置，计划 2027 年开放</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(760,40)">
+            <circle cx="0" cy="0" r="16" fill="none" stroke="#F59E0B" stroke-width="1" opacity="0.5"/>
+            <polygon points="0,-14 2,-3 14,0 2,3 0,14 -2,3 -14,0 -2,-3" fill="#F59E0B" opacity="0.8"/>
+            <text x="0" y="-19" text-anchor="middle" fill="#F59E0B" font-size="8" font-weight="700">N</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>游乐区</h3><p>靠陆侧集中布置，过山车、跳楼机、摩天轮和家庭项目挤在约三分之一的地块里。设备选型偏向家庭和青少年，没有追大型主题乐园的极限参数。</p></div>
+      <div class="card"><h3>餐饮带</h3><p>园区的主体业态。兰德里把自家餐饮品牌直接搬进园区，临水一侧全部留给餐厅，露台直接对着湾面。吃饭的人不玩项目也是客流的组成部分。</p></div>
+      <div class="card"><h3>Boardwalk Inn</h3><p>56 间客房夹在游乐区和餐厅之间，住客下楼就是栈道。酒店把半日游的客群延长成过夜客，也让园区的夜间时段有了人流。</p></div>
+      <div class="card"><h3>游艇码头</h3><p>400 个泊位，兼作快艇项目的登船点。码头给园区带来的是另一种客流——开船来吃饭的人，和开车来的家庭客不是同一批。</p></div>
+      <div class="card"><h3>水公园（在建）</h3><p>利用原餐厅位置改建，是园区二十多年来最大的一次业态补充。海盗船主题、8 项水上游乐，填的是得州夏季高温下的游乐空档。</p></div>
+      <div class="card"><h3>无围墙的入口</h3><p>园区与市政道路、停车场直接连通，没有售票大门。游客走进来不需要决策，玩不玩、吃不吃都在园内再定。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT & CONSTRUCTION TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1997年</div><div class="timeline-content"><h4>拿下水岸地块</h4><p>兰德里宣布在凯马水岸做娱乐项目，收购并整合沿海一线土地。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">1998年</div><div class="timeline-content"><h4>木栈道开放</h4><p>木栈道、初代游乐设备、餐厅与 56 间客房的 Boardwalk Inn 一起对公众开放。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2002年</div><div class="timeline-content"><h4>Boardwalk Beast 下水</h4><p>21 米长的快艇投入运营，25 分钟湾内航程成为园区的标志性体验。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2007年</div><div class="timeline-content"><h4>Boardwalk Bullet 建成</h4><p>木质过山车落成，高 29 米、长 986 米，占地仅约 0.4 公顷。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2008年9月</div><div class="timeline-content"><h4>飓风艾克</h4><p>飓风重创得州海岸，园区受损，修复后重新开放。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2014—2017年</div><div class="timeline-content"><h4>设备更新</h4><p>陆续增设 Flare 超级回环、HypnoSpin 离心机等设备，替换老旧项目。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年底</div><div class="timeline-content"><h4>两家老餐厅关闭</h4><p>Joe's Crab Shack 于 11 月关闭，Flying Dutchman 于 12 月 31 日关闭，为水公园腾地。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025年5月</div><div class="timeline-content"><h4>水公园报建</h4><p>向得州建筑管理部门提交许可，改造原餐厅为水公园入口，主体工程投资约 720 万美元。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年3月</div><div class="timeline-content"><h4>Drop Zone 重开</h4><p>43 米高的跳楼机以新设备替换原项目，12 座，最高时速 76 公里。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2027年（计划）</div><div class="timeline-content"><h4>水公园开放</h4><p>海盗船主题水公园计划投用，园区业态从餐饮加游乐扩展到水上乐园。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONAL INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>单日通票</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">¥201</p><p class="f-caption">29.99 美元，含 13 项设备</p></div>
+      <div class="card" style="text-align:center;"><h4>儿童通票</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">¥161</p><p class="f-caption">23.99 美元，身高 1.22 米以下</p></div>
+      <div class="card" style="text-align:center;"><h4>入园</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">免费</p><p class="f-caption">停车另计 10—15 美元</p></div>
+    </div>
+    <div class="card reveal" style="margin-bottom:1.5rem;">
+      <h3>餐饮集团做乐园，账怎么算</h3>
+      <p>兰德里的主业是餐饮，园区里十余家餐厅多数是自家品牌，餐饮收入不需要和其他租户分成。游乐设备是补充业态：通票 29.99 美元，13 项设备打包卖，单点也可以；快艇、滑索、电玩和嘉年华游戏另收费。餐饮、住宿、码头泊位和停车构成另外四个收入口子，各自独立结算。免费入园让游客不必为「值不值」做判断，进来吃饭、看船、散步都算客流，玩不玩项目在园内决定。这个结构对餐饮集团是顺的——它本来就有品牌、供应链和选址能力，缺的只是让人多停留几小时的理由。</p>
+    </div>
+    <div class="card reveal">
+      <h3>区位与客群</h3>
+      <p>凯马距休斯敦市中心约 48 公里，处在休斯敦去加尔维斯顿岛的海岸线上。客群以都会区家庭和自驾游客为主，周末和夏季是高峰，工作日靠本地居民和码头的船客。园区没有对外公布年客流，兰德里也不单独披露该项目的营收。可以观察的是它的业态配比：24 公顷里，餐厅、酒店、码头占的面积远大于游乐区，说明园区的收入基本盘不在门票。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>高密度木结构过山车</h3><p>Boardwalk Bullet 用约 0.4 公顷放下 986 米轨道，靠多层交叠的木结构实现。在地价高、地块窄的水岸，这种紧凑设计比常规布局更现实。</p></div>
+      <div class="card"><h3>餐饮带做主体</h3><p>临水一线全部给餐厅，游乐区退到陆侧。园区先保证吃饭的体验和景观，再用游乐设备延长停留，主次和一般主题乐园相反。</p></div>
+      <div class="card"><h3>免费入园加单点收费</h3><p>没有大门票，收入和客流脱钩。游客可以只消费餐饮，也可以买通票玩一整天，两种客群共用同一段栈道。</p></div>
+      <div class="card"><h3>水岸资源的多重变现</h3><p>同一段海岸线同时承载餐厅露台、游艇码头、快艇航线和观景栈道。水域既是景观，也是交通和游乐设施。</p></div>
+      <div class="card"><h3>酒店延长停留</h3><p>56 间客房体量不大，但把半日游变成过夜游。住客在园区内的餐饮和游乐消费，比一日游客群更稳定。</p></div>
+      <div class="card"><h3>抗灾与修复</h3><p>2008 年飓风艾克造成损坏，园区修复后重开。滨水项目每年面对飓风季，设备基础和建筑的抗风、防洪标准是隐性成本。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>游乐设备</h3><p>2026 年在营 12 项，含木质过山车、43 米跳楼机、20 米摩天轮、双层旋转木马、飞行塔、摆锤和滑索。</p></div>
+      <div class="card"><h3>餐饮</h3><p>十余家餐厅与酒吧，以兰德里旗下品牌为主，临水一侧设露台，另有嘉年华游戏摊位和甜品店。</p></div>
+      <div class="card"><h3>住宿</h3><p>Boardwalk Inn 56 间客房，园区中段，客房带观景阳台，住客有专用泳池。</p></div>
+      <div class="card"><h3>码头与游船</h3><p>400 个泊位的游艇码头，Boardwalk Beast 快艇从码头出发，另有一艘 133 客位的包船游艇。</p></div>
+      <div class="card"><h3>停车</h3><p>园区周边多处停车场，10—15 美元一天；部分闸口停车场工作日免费，节假日和活动日收费。</p></div>
+      <div class="card"><h3>活动场地</h3><p>栈道沿线的露天舞台常年排演出，摇滚、乡村音乐节、啤酒节、万圣节和跨年活动穿插全年。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>水公园报建</h3><p>2025 年 5 月提交许可，把原 Joe's Crab Shack 改成水公园入口，主体工程投资约 720 万美元，计划 2027 年开放，是园区二十多年来最大的一次扩建。</p></div>
+      <div class="card"><h3>Drop Zone 换新</h3><p>2026 年 3 月，43 米高的跳楼机以全新设备重开，12 座，最高时速 76 公里，含在常规票内。</p></div>
+      <div class="card"><h3>两家老餐厅退场</h3><p>Joe's Crab Shack 与 Flying Dutchman 在 2024 年底先后关闭，两家合计经营超过八十年，地块让给水公园。</p></div>
+      <div class="card"><h3>游戏摊改无现金</h3><p>嘉年华游戏摊位改为刷卡或充值卡消费，园区内现金使用进一步减少。</p></div>
+      <div class="card"><h3>活动常态化</h3><p>Rock the Dock 系列演出、墨西哥音乐节、啤酒节、万圣节、亡灵节、圣诞船队游行和跨年烟花排满全年，活动是淡季引流的主要手段。</p></div>
+      <div class="card"><h3>待观察</h3><p>水公园能否在得州夏季高温下把停留时间从半天拉到一天，是这次扩建的关键。另一方面，滨水地块的飓风风险和保险成本，长期压在运营账上。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>百科与官方</h4><ul>
+      <li><a href="https://en.wikipedia.org/wiki/Kemah_Boardwalk" target="_blank" rel="noopener">Wikipedia — Kemah Boardwalk</a><span class="tag">百科</span></li>
+      <li><a href="https://www.kemahboardwalk.com/" target="_blank" rel="noopener">Kemah Boardwalk — 官网首页</a><span class="tag">官方</span></li>
+      <li><a href="https://www.kemahboardwalk.com/rides-and-amusements" target="_blank" rel="noopener">Kemah Boardwalk — 游乐项目与票价</a><span class="tag">官方</span></li>
+      <li><a href="https://www.kemahboardwalk.com/latest-news" target="_blank" rel="noopener">Kemah Boardwalk — 最新动态</a><span class="tag">官方</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>行业与报道</h4><ul>
+      <li><a href="https://abc13.com/amp/post/landrys-seafood-house-plans-build-entrance-water-park-former-location-joes-crab-shack-kemah-boardwalk-coo-says/16646125/" target="_blank" rel="noopener">ABC13 — 水公园入口改建报道</a><span class="tag">媒体</span></li>
+      <li><a href="https://www.khou.com/article/money/business/houston-business-journal/kemah-boardwalk-water-park-project-landrys/285-83b665e5-5b5b-4bd2-a603-7795b7263159" target="_blank" rel="noopener">KHOU — 凯马水岸改造</a><span class="tag">媒体</span></li>
+      <li><a href="https://www.kemahboardwalk.com/drop-zone-press-release-2026" target="_blank" rel="noopener">Kemah Boardwalk — Drop Zone 新闻稿</a><span class="tag">官方</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>地图与影像</h4><ul>
+      <li><a href="https://www.google.com/maps/place/Kemah+Boardwalk" target="_blank" rel="noopener">Google Maps — Kemah Boardwalk</a><span class="tag">地图</span></li>
+      <li><a href="https://commons.wikimedia.org/w/index.php?search=Kemah+Boardwalk" target="_blank" rel="noopener">Wikimedia Commons — 园区自由版权图片</a><span class="tag">图库</span></li>
+    </ul></div>
+    <p class="f-caption" style="text-align:center;margin-top:2rem;">本报告所有数据来源于公开资料，仅供参考研究使用。数据截至 2026 年 11 月。</p>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：Nominatim 返回 WGS-84，ESRI World Imagery 同为 WGS-84，直接使用
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+
+  var map = L.map('parkmap', { scrollWheelZoom: false }).setView([29.546962, -95.017904], 16);
+
+  var tiles = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>', maxZoom: 19
+  }).addTo(map);
+  tiles.on('load', function() { if (fallback) fallback.style.display = 'none'; });
+
+  var icon = L.divIcon({
+    className: 'zone-marker',
+    html: '<div style="background:#0891B2;color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">Kemah Boardwalk</div>',
+    iconSize: [0, 0], iconAnchor: [0, 0]
+  });
+  L.marker([29.546962, -95.017904], { icon: icon }).addTo(map).bindPopup('Kemah Boardwalk<br><small>1998 年开放</small>');
+
+  L.circle([29.546962, -95.017904], { radius: 320, color: '#F59E0B', weight: 2, fill: false, dashArray: '6,4', opacity: 0.55 }).addTo(map);
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+  setTimeout(function() { if (fallback && fallback.style.display !== 'none') fallback.style.display = 'block'; }, 8000);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

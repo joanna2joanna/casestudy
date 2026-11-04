@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知北村艺术田园生活度假区 — 梅河口 222 亩关东民俗村落，91 栋房子装 48 种业态，免门票做四季生意</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #9A3412;
+  --clr-primary-light: #F97316;
+  --clr-primary-dark: #431407;
+  --clr-accent: #0EA5E9;
+}
+
+.hero {
+  background: linear-gradient(160deg, #431407 0%, #9A3412 40%, #F97316 70%, #FED7AA 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(14,165,233,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+
+#parkmap { height: 520px; }
+#satmap { width: 100%; height: 420px; border-radius: var(--radius-lg); z-index: 0; margin-top: 1rem; }
+@media (max-width: 768px) { #parkmap, #satmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>知北村艺术田园生活度假区</h1>
+    <p class="hero-subtitle">梅河口城源集团投资的关东民俗村落——70—80 年代东北农村做底，91 栋房子装 48 种业态，冬季做冰雪艺术季、夏季做花海，大门不收门票</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">222亩</div><div class="kpi-label">占地（约14.8公顷）</div></div>
+      <div class="kpi-card"><div class="kpi-number">约5.2亿元</div><div class="kpi-label">总投资（政府口径）</div></div>
+      <div class="kpi-card"><div class="kpi-number">1,055万+</div><div class="kpi-label">开园以来累计接待</div></div>
+      <div class="kpi-card"><div class="kpi-number">免门票</div><div class="kpi-label">园内项目单独收费</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>投资建设</h3><p>梅河口市城源城市管理运营集团（市属国企）</p></div>
+      <div class="card"><h3>运营主体</h3><p>梅河口市鹭航旅游管理有限公司，城源集团全资子公司</p></div>
+      <div class="card"><h3>设计与操盘</h3><p>吉林省方寸文旅有限公司主导美学与规划</p></div>
+      <div class="card"><h3>地理位置</h3><p>吉林省梅河口市南环路，梅小野星光花海景区内、海龙湖西侧</p></div>
+      <div class="card"><h3>项目定位</h3><p>以 20 世纪 70—80 年代东北农村为蓝本的复合型艺术田园度假区，国家 4A 级旅游景区</p></div>
+      <div class="card"><h3>开业时间</h3><p>2021 年 12 月 30 日开园，2022 年 7 月 16 日正式开放</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>知北村位于吉林省梅河口市南郊，紧邻海龙湖和梅小野星光花海，由梅河口市城源城市管理运营集团投资建设，旗下鹭航旅游管理有限公司负责运营，吉林省方寸文旅有限公司负责美学与规划。项目占地 222 亩，总建筑面积约 1.35 万平方米，其中商业 9,098 平方米、民宿 1,835 平方米，共 91 栋单体建筑、48 家商业业态。村落以 20 世纪 70—80 年代的东北农村为场景，做的是新东北民俗商街、美食、民宿、灯光夜游、沉浸式演艺和赏雪玩雪六类内容。2021 年 12 月 30 日开园，2023 年 11 月获评国家 4A 级旅游景区，2024 年入选第三批国家级夜间文化和旅游消费集聚区。项目不收大门票，收入来自园内餐饮、零售、民宿、演艺和冰雪项目。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>主体 / 内容</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>投资建设</td><td>梅河口市城源城市管理运营集团</td><td>市属国有企业，同时运营海龙湖、梅小野星光花海等文旅项目</td></tr>
+          <tr><td>运营管理</td><td>梅河口市鹭航旅游管理有限公司</td><td>城源集团全资子公司，2019 年成立</td></tr>
+          <tr><td>规划与美学</td><td>吉林省方寸文旅有限公司</td><td>以「美学、美好、共建、共生」为理念，提出「五感六美」体验框架</td></tr>
+          <tr><td>场景蓝本</td><td>20 世纪 70—80 年代东北农村</td><td>土墙、木栅、老供销社、粉坊豆腐坊，按村落肌理布置</td></tr>
+          <tr><td>建设节奏</td><td>一期 66 天建成，二期 91 天建成</td><td>2021 年 10 月一期开工，2022 年 3 月二期开工</td></tr>
+          <tr><td>投资口径</td><td>约 5.2 亿元，其中土地 3 亿元、工程 2.2 亿元</td><td>早期宣传另有 9,000 万元、1.8 亿元等口径，统计范围不同</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>占地</td><td>222 亩（约 14.8 公顷）</td><td>位于梅小野星光花海景区内</td></tr>
+          <tr><td>规模</td><td>总建筑面积</td><td>约 1.35 万 m²</td><td>商业 9,098 m²、民宿 1,835 m²</td></tr>
+          <tr><td>规模</td><td>单体建筑</td><td>91 栋</td><td>按东北村落肌理分散布置</td></tr>
+          <tr><td>业态</td><td>商业业态</td><td>48 家</td><td>餐饮、零售、工坊、演艺等</td></tr>
+          <tr><td>投资</td><td>总投资</td><td>约 5.2 亿元</td><td>土地 3 亿元、工程 2.2 亿元</td></tr>
+          <tr><td>运营</td><td>开园</td><td>2021 年 12 月 30 日</td><td>2022 年 7 月 16 日正式开放</td></tr>
+          <tr><td>运营</td><td>门票</td><td>免大门票</td><td>园内项目单独收费</td></tr>
+          <tr><td>运营</td><td>累计接待</td><td>1,055 万人次以上</td><td>开园以来累计，媒体口径</td></tr>
+          <tr><td>运营</td><td>单日峰值</td><td>19.8 万人次</td><td>2024 年春节期间</td></tr>
+          <tr><td>等级</td><td>景区评级</td><td>国家 4A 级</td><td>2023 年 11 月获评</td></tr>
+          <tr><td>等级</td><td>夜间消费集聚区</td><td>国家级（第三批）</td><td>2024 年入选</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">数据来源为梅河口市政府、吉林省文化和旅游厅、吉林日报及主流媒体报道。投资额存在多个口径，本表采用政府公布的全口径数字。数据截至 2026 年 11 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAPS + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <div>
+      <div id="parkmap"></div>
+      <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      <div id="satmap"></div>
+    </div>
+
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="450" fill="#1A0E08" rx="12"/>
+
+          <!-- 梅小野星光花海（东侧） -->
+          <path d="M 660 0 C 700 80, 690 180, 710 250 C 730 330, 700 400, 720 450 L 800 450 L 800 0 Z" fill="rgba(249,115,22,0.10)" stroke="#F97316" stroke-width="1.5"/>
+          <text x="745" y="230" text-anchor="middle" fill="#FDBA74" font-family="DM Sans,sans-serif" font-size="11" transform="rotate(90 745 230)">梅小野星光花海</text>
+
+          <!-- 民俗商街（中部主轴） -->
+          <rect x="150" y="90" width="380" height="90" rx="8" fill="rgba(154,52,18,0.28)" stroke="#F97316" stroke-width="2"/>
+          <text x="340" y="118" text-anchor="middle" fill="#FDBA74" font-family="Playfair Display,serif" font-size="15" font-weight="700">新东北民俗商街</text>
+          <text x="340" y="142" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">供销社 · 宋氏粉坊 · 豆腐坊 · 老式理发店 · 48 家业态</text>
+          <text x="340" y="162" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">前店后厂，边做边卖</text>
+
+          <!-- 民宿区（西侧） -->
+          <rect x="40" y="90" width="95" height="150" rx="8" fill="rgba(180,83,9,0.2)" stroke="#B45309" stroke-width="1.5"/>
+          <text x="87" y="150" text-anchor="middle" fill="#FCD34D" font-family="DM Sans,sans-serif" font-size="11">精品民宿</text>
+          <text x="87" y="170" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">1,835 m²</text>
+
+          <!-- 剧场与夜游 -->
+          <rect x="150" y="205" width="180" height="95" rx="8" fill="rgba(249,115,22,0.16)" stroke="#F97316" stroke-width="1.5"/>
+          <text x="240" y="232" text-anchor="middle" fill="#FDBA74" font-family="Playfair Display,serif" font-size="13" font-weight="700">剧场与夜游</text>
+          <text x="240" y="254" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">《唯有知北》户外情景剧</text>
+          <text x="240" y="272" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">《东北说书人》《情满知北村》</text>
+          <text x="240" y="290" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">鱼灯巡游 · 花灯 · 无人机表演</text>
+
+          <!-- 雪场与花海 -->
+          <rect x="355" y="205" width="250" height="95" rx="8" fill="rgba(14,165,233,0.14)" stroke="#0EA5E9" stroke-width="1.5"/>
+          <text x="480" y="232" text-anchor="middle" fill="#7DD3FC" font-family="Playfair Display,serif" font-size="13" font-weight="700">雪场与花海</text>
+          <text x="480" y="254" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">冬季：知北雪街 · 雪趣乐园 · 冰雪艺术季</text>
+          <text x="480" y="272" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">夏季：莫奈的后花园 · 星光花海 · 小火车</text>
+
+          <!-- 入口 -->
+          <rect x="150" y="340" width="455" height="55" rx="8" fill="rgba(148,163,184,0.12)" stroke="#94A3B8" stroke-width="1.5"/>
+          <text x="377" y="364" text-anchor="middle" fill="#CBD5E1" font-family="DM Sans,sans-serif" font-size="11">南侧主入口 · 梅小野星光花海东门（万人体育场对面）</text>
+          <text x="377" y="382" text-anchor="middle" fill="#94A3B8" font-family="DM Sans,sans-serif" font-size="9">免大门票 · 园内项目单独收费 · 车辆停东门外</text>
+
+          <!-- 花海连接 -->
+          <text x="420" y="322" text-anchor="middle" fill="#94A3B8" font-family="DM Sans,sans-serif" font-size="9">南接梅小野星光花海，北连东北不夜城</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(60,390)">
+            <circle cx="0" cy="0" r="16" fill="none" stroke="#0EA5E9" stroke-width="1" opacity="0.5"/>
+            <polygon points="0,-14 2,-3 14,0 2,3 0,14 -2,3 -14,0 -2,-3" fill="#0EA5E9" opacity="0.8"/>
+            <text x="0" y="-19" text-anchor="middle" fill="#0EA5E9" font-size="8" font-weight="700">N</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>新东北民俗商街</h3><p>村落的主轴，供销社、粉坊、豆腐坊、老式理发店沿街排开。商户多采用前店后厂的方式，生产过程和销售放在同一栋房子里。</p></div>
+      <div class="card"><h3>精品民宿</h3><p>1,835 平方米，房间分散在村落里，不做集中楼栋。雪季是民宿最紧俏的时段，常出现一房难求。</p></div>
+      <div class="card"><h3>剧场与夜游</h3><p>户外全景多媒体情景剧《唯有知北》加两座室内剧场，配合鱼灯巡游、花灯和无人机表演，把游客的停留时间推到晚上。</p></div>
+      <div class="card"><h3>雪场与花海</h3><p>冬季做知北雪街、雪趣乐园和冰雪艺术季，夏季换莫奈的后花园和星光花海。同一块地一年做两季生意，是项目控制空置期的核心办法。</p></div>
+      <div class="card"><h3>入口与动线</h3><p>主入口在南侧，接梅小野星光花海东门，车辆停在东门外。免大门票，游客从入口直接进入商街，不设验票闸机。</p></div>
+      <div class="card"><h3>周边联动</h3><p>北连东北不夜城，东邻海龙湖，三处由同一家国企运营，客流可以互相导。梅河口市区人口四十多万，本地客撑不起这个量级，客源主要靠域外。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2021年10月27日</div><div class="timeline-content"><h4>一期开工</h4><p>500 多人昼夜施工，66 天建成，赶在当年雪季前完工。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021年12月30日</div><div class="timeline-content"><h4>开园</h4><p>以「梅小野·知北村」的名义开园，纳入梅河口「金冬季·踏雪寻梅」文旅系列活动。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022年3月16日</div><div class="timeline-content"><h4>二期开工</h4><p>二期用 91 天建成，补齐商街和民宿。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022年7月16日</div><div class="timeline-content"><h4>正式开放</h4><p>从冬季项目转为全年运营，夏季做花海和避暑内容。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023年11月</div><div class="timeline-content"><h4>获评国家4A级景区</h4><p>吉林省文化和旅游厅公告确定「梅河口市知北村艺术田园生活度假区」为国家 4A 级旅游景区。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年</div><div class="timeline-content"><h4>入选国家级夜间消费集聚区</h4><p>第三批国家级夜间文化和旅游消费集聚区名单公布，知北村入选。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024年12月</div><div class="timeline-content"><h4>第四届冰雪艺术季</h4><p>在长春做推介会，城源集团与长春欧亚卖场签署战略合作，宋氏粉坊进入欧亚卖场开旗舰店。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026年1月</div><div class="timeline-content"><h4>元旦营收增长</h4><p>元旦假期营收同比增长 281%，吉林日报报道村内夜游热度。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONS INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>累计接待</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">1,055万+</p><p class="f-caption">开园以来，媒体口径</p></div>
+      <div class="card" style="text-align:center;"><h4>单日峰值</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">19.8万</p><p class="f-caption">开园以来最高单日</p></div>
+      <div class="card" style="text-align:center;"><h4>2024年五一</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">53.8万</p><p class="f-caption">假期入园人次</p></div>
+    </div>
+    <div class="card reveal" style="margin-bottom:1.5rem;">
+      <h3>免门票之后，钱从哪里来</h3>
+      <p>知北村不收大门票，收入落在园内五个口子：餐饮、零售、民宿、演艺和冰雪项目。商街的 48 家业态由商户经营，项目方收租金或参与分成；民宿 1,835 平方米自营或合作经营；冬季的冰雪艺术季和剧场演出单独售票；夏季的花海和小火车再补一轮。免门票换来人流，人流再分给园内业态，这套算法成立的前提是二次消费的客单价撑得住运营成本。</p>
+    </div>
+    <div class="card reveal">
+      <h3>四季运营怎么排</h3>
+      <p>项目把一年切成两季：冬季从 12 月到次年 2 月做冰雪艺术季，雪街、雪趣乐园、灯会和巡游集中投放；夏季从 6 月到 9 月做花海和避暑，主题叫「莫奈的后花园」。春秋两季靠研学、团建和周末短途补位。梅河口冬季长、夏季短，这个排法把最冷的三个月变成旺季；放到全市看，2025 年非雪季客流占比已达 63.7%。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>轻包装，重内容</h3><p>91 栋房子没有一栋是大型游乐设备，投资主要花在场景和内容上。村落形态降低了单栋建筑的造价，也方便分期建设和替换业态。</p></div>
+      <div class="card"><h3>前店后厂</h3><p>粉坊、豆腐坊这类工坊把生产和销售放在同一栋房子里，游客看见制作过程，购买发生在现场。工坊既是内容，也是零售终端。</p></div>
+      <div class="card"><h3>冬季冰雪艺术季</h3><p>雪街、雪趣乐园、户外情景剧、鱼灯巡游和无人机表演组合成一套冬季产品，把东北的寒冷从劣势变成卖点。</p></div>
+      <div class="card"><h3>夏季花海</h3><p>同一块地在无雪季节改种花海，配小火车和夜游，解决北方景区半年闲的问题。花海的投入远低于冰雪设施，换季成本可控。</p></div>
+      <div class="card"><h3>国企投资、专业运营</h3><p>城源集团出资建设，鹭航旅游负责运营，方寸文旅负责美学和内容。投资、运营、设计三件事分开，降低了单一方能力的依赖。</p></div>
+      <div class="card"><h3>域外客源</h3><p>梅河口本地人口只有四十多万，项目从开业起就按域外客源设计产品。长春、沈阳和南方客群构成主力，冬季的南方冰雪客尤其重要。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>民俗商街</h3><p>供销社、粉坊、豆腐坊、老式理发店、国营饭店等场景复原，48 家业态沿街分布，兼做零售和餐饮。</p></div>
+      <div class="card"><h3>精品民宿</h3><p>1,835 平方米，分散在村落里，房型按东北民居改造。雪季入住率高，常出现一房难求。</p></div>
+      <div class="card"><h3>剧场</h3><p>一座户外全景多媒体剧场加两座室内剧场，常演《唯有知北》《东北说书人》《情满知北村》。</p></div>
+      <div class="card"><h3>冰雪乐园</h3><p>知北雪街、雪趣乐园、雪地摩托等项目集中在冬季开放，配合冰雪艺术季做整体售票。</p></div>
+      <div class="card"><h3>灯光夜游</h3><p>鱼灯巡游、花灯、无人机和烟花表演构成夜间产品，支撑国家级夜间消费集聚区的定位。</p></div>
+      <div class="card"><h3>交通与停车</h3><p>距梅河口站约 6 公里，市区公交可达。村内禁止车辆驶入，自驾游客把车停在梅小野景区东门。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>2026年元旦营收增长281%</h3><p>吉林日报报道，知北村元旦假期营收同比增长 281%，夜游和冰雪项目是主要增量。</p></div>
+      <div class="card"><h3>三大IP联动</h3><p>2025 年梅河口把东北不夜城、爨街、知北村三处联动运营，全市接待游客 1,170.29 万人次，非雪季客流占比提升到 63.7%。</p></div>
+      <div class="card"><h3>品牌外溢</h3><p>宋氏粉坊进入长春欧亚卖场开旗舰店，知北村的商户品牌开始脱离景区独立经营。</p></div>
+      <div class="card"><h3>冰雪艺术季常态化</h3><p>冰雪艺术季已办到第四届，每年换主题、换灯组、换剧目，用内容更新维持复游率。</p></div>
+      <div class="card"><h3>县域文旅样本</h3><p>吉林省发改委把梅河口「三核驱动」列为现代服务业高质量发展典型案例，知北村是其中一核。</p></div>
+      <div class="card"><h3>待观察</h3><p>项目高度依赖冬季冰雪客流和域外客源，交通半径和住宿容量是上限。二期之后是否继续扩规模，取决于非雪季能否稳定盈利。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>官方来源</h4><ul>
+      <li><a href="http://mhk.gov.cn/xqyx/mhyx/202112/t20211227_8357072.html" target="_blank" rel="noopener">梅河口市人民政府 — 知北村艺术田园生活度假区</a><span class="tag">官方</span></li>
+      <li><a href="http://xxgk.jl.gov.cn/zcbm/fgw_98067/xxgkmlqy/202311/t20231123_8841546.html" target="_blank" rel="noopener">吉林省文化和旅游厅 — 4A 级旅游景区公告（2023.11）</a><span class="tag">官方</span></li>
+      <li><a href="http://mhk.gov.cn/xqtt/mhyw/202412/t20241230_9018460.html" target="_blank" rel="noopener">梅河口市人民政府 — 第四届冰雪艺术季推介会（2024.12）</a><span class="tag">官方</span></li>
+      <li><a href="http://jjw.jldrc.jl.gov.cn/lxcy/xly/202606/t20260626_16673.html" target="_blank" rel="noopener">吉林省发改委 — 梅河口「三核驱动」典型案例（2026.6）</a><span class="tag">官方</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>报道与资料</h4><ul>
+      <li><a href="http://jlrbszb.dajilin.com/pad/paper/c/202601/22/content_1041286.html" target="_blank" rel="noopener">吉林日报 — 知北村：流光溢彩醉游人（2026.1）</a><span class="tag">媒体</span></li>
+      <li><a href="https://changchun.ifeng.com/c/8P3rs5OeU3a" target="_blank" rel="noopener">凤凰网吉林 — 知北村粉坊迎来旅游打卡热</a><span class="tag">媒体</span></li>
+      <li><a href="http://www.jl.gov.cn/yaowen/202402/t20240223_3045272.html" target="_blank" rel="noopener">吉林省人民政府 — 梅河口市春节旅游迎来开年大吉（2024.2）</a><span class="tag">官方</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>地图与影像</h4><ul>
+      <li><a href="https://www.amap.com/search?query=%E7%9F%A5%E5%8C%97%E6%9D%91" target="_blank" rel="noopener">高德地图 — 知北村</a><span class="tag">地图</span></li>
+      <li><a href="https://commons.wikimedia.org/w/index.php?search=Meihekou" target="_blank" rel="noopener">Wikimedia Commons — 梅河口自由版权图片</a><span class="tag">图库</span></li>
+    </ul></div>
+    <p class="f-caption" style="text-align:center;margin-top:2rem;">本报告所有数据来源于公开资料，仅供参考研究使用。数据截至 2026 年 11 月。</p>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：amap_search.py 返回 GCJ-02，高德瓦片也是 GCJ-02，直接使用无需转换
+// 主 POI：知北村（高德 GCJ-02）
+
+var zonesGcj02 = [
+  { name: '知北村艺术田园生活度假区<br><small>民俗商街·民宿·剧场</small>', lng: 125.704953, lat: 42.500217, color: '#9A3412' },
+  { name: '梅小野星光花海', lng: 125.705506, lat: 42.502077, color: '#F97316' },
+  { name: '东北不夜城', lng: 125.707299, lat: 42.504299, color: '#7C3AED' }
+];
+
+function addZoneMarkers(targetMap, zones) {
+  zones.forEach(function(z) {
+    var label = z.name.replace(/<br><small>.*<\/small>/, '');
+    var icon = L.divIcon({
+      className: 'zone-marker',
+      html: '<div style="background:' + z.color + ';color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">' + label + '</div>',
+      iconSize: [0, 0], iconAnchor: [0, 0]
+    });
+    L.marker([z.lat, z.lng], { icon: icon }).addTo(targetMap).bindPopup(z.name);
+  });
+}
+
+function initMap(mapId, defaultLayer, withBoundary) {
+  var el = document.getElementById(mapId);
+  if (!el) return null;
+  var map = L.map(mapId, { scrollWheelZoom: false }).setView([42.5008, 125.7063], 16);
+
+  var roadLayer = L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=2&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    maxZoom: 18
+  });
+  var satLayer = L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1','2','3','4'],
+    attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> 卫星',
+    maxZoom: 18
+  });
+
+  if (defaultLayer === 'sat') {
+    satLayer.addTo(map);
+    L.control.layers({ '卫星图': satLayer, '街道图': roadLayer }, null, { position: 'topright' }).addTo(map);
+  } else {
+    roadLayer.addTo(map);
+    L.control.layers({ '街道图': roadLayer, '卫星图': satLayer }, null, { position: 'topright' }).addTo(map);
+  }
+
+  addZoneMarkers(map, zonesGcj02);
+
+  if (withBoundary) {
+    L.circle([42.5002, 125.7050], { radius: 380, color: 'var(--clr-accent)', weight: 2, fill: false, dashArray: '6,4', opacity: 0.5 }).addTo(map);
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 800);
+  return map;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initMap('parkmap', 'road', true);
+  initMap('satmap', 'sat', false);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fun Spot America 奥兰多 — 1.9 公顷起步的免费入园乐园，靠卡丁车和单点收费做到百万客流</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+<link rel="stylesheet" href="../shared.css">
+<style>
+html { font-size: 17px; }
+
+:root {
+  --clr-primary: #DC2626;
+  --clr-primary-light: #F97316;
+  --clr-primary-dark: #450A0A;
+  --clr-accent: #FACC15;
+}
+
+.hero {
+  background: linear-gradient(160deg, #450A0A 0%, #DC2626 40%, #F97316 70%, #FEF3C7 100%);
+}
+.hero::before {
+  background: radial-gradient(ellipse at 20% 80%, rgba(250,204,21,0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+
+#parkmap { height: 520px; }
+@media (max-width: 768px) { #parkmap { height: 300px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== 1. HERO ====== -->
+<header class="hero">
+  <div class="container">
+    <h1>Fun Spot America 奥兰多</h1>
+    <p class="hero-subtitle">1997 年以 1.9 公顷、400 万美元起步的家庭乐园——不收门票、停车免费，靠四条卡丁车道和单点收费，2013 年扩建后年客流做到约一百万人次</p>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-number">1.9公顷</div><div class="kpi-label">1997 年开园面积</div></div>
+      <div class="kpi-card"><div class="kpi-number">400万美元</div><div class="kpi-label">初始投资（约¥2,690万）</div></div>
+      <div class="kpi-card"><div class="kpi-number">2,500万美元</div><div class="kpi-label">2013 年扩建投入（约¥1.68亿）</div></div>
+      <div class="kpi-card"><div class="kpi-number">约100万</div><div class="kpi-label">2013 年扩建后年客流</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== 2. PROJECT OVERVIEW ====== -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="section-header reveal"><h2>项目概览</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>创始人与运营方</h3><p>John Arie Sr. 创立，现由 Fun Spot America Theme Parks 运营，家族企业经营</p></div>
+      <div class="card"><h3>地理位置</h3><p>美国佛罗里达州奥兰多，国际大道北端（International Drive）</p></div>
+      <div class="card"><h3>开园时间</h3><p>1997 年 12 月 24 日，原名 Fun Spot Action Park</p></div>
+      <div class="card"><h3>园区规模</h3><p>开园 1.9 公顷，2013 年扩建后约 6 公顷</p></div>
+      <div class="card"><h3>门票模式</h3><p>入园免费、停车免费，游乐项目单点收费或购买通票</p></div>
+      <div class="card"><h3>核心客群</h3><p>奥兰多本地家庭和自驾游客，主打半天到一天的游玩时长</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:1.5rem;"><h3>项目简介</h3><p>Fun Spot America 奥兰多园区位于佛罗里达州奥兰多国际大道北端，1997 年 12 月 24 日以「Fun Spot Action Park」的名字开业，创始人是 John Arie Sr.。开园时占地 1.9 公顷，投资约 400 万美元，靠一条三层高架卡丁车道、一座约 31 米高的摩天轮和两层电玩城起步。2010 年买下相邻的约 4 公顷土地，2012 年动工扩建，2013 年 6 月 8 日以「Fun Spot America」重新开业，扩建投入约 2,500 万美元，园区面积扩大到约 6 公顷，新增木质过山车 White Lightning、悬挂式家庭过山车 Freedom Flyer 和一座 76 米高的 SkyCoaster。园区不收门票、停车免费，游客可以单点付费，也可以买通票。2013 年扩建后年客流约一百万人次。品牌后来扩展到基西米和亚特兰大，形成三个园区的连锁。</p></div>
+  </div>
+</section>
+
+<!-- ====== 3. DESIGN & CONSTRUCTION ====== -->
+<section class="section section-alt" id="design">
+  <div class="container">
+    <div class="section-header reveal"><h2>设计与建设</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>角色</th><th>主体 / 内容</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>创始人</td><td>John Arie Sr.</td><td>家族经营，现任管理层为 Arie 家族</td></tr>
+          <tr><td>过山车制造</td><td>Great Coasters International（GCI）</td><td>White Lightning 木质过山车</td></tr>
+          <tr><td>过山车制造</td><td>Vekoma</td><td>Freedom Flyer 悬挂式家庭过山车</td></tr>
+          <tr><td>卡丁车</td><td>园区自建多层赛道</td><td>四条不同走向的赛道，高架与地面结合</td></tr>
+          <tr><td>动物合作</td><td>Gatorland</td><td>2015 年合作开设 Gator Spot，投入约 100 万美元</td></tr>
+          <tr><td>扩建节奏</td><td>2010 年买地、2012 年动工、2013 年重开</td><td>扩建投入约 2,500 万美元，面积扩大到约 6 公顷</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 4. TECHNICAL INDICATORS SUMMARY TABLE ====== -->
+<section class="section" id="tech-summary">
+  <div class="container">
+    <div class="section-header reveal"><h2>技术指标总表</h2><div class="section-line"></div></div>
+    <div class="card reveal" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>指标类别</th><th>指标名称</th><th>数值</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>规模</td><td>开园面积</td><td>1.9 公顷</td><td>1997 年</td></tr>
+          <tr><td>规模</td><td>扩建后面积</td><td>约 6 公顷</td><td>2013 年，面积扩大到原来的三倍</td></tr>
+          <tr><td>投资</td><td>初始投资</td><td>400 万美元（约 ¥2,690 万）</td><td>1997 年</td></tr>
+          <tr><td>投资</td><td>扩建投资</td><td>2,500 万美元（约 ¥1.68 亿）</td><td>2013 年</td></tr>
+          <tr><td>设施</td><td>游乐项目</td><td>约 27 项</td><td>含 4 条卡丁车道、3 座过山车</td></tr>
+          <tr><td>设施</td><td>SkyCoaster</td><td>高约 76 米</td><td>全球第二高，需另付费</td></tr>
+          <tr><td>设施</td><td>电玩城</td><td>约 930 m²</td><td>Fun e-Spot Arcade</td></tr>
+          <tr><td>定价</td><td>入园</td><td>免费</td><td>停车也免费</td></tr>
+          <tr><td>定价</td><td>单日通票</td><td>59.95 美元（约 ¥403）</td><td>含次日免费，另加税</td></tr>
+          <tr><td>定价</td><td>四项目票</td><td>36 美元（约 ¥242）</td><td>可升级为通票</td></tr>
+          <tr><td>定价</td><td>单点收费</td><td>约 5—10 美元（约 ¥34—67）</td><td>使用可充值的 Fun E-Card</td></tr>
+          <tr><td>客流</td><td>年接待</td><td>约 100 万人次</td><td>2013 年扩建后的媒体口径</td></tr>
+        </tbody>
+      </table>
+      <p class="f-caption" style="margin-top:0.8rem;">美元兑人民币按 2026 年 11 月 4 日中间价 1 美元 ≈ 6.718 元换算。数据来源为 Wikipedia、Park World、Coasterpedia、园区官网及票务平台。数据截至 2026 年 11 月。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 5. SPATIAL LAYOUT (MAP + SVG + ZONES) ====== -->
+<section class="section section-alt" id="spatial-layout">
+  <div class="container">
+    <div class="section-header reveal"><h2>空间布局</h2><div class="section-line"></div></div>
+
+    <div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div id="parkmap"></div>
+        <div id="map-fallback" class="map-fallback">地图瓦片加载超时，请检查网络连接后刷新页面。</div>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top:1.5rem;">
+      <div class="svg-container">
+        <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="450" fill="#1A0808" rx="12"/>
+
+          <!-- 入口与免费区 -->
+          <rect x="40" y="40" width="720" height="50" rx="8" fill="rgba(250,204,21,0.12)" stroke="#FACC15" stroke-width="1.5"/>
+          <text x="400" y="70" text-anchor="middle" fill="#FDE68A" font-family="DM Sans,sans-serif" font-size="12">免费入园 · 免费停车 · 售票与 Fun E-Card 充值</text>
+
+          <!-- 卡丁车区 -->
+          <rect x="40" y="110" width="350" height="150" rx="8" fill="rgba(220,38,38,0.2)" stroke="#DC2626" stroke-width="2"/>
+          <text x="215" y="140" text-anchor="middle" fill="#FCA5A5" font-family="Playfair Display,serif" font-size="15" font-weight="700">卡丁车区</text>
+          <text x="215" y="164" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">Quad Helix 四层螺旋 · Commander 起伏道</text>
+          <text x="215" y="184" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">Conquest 弯道 · Thrasher 高速道</text>
+          <text x="215" y="206" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">四条赛道，另设儿童双人车</text>
+          <text x="215" y="228" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">单独驾驶需满足身高要求</text>
+
+          <!-- 过山车区 -->
+          <rect x="410" y="110" width="350" height="150" rx="8" fill="rgba(249,115,22,0.16)" stroke="#F97316" stroke-width="2"/>
+          <text x="585" y="140" text-anchor="middle" fill="#FDBA74" font-family="Playfair Display,serif" font-size="15" font-weight="700">过山车区</text>
+          <text x="585" y="164" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">White Lightning 木质过山车（GCI）</text>
+          <text x="585" y="184" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">Freedom Flyer 悬挂式家庭过山车（Vekoma）</text>
+          <text x="585" y="206" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="10">Sea Serpent · Firecracker</text>
+          <text x="585" y="228" text-anchor="middle" fill="#AAA" font-family="DM Sans,sans-serif" font-size="9">家庭向为主，身高门槛低</text>
+
+          <!-- 高空与刺激 -->
+          <rect x="40" y="280" width="230" height="90" rx="8" fill="rgba(250,204,21,0.10)" stroke="#FACC15" stroke-width="1.5"/>
+          <text x="155" y="308" text-anchor="middle" fill="#FDE68A" font-family="Playfair Display,serif" font-size="13" font-weight="700">高空项目</text>
+          <text x="155" y="330" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">SkyCoaster 约 76 米</text>
+          <text x="155" y="348" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">Enterprise · Headrush 360</text>
+
+          <!-- 家庭与儿童 -->
+          <rect x="290" y="280" width="230" height="90" rx="8" fill="rgba(34,197,94,0.12)" stroke="#22C55E" stroke-width="1.5"/>
+          <text x="405" y="308" text-anchor="middle" fill="#86EFAC" font-family="Playfair Display,serif" font-size="13" font-weight="700">家庭与儿童区</text>
+          <text x="405" y="330" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">Kid Spot · 摩天轮 · 旋转木马</text>
+          <text x="405" y="348" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">碰碰船 · 戏水区</text>
+
+          <!-- 动物与合作 -->
+          <rect x="540" y="280" width="220" height="90" rx="8" fill="rgba(14,165,233,0.12)" stroke="#0EA5E9" stroke-width="1.5"/>
+          <text x="650" y="308" text-anchor="middle" fill="#7DD3FC" font-family="Playfair Display,serif" font-size="13" font-weight="700">Gator Spot</text>
+          <text x="650" y="330" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">与 Gatorland 合作</text>
+          <text x="650" y="348" text-anchor="middle" fill="#CCC" font-family="DM Sans,sans-serif" font-size="9">100 多条活体短吻鳄</text>
+
+          <!-- 餐饮 -->
+          <rect x="40" y="390" width="720" height="34" rx="6" fill="rgba(148,163,184,0.10)" stroke="#94A3B8" stroke-width="1"/>
+          <text x="400" y="412" text-anchor="middle" fill="#CBD5E1" font-family="DM Sans,sans-serif" font-size="10">餐饮与零售：Johnny Rockets 等快餐、电玩城、嘉年华游戏摊位</text>
+
+          <!-- 指北针 -->
+          <g transform="translate(760,240)">
+            <circle cx="0" cy="0" r="16" fill="none" stroke="#FACC15" stroke-width="1" opacity="0.5"/>
+            <polygon points="0,-14 2,-3 14,0 2,3 0,14 -2,3 -14,0 -2,-3" fill="#FACC15" opacity="0.8"/>
+            <text x="0" y="-19" text-anchor="middle" fill="#FACC15" font-size="8" font-weight="700">N</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="grid-3 reveal" style="margin-top:1.5rem;">
+      <div class="card"><h3>卡丁车区</h3><p>园区最早、也最稳定的引流项目。四条赛道覆盖螺旋、起伏、弯道和高速四种体验，儿童可以坐双人车，家长带孩子来的门槛低。</p></div>
+      <div class="card"><h3>过山车区</h3><p>2013 年扩建的核心，White Lightning 是奥兰多唯一的木质过山车，Freedom Flyer 是悬挂式家庭过山车。两座车都不追求极限刺激，高度门槛压在家庭客群能接受的范围。</p></div>
+      <div class="card"><h3>高空项目</h3><p>SkyCoaster 高约 76 米，是全球第二高的同类设备，从拉斯维加斯搬迁而来。它单独收费，是园区客单价最高的一项。</p></div>
+      <div class="card"><h3>家庭与儿童区</h3><p>Kid Spot 放儿童过山车、滑梯和嘉年华经典项目，配摩天轮、旋转木马和碰碰船。低龄儿童的项目密度决定了家庭客的停留时间。</p></div>
+      <div class="card"><h3>Gator Spot</h3><p>2015 年与 Gatorland 合作开设，投入约 100 万美元，养着 100 多条活体短吻鳄，其中有一条罕见白化鳄。动物内容为乐园增加了非游乐的看点。</p></div>
+      <div class="card"><h3>免费入口与商业</h3><p>入园和停车都不收费，游客可以只来吃饭、打电玩或看别人玩。商业部分靠餐饮、电玩城和嘉年华摊位变现，降低了家庭出游的决策成本。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 6. INVESTMENT & CONSTRUCTION TIMELINE ====== -->
+<section class="section" id="investment">
+  <div class="container">
+    <div class="section-header reveal"><h2>投资与建设时序</h2><div class="section-line"></div></div>
+    <div class="card reveal"><div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">1997年12月24日</div><div class="timeline-content"><h4>开园</h4><p>以 Fun Spot Action Park 的名字开业，占地 1.9 公顷，投资约 400 万美元，主打三层高架卡丁车道。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2010年</div><div class="timeline-content"><h4>买下相邻土地</h4><p>购入约 4 公顷相邻地块，为扩建留出空间。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2012年</div><div class="timeline-content"><h4>扩建动工</h4><p>投资约 2,500 万美元，新增两座过山车、SkyCoaster、卡丁车道和餐饮配套。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2013年6月8日</div><div class="timeline-content"><h4>重新开业</h4><p>更名 Fun Spot America，园区面积扩大到约 6 公顷，同年营收增长约两成，年客流约一百万人次。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2015年</div><div class="timeline-content"><h4>Gator Spot 开业</h4><p>与 Gatorland 合作，投入约 100 万美元开设鳄鱼展区。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2021年</div><div class="timeline-content"><h4>Liberty Swing</h4><p>增设面向行动不便游客的秋千，是行业里较早的无障碍游乐设施。</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">近年</div><div class="timeline-content"><h4>品牌连锁化</h4><p>Fun Spot America 扩展到基西米和亚特兰大，形成三个园区的家族连锁。</p></div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== 7. OPERATIONAL INDICATORS ====== -->
+<section class="section section-alt" id="operations">
+  <div class="container">
+    <div class="section-header reveal"><h2>运营指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal" style="margin-bottom:1.5rem;">
+      <div class="card" style="text-align:center;"><h4>单日通票</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">$59.95</p><p class="f-caption">约 ¥403，含次日免费</p></div>
+      <div class="card" style="text-align:center;"><h4>四项目票</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">$36</p><p class="f-caption">约 ¥242，可升级通票</p></div>
+      <div class="card" style="text-align:center;"><h4>年客流</h4><p style="font-family:'DM Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--clr-primary);">约100万</p><p class="f-caption">2013 年扩建后</p></div>
+    </div>
+    <div class="card reveal" style="margin-bottom:1.5rem;">
+      <h3>免费入园，靠什么赚钱</h3>
+      <p>园区不收门票，停车也不收费，收入来自四个口子：通票和单点游乐、餐饮、电玩城和嘉年华摊位。单点收费通过可充值的 Fun E-Card 完成，单项约 5 至 10 美元；通票 59.95 美元，含次日免费；四项目票 36 美元，可以现场升级。免费入园把决策门槛降到最低，游客可以只来吃饭或陪孩子，玩不玩项目另说。这套结构适合本地复游客群，和奥兰多那些需要一整天、一张票上百美元的目的地型乐园错开了客群。</p>
+    </div>
+    <div class="card reveal">
+      <h3>扩建后的账</h3>
+      <p>1997 年用 400 万美元开出一个 1.9 公顷的小园，2013 年再投 2,500 万美元把面积扩大三倍。扩建当年营收增长约两成，年客流约一百万人次。按通票 59.95 美元计算，只要人均消费做到 30 美元上下，一百万客流对应的是 3,000 万美元级别的营收。这个模型的关键不在设备多先进，而在单位面积的产出——6 公顷的园区里塞进了约 27 个项目、四条卡丁车道和一座电玩城。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 8. CORE TECHNOLOGY & SCALE ====== -->
+<section class="section" id="tech-scale">
+  <div class="container">
+    <div class="section-header reveal"><h2>核心技术与规模指标</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>免费入园</h3><p>入园和停车都不收费，游客可以只逛不玩。门槛降低带来的是客流基数，变现交给园内的项目和商业。</p></div>
+      <div class="card"><h3>单点加通票双轨</h3><p>不想买通票的游客可以按项目付费，Fun E-Card 充值消费；玩得多的买通票更划算。两种计价方式覆盖了不同停留时长的客群。</p></div>
+      <div class="card"><h3>卡丁车做差异</h3><p>四条赛道是园区最不容易被复制的部分。过山车可以买，卡丁车赛道的土地和结构买不来，这也是它和大型主题乐园错位的地方。</p></div>
+      <div class="card"><h3>家庭向的设备选型</h3><p>两座过山车都以家庭为目标，身高门槛低，不追求极限参数。设备选型围绕「孩子能玩、家长敢陪」来做。</p></div>
+      <div class="card"><h3>高密度用地</h3><p>约 6 公顷装下 27 个项目，靠的是多层卡丁车道和立体布局。对地价高的城市近郊，这种密度比摊大饼更现实。</p></div>
+      <div class="card"><h3>家族连锁</h3><p>品牌从奥兰多扩展到基西米和亚特兰大，三个园区共用采购、运营标准和会员体系。单园规模不大，连锁之后议价能力上来。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 9. SUPPORTING FACILITIES ====== -->
+<section class="section section-alt" id="facilities">
+  <div class="container">
+    <div class="section-header reveal"><h2>配套设施体系</h2><div class="section-line"></div></div>
+    <div class="grid-2 reveal">
+      <div class="card"><h3>卡丁车赛道</h3><p>四条赛道，含四层螺旋道和高速道，提供单人车、双人车和儿童车。</p></div>
+      <div class="card"><h3>过山车</h3><p>White Lightning 木质过山车、Freedom Flyer 悬挂式过山车，另有 Sea Serpent、Firecracker 两座家庭过山车。</p></div>
+      <div class="card"><h3>儿童区</h3><p>Kid Spot 含儿童过山车、滑梯、旋转类项目，配摩天轮、旋转木马、碰碰船和戏水区。</p></div>
+      <div class="card"><h3>Gator Spot</h3><p>与 Gatorland 合作，展示 100 多条活体短吻鳄，含一条罕见白化鳄。</p></div>
+      <div class="card"><h3>电玩与餐饮</h3><p>约 930 平方米的 Fun e-Spot 电玩城，另有 Johnny Rockets 等快餐和嘉年华游戏摊位。</p></div>
+      <div class="card"><h3>停车</h3><p>免费停车场，紧邻国际大道，自驾和旅游巴士都可直达。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 10. LATEST NEWS & OUTLOOK ====== -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="section-header reveal"><h2>最新动态与展望</h2><div class="section-line"></div></div>
+    <div class="grid-3 reveal">
+      <div class="card"><h3>票价与产品</h3><p>2026 年单日通票 59.95 美元，含次日免费；四项目票 36 美元；开门两小时内和晚 9 点后另有 49.95 美元的特价票。</p></div>
+      <div class="card"><h3>无障碍设施</h3><p>2021 年增设 Liberty Swing，让轮椅使用者也能荡秋千，是行业内较早的无障碍游乐尝试。</p></div>
+      <div class="card"><h3>三园连锁</h3><p>奥兰多、基西米、亚特兰大三处园区共用品牌和运营标准，形成区域性的家族连锁。</p></div>
+      <div class="card"><h3>与目的地乐园错位</h3><p>奥兰多主题乐园密集，Fun Spot 用免费入园、单点收费和半天时长承接本地复游和预算敏感的家庭。</p></div>
+      <div class="card"><h3>设备更新</h3><p>园区持续更换和增加项目，2021 年后的新增以家庭向和无障碍设施为主，没有再追大型过山车。</p></div>
+      <div class="card"><h3>待观察</h3><p>免费入园模式依赖高客流和园内消费，客流一旦下滑，餐饮和电玩的收入会同步收缩。设备老化和周边新项目的竞争是长期压力。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11. EXTENDED RESOURCE LIBRARY ====== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header reveal"><h2>延伸资料库</h2><div class="section-line"></div></div>
+    <div class="resource-group reveal"><h4>百科与官方</h4><ul>
+      <li><a href="https://en.wikipedia.org/wiki/Fun_Spot_America_Theme_Parks" target="_blank" rel="noopener">Wikipedia — Fun Spot America Theme Parks</a><span class="tag">百科</span></li>
+      <li><a href="https://fun-spot.com/about/" target="_blank" rel="noopener">Fun Spot America — About（官网）</a><span class="tag">官方</span></li>
+      <li><a href="https://fun-spot.com/" target="_blank" rel="noopener">Fun Spot America — 官网首页</a><span class="tag">官方</span></li>
+    </ul></div>
+    <div class="resource-group reveal"><h4>行业与报道</h4><ul>
+      <li><a href="https://parkworld-online.com/fun-spot-america/" target="_blank" rel="noopener">Park World — Fun Spot America</a><span class="tag">行业</span></li>
+      <li><a href="https://www.internationaldriveorlando.com/blog/posts/racing-through-international-drives-past-present-and-future.html" target="_blank" rel="noopener">International Drive Orlando — 国际大道今昔</a><span class="tag">媒体</span></li>
+          </ul></div>
+    <div class="resource-group reveal"><h4>地图与影像</h4><ul>
+      <li><a href="https://www.google.com/maps/place/Fun+Spot+America+Orlando" target="_blank" rel="noopener">Google Maps — Fun Spot America Orlando</a><span class="tag">地图</span></li>
+      <li><a href="https://commons.wikimedia.org/w/index.php?search=Fun+Spot+America+Orlando" target="_blank" rel="noopener">Wikimedia Commons — 园区自由版权图片</a><span class="tag">图库</span></li>
+    </ul></div>
+    <p class="f-caption" style="text-align:center;margin-top:2rem;">本报告所有数据来源于公开资料，仅供参考研究使用。数据截至 2026 年 11 月。</p>
+  </div>
+</section>
+
+<!-- ====== 12. FLOATING NAVIGATION ====== -->
+<div class="floating-nav">
+  <a href="../" title="返回首页" aria-label="返回首页">&#127968;</a>
+  <a href="#" title="返回顶部" aria-label="返回顶部" id="back-to-top">&#8593;</a>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter">
+  <span id="busuanzi_container_site_uv">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  &nbsp;|&nbsp;
+  <span id="busuanzi_container_site_pv">浏览 <span id="busuanzi_value_site_pv"></span> 次</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+// 坐标来源：Nominatim 返回 WGS-84，ESRI World Imagery 同为 WGS-84，直接使用
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('parkmap');
+  var fallback = document.getElementById('map-fallback');
+  if (!mapEl) return;
+
+  var map = L.map('parkmap', { scrollWheelZoom: false }).setView([28.466781, -81.455892], 16);
+
+  var tiles = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="https://www.esri.com/">Esri</a>', maxZoom: 19
+  }).addTo(map);
+  tiles.on('load', function() { if (fallback) fallback.style.display = 'none'; });
+
+  var icon = L.divIcon({
+    className: 'zone-marker',
+    html: '<div style="background:#DC2626;color:#fff;padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.85);font-family:\'DM Sans\',sans-serif;letter-spacing:0.02em;">Fun Spot America Orlando</div>',
+    iconSize: [0, 0], iconAnchor: [0, 0]
+  });
+  L.marker([28.466781, -81.455892], { icon: icon }).addTo(map).bindPopup('Fun Spot America Orlando<br><small>1997 年开园</small>');
+
+  L.circle([28.466781, -81.455892], { radius: 260, color: '#FACC15', weight: 2, fill: false, dashArray: '6,4', opacity: 0.55 }).addTo(map);
+
+  setTimeout(function() { map.invalidateSize(); }, 300);
+  setTimeout(function() { if (fallback && fallback.style.display !== 'none') fallback.style.display = 'block'; }, 8000);
+});
+
+// Scroll reveal
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>
